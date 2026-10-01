@@ -1,8 +1,8 @@
 # The rules
 
-Normative and complete. Nothing here needs a reason to be obeyed; the reasons
-are in [WHY.md](WHY.md), and every rule below names the incident that produced
-it so you can go and read it when you want to argue.
+Normative and complete: an agent that reads only this page works correctly.
+The reasons are in [WHY.md](WHY.md); a rule marked *(WHY § …)* has an incident
+behind it, worth reading before you argue with it.
 
 **A *spend* is anything this project cannot undo or would pay for twice.**
 What counts is listed in [`deaddrop.yml`](deaddrop.yml) — that file, and only
@@ -12,8 +12,11 @@ everywhere.
 ## Claiming
 
 1. **Claim before working, and the claim is a commit.** Move the file from
-   `backlog/` to `tasks/`, write the owner line, commit. If the commit
-   conflicts, someone else has it. *(A commitment nobody can see is not one.)*
+   `backlog/` to `tasks/`, set `status: claimed` and the owner line, commit.
+   If the commit conflicts, someone else has it. The owner line is
+   `<operator> @<profile>/<session> <YYYY-MM-DD> — <what you are doing>`, and
+   the operator is `git config user.name`. *(A commitment nobody can see is
+   not one.)*
 2. **One owner per task.** Never edit a task file claimed by someone else, and
    never edit another run's trail. The single exception is the `end` that reaps
    a run which plainly died, and that is an append. Use `## Notes` to talk.
@@ -35,7 +38,9 @@ everywhere.
 6. **Checkpoint before you spend, not after.** Open a run, write `doing`
    *before* the act, `did` after it, `end` whenever you stop for any reason.
    Every entry carries `next`. Commit the entries that cost something; let the
-   rest ride. *(WHY § what a dead run leaves behind.)*
+   rest ride. A trail-only commit's subject starts `ckpt: `. The format is
+   [`checkpoints/_SCHEMA.md`](checkpoints/_SCHEMA.md).
+   *(WHY § what a dead run leaves behind.)*
 7. **A subagent's brief carries rule 6 verbatim.** It knows only what its
    prompt says, it dies with its parent, and its report reaches one reader once.
    The trail is the deliverable.
@@ -45,7 +50,8 @@ everywhere.
 8. **The handoff is the resume contract.** Keep `## Handoff` true *while* you
    are claimed, before anything that could outlive the session — not on the way
    out, because a limit or a crash gives no warning. If you did not verify
-   something, say you did not.
+   something, say you did not. When the handoff and the trail disagree about
+   what is in flight, the newest trail entry wins.
 9. **Results land as they are measured**, in the file `deaddrop.yml` names as
    `log`, never at session end.
 

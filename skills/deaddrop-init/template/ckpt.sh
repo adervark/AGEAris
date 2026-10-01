@@ -27,7 +27,7 @@ mine() { printf '%s' "${CLAUDE_CODE_SESSION_ID:0:8}"; }
 myrun() { local s; s=$(mine); [ -n "$s" ] || s="x$(od -An -N2 -tx1 /dev/urandom | tr -d ' \n')"; printf '%s' "$s"; }
 
 # cfg <key> [default] — one value out of deaddrop.yml.
-# Flat by design (RULES § where things live): `key: value` at column 0, or a
+# Flat by design (see the header of deaddrop.yml): `key: value` at column 0, or a
 # one-level block whose items are `  - item`. Nothing here needs a YAML parser,
 # and adding one would make the config a dependency.
 cfg() {
@@ -170,9 +170,13 @@ view() { # view <files...> — one row per run: run, who, last kind, age, next
   | awk -F'\t' '{printf "  %-14s %-26s %-8s %-10s %s\n", $2, $3, toupper($4), $5, substr($6,1,58)}'
 }
 
-inflight() { records "$@" | jq -sr '
+# One trail at a time. Run ids are session-derived, so a session that works two
+# tasks writes the same id into both trails; grouping every trail by run at once
+# merged those runs, and a closed task's `end` hid another task's live `doing`.
+# On 2026-09-14 this printed "none" with a fold queued on the card (RSNA T092).
+inflight() { local f; for f in "$@"; do records "$f" | jq -sr --arg t "$(basename "$f" .jsonl)" '
     group_by(.run)[] | select(.[-1].kind == "doing") | .[-1] as $l |
-    "  \($l.run)  act: \($l.act // "?")\n      tell: \($l.tell // "?")\n      next: \($l.next // "?")"' 2>/dev/null; }
+    "  \($t) \($l.run)  act: \($l.act // "?")\n      tell: \($l.tell // "?")\n      next: \($l.next // "?")"' 2>/dev/null; done; }
 
 cmd_live() { # live [TASK]
   shopt -s nullglob; local t="${1:-}"; [ -n "$t" ] && valid_task "$t"

@@ -10,23 +10,13 @@ recommended next action and the rule that judges it.
 ## 1. Let the script do the mechanical half
 
 ```sh
-deaddrop/board.sh --all
-```
-
-It already computes, from the task files, the trails and git history: the
-columns, WIP against the limit, work item age against this repo's own 85th
-percentile, throughput, cycle time, flow efficiency, Little's Law, expired
-claims (⊘), your own idle claims (↩), missing decision rules (⚑), runs in
-flight (⚙), and every policy breach under **POLICY AND DRIFT**.
-
-**Do not redo any of that by hand.** It is measured; your reading is not.
-
-Then:
-
-```sh
+deaddrop/board.sh --all       # columns, WIP, marks, flow metrics, POLICY AND DRIFT
 deaddrop/board.sh --check     # is STATE.md's generated region stale?
 deaddrop/ckpt.sh live         # what was in flight when the last run stopped?
 ```
+
+Everything the board prints is measured from the task files, the trails and git.
+**Do not redo any of it by hand**; your reading is not a measurement.
 
 ## 2. Check the four things the script cannot
 
@@ -41,8 +31,7 @@ The script reads files. These need judgement or a machine:
    it. Go and look — the blocker is often gone and nobody noticed.
 3. **⚙ in flight with no live process.** A `doing` nothing closed means either
    work is still running or a run died without saying so. Check, then either
-   leave it or reap it with an `end` (that is the one line you may add to
-   someone else's run).
+   leave it or reap it (`/checkpoint`, rule 2).
 4. **The NOW block.** Is the standing still true? Is the next action still the
    next action? It is the one hand-written region, so it is the one that rots.
 
@@ -65,5 +54,4 @@ everything: somebody is about to pay for it twice.
 - **Cite, do not assert.** "I looked" is not a citation. Name the file, the
   line, the command you ran.
 - **Check your own findings before publishing them.** A false finding against
-  another session's work is worse than a missed one — it gets acted on. This
-  command has published one; see WHY.md.
+  another session's work is worse than a missed one — it gets acted on.

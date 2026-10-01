@@ -1,0 +1,8 @@
+{
+  "name": "agesight",
+  "version": "0.1.0",
+  "description": "Agent-first task board kept in git: a Kanban flow that humans can audit, with append-only checkpoint trails and a board generated from task files and git history.",
+  "author": { "name": "adervark" },
+  "repository": "https://github.com/adervark/agesight",
+  "license": "UNLICENSED"
+}

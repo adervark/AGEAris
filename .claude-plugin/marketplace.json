@@ -1,0 +1,14 @@
+{
+  "name": "agesight",
+  "owner": {
+    "name": "adervark"
+  },
+  "description": "agesight: an agent-first, human-auditable task board for Claude Code.",
+  "plugins": [
+    {
+      "name": "agesight",
+      "source": "./",
+      "description": "Agent-first task board kept in git: a Kanban flow that humans can audit."
+    }
+  ]
+}
