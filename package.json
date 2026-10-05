@@ -1,0 +1,13 @@
+{
+  "name": "agesight",
+  "version": "0.3.0",
+  "private": true,
+  "description": "A local project management application for people and agents, backed by git.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check server.mjs && node --check lib/workspace.mjs && node --check lib/audit.mjs && node --check lib/router.mjs && node --check lib/agents.mjs && node --check lib/pipeline.mjs && node --check agents/rehearsal-agent.mjs && node --check public/app.js && node --check public/icons.js"
+  }
+}
