@@ -79,3 +79,6 @@ everywhere.
 
 **The location is the state.** `status:` in the frontmatter adds detail within a
 column; when the two disagree, the directory is right.
+
+Moving a task to blocked: set `blockedReason:` to one line saying what
+unblocks it.

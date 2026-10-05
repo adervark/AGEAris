@@ -23,6 +23,9 @@ const MIME = new Map([
   ['.svg', 'image/svg+xml; charset=utf-8'],
 ]);
 const MAX_JSON_BYTES = 1024 * 1024;
+// Every task and project write made through the API is marked as made in the
+// UI, so the history ledger never reads a person's edit as a sign of agent life.
+const VIA_UI = { trailers: { 'AGESight-Via': 'ui' } };
 
 function securityHeaders(response) {
   response.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; object-src 'none'; frame-ancestors 'none'");
@@ -141,10 +144,12 @@ async function serveStatic(pathname, request, response) {
   return true;
 }
 
-export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || join(process.cwd(), '.agesight-data'), port, engineOptions = {}, registryOptions = {} } = {}) {
+// `clock` (milliseconds, like Date.now) is the time the engine computes its
+// read models at; tests inject it.
+export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || join(process.cwd(), '.agesight-data'), port, clock, engineOptions = {}, registryOptions = {} } = {}) {
   const workspace = await new Workspace({ dataDir }).init();
   const registry = await new AgentRegistry({ dataDir: workspace.dataDir, operator: workspace.operator, email: workspace.email, ...registryOptions }).init();
-  const engine = await new PipelineEngine({ workspace, registry, ...engineOptions }).init();
+  const engine = await new PipelineEngine({ workspace, registry, ...engineOptions, ...(clock ? { clock } : {}) }).init();
   const token = await apiToken(workspace.dataDir);
   const server = createHttpServer(async (request, response) => {
     securityHeaders(response);
@@ -164,9 +169,10 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       if (request.method === 'GET' && pathname === '/api/workspace') {
         return sendJson(response, 200, { ...await workspace.read(), runs: engine.listRuns(), agents: await engine.agentPerformance() });
       }
+      if (request.method === 'GET' && pathname === '/api/settings') return sendJson(response, 200, await workspace.readSettings());
       const pipelineMatch = /^\/api\/projects\/([^/]+)\/pipeline$/.exec(pathname);
       if (request.method === 'GET' && pipelineMatch) return sendJson(response, 200, await engine.getPipeline(pipelineMatch[1]));
-      if (request.method === 'PUT' && pipelineMatch) return sendJson(response, 200, await engine.savePipeline(pipelineMatch[1], await readJson(request)));
+      if (request.method === 'PUT' && pipelineMatch) return sendJson(response, 200, await engine.savePipeline(pipelineMatch[1], await readJson(request), VIA_UI));
       if (request.method === 'GET' && pathname === '/api/runs') return sendJson(response, 200, engine.listRuns());
       if (request.method === 'POST' && pathname === '/api/runs') return sendJson(response, 201, await engine.startRun(await readJson(request)));
       const runMatch = /^\/api\/runs\/([^/]+)(\/actions|\/audit)?$/.exec(pathname);
@@ -198,18 +204,18 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
         return sendJson(response, 200, attemptMatch[2] === 'complete' ? await engine.complete(attemptMatch[1], body) : await engine.heartbeat(attemptMatch[1], body));
       }
       if (request.method === 'POST' && pathname === '/api/projects') {
-        return sendJson(response, 201, await workspace.createProject(await readJson(request)));
+        return sendJson(response, 201, await workspace.createProject(await readJson(request), VIA_UI));
       }
       const projectMatch = /^\/api\/projects\/([^/]+)$/.exec(pathname);
       if (request.method === 'PATCH' && projectMatch) {
-        return sendJson(response, 200, await workspace.updateProject(projectMatch[1], await readJson(request)));
+        return sendJson(response, 200, await workspace.updateProject(projectMatch[1], await readJson(request), VIA_UI));
       }
       if (request.method === 'POST' && pathname === '/api/tasks') {
-        return sendJson(response, 201, await workspace.createTask(await readJson(request)));
+        return sendJson(response, 201, await workspace.createTask(await readJson(request), VIA_UI));
       }
       const taskMatch = /^\/api\/tasks\/([^/]+)$/.exec(pathname);
       if (request.method === 'PATCH' && taskMatch) {
-        return sendJson(response, 200, await workspace.updateTask(taskMatch[1], await readJson(request)));
+        return sendJson(response, 200, await workspace.updateTask(taskMatch[1], await readJson(request), VIA_UI));
       }
       if (request.method === 'GET' && (pathname === '/' || pathname === '/index.html') && url.searchParams.has('token')) {
         if (!sameToken(url.searchParams.get('token') || '', token)) {

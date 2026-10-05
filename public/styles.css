@@ -279,6 +279,7 @@ dialog::backdrop { background: #12213960; backdrop-filter: blur(2px); }
 .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: #7b9de8; box-shadow: 0 0 0 3px #3265df12; }
 .field select:disabled { color: #8b98ab; background: #f7f9fc; }
 .field small { display: block; font-size: 10px; font-weight: 400; color: #97a3b4; margin-top: 8px; line-height: 1.7; }
+.field[hidden] { display: none; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .dialog-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 17px 28px; background: #fafbfd; border-top: 1px solid var(--line); }
 .color-field { padding: 0; border: 0; margin: 0 0 22px; }

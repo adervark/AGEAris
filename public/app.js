@@ -382,11 +382,27 @@ function openProjectEditor(project = null) {
   setupDialog(dialog);
 }
 
-function openTaskEditor(task = null, status = 'backlog') {
+// The grouping key of a task type, as the server computes it: lowercased,
+// trimmed, placeholders and stray characters removed; '' means untyped.
+function typeKey(value = '') {
+  const text = String(value).toLowerCase().trim();
+  return /[{}]/.test(text) ? '' : text.replace(/[^a-z0-9 _-]/g, '').trim();
+}
+
+// `status` presets the status select: a new task's column, or Blocked when a
+// card is dropped there, so the editor can ask what would unblock it.
+function openTaskEditor(task = null, status = '') {
   if (!state.projects.length) return openProjectEditor();
   const projectId = task?.projectId || selectedProject()?.id || state.projects[0].id;
+  const initialStatus = status || task?.status || 'backlog';
+  const types = [...new Set(['feature', 'bug', 'chore', ...state.tasks.filter((entry) => entry.projectId === projectId).map((entry) => typeKey(entry.type))].filter(Boolean))];
   const dialog = $('#task-dialog');
-  dialog.innerHTML = `<form id="task-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${task ? escape(taskNumber(task)) : 'Plan your next step'}</span><h2 id="task-dialog-title">${task ? 'Task details' : 'New task'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header><div class="dialog-fields">${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${state.projects.map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, task?.status || status)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
+  dialog.innerHTML = `<form id="task-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${task ? escape(taskNumber(task)) : 'Plan your next step'}</span><h2 id="task-dialog-title">${task ? 'Task details' : 'New task'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header><div class="dialog-fields">${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${state.projects.map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type are timed together; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
+  const reasonField = $('#blocked-reason-field');
+  $('#task-form [name="status"]').addEventListener('change', (event) => {
+    reasonField.hidden = event.currentTarget.value !== 'blocked';
+    if (!reasonField.hidden) reasonField.querySelector('input').focus();
+  });
   $('#task-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -409,6 +425,7 @@ function openTaskEditor(task = null, status = 'backlog') {
     form.querySelector('[data-open-run]')?.addEventListener('click', (event) => { closeDialog(dialog); openRun(event.currentTarget.dataset.openRun); });
   }
   setupDialog(dialog);
+  if (status === 'blocked' && task) reasonField.querySelector('input').focus();
 }
 
 // Start a run from the drawer. Unsaved edits are saved first so the agents see
@@ -1372,6 +1389,8 @@ async function openPipelineEditor(project) {
 async function moveTask(id, status) {
   const task = state.tasks.find((entry) => entry.id === id);
   if (!task || task.status === status) return;
+  // Moving to Blocked asks (optionally) what would unblock the task.
+  if (status === 'blocked') return openTaskEditor(task, 'blocked');
   try {
     await api(`/tasks/${encodeURIComponent(id)}`, 'PATCH', { status, version: task.version });
     await refresh();

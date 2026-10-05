@@ -465,3 +465,78 @@ test('reusing the token file tightens loosened permissions back to 0600', async 
   assert.equal(second.server.apiToken, first.server.apiToken);
   assert.equal((await stat(file)).mode & 0o777, 0o600);
 });
+
+test('GET /api/settings returns the defaults without a settings file and the file values with one', async (t) => {
+  const { base, fetch, dir } = await tokenServer(t);
+  let response = await fetch(`${base}/api/settings`);
+  assert.equal(response.status, 200);
+  assert.deepEqual(await json(response), {
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    workdays: [1, 2, 3, 4, 5],
+    personalWipLimit: 3,
+    deltaFallback: 'previous-workday',
+    version: 'default',
+  });
+
+  await writeFile(path.join(dir, 'settings.json'), JSON.stringify({ timezone: 'Europe/London', workdays: [1, 2, 3, 4], personalWipLimit: 2, deltaFallback: '24h' }));
+  response = await fetch(`${base}/api/settings`);
+  assert.equal(response.status, 200);
+  const settings = await json(response);
+  assert.deepEqual({ ...settings, version: undefined }, { timezone: 'Europe/London', workdays: [1, 2, 3, 4], personalWipLimit: 2, deltaFallback: '24h', version: undefined });
+  assert.match(settings.version, /^[0-9a-f]{64}$/);
+
+  await writeFile(path.join(dir, 'settings.json'), JSON.stringify({ workdays: 'weekdays' }));
+  response = await fetch(`${base}/api/settings`);
+  assert.equal(response.status, 500);
+  assert.match((await json(response)).error, /workdays/);
+});
+
+test('every task and project write through the API is committed with AGESight-Via: ui, and a run\'s task move with Run instead', async (t) => {
+  const { base, fetch, server } = await tokenServer(t);
+  const committed = [];
+  server.workspace.onCommit((projectId) => committed.push(projectId));
+  const send = async (method, url, body, status = 200) => {
+    const response = await fetch(`${base}${url}`, { method, headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const value = await json(response);
+    assert.equal(response.status, status, value.error);
+    return value;
+  };
+  const lastMessage = async (projectId, ...paths) => (await exec('git', ['log', '-1', '--format=%B', '--', ...paths], {
+    cwd: path.join(server.workspace.projectsDir, projectId),
+    env: { ...process.env, GIT_CONFIG_GLOBAL: os.devNull, GIT_CONFIG_NOSYSTEM: '1' },
+  })).stdout.trim();
+  const assertViaUi = async (projectId, subject, ...paths) => {
+    const message = await lastMessage(projectId, ...paths);
+    assert.match(message, subject);
+    assert.match(message, /\n\nAGESight-Via: ui$/, `"${message}" ends with the trailer`);
+  };
+
+  let project = await send('POST', '/api/projects', { name: 'Via UI' }, 201);
+  await assertViaUi(project.id, /^Create project: Via UI\n/);
+  project = await send('PATCH', `/api/projects/${project.id}`, { name: 'Via UI, renamed', version: project.version });
+  await assertViaUi(project.id, /^Update project: Via UI, renamed\n/);
+  let task = await send('POST', '/api/tasks', { projectId: project.id, title: 'Typed', type: 'analysis' }, 201);
+  assert.equal(task.type, 'analysis');
+  await assertViaUi(project.id, /^Create T001: Typed\n/);
+  task = await send('PATCH', `/api/tasks/${encodeURIComponent(task.id)}`, { status: 'blocked', blockedReason: 'Waiting on legal', version: task.version });
+  assert.equal(task.blockedReason, 'Waiting on legal');
+  await assertViaUi(project.id, /^Update T001: Typed\n/);
+  const pipeline = await send('GET', `/api/projects/${project.id}/pipeline`);
+  await send('PUT', `/api/projects/${project.id}/pipeline`, { stages: pipeline.stages.slice(0, 2), version: pipeline.version });
+  await assertViaUi(project.id, /^Update pipeline: /);
+  assert.equal(committed.length, 5);
+  assert.ok(committed.every((id) => id === project.id));
+
+  const invalid = await fetch(`${base}/api/tasks/${encodeURIComponent(task.id)}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ type: 'x'.repeat(41), version: task.version }) });
+  assert.equal(invalid.status, 400);
+
+  // Starting a run is an HTTP request too, but the task move it makes belongs to the run.
+  await send('POST', '/api/runs', { taskId: task.id }, 201);
+  const moved = await lastMessage(project.id, 'deaddrop/tasks');
+  assert.match(moved, /^Update T001: Typed\n\nRun: R001$/);
+  assert.doesNotMatch(moved, /AGESight-Via/);
+  const current = await send('GET', '/api/workspace');
+  const stored = current.tasks.find((entry) => entry.id === task.id);
+  assert.equal(stored.status, 'in_progress');
+  assert.equal(stored.blockedReason, '', 'the reason is cleared when the run takes the task out of blocked');
+});

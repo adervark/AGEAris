@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
+import { once } from 'node:events';
 import { readFileSync } from 'node:fs';
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
@@ -9,7 +10,8 @@ import test from 'node:test';
 
 import { AgentRegistry, ROLES } from '../lib/agents.mjs';
 import { parseEvents, verifyChain } from '../lib/audit.mjs';
-import { PipelineEngine } from '../lib/pipeline.mjs';
+import { needsHumanAt, PipelineEngine, reduce } from '../lib/pipeline.mjs';
+import { createServer } from '../server.mjs';
 import { Workspace, WorkspaceError } from '../lib/workspace.mjs';
 
 // The library spawns git itself; keep it independent of the developer's config.
@@ -1875,4 +1877,232 @@ test('a waiting run is not routed again on every tick and dispatches once an age
   assert.equal(run.status, 'completed');
   assert.equal(run.attempts[0].agentId, 'ok');
   assert.equal(byType(run, 'waiting').length, 1);
+});
+
+// --- S1: blocked reason, Run trailer, clock, needsHumanAt, eventsByProject --------
+
+test('a failed run leaves the task blocked with the run named as the reason, in commits with a Run trailer', async (t) => {
+  const ctx = await setup(t, { agents: async ({ script }) => [commandAgent('broken', await script('broken', scriptExit1))] });
+  const { project, task } = await ctx.newTask({ stages: [stage('implement', 'implement', { maxAttempts: 1 })] });
+  const started = await ctx.start(task);
+  await ctx.engine.settle();
+  assert.equal((await ctx.engine.getRun(started.id)).status, 'failed');
+
+  let stored = await ctx.workspace.getTask(task.id);
+  assert.equal(stored.status, 'blocked');
+  assert.match(stored.blockedReason, /^Run R001 failed: Implement failed 1 time \(limit 1\): Agent exited with code 1$/);
+  const projectDir = ctx.projectDir(project.id);
+  const taskCommits = (await git(projectDir, 'log', '--format=%B%x00', '--', 'deaddrop/tasks', 'deaddrop/backlog')).split('\0').map((body) => body.trim()).filter(Boolean);
+  assert.equal(taskCommits.length, 3, 'blocked, claimed by the run, created');
+  for (const body of taskCommits.slice(0, 2)) {
+    assert.match(body, /\n\nRun: R001$/);
+    assert.doesNotMatch(body, /AGESight-Via/);
+  }
+  assert.doesNotMatch(taskCommits[2], /Run:/, 'the task was created outside the run');
+
+  await ctx.act(started.id, { action: 'retry' });
+  stored = await ctx.workspace.getTask(task.id);
+  assert.equal(stored.status, 'in_progress');
+  assert.equal(stored.blockedReason, '', 'leaving blocked clears the reason');
+  assert.match(await git(projectDir, 'log', '-1', '--format=%B', '--', 'deaddrop/tasks'), /\n\nRun: R001$/);
+});
+
+// The needsHuman rule before needsHumanAt existed, kept here to prove the
+// rewrite changes nothing when asOf is the engine's clock.
+function rev0NeedsHuman(engine, run, now) {
+  const { state } = run;
+  const superseded = [...engine.runs.values()].some((other) => other.state.taskId === state.taskId && other.state.startedAt > state.startedAt);
+  const unclaimed = state.attempts.some((attempt) => attempt.status === 'queued' && now - Date.parse(attempt.dispatchedAt) > engine.leaseMs);
+  return !run.integrity.ok
+    || ['awaiting_approval', 'awaiting_input', 'waiting'].includes(state.status)
+    || (state.status === 'failed' && !superseded)
+    || unclaimed;
+}
+
+// One engine holding a run in every state a decision can come from.
+async function decisionFixtures(t) {
+  const clock = { now: Date.now() };
+  const ctx = await setup(t, {
+    agents: async ({ script }) => [
+      pullAgent('puller'),
+      commandAgent('ok', await script('ok', scriptOk('ok'))),
+      commandAgent('broken', await script('broken', scriptExit1)),
+    ],
+    engineOptions: { leaseMs: 60000, clock: () => clock.now },
+  });
+  const projectWith = async (stages) => {
+    const project = await ctx.workspace.createProject({ name: 'Decisions', wipLimit: 20 });
+    await ctx.engine.savePipeline(project.id, { stages, version: 'default' });
+    return project;
+  };
+  const runOn = async (project, title) => ctx.start(await ctx.addTask(project, title));
+  const pull = await projectWith([stage('implement', 'implement', { pinnedAgent: 'puller' })]);
+  const gate = await projectWith([stage('plan', 'plan', { gate: 'approve', pinnedAgent: 'ok' }), stage('implement', 'implement', { pinnedAgent: 'ok' })]);
+  const human = await projectWith(HUMAN_STAGE);
+  const nobody = await projectWith([stage('implement', 'implement', { pinnedAgent: 'nobody' })]);
+  const broken = await projectWith([stage('implement', 'implement', { pinnedAgent: 'broken', maxAttempts: 1 })]);
+
+  const runs = {
+    claimed: await runOn(pull, 'Claimed by a pull agent'),
+    queued: await runOn(pull, 'Queued for a pull agent'),
+    gate: await runOn(gate, 'Waiting at a gate'),
+    approved: await runOn(gate, 'Approved and completed'),
+    cancelled: await runOn(gate, 'Cancelled'),
+    input: await runOn(human, 'Waiting for a person'),
+    waiting: await runOn(nobody, 'No agent can take it'),
+    failed: await runOn(broken, 'Failed once'),
+  };
+  await ctx.engine.settle();
+  const supersededTask = await ctx.addTask(broken, 'Failed twice');
+  runs.superseded = await ctx.start(supersededTask);
+  await ctx.engine.settle();
+  runs.newest = await ctx.start(supersededTask);
+  await ctx.engine.settle();
+  assert.equal((await ctx.engine.claim('puller')).runId, runs.claimed.id, 'the oldest queued attempt is claimed; the other stays queued');
+  await ctx.act(runs.approved.id, { action: 'approve' });
+  await ctx.act(runs.cancelled.id, { action: 'cancel' });
+  await ctx.engine.settle();
+  runs.tampered = await runOn(gate, 'Tampered log');
+  await ctx.engine.settle();
+  const file = path.join(ctx.runDir(runs.tampered), 'events.jsonl');
+  const lines = (await readFile(file, 'utf8')).split('\n').filter(Boolean);
+  const edited = JSON.parse(lines[1]);
+  edited.data.agentId = 'someone-else';
+  lines[1] = JSON.stringify(edited);
+  await writeFile(file, `${lines.join('\n')}\n`);
+  await ctx.engine.getRun(runs.tampered.id);
+
+  const status = async (key) => (await ctx.engine.getRun(runs[key].id)).status;
+  assert.deepEqual(
+    Object.fromEntries(await Promise.all(Object.keys(runs).map(async (key) => [key, await status(key)]))),
+    {
+      queued: 'running', claimed: 'running', gate: 'awaiting_approval', approved: 'completed', cancelled: 'cancelled',
+      input: 'awaiting_input', waiting: 'waiting', failed: 'failed', superseded: 'failed', newest: 'failed', tampered: 'awaiting_approval',
+    },
+  );
+  assert.equal(ctx.engine.runs.get(runs.queued.id).state.attempts[0].status, 'queued');
+  assert.equal(ctx.engine.runs.get(runs.claimed.id).state.attempts[0].status, 'running');
+  assert.equal(ctx.engine.runs.get(runs.tampered.id).integrity.ok, false);
+  return { ctx, clock, runs };
+}
+
+test('needsHuman equals the rev-0 rule for every kind of run at several clock values', async (t) => {
+  const { ctx, clock, runs } = await decisionFixtures(t);
+  const base = Date.now();
+  const flips = new Map();
+  for (const now of [base, base + 30000, base + 61000, base + 3600000, base + 7 * 86400000]) {
+    clock.now = now;
+    const listed = new Map(ctx.engine.listRuns().map((summary) => [summary.id, summary.needsHuman]));
+    for (const run of ctx.engine.runs.values()) {
+      const expected = rev0NeedsHuman(ctx.engine, run, now);
+      assert.equal(ctx.engine._summary(run).needsHuman, expected, `${run.localId} (${run.state.taskTitle}) at +${now - base} ms`);
+      assert.equal(listed.get(run.id), expected);
+      flips.set(run.id, [...(flips.get(run.id) || []), expected]);
+    }
+  }
+  assert.deepEqual(flips.get(runs.queued.id), [false, false, true, true, true], 'unclaimed work becomes a decision after the lease');
+  for (const key of ['gate', 'input', 'waiting', 'failed', 'newest', 'tampered']) assert.ok(flips.get(runs[key].id).every(Boolean), key);
+  for (const key of ['claimed', 'approved', 'cancelled', 'superseded']) assert.ok(!flips.get(runs[key].id).some(Boolean), key);
+});
+
+test('needsHumanAt says why a run waits and since when, from read-only events by project', async (t) => {
+  const { ctx, runs } = await decisionFixtures(t);
+  const byProject = ctx.engine.eventsByProject();
+  const entries = [...byProject.values()].flat();
+  assert.equal(entries.length, ctx.engine.runs.size);
+  assert.ok(Object.isFrozen([...byProject.values()][0]));
+  const entry = (key) => entries.find((candidate) => candidate.id === runs[key].id);
+  assert.ok(Object.isFrozen(entry('gate').events));
+  assert.throws(() => entry('gate').events.push({}), TypeError);
+  assert.equal(entry('gate').events.length, ctx.engine.runs.get(runs.gate.id).events.length);
+  const states = entries.map((candidate) => reduce(candidate.events));
+  const at = (key, asOf = Date.now()) => {
+    const { events, integrity } = entry(key);
+    return needsHumanAt({ state: reduce(events), integrity, events, otherRuns: states, asOf: new Date(asOf), leaseMs: 60000 });
+  };
+  const eventAt = (key, type) => entry(key).events.filter((event) => event.type === type).at(-1).at;
+
+  assert.deepEqual(at('gate'), { needsHuman: true, reason: 'gate', waitStart: eventAt('gate', 'gate_opened') });
+  assert.deepEqual(at('input'), { needsHuman: true, reason: 'input', waitStart: eventAt('input', 'attempt_dispatched') });
+  assert.deepEqual(at('waiting'), { needsHuman: true, reason: 'waiting', waitStart: eventAt('waiting', 'waiting') });
+  assert.deepEqual(at('failed'), { needsHuman: true, reason: 'failed', waitStart: eventAt('failed', 'run_failed') });
+  assert.deepEqual(at('tampered'), { needsHuman: true, reason: 'integrity', waitStart: entry('tampered').events[1].at });
+  assert.equal(entry('tampered').integrity.brokenAt, 2);
+  const dispatched = eventAt('queued', 'attempt_dispatched');
+  assert.deepEqual(at('queued', Date.parse(dispatched) + 60000), { needsHuman: false, reason: '', waitStart: '' });
+  assert.deepEqual(at('queued', Date.parse(dispatched) + 60001), { needsHuman: true, reason: 'unclaimed', waitStart: dispatched });
+  assert.equal(at('approved').needsHuman, false);
+
+  // The engine keeps working on its own arrays after handing out copies.
+  const before = entry('gate').events.length;
+  await ctx.act(runs.gate.id, { action: 'approve' });
+  assert.ok(ctx.engine.runs.get(runs.gate.id).events.length > before);
+  assert.equal(entry('gate').events.length, before, 'a copy handed out earlier does not change');
+});
+
+test('a run superseded later still needs a person at an earlier asOf', async (t) => {
+  const clock = { now: Date.now() };
+  const ctx = await setup(t, {
+    agents: async ({ script }) => [commandAgent('broken', await script('broken', scriptExit1))],
+    engineOptions: { clock: () => clock.now },
+  });
+  const { task } = await ctx.newTask({ stages: [stage('implement', 'implement', { maxAttempts: 1 })] });
+  const first = await ctx.start(task);
+  await ctx.engine.settle();
+  const second = await ctx.start(task);
+  const secondStart = Date.parse(ctx.engine.runs.get(second.id).state.startedAt);
+  const firstFailed = Date.parse(ctx.engine.runs.get(first.id).events.at(-1).at);
+  assert.ok(firstFailed <= secondStart);
+
+  const needs = () => ctx.engine.listRuns().find((entry) => entry.id === first.id).needsHuman;
+  clock.now = secondStart - 1;
+  assert.equal(needs(), true, 'before the newer run started, the failure still needed a person');
+  clock.now = secondStart;
+  assert.equal(needs(), false, 'from the moment the newer run started, it is superseded');
+
+  const run = ctx.engine.runs.get(first.id);
+  const otherRuns = [...ctx.engine.runs.values()].map((other) => other.state);
+  const asOf = (ms) => needsHumanAt({ state: run.state, integrity: run.integrity, events: run.events, otherRuns, asOf: new Date(ms), leaseMs: ctx.engine.leaseMs }).needsHuman;
+  assert.equal(asOf(firstFailed), true);
+  assert.equal(asOf(secondStart - 1), true);
+  assert.equal(asOf(secondStart), false);
+});
+
+test('a clock injected into createServer decides when unclaimed work starts waiting for a person', async (t) => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'agesight-clock-'));
+  const clock = { now: Date.now() };
+  const server = await createServer({
+    dataDir: path.join(root, 'data'),
+    clock: () => clock.now,
+    engineOptions: { leaseMs: 60000 },
+    registryOptions: { seed: () => [pullAgent('puller')] },
+  });
+  t.after(async () => {
+    if (server.listening) {
+      server.close();
+      await once(server, 'close');
+    } else {
+      await server.engine.stop();
+    }
+    await rm(root, { recursive: true, force: true, maxRetries: 5 });
+  });
+  const project = await server.workspace.createProject({ name: 'Clock' });
+  await server.engine.savePipeline(project.id, { stages: PULL_STAGE, version: 'default' });
+  const task = await server.workspace.createTask({ projectId: project.id, title: 'Unclaimed' });
+  const started = await server.engine.startRun({ taskId: task.id });
+  await server.engine.settle();
+  const dispatchedAt = Date.parse(server.engine.runs.get(started.id).state.attempts[0].dispatchedAt);
+
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const runs = async () => {
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/api/runs`, { headers: { 'x-agesight-token': server.apiToken } });
+    assert.equal(response.status, 200);
+    return (await response.json()).find((run) => run.id === started.id);
+  };
+  clock.now = dispatchedAt + 60000 - 1;
+  assert.equal((await runs()).needsHuman, false, 'within the lease the work is not waiting');
+  clock.now = dispatchedAt + 60000 + 1;
+  assert.equal((await runs()).needsHuman, true, 'after the lease it waits for a person');
+  assert.equal(server.engine.clock(), clock.now);
 });

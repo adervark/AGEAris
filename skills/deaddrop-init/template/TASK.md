@@ -3,8 +3,10 @@ id: {{T###}}
 title: "{{title}}"
 status: open
 owner: —
-type: {{optional — doc / analysis / run / review. Tasks of one type are timed
-  together. Delete this line where there is one kind of work.}}
+type: {{any single word; tasks of one type are timed together; `bug` is counted
+  as defect work; leave this placeholder or delete the line for untyped}}
+# blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
+blockedReason: ""
 depends: []
 created: {{DATE}}
 ---

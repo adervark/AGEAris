@@ -123,6 +123,10 @@ skills/deaddrop-init/
 - Every fact has one home. Files link to it rather than restating it, because restated prose is what drifts.
 - The read-always path (bootstrap, rules, NOW block, one task file) is kept to roughly 180 lines. Everything else loads on demand.
 
+## Template additions
+
+`TASK.md` gained a `blockedReason:` key and a clearer `type:` comment, and `RULES.md` asks for a `blockedReason:` when a task moves to blocked. Both are additive: a task file without the key reads as having none, and gains it on its next edit through AGESight.
+
 ## Legacy naming
 
 Repositories scaffolded before 2026-09-02 use `pm/` instead of `deaddrop/`. It is the same convention; leave the directory name alone unless you intend to migrate it.
