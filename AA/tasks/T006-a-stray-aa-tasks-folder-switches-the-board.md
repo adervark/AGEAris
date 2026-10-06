@@ -1,8 +1,8 @@
 ---
 id: T006
 title: "A stray AA/tasks/ folder switches a project's board"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/ff713831 2026-10-07 — making findBoard prefer a real board
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -56,8 +56,8 @@ A finished move, where the old folder is gone, is still followed.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/ff713831 (registered, never claimed)
-- **In flight:** nothing
+- **Last touched:** 2026-10-07, adervark @k/ff713831
+- **In flight:** the fix, in this session
 - **On disk:** nothing yet
 - **Resume with:** write the failing tests first
 - **Next decision:** none

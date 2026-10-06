@@ -16,19 +16,19 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T21:41Z · 16 tasks: 15 backlog, 0 WIP (0 in progress), 1 delivered`
+`board · 2026-10-06T21:41Z · 16 tasks: 13 backlog, 2 WIP (2 in progress), 1 delivered`
 
-FLOW · **WIP 0/2** · throughput 0.0/wk (0 in 30d) · cycle time: too few delivered with a claim commit (n=0)
+FLOW · **WIP 2/2** · throughput 0.2/wk (1 in 30d) · cycle time: too few delivered with a claim commit (n=1)
+FLOW · Little's Law: 2 ÷ 0.2/wk ≈ 60d expected
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 15 | | `T002` `T003` `T004` `T005` `T006` `T007` +9 more (`--all`) | | | ⚑ 0 not ready |
+| **IN PROGRESS** 2/2 | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | now |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | now |  |
+| **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T001 | Review 479b6e7 and e64f823 independently | adervark | now |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-
-**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
-
-- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T001
 <!-- /AA:generated -->
 
 <!--

@@ -1,8 +1,8 @@
 ---
 id: T005
 title: "A dollar pattern in a task title corrupts the task file on every edit"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/ff713831 2026-10-07 — fixing dollar patterns in edits
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -52,8 +52,8 @@ A title, owner, assignee or blocked reason holding `$&`, `$'`, `` $` `` or
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/ff713831 (registered, never claimed)
-- **In flight:** nothing
+- **Last touched:** 2026-10-07, adervark @k/ff713831
+- **In flight:** the fix, in this session
 - **On disk:** nothing yet
 - **Resume with:** write the failing test first
 - **Next decision:** none
