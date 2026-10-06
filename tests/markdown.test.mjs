@@ -46,6 +46,10 @@ test('headings shift under the page\'s own, and lists, task boxes, emphasis, and
   assert.equal(renderMarkdown('- item\n\ntext\n\n    code'), '<ul><li>item</li></ul><p>text</p><pre><code>code</code></pre>');
   // A line end inside a code span is a space, whatever ends the line.
   assert.equal(renderMarkdown('Use `C:\\\nfoo` here'), '<p>Use <code>C:\\ foo</code> here</p>');
+  // A stray backtick opens no span, so later breaks still hold.
+  assert.equal(renderMarkdown('don`t stop\\\nnext\\\nthird'), '<p>don`t stop<br>next<br>third</p>');
+  // Any indent keeps a paragraph inside the list, not only four spaces.
+  assert.equal(renderMarkdown('1. Step\n\n   Para A\n\n    Para B'), '<ol><li>Step</li></ol><p>Para A</p><p>Para B</p>');
 });
 
 test('hostile input stays fast and bounded: long headings, link runs, emphasis runs, and deep quotes', () => {

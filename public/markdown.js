@@ -95,16 +95,25 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
   let paragraph = [];
   // A paragraph's lines join as Markdown reads them: a line break is a space,
   // unless the line ends in two spaces or a backslash, another line follows,
-  // and no code span is open (an odd count of backticks so far). Inline markup
-  // runs over each stretch between breaks, so emphasis, code and links may
-  // wrap; a stretch longer than MAX_INLINE is read line by line.
+  // and the line end is not inside a code span (found as `inline` finds them).
+  // Inline markup runs over each stretch between breaks, so emphasis, code and
+  // links may wrap; a stretch longer than MAX_INLINE is read line by line.
   const flush = () => {
     if (!paragraph.length) return;
+    // Where each line ends in the joined text, and which ends fall inside a
+    // span. Spans and ends both run left to right, so one pass finds them.
+    const joined = paragraph.map(({ text }) => text).join('\n');
+    const ends = [];
+    for (const { text } of paragraph) ends.push((ends.at(-1) ?? -1) + text.length + 1);
+    const inSpan = new Set();
+    let next = 0;
+    for (const span of joined.matchAll(/`+[^`]*?`+/g)) {
+      while (next < ends.length && ends[next] < span.index) next += 1;
+      while (next < ends.length && ends[next] < span.index + span[0].length) inSpan.add(next++);
+    }
     const stretches = [[]];
-    let ticks = 0;
     paragraph.forEach(({ text, hard, slash }, at) => {
-      ticks += text.split('`').length - 1;
-      const breaks = hard && at < paragraph.length - 1 && ticks % 2 === 0;
+      const breaks = hard && at < paragraph.length - 1 && !inSpan.has(at);
       stretches.at(-1).push(breaks && slash ? text.slice(0, -1) : text);
       if (breaks) stretches.push([]);
     });
@@ -116,7 +125,7 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
   let afterList = false;
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
-    if (!paragraph.length && line.trim() && !INDENTED.test(line)) afterList = false;
+    if (!paragraph.length && line.trim() && !/^\s/.test(line)) afterList = false;
     const fence = /^\s*(```|~~~)/.exec(line);
     if (fence) {
       flush();
