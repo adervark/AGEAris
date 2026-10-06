@@ -371,7 +371,7 @@ test('external project metadata edits reject stale project saves', async () => {
   const project = await workspace.createProject({ name: 'Shared metadata', description: 'Original' });
   const metadataPath = path.join(projectRepository(directory, project.id), 'project.json');
   const externallyEdited = JSON.parse(await readFile(metadataPath, 'utf8'));
-  externallyEdited.description = 'Edited outside AGESight';
+  externallyEdited.description = 'Edited outside AgeAris';
   await writeFile(metadataPath, `${JSON.stringify(externallyEdited, null, 2)}\n`);
 
   await assert.rejects(
@@ -379,7 +379,7 @@ test('external project metadata edits reject stale project saves', async () => {
     (error) => error?.status === 409 && /changed|refresh|stale|version|conflict/i.test(error.message),
   );
   const current = (await workspace.read()).projects.find(candidate => candidate.id === project.id);
-  assert.equal(current.description, 'Edited outside AGESight');
+  assert.equal(current.description, 'Edited outside AgeAris');
   assert.notEqual(current.version, project.version);
 });
 
@@ -611,7 +611,7 @@ test('blocked-reason fallback: field, then the newest blocked checkpoint, then t
     JSON.stringify({ ts: '2026-10-02T10:00:00Z', run: 'e857a8c8', kind: 'did', what: 'not a block' }),
   ].join('\n');
 
-  assert.deepEqual(blockedReasonOf({ body: handoff(DEFAULT_NEXT_DECISION) }), { text: 'No reason given', source: 'none' }, 'AGESight boilerplate only');
+  assert.deepEqual(blockedReasonOf({ body: handoff(DEFAULT_NEXT_DECISION) }), { text: 'No reason given', source: 'none' }, 'AgeAris boilerplate only');
   assert.deepEqual(blockedReasonOf({ body: handoff('{{what the resuming session has to choose, if anything}}') }), { text: 'No reason given', source: 'none' }, 'a template placeholder is skipped');
   assert.deepEqual(blockedReasonOf({ trail, body: handoff('Pick a vendor') }), { text: 'waiting on the GPU quota', source: 'checkpoint' });
   assert.deepEqual(blockedReasonOf({ body: handoff('Pick a vendor for the importer') }), { text: 'Pick a vendor for the importer', source: 'handoff' });
@@ -779,11 +779,11 @@ function escapeRegExp(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// A task file as a board AGESight did not write keeps it: the keys given, in
+// A task file as a board AgeAris did not write keeps it: the keys given, in
 // that order, values written verbatim.
 function boardTask(id, title, fields = {}) {
   const header = Object.entries({ id, title, ...fields }).map(([key, value]) => `${key}: ${value}`).join('\n');
-  return `---\n${header}\n---\n\n# ${id} — ${title}\n\n## Goal\n\nWork tracked outside AGESight.\n`;
+  return `---\n${header}\n---\n\n# ${id} — ${title}\n\n## Goal\n\nWork tracked outside AgeAris.\n`;
 }
 
 // A git repository outside the data folder, as an agent team keeps it: a
@@ -810,7 +810,7 @@ async function scratchFolder() {
 }
 
 // HEAD, git status, and every file outside .git with its content (a symlink
-// as its target): equal before and after means AGESight changed nothing.
+// as its target): equal before and after means AgeAris changed nothing.
 async function repositoryState(directory) {
   const files = {};
   async function visit(current) {
@@ -903,9 +903,9 @@ test('linkProject refuses a missing, relative, absent, or non-folder path, and a
   await expectRejected(workspace.linkProject({ path: 'code/project' }), 400, /full path/);
   await expectRejected(workspace.linkProject({ path: path.join(repository, 'missing') }), 400, new RegExp(`^There is no folder at ${escapeRegExp(path.join(repository, 'missing'))}$`));
   await expectRejected(workspace.linkProject({ path: path.join(repository, 'README.md') }), 400, /README\.md is not a folder$/);
-  // An AGESight project is a git repository with a board, so only its place refuses it.
+  // An AgeAris project is a git repository with a board, so only its place refuses it.
   for (const inside of [directory, projectRepository(directory, own.id), path.join(outside, 'alias'), `${repository}/../${path.basename(directory)}/projects`]) {
-    await expectRejected(workspace.linkProject({ path: inside }), 400, /inside AGESight's own data folder/);
+    await expectRejected(workspace.linkProject({ path: inside }), 400, /inside AgeAris's own data folder/);
   }
   assert.deepEqual(await readdir(path.join(directory, 'projects')), [own.id], 'nothing was written, not even a staging folder');
 });
@@ -935,7 +935,7 @@ test('linkProject refuses a folder that is not a git repository, a subfolder of 
     'deaddrop/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open' }),
     'docs/tasks/T002-notes.md': boardTask('T002', 'Notes', { status: 'open' }),
   });
-  await expectRejected(workspace.linkProject({ path: boardless }), 400, /has no task board: AGESight reads deaddrop\/tasks\/ \(or pm\/tasks\/, its older name\), and not through a symbolic link$/);
+  await expectRejected(workspace.linkProject({ path: boardless }), 400, /has no task board: AgeAris reads deaddrop\/tasks\/ \(or pm\/tasks\/, its older name\), and not through a symbolic link$/);
   assert.deepEqual(await readdir(path.join(directory, 'projects')), []);
 });
 
@@ -1054,7 +1054,7 @@ test('a tracked repository refuses task and project writes with a 409 naming its
   const project = await workspace.linkProject({ path: repository, name: 'Theirs' });
   const task = await workspace.getTask(`${project.id}:T001`);
   const before = await repositoryState(repository);
-  const readOnly = new RegExp(`^Theirs is a tracked repository, which AGESight only reads\\. Change its tasks in ${escapeRegExp(path.join(repository, 'pm'))}, where its agents work\\.$`);
+  const readOnly = new RegExp(`^Theirs is a tracked repository, which AgeAris only reads\\. Change its tasks in ${escapeRegExp(path.join(repository, 'pm'))}, where its agents work\\.$`);
 
   await expectRejected(workspace.createTask({ projectId: project.id, title: 'One more' }), 409, readOnly);
   await expectRejected(workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }), 409, readOnly);
@@ -1079,7 +1079,7 @@ test('_commit and _resetPaths refuse any folder but an own project repository, s
 
   for (const target of [folder, repository, directory, path.join(directory, 'projects')]) {
     const paths = [path.join(target, 'project.json'), path.join(target, 'deaddrop')];
-    assert.throws(() => workspace._commit(target, paths, 'Sneak a commit in'), (error) => error.status === 500 && /^AGESight writes only to the project repositories in its data folder$/.test(error.message), target);
+    assert.throws(() => workspace._commit(target, paths, 'Sneak a commit in'), (error) => error.status === 500 && /^AgeAris writes only to the project repositories in its data folder$/.test(error.message), target);
     assert.throws(() => workspace._resetPaths(target, paths), (error) => error.status === 500, target);
   }
   assert.deepEqual(await heads(), before, 'neither the data folder\'s repository nor the tracked one got a commit');
@@ -1094,7 +1094,7 @@ test('unlinkProject removes only a tracked project\'s folder; an own project is 
   const project = await workspace.linkProject({ path: repository, name: 'Theirs' });
   const before = await repositoryState(repository);
 
-  await expectRejected(workspace.unlinkProject(own.id), 409, /^Own is an AGESight project; only a tracked repository can be removed$/);
+  await expectRejected(workspace.unlinkProject(own.id), 409, /^Own is an AgeAris project; only a tracked repository can be removed$/);
   await expectRejected(workspace.unlinkProject('00000000-0000-4000-8000-000000000000'), 404, /Project not found/);
   await expectRejected(workspace.unlinkProject('../projects'), 404, /Project not found/);
   assert.deepEqual(await workspace.unlinkProject(project.id), { id: project.id, name: 'Theirs' });
@@ -1128,7 +1128,7 @@ test('an own project whose project.json names a repository is still an own proje
   assert.deepEqual(snapshot.tasks.map((task) => task.title), ['Mine']);
   assert.equal((await workspace.createTask({ projectId: project.id, title: 'Still writable' })).id, `${project.id}:T002`);
   assert.match(await git(projectDir, 'log', '-1', '--format=%s'), /^Create T002: Still writable$/);
-  await expectRejected(workspace.unlinkProject(project.id), 409, /is an AGESight project/);
+  await expectRejected(workspace.unlinkProject(project.id), 409, /is an AgeAris project/);
   assert.deepEqual(await repositoryState(repository), before);
 });
 
@@ -1148,7 +1148,7 @@ test('a tracked task carries its holder\'s latest note from the owner line, and 
   assert.equal('body' in plain, false, 'the body is read only when asked for');
   assert.equal('_localId' in plain, false);
   const full = await workspace.getTask(tasks.T002.id, { body: true });
-  assert.match(full.body, /^\s*# T002 — Import\n\n## Goal\n\nWork tracked outside AGESight\.\n$/);
+  assert.match(full.body, /^\s*# T002 — Import\n\n## Goal\n\nWork tracked outside AgeAris\.\n$/);
   assert.deepEqual(Object.keys(full).filter((key) => key.startsWith('_')), []);
 });
 

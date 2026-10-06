@@ -29,7 +29,7 @@ function at(day, time = '09:00') {
 }
 
 // A workspace whose projects are fabricated histories; every commit is the
-// workspace operator's, as in a real AGESight project.
+// workspace operator's, as in a real AgeAris project.
 async function workspaceWith(projects, { runs = {} } = {}) {
   const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agesight-brief-'));
   directories.add(dataDir);

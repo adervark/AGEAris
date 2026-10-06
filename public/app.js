@@ -127,19 +127,19 @@ function agentsByProject() {
 }
 
 // The API token arrives as an HttpOnly cookie with the page, and same-origin
-// fetches send it. A 401 means this page's token is stale (AGESight restarted
+// fetches send it. A 401 means this page's token is stale (AgeAris restarted
 // with another data directory, or the cookie was cleared): only a reload helps.
 async function api(path, method = 'GET', data) {
   const response = await fetch(`/api${path}`, { method, credentials: 'same-origin', ...(data ? { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) } : {}) });
   if (response.status === 401) {
     connectionLost();
-    const error = new Error('Reload AGESight to reconnect.');
+    const error = new Error('Reload AgeAris to reconnect.');
     error.status = 401;
     throw error;
   }
   if (state.authLost) connectionRestored();
   let result;
-  try { result = await response.json(); } catch { throw new Error('The server did not return a valid response. Restart AGESight and refresh.'); }
+  try { result = await response.json(); } catch { throw new Error('The server did not return a valid response. Restart AgeAris and refresh.'); }
   if (!response.ok) {
     const error = new Error(result.error || 'Changes could not be saved. Try again.');
     error.status = response.status;
@@ -169,7 +169,7 @@ function connectionLost() {
   if (state.authLost) return;
   state.authLost = true;
   const banner = $('#connection-banner');
-  banner.innerHTML = `${icon('alert')}<p><strong>Sign in to AGESight.</strong> <span>Open the sign-in link printed in the terminal where AGESight is running (npm start), then reload. This keeps other local users out of your workspace. Automatic updates are stopped.</span></p><button type="button" class="button button-primary" id="reload-button">${icon('refresh')}Reload</button>`;
+  banner.innerHTML = `${icon('alert')}<p><strong>Sign in to AgeAris.</strong> <span>Open the sign-in link printed in the terminal where AgeAris is running (npm start), then reload. This keeps other local users out of your workspace. Automatic updates are stopped.</span></p><button type="button" class="button button-primary" id="reload-button">${icon('refresh')}Reload</button>`;
   banner.hidden = false;
   $('#reload-button').addEventListener('click', () => location.reload());
   setMonitor('Reload needed', true, 'The API rejected this page’s access key. Reload to reconnect.');
@@ -264,7 +264,7 @@ function render() {
   renderNavigation();
   const project = selectedProject();
   const page = project?.name || PAGE_NAMES[state.view] || (state.run?.id === state.runId ? `Run ${state.run.localId}` : 'Run');
-  document.title = `${page} · AGESight`;
+  document.title = `${page} · AgeAris`;
   const parent = project ? '<a href="#projects">Projects</a> <span>/</span> ' : state.view === 'work' ? '<a href="#projects">Projects</a> <span>/</span> ' : ['decisions', 'run'].includes(state.view) ? '<a href="#home">Home</a> <span>/</span> ' : '';
   $('#breadcrumb').innerHTML = `${parent}<strong>${escape(page)}</strong>`;
   // In one of your own projects the button adds a task there; elsewhere it adds a project.
@@ -371,12 +371,12 @@ function renderProjectPage(project) {
 
 function projectHeader(project, line) {
   const where = project.linked
-    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGESight reads its <code>${escape(project.board)}/</code> board and git history; its tasks change in the repository, where its agents work.</p>`
+    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AgeAris reads its <code>${escape(project.board)}/</code> board and git history; its tasks change in the repository, where its agents work.</p>`
     : project.description ? `<p class="project-where">${escape(project.description)}</p>` : '';
   const status = line?.state === 'ready'
     ? `<p class="project-status tone-${healthTone(line.health)}">${healthDot(line.health)}${metricButton({ projectId: project.id, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' })}<span>${escape(headline(line))}</span></p>`
     : `<p class="project-status">${healthDot(null)}<span>${escape(headline(line) || 'Reading this project’s history…')}</span></p>`;
-  return `<header class="project-header"><div class="project-title-row"><span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span><h1>${escape(project.name)}</h1>${project.linked ? '<span class="readonly-badge" title="AGESight reads this repository and never writes to it.">Read-only</span>' : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${vitals(project, line)}</header>`;
+  return `<header class="project-header"><div class="project-title-row"><span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span><h1>${escape(project.name)}</h1>${project.linked ? '<span class="readonly-badge" title="AgeAris reads this repository and never writes to it.">Read-only</span>' : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${vitals(project, line)}</header>`;
 }
 
 // The four numbers a project is run by, each with its plain meaning.
@@ -398,7 +398,7 @@ function projectActions(project) {
 // Task files in a tracked repository that could not be read; the rest of the
 // board is shown without them.
 function problemsNote(project) {
-  if (project.unavailable) return `<p class="window-note problems-note">${icon('alert')}<span>This repository cannot be read right now: ${escape(project.unavailable)} Its tasks show again once it can be read; Stop tracking removes it from AGESight.</span></p>`;
+  if (project.unavailable) return `<p class="window-note problems-note">${icon('alert')}<span>This repository cannot be read right now: ${escape(project.unavailable)} Its tasks show again once it can be read; Stop tracking removes it from AgeAris.</span></p>`;
   const problems = project.problems || [];
   if (!problems.length) return '';
   const listed = problems.slice(0, 5).map((problem) => `${problem.file} (${problem.error})`).join('; ');
@@ -497,12 +497,12 @@ function taskList(tasks, { showProject = false } = {}) {
 }
 
 function renderEmptyWorkspace() {
-  $('#main').innerHTML = `<section class="page-heading home-heading"><div><h1>Welcome to AGESight</h1><p class="home-sub">Run projects with people and agents: what needs you, how work flows, and whether the method is being followed.</p></div></section><section class="section panel add-panel"><div class="dialog-fields">${addChoices()}</div></section>`;
+  $('#main').innerHTML = `<section class="page-heading home-heading"><div><h1>Welcome to AgeAris</h1><p class="home-sub">Run projects with people and agents: what needs you, how work flows, and whether the method is being followed.</p></div></section><section class="section panel add-panel"><div class="dialog-fields">${addChoices()}</div></section>`;
 }
 
 // The two ways to add a project, plus the sample.
 function addChoices() {
-  return `<div class="choice-cards"><button type="button" class="choice-card" data-action="link-project">${icon('git')}<span><strong>Track an existing repository</strong><span>Its agents already keep a deaddrop/ board. AGESight reads the board and git history and never writes there.</span></span></button><button type="button" class="choice-card" data-action="new-project">${icon('folder')}<span><strong>Start a new project here</strong><span>AGESight keeps its board in a git repository of its own. Add tasks, set a WIP limit, and run them with agents.</span></span></button><button type="button" class="choice-card" data-action="sample-project">${icon('activity')}<span><strong>Explore a sample project</strong><span>Six weeks of simulated history, so every view has something to show.</span></span></button></div>`;
+  return `<div class="choice-cards"><button type="button" class="choice-card" data-action="link-project">${icon('git')}<span><strong>Track an existing repository</strong><span>Its agents already keep a deaddrop/ board. AgeAris reads the board and git history and never writes there.</span></span></button><button type="button" class="choice-card" data-action="new-project">${icon('folder')}<span><strong>Start a new project here</strong><span>AgeAris keeps its board in a git repository of its own. Add tasks, set a WIP limit, and run them with agents.</span></span></button><button type="button" class="choice-card" data-action="sample-project">${icon('activity')}<span><strong>Explore a sample project</strong><span>Six weeks of simulated history, so every view has something to show.</span></span></button></div>`;
 }
 
 function openAddProject() {
@@ -734,10 +734,10 @@ function openProjectEditor(project = null) {
   dialog.querySelector('[name="name"]').focus();
 }
 
-// Tracks an existing repository: AGESight reads its board and history.
+// Tracks an existing repository: AgeAris reads its board and history.
 function openLinkEditor() {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGESight reads the repository’s deaddrop/ task board (or pm/, its older name) and its git history, and checks the work against the board’s method. It never writes there: the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
+  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AgeAris reads the repository’s deaddrop/ task board (or pm/, its older name) and its git history, and checks the work against the board’s method. It never writes there: the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
   const form = $('#link-form');
   form.querySelector('[data-switch-new]').addEventListener('click', () => openProjectEditor());
   form.addEventListener('submit', async (event) => {
@@ -751,7 +751,7 @@ function openLinkEditor() {
       closeDialog(dialog);
       await refresh();
       navigate(saved.id);
-      toast(`Tracking ${saved.name}. AGESight only reads it.`);
+      toast(`Tracking ${saved.name}. AgeAris only reads it.`);
     } catch (error) { $('#link-error').textContent = error.message; } finally { button.disabled = false; }
   });
   setupDialog(dialog);
@@ -858,7 +858,7 @@ function openTaskViewer(task) {
   const project = projectOf(task);
   const dialog = $('#task-dialog');
   const head = drawerHead(task, { editable: false });
-  dialog.innerHTML = `<div class="task-view">${head.heading}<div class="dialog-fields">${head.summary}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>Read-only here. Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AGESight picks the change up.</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
+  dialog.innerHTML = `<div class="task-view">${head.heading}<div class="dialog-fields">${head.summary}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>Read-only here. Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AgeAris picks the change up.</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
   setupDialog(dialog);
   loadTaskBody(task);
   loadTaskHistory(task);
@@ -1250,7 +1250,7 @@ function statusCard(run) {
   const stageName = escape(run.currentStage?.name || 'This stage');
   const chain = run.audit?.chain || { ok: true };
   if (!run.integrity || !chain.ok) {
-    return card('fail', `${icon('shieldAlert')}Audit check failed`, 'This run is locked', `<p class="decision-copy">The audit log failed verification${chain.brokenAt ? ` at event ${escape(chain.brokenAt)}` : ''}. AGESight will not change this run.</p><pre class="error-text">${escape(chain.reason || 'No reason was recorded.')}</pre><p class="decision-copy">Inspect the git history of <code>${escape(run.path)}</code> in the project repository.</p>`);
+    return card('fail', `${icon('shieldAlert')}Audit check failed`, 'This run is locked', `<p class="decision-copy">The audit log failed verification${chain.brokenAt ? ` at event ${escape(chain.brokenAt)}` : ''}. AgeAris will not change this run.</p><pre class="error-text">${escape(chain.reason || 'No reason was recorded.')}</pre><p class="decision-copy">Inspect the git history of <code>${escape(run.path)}</code> in the project repository.</p>`);
   }
   switch (run.status) {
     case 'awaiting_approval': return approvalCard(run, card);
@@ -1275,7 +1275,7 @@ function statusCard(run) {
       const attempt = run.attempts.findLast((entry) => ['queued', 'running'].includes(entry.status));
       if (run.needsHuman && attempt?.status === 'queued') {
         const agent = escape(agentName(attempt.agentId));
-        return card('wait', `${icon('decision')}Waiting on you`, `Waiting for ${agent} to claim this stage`, `<p class="decision-copy">${agent} is a pull agent. It was given ${stageName} ${escape(relativeTime(attempt.dispatchedAt).replace(/^Just now$/, 'just now'))} and has not claimed it. Check that it is running and can reach AGESight, or move the stage to someone else.</p><div class="decision-actions"><button class="button button-primary" data-action="reassign">${icon('route')}Reassign</button><button class="button button-secondary" data-action="run-act" data-run-action="takeover">${icon('user')}Take over this stage</button></div>`);
+        return card('wait', `${icon('decision')}Waiting on you`, `Waiting for ${agent} to claim this stage`, `<p class="decision-copy">${agent} is a pull agent. It was given ${stageName} ${escape(relativeTime(attempt.dispatchedAt).replace(/^Just now$/, 'just now'))} and has not claimed it. Check that it is running and can reach AgeAris, or move the stage to someone else.</p><div class="decision-actions"><button class="button button-primary" data-action="reassign">${icon('route')}Reassign</button><button class="button button-secondary" data-action="run-act" data-run-action="takeover">${icon('user')}Take over this stage</button></div>`);
       }
       const body = run.paused
         ? 'The current stage finishes, then nothing new starts until you resume.'
@@ -1672,7 +1672,7 @@ function openAgentEditor(agent = null) {
     ${agent ? '' : '<label class="field">Id<input name="agentId" required maxlength="40" pattern="[a-z0-9][a-z0-9\\-]{0,39}" placeholder="e.g. codex-review" spellcheck="false" autofocus><small>Lowercase letters, digits, and hyphens. It cannot change later.</small></label>'}
     <label class="field">Name<input name="name" required maxlength="80" value="${value('name')}" ${agent ? 'autofocus' : ''}></label>
     <label class="field">Description <span class="field-optional">optional</span><input name="description" maxlength="300" value="${value('description')}"></label>
-    <div class="field-row"><label class="field">Runner<select name="runner"><option value="command" ${agent?.runner !== 'pull' ? 'selected' : ''}>Command: AGESight starts it</option><option value="pull" ${agent?.runner === 'pull' ? 'selected' : ''}>Pull: it asks for work</option></select></label><label class="field">Preferred tier<select name="tier">${TIERS.map((tier) => `<option value="${tier}" ${(agent?.tier || 'sonnet') === tier ? 'selected' : ''}>${tierLabel(tier)}</option>`).join('')}</select></label></div>
+    <div class="field-row"><label class="field">Runner<select name="runner"><option value="command" ${agent?.runner !== 'pull' ? 'selected' : ''}>Command: AgeAris starts it</option><option value="pull" ${agent?.runner === 'pull' ? 'selected' : ''}>Pull: it asks for work</option></select></label><label class="field">Preferred tier<select name="tier">${TIERS.map((tier) => `<option value="${tier}" ${(agent?.tier || 'sonnet') === tier ? 'selected' : ''}>${tierLabel(tier)}</option>`).join('')}</select></label></div>
     <label class="field">Command <span class="field-optional">one argument per line</span><textarea name="command" rows="5" class="mono-input" spellcheck="false">${escape((agent?.command || []).join('\n'))}</textarea><small>Run without a shell. The stage prompt arrives on standard input; standard output becomes the stage output.</small></label>
     <label class="field">Working directory <span class="field-optional">optional</span><input name="cwd" maxlength="500" spellcheck="false" placeholder="Absolute path. Defaults to the project repository." value="${value('cwd')}"></label>
     <fieldset class="check-group"><legend>Roles</legend>${ROLES.map((role) => `<label class="check-field"><input type="checkbox" name="roles" value="${role}" ${!agent || agent.roles.includes(role) ? 'checked' : ''}><span>${roleLabel(role)}</span></label>`).join('')}</fieldset>
@@ -2055,7 +2055,7 @@ lastView = state.view;
 refresh().catch((error) => {
   state.loading = false;
   $('#main').setAttribute('aria-busy', 'false');
-  $('#main').innerHTML = `<div class="empty-results">${icon('alert')}<h1>Workspace unavailable</h1><p>${escape(error.message)}</p><p>Check that AGESight is running, then use the refresh button.</p></div>`;
+  $('#main').innerHTML = `<div class="empty-results">${icon('alert')}<h1>Workspace unavailable</h1><p>${escape(error.message)}</p><p>Check that AgeAris is running, then use the refresh button.</p></div>`;
   $('#create-button').disabled = true;
   monitorOffline(error);
 });

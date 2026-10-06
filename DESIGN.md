@@ -1,6 +1,6 @@
-# AGESight application
+# AgeAris application
 
-AGESight is a project management application for an operator working with people
+AgeAris is a project management application for an operator working with people
 and agents. Its first version runs locally. Project tasks are Markdown files, and
 git records changes. The existing plugin remains an integration for agents.
 
@@ -20,9 +20,9 @@ from backlog to completion without losing ownership or handoff context.
   beside each.
 - Persist tasks and history across application restarts.
 - Reject stale edits and claims beyond the project's work in progress limit.
-- Track an existing repository's deaddrop board read-only. AGESight never
+- Track an existing repository's deaddrop board read-only. AgeAris never
   writes to a repository it did not create; that repository's agents keep
-  working there, and AGESight reads their files and history.
+  working there, and AgeAris reads their files and history.
 
 Accounts, remote collaboration, and external integrations belong to later
 versions. The application serves one local operator.

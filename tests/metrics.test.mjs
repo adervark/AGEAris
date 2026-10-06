@@ -478,7 +478,7 @@ test('stale 4: a ckpt: commit 2 h ago whose lines are dated 30 h ago is stale (t
 test('stale 5 (N1): a UI edit 2 h ago never counts as life; the same edit by raw git does', async () => {
   const ui = compute((await claimed('day 34 07:00 ade: set T001 {"priority": "high"} via=ui')).ledger).metrics.stale_claims;
   assert.deepEqual(keys(ui), ['T001']);
-  assert.deepEqual(ui.claims[0].ignored.map((entry) => entry.reason), ['AGESight-Via: ui (an edit made in AGESight)']);
+  assert.deepEqual(ui.claims[0].ignored.map((entry) => entry.reason), ['AGESight-Via: ui (an edit made in AgeAris)']);
 
   const raw = compute((await claimed('day 34 07:00 ade: set T001 {"priority": "high"}')).ledger).metrics.stale_claims;
   assert.deepEqual(keys(raw), []);

@@ -1,4 +1,4 @@
-# AGESight
+# AgeAris
 
 A local project management application with a main dashboard for monitoring
 project state and tasks. People use the web interface; tasks and history remain
@@ -23,7 +23,7 @@ already keep a deaddrop board (see
 
 ## Home, projects, agents, activity
 
-AGESight treats the way a project works as the product: work moves through
+AgeAris treats the way a project works as the product: work moves through
 states, policies govern each move, and the method's checks say whether the work
 follows them. Views use the method's own terms (WIP, cycle time, service level,
 aging WIP, stale claim), and each one carries a line of plain meaning where it
@@ -96,7 +96,7 @@ links open Home, All tasks, and Activity.
 ## Agent pipeline
 
 Open a task and choose **Run with agents**. The task moves through stages,
-Triage, Plan, Implement, Review, and Verify by default. For each stage AGESight
+Triage, Plan, Implement, Review, and Verify by default. For each stage AgeAris
 picks the agent with the best measured record for that kind of work. It stops
 for your approval after Plan and Review. Home's **Needs you** lists every run that is
 waiting on you. From there you can approve, request changes, send work back to
@@ -107,7 +107,7 @@ Every prompt, output, routing decision, and approval is written to a
 hash-chained audit log in the project's repository and committed to git. The
 run page verifies the chain and every stored artifact.
 
-AGESight registers an offline **Rehearsal agent** on first start. If the
+AgeAris registers an offline **Rehearsal agent** on first start. If the
 `claude` CLI is installed, it also registers Claude Haiku, Sonnet, and Opus.
 In the Implement stage these run with `--dangerously-skip-permissions`: they
 can run any command your account can, without asking. Every other stage is
@@ -119,12 +119,12 @@ retry policy, routing, the audit format, and the API are described in
 
 ## Track an existing repository
 
-AGESight can watch a repository whose agents already keep a deaddrop task board
+AgeAris can watch a repository whose agents already keep a deaddrop task board
 (`deaddrop/`, or `pm/`, its older name). Choose **Track an existing
-repository** and give the repository's folder. AGESight only reads it: Home,
+repository** and give the repository's folder. AgeAris only reads it: Home,
 health, changes, and each task's history come from the board's files and the
 repository's git history, and nothing is ever written there. Tasks change in the
-repository, where its agents work, and AGESight picks the changes up.
+repository, where its agents work, and AgeAris picks the changes up.
 
 - The folder must be the top of a git repository with a `.git` directory
   (worktrees and submodules cannot be tracked yet) and contain `deaddrop/tasks/`
@@ -133,11 +133,11 @@ repository, where its agents work, and AGESight picks the changes up.
   `tasks/` whose status is `open` or empty counts as backlog until it is
   claimed. A rename from `pm/` to `deaddrop/` keeps each task's history.
 - The work in progress limit comes from the board's `deaddrop.yml`.
-- Task files AGESight cannot read are listed on the project page instead of
+- Task files AgeAris cannot read are listed on the project page instead of
   hiding the project.
 - Editing, the pipeline, and agent runs are not available for a tracked
   repository.
-- **Stop tracking** removes AGESight's record of the repository and leaves the
+- **Stop tracking** removes AgeAris's record of the repository and leaves the
   repository unchanged.
 
 Scripts can do the same with the `X-AGESight-Token` header:
@@ -145,6 +145,12 @@ Scripts can do the same with the `X-AGESight-Token` header:
 returns the project, and `DELETE /api/projects/<id>` stops tracking it.
 
 ## Storage and behavior
+
+AgeAris was first called AGESight. Names that are part of stored data or of
+integrations keep that name so existing workspaces and scripts keep working:
+the `AGESight-Via` commit trailer, the `X-AGESight-Token` API header, the
+`.agesight-data` folder, the `AGESIGHT_*` environment variables, and the
+`@agesight/web` claim on owner lines.
 
 The first version manages local project repositories under
 `.agesight-data/projects/<project-id>/`. Each project contains:

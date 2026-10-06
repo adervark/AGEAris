@@ -170,7 +170,7 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       catch { return sendJson(response, 400, { error: 'Invalid request URL' }); }
       const pathname = decodeURIComponent(url.pathname);
       if (pathname.startsWith('/api/') && !sameToken(presentedToken(request), token)) {
-        return sendJson(response, 401, { error: 'Open the sign-in link AGESight printed when it started. Scripts send the X-AGESight-Token header from the data directory\'s .api-token file.' });
+        return sendJson(response, 401, { error: 'Open the sign-in link AgeAris printed when it started. Scripts send the X-AGESight-Token header from the data directory\'s .api-token file.' });
       }
 
       if (request.method === 'GET' && pathname === '/api/workspace') {
@@ -235,7 +235,7 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       if (request.method === 'PATCH' && projectMatch) {
         return sendJson(response, 200, await workspace.updateProject(projectMatch[1], await readJson(request), VIA_UI));
       }
-      // Stops tracking a repository; AGESight projects are never deleted here.
+      // Stops tracking a repository; AgeAris projects are never deleted here.
       if (request.method === 'DELETE' && projectMatch) {
         const removed = await workspace.unlinkProject(projectMatch[1]);
         cockpit.forget(removed.id);
@@ -298,7 +298,7 @@ async function main() {
   }
   const server = await createServer({ port: Number(rawPort) });
   await server.start();
-  console.log(`AGESight is running. Open this link to sign in:\n\n  http://127.0.0.1:${rawPort}/?token=${server.apiToken}\n\nThe browser stays signed in for this data folder; the link is also stored in ${join(server.workspace.dataDir, '.api-token')} as the token.`);
+  console.log(`AgeAris is running. Open this link to sign in:\n\n  http://127.0.0.1:${rawPort}/?token=${server.apiToken}\n\nThe browser stays signed in for this data folder; the link is also stored in ${join(server.workspace.dataDir, '.api-token')} as the token.`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

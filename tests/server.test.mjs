@@ -747,7 +747,7 @@ test('every write to a tracked project is refused with a 409: its tasks, its pro
     ['PUT', `/api/projects/${project.id}/pipeline`, { stages, version: 'default' }],
     ['POST', '/api/runs', { taskId: task.id }],
   ]) {
-    assert.match((await call(method, url, body, 409)).error, /^Their repo is a tracked repository, which AGESight only reads\./, `${method} ${url}`);
+    assert.match((await call(method, url, body, 409)).error, /^Their repo is a tracked repository, which AgeAris only reads\./, `${method} ${url}`);
   }
   assert.deepEqual(await call('GET', '/api/runs'), [], 'no run was started');
   assert.deepEqual(await repositoryState(repository), before, 'the repository is untouched');
@@ -763,7 +763,7 @@ test('DELETE /api/projects/:id stops tracking a repository; an own project is a 
   assert.ok((await call('GET', '/api/brief')).projects.some((line) => line.projectId === project.id && line.state === 'ready'));
   const before = await repositoryState(repository);
 
-  assert.match((await call('DELETE', `/api/projects/${own.id}`, undefined, 409)).error, /^Own is an AGESight project; only a tracked repository can be removed$/);
+  assert.match((await call('DELETE', `/api/projects/${own.id}`, undefined, 409)).error, /^Own is an AgeAris project; only a tracked repository can be removed$/);
   await call('DELETE', '/api/projects/00000000-0000-4000-8000-000000000000', undefined, 404);
   await call('DELETE', '/api/projects/not-a-project', undefined, 404);
   assert.deepEqual(await call('DELETE', `/api/projects/${project.id}`), { id: project.id, name: 'Their repo' });

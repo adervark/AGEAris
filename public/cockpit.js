@@ -76,7 +76,7 @@ export function healthDot(health) {
 }
 
 export function sampleBadge(sample) {
-  return sample ? '<span class="sample-badge" title="This project’s history was generated to show how AGESight works.">Simulated history</span>' : '';
+  return sample ? '<span class="sample-badge" title="This project’s history was generated to show how AgeAris works.">Simulated history</span>' : '';
 }
 
 function openItem({ projectId, taskKey, runId }) {
@@ -198,7 +198,7 @@ function usualWeek(kpis) {
 // One project as a card: its health in words, why, and how work is flowing.
 export function projectCard(line, { agents = 0, project } = {}) {
   const name = `<a class="project-card-name" href="#project/${escape(line.projectId)}">${escape(line.name)}</a>`;
-  const badges = `${line.linked ? '<span class="readonly-badge" title="AGESight reads this repository and never writes to it.">Read-only</span>' : ''}${sampleBadge(line.sample)}`;
+  const badges = `${line.linked ? '<span class="readonly-badge" title="AgeAris reads this repository and never writes to it.">Read-only</span>' : ''}${sampleBadge(line.sample)}`;
   if (line.state !== 'ready') {
     const word = line.state === 'unavailable' ? 'Unavailable' : 'Indexing';
     return `<article class="project-card"><div class="project-card-head">${healthDot(null)}${name}<span class="health-word">${word}</span>${badges}</div><p class="project-card-indexing">${line.state === 'unavailable' ? icon('alert') : '<span class="spinner"></span>'}${escape(headline(line))}</p></article>`;
@@ -210,7 +210,7 @@ export function projectCard(line, { agents = 0, project } = {}) {
   return `<article class="project-card tone-${healthTone(line.health)}"><div class="project-card-head">${healthDot(line.health)}${name}${word}${badges}</div>
     <p class="project-card-sentence">${escape(headline(line))}</p>
     <div class="project-card-flow"><p><strong>${metricOf(line.projectId, k.done7d)}</strong>finished in 7 days${usual !== null ? `<br><span class="muted">usually ~${escape(usual)} a week</span>` : ''}</p>${sparkline(line.spark)}</div>
-    <dl class="project-card-facts">${fact(TERMS.wip[0], TERMS.wip[1], `${metricOf(line.projectId, k.wip)}${k.wipLimit ? ` / ${escape(k.wipLimit)}` : ''}`)}${k.cycle50 ? fact(TERMS.cycle[0], TERMS.cycle[1], metricOf(line.projectId, k.cycle50)) : ''}${k.cycle85 ? fact(TERMS.service[0], TERMS.service[1], metricOf(line.projectId, k.cycle85)) : ''}${fact('Agents', 'Agent sessions holding work in progress', escape(agents))}${project?.problems?.length ? fact('Unread files', 'Task files AGESight could not read', escape(project.problems.length)) : ''}</dl></article>`;
+    <dl class="project-card-facts">${fact(TERMS.wip[0], TERMS.wip[1], `${metricOf(line.projectId, k.wip)}${k.wipLimit ? ` / ${escape(k.wipLimit)}` : ''}`)}${k.cycle50 ? fact(TERMS.cycle[0], TERMS.cycle[1], metricOf(line.projectId, k.cycle50)) : ''}${k.cycle85 ? fact(TERMS.service[0], TERMS.service[1], metricOf(line.projectId, k.cycle85)) : ''}${fact('Agents', 'Agent sessions holding work in progress', escape(agents))}${project?.problems?.length ? fact('Unread files', 'Task files AgeAris could not read', escape(project.problems.length)) : ''}</dl></article>`;
 }
 
 function windowNote(brief) {
