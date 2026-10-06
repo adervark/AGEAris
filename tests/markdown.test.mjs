@@ -42,6 +42,10 @@ test('headings shift under the page\'s own, and lists, task boxes, emphasis, and
   assert.equal(renderMarkdown('Log:\n\n    baseline  GET /a -> 404\n    now       GET /a\\x00 -> 404\n\nAfter.'), '<p>Log:</p><pre><code>baseline  GET /a -&gt; 404\nnow       GET /a\\x00 -&gt; 404</code></pre><p>After.</p>');
   assert.equal(renderMarkdown('one\n    two'), '<p>one two</p>');
   assert.equal(renderMarkdown('- item\n\n    more'), '<ul><li>item</li></ul><p>more</p>');
+  assert.equal(renderMarkdown('1. Step one.\n\n    Explanation.\n\n    More explanation.'), '<ol><li>Step one.</li></ol><p>Explanation.</p><p>More explanation.</p>');
+  assert.equal(renderMarkdown('- item\n\ntext\n\n    code'), '<ul><li>item</li></ul><p>text</p><pre><code>code</code></pre>');
+  // A line end inside a code span is a space, whatever ends the line.
+  assert.equal(renderMarkdown('Use `C:\\\nfoo` here'), '<p>Use <code>C:\\ foo</code> here</p>');
 });
 
 test('hostile input stays fast and bounded: long headings, link runs, emphasis runs, and deep quotes', () => {

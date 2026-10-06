@@ -94,22 +94,29 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
   const out = [];
   let paragraph = [];
   // A paragraph's lines join as Markdown reads them: a line break is a space,
-  // unless the line ends in two spaces or a backslash and another line follows.
-  // Inline markup runs over each stretch between breaks, so emphasis, code and
-  // links may wrap; a stretch longer than MAX_INLINE is read line by line.
+  // unless the line ends in two spaces or a backslash, another line follows,
+  // and no code span is open (an odd count of backticks so far). Inline markup
+  // runs over each stretch between breaks, so emphasis, code and links may
+  // wrap; a stretch longer than MAX_INLINE is read line by line.
   const flush = () => {
     if (!paragraph.length) return;
     const stretches = [[]];
+    let ticks = 0;
     paragraph.forEach(({ text, hard, slash }, at) => {
-      const breaks = hard && at < paragraph.length - 1;
+      ticks += text.split('`').length - 1;
+      const breaks = hard && at < paragraph.length - 1 && ticks % 2 === 0;
       stretches.at(-1).push(breaks && slash ? text.slice(0, -1) : text);
       if (breaks) stretches.push([]);
     });
     out.push(`<p>${stretches.map((lines) => (lines.join(' ').length <= MAX_INLINE ? inline(lines.join(' ')) : lines.map(inline).join(' '))).join('<br>')}</p>`);
     paragraph = [];
   };
+  // After a list, indented paragraphs continue its last item and read as
+  // text, until a block starts at the margin again.
+  let afterList = false;
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
+    if (!paragraph.length && line.trim() && !INDENTED.test(line)) afterList = false;
     const fence = /^\s*(```|~~~)/.exec(line);
     if (fence) {
       flush();
@@ -147,6 +154,7 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
       }
       index -= 1;
       out.push(listHtml(items));
+      afterList = true;
       continue;
     }
     if (line.includes('|') && (lines[index + 1] || '').includes('|') && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(lines[index + 1] || '')) {
@@ -157,8 +165,8 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
       out.push(tableHtml(rows));
       continue;
     }
-    // Indented code, except right after a list, where the line reads as text.
-    if (!paragraph.length && INDENTED.test(line) && !/^<[uo]l>/.test(out.at(-1) || '')) {
+    // Indented code, except after a list, where indented lines read as text.
+    if (!paragraph.length && INDENTED.test(line) && !afterList) {
       const code = [];
       for (; index < lines.length && (INDENTED.test(lines[index]) || !lines[index].trim()); index += 1) code.push(lines[index].replace(INDENTED, ''));
       while (code.length && !code.at(-1).trim()) code.pop();

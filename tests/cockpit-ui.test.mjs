@@ -116,6 +116,9 @@ test('the cockpit views render the sample project, escape what they show, and ci
   const homeYoung = renderHome(young, { mode: 'previous-workday', expanded: new Set(), taskOf: (id) => byId.get(id), agentsByProject: new Map(), projects: [project] });
   assert.match(homeYoung, /Nothing needs you: no decisions waiting/);
   assert.doesNotMatch(homeYoung, /no aging WIP/);
+  // While a project is still being read, no check is called clear.
+  const indexing = { ...brief, needsYou: [], projects: brief.projects.map((entry) => ({ ...entry, state: 'building' })) };
+  assert.match(renderHome(indexing, { mode: 'previous-workday', expanded: new Set(), taskOf: (id) => byId.get(id), agentsByProject: new Map(), projects: [project] }), /Nothing needs you\.<\/span>/);
 
   // One badge vocabulary for every task that needs a person.
   const index = signalIndex(brief);

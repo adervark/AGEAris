@@ -455,10 +455,10 @@ function board(tasks, project) {
     if (status === 'done') {
       // Done shows the newest of what finished this week; the rest is one click away.
       // Times compare as instants, since finishes carry their commit's UTC
-      // offset; a finish the ledger has not indexed yet counts as the newest.
+      // offset. A finish the ledger has not indexed yet counts as the newest;
+      // a sweep's, whose time is unknown, as the oldest.
       const time = (task) => {
-        const at = finished?.week.get(task.id);
-        if (at) return Date.parse(at) || 0;
+        if (finished?.week.has(task.id)) return Date.parse(finished.week.get(task.id)) || 0;
         return finished?.recent(task) ? Infinity : Date.parse(task.updatedAt) || 0;
       };
       column = column.sort((a, b) => Number(finished ? finished.recent(b) : 0) - Number(finished ? finished.recent(a) : 0) || (time(b) - time(a)) || 0);

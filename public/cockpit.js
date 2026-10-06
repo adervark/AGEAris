@@ -175,11 +175,12 @@ const CLEAR_WORDS = { decision: 'no decisions waiting', overdue: 'nothing overdu
 
 // The checks that found nothing, in words. A task is listed once, under its
 // most pressing need, so a need it also has is not clear; nor is a check that
-// cannot run yet because a project has too little history.
+// cannot run yet because a project has too little history. While a project
+// is still being read, no check is called clear.
 function clearChecks(brief) {
+  if (brief.projects.some((line) => line.state !== 'ready')) return [];
   const unchecked = new Set();
   for (const line of brief.projects) {
-    if (line.state !== 'ready') continue;
     if (line.kpis?.aging?.status !== 'ok') unchecked.add('aging');
     if (line.kpis?.dueRisk?.status !== 'ok') unchecked.add('due_risk');
   }
