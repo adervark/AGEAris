@@ -4,6 +4,7 @@ import { chmod, lstat, readFile, writeFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { AgentRegistry } from './lib/agents.mjs';
+import { Cockpit } from './lib/brief.mjs';
 import { PipelineEngine } from './lib/pipeline.mjs';
 import { Workspace, WorkspaceError } from './lib/workspace.mjs';
 
@@ -144,12 +145,14 @@ async function serveStatic(pathname, request, response) {
   return true;
 }
 
-// `clock` (milliseconds, like Date.now) is the time the engine computes its
-// read models at; tests inject it.
-export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || join(process.cwd(), '.agesight-data'), port, clock, engineOptions = {}, registryOptions = {} } = {}) {
+// `clock` (milliseconds, like Date.now) is the time the engine and the cockpit
+// compute their read models at; tests inject it, and `ledgerOptions` (spawn,
+// stat) for the history ledgers.
+export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || join(process.cwd(), '.agesight-data'), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {} } = {}) {
   const workspace = await new Workspace({ dataDir }).init();
   const registry = await new AgentRegistry({ dataDir: workspace.dataDir, operator: workspace.operator, email: workspace.email, ...registryOptions }).init();
   const engine = await new PipelineEngine({ workspace, registry, ...engineOptions, ...(clock ? { clock } : {}) }).init();
+  const cockpit = new Cockpit({ workspace, engine, clock: clock || (() => Date.now()), ledgerOptions, ...cockpitOptions });
   const token = await apiToken(workspace.dataDir);
   const server = createHttpServer(async (request, response) => {
     securityHeaders(response);
@@ -170,6 +173,15 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
         return sendJson(response, 200, { ...await workspace.read(), runs: engine.listRuns(), agents: await engine.agentPerformance() });
       }
       if (request.method === 'GET' && pathname === '/api/settings') return sendJson(response, 200, await workspace.readSettings());
+      const query = Object.fromEntries(url.searchParams);
+      if (request.method === 'GET' && pathname === '/api/brief') return sendJson(response, 200, await cockpit.brief(query));
+      if (request.method === 'GET' && pathname === '/api/changes') return sendJson(response, 200, await cockpit.changes(query));
+      const metricsMatch = /^\/api\/projects\/([^/]+)\/metrics$/.exec(pathname);
+      if (request.method === 'GET' && metricsMatch) return sendJson(response, 200, await cockpit.projectMetrics(metricsMatch[1], query));
+      const explainMatch = /^\/api\/explain\/([a-z0-9_]+)$/.exec(pathname);
+      if (request.method === 'GET' && explainMatch) return sendJson(response, 200, await cockpit.explain(explainMatch[1], query));
+      const historyMatch = /^\/api\/tasks\/([^/]+)\/history$/.exec(pathname);
+      if (request.method === 'GET' && historyMatch) return sendJson(response, 200, await cockpit.taskHistory(historyMatch[1]));
       const pipelineMatch = /^\/api\/projects\/([^/]+)\/pipeline$/.exec(pathname);
       if (request.method === 'GET' && pipelineMatch) return sendJson(response, 200, await engine.getPipeline(pipelineMatch[1]));
       if (request.method === 'PUT' && pipelineMatch) return sendJson(response, 200, await engine.savePipeline(pipelineMatch[1], await readJson(request), VIA_UI));
@@ -242,9 +254,13 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
   server.workspace = workspace;
   server.registry = registry;
   server.engine = engine;
+  server.cockpit = cockpit;
   server.apiToken = token;
   engine.start();
-  server.on('close', () => { engine.stop(); });
+  server.on('close', () => {
+    engine.stop();
+    cockpit.close();
+  });
   server.start = (listenPort = port ?? 4310) => new Promise((resolve, reject) => {
     server.once('error', reject);
     server.listen(listenPort, '127.0.0.1', () => {

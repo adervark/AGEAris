@@ -1067,6 +1067,25 @@ async function gatedRun(t) {
   return { ctx, task, run: await ctx.engine.getRun(started.id) };
 }
 
+test('getRun returns one consistent snapshot even when the run moves on while its files are read', async (t) => {
+  const { ctx, run } = await gatedRun(t);
+  const read = ctx.engine._readArtifact.bind(ctx.engine);
+  let moved = false;
+  ctx.engine._readArtifact = async (...args) => {
+    if (!moved) {
+      moved = true;
+      await ctx.engine.act(run.id, { action: 'comment', text: 'added mid-read' });
+    }
+    return read(...args);
+  };
+  const snapshot = await ctx.engine.getRun(run.id);
+  assert.equal(moved, true);
+  assert.equal(snapshot.events.at(-1).type, 'commented');
+  assert.equal(snapshot.lastSeq, snapshot.events.length);
+  assert.ok(snapshot.comments.some((comment) => comment.text === 'added mid-read'), 'the state matches the events it is returned with');
+  assert.deepEqual(snapshot.attempts.map((attempt) => attempt.status), run.attempts.map((attempt) => attempt.status));
+});
+
 test('editing a line of events.jsonl on disk fails verification after a restart and blocks further actions', async (t) => {
   const { ctx, run } = await gatedRun(t);
   const file = path.join(ctx.runDir(run), 'events.jsonl');

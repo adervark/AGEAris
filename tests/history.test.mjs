@@ -800,3 +800,16 @@ test('the ledger reads no clock: time is always an input', async () => {
   const source = await readFile(new URL('../lib/history.mjs', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /Date\.now\(|new Date\(\)/);
 });
+
+test('project metadata: creation, renames, WIP limits, other edits, and pipeline saves are project transitions', async () => {
+  const { ledger } = await fabricated(`
+    day 0 09:00 ade: project {"name": "Atlas", "wipLimit": 3}
+    day 1 09:00 ade: project {"name": "Atlas 2"}
+    day 2 09:00 ade: project {"wipLimit": 4}
+    day 3 09:00 ade: project {"description": "Now with a description"}
+    day 4 09:00 ade: write pipeline/pipeline.json "{}"
+  `);
+  assert.deepEqual(ledger.transitions.filter((transition) => transition.kind === 'project').map((transition) => [transition.change, transition.from ?? null, transition.to ?? null]), [
+    ['created', null, 'Atlas'], ['renamed', 'Atlas', 'Atlas 2'], ['wipLimit', 3, 4], ['edited', null, null], ['pipeline', null, null],
+  ]);
+});

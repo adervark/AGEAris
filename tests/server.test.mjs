@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
-import { execFile } from 'node:child_process';
-import { once } from 'node:events';
+import { execFile, spawn } from 'node:child_process';
+import { EventEmitter, once } from 'node:events';
+import { PassThrough } from 'node:stream';
 import { chmod, mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -8,6 +9,7 @@ import { promisify } from 'node:util';
 import test from 'node:test';
 
 import { createServer } from '../server.mjs';
+import { fabricate } from '../lib/fabricate.mjs';
 
 const exec = promisify(execFile);
 
@@ -379,10 +381,11 @@ test('HTTP API drives an agent pipeline run, enforces stale and cross-origin pro
 // --- API token --------------------------------------------------------------------------
 
 // A server on a fresh data dir with no agents, so nothing is ever spawned by these tests.
-async function tokenServer(t, { dataDir, listen = true } = {}) {
+async function tokenServer(t, { dataDir, listen = true, options = {}, prepare } = {}) {
   const root = dataDir ? '' : await mkdtemp(path.join(os.tmpdir(), 'agesight-token-'));
   const dir = dataDir ?? path.join(root, 'data');
-  const server = await createServer({ dataDir: dir, registryOptions: { seed: () => [] } });
+  await prepare?.(dir);
+  const server = await createServer({ dataDir: dir, registryOptions: { seed: () => [] }, ...options });
   t.after(async () => {
     if (server.listening) {
       server.close();
@@ -539,4 +542,116 @@ test('every task and project write through the API is committed with AGESight-Vi
   const stored = current.tasks.find((entry) => entry.id === task.id);
   assert.equal(stored.status, 'in_progress');
   assert.equal(stored.blockedReason, '', 'the reason is cleared when the run takes the task out of blocked');
+});
+
+test('the cockpit API: brief, project metrics, explain, task history, and changes, with their errors', async (t) => {
+  const { base, fetch, dir } = await tokenServer(t);
+  const call = async (method, url, body, status = 200) => {
+    const response = await fetch(`${base}${url}`, { method, headers: body === undefined ? {} : { 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
+    const value = await json(response);
+    assert.equal(response.status, status, `${method} ${url}: ${value.error}`);
+    return value;
+  };
+  const before = await call('GET', '/api/workspace');
+  const project = await call('POST', '/api/projects', { name: 'Cockpit' }, 201);
+  let task = await call('POST', '/api/tasks', { projectId: project.id, title: 'Watch me', priority: 'urgent' }, 201);
+  task = await call('PATCH', `/api/tasks/${encodeURIComponent(task.id)}`, { status: 'in_progress', version: task.version });
+  await call('POST', '/api/runs', { taskId: task.id }, 201);
+
+  const brief = await call('GET', '/api/brief?window=24h');
+  assert.deepEqual(Object.keys(brief).sort(), ['asOf', 'decisions', 'delta', 'live', 'needsYou', 'projects', 'timezone', 'window']);
+  assert.equal(brief.live, true);
+  const [line] = brief.projects;
+  assert.deepEqual([line.projectId, line.state], [project.id, 'ready']);
+  assert.match(line.build.headSha, /^[0-9a-f]{40}$/);
+  assert.match(line.build.ledgerSha, /^[0-9a-f]{40}$/);
+  for (const kpi of Object.values(line.kpis).filter((value) => typeof value === 'object')) {
+    assert.deepEqual(Object.keys(kpi).sort(), ['display', 'id', 'kind', 'reason', 'sample', 'status', 'value']);
+  }
+  assert.deepEqual(brief.delta.added.map((item) => item.taskKey), ['T001']);
+  assert.ok(brief.needsYou.length >= 1, 'the run waiting for an agent is a decision');
+
+  const metrics = await call('GET', `/api/projects/${project.id}/metrics`);
+  assert.equal(metrics.state, 'ready');
+  assert.equal(metrics.metrics.wip.value, 1);
+  assert.equal(metrics.ledger.branch.length > 0, true);
+  assert.equal(metrics.series.throughput.length, 42);
+
+  const explained = await call('GET', `/api/explain/wip?projectId=${project.id}`);
+  assert.deepEqual([explained.id, explained.kind, explained.value, explained.items[0].taskKey], ['wip', 'count', 1, 'T001']);
+  assert.match(explained.build.ledgerSha, /^[0-9a-f]{40}$/);
+  assert.equal(typeof explained.definition, 'string');
+  assert.equal(typeof explained.formula, 'string');
+  await call('GET', `/api/explain/no_such_metric?projectId=${project.id}`, undefined, 404);
+  await call('GET', '/api/explain/wip', undefined, 400);
+  await call('GET', `/api/explain/wip?projectId=${project.id}&asOf=2999-01-01T00:00:00Z`, undefined, 400);
+  await call('GET', `/api/brief?asOf=${encodeURIComponent('last tuesday')}`, undefined, 400);
+  await call('GET', '/api/projects/00000000-0000-4000-8000-000000000000/metrics', undefined, 404);
+  assert.equal((await globalThis.fetch(`${base}/api/brief`)).status, 401);
+
+  const history = await call('GET', `/api/tasks/${encodeURIComponent(task.id)}/history`);
+  // The commit of the HTTP update (the run's own move comes after it).
+  const sha = (await exec('git', ['log', '--format=%H', '--grep', 'AGESight-Via: ui', '-1', '--', 'deaddrop'], {
+    cwd: path.join(dir, 'projects', project.id), env: { ...process.env, GIT_CONFIG_GLOBAL: os.devNull, GIT_CONFIG_NOSYSTEM: '1' },
+  })).stdout.trim();
+  assert.match(sha, /^[0-9a-f]{40}$/);
+  const move = history.transitions.find((entry) => entry.commit === sha && entry.kind === 'status');
+  assert.deepEqual([move.from, move.to, move.via], ['backlog', 'in_progress', 'ui'], 'the HTTP update is in the history with its sha');
+  assert.equal(history.taskKey, 'T001');
+  await call('GET', `/api/tasks/${encodeURIComponent(`${project.id}:T999`)}/history`, undefined, 404);
+
+  const changes = await call('GET', `/api/changes?kinds=run,project&projectId=${project.id}`);
+  assert.ok(changes.changes.some((entry) => entry.kind === 'run' && entry.event === 'run_started' && entry.runId === 'R001' && /^[0-9a-f]{64}$/.test(entry.hash)));
+  assert.ok(changes.changes.some((entry) => entry.kind === 'project' && entry.change === 'created'));
+  assert.ok(changes.changes.every((entry) => entry.kind === 'run' || entry.kind === 'project'));
+  await call('GET', '/api/changes?kinds=gossip', undefined, 400);
+  await call('GET', '/api/changes?limit=501', undefined, 400);
+
+  const after = await call('GET', '/api/workspace');
+  assert.deepEqual(Object.keys(after).sort(), Object.keys(before).sort(), '/api/workspace keeps its shape');
+});
+
+test('a project still indexing does not hold up the brief or the rest of the API', async (t) => {
+  let slowDir = '';
+  // `git log` for the slow project starts two seconds late.
+  const slowSpawn = (command, args, options) => {
+    const cwd = args[args.indexOf('-C') + 1];
+    if (args[args.indexOf('-C') + 2] !== 'log' || cwd !== slowDir) return spawn(command, args, options);
+    const child = new EventEmitter();
+    Object.assign(child, { stdout: new PassThrough(), stderr: new PassThrough() });
+    let real = null;
+    const timer = setTimeout(() => {
+      real = spawn(command, args, options);
+      real.stdout.pipe(child.stdout);
+      real.stderr.pipe(child.stderr);
+      real.once('close', (code) => setImmediate(() => child.emit('close', code)));
+    }, 2000);
+    child.kill = () => {
+      clearTimeout(timer);
+      real?.kill();
+      child.stdout.end();
+      child.emit('close', null);
+    };
+    return child;
+  };
+  const prepare = async (dir) => {
+    for (const [index, name] of ['Quick', 'Slow'].entries()) {
+      const id = `00000000-0000-4000-8000-00000000000${index + 1}`;
+      const projectDir = path.join(dir, 'projects', id);
+      if (name === 'Slow') slowDir = projectDir;
+      await fabricate(projectDir, `day 0 08:00 ade: project {"id": "${id}", "name": "${name}", "createdAt": "2026-09-01T07:00:00.000Z", "wipLimit": 3}\nday 1 09:00 ade: create T001 backlog "One"`);
+    }
+  };
+  const { base, fetch } = await tokenServer(t, { prepare, options: { ledgerOptions: { spawn: slowSpawn } } });
+  const started = Date.now();
+  const pending = fetch(`${base}/api/brief`);
+  const workspace = await fetch(`${base}/api/workspace`);
+  assert.equal(workspace.status, 200);
+  assert.ok(Date.now() - started < 1500, '/api/workspace answered while the slow ledger was still building');
+  const response = await pending;
+  assert.equal(response.status, 200);
+  const brief = await json(response);
+  assert.deepEqual(brief.projects.map((line) => [line.name, line.state]), [['Quick', 'ready'], ['Slow', 'building']]);
+  assert.equal(typeof brief.projects[1].building.commitsSeen, 'number');
+  assert.ok(Date.now() - started < 1500, 'the brief did not wait for the slow ledger');
 });
