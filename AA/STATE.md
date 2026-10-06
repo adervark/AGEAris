@@ -16,19 +16,19 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T22:05Z · 18 tasks: 13 backlog, 0 WIP (0 in progress), 5 delivered`
+`board · 2026-10-06T22:57Z · 19 tasks: 14 backlog, 0 WIP (0 in progress), 5 delivered`
 
 FLOW · **WIP 0/2** · throughput 1.2/wk (5 in 30d) · cycle time 50th 5m / 85th 33m (n=5)
 FLOW · Little's Law: 0 ÷ 1.2/wk ≈ now expected · lead time 85th 36m
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T018 | /aa pulls up a project's board in any Claude Code session | adervark | now |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 8m |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 18m |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 18m |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 24m |  |
+| **BACKLOG** 14 | | `T002` `T003` `T004` `T007` `T008` `T009` +8 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 52m |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 60m |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 70m |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 70m |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 76m |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->
