@@ -16,7 +16,7 @@ npm start
 Open the sign-in link it prints, `http://127.0.0.1:4310/?token=…`. The browser
 stays signed in for that data folder; the token keeps other local users out of
 your workspace. Create your first project, track a repository whose agents
-already keep a deaddrop board (see
+already keep an AA board (see
 [Track an existing repository](#track-an-existing-repository)), or choose
 **Explore a sample project** to create one with six weeks of simulated history
 (marked **Simulated history** everywhere it appears).
@@ -128,20 +128,22 @@ retry policy, routing, the audit format, and the API are described in
 
 ## Track an existing repository
 
-AGE Aris can watch a repository whose agents already keep a deaddrop task board
-(`deaddrop/`, or `pm/`, its older name). Choose **Track an existing
+AGE Aris can watch a repository whose agents already keep an AA task board
+(`AA/`, or `deaddrop/` or `pm/`, its older names). Choose **Track an existing
 repository** and give the repository's folder. AGE Aris only reads it: Home,
 health, changes, and each task's history come from the board's files and the
 repository's git history, and nothing is ever written there. Tasks change in the
 repository, where its agents work, and AGE Aris picks the changes up.
 
 - The folder must be the top of a git repository with a `.git` directory
-  (worktrees and submodules cannot be tracked yet) and contain `deaddrop/tasks/`
-  or `pm/tasks/`.
+  (worktrees and submodules cannot be tracked yet) and contain `AA/tasks/`,
+  `deaddrop/tasks/` or `pm/tasks/`.
 - Older boards without a `backlog/` folder are read as they are: a task in
   `tasks/` whose status is `open` or empty counts as backlog until it is
-  claimed. A rename from `pm/` to `deaddrop/` keeps each task's history.
-- The work in progress limit comes from the board's `deaddrop.yml`.
+  claimed. Renaming the board folder, from `deaddrop/` to `AA/` say, keeps each
+  task's history.
+- The work in progress limit comes from the board's `AA.yml` (`deaddrop.yml` on
+  an older board).
 - Task files AGE Aris cannot read are listed on the project page instead of
   hiding the project.
 - Editing, the pipeline, and agent runs are not available for a tracked
@@ -166,12 +168,12 @@ The first version manages local project repositories under
 
 ```text
 project.json                  project settings
-deaddrop/STATE.md             a generated task table and preserved NOW notes
-deaddrop/deaddrop.yml         work in progress policy
-deaddrop/backlog/             unstarted Markdown tasks
-deaddrop/tasks/               in progress and blocked tasks
-deaddrop/tasks/done/          completed tasks
-deaddrop/checkpoints/         agent checkpoint format
+AA/STATE.md                   a generated task table and preserved NOW notes
+AA/AA.yml                     work in progress policy
+AA/backlog/                   unstarted Markdown tasks
+AA/tasks/                     in progress and blocked tasks
+AA/tasks/done/                completed tasks
+AA/checkpoints/               agent checkpoint format
 pipeline/pipeline.json        the project's stages (after the first edit)
 pipeline/runs/R001/           one run: events.jsonl audit log, RUN.md, attempts/
 .git/                         project history
@@ -233,12 +235,12 @@ lib/audit.mjs                 hash-chained audit log
 agents/rehearsal-agent.mjs    offline stand-in agent
 public/                       Home, board, Flow, Method, task drawer, and styles
 tests/                        integration tests
-skills/deaddrop-init/          existing agent task-board integration
+skills/aa-init/               existing agent task-board integration
 ```
 
 ## Agent plugin
 
-The existing `deaddrop-init` plugin remains available for scaffolding task boards
+The existing `aa-init` plugin remains available for scaffolding task boards
 into other repositories. Its installation and protocol documentation are in
 [the plugin guide](docs/PLUGIN.md).
 

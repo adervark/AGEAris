@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# deaddrop board — the Kanban board, computed and never stored.
+# AA board — the Kanban board, computed and never stored.
 #
 #   visualise the work      the columns              (Kanban core practice 1)
-#   limit work in progress  wip: in deaddrop.yml     (practice 2)
+#   limit work in progress  wip: in AA.yml     (practice 2)
 #   manage flow             throughput, cycle time, work item age, flow efficiency (3)
 #   policies explicit       the limit, the DoR and the DoD are checked here (4)
 #   the commitment point    backlog/ -> tasks/. After it, an item is WIP.
@@ -32,8 +32,8 @@ HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 . "$HERE/ckpt.sh"
 
 STATE="$DD/STATE.md"
-MARK_A='<!-- deaddrop:generated -->'
-MARK_B='<!-- /deaddrop:generated -->'
+MARK_A='<!-- AA:generated -->'
+MARK_B='<!-- /AA:generated -->'
 
 board_tasks() { # TSV: id, title, status, operator, where, has-DoR, has-Result, type
   shopt -s nullglob
@@ -125,7 +125,7 @@ board_history() { # TSV: task, created, entered WIP (latest claim), delivered, b
   # state-transition history. A bulk sweep is excluded by subject, or the day of
   # the sweep becomes every task's claim date (WHY § the staleness clock).
   git -C "$ROOT" -c core.quotePath=false log --format='%x01%at%x09%s' -p -G'^status:' \
-      -- deaddrop/tasks deaddrop/backlog 2>/dev/null \
+      -- AA/tasks AA/backlog 2>/dev/null \
   | LC_ALL=C awk '
       /^\001/ { split(substr($0,2), h, "\t"); ts=h[1]+0
                  mech = (h[2] ~ /^(migrate|ckpt): /) ? 1 : 0
@@ -147,7 +147,7 @@ board_history() { # TSV: task, created, entered WIP (latest claim), delivered, b
 board_commits() { # TSV: task, epoch, author, mechanical — the sign-of-life fallback (rule 4)
   git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1 || return 0
   git -C "$ROOT" -c core.quotePath=false log --format='%x01%at%x09%an%x09%s' --name-only \
-      -- deaddrop/tasks deaddrop/backlog deaddrop/checkpoints 2>/dev/null \
+      -- AA/tasks AA/backlog AA/checkpoints 2>/dev/null \
   | LC_ALL=C awk -F'\t' '
       /^\001/ { ts=substr($1,2)+0; who=$2; mech=($3 ~ /^(migrate|ckpt): /) ? 1 : 0; next }
       NF==1 && $1 != "" && ts>0 {
@@ -212,7 +212,7 @@ render() { # the whole board, as markdown, on stdout
                    }
                    next }
     END {
-      if (nid == 0) { print "(no task files in deaddrop/backlog/ or deaddrop/tasks/)"; exit }
+      if (nid == 0) { print "(no task files in AA/backlog/ or AA/tasks/)"; exit }
       cutoff = now - win*86400
 
       # ---- THE LOCATION IS THE STATE. status only refines a column.
@@ -253,7 +253,7 @@ render() { # the whole board, as markdown, on stdout
 
       f = sprintf("**WIP %d", n_wip)
       if (limwip > 0) f = f sprintf("/%d**%s", limwip, (n_wip > limwip ? " ⚠ **over the limit**" : ""))
-      else            f = f "** (no limit set — Kanban practice 2 is to set one, in `deaddrop.yml`)"
+      else            f = f "** (no limit set — Kanban practice 2 is to set one, in `AA.yml`)"
       f = f sprintf(" · throughput %.1f/wk (%d in %dd)", thr, n_thr, win)
       if (p85 > 0) f = f sprintf(" · cycle time 50th %s / 85th %s (n=%d)", dur(p50), dur(p85), n_cyc)
       else         f = f sprintf(" · cycle time: too few delivered with a claim commit (n=%d)", n_cyc)
@@ -398,7 +398,7 @@ write_state() { # replace only the generated region; the NOW block is never touc
     index($0,b) { skip=0 }
     !skip' "$STATE" > "$tmp" && mv "$tmp" "$STATE"
   rm -f "$body"
-  echo "wrote the generated region of deaddrop/STATE.md"
+  echo "wrote the generated region of AA/STATE.md"
 }
 
 # WHAT "STALE" MEANS, AND WHAT IT MUST NOT MEAN.
@@ -437,7 +437,7 @@ check_state() { # exit 1 when the region is stale — for CI or a pre-commit hoo
   if [ "$cur" = "$new" ]; then
     echo "STATE.md is current"; return 0
   fi
-  echo "STATE.md generated region is STALE — run: deaddrop/board.sh --write" >&2
+  echo "STATE.md generated region is STALE — run: AA/board.sh --write" >&2
   if command -v diff >/dev/null; then
     diff <(printf '%s\n' "$cur") <(printf '%s\n' "$new") \
       | sed -n 's/^</  on the board but not in the files: /p; s/^>/  in the files but not on the board: /p' >&2
@@ -461,11 +461,11 @@ usage: board.sh [--write|--check] [--all] [--window DAYS] [--wip N]
   backlog/ is the queue, tasks/ is work in progress, tasks/done/ is delivered.
 
   (no flag)       print the board
-  --write         replace the generated region of deaddrop/STATE.md
+  --write         replace the generated region of AA/STATE.md
   --check         exit 1 if that region is stale — for CI or a pre-commit hook
   --all           show the whole backlog and every delivered task, not just the window
   --window DAYS   window for throughput and the DONE column (default 30)
-  --wip N         override this run's WIP limit (normally from deaddrop.yml)
+  --wip N         override this run's WIP limit (normally from AA.yml)
 USAGE
         return 0 ;;
       *) die "unexpected argument: $1" ;;
@@ -474,7 +474,7 @@ USAGE
   case "$win" in ''|*[!0-9]*) die "--window takes a number of days" ;; esac
   case "$wip" in ''|-1) ;; *[!0-9]*) die "--wip takes a number" ;; esac
   [ "$win" -lt 1 ] && win=1
-  [ -d "$TD" ] || die "no deaddrop/tasks/ at $ROOT — is the board scaffolded here?"
+  [ -d "$TD" ] || die "no AA/tasks/ at $ROOT — is the board scaffolded here?"
   case "$mode" in
     write) write_state "$all" "$win" "$wip" ;;
     check) check_state "$all" "$win" "$wip" ;;

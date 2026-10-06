@@ -539,7 +539,7 @@ test('every task and project write through the API is committed with AGESight-Vi
 
   // Starting a run is an HTTP request too, but the task move it makes belongs to the run.
   await send('POST', '/api/runs', { taskId: task.id }, 201);
-  const moved = await lastMessage(project.id, 'deaddrop/tasks');
+  const moved = await lastMessage(project.id, 'AA/tasks');
   assert.match(moved, /^Update T001: Typed\n\nRun: R001$/);
   assert.doesNotMatch(moved, /AGESight-Via/);
   const current = await send('GET', '/api/workspace');
@@ -595,7 +595,7 @@ test('the cockpit API: brief, project metrics, explain, task history, and change
 
   const history = await call('GET', `/api/tasks/${encodeURIComponent(task.id)}/history`);
   // The commit of the HTTP update (the run's own move comes after it).
-  const sha = (await exec('git', ['log', '--format=%H', '--grep', 'AGESight-Via: ui', '-1', '--', 'deaddrop'], {
+  const sha = (await exec('git', ['log', '--format=%H', '--grep', 'AGESight-Via: ui', '-1', '--', 'AA'], {
     cwd: path.join(dir, 'projects', project.id), env: { ...process.env, GIT_CONFIG_GLOBAL: os.devNull, GIT_CONFIG_NOSYSTEM: '1' },
   })).stdout.trim();
   assert.match(sha, /^[0-9a-f]{40}$/);
@@ -675,7 +675,7 @@ test('the sample project is created only on request, through POST /api/projects/
 
 // --- tracked repositories ----------------------------------------------------------
 
-// A repository with its own deaddrop/ board, outside the data folder, as an
+// A repository with its own AA/ board, outside the data folder, as an
 // agent team keeps it; removed when the test ends. Its board sets a WIP limit of 3.
 async function trackedRepository(t) {
   const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-tracked-')));
@@ -683,7 +683,7 @@ async function trackedRepository(t) {
   const fabrication = await fabricate(path.join(root, 'repo'), `
     day 0 09:00 ade: create T001 backlog "Read the archive"
     day 1 09:00 ade: create T002 tasks "Parse the dates" {"owner": "ade @k/e857a8c8 2026-09-02 — importer"}
-    day 1 10:00 ade: write deaddrop/deaddrop.yml "wip:\\n  in_progress: 3\\n  blocked: 3\\n"
+    day 1 10:00 ade: write AA/AA.yml "wip:\\n  in_progress: 3\\n  blocked: 3\\n"
   `);
   return fabrication.dir;
 }
@@ -715,7 +715,7 @@ test('POST /api/projects/link tracks a repository, which the brief then lists as
   const own = await call('POST', '/api/projects', { name: 'Own' }, 201);
 
   const project = await call('POST', '/api/projects/link', { path: repository, name: 'Their repo' }, 201);
-  assert.deepEqual([project.name, project.linked, project.board, project.repository, project.wipLimit], ['Their repo', true, 'deaddrop', repository, 3]);
+  assert.deepEqual([project.name, project.linked, project.board, project.repository, project.wipLimit], ['Their repo', true, 'AA', repository, 3]);
   assert.match((await call('POST', '/api/projects/link', { path: repository }, 409)).error, /already tracked as Their repo$/);
   assert.match((await call('POST', '/api/projects/link', { path: 'code/repo' }, 400)).error, /full path/);
 
@@ -727,8 +727,8 @@ test('POST /api/projects/link tracks a repository, which the brief then lists as
   const workspace = await call('GET', '/api/workspace');
   assert.deepEqual(workspace.projects.find((entry) => entry.id === project.id).problems, []);
   assert.deepEqual(workspace.tasks.filter((task) => task.projectId === project.id).map((task) => [task.id.split(':').at(-1), task.status, task.file]), [
-    ['T001', 'backlog', 'deaddrop/backlog/T001-read-the-archive.md'],
-    ['T002', 'in_progress', 'deaddrop/tasks/T002-parse-the-dates.md'],
+    ['T001', 'backlog', 'AA/backlog/T001-read-the-archive.md'],
+    ['T002', 'in_progress', 'AA/tasks/T002-parse-the-dates.md'],
   ]);
 });
 
@@ -794,7 +794,7 @@ test('GET /api/tasks/:id returns the task with its text, GET /api/projects/:id/m
   await call('GET', `/api/tasks/${encodeURIComponent(`${project.id}:T999`)}`, undefined, 404);
 
   const method = await call('GET', `/api/projects/${project.id}/method`);
-  assert.deepEqual([method.linked, method.board, method.wipLimit, method.staleHours, method.docs], [true, 'deaddrop', 3, 24, []]);
+  assert.deepEqual([method.linked, method.board, method.config, method.wipLimit, method.staleHours, method.docs], [true, 'AA', 'AA/AA.yml', 3, 24, []]);
   await call('GET', '/api/projects/missing/method', undefined, 404);
 
   const line = (await call('GET', '/api/brief')).projects.find((entry) => entry.projectId === project.id);

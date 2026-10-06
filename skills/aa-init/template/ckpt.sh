@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# deaddrop checkpoints — one append-only JSONL file per task, one line per event.
+# AA checkpoints — one append-only JSONL file per task, one line per event.
 #
-# The FORMAT is the contract (deaddrop/checkpoints/_SCHEMA.md); this script is
+# The FORMAT is the contract (AA/checkpoints/_SCHEMA.md); this script is
 # only the fast path. A line appended by hand with jq is equally valid, and any
 # harness that cannot run bash can still take part.
 #
-# This file is the TRAIL. The board renderer is deaddrop/board.sh, which sources
+# This file is the TRAIL. The board renderer is AA/board.sh, which sources
 # this one for the helpers below. Agents append far more often than they render,
 # so the thing they load stays small.
 set -uo pipefail
@@ -15,7 +15,7 @@ warn() { printf 'ckpt: %s\n' "$1" >&2; }
 command -v jq >/dev/null || die "jq is required (or append the line by hand — see _SCHEMA.md)"
 
 ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD   # works from any subdirectory
-DD="$ROOT/deaddrop"
+DD="$ROOT/AA"
 CK="$DD/checkpoints"
 TD="$DD/tasks"
 BL="$DD/backlog"
@@ -26,13 +26,13 @@ valid_task() { case "${1:-}" in ""|.*|*[!A-Za-z0-9._-]*) die "not a task id: ${1
 mine() { printf '%s' "${CLAUDE_CODE_SESSION_ID:0:8}"; }
 myrun() { local s; s=$(mine); [ -n "$s" ] || s="x$(od -An -N2 -tx1 /dev/urandom | tr -d ' \n')"; printf '%s' "$s"; }
 
-# cfg <key> [default] — one value out of deaddrop.yml.
-# Flat by design (see the header of deaddrop.yml): `key: value` at column 0, or a
+# cfg <key> [default] — one value out of AA.yml.
+# Flat by design (see the header of AA.yml): `key: value` at column 0, or a
 # one-level block whose items are `  - item`. Nothing here needs a YAML parser,
 # and adding one would make the config a dependency.
 cfg() {
   local k="$1" d="${2:-}" v
-  v=$(sed -n "s/^${k}: *//p" "$DD/deaddrop.yml" 2>/dev/null | head -1 | sed 's/ *#.*//; s/ *$//')
+  v=$(sed -n "s/^${k}: *//p" "$DD/AA.yml" 2>/dev/null | head -1 | sed 's/ *#.*//; s/ *$//')
   printf '%s' "${v:-$d}"
 }
 cfg_sub() { # cfg_sub <block> <key> [default] — `block:` then `  key: value`
@@ -40,13 +40,13 @@ cfg_sub() { # cfg_sub <block> <key> [default] — `block:` then `  key: value`
   v=$(awk -v b="$b:" -v k="$k:" '
       $0 ~ "^"b { inb=1; next } inb && /^[^[:space:]#]/ { inb=0 }
       inb && $1 == k { $1=""; sub(/^ /,""); sub(/ *#.*/,""); print; exit }' \
-      "$DD/deaddrop.yml" 2>/dev/null)
+      "$DD/AA.yml" 2>/dev/null)
   printf '%s' "${v:-$d}"
 }
 cfg_list() { # cfg_list <block> — the `  - item` lines under it, one per line
   awk -v b="$1:" '$0 ~ "^"b { inb=1; next } inb && /^[^[:space:]#]/ { inb=0 }
                   inb && /^[[:space:]]*- / { sub(/^[[:space:]]*- /,""); sub(/ *#.*/,""); print }' \
-      "$DD/deaddrop.yml" 2>/dev/null
+      "$DD/AA.yml" 2>/dev/null
 }
 
 # tolerant read: skips a half-written last line or a hand-edited bad one
@@ -244,7 +244,7 @@ cmd_close() { # close <TASK> [--delete] [--force]
   # removal was left staged to ride along with some later, unrelated commit.
   if git -C "$ROOT" commit -q --no-verify \
        -m "ckpt: $task compacted into the task result" -- "$f" >/dev/null 2>&1; then
-    echo "deleted. The trail is in git: git log --diff-filter=D -p -- deaddrop/checkpoints/$task.jsonl"
+    echo "deleted. The trail is in git: git log --diff-filter=D -p -- AA/checkpoints/$task.jsonl"
   else
     warn "the file is removed and STAGED, but the removal is not committed yet.
      Its contents are safe in the previous commit; commit the removal with your next one."
@@ -263,7 +263,7 @@ case "${1:-}" in
   close) shift; cmd_close "$@" ;;
   board) shift; exec "$DD/board.sh" "$@" ;;
   *) cat >&2 <<'USAGE'
-ckpt.sh — deaddrop checkpoints. One JSONL file per task, one line per event.
+ckpt.sh — AA checkpoints. One JSONL file per task, one line per event.
 
   ckpt.sh open  <TASK> --brief "..." [--agent LABEL] [--budget "..."] [--no-commit]
         prints the RUN id. --agent opens a run for a subagent you are about to spawn.
@@ -272,7 +272,7 @@ ckpt.sh — deaddrop checkpoints. One JSONL file per task, one line per event.
   ckpt.sh last  <TASK>              the resume point
   ckpt.sh check [TASK]              every line parses?
   ckpt.sh close <TASK> [--delete]   digest for the Result; --delete retires the trail
-  ckpt.sh board ...                 -> deaddrop/board.sh
+  ckpt.sh board ...                 -> AA/board.sh
 
 doing BEFORE the act, did after it, end whenever you stop. Every entry carries --next.
 USAGE

@@ -2,7 +2,7 @@
 
 An agent-first, human-auditable task board for Claude Code, kept entirely in git.
 
-agesight is a Claude Code plugin that ships one skill, `deaddrop-init`. The skill scaffolds the **deaddrop** convention into any repository: a Kanban system in which coordination between AI agents happens through files and commits rather than through a server, a daemon, or two agents being awake at the same time.
+agesight is a Claude Code plugin that ships one skill, `aa-init`. The skill scaffolds the **AA** convention into any repository: a Kanban system in which coordination between AI agents happens through files and commits rather than through a server, a daemon, or two agents being awake at the same time.
 
 ## The problem
 
@@ -17,10 +17,10 @@ Agents working on one project never meet. A session dies mid-task, a headless wo
 Running the skill adds this layout to your repo:
 
 ```
-deaddrop/
+AA/
   RULES.md            the protocol, one page, binding
   WHY.md              the reasons behind each rule
-  deaddrop.yml        spend words, WIP limit, log, map (the only per-project file)
+  AA.yml              spend words, WIP limit, log, map (the only per-project file)
   STATE.md            hand-written NOW block plus a generated board
   ckpt.sh             writes and reads the checkpoint trail
   board.sh            renders the board: --write / --check
@@ -64,14 +64,14 @@ Alternatively, clone this repository and point Claude Code at it as a local mark
 From the repository you want to adopt the convention in, ask Claude Code to set up a task board, or invoke the skill directly:
 
 ```
-/deaddrop-init
+/aa-init
 ```
 
 The skill will:
 
-1. Refuse if `deaddrop/STATE.md` (or the legacy `pm/STATE.md`) already exists.
+1. Refuse if `AA/STATE.md` (or `deaddrop/STATE.md` or `pm/STATE.md`, its older names) already exists.
 2. Create the directory layout and copy the rules, reasons, and scripts verbatim.
-3. Ask what counts as a spend in your project and what the real WIP limit is, then fill in `deaddrop.yml`.
+3. Ask what counts as a spend in your project and what the real WIP limit is, then fill in `AA.yml`.
 4. Merge the bootstrap into any existing `AGENTS.md` or `CLAUDE.md` instead of replacing it.
 5. Seed real tasks from the conversation into `backlog/`, render the board, and commit.
 
@@ -86,12 +86,12 @@ Afterwards, day-to-day work uses three commands that the skill installs into the
 Scripts, run from the target repo:
 
 ```sh
-deaddrop/board.sh                 # print the board
-deaddrop/board.sh --write         # regenerate the generated region of STATE.md
-deaddrop/board.sh --check         # exit 1 if that region is stale
-deaddrop/ckpt.sh live             # what was in flight when the last run stopped
-deaddrop/ckpt.sh last <ID>        # newest trail entries for a task
-deaddrop/ckpt.sh close <ID>       # digest the trail into the task's Result
+AA/board.sh                       # print the board
+AA/board.sh --write               # regenerate the generated region of STATE.md
+AA/board.sh --check               # exit 1 if that region is stale
+AA/ckpt.sh live                   # what was in flight when the last run stopped
+AA/ckpt.sh last <ID>              # newest trail entries for a task
+AA/ckpt.sh close <ID>             # digest the trail into the task's Result
 ```
 
 ## Requirements
@@ -108,11 +108,11 @@ A harness that cannot run bash can still take part: the checkpoint format is the
 .claude-plugin/
   plugin.json             plugin manifest
   marketplace.json        single-plugin marketplace definition
-skills/deaddrop-init/
+skills/aa-init/
   SKILL.md                install steps and what must survive any edit
   template/               files copied into the target repo
     RULES.md  WHY.md  SCHEMA.md  STATE.md  TASK.md  AGENTS.md
-    deaddrop.yml  board.sh  ckpt.sh
+    AA.yml  board.sh  ckpt.sh
     commands/             board.md  checkpoint.md  reclaim.md
 ```
 
@@ -129,7 +129,7 @@ skills/deaddrop-init/
 
 ## Legacy naming
 
-Repositories scaffolded before 2026-09-02 use `pm/` instead of `deaddrop/`. It is the same convention; leave the directory name alone unless you intend to migrate it.
+Repositories scaffolded before 2026-10-07 use `deaddrop/`, with `deaddrop.yml`, instead of `AA/`, and those scaffolded before 2026-09-02 use `pm/`. It is the same convention; leave the directory name alone unless you intend to migrate it.
 
 ## License
 

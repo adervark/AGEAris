@@ -1911,7 +1911,7 @@ test('a failed run leaves the task blocked with the run named as the reason, in 
   assert.equal(stored.status, 'blocked');
   assert.match(stored.blockedReason, /^Run R001 failed: Implement failed 1 time \(limit 1\): Agent exited with code 1$/);
   const projectDir = ctx.projectDir(project.id);
-  const taskCommits = (await git(projectDir, 'log', '--format=%B%x00', '--', 'deaddrop/tasks', 'deaddrop/backlog')).split('\0').map((body) => body.trim()).filter(Boolean);
+  const taskCommits = (await git(projectDir, 'log', '--format=%B%x00', '--', 'AA/tasks', 'AA/backlog')).split('\0').map((body) => body.trim()).filter(Boolean);
   assert.equal(taskCommits.length, 3, 'blocked, claimed by the run, created');
   for (const body of taskCommits.slice(0, 2)) {
     assert.match(body, /\n\nRun: R001$/);
@@ -1923,7 +1923,7 @@ test('a failed run leaves the task blocked with the run named as the reason, in 
   stored = await ctx.workspace.getTask(task.id);
   assert.equal(stored.status, 'in_progress');
   assert.equal(stored.blockedReason, '', 'leaving blocked clears the reason');
-  assert.match(await git(projectDir, 'log', '-1', '--format=%B', '--', 'deaddrop/tasks'), /\n\nRun: R001$/);
+  assert.match(await git(projectDir, 'log', '-1', '--format=%B', '--', 'AA/tasks'), /\n\nRun: R001$/);
 });
 
 // The needsHuman rule before needsHumanAt existed, kept here to prove the

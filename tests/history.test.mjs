@@ -135,7 +135,7 @@ test('a task life cycle gives exact transitions and the agent claimant (golden)'
   assert.equal(claim.at, '2026-09-02T09:00:00+01:00');
   assert.equal(claim.actor, 'ade');
   const rename = of(ledger, 'T001').find((transition) => transition.field === 'title');
-  assert.equal(rename.path, 'deaddrop/tasks/T001-bulk-importer.md', 'the slug changes with the title');
+  assert.equal(rename.path, 'AA/tasks/T001-bulk-importer.md', 'the slug changes with the title');
   assert.equal(ledger.tasks.T001.status, 'done');
   assert.equal(ledger.tasks.T001.title, 'Bulk importer');
   assert.deepEqual(ledger.anomalies, []);
@@ -463,7 +463,7 @@ test('ids: a different task re-added under a removed id is a new incarnation', a
 test('ids: a second file with a present id raises duplicate_id and is ignored', async () => {
   const { ledger } = await fabricated(`
     day 0 09:00 ade: create T001 backlog "Original"
-    day 1 09:00 ade: write deaddrop/tasks/T001-copy.md "---\\nid: T001\\ntitle: \\"Copy\\"\\nstatus: claimed\\n---\\n"
+    day 1 09:00 ade: write AA/tasks/T001-copy.md "---\\nid: T001\\ntitle: \\"Copy\\"\\nstatus: claimed\\n---\\n"
   `);
   assert.equal(anomalies(ledger, 'duplicate_id').length, 1);
   assert.equal(ledger.tasks.T001.title, 'Original');
@@ -473,8 +473,8 @@ test('ids: a second file with a present id raises duplicate_id and is ignored', 
 test('ids: deleting the original of a duplicated id promotes the surviving duplicate', async () => {
   const { fabrication, ledger } = await fabricated(`
     day 0 09:00 ade: create T001 backlog "Original"
-    day 1 09:00 ade: write deaddrop/tasks/T001-copy.md "---\\nid: T001\\ntitle: \\"Copy\\"\\nstatus: claimed\\n---\\n"
-    day 2 09:00 ade: delete deaddrop/backlog/T001-original.md label=promote
+    day 1 09:00 ade: write AA/tasks/T001-copy.md "---\\nid: T001\\ntitle: \\"Copy\\"\\nstatus: claimed\\n---\\n"
+    day 2 09:00 ade: delete AA/backlog/T001-original.md label=promote
     day 3 09:00 ade: set T001 {"priority": "high"}
   `);
   assert.equal(anomalies(ledger, 'duplicate_id').length, 1);
@@ -482,7 +482,7 @@ test('ids: deleting the original of a duplicated id promotes the surviving dupli
   assert.equal(list.filter((transition) => transition.kind === 'removed').length, 0, 'the task was not removed');
   const promoted = list.filter((transition) => transition.commit === fabrication.sha('promote'));
   assert.deepEqual(promoted.map(shape), [['status', 'backlog', 'in_progress', { operator: '', profile: '', session: '' }], ['field', 'title', 'Original', 'Copy']]);
-  assert.equal(promoted[0].path, 'deaddrop/tasks/T001-copy.md');
+  assert.equal(promoted[0].path, 'AA/tasks/T001-copy.md');
   assert.deepEqual(shape(list.at(-1)), ['field', 'priority', 'medium', 'high'], 'the promoted file is followed');
   assert.deepEqual([ledger.tasks.T001.present, ledger.tasks.T001.title, ledger.tasks.T001.status, ledger.tasks.T001.priority], [true, 'Copy', 'in_progress', 'high']);
 });
@@ -490,17 +490,17 @@ test('ids: deleting the original of a duplicated id promotes the surviving dupli
 test('files: unsafe paths, checkpoints, non-ASCII content, and corrupt files become anomalies, never throws', async () => {
   const { ledger } = await fabricated(`
     day 0 09:00 ade: create T001 tasks "Café 日本 🚀" {"owner": "Zoë @k/beef 2026-09-01 — 日本", "blockedReason": "attente — clé"}
-    day 0 10:00 ade: write deaddrop/tasks/notes.md "loose notes"
+    day 0 10:00 ade: write AA/tasks/notes.md "loose notes"
     day 1 09:00 ade: ckpt T001 did "first" ts="day 0 20:00"
     + ckpt T001 blocked "card busy" ts="day 0 23:30"
     + ckpt T001 did "older" ts="day 0 21:00"
     day 1 10:00 ade: ckpt T001 raw "{not json"
     + ckpt T001 did "fine" ts="day 1 10:00"
-    day 2 09:00 ade: write deaddrop/tasks/T009-broken.md "no frontmatter at all"
-    day 2 10:00 ade: write deaddrop/checkpoints/_SCHEMA.md "the format"
+    day 2 09:00 ade: write AA/tasks/T009-broken.md "no frontmatter at all"
+    day 2 10:00 ade: write AA/checkpoints/_SCHEMA.md "the format"
   `);
   const unsafe = anomalies(ledger, 'unsafe_path');
-  assert.deepEqual(unsafe.map((anomaly) => anomaly.path), ['deaddrop/tasks/notes.md']);
+  assert.deepEqual(unsafe.map((anomaly) => anomaly.path), ['AA/tasks/notes.md']);
 
   const life = of(ledger, 'T001').filter((transition) => transition.kind === 'life');
   assert.equal(life.length, 2);
@@ -528,7 +528,7 @@ test('files: more than 1 MiB of task content builds, identically with a tiny chu
   }
   const { fabrication, ledger } = await fabricated(lines.join('\n'));
   assert.equal(Object.keys(ledger.tasks).length, 400);
-  assert.ok(Buffer.byteLength(await readFile(path.join(fabrication.dir, 'deaddrop/backlog/T001-task-1.md'))) > 4000);
+  assert.ok(Buffer.byteLength(await readFile(path.join(fabrication.dir, 'AA/backlog/T001-task-1.md'))) > 4000);
   assert.deepEqual(ledger.anomalies, []);
   const tiny = await buildLedger(fabrication.dir, { chunkSize: 7 });
   assert.deepEqual(tiny, ledger);
@@ -543,11 +543,11 @@ test('files: a checkpoint trail past 256 KB keeps producing life from its last 2
   }
   const { fabrication, ledger } = await fabricated(`
     day 0 09:00 ade: create T001 tasks "Long trail" {"owner": "${CLAIM}"}
-    day 1 09:00 ade: write deaddrop/checkpoints/T001.jsonl ${JSON.stringify(`${old.join('\n')}\n`)}
+    day 1 09:00 ade: write AA/checkpoints/T001.jsonl ${JSON.stringify(`${old.join('\n')}\n`)}
     day 2 09:00 ade: ckpt T001 did "after the cap" ts="day 2 08:00"
     day 3 09:00 ade: ckpt T001 blocked "still going" ts="day 3 08:00"
   `);
-  assert.ok((await lstat(path.join(fabrication.dir, 'deaddrop/checkpoints/T001.jsonl'))).size > 300 * 1024);
+  assert.ok((await lstat(path.join(fabrication.dir, 'AA/checkpoints/T001.jsonl'))).size > 300 * 1024);
   const life = of(ledger, 'T001').filter((transition) => transition.kind === 'life');
   assert.deepEqual(life.map((transition) => transition.ts), ['2026-09-10T09:00:00.000Z', '2026-09-03T07:00:00.000Z', '2026-09-04T07:00:00.000Z']);
   assert.equal(life[2].blocked, 'still going');
@@ -561,7 +561,7 @@ test('files: a task file over 256 KB is read from its head and its state still m
     day 0 09:00 ade: create T001 backlog "Big" {"body": "${body}"}
     day 1 09:00 ade: move T001 done
   `);
-  assert.ok((await lstat(path.join(fabrication.dir, 'deaddrop/tasks/done/T001-big.md'))).size > 300 * 1024);
+  assert.ok((await lstat(path.join(fabrication.dir, 'AA/tasks/done/T001-big.md'))).size > 300 * 1024);
   const ledger = await buildLedger(fabrication.dir, { chunkSize: 1 });
   assert.deepEqual(of(ledger, 'T001').map(shape), [['created'], ['status', 'backlog', 'done']]);
   assert.equal(ledger.tasks.T001.status, 'done');
@@ -574,7 +574,7 @@ test('files: frontmatter that does not close within 256 KB, and an oversized pro
     day 0 09:00 ade: create T001 backlog "Huge frontmatter" {"milestone": "${huge}"}
     day 0 10:00 ade: project {"name": "P", "notes": "${huge}"}
   `);
-  assert.deepEqual(anomalies(ledger, 'oversized_blob').map((anomaly) => [anomaly.seq, anomaly.path]), [[0, 'deaddrop/backlog/T001-huge-frontmatter.md'], [1, 'project.json']]);
+  assert.deepEqual(anomalies(ledger, 'oversized_blob').map((anomaly) => [anomaly.seq, anomaly.path]), [[0, 'AA/backlog/T001-huge-frontmatter.md'], [1, 'project.json']]);
   assert.match(anomalies(ledger, 'oversized_blob')[0].detail, /limit 262144/);
   assert.equal(ledger.tasks.T001, undefined);
   assert.equal(ledger.transitions.length, 0);
@@ -587,12 +587,12 @@ test('files: a task path whose blob is absent from the repository is missing_blo
   const run = (args, input) => execFileSync('git', args, { cwd: dir, input, env: { ...process.env, GIT_CONFIG_GLOBAL: os.devNull, GIT_CONFIG_NOSYSTEM: '1' } }).toString().trim();
   const ghost = '1'.repeat(40);
   const tasks = run(['mktree', '--missing'], `100644 blob ${ghost}\tT002-ghost.md\n`);
-  const deaddrop = run(['mktree', '--missing'], `040000 tree ${tasks}\ttasks\n`);
-  const root = run(['mktree', '--missing'], `040000 tree ${deaddrop}\tdeaddrop\n`);
+  const board = run(['mktree', '--missing'], `040000 tree ${tasks}\ttasks\n`);
+  const root = run(['mktree', '--missing'], `040000 tree ${board}\tAA\n`);
   const commit = run(['-c', 'user.name=ade', '-c', 'user.email=ade@example.invalid', 'commit-tree', root, '-m', 'Ghost']);
   await git(dir, 'update-ref', 'HEAD', commit);
   const ledger = await buildLedger(dir);
-  assert.deepEqual(anomalies(ledger, 'missing_blob').map((anomaly) => [anomaly.path, anomaly.detail]), [['deaddrop/tasks/T002-ghost.md', 'deaddrop/tasks/T002-ghost.md could not be read']]);
+  assert.deepEqual(anomalies(ledger, 'missing_blob').map((anomaly) => [anomaly.path, anomaly.detail]), [['AA/tasks/T002-ghost.md', 'AA/tasks/T002-ghost.md could not be read']]);
   assert.deepEqual(ledger.tasks, {});
 });
 
@@ -659,7 +659,7 @@ test('memo: coarse timestamps — AGE Aris writes invalidate the memo, and raw c
   await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }, { trailers: { 'AGESight-Via': 'ui' } });
   assert.equal((await ledgers.get(project.id)).tasks.T001.status, 'in_progress');
 
-  const file = path.join(dir, 'deaddrop', 'tasks', 'T001-coarse-task.md');
+  const file = path.join(dir, 'AA', 'tasks', 'T001-coarse-task.md');
   await writeFile(file, (await readFile(file, 'utf8')).replace(/^priority: .*$/m, 'priority: urgent'));
   await git(dir, 'commit', '--quiet', '-am', 'Raise priority by hand');
   assert.equal((await ledgers.get(project.id)).tasks.T001.priority, 'urgent');
@@ -814,7 +814,7 @@ test('project metadata: creation, renames, WIP limits, other edits, and pipeline
   ]);
 });
 
-// --- tracked repositories: the board's paths, under either name -------------------
+// --- tracked repositories: the board's paths, under any of its names -------------------
 
 // A tracked repository's ledger, as Ledgers builds it for one: BOARD_PATHS.
 async function boardLedger(script) {
@@ -850,6 +850,36 @@ test('tracked board: a pm/ → deaddrop/ rename in one commit is a move, so the 
   const rename = ledger.commits.find((commit) => commit.sha === fabrication.sha('rename'));
   assert.deepEqual(rename.touched, ['T001'], 'the rename follows the task to its new path');
   assert.equal(of(ledger, 'T001').at(-1).path, 'deaddrop/tasks/done/T001-importer.md');
+  const [cycle] = cycles(ledger).T001;
+  assert.deepEqual([cycle.start.commit, cycle.end.commit, cycle.excluded], [fabrication.sha('claim'), fabrication.sha('finish'), '']);
+});
+
+test('tracked board: a deaddrop/ → AA/ rename in one commit is a move, trail and all, so the task keeps one history', async () => {
+  const claimed = boardFile('T001', 'Importer', { status: 'claimed', owner: CLAIM });
+  const trail = JSON.stringify(`${JSON.stringify({ ts: '2026-09-02T09:00:00Z', run: 'r1', kind: 'did', what: 'read the archive', next: 'parse' })}\n`);
+  const { fabrication, ledger } = await boardLedger(`
+    day 0 09:00 ade: write deaddrop/tasks/T001-importer.md ${boardFile('T001', 'Importer', { status: 'open' })} subject="Add T001"
+    day 1 09:00 ade: write deaddrop/tasks/T001-importer.md ${claimed} subject="Claim T001" label=claim
+    day 1 10:00 ade: write deaddrop/checkpoints/T001.jsonl ${trail} subject="ckpt: T001"
+    day 2 09:00 ade: write AA/tasks/T001-importer.md ${claimed} subject="migrate: rename deaddrop/ to AA/" label=rename
+    + delete deaddrop/tasks/T001-importer.md
+    + write AA/checkpoints/T001.jsonl ${trail}
+    + delete deaddrop/checkpoints/T001.jsonl
+    day 3 09:00 ade: write AA/tasks/done/T001-importer.md ${boardFile('T001', 'Importer', { status: 'done', owner: CLAIM })} subject="Finish T001" label=finish
+    + delete AA/tasks/T001-importer.md
+  `);
+  assert.deepEqual(of(ledger, 'T001').map(shape), [
+    ['created'],
+    ['status', 'backlog', 'in_progress', AGENT],
+    ['field', 'owner', '', CLAIM],
+    ['life'],
+    ['status', 'in_progress', 'done'],
+  ], 'the moved trail is the same trail: no second sign of life, no second task');
+  assert.deepEqual(Object.keys(ledger.tasks), ['T001']);
+  assert.deepEqual(ledger.anomalies, []);
+  const rename = ledger.commits.find((commit) => commit.sha === fabrication.sha('rename'));
+  assert.deepEqual(rename.touched, ['T001'], 'the rename follows the task to its new path');
+  assert.equal(of(ledger, 'T001').at(-1).path, 'AA/tasks/done/T001-importer.md');
   const [cycle] = cycles(ledger).T001;
   assert.deepEqual([cycle.start.commit, cycle.end.commit, cycle.excluded], [fabrication.sha('claim'), fabrication.sha('finish'), '']);
 });

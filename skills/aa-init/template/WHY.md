@@ -69,7 +69,7 @@ each file's history begins at the rename, so `git log -1` reported the sweep and
 **all seventeen live claims read as touched today.**
 
 ```sh
-git log --format='%ad  %s' --date=short --follow -- deaddrop/tasks/T0XX-*.md \
+git log --format='%ad  %s' --date=short --follow -- AA/tasks/T0XX-*.md \
   | grep -vE '  (migrate|ckpt):' | head -3
 ```
 
@@ -208,7 +208,7 @@ can be settled by the method instead of by taste.
 | Kanban's six core practices (Anderson) | here |
 |---|---|
 | 1. Visualise the work | `tasks/` *is* the work; `board.sh` draws it, one column per state |
-| 2. Limit work in progress | the limit in `deaddrop.yml`; the board prints `WIP n/limit` and names the breach |
+| 2. Limit work in progress | the limit in `AA.yml`; the board prints `WIP n/limit` and names the breach |
 | 3. Manage flow | throughput, cycle time, work item age, flow efficiency — from git and the trails |
 | 4. Make policies explicit | RULES.md, plus the limit, the DoR and the DoD, all checked by the board |
 | 5. Implement feedback loops | `/board` is a service delivery review; `/reclaim` is replenishment |

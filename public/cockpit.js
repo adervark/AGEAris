@@ -352,7 +352,8 @@ export function renderMethod({ project, method, data, line, tasks, pipeline }) {
   if (!method) return '<div class="loading-state"><span class="spinner"></span>Reading the project’s method…</div>';
   if (method.error) return `<p class="today-clear">${icon('alert')}${escape(method.error)}</p>`;
   const count = (status) => tasks.filter((task) => task.status === status).length;
-  const board = method.board || 'deaddrop';
+  const board = method.board || 'AA';
+  const config = method.config || `${board}/AA.yml`;
   const limit = method.wipLimit;
   const states = [
     ['backlog', `Filed and not started. Lives in ${board}/backlog/${method.linked ? ' (or in tasks/ marked open, on boards older than backlog/)' : ''}.`],
@@ -363,8 +364,8 @@ export function renderMethod({ project, method, data, line, tasks, pipeline }) {
   const workflow = `<ol class="workflow">${states.map(([status, policy], index) => `${index ? `<li class="workflow-arrow" aria-hidden="true">${status === 'blocked' ? '⇄' : '→'}</li>` : ''}<li class="workflow-state status-${status}"><strong>${escape(STATUS_WORDS[status])}<span>${count(status)}</span></strong><p>${escape(policy)}</p></li>`).join('')}</ol>`;
   const k = line?.kpis;
   const policies = [
-    ['WIP limit', limit ? `${limit} tasks in progress or blocked at once.` : 'No limit is set.', method.linked ? `From ${board}/deaddrop.yml` : 'Set in Edit project'],
-    ['Stale threshold', `An agent claim with no commit or checkpoint for ${method.staleHours} h is stale.`, method.linked ? `stale_hours in ${board}/deaddrop.yml` : 'deaddrop.yml'],
+    ['WIP limit', limit ? `${limit} tasks in progress or blocked at once.` : 'No limit is set.', method.linked ? `From ${config}` : 'Set in Edit project'],
+    ['Stale threshold', `An agent claim with no commit or checkpoint for ${method.staleHours} h is stale.`, `stale_hours in ${config}`],
     ['Service level', k?.cycle85?.status === 'ok' ? `85% of tasks finish within ${k.cycle85.display} of being claimed.` : 'Not enough finished work yet to set one.', 'The 85th percentile of cycle time'],
     ['Aging', 'Work in progress past the service level is aging; past twice the service level, it is critical.', 'Per task type when a type has enough history'],
     ['Cycle and lead time', 'Cycle time runs from the claim to done; lead time from filing to done.', 'First-parent git history, commit times clamped'],

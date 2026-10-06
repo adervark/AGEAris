@@ -1,9 +1,9 @@
 ---
-name: deaddrop-init
-description: Scaffold the deaddrop/ task-board convention into the current repo — a Kanban system kept in git, in any discipline. One page of rules, a backlog/tasks/done split where the directory IS the state, an append-only checkpoint trail per run so a dead session or a killed subagent still says what was in flight, and a STATE.md board that is GENERATED from the task files and git history rather than hand-maintained (board.sh --check fails when it is stale). Flow metrics — work item age, cycle time, throughput, flow efficiency, Little's Law — are computed, never written down. One deaddrop.yml adapts it to the discipline. Use when the user wants a task board, a kanban board, or WIP limits in a project that lacks deaddrop/.
+name: aa-init
+description: Scaffold the AA/ task-board convention into the current repo — a Kanban system kept in git, in any discipline. One page of rules, a backlog/tasks/done split where the directory IS the state, an append-only checkpoint trail per run so a dead session or a killed subagent still says what was in flight, and a STATE.md board that is GENERATED from the task files and git history rather than hand-maintained (board.sh --check fails when it is stale). Flow metrics — work item age, cycle time, throughput, flow efficiency, Little's Law — are computed, never written down. One AA.yml adapts it to the discipline. Use when the user wants a task board, a kanban board, or WIP limits in a project that has none (no AA/, nor deaddrop/ or pm/, its older names).
 ---
 
-# deaddrop-init — adopt the task-board convention in this repo
+# aa-init — adopt the AA task-board convention in this repo
 
 Agents on one project never meet, so they coordinate through a fixed place in
 git: a claim is a commit, a result is a commit, and two agents on one task is a
@@ -15,10 +15,10 @@ It holds no rules; `template/RULES.md` does.
 ## The shape
 
 ```
-deaddrop/
+AA/
   RULES.md            the protocol, one page, binding     <- read always
   WHY.md              the reasons, one section per rule   <- read on challenge
-  deaddrop.yml        spend words, WIP limit, log, map    <- the only per-discipline file
+  AA.yml        spend words, WIP limit, log, map    <- the only per-discipline file
   STATE.md            NOW block (hand-written) + generated board
   ckpt.sh             writes and reads the trail
   board.sh            renders the board: --write / --check
@@ -43,7 +43,7 @@ reasons were split between WHY.md and the schema.
 | the trail's format, and how to read and write it | `SCHEMA.md` (deployed as `checkpoints/_SCHEMA.md`) |
 | why a rule or a format choice is what it is, and the incident behind it | `WHY.md`, in the section for that rule |
 | a step-by-step procedure | `commands/*.md` |
-| what differs per discipline | `deaddrop.yml` |
+| what differs per discipline | `AA.yml` |
 | read order, identity, project constraints | `AGENTS.md` |
 | why a line of code is written the way it is | a comment beside that code |
 | how to install, and what must survive an edit | this file |
@@ -59,23 +59,23 @@ Two properties to protect above all others:
 
 ## Steps
 
-1. **Refuse gently if `deaddrop/STATE.md` or `pm/STATE.md` already exists** —
+1. **Refuse gently if `AA/STATE.md`, `deaddrop/STATE.md` or `pm/STATE.md` exists** —
    the repo has the convention. Point the user at it rather than re-scaffolding.
-2. `mkdir -p deaddrop/{tasks/done,backlog,checkpoints} .claude/commands`
+2. `mkdir -p AA/{tasks/done,backlog,checkpoints} .claude/commands`
 3. Copy from `template/`:
-   - `RULES.md`, `WHY.md` → `deaddrop/`, and `SCHEMA.md` →
-     `deaddrop/checkpoints/_SCHEMA.md`. **Verbatim**; there is nothing to fill in.
-   - `ckpt.sh`, `board.sh` → `deaddrop/`, `chmod +x` both. Verbatim.
+   - `RULES.md`, `WHY.md` → `AA/`, and `SCHEMA.md` →
+     `AA/checkpoints/_SCHEMA.md`. **Verbatim**; there is nothing to fill in.
+   - `ckpt.sh`, `board.sh` → `AA/`, `chmod +x` both. Verbatim.
      **They need `jq`** — say so if the machine has none rather than scaffolding
      a script that cannot run.
-   - `deaddrop.yml` → `deaddrop/`, **filling every `{{...}}` from the
+   - `AA.yml` → `AA/`, **filling every `{{...}}` from the
      conversation.** Ask what a spend is here and what the real WIP limit is —
      one machine, one operator, one reviewer, one meter. `board.sh` complains on
      every run until the limit is set.
-   - `STATE.md` → `deaddrop/`, filling the NOW block only. **Leave the
+   - `STATE.md` → `AA/`, filling the NOW block only. **Leave the
      generated markers alone**; step 6 fills that region.
    - `AGENTS.md` → repo root, filling placeholders. If a real `CLAUDE.md` or
-     `AGENTS.md` exists, **merge into it** — the bootstrap points at deaddrop/,
+     `AGENTS.md` exists, **merge into it** — the bootstrap points at AA/,
      it does not replace project instructions.
    - `commands/*.md` → `.claude/commands/`. Committed, so every session and
      agent gets them from git. If `.gitignore` ignores `.claude/`, narrow it to
@@ -85,11 +85,11 @@ Two properties to protect above all others:
      review and two clones appending to one task's trail merge cleanly:
 
      ```
-     deaddrop/checkpoints/*.jsonl    diff merge=union linguist-generated=true
+     AA/checkpoints/*.jsonl    diff merge=union linguist-generated=true
      ```
 4. **Point `map:` at what already exists.** Most repos have a README, an
    ARCHITECTURE.md or an orientation doc that answers *"how does this work"*.
-   Name **that** in `deaddrop.yml` and in `AGENTS.md` step 0. Only write a new
+   Name **that** in `AA.yml` and in `AGENTS.md` step 0. Only write a new
    one if there is genuinely nothing.
 5. Symlinks: `ln -s AGENTS.md CLAUDE.md`, `ln -s AGENTS.md GEMINI.md`. Skip any
    that exist as real files; on a Windows checkout, tell the user instead of
@@ -100,15 +100,15 @@ Two properties to protect above all others:
    of work, give each a `type:`. Then render the board:
 
    ```sh
-   deaddrop/board.sh --write
+   AA/board.sh --write
    ```
-7. Ensure the log named by `deaddrop.yml` exists (default `PROGRESS.md`), with
+7. Ensure the log named by `AA.yml` exists (default `PROGRESS.md`), with
    a title and a *"measurements land here as they happen"* note.
 8. Offer the staleness gate, and let the user decide — it is their hook:
 
    ```sh
    # .git/hooks/pre-commit  (or a CI step)
-   deaddrop/board.sh --check || exit 1
+   AA/board.sh --check || exit 1
    ```
 9. Commit everything in one commit unless told otherwise.
 
@@ -131,7 +131,9 @@ one.
 - **Checkpoint commits are prefixed `ckpt:`**, so the project's real history
   stays one `--invert-grep` away.
 
-**Legacy name:** repos scaffolded before 2026-09-02 use `pm/`. Same convention.
-Read `pm/STATE.md` there and leave the directory name alone unless asked to
-migrate it. Repos scaffolded before 2026-09-21 have one `WORKFLOW.md` where this
-template has `RULES.md` + `WHY.md`, and no `board.sh` or `deaddrop.yml`.
+**Older names:** repos scaffolded before 2026-10-07 use `deaddrop/`, with
+`deaddrop.yml` and `<!-- deaddrop:… -->` markers, and before 2026-09-02, `pm/`.
+Same convention. Read `STATE.md` there and leave the directory name alone
+unless asked to migrate it. Repos scaffolded before 2026-09-21 have one
+`WORKFLOW.md` where this template has `RULES.md` + `WHY.md`, and no `board.sh`
+or settings file.

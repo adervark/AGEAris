@@ -339,11 +339,11 @@ test('task updates preserve manually maintained STATE content and use template-c
   const workspace = await openWorkspace(directory);
   const project = await workspace.createProject({ name: 'Manual state', wipLimit: 2 });
   const projectDir = projectRepository(directory, project.id);
-  const statePath = path.join(projectDir, 'deaddrop', 'STATE.md');
-  const configPath = path.join(projectDir, 'deaddrop', 'deaddrop.yml');
+  const statePath = path.join(projectDir, 'AA', 'STATE.md');
+  const configPath = path.join(projectDir, 'AA', 'AA.yml');
   const original = await readFile(statePath, 'utf8');
-  const manualNow = '<!-- deaddrop:now -->\nManual standing and next action.\n<!-- /deaddrop:now -->';
-  const customized = `Manual preface that belongs to the operator.\n\n${original.replace(/<!-- deaddrop:now -->[\s\S]*?<!-- \/deaddrop:now -->/, manualNow)}\nManual footer that must survive.\n`;
+  const manualNow = '<!-- AA:now -->\nManual standing and next action.\n<!-- /AA:now -->';
+  const customized = `Manual preface that belongs to the operator.\n\n${original.replace(/<!-- AA:now -->[\s\S]*?<!-- \/AA:now -->/, manualNow)}\nManual footer that must survive.\n`;
   await writeFile(statePath, customized);
 
   let task = await workspace.createTask({ projectId: project.id, title: 'Refresh generated rows' });
@@ -363,6 +363,45 @@ test('task updates preserve manually maintained STATE content and use template-c
   assert.match(config, /^log: /m);
   assert.match(config, /^map: /m);
   assert.match(config, /^id_prefix: T$/m);
+});
+
+test('a project AGE Aris made before the rename keeps its board in deaddrop/: tasks, STATE.md markers, and settings stay there', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.createProject({ name: 'Older project', wipLimit: 2 });
+  const projectDir = projectRepository(directory, project.id);
+  // The board as AGE Aris laid it out before 2026-10-07.
+  await rename(path.join(projectDir, 'AA'), path.join(projectDir, 'deaddrop'));
+  await rename(path.join(projectDir, 'deaddrop', 'AA.yml'), path.join(projectDir, 'deaddrop', 'deaddrop.yml'));
+  const statePath = path.join(projectDir, 'deaddrop', 'STATE.md');
+  await writeFile(statePath, (await readFile(statePath, 'utf8')).replace(/<!-- (\/?)AA:/g, '<!-- $1deaddrop:'));
+  await git(projectDir, 'add', '-A');
+  await git(projectDir, 'commit', '--quiet', '-m', 'Lay the board out as before the rename');
+
+  let task = await workspace.createTask({ projectId: project.id, title: 'Still here' });
+  task = await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' });
+  assert.deepEqual((await readdir(projectDir)).sort(), ['.git', 'deaddrop', 'project.json'], 'no AA/ folder appears beside it');
+  assert.ok((await stat(path.join(projectDir, 'deaddrop', 'tasks', 'T001-still-here.md'))).isFile());
+  const state = await readFile(statePath, 'utf8');
+  assert.match(state, /<!-- deaddrop:now -->[\s\S]*<!-- deaddrop:generated -->\n[\s\S]*\| T001 \| Still here \| in_progress \|[\s\S]*<!-- \/deaddrop:generated -->/);
+  assert.doesNotMatch(state, /AA:/, 'the markers stay the ones its board.sh looks for');
+  const method = await workspace.methodOf(project.id);
+  assert.deepEqual([method.board, method.config, method.wipLimit], ['deaddrop', 'deaddrop/deaddrop.yml', 2]);
+  await workspace.updateProject(project.id, { version: project.version, wipLimit: 3 });
+  const config = await readFile(path.join(projectDir, 'deaddrop', 'deaddrop.yml'), 'utf8');
+  assert.match(config, /^ {2}in_progress: 3$/m);
+  assert.match(config, /^log: deaddrop\/RESULTS\.md$/m);
+  assert.equal(await git(projectDir, 'status', '--porcelain'), '');
+});
+
+test('a STATE.md title or project name with $ patterns is written as given', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.createProject({ name: "Costs $& $' and $1" });
+  await workspace.createTask({ projectId: project.id, title: "Price in $& and $` units" });
+  const state = await readFile(path.join(projectRepository(directory, project.id), 'AA', 'STATE.md'), 'utf8');
+  assert.match(state, /^# State — Costs \$& \$' and \$1$/m);
+  assert.ok(state.includes("| T001 | Price in $& and $` units | backlog |"), state);
 });
 
 test('external project metadata edits reject stale project saves', async () => {
@@ -469,7 +508,7 @@ test('a blocked reason is kept while blocked and cleared when the task leaves bl
   assert.equal(task.blockedReason, '');
   assert.match((await taskFile(directory, task.title)).contents, /^blockedReason: ""$/m);
   const projectDir = projectRepository(directory, project.id);
-  assert.match(await git(projectDir, 'log', '-p', '-1', '--format=', '--', 'deaddrop/tasks'), /^-blockedReason: "Ops is on holiday until Monday"$/m, 'git keeps the cleared reason');
+  assert.match(await git(projectDir, 'log', '-p', '-1', '--format=', '--', 'AA/tasks'), /^-blockedReason: "Ops is on holiday until Monday"$/m, 'git keeps the cleared reason');
 
   task = await workspace.updateTask(task.id, { version: task.version, status: 'blocked' });
   assert.equal(task.blockedReason, '');
@@ -525,11 +564,11 @@ test('a new task id is above every id ever used, including deleted tasks', async
   assert.equal(next.id, `${project.id}:T004`);
 
   // A retired checkpoint trail holds its id too.
-  await mkdir(path.join(projectDir, 'deaddrop', 'checkpoints'), { recursive: true });
-  await writeFile(path.join(projectDir, 'deaddrop', 'checkpoints', 'T009.jsonl'), '{"ts":"2026-10-01T09:00:00Z","run":"r","kind":"open"}\n');
-  await git(projectDir, 'add', 'deaddrop/checkpoints/T009.jsonl');
+  await mkdir(path.join(projectDir, 'AA', 'checkpoints'), { recursive: true });
+  await writeFile(path.join(projectDir, 'AA', 'checkpoints', 'T009.jsonl'), '{"ts":"2026-10-01T09:00:00Z","run":"r","kind":"open"}\n');
+  await git(projectDir, 'add', 'AA/checkpoints/T009.jsonl');
   await git(projectDir, 'commit', '--quiet', '-m', 'ckpt: T009');
-  await git(projectDir, 'rm', '--quiet', 'deaddrop/checkpoints/T009.jsonl');
+  await git(projectDir, 'rm', '--quiet', 'AA/checkpoints/T009.jsonl');
   await git(projectDir, 'commit', '--quiet', '-m', 'ckpt: retire T009');
   assert.equal((await workspace.createTask({ projectId: project.id, title: 'Five' })).id, `${project.id}:T010`);
 });
@@ -577,9 +616,9 @@ test('commit listeners receive the committed paths, and a listener that rejects 
   await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' });
   await new Promise((resolve) => setImmediate(resolve));
   assert.deepEqual(seen, [
-    ['project.json', 'deaddrop'],
-    ['deaddrop/backlog/T001-path-task.md', 'deaddrop/STATE.md'],
-    ['deaddrop/backlog/T001-path-task.md', 'deaddrop/tasks/T001-path-task.md', 'deaddrop/STATE.md'],
+    ['project.json', 'AA'],
+    ['AA/backlog/T001-path-task.md', 'AA/STATE.md'],
+    ['AA/backlog/T001-path-task.md', 'AA/tasks/T001-path-task.md', 'AA/STATE.md'],
   ]);
   assert.deepEqual(unhandled, [], 'a rejected listener promise never becomes an unhandled rejection');
 });
@@ -886,7 +925,7 @@ test('boardPolicy reads the in-progress WIP limit and stale_hours, and gives 0 w
   assert.deepEqual(boardPolicy(''), { staleHours: undefined, wipLimit: 0 });
   assert.deepEqual(boardPolicy('stale_hours: 24\nlog: PROGRESS.md\n'), { staleHours: 24, wipLimit: 0 });
   assert.deepEqual(boardPolicy('limits:\n  in_progress: 9\nwip:\n  blocked: 2\n'), { staleHours: undefined, wipLimit: 0 }, 'only the wip: block sets it');
-  const template = await readFile(new URL('../skills/deaddrop-init/template/deaddrop.yml', import.meta.url), 'utf8');
+  const template = await readFile(new URL('../skills/aa-init/template/AA.yml', import.meta.url), 'utf8');
   assert.match(template, /^ {2}in_progress: \{\{N\}\}$/m, 'the template still carries the placeholder');
   assert.deepEqual(boardPolicy(template), { staleHours: 24, wipLimit: 0 });
 });
@@ -895,7 +934,7 @@ test('linkProject refuses a missing, relative, absent, or non-folder path, and a
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
   const own = await workspace.createProject({ name: 'Own board' });
-  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const repository = await makeTrackedRepository({ 'AA/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
   const outside = await scratchFolder();
   await symlink(projectRepository(directory, own.id), path.join(outside, 'alias'));
 
@@ -914,41 +953,41 @@ test('linkProject refuses a folder that is not a git repository, a subfolder of 
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
   const plain = await scratchFolder();
-  await mkdir(path.join(plain, 'deaddrop', 'tasks'), { recursive: true });
+  await mkdir(path.join(plain, 'AA', 'tasks'), { recursive: true });
   await expectRejected(workspace.linkProject({ path: plain }), 400, new RegExp(`^${escapeRegExp(plain)} is not a git repository$`));
 
   // A monorepo whose service keeps its own board: the repository root is what can be tracked.
-  const monorepo = await makeTrackedRepository({ 'services/api/deaddrop/tasks/T001-route.md': boardTask('T001', 'Route', { status: 'open' }) });
+  const monorepo = await makeTrackedRepository({ 'services/api/AA/tasks/T001-route.md': boardTask('T001', 'Route', { status: 'open' }) });
   await expectRejected(
     workspace.linkProject({ path: path.join(monorepo, 'services', 'api') }),
     400,
     new RegExp(`^${escapeRegExp(path.join(monorepo, 'services', 'api'))} is inside the repository at ${escapeRegExp(monorepo)}; give that folder instead$`),
   );
 
-  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const repository = await makeTrackedRepository({ 'AA/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
   const worktree = path.join(await scratchFolder(), 'worktree');
   await git(repository, 'worktree', 'add', '--quiet', '--detach', worktree);
-  assert.ok((await stat(path.join(worktree, 'deaddrop', 'tasks'))).isDirectory(), 'the worktree has the board');
+  assert.ok((await stat(path.join(worktree, 'AA', 'tasks'))).isDirectory(), 'the worktree has the board');
   await expectRejected(workspace.linkProject({ path: worktree }), 400, /\.git is not a folder: worktrees and submodules cannot be tracked yet$/);
 
   const boardless = await makeTrackedRepository({
-    'deaddrop/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open' }),
+    'AA/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open' }),
     'docs/tasks/T002-notes.md': boardTask('T002', 'Notes', { status: 'open' }),
   });
-  await expectRejected(workspace.linkProject({ path: boardless }), 400, /has no task board: AGE Aris reads deaddrop\/tasks\/ \(or pm\/tasks\/, its older name\), and not through a symbolic link$/);
+  await expectRejected(workspace.linkProject({ path: boardless }), 400, /has no task board: AGE Aris reads AA\/tasks\/ \(or deaddrop\/tasks\/ or pm\/tasks\/, its older names\), and not through a symbolic link$/);
   assert.deepEqual(await readdir(path.join(directory, 'projects')), []);
 });
 
 test('a repository can be tracked once: a second link is a 409 however its path is spelled', async () => {
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
-  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const repository = await makeTrackedRepository({ 'AA/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
   const alias = path.join(await scratchFolder(), 'alias');
   await symlink(repository, alias);
 
   const first = await workspace.linkProject({ path: repository });
   assert.equal(first.name, path.basename(repository), 'without a name, the project is named after the folder');
-  for (const spelling of [repository, `${repository}/`, `${repository}/deaddrop/..`, alias]) {
+  for (const spelling of [repository, `${repository}/`, `${repository}/AA/..`, alias]) {
     await expectRejected(workspace.linkProject({ path: spelling, name: 'Again' }), 409, new RegExp(`^${escapeRegExp(repository)} is already tracked as ${escapeRegExp(first.name)}$`));
   }
   assert.deepEqual(await readdir(path.join(directory, 'projects')), [first.id]);
@@ -1012,13 +1051,13 @@ test('a tracked board reports unreadable task files and symlinks as problems and
   const elsewhere = await scratchFolder();
   await writeFile(path.join(elsewhere, 'T009-elsewhere.md'), boardTask('T009', 'Elsewhere', { status: 'claimed' }));
   const repository = await makeTrackedRepository({
-    'deaddrop/backlog/T001-good.md': boardTask('T001', 'Good', { status: 'open' }),
-    'deaddrop/tasks/T002-also-good.md': boardTask('T002', 'Also good', { status: 'claimed' }),
-    'deaddrop/tasks/T003-no-frontmatter.md': '# T003 — No frontmatter\n\nJust notes.\n',
-    'deaddrop/tasks/T004-wrong-id.md': boardTask('T005', 'Wrong id', { status: 'claimed' }),
-    'deaddrop/tasks/done/T002-copy.md': boardTask('T002', 'A copy', { status: 'done' }),
+    'AA/backlog/T001-good.md': boardTask('T001', 'Good', { status: 'open' }),
+    'AA/tasks/T002-also-good.md': boardTask('T002', 'Also good', { status: 'claimed' }),
+    'AA/tasks/T003-no-frontmatter.md': '# T003 — No frontmatter\n\nJust notes.\n',
+    'AA/tasks/T004-wrong-id.md': boardTask('T005', 'Wrong id', { status: 'claimed' }),
+    'AA/tasks/done/T002-copy.md': boardTask('T002', 'A copy', { status: 'done' }),
   });
-  await symlink(path.join(elsewhere, 'T009-elsewhere.md'), path.join(repository, 'deaddrop', 'tasks', 'T009-elsewhere.md'));
+  await symlink(path.join(elsewhere, 'T009-elsewhere.md'), path.join(repository, 'AA', 'tasks', 'T009-elsewhere.md'));
   await git(repository, 'add', '-A');
   await git(repository, 'commit', '--quiet', '-m', 'Link a task from elsewhere');
   const project = await workspace.linkProject({ path: repository, name: 'Messy board' });
@@ -1027,10 +1066,10 @@ test('a tracked board reports unreadable task files and symlinks as problems and
   const listed = snapshot.projects.find((candidate) => candidate.id === project.id);
   // readdir order is the file system's; compare in code-point order.
   assert.deepEqual([...listed.problems].sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0)), [
-    { file: 'deaddrop/tasks/T003-no-frontmatter.md', error: 'Task file has invalid frontmatter' },
-    { file: 'deaddrop/tasks/T004-wrong-id.md', error: 'Task file T004-wrong-id.md has an invalid id' },
-    { file: 'deaddrop/tasks/T009-elsewhere.md', error: 'Symbolic links are not read' },
-    { file: 'deaddrop/tasks/done/T002-copy.md', error: 'Duplicate task id T002 in project Messy board' },
+    { file: 'AA/tasks/T003-no-frontmatter.md', error: 'Task file has invalid frontmatter' },
+    { file: 'AA/tasks/T004-wrong-id.md', error: 'Task file T004-wrong-id.md has an invalid id' },
+    { file: 'AA/tasks/T009-elsewhere.md', error: 'Symbolic links are not read' },
+    { file: 'AA/tasks/done/T002-copy.md', error: 'Duplicate task id T002 in project Messy board' },
   ]);
   assert.deepEqual(Object.keys(tasksOf(snapshot, project.id)).sort(), ['T001', 'T002']);
   assert.equal(tasksOf(snapshot, project.id).T002.title, 'Also good');
@@ -1039,7 +1078,7 @@ test('a tracked board reports unreadable task files and symlinks as problems and
 test('a tracked repository\'s activity is the commits that touch its board, not the rest of its code', async () => {
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
-  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const repository = await makeTrackedRepository({ 'AA/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
   await writeFile(path.join(repository, 'README.md'), '# Their project, documented\n');
   await git(repository, 'commit', '--quiet', '-am', 'Document the code');
   const project = await workspace.linkProject({ path: repository });
@@ -1070,20 +1109,20 @@ test('_commit and _resetPaths refuse any folder but an own project repository, s
   // folder has no .git, so a git command run there would reach this one.
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
-  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const repository = await makeTrackedRepository({ 'AA/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
   const project = await workspace.linkProject({ path: repository });
   const folder = projectRepository(directory, project.id);
-  await writeFile(path.join(repository, 'deaddrop', 'tasks', 'T002-sneaked-in.md'), boardTask('T002', 'Sneaked in', { status: 'open' }));
+  await writeFile(path.join(repository, 'AA', 'tasks', 'T002-sneaked-in.md'), boardTask('T002', 'Sneaked in', { status: 'open' }));
   const heads = async () => [await git(directory, 'rev-parse', 'HEAD'), await git(repository, 'rev-parse', 'HEAD')];
   const before = await heads();
 
   for (const target of [folder, repository, directory, path.join(directory, 'projects')]) {
-    const paths = [path.join(target, 'project.json'), path.join(target, 'deaddrop')];
+    const paths = [path.join(target, 'project.json'), path.join(target, 'AA')];
     assert.throws(() => workspace._commit(target, paths, 'Sneak a commit in'), (error) => error.status === 500 && /^AGE Aris writes only to the project repositories in its data folder$/.test(error.message), target);
     assert.throws(() => workspace._resetPaths(target, paths), (error) => error.status === 500, target);
   }
   assert.deepEqual(await heads(), before, 'neither the data folder\'s repository nor the tracked one got a commit');
-  assert.match(await git(repository, 'status', '--porcelain'), /^\?\? deaddrop\/tasks\/T002-sneaked-in\.md$/);
+  assert.match(await git(repository, 'status', '--porcelain'), /^\?\? AA\/tasks\/T002-sneaked-in\.md$/);
 });
 
 test('unlinkProject removes only a tracked project\'s folder; an own project is a 409 and an unknown one a 404', async () => {
@@ -1113,12 +1152,12 @@ test('unlinkProject removes only a tracked project\'s folder; an own project is 
 test('an own project whose project.json names a repository is still an own project: the key is ignored', async () => {
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
-  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-theirs.md': boardTask('T001', 'Theirs', { status: 'claimed' }) });
+  const repository = await makeTrackedRepository({ 'AA/tasks/T001-theirs.md': boardTask('T001', 'Theirs', { status: 'claimed' }) });
   const project = await workspace.createProject({ name: 'Own' });
   await workspace.createTask({ projectId: project.id, title: 'Mine' });
   const projectDir = projectRepository(directory, project.id);
   const metadata = path.join(projectDir, 'project.json');
-  await writeFile(metadata, `${JSON.stringify({ ...JSON.parse(await readFile(metadata, 'utf8')), repository, board: 'deaddrop' }, null, 2)}\n`);
+  await writeFile(metadata, `${JSON.stringify({ ...JSON.parse(await readFile(metadata, 'utf8')), repository, board: 'AA' }, null, 2)}\n`);
   await git(projectDir, 'commit', '--quiet', '-am', 'An agent points project.json elsewhere');
   const before = await repositoryState(repository);
 
@@ -1136,10 +1175,10 @@ test('a tracked task carries its holder\'s latest note from the owner line, and 
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
   const project = await workspace.linkProject({ path: await makeTrackedRepository({
-    'deaddrop/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open', owner: '—' }),
-    'deaddrop/tasks/T002-import.md': boardTask('T002', 'Import', { status: 'claimed', owner: AGENT_CLAIM }),
-    'deaddrop/tasks/T003-quiet.md': boardTask('T003', 'Quiet', { status: 'claimed', owner: 'ade @k/e857a8c8 2026-10-01' }),
-    'deaddrop/tasks/T004-ui.md': boardTask('T004', 'From the UI', { status: 'claimed', owner: 'ade @agesight/web 2026-10-01 — moved on the board' }),
+    'AA/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open', owner: '—' }),
+    'AA/tasks/T002-import.md': boardTask('T002', 'Import', { status: 'claimed', owner: AGENT_CLAIM }),
+    'AA/tasks/T003-quiet.md': boardTask('T003', 'Quiet', { status: 'claimed', owner: 'ade @k/e857a8c8 2026-10-01' }),
+    'AA/tasks/T004-ui.md': boardTask('T004', 'From the UI', { status: 'claimed', owner: 'ade @agesight/web 2026-10-01 — moved on the board' }),
   }) });
   const tasks = tasksOf(await workspace.read(), project.id);
   assert.deepEqual(['T001', 'T002', 'T003', 'T004'].map((id) => [id, tasks[id].claimNote]), [['T001', ''], ['T002', 'importer'], ['T003', ''], ['T004', '']], 'a note needs a claim, and a UI claim names nobody');
@@ -1157,6 +1196,7 @@ test('methodOf reads a board\'s policy and its own method documents, skipping sy
   const workspace = await openWorkspace(directory);
   const elsewhere = await scratchFolder();
   await writeFile(path.join(elsewhere, 'RULES.md'), '# Not the board\'s\n');
+  // A board under its older name, deaddrop/, whose settings file is deaddrop.yml.
   const repository = await makeTrackedRepository({
     'deaddrop/tasks/T001-work.md': boardTask('T001', 'Work', { status: 'claimed', owner: AGENT_CLAIM }),
     'deaddrop/deaddrop.yml': 'wip:\n  in_progress: 4\n  blocked: 4\nstale_hours: 12\n',
@@ -1169,13 +1209,13 @@ test('methodOf reads a board\'s policy and its own method documents, skipping sy
   const project = await workspace.linkProject({ path: repository });
 
   const method = await workspace.methodOf(project.id);
-  assert.deepEqual([method.projectId, method.linked, method.board, method.staleHours, method.wipLimit], [project.id, true, 'deaddrop', 12, 4]);
+  assert.deepEqual([method.projectId, method.linked, method.board, method.config, method.staleHours, method.wipLimit], [project.id, true, 'deaddrop', 'deaddrop/deaddrop.yml', 12, 4]);
   assert.deepEqual(method.docs, [{ name: 'WORKFLOW.md', path: 'deaddrop/WORKFLOW.md', text: '# Workflow\n\nClaim, checkpoint, done.\n' }]);
   assert.deepEqual(await repositoryState(repository), before);
 
   const own = await workspace.createProject({ name: 'Own', wipLimit: 5 });
   const ownMethod = await workspace.methodOf(own.id);
-  assert.deepEqual([ownMethod.linked, ownMethod.board, ownMethod.wipLimit, ownMethod.staleHours], [false, 'deaddrop', 5, 24]);
+  assert.deepEqual([ownMethod.linked, ownMethod.board, ownMethod.config, ownMethod.wipLimit, ownMethod.staleHours], [false, 'AA', 'AA/AA.yml', 5, 24]);
   await expectRejected(workspace.methodOf('missing-project'), 404, /./);
 });
 
@@ -1183,10 +1223,10 @@ test('a task lists what it builds on from depends:, in order, without itself, re
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
   const project = await workspace.linkProject({ path: await makeTrackedRepository({
-    'deaddrop/tasks/T001-a.md': boardTask('T001', 'A', { status: 'claimed', depends: '[]' }),
-    'deaddrop/tasks/T002-b.md': boardTask('T002', 'B', { status: 'claimed', depends: '[T001, T009, T001, T002, see notes]' }),
-    'deaddrop/tasks/T003-c.md': boardTask('T003', 'C', { status: 'claimed', depends: 'T002' }),
-    'deaddrop/tasks/T004-d.md': boardTask('T004', 'D', { status: 'claimed' }),
+    'AA/tasks/T001-a.md': boardTask('T001', 'A', { status: 'claimed', depends: '[]' }),
+    'AA/tasks/T002-b.md': boardTask('T002', 'B', { status: 'claimed', depends: '[T001, T009, T001, T002, see notes]' }),
+    'AA/tasks/T003-c.md': boardTask('T003', 'C', { status: 'claimed', depends: 'T002' }),
+    'AA/tasks/T004-d.md': boardTask('T004', 'D', { status: 'claimed' }),
   }) });
   const tasks = tasksOf(await workspace.read(), project.id);
   assert.deepEqual(['T001', 'T002', 'T003', 'T004'].map((id) => tasks[id].depends), [[], ['T001', 'T009'], ['T002'], []]);

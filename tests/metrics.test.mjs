@@ -513,7 +513,7 @@ test('stale 7: an uncommitted trail line 1 h ago keeps the claim alive now, and 
   const claim = now.claims[0];
   assert.equal(claim.live, true);
   assert.equal(claim.liveInput, 'read');
-  assert.deepEqual(claim.lastLife, { source: 'live trail', at: '2026-10-05T07:00:00.000Z', trail: 'deaddrop/checkpoints/T001.jsonl', ts: '2026-10-05T07:00:00Z', live: true });
+  assert.deepEqual(claim.lastLife, { source: 'live trail', at: '2026-10-05T07:00:00.000Z', trail: 'AA/checkpoints/T001.jsonl', ts: '2026-10-05T07:00:00Z', live: true });
 
   const past = compute(ledger, { live, asOf: '2026-10-04T09:12:00+01:00' }).metrics.stale_claims;
   assert.equal(past.inputs.live, false);

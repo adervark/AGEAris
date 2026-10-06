@@ -44,11 +44,12 @@ file new work in `tasks/`), otherwise in progress; `tasks/done/` is dropped with
 `in progress` in any spelling is in progress. WIP is in progress plus blocked.
 Open work is backlog plus WIP.
 
-**Boards.** A project created in AGE Aris reads `deaddrop/` and its pipeline
-runs. A tracked repository reads only its board's `backlog/`, `tasks/`, and
-`checkpoints/`, under `deaddrop/` and under `pm/`, the board's older name. A
-commit that moves a task from `pm/` to `deaddrop/` is a move, not a deletion
-and a creation, so the task's history continues.
+**Boards.** A project created in AGE Aris reads `AA/` (`deaddrop/` when the
+project is older than that name) and its pipeline runs. A tracked repository
+reads only its board's `backlog/`, `tasks/`, and `checkpoints/`, under `AA/`
+and under `deaddrop/` and `pm/`, the board's older names. A commit that moves a
+task from `deaddrop/` to `AA/` is a move, not a deletion and a creation, so the
+task's history continues.
 
 **Cycle start.** A cycle begins at creation or at a reopen (leaving done or
 dropped). Its start is its first entry into WIP: creation in WIP, backlog →
@@ -302,7 +303,7 @@ What moved in a window, one list each:
   
   A claim is never staler than its own cycle start.
 - **Stale** when `asOf − last sign of life > stale_hours` (from
-  `deaddrop/deaddrop.yml`, default 24).
+  `AA/AA.yml`, default 24).
 - **Drawer data:** `claims` lists every WIP claim with its type, why it is an
   agent claim, each input with its time, the commits ignored and why, and the
   live-trail state.
@@ -357,7 +358,7 @@ sample}`.
 
 ## Differences from board.sh
 
-`skills/deaddrop-init/template/board.sh` computes flow metrics from the same
+`skills/aa-init/template/board.sh` computes flow metrics from the same
 files. It is a precedent, not an oracle: AGE Aris differs on purpose here.
 
 | Topic | board.sh (line) | AGE Aris | Why AGE Aris differs |

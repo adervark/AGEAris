@@ -5,7 +5,7 @@ The reasons are in [WHY.md](WHY.md); a rule marked *(WHY § …)* has an inciden
 behind it, worth reading before you argue with it.
 
 **A *spend* is anything this project cannot undo or would pay for twice.**
-What counts is listed in [`deaddrop.yml`](deaddrop.yml) — that file, and only
+What counts is listed in [`AA.yml`](AA.yml) — that file, and only
 that file, is where a discipline differs. Everything on this page is the same
 everywhere.
 
@@ -52,16 +52,16 @@ everywhere.
    out, because a limit or a crash gives no warning. If you did not verify
    something, say you did not. When the handoff and the trail disagree about
    what is in flight, the newest trail entry wins.
-9. **Results land as they are measured**, in the file `deaddrop.yml` names as
+9. **Results land as they are measured**, in the file `AA.yml` names as
    `log`, never at session end.
 
 ## The board
 
-10. **Work in progress is limited** by `deaddrop.yml`. A breach is a stop
+10. **Work in progress is limited** by `AA.yml`. A breach is a stop
     condition: finish or release something before claiming. *(An unlimited
     board is a push queue with better manners.)*
 11. **`STATE.md` below the NOW marker is generated.** Do not hand-edit it;
-    `deaddrop/board.sh --write` regenerates it and `--check` fails when it is
+    `AA/board.sh --write` regenerates it and `--check` fails when it is
     stale. History goes to the log and to `done/`.
     *(WHY § the board that ate itself — this is the rule the convention's own
     reference repo violated by 40×.)*

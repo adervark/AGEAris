@@ -28,7 +28,7 @@ created: {{DATE}}
 ## Decision rules — fixed in advance
 
 {{Pass, fail and stop criteria — required before claiming if this task will
-spend anything named in deaddrop.yml (rule 5).}}
+spend anything named in AA.yml (rule 5).}}
 
 *(While this is empty the board marks the task ⚑.)*
 
@@ -49,7 +49,7 @@ spend anything named in deaddrop.yml (rule 5).}}
 ## Result
 
 *(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `deaddrop/ckpt.sh close {{T###}}` — then
+entry in the log, and the digest from `AA/ckpt.sh close {{T###}}` — then
 retire the trail with `--delete`)*
 
 ## Notes

@@ -65,10 +65,10 @@ test('every sample commit is dated at or before now, and each task\'s createdAt 
   const log = (await exec('git', ['-C', dir, 'log', '--format=%cI %aI'])).stdout.trim().split('\n');
   assert.ok(log.length > 100);
   for (const line of log) for (const time of line.split(' ')) assert.ok(Date.parse(time) <= NOW, `${time} is after now`);
-  const files = (await exec('git', ['-C', dir, 'ls-files', 'deaddrop/backlog', 'deaddrop/tasks'])).stdout.trim().split('\n').filter((file) => /\/T\d{3}-/.test(file));
+  const files = (await exec('git', ['-C', dir, 'ls-files', 'AA/backlog', 'AA/tasks'])).stdout.trim().split('\n').filter((file) => /\/T\d{3}-/.test(file));
   assert.equal(files.length, 43);
   const firstCommitOf = new Map();
-  const added = (await exec('git', ['-C', dir, 'log', '--reverse', '--diff-filter=A', '--name-only', '--format=@%cI', '--', 'deaddrop'])).stdout.split('\n');
+  const added = (await exec('git', ['-C', dir, 'log', '--reverse', '--diff-filter=A', '--name-only', '--format=@%cI', '--', 'AA'])).stdout.split('\n');
   let current = '';
   for (const entry of added) {
     if (entry.startsWith('@')) current = entry.slice(1);

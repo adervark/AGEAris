@@ -20,7 +20,7 @@ from backlog to completion without losing ownership or handoff context.
   beside each.
 - Persist tasks and history across application restarts.
 - Reject stale edits and claims beyond the project's work in progress limit.
-- Track an existing repository's deaddrop board read-only. AGE Aris never
+- Track an existing repository's AA board read-only. AGE Aris never
   writes to a repository it did not create; that repository's agents keep
   working there, and AGE Aris reads their files and history.
 

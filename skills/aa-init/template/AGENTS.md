@@ -10,14 +10,14 @@ Edit here, once.*
 0. **New here, or back after a gap?** `{{MAP}}` — what this system is, stage by
    stage. **Skip it if you already know**; everything below assumes you do. The
    board says what is being worked on, never what there is to work on.
-1. `deaddrop/STATE.md` — the board. The NOW block is hand-written; everything
-   below it is rendered by `deaddrop/board.sh`, which is also how you get it
+1. `AA/STATE.md` — the board. The NOW block is hand-written; everything
+   below it is rendered by `AA/board.sh`, which is also how you get it
    fresh. **If WIP is over the limit, the next action is to finish or release
    something — not to claim.**
-2. `deaddrop/RULES.md` — the protocol, one page, binding. What counts as a
-   *spend* here is in `deaddrop/deaddrop.yml`.
-3. Your task file in `deaddrop/tasks/`. It links the deeper context it needs.
-4. `deaddrop/ckpt.sh live` — what runs have already done here, and whether
+2. `AA/RULES.md` — the protocol, one page, binding. What counts as a
+   *spend* here is in `AA/AA.yml`.
+3. Your task file in `AA/tasks/`. It links the deeper context it needs.
+4. `AA/ckpt.sh live` — what runs have already done here, and whether
    anything was in flight when the last one stopped. **Check it before you spend
    anything; you may be about to buy something twice.**
 

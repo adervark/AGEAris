@@ -1,6 +1,6 @@
 # The checkpoint format
 
-One task, one file: `deaddrop/checkpoints/T###.jsonl`. **One JSON object per
+One task, one file: `AA/checkpoints/T###.jsonl`. **One JSON object per
 line, append-only.** Nothing already written is ever edited — a correction is
 another line. Every line carries `ts` (UTC), `run`, `kind`, and (except the
 header) `next`, so the newest line is always the resume point.
@@ -35,14 +35,14 @@ narrating rather than checkpointing.
 
 ## Writing a line without the script
 
-`deaddrop/ckpt.sh` is the fast path; **the format is the contract.** A line
+`AA/ckpt.sh` is the fast path; **the format is the contract.** A line
 appended by hand is equally valid:
 
 ```sh
 jq -cn --arg ts "$(date -u +%FT%TZ)" --arg run "$RUN" --arg kind did \
    --arg what "…" --arg next "…" \
    '{ts:$ts,run:$run,kind:$kind} + ($ARGS.named|del(.ts,.run,.kind))' \
-   >> deaddrop/checkpoints/T042.jsonl
+   >> AA/checkpoints/T042.jsonl
 ```
 
 Commit a trail-only change with a subject starting `ckpt: `, so the project's
@@ -66,7 +66,7 @@ and then removed from the tree (`ckpt.sh close <ID> --delete`, which refuses
 while any run lacks an `end`). Git keeps it:
 
 ```sh
-git log --diff-filter=D -p -- deaddrop/checkpoints/T042.jsonl
+git log --diff-filter=D -p -- AA/checkpoints/T042.jsonl
 ```
 
 Why each of these choices was made: [WHY.md](../WHY.md) § *How the trail is

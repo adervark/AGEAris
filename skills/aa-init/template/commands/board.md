@@ -10,9 +10,9 @@ recommended next action and the rule that judges it.
 ## 1. Let the script do the mechanical half
 
 ```sh
-deaddrop/board.sh --all       # columns, WIP, marks, flow metrics, POLICY AND DRIFT
-deaddrop/board.sh --check     # is STATE.md's generated region stale?
-deaddrop/ckpt.sh live         # what was in flight when the last run stopped?
+AA/board.sh --all       # columns, WIP, marks, flow metrics, POLICY AND DRIFT
+AA/board.sh --check     # is STATE.md's generated region stale?
+AA/ckpt.sh live         # what was in flight when the last run stopped?
 ```
 
 Everything the board prints is measured from the task files, the trails and git.

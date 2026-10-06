@@ -16,7 +16,7 @@ test('markdown escapes raw HTML everywhere: text, headings, list items, tables, 
 test('links keep only http(s) and mailto targets, open in a new tab without a referrer, and other targets show as text', () => {
   assert.equal(inline('[docs](https://example.org/a?b=1&c=2)'), '<a href="https://example.org/a?b=1&amp;c=2" target="_blank" rel="noopener noreferrer">docs</a>');
   assert.equal(inline('[mail](mailto:a@example.org)'), '<a href="mailto:a@example.org" target="_blank" rel="noopener noreferrer">mail</a>');
-  for (const target of ['javascript:alert(1)', 'data:text/html,x', 'vbscript:x', 'deaddrop/tasks/T001.md', '//evil.example']) {
+  for (const target of ['javascript:alert(1)', 'data:text/html,x', 'vbscript:x', 'AA/tasks/T001.md', '//evil.example']) {
     assert.doesNotMatch(inline(`[x](${target})`), /<a /, target);
   }
 });
