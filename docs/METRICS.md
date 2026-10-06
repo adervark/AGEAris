@@ -1,6 +1,6 @@
 # Metrics
 
-AgeAris computes every number on Home, a project's Flow and Method tabs, and Decisions from
+AGE Aris computes every number on Home, a project's Flow and Method tabs, and Decisions from
 two records: the project's git history and the runs' hash-chained audit logs.
 Nothing is typed in by hand and nothing is stored apart from those records. The
 engine is `lib/metrics.mjs`; it is pure, takes the moment it computes for
@@ -44,7 +44,7 @@ file new work in `tasks/`), otherwise in progress; `tasks/done/` is dropped with
 `in progress` in any spelling is in progress. WIP is in progress plus blocked.
 Open work is backlog plus WIP.
 
-**Boards.** A project created in AgeAris reads `deaddrop/` and its pipeline
+**Boards.** A project created in AGE Aris reads `deaddrop/` and its pipeline
 runs. A tracked repository reads only its board's `backlog/`, `tasks/`, and
 `checkpoints/`, under `deaddrop/` and under `pm/`, the board's older name. A
 commit that moves a task from `pm/` to `deaddrop/` is a move, not a deletion
@@ -209,7 +209,7 @@ What moved in a window, one list each:
   last move into blocked; `workingDays` subtracts non-working days. The reason
   comes from the first informative source: `blockedReason`, then the latest
   checkpoint line with `kind: "blocked"`, then the Handoff's "Next decision",
-  else "No reason given". AgeAris's default Next-decision text, `{{…}}`
+  else "No reason given". AGE Aris's default Next-decision text, `{{…}}`
   placeholders, and empty or "nothing" values are skipped. `reasonSource`
   names the source. The trail is the committed one; for a value computed now,
   a newer line in the live trail is used and marked `reasonLive`.
@@ -290,7 +290,7 @@ What moved in a window, one list each:
 - **Excluded:** a task with a run that needs a person (it is a decision).
 - **Last sign of life** is the latest of:
   - non-sweep commits touching the task file or its trail, except commits with
-    the `AGESight-Via: ui` trailer (edits made in AgeAris, whoever made them),
+    the `AGESight-Via: ui` trailer (edits made in AGE Aris, whoever made them),
     and except commits authored by the workspace operator when the claimant's
     operator is someone else;
   - the `ts` of committed checkpoint lines (for a `ckpt:` commit, the lines'
@@ -358,9 +358,9 @@ sample}`.
 ## Differences from board.sh
 
 `skills/deaddrop-init/template/board.sh` computes flow metrics from the same
-files. It is a precedent, not an oracle: AgeAris differs on purpose here.
+files. It is a precedent, not an oracle: AGE Aris differs on purpose here.
 
-| Topic | board.sh (line) | AgeAris | Why AgeAris differs |
+| Topic | board.sh (line) | AGE Aris | Why AGE Aris differs |
 |---|---|---|---|
 | `killed` | Counted as delivered (141) | Dropped: removed from scope, never a finish | A cancelled item is not delivery; counting it inflates throughput and forecasts. |
 | Cycle start | The **latest** `claimed` line, "this stint" (140); WIP → backlog → WIP restarts the clock | The **first** WIP entry of the cycle; a return keeps the original start; a reopen starts a new cycle | A manager's cycle time includes time parked and resumed; the latest stint understates it. |
@@ -371,7 +371,7 @@ files. It is a precedent, not an oracle: AgeAris differs on purpose here.
 | Blocked item age | Measured from the move into blocked (275) | Aging from cycle start; blocker age shown separately, from the move into blocked | Aging measures the item's whole time in flight. |
 | Aging reference | Per-type P85, else global, with no minimum (280) | Per-`typeKey` P85 when the type has ≥5 finishes, else the project P85; `insufficient` under 5 | Same idea, with a minimum sample. |
 | Type normalization | Lowercase, `{…}` → untyped, other characters removed (89–91) | The same (`typeKey`); the stored value is kept as written; untyped items use the project reference | Kept identical on purpose. |
-| Owner parsing | Reduced to the operator name (85–88) | The same operator parse, keeping `@profile/session` too | Every AgeAris repository commits as the workspace operator, so only the profile and session tell agents apart. |
+| Owner parsing | Reduced to the operator name (85–88) | The same operator parse, keeping `@profile/session` too | Every AGE Aris repository commits as the workspace operator, so only the profile and session tell agents apart. |
 | Who owns a task | The parsed `owner:` operator | `assignee` → the active run's agent ("via run Rxxx") → the agent-claim identity → Unassigned; `@agesight/web` owner lines never make anyone the owner | The UI writes `owner:` for whoever clicks, and so does `startRun`; treating that as ownership would put every task the manager touched under the manager. |
 | Staleness: whose commits count | Ignores the **viewer's** commits (`user.name`) unless the claim is the viewer's own (161, 282–288) | Commits with `AGESight-Via: ui` never count, whoever authored them; the workspace operator's commits do not count unless the claimant's operator is the workspace operator | In the default setup the claimant's operator is always the workspace operator, so an author rule alone would let the manager's UI edits keep dead agent claims alive. |
 | Staleness: scope | Every WIP claim | Agent claims only; human `@agesight/web` claims get aging only; tasks whose run waits on a person are excluded | Human UI claims are never written to again, so they would always look stale. |

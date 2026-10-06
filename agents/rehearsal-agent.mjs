@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Offline stand-in agent. Reads an AgeAris stage prompt on stdin and answers
+// Offline stand-in agent. Reads an AGE Aris stage prompt on stdin and answers
 // with a short, deterministic response so the pipeline can be exercised
 // without calling a model. Set REHEARSAL_VERDICT=FAIL to rehearse a failure.
 

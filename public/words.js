@@ -1,4 +1,4 @@
-// The method's own words, each with one plain line of meaning. AgeAris is a
+// The method's own words, each with one plain line of meaning. AGE Aris is a
 // method for running work with people and agents, so its views label things
 // with the method's terms (WIP, cycle time, service level, stale claim) and
 // explain each where it appears instead of replacing it with vaguer words.

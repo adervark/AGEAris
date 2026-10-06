@@ -125,7 +125,7 @@ skills/deaddrop-init/
 
 ## Template additions
 
-`TASK.md` gained a `blockedReason:` key and a clearer `type:` comment, and `RULES.md` asks for a `blockedReason:` when a task moves to blocked. Both are additive: a task file without the key reads as having none, and gains it on its next edit through AgeAris.
+`TASK.md` gained a `blockedReason:` key and a clearer `type:` comment, and `RULES.md` asks for a `blockedReason:` when a task moves to blocked. Both are additive: a task file without the key reads as having none, and gains it on its next edit through AGE Aris.
 
 ## Legacy naming
 

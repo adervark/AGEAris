@@ -1479,7 +1479,7 @@ for (const removed of [1, 2]) {
   });
 }
 
-test('a log truncated while AgeAris was stopped is flagged against git when the engine restarts', async (t) => {
+test('a log truncated while AGE Aris was stopped is flagged against git when the engine restarts', async (t) => {
   const { ctx, run } = await gatedRun(t);
   const lines = await readEventLines(ctx, run);
   await writeEventLines(ctx, run, lines.slice(0, -1));
@@ -1511,7 +1511,7 @@ test('a plan output modified after the gate opened is never sent to the next age
   assert.equal(locked.audit.artifacts.ok, false);
   assert.equal(locked.needsHuman, true);
   assert.equal(ctx.engine.processes.size, 0);
-  assert.ok(quiet.mock.calls.some((call) => /was changed outside AgeAris/.test(String(call.arguments[0]))), 'the refusal is logged');
+  assert.ok(quiet.mock.calls.some((call) => /was changed outside AGE Aris/.test(String(call.arguments[0]))), 'the refusal is logged');
   await expectStatus(ctx.engine.act(run.id, { action: 'comment', text: 'still locked' }), 409, /failed verification/);
 });
 

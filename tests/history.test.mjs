@@ -647,7 +647,7 @@ test('memo: concurrent reads share one build, and an unchanged repository spawns
   ledgers.close();
 });
 
-test('memo: coarse timestamps — AgeAris writes invalidate the memo, and raw commits show through a new ref inode', async () => {
+test('memo: coarse timestamps — AGE Aris writes invalidate the memo, and raw commits show through a new ref inode', async () => {
   const workspace = await openWorkspace();
   const project = await workspace.createProject({ name: 'Coarse' });
   const task = await workspace.createTask({ projectId: project.id, title: 'Coarse task' });
@@ -872,7 +872,7 @@ test('tracked board: a legacy task created status: open in tasks/ starts in back
   assert.deepEqual([cycle.end.commit, cycle.outcome], [fabrication.sha('finish'), 'done']);
 });
 
-test('tracked board: the repository\'s own project.json is not AgeAris\'s, so its changes never reach the ledger', async () => {
+test('tracked board: the repository\'s own project.json is not AGE Aris\'s, so its changes never reach the ledger', async () => {
   const fabrication = await fabricate(path.join(await scratch(), 'repo'), `
     day 0 08:00 ade: project {"name": "Their app", "version": "1.0.0"}
     day 1 09:00 ade: create T001 backlog "Importer"
@@ -892,7 +892,7 @@ test('tracked board: the repository\'s own project.json is not AgeAris\'s, so it
   assert.ok(!ledger.commits.some((commit) => commit.sha === fabrication.sha('manifest')), 'a commit touching only project.json is not read');
   assert.equal(ledger.ledgerSha, fabrication.sha('claim'), 'the last commit touching the board');
   assert.equal(ledger.headSha, fabrication.sha('later'));
-  // Read as an AgeAris project, the same history has project transitions.
+  // Read as an AGE Aris project, the same history has project transitions.
   const own = await buildLedger(fabrication.dir);
   assert.deepEqual(own.transitions.filter((transition) => transition.kind === 'project').map((transition) => transition.change), ['created', 'renamed', 'wipLimit', 'edited', 'edited']);
 });

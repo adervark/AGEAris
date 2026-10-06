@@ -84,7 +84,7 @@ test('HTTP API performs a project and task CRUD round trip and reports client er
   response = await fetch(`${base}/api/projects`, { method: 'POST', body: JSON.stringify({ name: 'No type' }) });
   assert.equal(response.status, 415, 'a body without a JSON content type is refused');
 
-  response = await fetch(`${base}/favicon.png`);
+  response = await fetch(`${base}/planet.png`);
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'image/png');
   response = await fetch(`${base}/logo.webp`);
@@ -751,7 +751,7 @@ test('every write to a tracked project is refused with a 409: its tasks, its pro
     ['PUT', `/api/projects/${project.id}/pipeline`, { stages, version: 'default' }],
     ['POST', '/api/runs', { taskId: task.id }],
   ]) {
-    assert.match((await call(method, url, body, 409)).error, /^Their repo is a tracked repository, which AgeAris only reads\./, `${method} ${url}`);
+    assert.match((await call(method, url, body, 409)).error, /^Their repo is a tracked repository, which AGE Aris only reads\./, `${method} ${url}`);
   }
   assert.deepEqual(await call('GET', '/api/runs'), [], 'no run was started');
   assert.deepEqual(await repositoryState(repository), before, 'the repository is untouched');
@@ -767,7 +767,7 @@ test('DELETE /api/projects/:id stops tracking a repository; an own project is a 
   assert.ok((await call('GET', '/api/brief')).projects.some((line) => line.projectId === project.id && line.state === 'ready'));
   const before = await repositoryState(repository);
 
-  assert.match((await call('DELETE', `/api/projects/${own.id}`, undefined, 409)).error, /^Own is an AgeAris project; only a tracked repository can be removed$/);
+  assert.match((await call('DELETE', `/api/projects/${own.id}`, undefined, 409)).error, /^Own is an AGE Aris project; only a tracked repository can be removed$/);
   await call('DELETE', '/api/projects/00000000-0000-4000-8000-000000000000', undefined, 404);
   await call('DELETE', '/api/projects/not-a-project', undefined, 404);
   assert.deepEqual(await call('DELETE', `/api/projects/${project.id}`), { id: project.id, name: 'Their repo' });

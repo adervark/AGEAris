@@ -1,6 +1,6 @@
 # Agent pipeline
 
-AgeAris can carry a task through a sequence of stages, each done by an agent
+AGE Aris can carry a task through a sequence of stages, each done by an agent
 or a person. You stay in control: gates stop for your approval, you can send
 work back, take a stage over, reassign it, pause, cancel, or retry. Every step
 is written to a hash-chained audit log and committed to the project's git
@@ -26,7 +26,7 @@ history.
 The board card of a task with an active run shows its current stage and a
 **Needs you** marker when it is waiting on a decision.
 
-A tracked repository (see the README) has no pipeline. AgeAris only reads it,
+A tracked repository (see the README) has no pipeline. AGE Aris only reads it,
 so pipeline edits and runs there are refused with 409.
 
 ## Stages
@@ -65,7 +65,7 @@ runs already in progress.
 ## Agents and routing
 
 Agents are registered once per workspace in `<data dir>/registry/agents.json`,
-which is its own git repository. On first start AgeAris registers a
+which is its own git repository. On first start AGE Aris registers a
 **Rehearsal agent**, an offline stand-in that answers instantly. If the
 `claude` CLI is on `PATH`, it also registers **Claude Haiku**, **Claude Sonnet**
 and **Claude Opus** (`claude -p --model <tier>`) and leaves the rehearsal agent
@@ -104,9 +104,9 @@ an agent, or take the stage over yourself.
 
 ### Command runner
 
-AgeAris starts the command and sends the stage prompt on standard input.
+AGE Aris starts the command and sends the stage prompt on standard input.
 Standard output becomes the stage output. A zero exit code means success.
-Standard error is stored next to the output. AgeAris stops the agent after
+Standard error is stored next to the output. AGE Aris stops the agent after
 `timeoutSec`, together with any processes it started. The process receives
 `AGESIGHT_RUN`, `AGESIGHT_TASK`, `AGESIGHT_STAGE`, `AGESIGHT_ATTEMPT`, and
 `AGESIGHT_WORKDIR` in its environment. The exact argument list of every attempt
@@ -128,7 +128,7 @@ Approval gates control the workflow, not what an agent can do: an agent with
 unrestricted permissions runs as you and could call the local API itself. For
 real isolation, run such agents as another user or in a container.
 
-If AgeAris stops while an agent is running, the attempt is recorded as
+If AGE Aris stops while an agent is running, the attempt is recorded as
 interrupted on the next start and the stage's failure policy applies.
 
 ### Pull runner
@@ -183,18 +183,18 @@ Every change to a run is one git commit, for example
 `Run R001 (T003): Plan approved by Ada; moved to Implement`. Its message ends
 with the chain head, `Audit-Head: <hash>` and `Audit-Seq: <n>`.
 
-Each time the run page loads, AgeAris reads the log from disk and verifies the
+Each time the run page loads, AGE Aris reads the log from disk and verifies the
 chain. It compares the head with the one in memory and with the one in the
 latest commit, and checks every artifact against its hash. Before it appends
 an event or passes an earlier output to the next agent, it checks again. If
 anything does not match, the run is locked and listed in Decisions with the
-reason, and AgeAris records nothing more for it.
+reason, and AGE Aris records nothing more for it.
 
 The log is tamper-evident, not tamper-proof. It detects edits, deletions,
 truncation, and recomputed hashes that git does not also reflect. Anyone who
 can write to the data directory can also rewrite git history; git's reflog and
 any remote you push to are the stronger record. The `actor` on an event names
-who acted through AgeAris. It is not a signature.
+who acted through AGE Aris. It is not a signature.
 
 ## API
 
