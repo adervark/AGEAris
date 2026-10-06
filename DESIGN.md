@@ -12,7 +12,9 @@ from backlog to completion without losing ownership or handoff context.
 - Create projects with a name, description, color, and work in progress limit.
 - Create and edit tasks with an owner, priority, due date, and description.
 - Use a board or task list; search and filter the work.
-- Review project progress, overdue work, blocked tasks, and saved activity.
+- Start each day on Today: what needs the operator, what moved since the last
+  visit, and each project's health, with every number explainable down to its
+  commits.
 - Persist tasks and history across application restarts.
 - Reject stale edits and claims beyond the project's work in progress limit.
 
@@ -53,12 +55,17 @@ Projects rail | Search                          New task
               | Backlog | In progress | Blocked | Done
 ```
 
-Overview uses project rows and an attention list instead of unrelated charts.
+Today is a short list of decisions and risks, a count of what moved, and one
+line per project. It shows counts, ages, and means, never percentiles; those
+live on a project's Health tab. Every number opens the Explain drawer. That
+keeps the page high-level, with the audit detail one level down, as on the run
+page.
 The empty workspace offers project creation and an explicitly chosen example.
 The task editor is a drawer so the board remains in context. On mobile the rail
 collapses, the task list remains readable, and the board scrolls horizontally.
 
 The first design review removed ornamental metrics and a marketing hero: the
-application must open directly on work. Every count is computed from saved tasks.
+application must open directly on work. Every count is computed from saved
+history and cites it; a metric without enough history shows — and says why.
 Keyboard focus, labeled controls, dialog focus management, plain text rendering,
 and reduced motion are required throughout.

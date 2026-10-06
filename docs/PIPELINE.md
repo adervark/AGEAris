@@ -207,6 +207,12 @@ you, including agents, because they can read the file.
 | Method | Path | Purpose |
 |---|---|---|
 | GET | `/api/workspace` | Projects, tasks, activity, plus `runs` (summaries) and `agents` (with performance) |
+| GET | `/api/brief` | Today: Needs you, the delta window (`window`, `since`, `sinceHeads`), project lines, decision latency |
+| GET | `/api/projects/:id/metrics` | A project's health, metrics, series, and tables (`asOf` optional) |
+| GET | `/api/explain/:metricId` | The full metric value behind a number (`projectId`, `asOf`, `taskKey` for `due_risk`) |
+| GET | `/api/tasks/:id/history` | Every transition of a task, across reuses of its id, with commits |
+| GET | `/api/changes` | The change feed (`projectId`, `kinds`, `since`, `limit` ≤ 500) |
+| POST | `/api/projects/sample` | Create the sample project with simulated history |
 | GET / PUT | `/api/projects/:id/pipeline` | Read or replace stages (`{stages, version}`) |
 | GET / POST | `/api/runs` | List run summaries / start a run (`{taskId}`) |
 | GET | `/api/runs/:runId` | Full run: attempts with prompt and output, events, audit result |

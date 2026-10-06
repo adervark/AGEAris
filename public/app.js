@@ -320,10 +320,6 @@ function cockpitSignature() {
   return [cockpit.brief, cockpit.briefError, state.view === 'changes' ? cockpit.changes : null, project ? cockpit.metrics.get(project.id) : null];
 }
 
-function asOfQuery(asOf) {
-  return asOf ? `asOf=${encodeURIComponent(asOf)}` : '';
-}
-
 async function loadBrief() {
   const { params } = briefQuery({ storage: storage() });
   try {
@@ -331,11 +327,12 @@ async function loadBrief() {
     cockpit.briefError = '';
   } catch (error) {
     if (error.status === 401) throw error;
-    // A stored cursor the server rejects (another workspace's projects, say)
-    // must not leave Today empty: drop it and ask again by time.
+    // A stored cursor the server rejects must not leave Today empty, nor mark
+    // everything seen: forget it, so the brief counts from the previous
+    // working day and says why.
     if (error.status === 400 && params.has('since')) {
-      writeCursor(storage(), { at: new Date().toISOString(), heads: {} });
-      cockpit.brief = await api(`/brief?window=${encodeURIComponent(readWindow(storage()))}`);
+      writeCursor(storage(), null);
+      cockpit.brief = await api(`/brief?${briefQuery({ storage: storage() }).params}`);
       cockpit.briefError = '';
     } else cockpit.briefError = error.message;
   }

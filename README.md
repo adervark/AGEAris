@@ -15,27 +15,52 @@ npm start
 
 Open the sign-in link it prints, `http://127.0.0.1:4310/?token=…`. The browser
 stays signed in for that data folder; the token keeps other local users out of
-your workspace. Create your first project, or choose **Explore with a sample
-project** to create an editable example.
+your workspace. Create your first project, or choose **Explore a sample
+project** to create one with six weeks of simulated history (marked **Simulated
+history** everywhere it appears).
 
-## Main page
+## Today
 
-The Overview page is the monitoring surface:
+**Today** is the first page, the view a project owner reads each morning:
 
-- Task counts for backlog, in progress, blocked, and completed work.
-- Project state, completion progress, and work in progress limits.
-- A task monitor with owners, priorities, due dates, and state filters.
-- Blocked and overdue tasks that need attention.
-- Recent activity from each project's git history.
+- **Needs you**: runs waiting on a decision, then overdue work, agent claims that
+  have gone quiet, due dates likely to slip, work far older than usual for its
+  type, blocked work, and urgent work in progress with no owner. Each item appears
+  once, under its most pressing reason.
+- **Since your last visit**: what finished, started, was blocked or unblocked,
+  added, dropped, reopened, or slipped. Each count expands into its tasks. The
+  window can also be the previous working day, 24 hours, or 7 days. **Mark
+  seen** starts the next window from now. Leaving Today after ten seconds also
+  does this. The last visit is kept in this browser only.
+- **Projects**: one line per project. Each shows its health (Green, Amber, Red, or
+  grey when history is too thin), a sentence on what is wrong, and a few counts.
 
-The page refreshes every 10 seconds while visible. Refreshing pauses while a
+Every number is a button. It opens the **Explain** drawer with the definition,
+formula, clock, sample size, settings, the items counted, what was left out and
+why, and the commits or audit events each item comes from. The definitions are
+in [docs/METRICS.md](docs/METRICS.md).
+
+A project opens on its **Health** tab. The tab shows the health rules, flow
+(throughput, cycle and lead time medians and 85th percentiles, work in
+progress, blocked share), risk tables, load per person and per agent, and the
+git history the numbers were computed from. **Board** and **List** are beside
+it. **Changes** lists every status, field, and run change, newest first, and
+can be filtered by kind and project. A task's drawer shows its history, with
+each change's commit.
+
+Timezone, working days, and the personal work-in-progress limit are read from
+`<data dir>/settings.json` (`{"timezone": "Europe/London", "workdays": [1,2,3,4,5],
+"personalWipLimit": 3}`). Ages and approval times skip non-working days.
+
+The page refreshes every 10 seconds while visible; Today's brief every 30. Refreshing pauses while a
 project or task editor is open, preserving the edit in progress. The refresh
 button also loads changes immediately. The live indicator changes to
 Reconnecting if the server becomes unavailable.
 
 Open a project to use its Kanban board or task list. Drag a task to another
 column, or open its details and choose a status. Use search and owner, priority,
-or status filters to find work. The **All tasks** page spans the workspace.
+or status filters to find work. The **Work** page spans the workspace. Old
+`#overview`, `#tasks`, and `#activity` links open Today, Work, and Changes.
 
 ## Agent pipeline
 
@@ -87,8 +112,10 @@ The task's directory determines its state. Creating, editing, or moving work
 records a commit in that project's repository. Nothing is automatically pushed
 to a remote. Task and project saves reject stale versions rather than overwrite
 changes made since an editor opened. Blocked work counts toward the work in
-progress limit. Unchanged saves add no commit. The Activity page shows the most
-recent 200 commits per project; the full history remains in git.
+progress limit. Unchanged saves add no commit. Every metric is computed from
+that git history (first-parent, with commit times clamped so they never go
+backwards) and from the runs' audit logs, so any number can be traced to the
+commits behind it.
 
 Project repositories are independent of the application's source repository.
 The data directory is ignored by this repository's git configuration. Back up
