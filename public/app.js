@@ -1,4 +1,4 @@
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, sampleBadge, signalBadges, signalIndex, threadTag, usualWeek, waitingChip } from './cockpit.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, usualWeek, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
@@ -237,7 +237,7 @@ function refresh() {
 // Old links keep working: Overview and Today became Home, Tasks and Work All
 // tasks, Activity and Changes Activity.
 const ROUTE_ALIASES = { overview: 'home', today: 'home', tasks: 'work', changes: 'activity' };
-const VIEWS = ['home', 'projects', 'work', 'activity', 'decisions', 'agents'];
+const VIEWS = ['home', 'projects', 'work', 'working', 'activity', 'decisions', 'agents'];
 
 function readRoute() {
   const raw = location.hash.slice(1);
@@ -272,7 +272,7 @@ function navigate(view) {
   $('#menu-toggle').setAttribute('aria-expanded', 'false');
 }
 
-const PAGE_NAMES = { home: 'Home', projects: 'Projects', work: 'All tasks', activity: 'Activity', decisions: 'Decisions', agents: 'Agents' };
+const PAGE_NAMES = { home: 'Home', projects: 'Projects', work: 'All tasks', working: 'Working', activity: 'Activity', decisions: 'Decisions', agents: 'Agents' };
 
 function render() {
   renderNavigation();
@@ -291,9 +291,13 @@ function render() {
 
 function renderNavigation() {
   const needs = cockpit.brief?.needsYou.length || 0;
-  const counts = { home: needs ? `<span class="nav-count nav-count-alert" aria-label="${needs} need you">${needs}</span>` : '' };
-  const active = { home: ['home', 'decisions', 'run'], projects: ['projects', 'work'], agents: ['agents'], activity: ['activity'] };
-  $('#navigation').innerHTML = [['home', 'grid', 'Home'], ['projects', 'folder', 'Projects'], ['agents', 'agent', 'Agents'], ['activity', 'activity', 'Activity']].map(([view, symbol, label]) => {
+  const working = state.tasks.filter((task) => task.status === 'in_progress' || task.status === 'blocked').length;
+  const counts = {
+    home: needs ? `<span class="nav-count nav-count-alert" aria-label="${needs} need you">${needs}</span>` : '',
+    working: working ? `<span class="nav-count" aria-label="${working} in progress or blocked">${working}</span>` : '',
+  };
+  const active = { home: ['home', 'decisions', 'run'], projects: ['projects', 'work'], working: ['working'], agents: ['agents'], activity: ['activity'] };
+  $('#navigation').innerHTML = [['home', 'grid', 'Home'], ['projects', 'folder', 'Projects'], ['working', 'play', 'Working'], ['agents', 'agent', 'Agents'], ['activity', 'activity', 'Activity']].map(([view, symbol, label]) => {
     const on = active[view].includes(state.view);
     return `<a href="#${view}" class="nav-link ${on ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${label}</span>${counts[view] || ''}</a>`;
   }).join('');
@@ -337,11 +341,17 @@ function renderPage() {
   if (state.view === 'run' && !state.query) return renderRun();
   if (state.view === 'decisions' && !state.query) return renderDecisions();
   if (state.view === 'activity' && !state.query) return renderActivityPage();
+  if (state.view === 'working' && !state.query) return renderWorkingPage();
   if (state.view === 'home' && !state.query) return renderHomePage();
   if (state.view === 'projects' && !state.query) return renderProjectsPage();
   const project = selectedProject();
   if (project && !state.query) return renderProjectPage(project);
   renderTaskSearch();
+}
+
+// Everything in progress or blocked, on every board.
+function renderWorkingPage() {
+  $('#main').innerHTML = renderWorking({ tasks: state.tasks, projects: state.projects, brief: cockpit.brief });
 }
 
 // All tasks across projects, or search results: one grouped list.

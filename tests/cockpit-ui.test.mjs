@@ -7,7 +7,7 @@ import test from 'node:test';
 import { Cockpit } from '../lib/brief.mjs';
 import { METRIC_DEFINITIONS } from '../lib/metrics.mjs';
 import { Workspace } from '../lib/workspace.mjs';
-import { escape, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, signalBadges, signalIndex } from '../public/cockpit.js';
+import { escape, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, renderWorking, signalBadges, signalIndex } from '../public/cockpit.js';
 import { agentShort, healthWord } from '../public/words.js';
 import { briefQuery, CURSOR_KEY, cursorFromBrief, readCursor, readWindow, WINDOW_KEY, writeCursor, writeWindow } from '../public/cursor.js';
 
@@ -17,6 +17,8 @@ process.env.GIT_CONFIG_NOSYSTEM = '1';
 const NOW = Date.parse('2026-10-05T09:12:00+01:00');
 const SHA = 'a'.repeat(40);
 const PROJECT = '00000000-0000-4000-8000-000000000001';
+// A Tuesday afternoon in London, the test's time zone, when the sample's history ends.
+const SAMPLE_END = Date.parse('2026-10-06T15:00:00+01:00');
 
 function memoryStorage(initial = {}) {
   const values = new Map(Object.entries(initial));
@@ -77,12 +79,21 @@ test('the cockpit views render the sample project, escape what they show, and ci
   t.after(() => rm(dataDir, { recursive: true, force: true }));
   const workspace = await new Workspace({ dataDir, operator: 'ade', email: 'ade@example.invalid' }).init();
   await writeFile(path.join(dataDir, 'settings.json'), '{"timezone": "Europe/London"}');
-  // The sample's history ends now, so a later edit lands after it.
-  const project = await workspace.createSampleProject({ now: Date.now() });
+  // Every clock is pinned, so the windows below hold the same history at any
+  // hour: the sample's ends at SAMPLE_END, the edit lands a minute later, and
+  // the brief is read a minute after that (T020).
+  const project = await workspace.createSampleProject({ now: SAMPLE_END });
   // A hostile title shows as text.
   const task = await workspace.getTask(`${project.id}:T040`);
-  await workspace.updateTask(task.id, { title: '<img src=x onerror=alert(1)> Launch', version: task.version });
-  const cockpit = new Cockpit({ workspace, engine: null, clock: Date.now });
+  const editedAt = new Date(SAMPLE_END + 60_000).toISOString();
+  Object.assign(process.env, { GIT_AUTHOR_DATE: editedAt, GIT_COMMITTER_DATE: editedAt });
+  try {
+    await workspace.updateTask(task.id, { title: '<img src=x onerror=alert(1)> Launch', version: task.version });
+  } finally {
+    delete process.env.GIT_AUTHOR_DATE;
+    delete process.env.GIT_COMMITTER_DATE;
+  }
+  const cockpit = new Cockpit({ workspace, engine: null, clock: () => SAMPLE_END + 120_000 });
   t.after(() => cockpit.close());
 
   const brief = await cockpit.brief({ window: 'previous-workday' });
@@ -180,4 +191,67 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(renderTimeline({ error: '<x>' }), /&lt;x&gt;/);
   assert.match(renderEvidence(byId.get(`${project.id}:T040`), history), /<code title="[0-9a-f]{40}">[0-9a-f]{7}<\/code>/);
   assert.equal(escape(`"'&<>`), '&quot;&#39;&amp;&lt;&gt;');
+});
+
+test('the Working page lists exactly the work in progress or blocked, by project and oldest first, with holder, age and note, escaped', () => {
+  const OTHER = '00000000-0000-4000-8000-000000000002';
+  const IDLE = '00000000-0000-4000-8000-000000000003';
+  const task = (project, id, fields) => ({ id: `${project}:${id}`, projectId: project, title: `Task ${id}`, status: 'in_progress', assignee: '', claim: '', claimNote: '', blockedReason: '', ...fields });
+  const tasks = [
+    task(PROJECT, 'T001', { claim: 'ade @k/beef', claimNote: 'fold 0 <done>' }),
+    task(PROJECT, 'T002', { status: 'blocked', claim: 'ade @b/cafe', blockedReason: 'Waiting on <the key>', claimNote: 'not shown' }),
+    task(PROJECT, 'T003', { title: '<img src=x onerror=alert(1)>', assignee: 'Ana' }),
+    task(PROJECT, 'T004', { status: 'backlog' }),
+    task(PROJECT, 'T005', { status: 'done' }),
+    task(OTHER, 'T120', { title: 'Reused id' }),
+    task(IDLE, 'T001', { status: 'backlog' }),
+  ];
+  const projects = [{ id: PROJECT, name: 'Alpha & co' }, { id: IDLE, name: 'Idle' }, { id: OTHER, name: 'Beta' }];
+  const brief = {
+    projects: [
+      { projectId: PROJECT, health: { level: 'green' }, kpis: { wipLimit: 4 }, wipSince: { T001: '2026-10-03T08:12:00Z', T002: '2026-10-01T08:12:00Z', T003: '2026-10-05T08:00:00Z' } },
+      // The ledger names a reused id T120#2; the task is T120.
+      { projectId: OTHER, health: null, kpis: { wipLimit: 0 }, wipSince: { 'T120#2': '2026-10-04T08:12:00Z' } },
+    ],
+    needsYou: [
+      { kind: 'stale', projectId: PROJECT, taskKey: 'T001', hours: 30, reasons: ['stale'] },
+      { kind: 'blocked', projectId: PROJECT, taskKey: 'T002', days: 3.04, reasons: ['blocked'] },
+    ],
+  };
+  const html = renderWorking({ tasks, projects, brief, now: NOW });
+
+  assert.match(html, /<h1>Working<\/h1>/);
+  assert.match(html, /3 tasks in progress, 1 blocked; 1 claim gone quiet past the stale threshold\./);
+  const rows = [...html.matchAll(/<li class="working-row">[\s\S]*?<\/li>/g)].map(([row]) => row);
+  assert.equal(rows.length, 4, 'in progress and blocked only, on every board');
+  const ids = rows.map((row) => /class="task-number">([^<]+)</.exec(row)[1]);
+  assert.deepEqual(ids, ['T002', 'T001', 'T003', 'T120'], 'by project in sidebar order, oldest first; a project with no WIP is left out');
+  assert.ok(html.indexOf('Alpha &amp; co') < html.indexOf('Beta') && !html.includes('>Idle<'));
+  assert.match(html, /WIP 3 of 4/);
+  assert.match(html, /WIP 1<\/span>/, 'no limit, no "of"');
+
+  assert.match(rows[0], /Blocked 3 d/);
+  assert.match(rows[0], /4 days in progress/);
+  assert.match(rows[0], /Blocked: Waiting on &lt;the key&gt;/);
+  assert.doesNotMatch(rows[0], /not shown/, 'a blocked task shows its reason, not its claim note');
+  assert.doesNotMatch(rows[0], /Stale claim|>Blocked<\/span><span class="chip/, 'blocked is said once');
+  assert.match(rows[1], /“fold 0 &lt;done&gt;”/);
+  assert.match(rows[1], /Stale claim 30 h/);
+  assert.match(rows[1], /<small>ade @k\/beef<\/small>/);
+  assert.match(rows[1], /2 days in progress/);
+  assert.match(rows[2], /&lt;img src=x onerror=alert\(1\)&gt;/);
+  assert.match(rows[2], /person-chip">Ana</);
+  assert.match(rows[2], /12 min in progress/);
+  assert.match(rows[3], /24 h in progress/);
+  assert.match(rows[3], /Unclaimed/);
+  assert.doesNotMatch(html, /<img|style=/, 'nothing unescaped, no inline style');
+
+  // Without the brief (history still indexing) the rows stand without ages.
+  const bare = renderWorking({ tasks, projects, brief: null, now: NOW });
+  assert.equal((bare.match(/working-row/g) || []).length, 4);
+  assert.doesNotMatch(bare, /Work item age/);
+
+  const empty = renderWorking({ tasks: tasks.filter((entry) => !['in_progress', 'blocked'].includes(entry.status)), projects, brief, now: NOW });
+  assert.match(empty, /Nothing is in progress/);
+  assert.doesNotMatch(empty, /working-row/);
 });

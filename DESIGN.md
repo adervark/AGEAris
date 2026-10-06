@@ -57,7 +57,7 @@ always opens the same way.
 
 The shell is true black: the page and its panels are `#000`, separated by thin
 borders rather than shades of grey. A slim sidebar (the AGE Aris logo and name,
-then Home, Projects, Agents, Activity, and the projects with a health dot each;
+then Home, Projects, Working, Agents, Activity, and the projects with a health dot each;
 the logo is `public/logo.webp` and the tab icon `public/planet.png`, both made
 from `docs/brand/age-aris-logo.png`), a top bar with search and a secondary Add
 project button. Colour carries meaning only: red stuck or overdue, amber quiet
@@ -74,10 +74,16 @@ content security policy allows no inline styles, so agent colours are classes.
 Sidebar  | Search                                   Add project
 Home     | AGEIS  Read-only
 Projects | ● Needs attention: 5 items past 2× usual, 2 stale agent claims.
-Agents   | Throughput 32 | WIP 6 | Cycle time 0.4 h | Service level 6.2 h
-Activity | Board  Threads  List  Flow  Method
- ● AGEIS | Backlog | In progress | Blocked | Done this week, newest 10 (Show all 80)
+Working  | Throughput 32 | WIP 6 | Cycle time 0.4 h | Service level 6.2 h
+Agents   | Board  Threads  List  Flow  Method
+Activity | Backlog | In progress | Blocked | Done this week, newest 10 (Show all 80)
+ ● AGEIS |
 ```
+
+Working lists everything in progress or blocked on every board, grouped by
+project and oldest first: the holder, the time in progress, the blocked reason
+or the holder's last note, and the usual signal badges. Agents keeps its own
+"Working now" tab, which groups the same work by agent session.
 
 The empty workspace offers project creation and an explicitly chosen example.
 The task drawer keeps the board in context and renders the task file as

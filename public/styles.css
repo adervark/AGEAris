@@ -608,6 +608,18 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
 .session-note { font-size: 13px; color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
 .session-state { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 12px; color: var(--muted); text-align: right; }
 .agents-section { margin-bottom: 32px; }
+.working-project { margin-bottom: 28px; }
+.working-project h2 a { display: inline-flex; align-items: center; gap: 8px; color: inherit; }
+.working-project h2 a:hover { color: var(--accent); }
+.working-list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.working-row { display: grid; grid-template-columns: minmax(0, 1fr) 200px 170px; gap: 8px 16px; align-items: start; padding: 14px 16px; border-top: 1px solid var(--line); }
+.working-row:first-child { border-top: 0; }
+.working-task { display: grid; gap: 4px; min-width: 0; }
+.working-task .task-link { font-weight: 550; }
+.working-note { font-size: 13px; color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
+.working-holder { display: grid; gap: 4px; justify-items: start; min-width: 0; }
+.working-holder small { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.working-state { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 12px; color: var(--muted); text-align: right; }
 .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: 12px; }
 .role-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 14px 16px 16px; min-width: 0; }
 .role-card h3 { font-size: 14px; font-weight: 650; margin: 0 0 10px; }
@@ -900,6 +912,8 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
   .vital:nth-child(n + 3) { border-top: 1px solid var(--line); }
   .run-layout { grid-template-columns: minmax(0, 1fr); }
   .session-row { grid-template-columns: 190px minmax(0, 1fr); }
+  .working-row { grid-template-columns: minmax(0, 1fr) 170px; }
+  .working-state { grid-column: 1 / -1; flex-flow: row wrap; align-items: center; text-align: left; }
   .session-state { grid-column: 2; align-items: flex-start; text-align: left; flex-direction: row; flex-wrap: wrap; }
 }
 @media (max-width: 860px) {
@@ -928,6 +942,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
   .health-header { flex-direction: column; gap: 12px; }
   .activity-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .session-row { grid-template-columns: minmax(0, 1fr); }
+  .working-row { grid-template-columns: minmax(0, 1fr); }
   .session-state { grid-column: auto; }
   .delta-list li { flex-direction: column; gap: 2px; }
   .delta-meta { white-space: normal; }

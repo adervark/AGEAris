@@ -7,7 +7,8 @@ AA) are committed on `feature/pm-cockpit`, which is not on `main` yet.
 AGEION, AGEIS, Gem4A and RSNA have moved their boards to `AA/` too.
 
 **Next action:** the review's bugs (T001), two at a time: T007 with T012, then
-T011 with T013, and T008 with T010. T005, T006, T017 and T018 (`/aa`) are done.
+T011 with T013, and T008 with T010. Done today: T005, T006, T017, T018
+(`/aa`), T019 (the Working page) and T020.
 
 **Watch out for:** until T007 is fixed, AGE Aris reads RSNA's T120 as the
 task that reuses its id. AGE Aris must go on reading `deaddrop/` and `pm/`
@@ -16,21 +17,21 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T23:03Z · 20 tasks: 13 backlog, 2 WIP (2 in progress), 5 delivered`
+`board · 2026-10-06T23:05Z · 20 tasks: 13 backlog, 0 WIP (0 in progress), 7 delivered`
 
-FLOW · **WIP 2/2** · throughput 1.2/wk (5 in 30d) · cycle time 50th 5m / 85th 33m (n=5)
-FLOW · Little's Law: 2 ÷ 1.2/wk ≈ 12d expected · lead time 85th 36m
+FLOW · **WIP 0/2** · throughput 1.6/wk (7 in 30d) · cycle time 50th 5m / 85th 7m (n=7)
+FLOW · Little's Law: 0 ÷ 1.6/wk ≈ now expected · lead time 85th 7m
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 2/2 | T019 | A Working page: everything in progress or blocked, on every board | adervark | 5m |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | now |  |
 | **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 57m |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 66m |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 75m |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 75m |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 81m |  |
+| **DONE** | T019 | A Working page: everything in progress or blocked, on every board | adervark | now |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | now |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 59m |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 68m |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 77m |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 77m |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 83m |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->

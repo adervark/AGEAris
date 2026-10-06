@@ -56,3 +56,15 @@ its date, the number, and where the evidence is. Newest last.
 - `/aa link` tracks a repository and leaves it unchanged (scratch data folder).
 - Spend: one global-config write, `~/.claude/skills/aa/`.
 - Evidence: the Result of T018 in `AA/tasks/done/`.
+
+## 2026-10-07 — T019 and T020: a Working page; a clock-dependent test
+
+- **T019:** the main navigation has a Working page. On real data it lists 7
+  tasks (AGEIS 6, AGE Aris 1), each with its holder, time in progress and note.
+  At 1440, 1100 and 390 px nothing scrolls sideways and there are no console or
+  CSP errors (headless Chrome 152).
+- **T020:** a cockpit test failed between local midnight and the sample's next
+  finish. With its clocks pinned, it passes at 00:30, 04:30, 12:00 and 23:30
+  London; the old test fails at 00:30.
+- `npm test` passed 372 of 372.
+- Evidence: the Results of T019 and T020 in `AA/tasks/done/`.

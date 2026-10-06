@@ -801,4 +801,8 @@ test('GET /api/tasks/:id returns the task with its text, GET /api/projects/:id/m
   assert.ok(line.spark.length > 0 && line.spark.length <= 28, `${line.spark.length} days`);
   assert.ok(line.spark.every((point) => /^\d{4}-\d\d-\d\d$/.test(point.date) && Number.isInteger(point.n)));
   assert.deepEqual([line.kpis.cycle50.id, line.kpis.cycle85.id], ['cycle_time_p50', 'cycle_time_p85']);
+  // The Working page's ages: when each task in progress or blocked started.
+  const working = (await call('GET', '/api/workspace')).tasks.filter((entry) => entry.projectId === project.id && ['in_progress', 'blocked'].includes(entry.status));
+  assert.deepEqual(Object.keys(line.wipSince).sort(), working.map((entry) => entry.id.split(':')[1]).sort());
+  assert.ok(Object.values(line.wipSince).every((at) => !Number.isNaN(Date.parse(at))), JSON.stringify(line.wipSince));
 });

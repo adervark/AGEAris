@@ -131,6 +131,54 @@ export function signalBadges(signal) {
   }).join('');
 }
 
+// --- Working ----------------------------------------------------------------------
+
+const WORKING = ['in_progress', 'blocked'];
+const keyOf = (task) => String(task.id).split(':').at(-1);
+
+// Everything in progress or blocked on every board, grouped by project and
+// oldest first: who holds it, how long it has been in progress, and what its
+// holder last said. `tasks` and `projects` are the workspace's; ages come from
+// the brief's `wipSince` and are missing while a project's history is indexed.
+export function renderWorking({ tasks = [], projects = [], brief = null, now = Date.now() } = {}) {
+  const working = tasks.filter((task) => WORKING.includes(task.status));
+  const heading = '<section class="page-heading"><div><h1>Working</h1><p>Everything in progress or blocked, on every board: who holds it, how long it has been in progress, and what they last said.</p></div></section>';
+  if (!working.length) return `${heading}<div class="empty-results">${icon('play')}<h2>Nothing is in progress</h2><p>When a person or an agent claims a task on any board, it appears here until it is done.</p></div>`;
+  const signals = signalIndex(brief);
+  const lines = new Map((brief?.projects || []).map((line) => [line.projectId, line]));
+  const since = (task) => {
+    // A ledger key carries #n when an id was used before; the task has the bare id.
+    const at = Object.entries(lines.get(task.projectId)?.wipSince || {}).findLast(([key]) => localId(key) === keyOf(task))?.[1];
+    const ms = at ? Date.parse(at) : NaN;
+    return Number.isNaN(ms) ? null : ms;
+  };
+  const blocked = working.filter((task) => task.status === 'blocked').length;
+  const quiet = working.filter((task) => signals.get(task.id)?.reasons.includes('stale')).length;
+  const summary = `<p class="flow-intro">${escape(plural(working.length - blocked, 'task'))} in progress, ${escape(blocked)} blocked${quiet ? `; ${escape(plural(quiet, 'claim'))} gone quiet past the stale threshold` : ''}. Oldest first: the longer a task has been in progress, the more it needs a look.</p>`;
+  const groups = projects.map((project) => {
+    const rows = working.filter((task) => task.projectId === project.id)
+      .map((task) => ({ task, start: since(task) }))
+      .sort((a, b) => (a.start ?? Infinity) - (b.start ?? Infinity) || a.task.id.localeCompare(b.task.id));
+    if (!rows.length) return '';
+    const line = lines.get(project.id);
+    const limit = line?.kpis?.wipLimit;
+    const wip = `<span title="${escape(`${TERMS.wip[0]}: ${TERMS.wip[1]}`)}">${escape(TERMS.wip[0])} ${escape(rows.length)}${limit ? ` of ${escape(limit)}` : ''}</span>`;
+    return `<section class="working-project" aria-labelledby="working-${escape(project.id)}"><div class="section-heading"><h2 id="working-${escape(project.id)}"><a href="#project/${escape(project.id)}">${healthDot(line?.health)}${escape(project.name)}</a></h2>${wip}</div><ul class="working-list">${rows.map(({ task, start }) => workingRow(task, start, signals.get(task.id), now)).join('')}</ul></section>`;
+  }).join('');
+  return heading + summary + groups;
+}
+
+function workingRow(task, start, signal, now) {
+  const holder = task.assignee || task.claim || '';
+  const note = task.status === 'blocked' && task.blockedReason ? `Blocked: ${task.blockedReason}` : task.claimNote ? `“${task.claimNote}”` : '';
+  const blockedFor = signal?.row?.kind === 'blocked' ? ` ${round1(signal.row.days)} d` : '';
+  const state = task.status === 'blocked' ? `<span class="chip tone-fail">Blocked${escape(blockedFor)}</span>` : '<span class="chip tone-run">In progress</span>';
+  const age = start === null ? '' : `<span title="Work item age: time since this stretch of work started">${escape(formatAge((now - start) / 3_600_000))} in progress</span>`;
+  // The status chip already says blocked; the other signals keep their badges.
+  const others = signal ? signalBadges({ ...signal, reasons: signal.reasons.filter((kind) => kind !== 'blocked') }) : '';
+  return `<li class="working-row"><div class="working-task">${taskLink(task.projectId, keyOf(task), task.title)}${note ? `<p class="working-note">${escape(note)}</p>` : ''}</div><div class="working-holder">${holder ? `${ownerChip(holder)}${task.claim ? `<small>${escape(task.claim)}</small>` : ''}` : '<span class="muted">Unclaimed</span>'}</div><div class="working-state">${state}${others}${age}</div></li>`;
+}
+
 // --- Home -------------------------------------------------------------------------
 
 function needDetail(row) {
