@@ -106,8 +106,6 @@ kbd { font: inherit; font-size: 12px; line-height: 1.3; border: 1px solid var(--
 .app-shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100dvh; }
 .sidebar { position: sticky; top: 0; display: flex; flex-direction: column; height: 100dvh; background: var(--surface); border-right: 1px solid var(--line); padding: 16px 12px 20px; overflow-y: auto; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 6px 10px 20px; color: var(--ink); font-size: 18px; font-weight: 700; letter-spacing: -.4px; }
-.brand-symbol { display: grid; place-items: center; width: 26px; height: 18px; border: 2px solid var(--accent); border-radius: 60% 10%; transform: rotate(45deg); }
-.brand-symbol span { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
 .nav-link { display: flex; align-items: center; gap: 10px; padding: 7px 10px; margin-bottom: 2px; border-radius: var(--radius-sm); color: var(--ink-2); font-size: 14px; font-weight: 500; min-width: 0; }
 .nav-link > .icon { width: 18px; height: 18px; color: var(--faint); }
 .nav-link:hover { background: var(--surface-3); color: var(--ink); }
