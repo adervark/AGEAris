@@ -45,3 +45,14 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` passed 371 of 371.
 - Evidence: the Result of T017 in `AA/tasks/done/`, and its tests in
   `tests/history.test.mjs`.
+
+## 2026-10-07 — T018: /aa pulls up the board in any session
+
+- `/aa` printed a board in all five repositories, each left unchanged: in
+  0.1 s where there is a `board.sh`, and in under 1 s from the task files on
+  the three older boards. It also prints the AGE Aris link, starting AGE Aris
+  if it is not running (0.34 s cold).
+- `/aa open` lands on the project, signed in (headless Chrome 152).
+- `/aa link` tracks a repository and leaves it unchanged (scratch data folder).
+- Spend: one global-config write, `~/.claude/skills/aa/`.
+- Evidence: the Result of T018 in `AA/tasks/done/`.

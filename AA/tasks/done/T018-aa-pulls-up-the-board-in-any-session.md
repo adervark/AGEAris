@@ -1,8 +1,8 @@
 ---
 id: T018
 title: "/aa pulls up a project's board in any Claude Code session"
-status: claimed
-owner: adervark @v/2e8b687e 2026-10-07 — writing /aa
+status: done
+owner: adervark @v/2e8b687e 2026-10-07 — /aa installed
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -32,14 +32,14 @@ and the link to it in AGE Aris, starting AGE Aris if it is not running.
 
 ## Steps
 
-- [ ] `skills/aa/aa.sh`: find the board (`AA/`, `deaddrop/`, `pm/`). Print
+- [x] `skills/aa/aa.sh`: find the board (`AA/`, `deaddrop/`, `pm/`). Print
   `board.sh`'s render where there is one; otherwise print `STATE.md` and the
   tasks in `tasks/`. Then the AGE Aris link, starting the server if needed.
   `--open` opens the sign-in link without printing the token. `--link` tracks
   the repository.
-- [ ] `skills/aa/SKILL.md`: run the script and show its output as is.
-- [ ] Try it on the five repos, and `--link` against a scratch data folder.
-- [ ] Copy `skills/aa/` to `~/.claude/skills/aa/` (the spend).
+- [x] `skills/aa/SKILL.md`: run the script and show its output as is.
+- [x] Try it on the five repos, and `--link` against a scratch data folder.
+- [x] Copy `skills/aa/` to `~/.claude/skills/aa/` (the spend).
 
 ## Decision rules — fixed in advance
 
@@ -56,10 +56,10 @@ and the link to it in AGE Aris, starting AGE Aris if it is not running.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @v/2e8b687e (claimed)
-- **In flight:** the script, in this session
-- **On disk:** nothing yet
-- **Resume with:** the script
+- **Last touched:** 2026-10-07, adervark @v/2e8b687e
+- **In flight:** nothing; done
+- **On disk:** `skills/aa/` committed; `~/.claude/skills/aa/` installed
+- **Resume with:** nothing to resume
 - **Next decision:** none
 
 ## Verify
@@ -68,9 +68,31 @@ Run `/aa` in a session of each of the five repos.
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T018` — then
-retire the trail with `--delete`)*
+Pass, against the decision rules.
+
+- `skills/aa/aa.sh` and `SKILL.md`, copied to `~/.claude/skills/aa/`, which all
+  four profiles share. `/aa` ran as a skill in a live session and printed the
+  board and link verbatim.
+- The five repositories: each printed a board, and HEAD and `git status` were
+  identical before and after.
+  - AGE Aris and Gem4A: their `board.sh` render and NOW block, in 0.1 s.
+  - AGEION, AGEIS and RSNA: the open tasks read from their files, in under 1 s.
+  - AGE Aris and AGEIS: a link to a project the running server serves.
+  - AGEION, Gem4A and RSNA: how to track them with `/aa link`.
+- Cold start of AGE Aris: 0.34 s. The server runs in its own session
+  (`setsid -f`). A first version did not detach, and the script waited on the
+  server; that is fixed.
+- `/aa open`: in headless Chrome 152 the sign-in link lands on the AGEIS
+  project with the token gone from the address bar.
+- `/aa link`, against a scratch data folder and repository on port 4399:
+  tracked, and the repository unchanged.
+- `npm test`: 371 of 371 pass. The spend was one new folder; undo by deleting
+  `~/.claude/skills/aa/`.
+- Log: `PROGRESS.md`, 2026-10-07 — T018.
+
+Digest:
+
+- **2e8b687e** (session @v/2e8b687e): skills/aa/ (SKILL.md, aa.sh); ~/.claude/skills/aa/ installed · cost one global-config write · left: nothing; /aa verified in a live session
 
 ## Notes
 
