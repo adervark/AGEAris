@@ -1,7 +1,8 @@
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, sampleBadge, signalBadges, signalIndex } from './cockpit.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
+import { buildThreads } from './threads.js';
 import { healthTone, healthWord, ownerChip, TERMS } from './words.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -16,7 +17,7 @@ const runStatuses = { running: 'Running', waiting: 'Waiting for an agent', await
 const stageStatuses = { done: 'Done', active: 'Running', awaiting_approval: 'Needs approval', awaiting_input: 'Needs input', waiting: 'No agent', failed: 'Failed', cancelled: 'Cancelled', pending: 'Not started' };
 const attemptStatuses = { queued: 'Queued', running: 'Running', awaiting_input: 'Waiting for a person', succeeded: 'Succeeded', failed: 'Failed', awaiting_approval: 'Awaiting approval', approved: 'Approved', rejected: 'Changes requested', cancelled: 'Cancelled' };
 // A project's tabs. It opens on its board.
-const LAYOUTS = { board: ['board', 'Board'], list: ['list', 'List'], flow: ['activity', 'Flow'], method: ['shield', 'Method'] };
+const LAYOUTS = { board: ['board', 'Board'], threads: ['route', 'Threads'], list: ['list', 'List'], flow: ['activity', 'Flow'], method: ['shield', 'Method'] };
 const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'home', layout: 'board', agentsTab: 'now', query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
 const detailsOpen = new Map();
 // Decisions inbox: full runs fetched for rows opened inline, and which of them
@@ -113,6 +114,17 @@ function signals() {
     cockpit.signalsFor = cockpit.brief;
   }
   return cockpit.signals;
+}
+
+// Each project's threads (what its tasks build on), rebuilt when the tasks change.
+function threadsFor(projectId) {
+  if (cockpit.threadsOf !== state.tasks) { cockpit.threads = new Map(); cockpit.threadsOf = state.tasks; }
+  if (!cockpit.threads.has(projectId)) cockpit.threads.set(projectId, buildThreads(state.tasks.filter((task) => task.projectId === projectId)));
+  return cockpit.threads.get(projectId);
+}
+
+function placeOf(task) {
+  return threadsFor(task.projectId).place.get(task.id);
 }
 
 // Agent sessions holding work in progress, per project.
@@ -363,7 +375,8 @@ function renderProjectPage(project) {
   const tasks = taskView ? filteredTasks() : [];
   const filters = taskView ? `<div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div>` : '';
   let body;
-  if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0 });
+  if (layout === 'threads') body = `${problemsNote(project)}${renderThreads(threadsFor(project.id), { signals: signals(), expanded: cockpit.expanded, holder })}`;
+  else if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0 });
   else if (layout === 'method') body = renderMethod({ project, method: cockpit.method.get(project.id), data: cockpit.metrics.get(project.id), line, tasks: projectTasks, pipeline: cockpit.pipelines.get(project.id) });
   else body = `${problemsNote(project)}${layout === 'board' ? board(tasks, project) : taskList(tasks)}${!projectTasks.length && writable(project) ? '<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>' : ''}`;
   $('#main').innerHTML = `${projectHeader(project, line)}<div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Project view">${tabs}</div>${filters}</div>${body}`;
@@ -471,13 +484,13 @@ function taskCard(task) {
   const editable = writable(project);
   const signal = signals().get(task.id);
   const footer = `${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${icon('calendar')}${escape(formatDate(task.dueDate))}</span>` : '<span></span>'}${holder(task) || (task.status === 'done' ? '' : '<span class="muted">Unclaimed</span>')}`;
-  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${signal && task.status !== 'done' ? `<span class="card-signals">${signalBadges(signal)}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></button>`;
+  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${task.status !== 'done' && (signal || placeOf(task)?.waitingOn.length || placeOf(task)?.thread) ? `<span class="card-signals">${signal ? signalBadges(signal) : ''}${waitingChip(placeOf(task))}${threadTag(placeOf(task))}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></button>`;
 }
 
 function taskRow(task, showProject) {
   const signal = signals().get(task.id);
   const project = showProject ? projectOf(task) : null;
-  return `<li><button class="task-row" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="task-row-title" title="${escape(task.title)}">${escape(task.title)}${project ? `<small>${escape(project.name)}</small>` : ''}</span><span class="task-row-signals">${signal && task.status !== 'done' ? signalBadges(signal) : ''}${runLine(task)}</span><span class="task-row-owner">${holder(task) || '<span class="muted">—</span>'}</span><span class="task-row-when">${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${escape(formatDate(task.dueDate))}</span>` : escape(formatDate(task.createdAt))}</span></button></li>`;
+  return `<li><button class="task-row" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="task-row-title" title="${escape(task.title)}">${escape(task.title)}${project ? `<small>${escape(project.name)}</small>` : ''}</span><span class="task-row-signals">${signal && task.status !== 'done' ? signalBadges(signal) : ''}${task.status !== 'done' ? waitingChip(placeOf(task)) : ''}${runLine(task)}</span><span class="task-row-owner">${holder(task) || '<span class="muted">—</span>'}</span><span class="task-row-when">${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${escape(formatDate(task.dueDate))}</span>` : escape(formatDate(task.createdAt))}</span></button></li>`;
 }
 
 // Grouped by state; each group shows a page of rows and the rest on request.
@@ -801,6 +814,16 @@ function drawerHead(task, { editable }) {
   return { heading, summary: editable ? summary : `${summary}${note}`, note };
 }
 
+// Where a task sits in its thread: what it builds on and what builds on it.
+function drawerThread(task) {
+  const place = placeOf(task);
+  if (!place || (!place.needs.length && !place.children.length)) return '';
+  const line = (entry) => `<li><button type="button" class="task-link" data-action="open-task" data-id="${escape(entry.id)}"><span class="task-number">${escape(taskNumber(entry))}</span>${escape(entry.title)}</button> <span class="status-pill status-${entry.status}"><span class="status-dot"></span>${statuses[entry.status] || entry.status}</span></li>`;
+  const thread = place.thread;
+  const done = thread ? thread.tasks.length - thread.open.length : 0;
+  return `<section class="drawer-section drawer-thread"><h3>Thread</h3>${thread ? `<p class="drawer-thread-name">${icon('route')}<span><span class="task-number">${escape(taskNumber(thread.root))}</span> ${escape(thread.root.title)}</span><span class="muted">${done} of ${thread.tasks.length} done</span></p>` : ''}${place.needs.length ? `<h4>Builds on</h4><ul class="drawer-thread-list">${place.needs.map(line).join('')}</ul>` : ''}${place.children.length ? `<h4>Built on by</h4><ul class="drawer-thread-list">${place.children.map(line).join('')}</ul>` : ''}</section>`;
+}
+
 function drawerTimeline(task, open) {
   return `<details class="drawer-history" data-key="history" ${open ? 'open' : ''}><summary>Timeline</summary><div id="task-history" data-task="${escape(task.id)}">${renderTimeline(null)}</div></details><div id="task-evidence"></div>`;
 }
@@ -820,7 +843,7 @@ function openTaskEditor(task = null, status = '') {
   const dialog = $('#task-dialog');
   const head = task ? drawerHead(task, { editable: true }) : null;
   const heading = head ? head.heading : `<header class="dialog-heading"><div><span class="dialog-eyebrow">Plan your next step</span><h2 id="task-dialog-title">New task</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header>`;
-  dialog.innerHTML = `<form id="task-form">${heading}<div class="dialog-fields">${head ? `${head.summary}${head.note}` : ''}${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${(task ? state.projects : choices).map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type share a service level; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>${drawerTimeline(task, false)}` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
+  dialog.innerHTML = `<form id="task-form">${heading}<div class="dialog-fields">${head ? `${head.summary}${head.note}` : ''}${task ? `${drawerThread(task)}${taskRunPanel(task)}` : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${(task ? state.projects : choices).map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type share a service level; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>${drawerTimeline(task, false)}` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
   const reasonField = $('#blocked-reason-field');
   $('#task-form [name="status"]').addEventListener('change', (event) => {
     reasonField.hidden = event.currentTarget.value !== 'blocked';
@@ -858,7 +881,7 @@ function openTaskViewer(task) {
   const project = projectOf(task);
   const dialog = $('#task-dialog');
   const head = drawerHead(task, { editable: false });
-  dialog.innerHTML = `<div class="task-view">${head.heading}<div class="dialog-fields">${head.summary}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>Read-only here. Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AgeAris picks the change up.</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
+  dialog.innerHTML = `<div class="task-view">${head.heading}<div class="dialog-fields">${head.summary}${drawerThread(task)}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>Read-only here. Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AgeAris picks the change up.</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
   setupDialog(dialog);
   loadTaskBody(task);
   loadTaskHistory(task);
@@ -1978,6 +2001,15 @@ $('#main').addEventListener('dragend', () => {
   document.querySelectorAll('.dragging, .drop-target').forEach((entry) => entry.classList.remove('dragging', 'drop-target'));
 });
 
+// A task named in the drawer (what it builds on, what builds on it) opens in
+// the same drawer.
+$('#task-dialog').addEventListener('click', (event) => {
+  const link = event.target.closest('[data-action="open-task"]');
+  if (!link) return;
+  event.preventDefault();
+  closeDialog($('#task-dialog'));
+  openTask(link.dataset.id);
+});
 $('#search').addEventListener('input', (event) => { state.query = event.target.value; renderMain(); });
 $('#sidebar-add').innerHTML = icon('plus');
 $('#search-icon').innerHTML = icon('search');

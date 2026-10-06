@@ -19,6 +19,7 @@ const STATIC_FILES = new Map([
   ['/cursor.js', 'cursor.js'],
   ['/words.js', 'words.js'],
   ['/markdown.js', 'markdown.js'],
+  ['/threads.js', 'threads.js'],
   ['/favicon.svg', 'favicon.svg'],
 ]);
 const MIME = new Map([

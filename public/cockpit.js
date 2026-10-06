@@ -1,6 +1,7 @@
 import { icon } from './icons.js';
 import { WINDOWS } from './cursor.js';
 import { renderMarkdown } from './markdown.js';
+import { visibleRows } from './threads.js';
 import { agentChip, agentShort, CHECKS, escape, healthTone, healthWord, NEED, NEEDS, ownerChip, TERMS } from './words.js';
 
 export { escape };
@@ -546,3 +547,59 @@ export function renderEvidence(task, history) {
 }
 
 export { agentShort };
+
+// --- Threads: a project's tasks by what they build on ------------------------------
+
+const statusChip = (status) => `<span class="status-pill status-${escape(status)}"><span class="status-dot"></span>${escape(STATUS_WORDS[status] || status)}</span>`;
+const taskWord = (task) => `${task.id.split(':').at(-1)} ${task.title}`;
+
+// "Waiting on T076": an open task whose dependency is not finished.
+export function waitingChip(place) {
+  if (!place?.waitingOn?.length) return '';
+  const [first, ...rest] = place.waitingOn;
+  return `<span class="chip tone-wait" title="${escape(`Builds on work that is not done: ${place.waitingOn.map(taskWord).join('; ')}`)}">Waiting on ${escape(first.id.split(':').at(-1))}${rest.length ? ` +${rest.length}` : ''}</span>`;
+}
+
+// The thread a task belongs to, as a small tag: "T021 thread".
+export function threadTag(place) {
+  const thread = place?.thread;
+  if (!thread || thread.root === place.task) return '';
+  return `<span class="needs-tag thread-tag" title="${escape(`Thread: ${taskWord(thread.root)} (${thread.tasks.length - thread.open.length} of ${thread.tasks.length} done)`)}">${icon('route')}${escape(thread.root.id.split(':').at(-1))}</span>`;
+}
+
+function threadRow(row, place, { signals, holder }) {
+  const { task } = row;
+  const entry = place.get(task.id);
+  const open = task.status !== 'done';
+  const also = entry.alsoNeeds.length ? `<span class="muted thread-also" title="${escape(entry.alsoNeeds.map(taskWord).join('; '))}">also needs ${escape(entry.alsoNeeds.map((need) => need.id.split(':').at(-1)).join(', '))}</span>` : '';
+  const link = row.link === 'then' ? '<span class="thread-link" aria-hidden="true">↓</span>' : row.link === 'branch' ? '<span class="thread-link" aria-hidden="true">↳</span>' : '<span class="thread-link" aria-hidden="true">●</span>';
+  return `<li class="thread-row depth-${Math.min(row.depth, 6)} ${open ? 'is-open' : 'is-done'}"><button type="button" class="thread-task" data-action="open-task" data-id="${escape(task.id)}">${link}<span class="task-number">${escape(task.id.split(':').at(-1))}</span><span class="thread-title" title="${escape(task.title)}">${escape(task.title)}</span></button><span class="thread-meta">${open ? (signals.get(task.id)?.reasons.includes('blocked') ? '' : statusChip(task.status)) : '<span class="muted">Done</span>'}${open ? signalBadges(signals.get(task.id)) : ''}${open ? waitingChip(entry) : ''}${also}${open ? holder(task) : ''}</span></li>`;
+}
+
+function threadCard(thread, place, options) {
+  const key = `thread:${thread.root.id}`;
+  const open = options.expanded.has(key);
+  const done = thread.tasks.length - thread.open.length;
+  const rows = visibleRows(thread, place, { expanded: open }).map((row) => (row.fold
+    ? `<li class="thread-row thread-fold depth-${Math.min(row.depth, 6)}"><button type="button" class="text-button" data-action="toggle-delta" data-value="${escape(key)}">${escape(plural(row.fold, 'finished step'))}</button></li>`
+    : threadRow(row, place, options))).join('');
+  const holders = [...new Set(thread.open.map((task) => task.claim || task.assignee).filter(Boolean))].map((who) => ownerChip(who)).join('');
+  return `<article class="thread panel"><header class="thread-head"><div class="thread-name"><span class="task-number">${escape(thread.root.id.split(':').at(-1))}</span><strong title="${escape(thread.root.title)}">${escape(thread.root.title)}</strong></div><div class="thread-facts"><span class="thread-progress" title="${escape(`${done} of ${thread.tasks.length} tasks done`)}"><span class="thread-bar"><span class="thread-bar-fill fill-${Math.round((done / thread.tasks.length) * 10)}"></span></span>${escape(done)} of ${escape(thread.tasks.length)} done</span>${holders}${open && thread.tasks.length > thread.open.length ? `<button type="button" class="text-button" data-action="toggle-delta" data-value="${escape(key)}">Fold finished steps</button>` : ''}</div></header><ol class="thread-rows">${rows}</ol></article>`;
+}
+
+// `built` is buildThreads() over the project's tasks; `holder(task)` renders
+// who holds a task.
+export function renderThreads(built, { signals, expanded, holder }) {
+  const { threads, alone, place } = built;
+  const options = { signals, expanded, holder };
+  const active = threads.filter((thread) => thread.open.length);
+  const finished = threads.filter((thread) => !thread.open.length);
+  const aloneOpen = alone.filter((task) => task.status !== 'done');
+  const aloneDone = alone.length - aloneOpen.length;
+  if (!threads.length && !alone.length) return '<div class="empty-results"><h2>No tasks yet</h2><p>Tasks will appear here, organised by what they build on.</p></div>';
+  const finishedOpen = expanded.has('threads:finished');
+  return `<p class="flow-intro">Tasks organised by what they build on, read from each task file’s <code>depends:</code>. Open work shows with the tasks it builds on; finished steps fold away.</p>
+    <section class="section" aria-labelledby="threads-active"><div class="section-heading"><h2 id="threads-active">Threads with open work</h2><span>${active.length}</span></div>${active.length ? `<div class="thread-list">${active.map((thread) => threadCard(thread, place, options)).join('')}</div>` : `<p class="all-clear">${icon('check')}Every thread is finished.</p>`}</section>
+    <section class="section" aria-labelledby="threads-alone"><div class="section-heading"><h2 id="threads-alone">On their own</h2><span>Tasks that build on nothing and that nothing builds on</span></div>${aloneOpen.length ? `<ol class="thread-rows panel thread-alone">${aloneOpen.map((task) => threadRow({ task, depth: 0, link: 'root' }, place, options)).join('')}</ol>` : `<p class="all-clear">${icon('check')}No open task stands on its own.</p>`}${aloneDone ? `<p class="muted thread-note">${escape(plural(aloneDone, 'finished task'))} on their own; see Board or List.</p>` : ''}</section>
+    ${finished.length ? `<section class="section" aria-labelledby="threads-finished"><div class="section-heading"><h2 id="threads-finished">Finished threads</h2><button type="button" class="text-button" data-action="toggle-delta" data-value="threads:finished" aria-expanded="${finishedOpen}">${finishedOpen ? 'Hide' : `Show ${finished.length}`}</button></div>${finishedOpen ? `<div class="thread-list">${finished.map((thread) => threadCard(thread, place, options)).join('')}</div>` : `<p class="muted">${escape(finished.map((thread) => `${thread.root.id.split(':').at(-1)} (${thread.tasks.length})`).join(' · '))}</p>`}</section>` : ''}`;
+}

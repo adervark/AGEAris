@@ -1178,3 +1178,16 @@ test('methodOf reads a board\'s policy and its own method documents, skipping sy
   assert.deepEqual([ownMethod.linked, ownMethod.board, ownMethod.wipLimit, ownMethod.staleHours], [false, 'deaddrop', 5, 24]);
   await expectRejected(workspace.methodOf('missing-project'), 404, /./);
 });
+
+test('a task lists what it builds on from depends:, in order, without itself, repeats, or text that is not a task id', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.linkProject({ path: await makeTrackedRepository({
+    'deaddrop/tasks/T001-a.md': boardTask('T001', 'A', { status: 'claimed', depends: '[]' }),
+    'deaddrop/tasks/T002-b.md': boardTask('T002', 'B', { status: 'claimed', depends: '[T001, T009, T001, T002, see notes]' }),
+    'deaddrop/tasks/T003-c.md': boardTask('T003', 'C', { status: 'claimed', depends: 'T002' }),
+    'deaddrop/tasks/T004-d.md': boardTask('T004', 'D', { status: 'claimed' }),
+  }) });
+  const tasks = tasksOf(await workspace.read(), project.id);
+  assert.deepEqual(['T001', 'T002', 'T003', 'T004'].map((id) => tasks[id].depends), [[], ['T001', 'T009'], ['T002'], []]);
+});
