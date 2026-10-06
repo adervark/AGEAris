@@ -3,9 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#182b49">
-    <meta name="description" content="Manage projects, tasks, and progress with AGESight.">
-    <title>AGESight · Projects</title>
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#151922" media="(prefers-color-scheme: dark)">
+    <meta name="description" content="Run projects with people and agents: what needs you, how work flows, and whether the method is being followed.">
+    <title>AGESight</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/styles.css">
     <script type="module" src="/app.js"></script>
@@ -14,20 +15,19 @@
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="app-shell">
       <aside class="sidebar" id="sidebar" aria-label="Workspace navigation">
-        <a class="brand" href="#today" aria-label="AGESight: Today"><span class="brand-symbol" aria-hidden="true"><span></span></span><span>agesight<span class="brand-caption">Project workspace</span></span></a>
-        <div class="workspace-label"><span class="workspace-avatar">A</span><span>Your workspace<small>Local workspace</small></span></div>
+        <a class="brand" href="#home" aria-label="AGESight: Home"><span class="brand-symbol" aria-hidden="true"><span></span></span><span>agesight</span></a>
         <nav id="navigation" aria-label="Main navigation"></nav>
-        <div class="projects-label"><span>Projects</span><button id="sidebar-add" class="icon-button" aria-label="Create project"></button></div>
+        <div class="projects-label"><span>Projects</span><button id="sidebar-add" class="icon-button" aria-label="Add a project" title="Add a project"></button></div>
         <nav id="project-navigation" class="project-navigation" aria-label="Projects"></nav>
-        <div class="sidebar-footer"><span class="save-symbol" aria-hidden="true"></span><div>Changes saved in git<small>Your work stays on this machine</small></div></div>
+        <p class="sidebar-foot">Everything here is read from git on this machine.</p>
       </aside>
       <div class="workspace">
         <header class="topbar">
           <button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false"></button>
-          <div class="breadcrumb" id="breadcrumb">Workspace <span>/</span> Today</div>
+          <div class="breadcrumb" id="breadcrumb"></div>
           <span class="monitor-state" id="monitor-state" role="status"><span class="status-dot"></span><span>Live</span></span>
           <label class="search-box"><span id="search-icon"></span><input id="search" type="search" placeholder="Search tasks…" aria-label="Search tasks"><kbd>/</kbd></label>
-          <button class="icon-button refresh-button" id="refresh" title="Refresh workspace" aria-label="Refresh workspace"></button>
+          <button class="icon-button refresh-button" id="refresh" title="Refresh" aria-label="Refresh"></button>
           <button class="button button-primary topbar-create" id="create-button"></button>
           <span class="user-avatar" id="user-avatar" title="Local operator">A</span>
         </header>

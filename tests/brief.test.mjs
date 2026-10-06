@@ -208,13 +208,14 @@ test('an idle project and a new one read grey in plain words; unassigned urgent 
   assert.deepEqual(result.needsYou.map((row) => [row.kind, row.projectName, row.owner]), [['unassigned', 'Echo', 'Unassigned']]);
 });
 
-test('no percentile ever reaches Today: project KPIs are counts, and no text names a percentile', () => {
+test('the brief\'s only percentiles are cycle time and its service level, and no sentence names a percentile', () => {
   assert.ok(briefs.length >= 5);
   for (const result of briefs) {
     for (const line of result.projects.filter((entry) => entry.kpis)) {
       for (const [name, kpi] of Object.entries(line.kpis)) {
         if (name === 'wipLimit') continue;
-        assert.notEqual(kpi.kind, 'percentile', `${line.name} ${name}`);
+        if (name === 'cycle50' || name === 'cycle85') assert.equal(kpi.kind, 'percentile', `${line.name} ${name}`);
+        else assert.notEqual(kpi.kind, 'percentile', `${line.name} ${name}`);
         assert.deepEqual(Object.keys(kpi).sort(), ['display', 'id', 'kind', 'reason', 'sample', 'status', 'value']);
       }
     }

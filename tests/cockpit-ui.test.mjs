@@ -7,7 +7,8 @@ import test from 'node:test';
 import { Cockpit } from '../lib/brief.mjs';
 import { METRIC_DEFINITIONS } from '../lib/metrics.mjs';
 import { Workspace } from '../lib/workspace.mjs';
-import { escape, renderChanges, renderExplain, renderHealth, renderHistory, renderToday } from '../public/cockpit.js';
+import { escape, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, signalBadges, signalIndex } from '../public/cockpit.js';
+import { agentShort, healthWord } from '../public/words.js';
 import { briefQuery, CURSOR_KEY, cursorFromBrief, readCursor, readWindow, WINDOW_KEY, writeCursor, writeWindow } from '../public/cursor.js';
 
 process.env.GIT_CONFIG_GLOBAL = os.devNull;
@@ -85,24 +86,50 @@ test('the cockpit views render the sample project, escape what they show, and ci
   t.after(() => cockpit.close());
 
   const brief = await cockpit.brief({ window: 'previous-workday' });
-  const today = renderToday(brief, { mode: 'previous-workday', expanded: new Set(['finished', 'added']) });
-  checkMarkup(today, 'Today');
-  assert.match(today, /&lt;img src=x onerror=alert\(1\)&gt; Launch/);
-  assert.match(today, /Simulated history/);
-  assert.match(today, /data-action="mark-seen"/);
-  assert.match(today, /<option value="previous-workday" selected>/);
-  assert.match(today, /data-metric="overdue"/);
-  assert.match(today, /data-metric="health"/);
-  assert.match(today, /id="delta-finished"/, 'an expanded delta lists its items');
-  assert.doesNotMatch(today, /P50|P85|percentile/i, 'no percentiles on Today');
+  const { tasks } = await workspace.read();
+  const byId = new Map(tasks.map((entry) => [entry.id, entry]));
+  const home = renderHome(brief, { mode: 'previous-workday', expanded: new Set(['finished', 'added']), taskOf: (id) => byId.get(id), agentsByProject: new Map(), projects: [project] });
+  checkMarkup(home, 'Home');
+  assert.match(home, /&lt;img src=x onerror=alert\(1\)&gt; Launch/);
+  assert.match(home, /Simulated history/);
+  assert.match(home, /data-action="mark-seen"/);
+  assert.match(home, /<option value="previous-workday" selected>/);
+  assert.match(home, /data-metric="overdue"/);
+  assert.match(home, /data-metric="health"/);
+  assert.match(home, /id="delta-finished"/, 'an expanded delta lists its items');
+  assert.match(home, /Overdue<span class="need-count">/, 'Needs you groups under the method\'s terms');
+  assert.match(home, /Past the due date and not done/, 'each term carries its plain meaning');
+  assert.match(home, new RegExp(`>${healthWord(brief.projects[0].health)}<`), 'health reads as words');
+  assert.match(home, /Service level/);
+  assert.doesNotMatch(home.replace(/data-metric="[^"]*"/g, ''), /\bP50\b|\bP85\b|percentile/i, 'the service level is named, not its percentile');
+
+  // One badge vocabulary for every task that needs a person.
+  const index = signalIndex(brief);
+  const overdueTask = index.get(`${project.id}:T040`);
+  assert.ok(overdueTask.reasons.includes('overdue'));
+  assert.match(signalBadges(overdueTask), /class="chip tone-fail"[^>]*>Overdue \d+ d</);
+  assert.equal(agentShort('agent ade @k/b6192924'), 'k·b619');
 
   const metrics = await cockpit.projectMetrics(project.id, {});
-  const health = renderHealth(metrics, { projectId: project.id });
-  checkMarkup(health, 'Health');
-  for (const id of ['done_7d', 'cycle_time_p85', 'lead_time_p50', 'wip', 'blocked_share']) assert.match(health, new RegExp(`data-metric="${id}"`));
-  assert.match(health, /data-metric="due_risk" data-project="[^"]+" data-task="T039"/);
-  assert.match(health, /Stale agent claims/);
-  assert.match(health, /ledger <code>[0-9a-f]{7}<\/code>/);
+  // Done this week on the board: every finish in the last 7 days, sweeps included.
+  assert.ok(metrics.tables.finishedWeek.length >= metrics.metrics.done_7d.value);
+  assert.ok(metrics.tables.finishedWeek.every((row) => typeof row.taskKey === 'string' && typeof row.at === 'string'));
+  const flow = renderFlow(metrics, { projectId: project.id, wipLimit: 6 });
+  checkMarkup(flow, 'Flow');
+  for (const id of ['done_7d', 'cycle_time_p85', 'lead_time_p50', 'wip', 'blocked_share']) assert.match(flow, new RegExp(`data-metric="${id}"`));
+  assert.match(flow, /data-metric="due_risk" data-project="[^"]+" data-task="T039"/);
+  assert.match(flow, /Stale claims/);
+  assert.match(flow, /class="limit-line"/, 'the WIP chart draws its limit');
+  assert.match(flow, /ledger <code title="[0-9a-f]{40}">[0-9a-f]{7}<\/code>/);
+
+  const line = brief.projects.find((entry) => entry.projectId === project.id);
+  const method = renderMethod({ project, method: { linked: false, board: 'deaddrop', staleHours: 24, wipLimit: 6, docs: [{ name: 'WORKFLOW.md', path: 'deaddrop/WORKFLOW.md', text: '# Flow\n\n<script>x</script> [x](javascript:alert(1))' }] }, data: metrics, line, tasks: tasks.filter((entry) => entry.projectId === project.id), pipeline: { stages: [{ name: 'Plan', role: 'plan', gate: true }] } });
+  checkMarkup(method, 'Method');
+  for (const id of line.health.rules.map((rule) => rule.id)) assert.match(method, new RegExp(`class="check-code"[^>]*>${id}<`), `check ${id} is listed`);
+  assert.match(method, /At most 6 at once/);
+  assert.match(method, /&lt;script&gt;x&lt;\/script&gt;/);
+  assert.doesNotMatch(method, /href="javascript/);
+  assert.match(method, /data-action="edit-pipeline"/);
 
   for (const id of ['overdue', 'health', 'cycle_time_p85', 'load']) {
     const value = await cockpit.explain(id, { projectId: project.id });
@@ -116,14 +143,17 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(renderExplain({ error: '<b>gone</b>' }), /&lt;b&gt;gone&lt;\/b&gt;/);
 
   const feed = await cockpit.changes({ limit: 200 });
-  const changes = renderChanges(feed, { kind: '', projectId: '', projects: [project], timezone: 'Europe/London' });
-  checkMarkup(changes, 'Changes');
-  assert.match(changes, /&lt;img src=x/);
-  assert.match(changes, /<code title="[^"]*">[0-9a-f]{7}<\/code>/, 'each change cites its commit');
+  const activity = renderActivity(feed, { kind: '', projectId: '', projects: [project], timezone: 'Europe/London' });
+  checkMarkup(activity, 'Activity');
+  assert.match(activity, /&lt;img src=x/);
+  assert.match(activity, /<code title="[^"]*">[0-9a-f]{7}<\/code>/, 'each change cites its commit');
+  assert.ok((activity.match(/class="activity-row"/g) || []).length < feed.changes.length, 'a task\'s changes in a day share a row');
 
-  const history = renderHistory(await cockpit.taskHistory(`${project.id}:T040`), 'Europe/London');
-  checkMarkup(history, 'History');
-  assert.match(history, /Created/);
-  assert.match(renderHistory({ error: '<x>' }), /&lt;x&gt;/);
+  const history = await cockpit.taskHistory(`${project.id}:T040`);
+  const timeline = renderTimeline(history, 'Europe/London');
+  checkMarkup(timeline, 'Timeline');
+  assert.match(timeline, /Filed/);
+  assert.match(renderTimeline({ error: '<x>' }), /&lt;x&gt;/);
+  assert.match(renderEvidence(byId.get(`${project.id}:T040`), history), /<code title="[0-9a-f]{40}">[0-9a-f]{7}<\/code>/);
   assert.equal(escape(`"'&<>`), '&quot;&#39;&amp;&lt;&gt;');
 });

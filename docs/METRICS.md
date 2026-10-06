@@ -1,6 +1,6 @@
 # Metrics
 
-AGESight computes every number on Today, project Health, and Decisions from
+AGESight computes every number on Home, a project's Flow and Method tabs, and Decisions from
 two records: the project's git history and the runs' hash-chained audit logs.
 Nothing is typed in by hand and nothing is stored apart from those records. The
 engine is `lib/metrics.mjs`; it is pure, takes the moment it computes for

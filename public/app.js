@@ -1,6 +1,8 @@
-import { decisionsSummary, escape, healthDot, renderChanges, renderExplain, renderHealth, renderHistory, renderToday } from './cockpit.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, sampleBadge, signalBadges, signalIndex } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
+import { renderMarkdown } from './markdown.js';
+import { healthTone, healthWord, ownerChip, TERMS } from './words.js';
 
 const $ = (selector) => document.querySelector(selector);
 const statuses = { backlog: 'Backlog', in_progress: 'In progress', blocked: 'Blocked', done: 'Done' };
@@ -13,7 +15,9 @@ const TERMINAL = ['completed', 'failed', 'cancelled'];
 const runStatuses = { running: 'Running', waiting: 'Waiting for an agent', awaiting_approval: 'Needs approval', awaiting_input: 'Needs your input', failed: 'Failed', cancelled: 'Cancelled', completed: 'Completed' };
 const stageStatuses = { done: 'Done', active: 'Running', awaiting_approval: 'Needs approval', awaiting_input: 'Needs input', waiting: 'No agent', failed: 'Failed', cancelled: 'Cancelled', pending: 'Not started' };
 const attemptStatuses = { queued: 'Queued', running: 'Running', awaiting_input: 'Waiting for a person', succeeded: 'Succeeded', failed: 'Failed', awaiting_approval: 'Awaiting approval', approved: 'Approved', rejected: 'Changes requested', cancelled: 'Cancelled' };
-const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'today', layout: 'health', query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
+// A project's tabs. It opens on its board.
+const LAYOUTS = { board: ['board', 'Board'], list: ['list', 'List'], flow: ['activity', 'Flow'], method: ['shield', 'Method'] };
+const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'home', layout: 'board', agentsTab: 'now', query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
 const detailsOpen = new Map();
 // Decisions inbox: full runs fetched for rows opened inline, and which of them
 // show the request-changes form.
@@ -25,14 +29,18 @@ let refreshing = false;
 let refreshPromise = Promise.resolve();
 let workspaceSignature = '';
 let lastView = '';
-// The cockpit's read models: the brief (Today, the Decisions header, and the
-// health dots in the sidebar), each project's metrics, and the change feed.
-const cockpit = { brief: null, briefAt: 0, briefError: '', metrics: new Map(), changes: null, changesKey: '', changesFilter: { kind: '', projectId: '' }, expanded: new Set() };
+// The cockpit's read models: the brief (Home, the Decisions header, signals on
+// every card, and the health dots in the sidebar), each project's metrics and
+// method, and the change feed. `expanded` holds what a person opened: delta
+// groups, long Needs you groups, and board columns shown in full.
+const cockpit = { brief: null, briefAt: 0, briefError: '', metrics: new Map(), method: new Map(), pipelines: new Map(), changes: null, changesKey: '', changesFilter: { kind: '', projectId: '' }, expanded: new Set() };
 const BRIEF_POLL_MS = 30000;
-// "Since your last visit" moves on when a person leaves Today after looking at
+// "Since your last visit" moves on when a person leaves Home after looking at
 // it for at least this long, or presses Mark seen.
 const SEEN_AFTER_MS = 10000;
-let todayShownAt = 0;
+let homeShownAt = 0;
+// A board column shows this many cards before "Show all".
+const COLUMN_CARDS = 25;
 
 function projectColor(project) {
   const value = String(project?.color || 'blue');
@@ -92,6 +100,30 @@ function writableProjects() {
 // Who holds a task: its assignee, else the agent session its owner line names.
 function ownerOf(task) {
   return task.assignee || task.claim || '';
+}
+
+function briefLine(projectId) {
+  return cockpit.brief?.projects.find((entry) => entry.projectId === projectId);
+}
+
+// Signals (stale, aging, blocked, …) per task, from the brief.
+function signals() {
+  if (cockpit.signalsFor !== cockpit.brief) {
+    cockpit.signals = signalIndex(cockpit.brief);
+    cockpit.signalsFor = cockpit.brief;
+  }
+  return cockpit.signals;
+}
+
+// Agent sessions holding work in progress, per project.
+function agentsByProject() {
+  const sessions = new Map();
+  for (const task of state.tasks) {
+    if (!task.claim || !['in_progress', 'blocked'].includes(task.status)) continue;
+    if (!sessions.has(task.projectId)) sessions.set(task.projectId, new Set());
+    sessions.get(task.projectId).add(task.claim);
+  }
+  return new Map([...sessions].map(([id, set]) => [id, set.size]));
 }
 
 // The API token arrives as an HttpOnly cookie with the page, and same-origin
@@ -188,19 +220,22 @@ function refresh() {
   return operation;
 }
 
-// Old links keep working: Overview became Today, All tasks Work, Activity Changes.
-const ROUTE_ALIASES = { overview: 'today', tasks: 'work', activity: 'changes' };
+// Old links keep working: Overview and Today became Home, Tasks and Work All
+// tasks, Activity and Changes Activity.
+const ROUTE_ALIASES = { overview: 'home', today: 'home', tasks: 'work', changes: 'activity' };
+const VIEWS = ['home', 'projects', 'work', 'activity', 'decisions', 'agents'];
 
 function readRoute() {
   const raw = location.hash.slice(1);
   const hash = ROUTE_ALIASES[raw] || raw;
   if (hash.startsWith('project/')) {
-    const id = hash.slice(8);
-    state.view = state.projects.some((project) => project.id === id) ? id : 'today';
+    const [id, layout] = hash.slice(8).split('/');
+    state.view = state.projects.some((project) => project.id === id) ? id : 'home';
+    if (layout && LAYOUTS[layout]) state.layout = layout;
   } else if (hash.startsWith('run/')) {
     state.view = 'run';
     try { state.runId = decodeURIComponent(hash.slice(4)); } catch { state.runId = ''; }
-  } else state.view = ['today', 'work', 'changes', 'decisions', 'agents'].includes(hash) ? hash : 'today';
+  } else state.view = VIEWS.includes(hash) ? hash : 'home';
   if (state.decisionRun !== state.runId) state.decisionMode = '';
 }
 
@@ -214,33 +249,43 @@ function navigate(view) {
   state.owner = '';
   state.query = '';
   $('#search').value = '';
-  const route = state.projects.some((project) => project.id === view) ? `project/${view}` : view;
+  const isProject = state.projects.some((project) => project.id === view);
+  // A project link opens its board, also from one of its other tabs.
+  if (isProject) state.layout = 'board';
+  const route = isProject ? `project/${view}` : view;
   if (location.hash === `#${route}`) { readRoute(); render(); } else location.hash = route;
   $('#sidebar').classList.remove('is-open');
   $('#menu-toggle').setAttribute('aria-expanded', 'false');
 }
 
+const PAGE_NAMES = { home: 'Home', projects: 'Projects', work: 'All tasks', activity: 'Activity', decisions: 'Decisions', agents: 'Agents' };
+
 function render() {
   renderNavigation();
   const project = selectedProject();
-  const page = project?.name || ({ today: 'Today', work: 'Work', changes: 'Changes', decisions: 'Decisions', agents: 'Agents', run: state.run?.id === state.runId ? `Run ${state.run.localId}` : 'Run' }[state.view]);
+  const page = project?.name || PAGE_NAMES[state.view] || (state.run?.id === state.runId ? `Run ${state.run.localId}` : 'Run');
   document.title = `${page} · AGESight`;
-  $('#breadcrumb').innerHTML = `Workspace <span>/</span> <strong>${escape(page)}</strong>`;
-  $('#create-button').innerHTML = `${icon('plus')}<span>${writableProjects().length ? 'New task' : 'New project'}</span>`;
+  const parent = project ? '<a href="#projects">Projects</a> <span>/</span> ' : state.view === 'work' ? '<a href="#projects">Projects</a> <span>/</span> ' : ['decisions', 'run'].includes(state.view) ? '<a href="#home">Home</a> <span>/</span> ' : '';
+  $('#breadcrumb').innerHTML = `${parent}<strong>${escape(page)}</strong>`;
+  // In one of your own projects the button adds a task there; elsewhere it adds a project.
+  const addTask = writable(project);
+  $('#create-button').className = 'button button-secondary topbar-create';
+  $('#create-button').innerHTML = `${icon('plus')}<span>${addTask ? 'New task' : 'Add project'}</span>`;
+  $('#create-button').title = addTask ? `Add a task to ${project.name} (N)` : 'Track a repository or start a project';
   renderMain();
 }
 
 function renderNavigation() {
-  const waiting = state.runs.filter((run) => run.needsHuman).length;
-  const counts = {
-    work: `<span class="nav-count">${state.tasks.filter((task) => task.status !== 'done').length}</span>`,
-    decisions: waiting ? `<span class="nav-count nav-count-alert" aria-label="${waiting} waiting on you">${waiting}</span>` : '',
-  };
-  $('#navigation').innerHTML = [ ['today', 'grid', 'Today'], ['decisions', 'decision', 'Decisions'], ['work', 'tasks', 'Work'], ['changes', 'activity', 'Changes'], ['agents', 'agent', 'Agents'] ].map(([view, symbol, label]) => `<a href="#${view}" class="nav-link ${state.view === view || (view === 'decisions' && state.view === 'run') ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${label}</span>${counts[view] || ''}</a>`).join('');
+  const needs = cockpit.brief?.needsYou.length || 0;
+  const counts = { home: needs ? `<span class="nav-count nav-count-alert" aria-label="${needs} need you">${needs}</span>` : '' };
+  const active = { home: ['home', 'decisions', 'run'], projects: ['projects', 'work'], agents: ['agents'], activity: ['activity'] };
+  $('#navigation').innerHTML = [['home', 'grid', 'Home'], ['projects', 'folder', 'Projects'], ['agents', 'agent', 'Agents'], ['activity', 'activity', 'Activity']].map(([view, symbol, label]) => {
+    const on = active[view].includes(state.view);
+    return `<a href="#${view}" class="nav-link ${on ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${label}</span>${counts[view] || ''}</a>`;
+  }).join('');
   $('#project-navigation').innerHTML = state.projects.length ? state.projects.map((project) => {
-    const line = cockpit.brief?.projects.find((entry) => entry.projectId === project.id);
-    const health = line?.health;
-    return `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''}>${healthDot(health)}<span class="truncate">${escape(project.name)}</span>${health ? `<span class="nav-health">${escape(health.label)}</span>` : ''}</a>`;
+    const health = briefLine(project.id)?.health;
+    return `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''} title="${escape(`${project.name}: ${health ? healthWord(health) : 'not computed yet'}`)}">${healthDot(health)}<span class="truncate">${escape(project.name)}</span></a>`;
   }).join('') : '<p class="sidebar-empty">Your projects will appear here.</p>';
 }
 
@@ -248,7 +293,7 @@ function filteredTasks() {
   const project = selectedProject();
   const query = state.query.trim().toLowerCase();
   const ordered = { urgent: 0, high: 1, medium: 2, low: 3 };
-  return state.tasks.filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !ownerOf(task) : ownerOf(task) === state.owner)) && (!query || `${task.title} ${task.description} ${ownerOf(task)} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
+  return state.tasks.filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !ownerOf(task) : ownerOf(task) === state.owner)) && (!query || `${task.title} ${task.description} ${ownerOf(task)} ${task.claimNote || ''} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
 }
 
 // Re-rendering replaces #main, so keep what a person was doing: open <details>,
@@ -277,41 +322,87 @@ function renderPage() {
   if (!state.projects.length) return renderEmptyWorkspace();
   if (state.view === 'run' && !state.query) return renderRun();
   if (state.view === 'decisions' && !state.query) return renderDecisions();
-  if (state.view === 'changes' && !state.query) return renderChangesPage();
-  if (state.view === 'today' && !state.query) return renderTodayPage();
+  if (state.view === 'activity' && !state.query) return renderActivityPage();
+  if (state.view === 'home' && !state.query) return renderHomePage();
+  if (state.view === 'projects' && !state.query) return renderProjectsPage();
   const project = selectedProject();
-  const health = project && !state.query && state.layout === 'health';
+  if (project && !state.query) return renderProjectPage(project);
+  renderTaskSearch();
+}
+
+// All tasks across projects, or search results: one grouped list.
+function renderTaskSearch() {
   const tasks = filteredTasks();
-  const projectTasks = state.tasks.filter((task) => !project || task.projectId === project.id);
-  const done = projectTasks.filter((task) => task.status === 'done').length;
-  const active = projectTasks.filter((task) => ['in_progress', 'blocked'].includes(task.status)).length;
-  const layout = state.layout === 'health' ? 'board' : state.layout;
-  $('#main').innerHTML = `<section class="page-heading"><div><div class="heading-title">${project ? `<span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span>` : ''}<h1>${escape(project?.name || (state.query ? 'Search results' : 'Work'))}</h1>${project ? projectActions(project) : ''}</div>${project?.linked ? trackedLine(project) : `<p>${escape(project?.description || (state.query ? `Tasks matching “${state.query}”` : 'Everything on your plate, across your projects.'))}</p>`}</div>${project ? `<div class="project-heading-progress"><span><strong>${done}</strong> of ${projectTasks.length} tasks complete</span><progress max="${Math.max(projectTasks.length, 1)}" value="${done}" aria-label="Project completion"></progress></div>` : ''}</section>
-    <div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Project view">${project && !state.query ? `<button class="view-tab ${health ? 'selected' : ''}" data-action="layout" data-value="health" aria-pressed="${health}">${icon('shield')} Health</button>` : ''}<button class="view-tab ${layout === 'board' && !health ? 'selected' : ''}" data-action="layout" data-value="board" aria-pressed="${layout === 'board' && !health}">${icon('board')} Board</button><button class="view-tab ${layout === 'list' && !health ? 'selected' : ''}" data-action="layout" data-value="list" aria-pressed="${layout === 'list' && !health}">${icon('list')} List</button></div>${health ? '' : `<div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div>`}</div>
-    ${health ? renderHealth(cockpit.metrics.get(project.id), { projectId: project.id }) : `<div class="board-meta"><span>${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}${state.query ? ' found' : ''}</span>${project ? `<span>${active}${project.wipLimit ? ` / ${project.wipLimit}` : ''} in progress ${icon('circle', 'tiny-icon')}</span>` : '<span>Across all projects</span>'}</div>
-    ${project ? problemsNote(project) : ''}
-    ${layout === 'board' ? board(tasks) : taskList(tasks)}
-    ${!projectTasks.length && writable(project) ? `<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>` : ''}`}`;
+  const title = state.query ? 'Search results' : 'All tasks';
+  const intro = state.query ? `Tasks matching “${state.query}”` : 'Every task in every project, grouped by state.';
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>${escape(title)}</h1><p>${escape(intro)}</p></div></section>
+    <div class="view-toolbar"><span class="board-meta">${escape(plural(tasks.length, 'task'))}${state.query ? ' found' : ''}</span><div class="filters">${filterControls(state.tasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div></div>
+    ${taskList(tasks, { showProject: true })}`;
+}
+
+// --- Projects ------------------------------------------------------------------
+
+function renderProjectsPage() {
+  const agents = agentsByProject();
+  const cards = state.projects.map((project) => {
+    const line = briefLine(project.id) || { projectId: project.id, name: project.name, linked: project.linked, state: 'building', sentence: 'Reading this project’s history…' };
+    return projectCard(line, { agents: agents.get(project.id) || 0, project });
+  }).join('');
+  const open = state.tasks.filter((task) => task.status !== 'done').length;
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>Projects</h1><p>Your own projects and the repositories you track. Each card says whether the work follows the method, and why not.</p></div><div class="heading-actions"><a class="button button-secondary" href="#work">${icon('tasks')}All tasks <span class="muted">${open} open</span></a><button class="button button-secondary" data-action="add-project">${icon('plus')}Add project</button></div></section><div class="project-cards">${cards}</div>`;
+}
+
+// --- A project: status, then the board; flow and method one tab away ----------
+
+function renderProjectPage(project) {
+  const line = briefLine(project.id);
+  const projectTasks = state.tasks.filter((task) => task.projectId === project.id);
+  const layout = LAYOUTS[state.layout] ? state.layout : 'board';
+  const tabs = Object.entries(LAYOUTS).map(([value, [symbol, label]]) => `<button class="view-tab ${layout === value ? 'selected' : ''}" data-action="layout" data-value="${value}" aria-pressed="${layout === value}">${icon(symbol)}${label}</button>`).join('');
+  const taskView = layout === 'board' || layout === 'list';
+  const tasks = taskView ? filteredTasks() : [];
+  const filters = taskView ? `<div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div>` : '';
+  let body;
+  if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0 });
+  else if (layout === 'method') body = renderMethod({ project, method: cockpit.method.get(project.id), data: cockpit.metrics.get(project.id), line, tasks: projectTasks, pipeline: cockpit.pipelines.get(project.id) });
+  else body = `${problemsNote(project)}${layout === 'board' ? board(tasks, project) : taskList(tasks)}${!projectTasks.length && writable(project) ? '<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>' : ''}`;
+  $('#main').innerHTML = `${projectHeader(project, line)}<div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Project view">${tabs}</div>${filters}</div>${body}`;
+}
+
+function projectHeader(project, line) {
+  const where = project.linked
+    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGESight reads its <code>${escape(project.board)}/</code> board and git history; its tasks change in the repository, where its agents work.</p>`
+    : project.description ? `<p class="project-where">${escape(project.description)}</p>` : '';
+  const status = line?.state === 'ready'
+    ? `<p class="project-status tone-${healthTone(line.health)}">${healthDot(line.health)}${metricButton({ projectId: project.id, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' })}<span>${escape(headline(line))}</span></p>`
+    : `<p class="project-status">${healthDot(null)}<span>${escape(headline(line) || 'Reading this project’s history…')}</span></p>`;
+  return `<header class="project-header"><div class="project-title-row"><span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span><h1>${escape(project.name)}</h1>${project.linked ? '<span class="readonly-badge" title="AGESight reads this repository and never writes to it.">Read-only</span>' : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${vitals(project, line)}</header>`;
+}
+
+// The four numbers a project is run by, each with its plain meaning.
+function vitals(project, line) {
+  if (line?.state !== 'ready') return '';
+  const k = line.kpis;
+  const usual = k.done4w?.status === 'ok' ? Math.round((k.done4w.value / 4) * 10) / 10 : null;
+  const number = (metric) => (metric ? metricButton({ projectId: project.id, metricId: metric.id, display: metric.display, title: metric.status === 'ok' ? '' : metric.reason }) : '—');
+  const over = k.wipLimit && k.wip?.value > k.wipLimit;
+  const vital = (label, value, help, alert = false) => `<div class="vital"><span class="vital-label">${escape(label)}</span><span class="vital-value ${alert ? 'is-alert' : ''}">${value}</span><span class="vital-help">${escape(help)}</span></div>`;
+  return `<div class="vitals">${vital(TERMS.throughput[0], number(k.done7d), usual !== null ? `Finished in 7 days; usually ~${usual} a week` : TERMS.throughput[1])}${vital(TERMS.wip[0], `${number(k.wip)}${k.wipLimit ? ` <small class="muted">/ ${escape(k.wipLimit)}</small>` : ''}`, k.wipLimit ? `In progress or blocked; the limit is ${k.wipLimit}` : `${TERMS.wip[1].split(': ')[1]}; no limit set`, over)}${vital(TERMS.cycle[0], number(k.cycle50), TERMS.cycle[1])}${vital(TERMS.service[0], number(k.cycle85), TERMS.service[1])}</div>`;
 }
 
 function projectActions(project) {
-  if (project.linked) return `<span class="readonly-badge" title="AGESight reads this repository and never writes to it.">Read-only</span><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
-  return `<button class="text-button project-settings" data-action="edit-project">Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>`;
-}
-
-// Where a tracked repository is, and that its tasks change there.
-function trackedLine(project) {
-  return `<p>${project.description ? `${escape(project.description)} ` : ''}<span class="tracked-line">Tracked from <code>${escape(project.repository)}</code>. AGESight reads its ${escape(project.board)}/ board and git history; its tasks change in the repository, where its agents work.</span></p>`;
+  if (project.linked) return `<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
+  return `<button class="text-button project-settings" data-action="edit-project">${icon('edit')}Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>`;
 }
 
 // Task files in a tracked repository that could not be read; the rest of the
 // board is shown without them.
 function problemsNote(project) {
-  if (project.unavailable) return `<p class="window-note">${icon('alert')}<span>This repository cannot be read right now: ${escape(project.unavailable)} Its tasks show again once it can be read; Stop tracking removes it from AGESight.</span></p>`;
+  if (project.unavailable) return `<p class="window-note problems-note">${icon('alert')}<span>This repository cannot be read right now: ${escape(project.unavailable)} Its tasks show again once it can be read; Stop tracking removes it from AGESight.</span></p>`;
   const problems = project.problems || [];
   if (!problems.length) return '';
   const listed = problems.slice(0, 5).map((problem) => `${problem.file} (${problem.error})`).join('; ');
-  return `<p class="window-note">${icon('alert')}<span>${problems.length === 1 ? '1 task file was' : `${problems.length} task files were`} not read: ${escape(listed)}${problems.length > 5 ? `; ${problems.length - 5} more` : ''}.</span></p>`;
+  return `<p class="window-note problems-note">${icon('alert')}<span>${problems.length === 1 ? '1 task file was' : `${problems.length} task files were`} not read: ${escape(listed)}${problems.length > 5 ? `; ${problems.length - 5} more` : ''}.</span></p>`;
 }
 
 function filterControls(tasks) {
@@ -323,13 +414,45 @@ function options(values, current) {
   return Object.entries(values).map(([value, label]) => `<option value="${value}" ${current === value ? 'selected' : ''}>${label}</option>`).join('');
 }
 
-function board(tasks) {
-  // A tracked repository's board takes no new tasks; Work adds to the others.
-  const project = selectedProject();
-  const canAdd = project ? writable(project) : writableProjects().length > 0;
+// What a project's metrics know about finishes: the tasks that finished in the
+// last 7 days (sweeps included), and every task with a recorded finish. A done
+// task the metrics have not seen yet (its move not yet indexed) counts as recent.
+function finishes(projectId) {
+  const tables = cockpit.metrics.get(projectId)?.tables;
+  if (!tables?.finishedWeek) return null;
+  const key = (row) => `${projectId}:${localId(row.taskKey)}`;
+  const week = new Map(tables.finishedWeek.map((row) => [key(row), row.at]));
+  const known = new Set([...tables.cycle, ...tables.excluded].map(key));
+  return { week, recent: (task) => week.has(task.id) || !known.has(task.id) };
+}
+
+function board(tasks, project) {
+  const canAdd = writable(project);
+  const finished = finishes(project.id);
+  const limit = project.wipLimit > 0 ? project.wipLimit : 0;
+  const wip = state.tasks.filter((task) => task.projectId === project.id && ['in_progress', 'blocked'].includes(task.status)).length;
   return `<div class="board">${Object.entries(statuses).map(([status, label]) => {
-    const column = tasks.filter((task) => task.status === status);
-    return `<section class="board-column" data-drop-status="${status}" aria-label="${label}"><header class="column-heading"><span class="status-dot status-${status}"></span><h2>${label}</h2><span class="column-count">${column.length}</span>${canAdd ? `<button class="icon-button" data-action="new-task" data-status="${status}" aria-label="Add task to ${label}">${icon('plus')}</button>` : ''}</header><div class="column-tasks">${column.map(taskCard).join('')}${!column.length ? '<div class="column-empty">No tasks here yet</div>' : ''}</div>${canAdd ? `<button class="column-add" data-action="new-task" data-status="${status}">${icon('plus')} Add task</button>` : ''}</section>`;
+    let column = tasks.filter((task) => task.status === status);
+    let heading = label;
+    let hidden = 0;
+    const key = `column:${project.id}:${status}`;
+    if (status === 'done') {
+      // Done shows what finished this week; the rest is one click away.
+      const at = (task) => String(finished?.week.get(task.id) || task.updatedAt || '');
+      column = column.sort((a, b) => Number(finished ? finished.recent(b) : 0) - Number(finished ? finished.recent(a) : 0) || at(b).localeCompare(at(a)));
+      if (!cockpit.expanded.has(key)) {
+        const recent = finished ? column.filter(finished.recent) : column.slice(0, 10);
+        hidden = column.length - recent.length;
+        heading = finished ? 'Done this week' : 'Done';
+        column = recent;
+      }
+    } else if (!cockpit.expanded.has(key) && column.length > COLUMN_CARDS) {
+      hidden = column.length - COLUMN_CARDS;
+      column = column.slice(0, COLUMN_CARDS);
+    }
+    const total = column.length + hidden;
+    const more = hidden ? `<button class="column-more" data-action="toggle-delta" data-value="${escape(key)}">Show all ${total}${status === 'done' ? ' done' : ''}</button>` : cockpit.expanded.has(key) ? `<button class="column-more" data-action="toggle-delta" data-value="${escape(key)}">Show fewer</button>` : '';
+    return `<section class="board-column" data-drop-status="${status}" aria-label="${label}"><header class="column-heading"><span class="status-dot status-${status}"></span><h2>${heading}</h2><span class="column-count ${status === 'in_progress' && limit && wip > limit ? 'is-over' : ''}">${status === 'done' && hidden ? `${column.length} of ${total}` : total}</span>${status === 'in_progress' && limit ? `<span class="column-limit" title="WIP limit, counting blocked work: ${wip} in progress or blocked">limit ${escape(limit)}</span>` : ''}${canAdd ? `<button class="icon-button" data-action="new-task" data-status="${status}" aria-label="Add task to ${label}">${icon('plus')}</button>` : ''}</header><div class="column-tasks">${column.map(taskCard).join('')}${!column.length ? `<div class="column-empty">${status === 'done' && hidden ? 'Nothing finished this week' : 'Nothing here'}</div>` : ''}</div>${more}${canAdd ? `<button class="column-add" data-action="new-task" data-status="${status}">${icon('plus')} Add task</button>` : ''}</section>`;
   }).join('')}</div>`;
 }
 
@@ -337,26 +460,65 @@ function priorityBadge(task) {
   return task.priorityGiven === false ? '' : `<span class="priority priority-${task.priority}">${icon('flag')}${priorities[task.priority]}</span>`;
 }
 
+function holder(task) {
+  return task.assignee ? ownerChip(task.assignee) : task.claim ? ownerChip(task.claim) : '';
+}
+
+// One task, one look: the same signals, holder and note on a card, a row, and
+// in the drawer.
 function taskCard(task) {
-  const project = state.projects.find((item) => item.id === task.projectId);
+  const project = projectOf(task);
   const editable = writable(project);
-  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="${editable ? 'Edit' : 'Open'} ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${task.description ? `<span class="card-description">${escape(task.description)}</span>` : ''}${!selectedProject() ? `<span class="card-project"><span class="project-dot color-${projectColor(project)}"></span>${escape(project?.name)}</span>` : ''}${runLine(task)}<span class="card-footer"><span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${task.dueDate ? `${icon('calendar')}${escape(formatDate(task.dueDate))}` : ''}</span>${avatar(ownerOf(task))}</span></button>`;
+  const signal = signals().get(task.id);
+  const footer = `${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${icon('calendar')}${escape(formatDate(task.dueDate))}</span>` : '<span></span>'}${holder(task) || (task.status === 'done' ? '' : '<span class="muted">Unclaimed</span>')}`;
+  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${signal && task.status !== 'done' ? `<span class="card-signals">${signalBadges(signal)}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></button>`;
 }
 
-function avatar(name) {
-  return name ? `<span class="task-avatar" title="${escape(name)}" aria-label="Owner: ${escape(name)}">${escape(initials(name))}</span>` : `<span class="task-avatar unassigned" title="Unassigned" aria-label="Unassigned">${icon('user')}</span>`;
+function taskRow(task, showProject) {
+  const signal = signals().get(task.id);
+  const project = showProject ? projectOf(task) : null;
+  return `<li><button class="task-row" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="task-row-title" title="${escape(task.title)}">${escape(task.title)}${project ? `<small>${escape(project.name)}</small>` : ''}</span><span class="task-row-signals">${signal && task.status !== 'done' ? signalBadges(signal) : ''}${runLine(task)}</span><span class="task-row-owner">${holder(task) || '<span class="muted">—</span>'}</span><span class="task-row-when">${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${escape(formatDate(task.dueDate))}</span>` : escape(formatDate(task.createdAt))}</span></button></li>`;
 }
 
-function taskList(tasks) {
-  if (!tasks.length) return `<div class="empty-results">${icon('tasks')}<h2>No tasks found</h2><p>${state.query || state.status || state.priority || state.owner ? 'Try another search or clear your filters.' : 'Create a task to start planning your project.'}</p><button class="button button-secondary" data-action="${state.query || state.status || state.priority || state.owner ? 'clear-filters' : 'new-task'}">${state.query || state.status || state.priority || state.owner ? 'Clear search and filters' : 'New task'}</button></div>`;
-  return `<div class="task-table-wrap"><table class="task-table"><thead><tr><th scope="col">Task</th><th scope="col">Status</th><th scope="col">Priority</th><th scope="col">Owner</th><th scope="col">Due date</th></tr></thead><tbody>${tasks.map((task) => `<tr><td><button class="task-name-button" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="list-task-title ${task.status === 'done' ? 'completed-title' : ''}">${escape(task.title)}</span>${!selectedProject() ? `<small>${escape(state.projects.find((project) => project.id === task.projectId)?.name)}</small>` : ''}${runLine(task)}</button></td><td><span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status]}</span></td><td>${priorityBadge(task) || '<span class="muted">—</span>'}</td><td><span class="list-owner">${avatar(ownerOf(task))}<span>${escape(ownerOf(task) || 'Unassigned')}</span></span></td><td><span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${task.dueDate ? escape(formatDate(task.dueDate)) : '—'}</span></td></tr>`).join('')}</tbody></table></div>`;
+// Grouped by state; each group shows a page of rows and the rest on request.
+function taskList(tasks, { showProject = false } = {}) {
+  const filtering = state.query || state.status || state.priority || state.owner;
+  if (!tasks.length) return `<div class="empty-results">${icon('tasks')}<h2>No tasks found</h2><p>${filtering ? 'Try another search or clear your filters.' : 'Tasks will appear here.'}</p>${filtering ? '<button class="button button-secondary" data-action="clear-filters">Clear search and filters</button>' : ''}</div>`;
+  const groups = ['blocked', 'in_progress', 'backlog', 'done'].map((status) => {
+    const rows = tasks.filter((task) => task.status === status);
+    if (!rows.length) return '';
+    const key = `list:${state.view}:${status}`;
+    const open = cockpit.expanded.has(key);
+    const limit = status === 'done' ? 15 : 50;
+    const shown = open ? rows : rows.slice(0, limit);
+    return `<section aria-label="${statuses[status]}"><h2 class="task-group-heading"><span class="status-dot status-${status}"></span>${statuses[status]}<span>${rows.length}</span></h2><ul class="task-rows">${shown.map((task) => taskRow(task, showProject)).join('')}</ul>${rows.length > shown.length ? `<button class="task-group-more" data-action="toggle-delta" data-value="${escape(key)}">Show all ${rows.length}</button>` : ''}</section>`;
+  }).join('');
+  return `<div class="task-groups">${groups}</div>`;
 }
 
 function renderEmptyWorkspace() {
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Today</h1><p>No projects yet.</p></div></section><section class="welcome-panel"><h2>Start with a project.</h2><p>Each morning, Today shows what needs you, what moved since your last visit, and how each project is doing.</p><button class="button button-primary" data-action="new-project">${icon('plus')} Create your first project</button><button class="button button-secondary track-button" data-action="link-project">${icon('git')} Track an existing repository</button><button class="text-button sample-button" data-action="sample-project">Explore a sample project with six weeks of history</button></section>`;
+  $('#main').innerHTML = `<section class="page-heading home-heading"><div><h1>Welcome to AGESight</h1><p class="home-sub">Run projects with people and agents: what needs you, how work flows, and whether the method is being followed.</p></div></section><section class="section panel add-panel"><div class="dialog-fields">${addChoices()}</div></section>`;
 }
 
-// --- Cockpit: Today, project health, changes, explain ----------------------------
+// The two ways to add a project, plus the sample.
+function addChoices() {
+  return `<div class="choice-cards"><button type="button" class="choice-card" data-action="link-project">${icon('git')}<span><strong>Track an existing repository</strong><span>Its agents already keep a deaddrop/ board. AGESight reads the board and git history and never writes there.</span></span></button><button type="button" class="choice-card" data-action="new-project">${icon('folder')}<span><strong>Start a new project here</strong><span>AGESight keeps its board in a git repository of its own. Add tasks, set a WIP limit, and run them with agents.</span></span></button><button type="button" class="choice-card" data-action="sample-project">${icon('activity')}<span><strong>Explore a sample project</strong><span>Six weeks of simulated history, so every view has something to show.</span></span></button></div>`;
+}
+
+function openAddProject() {
+  const dialog = $('#project-dialog');
+  dialog.innerHTML = `<header class="dialog-heading"><div><span class="dialog-eyebrow">Your workspace</span><h2 id="project-dialog-title">Add a project</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields">${addChoices()}</div>`;
+  dialog.querySelectorAll('[data-action]').forEach((button) => button.addEventListener('click', () => {
+    const action = button.dataset.action;
+    if (action === 'link-project') openLinkEditor();
+    else if (action === 'new-project') openProjectEditor();
+    else { closeDialog(dialog); createSample(button); }
+  }));
+  setupDialog(dialog);
+  dialog.querySelector('.choice-card')?.focus();
+}
+
+// --- Cockpit: Home, flow, method, activity, explain --------------------------------
 
 function storage() {
   try { return window.localStorage; } catch { return null; }
@@ -364,7 +526,7 @@ function storage() {
 
 function cockpitSignature() {
   const project = selectedProject();
-  return [cockpit.brief, cockpit.briefError, state.view === 'changes' ? cockpit.changes : null, project ? cockpit.metrics.get(project.id) : null];
+  return [cockpit.brief, cockpit.briefError, state.view === 'activity' ? cockpit.changes : null, project ? [cockpit.metrics.get(project.id), cockpit.method.get(project.id), cockpit.pipelines.get(project.id)] : null];
 }
 
 async function loadBrief() {
@@ -374,7 +536,7 @@ async function loadBrief() {
     cockpit.briefError = '';
   } catch (error) {
     if (error.status === 401) throw error;
-    // A stored cursor the server rejects must not leave Today empty, nor mark
+    // A stored cursor the server rejects must not leave Home empty, nor mark
     // everything seen: forget it, so the brief counts from the previous
     // working day and says why.
     if (error.status === 400 && params.has('since')) {
@@ -398,13 +560,23 @@ async function refreshCockpit(workspace, { force = false, metrics = false } = {}
   const stale = Date.now() - cockpit.briefAt >= BRIEF_POLL_MS;
   const jobs = [];
   if (force || changed || stale || !cockpit.brief) jobs.push(loadBrief());
-  if (project && state.layout === 'health' && !state.query && (force || metrics || changed || stale || !cockpit.metrics.has(project.id))) {
+  // A project's metrics feed the board (what finished this week), Flow and Method.
+  if (project && !state.query && (force || metrics || changed || stale || !cockpit.metrics.has(project.id))) {
     jobs.push(api(`/projects/${encodeURIComponent(project.id)}/metrics`).then((data) => { cockpit.metrics.set(project.id, data); }, (error) => {
       if (error.status === 401) throw error;
       cockpit.metrics.set(project.id, { state: 'error', error: error.message });
     }));
   }
-  if (state.view === 'changes') {
+  // The board's method documents are not part of the workspace, so they are read again on the brief's clock.
+  if (changed) for (const id of [...cockpit.method.keys()]) if (id !== project?.id) cockpit.method.delete(id);
+  if (project && state.layout === 'method' && !state.query && (force || changed || stale || !cockpit.method.has(project.id))) {
+    jobs.push(api(`/projects/${encodeURIComponent(project.id)}/method`).then((method) => { cockpit.method.set(project.id, method); }, (error) => {
+      if (error.status === 401) throw error;
+      cockpit.method.set(project.id, { error: error.message });
+    }));
+    if (writable(project)) jobs.push(api(`/projects/${encodeURIComponent(project.id)}/pipeline`).then((pipeline) => { cockpit.pipelines.set(project.id, pipeline); }, (error) => { if (error.status === 401) throw error; }));
+  }
+  if (state.view === 'activity') {
     const { kind, projectId } = cockpit.changesFilter;
     const key = `${kind}|${projectId}`;
     if (force || changed || stale || cockpit.changesKey !== key || !cockpit.changes) {
@@ -417,26 +589,27 @@ async function refreshCockpit(workspace, { force = false, metrics = false } = {}
   if (cockpit.brief?.projects.some((line) => line.state !== 'ready' && line.state !== 'unavailable')) cockpit.briefAt = Date.now() - BRIEF_POLL_MS + 3000;
 }
 
-function renderTodayPage() {
+function renderHomePage() {
   if (!cockpit.brief) {
     $('#main').innerHTML = cockpit.briefError
-      ? `<div class="empty-results">${icon('alert')}<h2>Today is unavailable</h2><p>${escape(cockpit.briefError)}</p></div>`
+      ? `<div class="empty-results">${icon('alert')}<h2>Home is unavailable</h2><p>${escape(cockpit.briefError)}</p></div>`
       : '<div class="loading-state"><span class="spinner"></span>Reading your projects’ history…</div>';
     return;
   }
-  if (!document.hidden && !todayShownAt) todayShownAt = Date.now();
-  $('#main').innerHTML = renderToday(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded });
+  if (!document.hidden && !homeShownAt) homeShownAt = Date.now();
+  const tasks = new Map(state.tasks.map((task) => [task.id, task]));
+  $('#main').innerHTML = renderHome(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded, taskOf: (id) => tasks.get(id), agentsByProject: agentsByProject(), projects: state.projects });
 }
 
-function renderChangesPage() {
-  $('#main').innerHTML = renderChanges(cockpit.changes, { ...cockpit.changesFilter, projects: state.projects, timezone: cockpit.brief?.timezone });
+function renderActivityPage() {
+  $('#main').innerHTML = renderActivity(cockpit.changes, { ...cockpit.changesFilter, projects: state.projects, timezone: cockpit.brief?.timezone });
 }
 
-// Leaving Today after looking at it marks what it showed as seen.
-function leaveToday(view) {
-  if (view !== 'today' || !todayShownAt) return;
-  const looked = Date.now() - todayShownAt;
-  todayShownAt = 0;
+// Leaving Home after looking at it marks what it showed as seen.
+function leaveHome(view) {
+  if (view !== 'home' || !homeShownAt) return;
+  const looked = Date.now() - homeShownAt;
+  homeShownAt = 0;
   if (looked >= SEEN_AFTER_MS && cockpit.brief?.live) writeCursor(storage(), cursorFromBrief(cockpit.brief));
 }
 
@@ -444,17 +617,17 @@ async function markSeen() {
   if (!cockpit.brief) return;
   writeCursor(storage(), cursorFromBrief(cockpit.brief));
   if (readWindow(storage()) !== 'last-visit') writeWindow(storage(), 'last-visit');
-  cockpit.expanded.clear();
+  for (const key of [...cockpit.expanded]) if (!key.includes(':')) cockpit.expanded.delete(key);
   try { await refreshCockpit(null, { force: true }); renderMain(); toast('Marked as seen. Changes from now on will show here.'); } catch (error) { toast(error.message, true); }
 }
 
 async function changeWindow(value) {
   writeWindow(storage(), value);
-  cockpit.expanded.clear();
+  for (const key of [...cockpit.expanded]) if (!key.includes(':')) cockpit.expanded.delete(key);
   try { await refreshCockpit(null, { force: true }); renderMain(); } catch (error) { toast(error.message, true); }
 }
 
-function toggleDelta(name) {
+function toggleExpanded(name) {
   if (cockpit.expanded.has(name)) cockpit.expanded.delete(name); else cockpit.expanded.add(name);
   renderMain();
 }
@@ -468,9 +641,8 @@ async function changeChangesFilter(field, value) {
 
 function openTask(id) {
   const task = state.tasks.find((entry) => entry.id === id);
-  // A tracked repository's task opens read-only (openTaskEditor redirects).
   if (task) openTaskEditor(task);
-  else toast('This task is no longer on the board. Its history stays in Changes.', true);
+  else toast('This task is no longer on the board. Its history stays in Activity.', true);
 }
 
 // The full MetricValue behind a number, as of the time the number was computed.
@@ -478,7 +650,7 @@ async function openExplain({ metric, project: projectId, task: taskKey }, opener
   const dialog = $('#explain-dialog');
   // Focus comes back to the number when the drawer closes.
   opener?.focus({ preventScroll: true });
-  const asOf = state.view === 'today' || state.view === 'decisions' ? cockpit.brief?.asOf : cockpit.metrics.get(projectId)?.asOf;
+  const asOf = ['home', 'decisions', 'projects'].includes(state.view) ? cockpit.brief?.asOf : cockpit.metrics.get(projectId)?.asOf || cockpit.brief?.asOf;
   dialog.innerHTML = `<header class="dialog-heading"><div><span class="dialog-eyebrow">Explain</span><h2 id="explain-dialog-title">Loading…</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><div class="loading-state dialog-loading"><span class="spinner"></span></div></div>`;
   setupDialog(dialog);
   const params = new URLSearchParams({ projectId, ...(taskKey ? { taskKey } : {}) });
@@ -491,14 +663,25 @@ async function openExplain({ metric, project: projectId, task: taskKey }, opener
   dialog.querySelector('[data-close]')?.focus();
 }
 
-// A task's history in its drawer: every transition with its commit.
+// A task's timeline in its drawer, and the commits behind it.
 async function loadTaskHistory(task) {
-  const slot = $('#task-history');
-  if (!slot) return;
   let history;
   try { history = await api(`/tasks/${encodeURIComponent(task.id)}/history`); } catch (error) { history = { error: error.status === 404 ? 'No history yet: this task has not been committed.' : error.message }; }
-  const current = $('#task-history');
-  if (current && current.dataset.task === task.id) current.innerHTML = renderHistory(history, cockpit.brief?.timezone);
+  const slot = $('#task-history');
+  if (!slot || slot.dataset.task !== task.id) return;
+  slot.innerHTML = renderTimeline(history, cockpit.brief?.timezone);
+  const evidence = $('#task-evidence');
+  if (evidence) evidence.innerHTML = renderEvidence(task, history);
+}
+
+// The task as written: the Markdown below its frontmatter.
+async function loadTaskBody(task) {
+  let text = '';
+  let failed = '';
+  try { text = (await api(`/tasks/${encodeURIComponent(task.id)}`)).body || ''; } catch (error) { failed = error.message; }
+  const slot = $('#task-body');
+  if (!slot || slot.dataset.task !== task.id) return;
+  slot.innerHTML = failed ? `<p class="muted">${escape(failed)}</p>` : text.trim() ? `<div class="markdown">${renderMarkdown(text, { shift: 2 })}</div>` : '<p class="muted">The task file has no text below its header.</p>';
 }
 
 function closeDialog(dialog) {
@@ -527,7 +710,7 @@ function colorField(selected) {
 
 function openProjectEditor(project = null) {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="project-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Your workspace</span><h2 id="project-dialog-title">${project ? 'Edit project' : 'New project'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close project editor">${icon('close')}</button></header><div class="dialog-fields"><label class="field">Project name<input name="name" required maxlength="100" placeholder="e.g. Website launch" value="${escape(project?.name || '')}" autofocus></label><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="3" maxlength="4000" placeholder="What are you working toward?">${escape(project?.description || '')}</textarea></label>${colorField(project ? projectColor(project) : 'blue')}<label class="field">Work in progress limit<input name="wipLimit" type="number" min="1" max="99" required value="${project?.wipLimit || 6}"><small>Limit how many tasks can be in progress or blocked at once.</small></label><p class="form-error" id="project-error" role="alert"></p></div><footer class="dialog-footer">${project ? '' : '<button type="button" class="text-button dialog-switch" data-switch-link>Track an existing repository instead</button>'}<button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${project ? 'Save changes' : 'Create project'}</button></footer></form>`;
+  dialog.innerHTML = `<form id="project-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${project ? escape(project.name) : 'Start a new project here'}</span><h2 id="project-dialog-title">${project ? 'Edit project' : 'New project'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close project editor">${icon('close')}</button></header><div class="dialog-fields"><label class="field">Project name<input name="name" required maxlength="100" placeholder="e.g. Website launch" value="${escape(project?.name || '')}" autofocus></label><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="3" maxlength="4000" placeholder="What are you working toward?">${escape(project?.description || '')}</textarea></label>${colorField(project ? projectColor(project) : 'blue')}<label class="field">WIP limit<input name="wipLimit" type="number" min="1" max="99" required value="${project?.wipLimit || 6}"><small>How many tasks may be in progress or blocked at once. The method checks it.</small></label><p class="form-error" id="project-error" role="alert"></p></div><footer class="dialog-footer">${project ? '' : '<button type="button" class="text-button dialog-switch" data-switch-link>Track an existing repository instead</button>'}<button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${project ? 'Save changes' : 'Create project'}</button></footer></form>`;
   dialog.querySelector('[data-switch-link]')?.addEventListener('click', () => openLinkEditor());
   $('#project-form').addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -554,7 +737,7 @@ function openProjectEditor(project = null) {
 // Tracks an existing repository: AGESight reads its board and history.
 function openLinkEditor() {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Your workspace</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGESight reads the repository’s deaddrop/ task board (or pm/, its older name) and its git history, and shows them like a project’s. It never writes there: the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Create a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
+  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGESight reads the repository’s deaddrop/ task board (or pm/, its older name) and its git history, and checks the work against the board’s method. It never writes there: the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
   const form = $('#link-form');
   form.querySelector('[data-switch-new]').addEventListener('click', () => openProjectEditor());
   form.addEventListener('submit', async (event) => {
@@ -578,7 +761,7 @@ function openLinkEditor() {
 function openUnlinkDialog(project) {
   if (!project?.linked) return;
   const dialog = $('#action-dialog');
-  dialog.innerHTML = `<form id="unlink-form">${dialogHeading('Tracked repository', `Stop tracking ${escape(project.name)}?`, 'Close dialog')}<div class="dialog-fields"><p class="dialog-copy">It leaves Today, Work, and Changes. Nothing in <code>${escape(project.repository)}</code> changes, and you can track it again at any time.</p><p class="form-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close autofocus>Keep tracking</button><button type="submit" class="button button-danger">Stop tracking</button></footer></form>`;
+  dialog.innerHTML = `<form id="unlink-form">${dialogHeading('Tracked repository', `Stop tracking ${escape(project.name)}?`, 'Close dialog')}<div class="dialog-fields"><p class="dialog-copy">It leaves Home, Projects, and Activity. Nothing in <code>${escape(project.repository)}</code> changes, and you can track it again at any time.</p><p class="form-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close autofocus>Keep tracking</button><button type="submit" class="button button-danger">Stop tracking</button></footer></form>`;
   const form = $('#unlink-form');
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -588,11 +771,15 @@ function openUnlinkDialog(project) {
       await api(`/projects/${encodeURIComponent(project.id)}`, 'DELETE');
       closeDialog(dialog);
       await refresh();
-      navigate('today');
+      navigate('home');
       toast(`${project.name} is no longer tracked. The repository is unchanged.`);
     } catch (error) { form.querySelector('.form-error').textContent = error.message; button.disabled = false; }
   });
   setupDialog(dialog);
+}
+
+async function copyPath(path) {
+  try { await navigator.clipboard.writeText(path); toast('Repository path copied'); } catch { toast(path); }
 }
 
 // The grouping key of a task type, as the server computes it: lowercased,
@@ -602,6 +789,22 @@ function typeKey(value = '') {
   return /[{}]/.test(text) ? '' : text.replace(/[^a-z0-9 _-]/g, '').trim();
 }
 
+// The top of the task drawer, the same for every task: where it is, its state,
+// who holds it, its signals, and the holder's latest note.
+function drawerHead(task, { editable }) {
+  const project = projectOf(task);
+  const signal = signals().get(task.id);
+  const eyebrow = `<span class="dialog-eyebrow"><span class="task-number">${escape(taskNumber(task))}</span><span>${escape(project?.name || '')}</span>${project?.linked ? '<span class="readonly-badge">Read-only</span>' : ''}</span>`;
+  const heading = `<header class="dialog-heading"><div>${eyebrow}<h2 id="task-dialog-title">${escape(task.title)}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task">${icon('close')}</button></header>`;
+  const summary = `<div class="drawer-summary"><span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status] || task.status}</span>${holder(task) || '<span>Unclaimed</span>'}${signal && task.status !== 'done' ? signalBadges(signal) : ''}${task.priorityGiven === false ? '' : priorityBadge(task)}${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${icon('calendar')}Due ${escape(formatDate(task.dueDate, true))}</span>` : ''}${task.type ? `<span class="needs-tag">${escape(task.type)}</span>` : ''}${!editable && task.createdAt ? `<span>Filed ${escape(formatDate(task.createdAt, true))}</span>` : ''}</div>`;
+  const note = `${task.status === 'blocked' && task.blockedReason ? `<div class="drawer-note"><small>Blocked because</small><p>${escape(task.blockedReason)}</p></div>` : ''}${task.claimNote ? `<div class="drawer-note"><small>${ownerChip(task.claim)} latest note</small><p>${escape(task.claimNote)}</p></div>` : ''}`;
+  return { heading, summary: editable ? summary : `${summary}${note}`, note };
+}
+
+function drawerTimeline(task, open) {
+  return `<details class="drawer-history" data-key="history" ${open ? 'open' : ''}><summary>Timeline</summary><div id="task-history" data-task="${escape(task.id)}">${renderTimeline(null)}</div></details><div id="task-evidence"></div>`;
+}
+
 // `status` presets the status select: a new task's column, or Blocked when a
 // card is dropped there, so the editor can ask what would unblock it.
 function openTaskEditor(task = null, status = '') {
@@ -609,13 +812,15 @@ function openTaskEditor(task = null, status = '') {
   const here = selectedProject();
   if (!task && here && !writable(here)) return toast(`${here.name} is read-only here: its tasks are added in the repository.`, true);
   const choices = writableProjects();
-  if (!task && !choices.length) return openProjectEditor();
+  if (!task && !choices.length) return openAddProject();
   const current = selectedProject();
   const projectId = task?.projectId || (writable(current) ? current.id : choices[0].id);
   const initialStatus = status || task?.status || 'backlog';
   const types = [...new Set(['feature', 'bug', 'chore', ...state.tasks.filter((entry) => entry.projectId === projectId).map((entry) => typeKey(entry.type))].filter(Boolean))];
   const dialog = $('#task-dialog');
-  dialog.innerHTML = `<form id="task-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${task ? escape(taskNumber(task)) : 'Plan your next step'}</span><h2 id="task-dialog-title">${task ? 'Task details' : 'New task'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header><div class="dialog-fields">${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${(task ? state.projects : choices).map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type are timed together; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div><details class="drawer-history" data-key="history"><summary>History</summary><div id="task-history" data-task="${escape(task.id)}">${renderHistory(null)}</div></details>` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
+  const head = task ? drawerHead(task, { editable: true }) : null;
+  const heading = head ? head.heading : `<header class="dialog-heading"><div><span class="dialog-eyebrow">Plan your next step</span><h2 id="task-dialog-title">New task</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header>`;
+  dialog.innerHTML = `<form id="task-form">${heading}<div class="dialog-fields">${head ? `${head.summary}${head.note}` : ''}${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${(task ? state.projects : choices).map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type share a service level; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>${drawerTimeline(task, false)}` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
   const reasonField = $('#blocked-reason-field');
   $('#task-form [name="status"]').addEventListener('change', (event) => {
     reasonField.hidden = event.currentTarget.value !== 'blocked';
@@ -641,27 +846,21 @@ function openTaskEditor(task = null, status = '') {
     const snapshot = JSON.stringify(Object.fromEntries(new FormData(form)));
     form.querySelector('[data-start-run]')?.addEventListener('click', (event) => startRun(task, event.currentTarget, form, snapshot));
     form.querySelector('[data-open-run]')?.addEventListener('click', (event) => { closeDialog(dialog); openRun(event.currentTarget.dataset.openRun); });
+    dialog.querySelector('.drawer-history').addEventListener('toggle', (event) => { if (event.currentTarget.open) loadTaskHistory(task); }, { once: true });
   }
-  if (task) dialog.querySelector('.drawer-history').addEventListener('toggle', (event) => { if (event.currentTarget.open) loadTaskHistory(task); }, { once: true });
   setupDialog(dialog);
   if (status === 'blocked' && task) reasonField.querySelector('input').focus();
 }
 
-// A tracked repository's task: what its file says, and its history. It is
-// changed in the repository, so nothing here edits it.
+// A tracked repository's task: the task file as written, its timeline, and the
+// commits behind it. It is changed in the repository, so nothing here edits it.
 function openTaskViewer(task) {
   const project = projectOf(task);
   const dialog = $('#task-dialog');
-  const facts = [
-    ['Status', `<span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status]}</span>`],
-    ['Owner', escape(ownerOf(task) || 'Nobody')],
-    task.priorityGiven === false ? null : ['Priority', escape(priorities[task.priority])],
-    task.dueDate ? ['Due', escape(formatDate(task.dueDate, true))] : null,
-    task.type ? ['Type', escape(task.type)] : null,
-    task.createdAt ? ['Created', escape(formatDate(task.createdAt, true))] : null,
-  ].filter(Boolean);
-  dialog.innerHTML = `<div class="task-view"><header class="dialog-heading"><div><span class="dialog-eyebrow">${escape(taskNumber(task))} · ${escape(project?.name || '')}</span><h2 id="task-dialog-title">${escape(task.title)}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task">${icon('close')}</button></header><div class="dialog-fields"><p class="readonly-note">${icon('git')}<span>Read-only here. This task is <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code>; change it there and AGESight picks the change up.</span></p><dl class="fact-list task-facts">${facts.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl>${task.description ? `<h3 class="task-view-heading">Goal</h3><p class="task-goal">${escape(task.description)}</p>` : ''}<details class="drawer-history" data-key="history" open><summary>History</summary><div id="task-history" data-task="${escape(task.id)}">${renderHistory(null)}</div></details></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
+  const head = drawerHead(task, { editable: false });
+  dialog.innerHTML = `<div class="task-view">${head.heading}<div class="dialog-fields">${head.summary}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>Read-only here. Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AGESight picks the change up.</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
   setupDialog(dialog);
+  loadTaskBody(task);
   loadTaskHistory(task);
 }
 
@@ -1389,7 +1588,34 @@ function actingApplies(agent, role) {
   return agent.runner === 'command' && (agent.actArgs || []).length > 0 && (agent.actRoles || []).includes(role);
 }
 
+// Agents: the sessions working on the boards now, and the pipeline's agents.
 function renderAgents() {
+  const tabs = [['now', 'Working now'], ['pipeline', 'Pipeline agents']].map(([value, label]) => `<button class="view-tab ${state.agentsTab === value ? 'selected' : ''}" data-action="agents-tab" data-value="${value}" aria-pressed="${state.agentsTab === value}">${label}</button>`).join('');
+  const heading = `<section class="page-heading"><div><h1>Agents</h1><p>Who is doing the work: the agent sessions holding tasks on each board, and the agents the pipeline routes stages to.</p></div>${state.agentsTab === 'pipeline' ? `<button class="button button-secondary" data-action="add-agent">${icon('plus')}Add agent</button>` : ''}</section><div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Agents view">${tabs}</div></div>`;
+  $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : workingNow());
+}
+
+// One row per agent session holding work: what it holds, its latest note, and
+// whether its claim is stale.
+function workingNow() {
+  const stale = new Map((cockpit.brief?.needsYou || []).filter((row) => row.kind === 'stale' || row.reasons?.includes('stale')).map((row) => [`${row.projectId}:${localId(row.taskKey)}`, row]));
+  const sessions = new Map();
+  for (const task of state.tasks) {
+    if (!task.claim || !['in_progress', 'blocked'].includes(task.status)) continue;
+    if (!sessions.has(task.claim)) sessions.set(task.claim, []);
+    sessions.get(task.claim).push(task);
+  }
+  if (!sessions.size) return `<div class="empty-results">${icon('agent')}<h2>No agent session holds work</h2><p>When an agent claims a task on a board, writing its session on the task’s owner line, it appears here with its latest note.</p></div>`;
+  const rows = [...sessions].map(([claim, tasks]) => {
+    const quiet = tasks.map((task) => stale.get(task.id)).filter(Boolean);
+    const hours = quiet.length ? Math.max(...quiet.map((row) => row.hours || 0)) : 0;
+    return { claim, tasks, quiet: quiet.length > 0, hours };
+  }).sort((a, b) => Number(b.quiet) - Number(a.quiet) || b.hours - a.hours || a.claim.localeCompare(b.claim));
+  const quietCount = rows.filter((row) => row.quiet).length;
+  return `<p class="flow-intro">${escape(plural(rows.length, 'session'))} holding work${quietCount ? `; ${quietCount} ${quietCount === 1 ? 'has' : 'have'} gone quiet past the stale threshold` : ', all showing life'}. A session shows life with a commit or a checkpoint.</p><ul class="session-list">${rows.map(({ claim, tasks, quiet, hours }) => `<li class="session-row"><div class="session-who">${ownerChip(claim)}<small>${escape(claim)}</small></div><div class="session-work">${tasks.map((task) => `<button type="button" class="task-link" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span>${escape(task.title)}</button>${task.claimNote ? `<p class="session-note">“${escape(task.claimNote)}”</p>` : ''}`).join('')}</div><div class="session-state">${quiet ? `<span class="chip tone-wait" title="No commit or checkpoint within the stale threshold">Stale claim · quiet ${escape(formatAge(hours))}</span>` : '<span class="chip tone-done">Active</span>'}<span>${escape([...new Set(tasks.map((task) => projectOf(task)?.name).filter(Boolean))].join(', '))}</span></div></li>`).join('')}</ul>`;
+}
+
+function pipelineAgents() {
   const board = ROLES.map((role) => {
     const rows = state.agents.filter((agent) => agent.roles.includes(role)).sort((a, b) => {
       const first = agentPerformance(a, role);
@@ -1418,7 +1644,7 @@ function renderAgents() {
     </article>`;
   }).join('');
   const enabled = state.agents.filter((agent) => agent.enabled).length;
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Agents</h1><p>Who can take each stage, and how each has performed. Results come from the audit log of every run.</p></div><button class="button button-primary" data-action="add-agent">${icon('plus')}Add agent</button></section>
+  return `<p class="flow-intro">The agents a project’s pipeline routes stages to, and how each has performed per role. Results come from the audit log of every run.</p>
     <section class="agents-section" aria-labelledby="leaderboard-title"><div class="section-heading"><h2 id="leaderboard-title">Performance by role</h2><span>Approved or passed attempts count as successes</span></div><div class="role-grid">${board}</div></section>
     <section class="agents-section" aria-labelledby="registry-title"><div class="section-heading"><h2 id="registry-title">Registered agents</h2><span>${enabled} of ${state.agents.length} enabled</span></div>${state.agents.length ? `<div class="agent-grid">${cards}</div>` : `<div class="empty-results">${icon('agent')}<h2>No agents registered</h2><p>Add an agent so runs have someone to route work to.</p></div>`}</section>`;
 }
@@ -1648,6 +1874,15 @@ async function createSample(button) {
   } finally { button.disabled = false; }
 }
 
+// A project's tab is part of its link, so a reload or a shared link keeps it.
+function setLayout(layout) {
+  const project = selectedProject();
+  state.layout = LAYOUTS[layout] ? layout : 'board';
+  if (project) history.replaceState(null, '', `#project/${project.id}${state.layout === 'board' ? '' : `/${state.layout}`}`);
+  renderMain();
+  refreshCockpit(null).then(() => { if (!refreshPaused()) renderMain(); }).catch(monitorOffline);
+}
+
 $('#main').addEventListener('click', (event) => {
   const target = event.target.closest('[data-action]');
   if (!target) return;
@@ -1658,9 +1893,12 @@ $('#main').addEventListener('click', (event) => {
     case 'open-task': openTask(target.dataset.id); break;
     case 'explain': openExplain(target.dataset, target); break;
     case 'mark-seen': markSeen(); break;
-    case 'toggle-delta': toggleDelta(target.dataset.value); break;
+    case 'toggle-delta': toggleExpanded(target.dataset.value); break;
+    case 'add-project': openAddProject(); break;
+    case 'copy-path': copyPath(target.dataset.value); break;
+    case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); break;
     case 'open-project': navigate(target.dataset.id); break;
-    case 'layout': state.layout = target.dataset.value; renderMain(); if (state.layout === 'health') refreshCockpit(null, { metrics: true }).then(renderMain).catch(monitorOffline); break;
+    case 'layout': setLayout(target.dataset.value); break;
     case 'clear-filters': state.priority = ''; state.status = ''; state.owner = ''; state.query = ''; $('#search').value = ''; renderMain(); break;
     case 'sample-project': createSample(target); break;
     case 'link-project': openLinkEditor(); break;
@@ -1745,8 +1983,8 @@ $('#sidebar-add').innerHTML = icon('plus');
 $('#search-icon').innerHTML = icon('search');
 $('#menu-toggle').innerHTML = icon('menu');
 $('#refresh').innerHTML = icon('refresh');
-$('#sidebar-add').addEventListener('click', () => openProjectEditor());
-$('#create-button').addEventListener('click', () => (writableProjects().length ? openTaskEditor() : openProjectEditor()));
+$('#sidebar-add').addEventListener('click', () => openAddProject());
+$('#create-button').addEventListener('click', () => (writable(selectedProject()) ? openTaskEditor() : openAddProject()));
 $('#refresh').addEventListener('click', async () => {
   $('#refresh').disabled = true;
   try { await refresh(); toast('Workspace refreshed'); } catch (error) { toast(error.message, true); } finally { $('#refresh').disabled = false; }
@@ -1766,19 +2004,19 @@ $('#sidebar').addEventListener('click', (event) => {
 window.addEventListener('hashchange', () => {
   const previous = state.view;
   readRoute();
-  if (state.view !== previous) leaveToday(previous);
-  // A project opens on its Health tab.
-  if (state.view !== previous && selectedProject()) state.layout = 'health';
+  if (state.view !== previous) leaveHome(previous);
+  // A project opens on its board unless the link names a tab.
+  if (state.view !== previous && selectedProject() && !/^#project\/[^/]+\/\w/.test(location.hash)) state.layout = 'board';
   if (state.view !== lastView || state.view === 'run') window.scrollTo(0, 0);
   lastView = state.view;
   render();
   if (state.view === 'run' && state.run?.id !== state.runId) refresh().catch(monitorOffline);
-  else if (state.view !== previous) refreshCockpit(null, { force: state.view === 'today' }).then(() => { if (!refreshPaused()) renderMain(); }).catch(monitorOffline);
+  else if (state.view !== previous) refreshCockpit(null, { force: state.view === 'home' }).then(() => { if (!refreshPaused()) renderMain(); }).catch(monitorOffline);
 });
 document.addEventListener('keydown', (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey || anyDialogOpen() || event.target.closest('input,textarea,select,[contenteditable]')) return;
   if (event.key === '/') { event.preventDefault(); $('#search').focus(); }
-  if (event.key.toLowerCase() === 'n') { event.preventDefault(); openTaskEditor(); }
+  if (event.key.toLowerCase() === 'n' && writableProjects().length) { event.preventDefault(); openTaskEditor(); }
   if (event.key === 'Escape') { $('#sidebar').classList.remove('is-open'); $('#menu-toggle').setAttribute('aria-expanded', 'false'); }
 });
 
@@ -1807,10 +2045,10 @@ setInterval(() => {
   refresh().catch(monitorOffline);
 }, 3000);
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) leaveToday(state.view);
-  else if (state.view === 'today') todayShownAt = Date.now();
+  if (document.hidden) leaveHome(state.view);
+  else if (state.view === 'home') homeShownAt = Date.now();
 });
-window.addEventListener('pagehide', () => leaveToday(state.view));
+window.addEventListener('pagehide', () => leaveHome(state.view));
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !refreshing && !state.authLost && !editingMain()) refresh().catch(monitorOffline); });
 
 lastView = state.view;

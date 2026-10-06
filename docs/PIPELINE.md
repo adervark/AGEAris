@@ -9,7 +9,7 @@ history.
 ## Using it
 
 1. Open a task and choose **Run with agents**. The task moves to In progress.
-2. Stages run on their own until one needs you. **Decisions** in the navigation
+2. Stages run on their own until one needs you. **Needs you** on Home
    lists every run that is waiting: a gate to approve, a stage assigned to a
    person, a stage with no available agent, work no pull agent has claimed, a
    failed run, or a run whose audit check failed. Expand a waiting gate to read
@@ -210,7 +210,9 @@ you, including agents, because they can read the file.
 | Method | Path | Purpose |
 |---|---|---|
 | GET | `/api/workspace` | Projects, tasks, activity, plus `runs` (summaries) and `agents` (with performance) |
-| GET | `/api/brief` | Today: Needs you, the delta window (`window`, `since`, `sinceHeads`), project lines, decision latency |
+| GET | `/api/brief` | Home: Needs you, the delta window (`window`, `since`, `sinceHeads`), project lines (with a 28-day `spark` and cycle-time KPIs), decision latency |
+| GET | `/api/projects/:id/method` | A project's written method: `wipLimit`, `staleHours`, and the board's `WORKFLOW.md`, `RULES.md`, `AGENTS.md`, `WHY.md` (read-only, ≤ 256 KiB, no symlinks) |
+| GET | `/api/tasks/:id` | One task, with `body`: the Markdown below its frontmatter |
 | GET | `/api/projects/:id/metrics` | A project's health, metrics, series, and tables (`asOf` optional) |
 | GET | `/api/explain/:metricId` | The full metric value behind a number (`projectId`, `asOf`, `taskKey` for `due_risk`) |
 | GET | `/api/tasks/:id/history` | Every transition of a task, across reuses of its id, with commits |

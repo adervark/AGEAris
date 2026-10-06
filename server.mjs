@@ -17,6 +17,8 @@ const STATIC_FILES = new Map([
   ['/icons.js', 'icons.js'],
   ['/cockpit.js', 'cockpit.js'],
   ['/cursor.js', 'cursor.js'],
+  ['/words.js', 'words.js'],
+  ['/markdown.js', 'markdown.js'],
   ['/favicon.svg', 'favicon.svg'],
 ]);
 const MIME = new Map([
@@ -184,6 +186,8 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       if (request.method === 'GET' && explainMatch) return sendJson(response, 200, await cockpit.explain(explainMatch[1], query));
       const historyMatch = /^\/api\/tasks\/([^/]+)\/history$/.exec(pathname);
       if (request.method === 'GET' && historyMatch) return sendJson(response, 200, await cockpit.taskHistory(historyMatch[1]));
+      const methodMatch = /^\/api\/projects\/([^/]+)\/method$/.exec(pathname);
+      if (request.method === 'GET' && methodMatch) return sendJson(response, 200, await workspace.methodOf(methodMatch[1]));
       const pipelineMatch = /^\/api\/projects\/([^/]+)\/pipeline$/.exec(pathname);
       if (request.method === 'GET' && pipelineMatch) return sendJson(response, 200, await engine.getPipeline(pipelineMatch[1]));
       if (request.method === 'PUT' && pipelineMatch) return sendJson(response, 200, await engine.savePipeline(pipelineMatch[1], await readJson(request), VIA_UI));
@@ -241,6 +245,7 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
         return sendJson(response, 201, await workspace.createTask(await readJson(request), VIA_UI));
       }
       const taskMatch = /^\/api\/tasks\/([^/]+)$/.exec(pathname);
+      if (request.method === 'GET' && taskMatch) return sendJson(response, 200, await workspace.getTask(taskMatch[1], { body: true }));
       if (request.method === 'PATCH' && taskMatch) {
         return sendJson(response, 200, await workspace.updateTask(taskMatch[1], await readJson(request), VIA_UI));
       }

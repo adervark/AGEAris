@@ -777,3 +777,24 @@ test('DELETE /api/projects/:id stops tracking a repository; an own project is a 
   // The same repository can be tracked again.
   await call('POST', '/api/projects/link', { path: repository }, 201);
 });
+
+test('GET /api/tasks/:id returns the task with its text, GET /api/projects/:id/method its board\'s policy, and the brief a four-week spark', async (t) => {
+  const { base, fetch } = await tokenServer(t, { options: { cockpitOptions: { buildWaitMs: 60_000 } } });
+  const call = caller(base, fetch);
+  const repository = await trackedRepository(t);
+  const project = await call('POST', '/api/projects/link', { path: repository }, 201);
+
+  const task = await call('GET', `/api/tasks/${encodeURIComponent(`${project.id}:T002`)}`);
+  assert.deepEqual([task.title, task.status, task.claim, task.claimNote], ['Parse the dates', 'in_progress', 'ade @k/e857a8c8', 'importer']);
+  assert.equal(typeof task.body, 'string');
+  await call('GET', `/api/tasks/${encodeURIComponent(`${project.id}:T999`)}`, undefined, 404);
+
+  const method = await call('GET', `/api/projects/${project.id}/method`);
+  assert.deepEqual([method.linked, method.board, method.wipLimit, method.staleHours, method.docs], [true, 'deaddrop', 3, 24, []]);
+  await call('GET', '/api/projects/missing/method', undefined, 404);
+
+  const line = (await call('GET', '/api/brief')).projects.find((entry) => entry.projectId === project.id);
+  assert.ok(line.spark.length > 0 && line.spark.length <= 28, `${line.spark.length} days`);
+  assert.ok(line.spark.every((point) => /^\d{4}-\d\d-\d\d$/.test(point.date) && Number.isInteger(point.n)));
+  assert.deepEqual([line.kpis.cycle50.id, line.kpis.cycle85.id], ['cycle_time_p50', 'cycle_time_p85']);
+});

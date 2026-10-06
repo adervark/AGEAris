@@ -12,9 +12,12 @@ from backlog to completion without losing ownership or handoff context.
 - Create projects with a name, description, color, and work in progress limit.
 - Create and edit tasks with an owner, priority, due date, and description.
 - Use a board or task list; search and filter the work.
-- Start each day on Today: what needs the operator, what moved since the last
+- Start each day on Home: what needs the operator, what moved since the last
   visit, and each project's health, with every number explainable down to its
   commits.
+- Show and check the method: each project's workflow, policies, method checks,
+  agent protocol, and pipeline, in the method's own terms with a plain meaning
+  beside each.
 - Persist tasks and history across application restarts.
 - Reject stale edits and claims beyond the project's work in progress limit.
 - Track an existing repository's deaddrop board read-only. AGESight never
@@ -29,7 +32,8 @@ versions. The application serves one local operator.
 Agents carry a task through stages while the operator keeps control. The run is
 reduced to one question at a time: the **decision card** at the top of the run
 page asks for exactly what is needed (approve, provide input, choose an agent,
-or retry), and the Decisions page collects all such questions across projects.
+or retry), and Home's Needs you (with the Decisions inbox one click down)
+collects all such questions across projects.
 Audit detail sits one level down: attempts, prompts, outputs, the routing
 scoreboard, and the verified event log are expanded on request. A board card
 shows only the current stage and whether the run needs the operator.
@@ -41,31 +45,41 @@ configuration and appear outside the main flow.
 
 ## Visual direction
 
-The board is the central working surface. A narrow navy rail keeps projects
-available while a quiet, cool white canvas puts attention on task titles. Blue
-marks selected actions; amber and coral identify waiting and urgent work.
+The method is the product, so its terms are labels: WIP, cycle time, service
+level, aging WIP, stale claim, blocked time. A plain one-liner sits beside each
+("Service level: 85% of tasks finish within this cycle time"). Raw machinery,
+commit hashes, the ledger, and rule codes as bare ids, sits one level down.
 
-Tokens: canvas `#f5f7fb`, surface `#ffffff`, ink `#19263c`, rail `#182b49`,
-action `#3265df`, muted `#69788f`. Status colors carry meaning, not decoration.
-Segoe UI (with native sans-serif fallbacks) gives the interface familiar, legible
-text without a font download. Titles use 28px, section titles 18px, body 14px,
-and metadata 12px. Text is left aligned.
+Story first, evidence one click down: problems get full rows, and everything
+that is fine collapses into one "All clear" line. One task has one look: the
+same signal badges on a Home row, a card, a list row, and the drawer, which
+always opens the same way.
+
+The shell is light and calm: a slim white sidebar (Home, Projects, Agents,
+Activity, then the projects with a health dot each), a top bar with search and
+a secondary Add project button. Colour carries meaning only: red stuck or
+overdue, amber quiet or running long, blue in progress, green done. Health reads
+as words (On track, Watch, Needs attention) and the dot keeps the colour.
+Numbers are plain text that explain themselves on hover and focus. Charts carry
+date ticks and a maximum label.
+
+All colour, space, and type come from CSS tokens; dark mode uses the same
+tokens. The type scale is 12/13/14/16/20/28px, nothing smaller than 12px. The
+content security policy allows no inline styles, so agent colours are classes.
 
 ```text
-Projects rail | Search                          New task
-              | Project title / progress
-              | Board / List     Owner / Priority filters
-              | Backlog | In progress | Blocked | Done
+Sidebar  | Search                                   Add project
+Home     | AGEIS  Read-only
+Projects | ● Needs attention: 5 items past 2× usual, 2 stale agent claims.
+Agents   | Throughput 32 | WIP 6 | Cycle time 0.4 h | Service level 6.2 h
+Activity | Board  List  Flow  Method
+ ● AGEIS | Backlog | In progress | Blocked | Done this week (Show all 80)
 ```
 
-Today is a short list of decisions and risks, a count of what moved, and one
-line per project. It shows counts, ages, and means, never percentiles; those
-live on a project's Health tab. Every number opens the Explain drawer. That
-keeps the page high-level, with the audit detail one level down, as on the run
-page.
 The empty workspace offers project creation and an explicitly chosen example.
-The task editor is a drawer so the board remains in context. On mobile the rail
-collapses, the task list remains readable, and the board scrolls horizontally.
+The task drawer keeps the board in context. On a phone the sidebar collapses,
+Home and the drawer read first, list rows stay one line, and the board's columns
+scroll sideways.
 
 The first design review removed ornamental metrics and a marketing hero: the
 application must open directly on work. Every count is computed from saved

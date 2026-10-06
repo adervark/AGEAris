@@ -1131,3 +1131,50 @@ test('an own project whose project.json names a repository is still an own proje
   await expectRejected(workspace.unlinkProject(project.id), 409, /is an AGESight project/);
   assert.deepEqual(await repositoryState(repository), before);
 });
+
+test('a tracked task carries its holder\'s latest note from the owner line, and getTask with body returns the task as written', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.linkProject({ path: await makeTrackedRepository({
+    'deaddrop/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open', owner: '—' }),
+    'deaddrop/tasks/T002-import.md': boardTask('T002', 'Import', { status: 'claimed', owner: AGENT_CLAIM }),
+    'deaddrop/tasks/T003-quiet.md': boardTask('T003', 'Quiet', { status: 'claimed', owner: 'ade @k/e857a8c8 2026-10-01' }),
+    'deaddrop/tasks/T004-ui.md': boardTask('T004', 'From the UI', { status: 'claimed', owner: 'ade @agesight/web 2026-10-01 — moved on the board' }),
+  }) });
+  const tasks = tasksOf(await workspace.read(), project.id);
+  assert.deepEqual(['T001', 'T002', 'T003', 'T004'].map((id) => [id, tasks[id].claimNote]), [['T001', ''], ['T002', 'importer'], ['T003', ''], ['T004', '']], 'a note needs a claim, and a UI claim names nobody');
+
+  const plain = await workspace.getTask(tasks.T002.id);
+  assert.equal('body' in plain, false, 'the body is read only when asked for');
+  assert.equal('_localId' in plain, false);
+  const full = await workspace.getTask(tasks.T002.id, { body: true });
+  assert.match(full.body, /^\s*# T002 — Import\n\n## Goal\n\nWork tracked outside AGESight\.\n$/);
+  assert.deepEqual(Object.keys(full).filter((key) => key.startsWith('_')), []);
+});
+
+test('methodOf reads a board\'s policy and its own method documents, skipping symlinked and oversized ones, and writes nothing', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const elsewhere = await scratchFolder();
+  await writeFile(path.join(elsewhere, 'RULES.md'), '# Not the board\'s\n');
+  const repository = await makeTrackedRepository({
+    'deaddrop/tasks/T001-work.md': boardTask('T001', 'Work', { status: 'claimed', owner: AGENT_CLAIM }),
+    'deaddrop/deaddrop.yml': 'wip:\n  in_progress: 4\n  blocked: 4\nstale_hours: 12\n',
+    'deaddrop/WORKFLOW.md': '# Workflow\n\nClaim, checkpoint, done.\n',
+    'deaddrop/WHY.md': `# Why\n\n${'x'.repeat(300 * 1024)}\n`,
+    'deaddrop/NOTES.md': '# Not a method document\n',
+  });
+  await symlink(path.join(elsewhere, 'RULES.md'), path.join(repository, 'deaddrop', 'RULES.md'));
+  const before = await repositoryState(repository);
+  const project = await workspace.linkProject({ path: repository });
+
+  const method = await workspace.methodOf(project.id);
+  assert.deepEqual([method.projectId, method.linked, method.board, method.staleHours, method.wipLimit], [project.id, true, 'deaddrop', 12, 4]);
+  assert.deepEqual(method.docs, [{ name: 'WORKFLOW.md', path: 'deaddrop/WORKFLOW.md', text: '# Workflow\n\nClaim, checkpoint, done.\n' }]);
+  assert.deepEqual(await repositoryState(repository), before);
+
+  const own = await workspace.createProject({ name: 'Own', wipLimit: 5 });
+  const ownMethod = await workspace.methodOf(own.id);
+  assert.deepEqual([ownMethod.linked, ownMethod.board, ownMethod.wipLimit, ownMethod.staleHours], [false, 'deaddrop', 5, 24]);
+  await expectRejected(workspace.methodOf('missing-project'), 404, /./);
+});
