@@ -655,3 +655,16 @@ test('a project still indexing does not hold up the brief or the rest of the API
   assert.equal(typeof brief.projects[1].building.commitsSeen, 'number');
   assert.ok(Date.now() - started < 1500, 'the brief did not wait for the slow ledger');
 });
+
+test('the sample project is created only on request, through POST /api/projects/sample', async (t) => {
+  const { base, fetch } = await tokenServer(t);
+  const workspace = await json(await fetch(`${base}/api/workspace`));
+  assert.deepEqual(workspace.projects, [], 'a new workspace has no sample until asked');
+  const response = await fetch(`${base}/api/projects/sample`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+  assert.equal(response.status, 201);
+  const project = await json(response);
+  assert.equal(project.sample, true);
+  const brief = await json(await fetch(`${base}/api/brief`));
+  assert.deepEqual(brief.projects.map((line) => [line.projectId, line.sample, line.state]), [[project.id, true, 'ready']]);
+  assert.ok(brief.needsYou.length >= 5);
+});

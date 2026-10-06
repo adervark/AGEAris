@@ -215,6 +215,10 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
         const body = await readJson(request);
         return sendJson(response, 200, attemptMatch[2] === 'complete' ? await engine.complete(attemptMatch[1], body) : await engine.heartbeat(attemptMatch[1], body));
       }
+      if (request.method === 'POST' && pathname === '/api/projects/sample') {
+        await readJson(request);
+        return sendJson(response, 201, await workspace.createSampleProject({ now: cockpit.clock(), ...VIA_UI }));
+      }
       if (request.method === 'POST' && pathname === '/api/projects') {
         return sendJson(response, 201, await workspace.createProject(await readJson(request), VIA_UI));
       }
