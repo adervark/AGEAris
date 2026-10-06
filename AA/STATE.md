@@ -16,18 +16,18 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T21:56Z · 17 tasks: 13 backlog, 0 WIP (0 in progress), 4 delivered`
+`board · 2026-10-06T21:59Z · 18 tasks: 14 backlog, 0 WIP (0 in progress), 4 delivered`
 
 FLOW · **WIP 0/2** · throughput 0.9/wk (4 in 30d) · cycle time: too few delivered with a claim commit (n=4)
 FLOW · Little's Law: 0 ÷ 0.9/wk ≈ now expected
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T017 | Two owner-line regexes take quadratic time on a long line | adervark | now |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 9m |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 9m |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 15m |  |
+| **BACKLOG** 14 | | `T002` `T003` `T004` `T007` `T008` `T009` +8 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 2m |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 12m |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 12m |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 17m |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->
