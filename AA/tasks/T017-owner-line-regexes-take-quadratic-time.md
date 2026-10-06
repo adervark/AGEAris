@@ -1,8 +1,8 @@
 ---
 id: T017
 title: "Two owner-line regexes take quadratic time on a long line"
-status: open
-owner: —
+status: claimed
+owner: adervark @v/2e8b687e 2026-10-07 — making owner parsing linear
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -53,8 +53,8 @@ repository's task file cannot stall the server.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @v/2e8b687e (registered)
-- **In flight:** nothing
+- **Last touched:** 2026-10-07, adervark @v/2e8b687e (claimed)
+- **In flight:** the fix, in this session
 - **On disk:** nothing yet
 - **Resume with:** the timing test
 - **Next decision:** none

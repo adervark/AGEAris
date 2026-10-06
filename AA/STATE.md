@@ -17,14 +17,15 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T21:54Z · 17 tasks: 14 backlog, 0 WIP (0 in progress), 3 delivered`
+`board · 2026-10-06T21:54Z · 17 tasks: 13 backlog, 1 WIP (1 in progress), 3 delivered`
 
-FLOW · **WIP 0/2** · throughput 0.7/wk (3 in 30d) · cycle time: too few delivered with a claim commit (n=3)
-FLOW · Little's Law: 0 ÷ 0.7/wk ≈ now expected
+FLOW · **WIP 1/2** · throughput 0.7/wk (3 in 30d) · cycle time: too few delivered with a claim commit (n=3)
+FLOW · Little's Law: 1 ÷ 0.7/wk ≈ 9d expected
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 14 | | `T002` `T003` `T004` `T007` `T008` `T009` +8 more (`--all`) | | | ⚑ 0 not ready |
+| **IN PROGRESS** 1/2 | T017 | Two owner-line regexes take quadratic time on a long line | adervark | now |  |
+| **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 7m |  |
 |  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 7m |  |
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 13m |  |
