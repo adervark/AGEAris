@@ -33,3 +33,15 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` passed 369 of 369.
 - Evidence: the Results of T005 and T006 in `AA/tasks/done/`, and their tests
   in `tests/workspace.test.mjs`.
+
+## 2026-10-07 — T017: owner lines read in linear time
+
+- `parseOwner` on `'x' + ' '.repeat(n) + 'y'`: 2,839 ms at n = 40,000 and
+  10.8 s at 80,000 before the fix; under 100 ms at 80,000 after it. `ownerNote`
+  on `' —'.repeat(n / 2) + ' '`: 871 ms at 40,000 before; under 100 ms at
+  80,000 after.
+- Old and new agree on all 272 distinct `owner:` values in the history of the
+  five real boards.
+- `npm test` passed 371 of 371.
+- Evidence: the Result of T017 in `AA/tasks/done/`, and its tests in
+  `tests/history.test.mjs`.

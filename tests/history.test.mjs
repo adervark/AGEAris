@@ -12,7 +12,7 @@ import { fabricate } from '../lib/fabricate.mjs';
 import {
   agentIdentity, BOARD_PATHS, buildLedger, cycles, fingerprint, isUiClaim, ledgerAt, Ledgers, parseOwner, typeKey,
 } from '../lib/history.mjs';
-import { Workspace } from '../lib/workspace.mjs';
+import { ownerNote, Workspace } from '../lib/workspace.mjs';
 
 const exec = promisify(execFile);
 const temporaryDirectories = new Set();
@@ -93,6 +93,28 @@ test('parseOwner splits operator, profile, and session; isUiClaim and agentIdent
   const accented = parseOwner('Zoë Ångström @k/beef 2026-10-01 — 日本');
   assert.equal(accented.operator, 'Zoë Ångström');
   assert.equal(agentIdentity(accented), 'Zoë Ångström @k/beef');
+});
+
+test('an owner line is read in time proportional to its length, however it is padded', () => {
+  const n = 80_000;
+  const timed = (label, read) => {
+    const start = performance.now();
+    const value = read();
+    assert.ok(performance.now() - start < 100, `${label} took ${Math.round(performance.now() - start)} ms`);
+    return value;
+  };
+  assert.equal(timed('spaces with no marker', () => parseOwner(`x${' '.repeat(n)}y`)).operator, `x${' '.repeat(n)}y`);
+  assert.equal(timed('spaces, then a handle', () => parseOwner(`ade${' '.repeat(n)}@k/beef`)).operator, 'ade');
+  assert.equal(timed('dashes, then a line separator', () => ownerNote(`ade${' —'.repeat(n / 2)}\u2028`)), ' —'.repeat(n / 2 - 1).trim().slice(0, 400));
+  assert.equal(timed('a dash, then spaces', () => ownerNote(`ade —${' '.repeat(n)}x`)), 'x');
+});
+
+test('ownerNote is what follows the first dash, trimmed and capped', () => {
+  assert.equal(ownerNote('ade @k/beef 2026-10-01 — universe built; fetch next'), 'universe built; fetch next');
+  assert.equal(ownerNote('ade @k/beef 2026-10-01 -- a — b'), 'a — b');
+  assert.equal(ownerNote('ade @k/beef 2026-10-01'), '');
+  assert.equal(ownerNote('ade—x'), '', 'a dash with no space before it is part of the name');
+  assert.equal(ownerNote(`ade — ${'n'.repeat(500)}`), 'n'.repeat(400));
 });
 
 test('typeKey lowercases, treats placeholders as untyped, and strips other characters', () => {
