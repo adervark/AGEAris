@@ -560,6 +560,44 @@ test('commits carry the trailers they are given and every commit notifies the co
   assert.equal(await git(projectDir, 'status', '--porcelain'), '');
 });
 
+test('commit listeners receive the committed paths, and a listener that rejects is contained', async (t) => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const seen = [];
+  workspace.onCommit((projectId, { paths }) => seen.push(paths));
+  workspace.onCommit(async () => { throw new Error('an async listener failed'); });
+  const unhandled = [];
+  const onUnhandled = (reason) => unhandled.push(reason);
+  process.on('unhandledRejection', onUnhandled);
+  t.after(() => process.off('unhandledRejection', onUnhandled));
+  const project = await workspace.createProject({ name: 'Paths' });
+  const task = await workspace.createTask({ projectId: project.id, title: 'Path task' });
+  await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(seen, [
+    ['project.json', 'deaddrop'],
+    ['deaddrop/backlog/T001-path-task.md', 'deaddrop/STATE.md'],
+    ['deaddrop/backlog/T001-path-task.md', 'deaddrop/tasks/T001-path-task.md', 'deaddrop/STATE.md'],
+  ]);
+  assert.deepEqual(unhandled, [], 'a rejected listener promise never becomes an unhandled rejection');
+});
+
+test('single-line fields refuse U+0085, U+2028, and U+2029, which would end the frontmatter line', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.createProject({ name: 'Separators' });
+  const projectDir = projectRepository(directory, project.id);
+  const task = await workspace.createTask({ projectId: project.id, title: 'Plain' });
+  const before = await commitCount(projectDir);
+  await expectRejected(workspace.createTask({ projectId: project.id, title: 'Line\u2028separator' }), 400, /title must be a single line/);
+  await expectRejected(workspace.updateTask(task.id, { version: task.version, assignee: 'Ana\u2029Ben' }), 400, /assignee must be a single line/);
+  await expectRejected(workspace.updateTask(task.id, { version: task.version, type: 'bug\u0085x' }), 400, /type must be a single line/);
+  await expectRejected(workspace.updateTask(task.id, { version: task.version, status: 'blocked', blockedReason: 'a\u2028b' }), 400, /blockedReason must be a single line/);
+  await expectRejected(workspace.createProject({ name: 'Name\u2028two' }), 400, /name must be a single line/);
+  assert.equal(await commitCount(projectDir), before);
+  assert.equal((await workspace.getTask(task.id)).title, 'Plain');
+});
+
 test('blocked-reason fallback: field, then the newest blocked checkpoint, then the Handoff, then no reason', () => {
   const handoff = (next) => `# T001 — Task\n\n## Goal\n\nX\n\n## Handoff — state at last stop\n\n- **Last touched:** 2026-10-01\n- **Next decision:** ${next}\n\n## Verify\n\nY\n`;
   const blocked = (what, ts = '2026-10-02T09:00:00Z') => JSON.stringify({ ts, run: 'e857a8c8', kind: 'blocked', what, unblocks: 'later', next: 'wait' });

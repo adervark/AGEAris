@@ -2005,6 +2005,22 @@ test('needsHuman equals the rev-0 rule for every kind of run at several clock va
   for (const key of ['claimed', 'approved', 'cancelled', 'superseded']) assert.ok(!flips.get(runs[key].id).some(Boolean), key);
 });
 
+test('eventsByProject hands out deep-frozen copies, so a consumer cannot change audit state', async (t) => {
+  const { ctx, runs } = await decisionFixtures(t);
+  const run = ctx.engine.runs.get(runs.gate.id);
+  const find = () => [...ctx.engine.eventsByProject().values()].flat().find((candidate) => candidate.id === run.id);
+  const entry = find();
+  assert.deepEqual(entry.events, run.events);
+  const started = entry.events.find((event) => event.type === 'run_started');
+  assert.notEqual(started, run.events.find((event) => event.type === 'run_started'), 'a copy, not the engine\'s own event');
+  assert.ok(Object.isFrozen(started) && Object.isFrozen(started.data) && Object.isFrozen(started.actor));
+  assert.ok(Object.isFrozen(started.data.pipeline) && Object.isFrozen(started.data.pipeline[0]));
+  assert.throws(() => { started.data.taskTitle = 'Changed'; }, TypeError);
+  assert.throws(() => { started.data.pipeline[0].name = 'Changed'; }, TypeError);
+  assert.equal(find().events[0], entry.events[0], 'copies are made once per event');
+  assert.equal(ctx.engine._summary(run).needsHuman, true, 'the engine is unaffected');
+});
+
 test('needsHumanAt says why a run waits and since when, from read-only events by project', async (t) => {
   const { ctx, runs } = await decisionFixtures(t);
   const byProject = ctx.engine.eventsByProject();

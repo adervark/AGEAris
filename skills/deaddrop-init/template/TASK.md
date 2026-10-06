@@ -3,8 +3,8 @@ id: {{T###}}
 title: "{{title}}"
 status: open
 owner: —
-type: {{any single word; tasks of one type are timed together; `bug` is counted
-  as defect work; leave this placeholder or delete the line for untyped}}
+# type: one word; tasks of one type are timed together; `bug` counts as defect work
+type: {{type, or delete the line for untyped}}
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
 blockedReason: ""
 depends: []
