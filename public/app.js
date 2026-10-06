@@ -1,3 +1,5 @@
+import { decisionsSummary, escape, healthDot, renderChanges, renderExplain, renderHealth, renderHistory, renderToday } from './cockpit.js';
+import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -11,7 +13,7 @@ const TERMINAL = ['completed', 'failed', 'cancelled'];
 const runStatuses = { running: 'Running', waiting: 'Waiting for an agent', awaiting_approval: 'Needs approval', awaiting_input: 'Needs your input', failed: 'Failed', cancelled: 'Cancelled', completed: 'Completed' };
 const stageStatuses = { done: 'Done', active: 'Running', awaiting_approval: 'Needs approval', awaiting_input: 'Needs input', waiting: 'No agent', failed: 'Failed', cancelled: 'Cancelled', pending: 'Not started' };
 const attemptStatuses = { queued: 'Queued', running: 'Running', awaiting_input: 'Waiting for a person', succeeded: 'Succeeded', failed: 'Failed', awaiting_approval: 'Awaiting approval', approved: 'Approved', rejected: 'Changes requested', cancelled: 'Cancelled' };
-const state = { projects: [], tasks: [], activity: [], runs: [], agents: [], operator: '', view: 'overview', layout: 'board', query: '', priority: '', status: '', owner: '', monitorStatus: 'active', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
+const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'today', layout: 'health', query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
 const detailsOpen = new Map();
 // Decisions inbox: full runs fetched for rows opened inline, and which of them
 // show the request-changes form.
@@ -23,10 +25,14 @@ let refreshing = false;
 let refreshPromise = Promise.resolve();
 let workspaceSignature = '';
 let lastView = '';
-
-function escape(value = '') {
-  return String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
-}
+// The cockpit's read models: the brief (Today, the Decisions header, and the
+// health dots in the sidebar), each project's metrics, and the change feed.
+const cockpit = { brief: null, briefAt: 0, briefError: '', metrics: new Map(), changes: null, changesKey: '', changesFilter: { kind: '', projectId: '' }, expanded: new Set() };
+const BRIEF_POLL_MS = 30000;
+// "Since your last visit" moves on when a person leaves Today after looking at
+// it for at least this long, or presses Mark seen.
+const SEEN_AFTER_MS = 10000;
+let todayShownAt = 0;
 
 function projectColor(project) {
   const value = String(project?.color || 'blue');
@@ -132,11 +138,11 @@ function refresh() {
       const workspace = await api('/workspace');
       state.projects = workspace.projects;
       state.tasks = workspace.tasks;
-      state.activity = workspace.activity;
       state.runs = workspace.runs || [];
       state.agents = workspace.agents || [];
       state.operator = workspace.operator;
       readRoute();
+      await refreshCockpit(workspace);
       if (state.view === 'decisions') await refreshInbox();
       if (state.view === 'run' && state.runId) {
         try {
@@ -148,7 +154,7 @@ function refresh() {
           state.runError = { id: state.runId, message: error.message };
         }
       }
-      const signature = JSON.stringify([workspace, state.view === 'run' ? [state.run, state.runError] : null, state.view === 'decisions' ? [...inbox].map(([id, entry]) => [id, entry.run?.lastSeq, entry.error]) : null]);
+      const signature = JSON.stringify([workspace, cockpitSignature(), state.view === 'run' ? [state.run, state.runError] : null, state.view === 'decisions' ? [...inbox].map(([id, entry]) => [id, entry.run?.lastSeq, entry.error]) : null]);
       const changed = signature !== workspaceSignature;
       workspaceSignature = signature;
       state.loading = false;
@@ -164,15 +170,19 @@ function refresh() {
   return operation;
 }
 
+// Old links keep working: Overview became Today, All tasks Work, Activity Changes.
+const ROUTE_ALIASES = { overview: 'today', tasks: 'work', activity: 'changes' };
+
 function readRoute() {
-  const hash = location.hash.slice(1);
+  const raw = location.hash.slice(1);
+  const hash = ROUTE_ALIASES[raw] || raw;
   if (hash.startsWith('project/')) {
     const id = hash.slice(8);
-    state.view = state.projects.some((project) => project.id === id) ? id : 'overview';
+    state.view = state.projects.some((project) => project.id === id) ? id : 'today';
   } else if (hash.startsWith('run/')) {
     state.view = 'run';
     try { state.runId = decodeURIComponent(hash.slice(4)); } catch { state.runId = ''; }
-  } else state.view = ['overview', 'tasks', 'activity', 'decisions', 'agents'].includes(hash) ? hash : 'overview';
+  } else state.view = ['today', 'work', 'changes', 'decisions', 'agents'].includes(hash) ? hash : 'today';
   if (state.decisionRun !== state.runId) state.decisionMode = '';
 }
 
@@ -195,7 +205,7 @@ function navigate(view) {
 function render() {
   renderNavigation();
   const project = selectedProject();
-  const page = project?.name || ({ overview: 'Overview', tasks: 'All tasks', activity: 'Activity', decisions: 'Decisions', agents: 'Agents', run: state.run?.id === state.runId ? `Run ${state.run.localId}` : 'Run' }[state.view]);
+  const page = project?.name || ({ today: 'Today', work: 'Work', changes: 'Changes', decisions: 'Decisions', agents: 'Agents', run: state.run?.id === state.runId ? `Run ${state.run.localId}` : 'Run' }[state.view]);
   document.title = `${page} · AGESight`;
   $('#breadcrumb').innerHTML = `Workspace <span>/</span> <strong>${escape(page)}</strong>`;
   $('#create-button').innerHTML = `${icon('plus')}<span>${state.projects.length ? 'New task' : 'New project'}</span>`;
@@ -205,11 +215,15 @@ function render() {
 function renderNavigation() {
   const waiting = state.runs.filter((run) => run.needsHuman).length;
   const counts = {
-    tasks: `<span class="nav-count">${state.tasks.filter((task) => task.status !== 'done').length}</span>`,
+    work: `<span class="nav-count">${state.tasks.filter((task) => task.status !== 'done').length}</span>`,
     decisions: waiting ? `<span class="nav-count nav-count-alert" aria-label="${waiting} waiting on you">${waiting}</span>` : '',
   };
-  $('#navigation').innerHTML = [ ['overview', 'grid', 'Overview'], ['tasks', 'tasks', 'All tasks'], ['decisions', 'decision', 'Decisions'], ['agents', 'agent', 'Agents'], ['activity', 'activity', 'Activity'] ].map(([view, symbol, label]) => `<a href="#${view}" class="nav-link ${state.view === view || (view === 'decisions' && state.view === 'run') ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${label}</span>${counts[view] || ''}</a>`).join('');
-  $('#project-navigation').innerHTML = state.projects.length ? state.projects.map((project) => `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''}><span class="project-dot color-${projectColor(project)}"></span><span class="truncate">${escape(project.name)}</span></a>`).join('') : '<p class="sidebar-empty">Your projects will appear here.</p>';
+  $('#navigation').innerHTML = [ ['today', 'grid', 'Today'], ['decisions', 'decision', 'Decisions'], ['work', 'tasks', 'Work'], ['changes', 'activity', 'Changes'], ['agents', 'agent', 'Agents'] ].map(([view, symbol, label]) => `<a href="#${view}" class="nav-link ${state.view === view || (view === 'decisions' && state.view === 'run') ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${label}</span>${counts[view] || ''}</a>`).join('');
+  $('#project-navigation').innerHTML = state.projects.length ? state.projects.map((project) => {
+    const line = cockpit.brief?.projects.find((entry) => entry.projectId === project.id);
+    const health = line?.health;
+    return `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''}>${healthDot(health)}<span class="truncate">${escape(project.name)}</span>${health ? `<span class="nav-health">${escape(health.label)}</span>` : ''}</a>`;
+  }).join('') : '<p class="sidebar-empty">Your projects will appear here.</p>';
 }
 
 function filteredTasks() {
@@ -245,18 +259,20 @@ function renderPage() {
   if (!state.projects.length) return renderEmptyWorkspace();
   if (state.view === 'run' && !state.query) return renderRun();
   if (state.view === 'decisions' && !state.query) return renderDecisions();
-  if (state.view === 'activity' && !state.query) return renderActivity();
-  if (state.view === 'overview' && !state.query) return renderOverview();
+  if (state.view === 'changes' && !state.query) return renderChangesPage();
+  if (state.view === 'today' && !state.query) return renderTodayPage();
   const project = selectedProject();
+  const health = project && !state.query && state.layout === 'health';
   const tasks = filteredTasks();
   const projectTasks = state.tasks.filter((task) => !project || task.projectId === project.id);
   const done = projectTasks.filter((task) => task.status === 'done').length;
   const active = projectTasks.filter((task) => ['in_progress', 'blocked'].includes(task.status)).length;
-  $('#main').innerHTML = `<section class="page-heading"><div><div class="heading-title">${project ? `<span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span>` : ''}<h1>${escape(project?.name || (state.query ? 'Search results' : 'All tasks'))}</h1>${project ? `<button class="text-button project-settings" data-action="edit-project">Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>` : ''}</div><p>${escape(project?.description || (state.query ? `Tasks matching “${state.query}”` : 'Everything on your plate, across your projects.'))}</p></div>${project ? `<div class="project-heading-progress"><span><strong>${done}</strong> of ${projectTasks.length} tasks complete</span><progress max="${Math.max(projectTasks.length, 1)}" value="${done}" aria-label="Project completion"></progress></div>` : ''}</section>
-    <div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Task view"><button class="view-tab ${state.layout === 'board' ? 'selected' : ''}" data-action="layout" data-value="board" aria-pressed="${state.layout === 'board'}">${icon('board')} Board</button><button class="view-tab ${state.layout === 'list' ? 'selected' : ''}" data-action="layout" data-value="list" aria-pressed="${state.layout === 'list'}">${icon('list')} List</button></div><div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div></div>
-    <div class="board-meta"><span>${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}${state.query ? ' found' : ''}</span>${project ? `<span>${active} / ${project.wipLimit} in progress ${icon('circle', 'tiny-icon')}</span>` : '<span>Across all projects</span>'}</div>
-    ${state.layout === 'board' ? board(tasks) : taskList(tasks)}
-    ${!projectTasks.length ? `<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>` : ''}`;
+  const layout = state.layout === 'health' ? 'board' : state.layout;
+  $('#main').innerHTML = `<section class="page-heading"><div><div class="heading-title">${project ? `<span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span>` : ''}<h1>${escape(project?.name || (state.query ? 'Search results' : 'Work'))}</h1>${project ? `<button class="text-button project-settings" data-action="edit-project">Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>` : ''}</div><p>${escape(project?.description || (state.query ? `Tasks matching “${state.query}”` : 'Everything on your plate, across your projects.'))}</p></div>${project ? `<div class="project-heading-progress"><span><strong>${done}</strong> of ${projectTasks.length} tasks complete</span><progress max="${Math.max(projectTasks.length, 1)}" value="${done}" aria-label="Project completion"></progress></div>` : ''}</section>
+    <div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Project view">${project && !state.query ? `<button class="view-tab ${health ? 'selected' : ''}" data-action="layout" data-value="health" aria-pressed="${health}">${icon('shield')} Health</button>` : ''}<button class="view-tab ${layout === 'board' && !health ? 'selected' : ''}" data-action="layout" data-value="board" aria-pressed="${layout === 'board' && !health}">${icon('board')} Board</button><button class="view-tab ${layout === 'list' && !health ? 'selected' : ''}" data-action="layout" data-value="list" aria-pressed="${layout === 'list' && !health}">${icon('list')} List</button></div>${health ? '' : `<div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div>`}</div>
+    ${health ? renderHealth(cockpit.metrics.get(project.id), { projectId: project.id }) : `<div class="board-meta"><span>${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}${state.query ? ' found' : ''}</span>${project ? `<span>${active} / ${project.wipLimit} in progress ${icon('circle', 'tiny-icon')}</span>` : '<span>Across all projects</span>'}</div>
+    ${layout === 'board' ? board(tasks) : taskList(tasks)}
+    ${!projectTasks.length ? `<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>` : ''}`}`;
 }
 
 function filterControls(tasks) {
@@ -289,53 +305,152 @@ function taskList(tasks) {
   return `<div class="task-table-wrap"><table class="task-table"><thead><tr><th scope="col">Task</th><th scope="col">Status</th><th scope="col">Priority</th><th scope="col">Owner</th><th scope="col">Due date</th></tr></thead><tbody>${tasks.map((task) => `<tr><td><button class="task-name-button" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="list-task-title ${task.status === 'done' ? 'completed-title' : ''}">${escape(task.title)}</span>${!selectedProject() ? `<small>${escape(state.projects.find((project) => project.id === task.projectId)?.name)}</small>` : ''}${runLine(task)}</button></td><td><span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status]}</span></td><td><span class="priority priority-${task.priority}">${icon('flag')}${priorities[task.priority]}</span></td><td><span class="list-owner">${avatar(task.assignee)}<span>${escape(task.assignee || 'Unassigned')}</span></span></td><td><span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${task.dueDate ? escape(formatDate(task.dueDate)) : '—'}</span></td></tr>`).join('')}</tbody></table></div>`;
 }
 
-function renderOverview() {
-  const open = state.tasks.filter((task) => task.status !== 'done');
-  const blocked = open.filter((task) => task.status === 'blocked');
-  const late = open.filter(overdue);
-  const decisions = state.runs.filter((run) => run.needsHuman);
-  const flagged = [...late, ...blocked.filter((task) => !late.includes(task))].filter((task) => !decisions.some((run) => run.taskId === task.id));
-  const attention = flagged.slice(0, 5);
-  const attentionCount = decisions.length + flagged.length;
-  const complete = state.tasks.length - open.length;
-  const moving = open.filter((task) => task.status === 'in_progress').length;
-  const monitoredTasks = state.tasks.filter((task) => state.monitorStatus === 'all' || (state.monitorStatus === 'active' ? task.status !== 'done' : task.status === state.monitorStatus)).sort((a, b) => Number(overdue(b)) - Number(overdue(a)) || ({ blocked: 0, in_progress: 1, backlog: 2, done: 3 }[a.status] - { blocked: 0, in_progress: 1, backlog: 2, done: 3 }[b.status]) || b.updatedAt.localeCompare(a.updatedAt));
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Workspace overview</h1><p>Monitor project state, tasks, and the work that needs your attention.</p></div><button class="button button-secondary" data-action="new-project">${icon('plus')} New project</button></section>
-    <section class="overview-counts" aria-label="Task state">
-      <div><span class="count-icon blue-icon">${icon('list')}</span><span><strong>${open.length - moving - blocked.length}</strong><small>Backlog</small></span></div>
-      <div><span class="count-icon violet-icon">${icon('clock')}</span><span><strong>${moving}</strong><small>In progress</small></span></div>
-      <div><span class="count-icon amber-icon">${icon('alert')}</span><span><strong>${blocked.length}</strong><small>Blocked</small></span></div>
-      <div><span class="count-icon teal-icon">${icon('check')}</span><span><strong>${complete}</strong><small>Completed</small></span></div>
-    </section><p class="state-caption">${state.tasks.length} tasks across ${state.projects.length} ${state.projects.length === 1 ? 'project' : 'projects'}. Updates automatically every 10 seconds.</p>
-    <div class="overview-columns"><div><section class="projects-section"><div class="section-heading"><h2>Project state</h2><span>${state.projects.length} total</span></div><div class="project-cards">${state.projects.map(projectCard).join('')}</div></section>
-    <section class="monitor-section"><div class="section-heading"><h2>Task monitor</h2><label><span class="sr-only">Tasks to monitor</span><select class="monitor-filter" data-monitor-filter><option value="active" ${state.monitorStatus === 'active' ? 'selected' : ''}>Open tasks</option><option value="all" ${state.monitorStatus === 'all' ? 'selected' : ''}>All tasks</option>${options(statuses, state.monitorStatus)}</select></label></div>${monitoredTasks.length ? taskList(monitoredTasks) : `<div class="empty-results">${icon('check')}<h2>${state.tasks.length ? 'No tasks in this state' : 'No tasks yet'}</h2><p>${state.tasks.length ? 'Choose another state to monitor your work.' : 'Add a task to start tracking work in your project.'}</p><button class="button button-secondary" data-action="new-task">${icon('plus')} New task</button></div>`}</section></div>
-    <aside class="attention-panel"><div class="section-heading"><h2>Needs attention</h2>${attentionCount ? `<span class="attention-count">${attentionCount}</span>` : icon('check')}</div>${decisions.slice(0, 5).map((run) => `<button class="attention-task" data-action="open-run" data-id="${escape(run.id)}"><span class="attention-reason decision-text ${run.status === 'failed' || !run.integrity ? 'overdue-text' : ''}">${icon('decision')}${escape(decisionReason(run))}</span><strong>${escape(run.taskTitle)}</strong><small>${escape(state.projects.find((project) => project.id === run.projectId)?.name)} · Run ${escape(run.localId)}</small></button>`).join('')}${decisions.length > 5 ? `<a class="attention-more" href="#decisions">${decisions.length - 5} more decisions</a>` : ''}${attention.length || decisions.length ? attention.map((task) => `<button class="attention-task" data-action="open-task" data-id="${escape(task.id)}"><span class="attention-reason ${overdue(task) ? 'overdue-text' : ''}">${icon(overdue(task) ? 'calendar' : 'alert')}${overdue(task) ? 'Overdue' : 'Blocked'}</span><strong>${escape(task.title)}</strong><small>${escape(state.projects.find((project) => project.id === task.projectId)?.name)}${task.dueDate ? ` · ${formatDate(task.dueDate)}` : ''}</small></button>`).join('') : '<div class="attention-clear"><span class="clear-check">✓</span><strong>Looking clear</strong><p>Decisions, blocked tasks, and overdue tasks will appear here.</p></div>'}<div class="section-heading recent-heading"><h2>Recent activity</h2><a href="#activity">View all</a></div>${activityItems(state.activity.slice(0, 4), true)}</aside></div>`;
-}
-
-function projectCard(project) {
-  const tasks = state.tasks.filter((task) => task.projectId === project.id);
-  const done = tasks.filter((task) => task.status === 'done').length;
-  const active = tasks.filter((task) => ['in_progress', 'blocked'].includes(task.status)).length;
-  const status = tasks.some((task) => task.status === 'blocked') ? 'blocked' : active ? 'in_progress' : tasks.length && done === tasks.length ? 'done' : 'backlog';
-  const people = [...new Set(tasks.map((task) => task.assignee).filter(Boolean))].slice(0, 3);
-  return `<button class="project-card" data-action="open-project" data-id="${escape(project.id)}"><span class="project-card-title"><span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span><strong>${escape(project.name)}</strong>${icon('chevron')}</span><span class="project-card-description">${escape(project.description || 'Add tasks and plan your next step.')}</span><span class="project-card-progress"><span>${tasks.length ? `${done} of ${tasks.length} tasks complete` : 'No tasks yet'}</span><strong>${tasks.length ? Math.round(done / tasks.length * 100) : 0}%</strong></span><progress class="progress-${projectColor(project)}" max="${Math.max(tasks.length, 1)}" value="${done}" aria-label="${escape(project.name)} completion"></progress><span class="project-card-footer"><span class="project-state status-${status}"><span class="status-dot"></span>${statuses[status]}</span><span>${active} / ${project.wipLimit} in progress</span><span class="avatar-stack">${people.map(avatar).join('')}</span></span></button>`;
-}
-
-function activityItems(items, compact = false) {
-  if (!items.length) return '<p class="activity-empty">Project and task changes will appear here.</p>';
-  return `<ol class="activity-list ${compact ? 'compact' : ''}">${items.map((item) => {
-    const project = state.projects.find((entry) => entry.id === item.projectId);
-    const task = state.tasks.find((entry) => entry.id === item.taskId);
-    return `<li><span class="activity-symbol">${icon('git')}</span><div>${task ? `<button class="activity-message" data-action="open-task" data-id="${escape(task.id)}">${escape(item.message)}</button>` : `<p class="activity-message">${escape(item.message)}</p>`}<span class="activity-detail">${escape(item.actor)}${project ? ` · ${escape(project.name)}` : ''}</span></div><time datetime="${escape(item.at)}">${relativeTime(item.at)}</time></li>`;
-  }).join('')}</ol>`;
-}
-
-function renderActivity() {
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Activity</h1><p>Recent changes across your projects. Shows up to 200 changes per project.</p></div></section><section class="activity-panel">${activityItems(state.activity)}</section>`;
-}
-
 function renderEmptyWorkspace() {
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Your work, in sight.</h1><p>A home for your projects, tasks, and next steps.</p></div></section><section class="welcome-panel"><div class="welcome-illustration" aria-hidden="true"><div class="illustration-rail"><span></span><span></span><span></span></div><div class="illustration-board"><div><i></i><b></b><b></b></div><div><i></i><b></b></div><div><i></i><b></b><b></b></div></div><span class="illustration-check">${icon('check')}</span></div><h2>Make room for your next project.</h2><p>Break the work into tasks, see what’s moving, and keep everyone’s next step clear.</p><button class="button button-primary" data-action="new-project">${icon('plus')} Create your first project</button><button class="text-button sample-button" data-action="sample-project">Explore with a sample project</button></section><section class="welcome-features"><div>${icon('board')}<h3>See the whole picture</h3><p>Plan work on a board or scan it in a task list.</p></div><div>${icon('user')}<h3>Give work a clear owner</h3><p>Keep priorities, due dates, and next steps together.</p></div><div>${icon('activity')}<h3>Keep progress visible</h3><p>See completed work and recent changes in one place.</p></div></section>`;
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>Today</h1><p>No projects yet.</p></div></section><section class="welcome-panel"><h2>Start with a project.</h2><p>Each morning, Today shows what needs you, what moved since your last visit, and how each project is doing.</p><button class="button button-primary" data-action="new-project">${icon('plus')} Create your first project</button><button class="text-button sample-button" data-action="sample-project">Explore a sample project with six weeks of history</button></section>`;
+}
+
+// --- Cockpit: Today, project health, changes, explain ----------------------------
+
+function storage() {
+  try { return window.localStorage; } catch { return null; }
+}
+
+function cockpitSignature() {
+  const project = selectedProject();
+  return [cockpit.brief, cockpit.briefError, state.view === 'changes' ? cockpit.changes : null, project ? cockpit.metrics.get(project.id) : null];
+}
+
+function asOfQuery(asOf) {
+  return asOf ? `asOf=${encodeURIComponent(asOf)}` : '';
+}
+
+async function loadBrief() {
+  const { params } = briefQuery({ storage: storage() });
+  try {
+    cockpit.brief = await api(`/brief?${params}`);
+    cockpit.briefError = '';
+  } catch (error) {
+    if (error.status === 401) throw error;
+    // A stored cursor the server rejects (another workspace's projects, say)
+    // must not leave Today empty: drop it and ask again by time.
+    if (error.status === 400 && params.has('since')) {
+      writeCursor(storage(), { at: new Date().toISOString(), heads: {} });
+      cockpit.brief = await api(`/brief?window=${encodeURIComponent(readWindow(storage()))}`);
+      cockpit.briefError = '';
+    } else cockpit.briefError = error.message;
+  }
+  cockpit.briefAt = Date.now();
+}
+
+// Fetches what the current view shows. `workspace` is the fresh workspace (or
+// null); a changed workspace means the brief and metrics may be stale.
+async function refreshCockpit(workspace, { force = false, metrics = false } = {}) {
+  if (!state.projects.length) { cockpit.brief = null; return; }
+  const changed = workspace && JSON.stringify([workspace.projects, workspace.tasks, workspace.runs]) !== cockpit.workspaceKey;
+  if (workspace) cockpit.workspaceKey = JSON.stringify([workspace.projects, workspace.tasks, workspace.runs]);
+  const project = selectedProject();
+  // Other projects' metrics are fetched again when next shown.
+  if (changed) for (const id of [...cockpit.metrics.keys()]) if (id !== project?.id) cockpit.metrics.delete(id);
+  const stale = Date.now() - cockpit.briefAt >= BRIEF_POLL_MS;
+  const jobs = [];
+  if (force || changed || stale || !cockpit.brief) jobs.push(loadBrief());
+  if (project && state.layout === 'health' && !state.query && (force || metrics || changed || stale || !cockpit.metrics.has(project.id))) {
+    jobs.push(api(`/projects/${encodeURIComponent(project.id)}/metrics`).then((data) => { cockpit.metrics.set(project.id, data); }));
+  }
+  if (state.view === 'changes') {
+    const { kind, projectId } = cockpit.changesFilter;
+    const key = `${kind}|${projectId}`;
+    if (force || changed || stale || cockpit.changesKey !== key || !cockpit.changes) {
+      const params = new URLSearchParams({ limit: '200', ...(kind ? { kinds: kind } : {}), ...(projectId ? { projectId } : {}) });
+      jobs.push(api(`/changes?${params}`).then((feed) => { cockpit.changes = feed; cockpit.changesKey = key; }));
+    }
+  }
+  await Promise.all(jobs);
+  // A project still indexing is asked again soon.
+  if (cockpit.brief?.projects.some((line) => line.state !== 'ready')) cockpit.briefAt = Date.now() - BRIEF_POLL_MS + 3000;
+}
+
+function renderTodayPage() {
+  if (!cockpit.brief) {
+    $('#main').innerHTML = cockpit.briefError
+      ? `<div class="empty-results">${icon('alert')}<h2>Today is unavailable</h2><p>${escape(cockpit.briefError)}</p></div>`
+      : '<div class="loading-state"><span class="spinner"></span>Reading your projects’ history…</div>';
+    return;
+  }
+  if (!document.hidden && !todayShownAt) todayShownAt = Date.now();
+  $('#main').innerHTML = renderToday(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded });
+}
+
+function renderChangesPage() {
+  $('#main').innerHTML = renderChanges(cockpit.changes, { ...cockpit.changesFilter, projects: state.projects, timezone: cockpit.brief?.timezone });
+}
+
+// Leaving Today after looking at it marks what it showed as seen.
+function leaveToday(view) {
+  if (view !== 'today' || !todayShownAt) return;
+  const looked = Date.now() - todayShownAt;
+  todayShownAt = 0;
+  if (looked >= SEEN_AFTER_MS && cockpit.brief?.live) writeCursor(storage(), cursorFromBrief(cockpit.brief));
+}
+
+async function markSeen() {
+  if (!cockpit.brief) return;
+  writeCursor(storage(), cursorFromBrief(cockpit.brief));
+  if (readWindow(storage()) !== 'last-visit') writeWindow(storage(), 'last-visit');
+  cockpit.expanded.clear();
+  try { await refreshCockpit(null, { force: true }); renderMain(); toast('Marked as seen. Changes from now on will show here.'); } catch (error) { toast(error.message, true); }
+}
+
+async function changeWindow(value) {
+  writeWindow(storage(), value);
+  cockpit.expanded.clear();
+  try { await refreshCockpit(null, { force: true }); renderMain(); } catch (error) { toast(error.message, true); }
+}
+
+function toggleDelta(name) {
+  if (cockpit.expanded.has(name)) cockpit.expanded.delete(name); else cockpit.expanded.add(name);
+  renderMain();
+}
+
+async function changeChangesFilter(field, value) {
+  cockpit.changesFilter[field === 'project' ? 'projectId' : 'kind'] = value;
+  cockpit.changes = null;
+  renderMain();
+  try { await refreshCockpit(null); renderMain(); } catch (error) { toast(error.message, true); }
+}
+
+function openTask(id) {
+  const task = state.tasks.find((entry) => entry.id === id);
+  if (task) openTaskEditor(task);
+  else toast('This task is no longer on the board. Its history stays in Changes.', true);
+}
+
+// The full MetricValue behind a number, as of the time the number was computed.
+async function openExplain({ metric, project: projectId, task: taskKey }, opener) {
+  const dialog = $('#explain-dialog');
+  // Focus comes back to the number when the drawer closes.
+  opener?.focus({ preventScroll: true });
+  const asOf = state.view === 'today' || state.view === 'decisions' ? cockpit.brief?.asOf : cockpit.metrics.get(projectId)?.asOf;
+  dialog.innerHTML = `<header class="dialog-heading"><div><span class="dialog-eyebrow">Explain</span><h2 id="explain-dialog-title">Loading…</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><div class="loading-state dialog-loading"><span class="spinner"></span></div></div>`;
+  setupDialog(dialog);
+  const params = new URLSearchParams({ projectId, ...(taskKey ? { taskKey } : {}) });
+  if (asOf) params.set('asOf', asOf);
+  let value;
+  try { value = await api(`/explain/${encodeURIComponent(metric)}?${params}`); } catch (error) { value = { error: error.message }; }
+  if (!dialog.open) return;
+  dialog.innerHTML = renderExplain(value);
+  dialog.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', () => closeDialog(dialog)));
+  dialog.querySelector('[data-close]')?.focus();
+}
+
+// A task's history in its drawer: every transition with its commit.
+async function loadTaskHistory(task) {
+  const slot = $('#task-history');
+  if (!slot) return;
+  let history;
+  try { history = await api(`/tasks/${encodeURIComponent(task.id)}/history`); } catch (error) { history = { error: error.status === 404 ? 'No history yet: this task has not been committed.' : error.message }; }
+  const current = $('#task-history');
+  if (current && current.dataset.task === task.id) current.innerHTML = renderHistory(history, cockpit.brief?.timezone);
 }
 
 function closeDialog(dialog) {
@@ -397,7 +512,7 @@ function openTaskEditor(task = null, status = '') {
   const initialStatus = status || task?.status || 'backlog';
   const types = [...new Set(['feature', 'bug', 'chore', ...state.tasks.filter((entry) => entry.projectId === projectId).map((entry) => typeKey(entry.type))].filter(Boolean))];
   const dialog = $('#task-dialog');
-  dialog.innerHTML = `<form id="task-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${task ? escape(taskNumber(task)) : 'Plan your next step'}</span><h2 id="task-dialog-title">${task ? 'Task details' : 'New task'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header><div class="dialog-fields">${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${state.projects.map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type are timed together; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
+  dialog.innerHTML = `<form id="task-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${task ? escape(taskNumber(task)) : 'Plan your next step'}</span><h2 id="task-dialog-title">${task ? 'Task details' : 'New task'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header><div class="dialog-fields">${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${state.projects.map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type are timed together; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div><details class="drawer-history" data-key="history"><summary>History</summary><div id="task-history" data-task="${escape(task.id)}">${renderHistory(null)}</div></details>` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
   const reasonField = $('#blocked-reason-field');
   $('#task-form [name="status"]').addEventListener('change', (event) => {
     reasonField.hidden = event.currentTarget.value !== 'blocked';
@@ -424,6 +539,7 @@ function openTaskEditor(task = null, status = '') {
     form.querySelector('[data-start-run]')?.addEventListener('click', (event) => startRun(task, event.currentTarget, form, snapshot));
     form.querySelector('[data-open-run]')?.addEventListener('click', (event) => { closeDialog(dialog); openRun(event.currentTarget.dataset.openRun); });
   }
+  if (task) dialog.querySelector('.drawer-history').addEventListener('toggle', (event) => { if (event.currentTarget.open) loadTaskHistory(task); }, { once: true });
   setupDialog(dialog);
   if (status === 'blocked' && task) reasonField.querySelector('input').focus();
 }
@@ -600,8 +716,8 @@ function renderDecisions() {
   const section = (key, title, runs, empty, row = runRow) => `<section class="run-section run-section-${key}" aria-labelledby="runs-${key}"><div class="section-heading"><h2 id="runs-${key}" tabindex="-1">${title}</h2><span class="${key === 'waiting' && runs.length ? 'count-alert' : ''}">${runs.length}</span></div>${runs.length ? `<ol class="run-list">${runs.map(row).join('')}</ol>` : `<p class="run-empty">${empty}</p>`}</section>`;
   const body = state.runs.length
     ? `${section('waiting', 'Waiting on you', waiting, `${icon('check')}Nothing is waiting on you.`, (run) => (inlineDecision(run) ? inboxItem(run) : runRow(run)))}${section('moving', 'In progress', moving, 'No runs are moving right now.')}${section('recent', 'Recent', recent, 'Finished runs will appear here.')}`
-    : `<div class="empty-results">${icon('pipeline')}<h2>No agent runs yet</h2><p>Open a task and choose Run with agents. Runs that need you will wait here.</p><a class="button button-secondary" href="#tasks">Go to all tasks</a></div>`;
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Decisions</h1><p>Runs waiting on you come first. Expand an approval or a request for input to answer it here, or open the run for the full record.</p></div></section>${body}`;
+    : `<div class="empty-results">${icon('pipeline')}<h2>No agent runs yet</h2><p>Open a task and choose Run with agents. Runs that need you will wait here.</p><a class="button button-secondary" href="#work">Go to work</a></div>`;
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>Decisions</h1><p>Runs waiting on you come first. Expand an approval or a request for input to answer it here, or open the run for the full record.</p>${decisionsSummary(cockpit.brief)}</div></section>${body}`;
 }
 
 // --- Decisions inbox: answer approvals and input requests without leaving -----
@@ -1400,25 +1516,13 @@ async function moveTask(id, status) {
 
 async function createSample(button) {
   button.disabled = true;
-  let project;
   try {
-    project = await api('/projects', 'POST', { name: 'Website launch', description: 'Bring a new product website from the first sketch to launch day.', color: colorHex.blue, wipLimit: 6 });
-    const samples = [
-      ['Write the launch brief', 'Define the audience, the main message, and what a successful launch looks like.', 'done', 'high', state.operator],
-      ['Design the homepage', 'Sketch the main sections and build a first visual direction for review.', 'in_progress', 'high', state.operator],
-      ['Build the project pages', 'Give each featured project a short story, useful images, and a clear result.', 'in_progress', 'medium', ''],
-      ['Get feedback on the copy', 'Waiting on the first review. Resolve the open questions before finalizing the pages.', 'blocked', 'medium', state.operator],
-      ['Test on mobile', 'Check navigation, forms, and the task board at narrow screen sizes.', 'backlog', 'high', ''],
-      ['Prepare the launch checklist', 'Collect final checks for content, accessibility, and the release.', 'backlog', 'low', ''],
-    ];
-    for (const [title, description, status, priority, assignee] of samples) await api('/tasks', 'POST', { projectId: project.id, title, description, status, priority, assignee, dueDate: '' });
+    const project = await api('/projects/sample', 'POST', {});
     await refresh();
     navigate(project.id);
-    toast('Sample project created. Edit it to make it yours.');
+    toast('Sample project created. Its history is simulated.');
   } catch (error) {
-    await refresh().catch(() => {});
-    if (project) navigate(project.id);
-    toast(project ? `Project created, but some sample tasks could not be added: ${error.message}` : error.message, true);
+    toast(error.message, true);
   } finally { button.disabled = false; }
 }
 
@@ -1429,9 +1533,12 @@ $('#main').addEventListener('click', (event) => {
     case 'new-project': openProjectEditor(); break;
     case 'edit-project': openProjectEditor(selectedProject()); break;
     case 'new-task': openTaskEditor(null, target.dataset.status || 'backlog'); break;
-    case 'open-task': openTaskEditor(state.tasks.find((task) => task.id === target.dataset.id)); break;
+    case 'open-task': openTask(target.dataset.id); break;
+    case 'explain': openExplain(target.dataset, target); break;
+    case 'mark-seen': markSeen(); break;
+    case 'toggle-delta': toggleDelta(target.dataset.value); break;
     case 'open-project': navigate(target.dataset.id); break;
-    case 'layout': state.layout = target.dataset.value; renderMain(); break;
+    case 'layout': state.layout = target.dataset.value; renderMain(); if (state.layout === 'health') refreshCockpit(null, { metrics: true }).then(renderMain).catch(monitorOffline); break;
     case 'clear-filters': state.priority = ''; state.status = ''; state.owner = ''; state.query = ''; $('#search').value = ''; renderMain(); break;
     case 'sample-project': createSample(target); break;
     case 'open-run': openRun(target.dataset.id); break;
@@ -1453,7 +1560,8 @@ $('#main').addEventListener('click', (event) => {
 
 $('#main').addEventListener('change', (event) => {
   saveDraft(event.target);
-  if (event.target.hasAttribute('data-monitor-filter')) { state.monitorStatus = event.target.value; renderMain(); }
+  if (event.target.hasAttribute('data-brief-window')) changeWindow(event.target.value);
+  if (event.target.dataset.changesFilter) changeChangesFilter(event.target.dataset.changesFilter, event.target.value);
   if (event.target.dataset.filter) { state[event.target.dataset.filter] = event.target.value; renderMain(); }
   if (event.target.dataset.agentToggle) toggleAgent(event.target);
   if (event.target.hasAttribute('data-rerender')) renderMain();
@@ -1532,11 +1640,16 @@ $('#sidebar').addEventListener('click', (event) => {
   navigate(route.startsWith('project/') ? route.slice(8) : route);
 });
 window.addEventListener('hashchange', () => {
+  const previous = state.view;
   readRoute();
+  if (state.view !== previous) leaveToday(previous);
+  // A project opens on its Health tab.
+  if (state.view !== previous && selectedProject()) state.layout = 'health';
   if (state.view !== lastView || state.view === 'run') window.scrollTo(0, 0);
   lastView = state.view;
   render();
   if (state.view === 'run' && state.run?.id !== state.runId) refresh().catch(monitorOffline);
+  else if (state.view !== previous) refreshCockpit(null, { force: state.view === 'today' }).then(() => { if (!refreshPaused()) renderMain(); }).catch(monitorOffline);
 });
 document.addEventListener('keydown', (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey || anyDialogOpen() || event.target.closest('input,textarea,select,[contenteditable]')) return;
@@ -1569,6 +1682,11 @@ setInterval(() => {
   if (state.view !== 'run' || !['running', 'waiting'].includes(state.run?.status) || state.run?.paused || refreshPaused()) return;
   refresh().catch(monitorOffline);
 }, 3000);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) leaveToday(state.view);
+  else if (state.view === 'today') todayShownAt = Date.now();
+});
+window.addEventListener('pagehide', () => leaveToday(state.view));
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !refreshing && !state.authLost && !editingMain()) refresh().catch(monitorOffline); });
 
 lastView = state.view;

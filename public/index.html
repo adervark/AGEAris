@@ -14,7 +14,7 @@
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="app-shell">
       <aside class="sidebar" id="sidebar" aria-label="Workspace navigation">
-        <a class="brand" href="#overview" aria-label="AGESight overview"><span class="brand-symbol" aria-hidden="true"><span></span></span><span>agesight<span class="brand-caption">Project workspace</span></span></a>
+        <a class="brand" href="#today" aria-label="AGESight: Today"><span class="brand-symbol" aria-hidden="true"><span></span></span><span>agesight<span class="brand-caption">Project workspace</span></span></a>
         <div class="workspace-label"><span class="workspace-avatar">A</span><span>Your workspace<small>Local workspace</small></span></div>
         <nav id="navigation" aria-label="Main navigation"></nav>
         <div class="projects-label"><span>Projects</span><button id="sidebar-add" class="icon-button" aria-label="Create project"></button></div>
@@ -24,7 +24,7 @@
       <div class="workspace">
         <header class="topbar">
           <button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false"></button>
-          <div class="breadcrumb" id="breadcrumb">Workspace <span>/</span> Overview</div>
+          <div class="breadcrumb" id="breadcrumb">Workspace <span>/</span> Today</div>
           <span class="monitor-state" id="monitor-state" role="status"><span class="status-dot"></span><span>Live</span></span>
           <label class="search-box"><span id="search-icon"></span><input id="search" type="search" placeholder="Search tasks…" aria-label="Search tasks"><kbd>/</kbd></label>
           <button class="icon-button refresh-button" id="refresh" title="Refresh workspace" aria-label="Refresh workspace"></button>
@@ -38,6 +38,7 @@
     <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title"></dialog>
     <dialog id="task-dialog" class="task-dialog" aria-labelledby="task-dialog-title"></dialog>
     <dialog id="action-dialog" class="project-dialog" aria-labelledby="action-dialog-title"></dialog>
+    <dialog id="explain-dialog" class="task-dialog explain-dialog" aria-labelledby="explain-dialog-title"></dialog>
     <dialog id="pipeline-dialog" class="pipeline-dialog" aria-labelledby="pipeline-dialog-title"></dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </body>
