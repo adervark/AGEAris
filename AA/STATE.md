@@ -13,16 +13,16 @@ this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T21:04Z · 4 tasks: 4 backlog, 0 WIP (0 in progress), 0 delivered`
+`board · 2026-10-06T21:07Z · 4 tasks: 3 backlog, 1 WIP (1 in progress), 0 delivered`
 
-FLOW · **WIP 0/2** · throughput 0.0/wk (0 in 30d) · cycle time: too few delivered with a claim commit (n=0)
+FLOW · **WIP 1/2** · throughput 0.0/wk (0 in 30d) · cycle time: too few delivered with a claim commit (n=0)
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** | T001 | Review 479b6e7 and e64f823 independently | — | ? |  |
-|  | T002 | Bold or a link that contains inline code shows raw markers | — | ? |  |
-|  | T003 | Track the repository AGE Aris runs from without moving its data | — | ? |  |
-|  | T004 | Keep one copy of the aa-init template | — | ? |  |
+| **IN PROGRESS** 1/2 | T001 | Review 479b6e7 and e64f823 independently | adervark | 2m |  |
+| **BACKLOG** | T002 | Bold or a link that contains inline code shows raw markers | — | 2m |  |
+|  | T003 | Track the repository AGE Aris runs from without moving its data | — | 2m |  |
+|  | T004 | Keep one copy of the aa-init template | — | 2m |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->

@@ -1,8 +1,8 @@
 ---
 id: T001
 title: "Review 479b6e7 and e64f823 independently"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/ff713831 2026-10-07 — one independent reviewer per commit
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: review
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -47,8 +47,8 @@ task text) and e64f823 (the board renamed to AA, its older names still read).
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/ff713831 (registered, never claimed)
-- **In flight:** nothing
+- **Last touched:** 2026-10-07, adervark @k/ff713831
+- **In flight:** two reviewers, one per commit, logging to `AA/checkpoints/T001.jsonl`
 - **On disk:** nothing yet
 - **Resume with:** `git show 479b6e7` and `git show e64f823`, then one reviewer per commit
 - **Next decision:** none until the findings are in
