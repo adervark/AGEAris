@@ -78,12 +78,36 @@ function tableHtml(lines) {
 // headings: in the drawer, # renders as h3.
 // Quotes nest at most this deep; deeper markers are text.
 const MAX_QUOTE_DEPTH = 8;
+// Outside a paragraph, a line indented four spaces or a tab is code.
+const INDENTED = /^( {4}|\t)/;
+
+// A line that ends in a backslash, itself not escaped, breaks the line. The
+// run is counted by hand: a pattern anchored at the end would backtrack.
+function trailingBackslash(line) {
+  let run = 0;
+  while (run < line.length && line[line.length - 1 - run] === '\\') run += 1;
+  return run % 2 === 1;
+}
 
 export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
   const lines = String(source ?? '').replace(/\r\n?/g, '\n').split('\n');
   const out = [];
   let paragraph = [];
-  const flush = () => { if (paragraph.length) out.push(`<p>${paragraph.map(inline).join('<br>')}</p>`); paragraph = []; };
+  // A paragraph's lines join as Markdown reads them: a line break is a space,
+  // unless the line ends in two spaces or a backslash and another line follows.
+  // Inline markup runs over each stretch between breaks, so emphasis, code and
+  // links may wrap; a stretch longer than MAX_INLINE is read line by line.
+  const flush = () => {
+    if (!paragraph.length) return;
+    const stretches = [[]];
+    paragraph.forEach(({ text, hard, slash }, at) => {
+      const breaks = hard && at < paragraph.length - 1;
+      stretches.at(-1).push(breaks && slash ? text.slice(0, -1) : text);
+      if (breaks) stretches.push([]);
+    });
+    out.push(`<p>${stretches.map((lines) => (lines.join(' ').length <= MAX_INLINE ? inline(lines.join(' ')) : lines.map(inline).join(' '))).join('<br>')}</p>`);
+    paragraph = [];
+  };
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
     const fence = /^\s*(```|~~~)/.exec(line);
@@ -133,7 +157,17 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
       out.push(tableHtml(rows));
       continue;
     }
-    paragraph.push(line.trim());
+    // Indented code, except right after a list, where the line reads as text.
+    if (!paragraph.length && INDENTED.test(line) && !/^<[uo]l>/.test(out.at(-1) || '')) {
+      const code = [];
+      for (; index < lines.length && (INDENTED.test(lines[index]) || !lines[index].trim()); index += 1) code.push(lines[index].replace(INDENTED, ''));
+      while (code.length && !code.at(-1).trim()) code.pop();
+      index -= 1;
+      out.push(`<pre><code>${escape(code.join('\n'))}</code></pre>`);
+      continue;
+    }
+    const slash = trailingBackslash(line);
+    paragraph.push({ text: line.trim(), hard: slash || line.endsWith('  '), slash });
   }
   flush();
   return out.join('');

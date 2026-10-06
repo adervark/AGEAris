@@ -1,4 +1,4 @@
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, sampleBadge, signalBadges, signalIndex, threadTag, usualWeek, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
@@ -40,8 +40,10 @@ const BRIEF_POLL_MS = 30000;
 // it for at least this long, or presses Mark seen.
 const SEEN_AFTER_MS = 10000;
 let homeShownAt = 0;
-// A board column shows this many cards before "Show all".
+// A board column shows this many cards before "Show all"; Done shows fewer,
+// the newest of what finished this week.
 const COLUMN_CARDS = 25;
+const DONE_CARDS = 10;
 
 function projectColor(project) {
   const value = String(project?.color || 'blue');
@@ -379,7 +381,7 @@ function renderProjectPage(project) {
   else if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0 });
   else if (layout === 'method') body = renderMethod({ project, method: cockpit.method.get(project.id), data: cockpit.metrics.get(project.id), line, tasks: projectTasks, pipeline: cockpit.pipelines.get(project.id) });
   else body = `${problemsNote(project)}${layout === 'board' ? board(tasks, project) : taskList(tasks)}${!projectTasks.length && writable(project) ? '<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>' : ''}`;
-  $('#main').innerHTML = `${projectHeader(project, line)}<div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Project view">${tabs}</div>${filters}</div>${body}`;
+  $('#main').innerHTML = `${projectHeader(project, line)}<div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Project view">${tabs}</div>${filters}</div>${body}`;
 }
 
 function projectHeader(project, line) {
@@ -396,11 +398,11 @@ function projectHeader(project, line) {
 function vitals(project, line) {
   if (line?.state !== 'ready') return '';
   const k = line.kpis;
-  const usual = k.done4w?.status === 'ok' ? Math.round((k.done4w.value / 4) * 10) / 10 : null;
+  const usual = usualWeek(k.done4w);
   const number = (metric) => (metric ? metricButton({ projectId: project.id, metricId: metric.id, display: metric.display, title: metric.status === 'ok' ? '' : metric.reason }) : '—');
   const over = k.wipLimit && k.wip?.value > k.wipLimit;
   const vital = (label, value, help, alert = false) => `<div class="vital"><span class="vital-label">${escape(label)}</span><span class="vital-value ${alert ? 'is-alert' : ''}">${value}</span><span class="vital-help">${escape(help)}</span></div>`;
-  return `<div class="vitals">${vital(TERMS.throughput[0], number(k.done7d), usual !== null ? `Finished in 7 days; usually ~${usual} a week` : TERMS.throughput[1])}${vital(TERMS.wip[0], `${number(k.wip)}${k.wipLimit ? ` <small class="muted">/ ${escape(k.wipLimit)}</small>` : ''}`, k.wipLimit ? `In progress or blocked; the limit is ${k.wipLimit}` : `${TERMS.wip[1].split(': ')[1]}; no limit set`, over)}${vital(TERMS.cycle[0], number(k.cycle50), TERMS.cycle[1])}${vital(TERMS.service[0], number(k.cycle85), TERMS.service[1])}</div>`;
+  return `<div class="vitals">${vital(TERMS.throughput[0], number(k.done7d), usual !== null ? `Finished in 7 days; usually ~${usual} a week` : TERMS.throughput[1])}${vital(TERMS.wip[0], number(k.wip), k.wipLimit ? `In progress or blocked; the limit is ${k.wipLimit}` : `${TERMS.wip[1].split(': ')[1]}; no limit set`, over)}${vital(TERMS.cycle[0], number(k.cycle50), TERMS.cycle[1])}${vital(TERMS.service[0], number(k.cycle85), TERMS.service[1])}</div>`;
 }
 
 function projectActions(project) {
@@ -448,16 +450,24 @@ function board(tasks, project) {
     let column = tasks.filter((task) => task.status === status);
     let heading = label;
     let hidden = 0;
+    let week = 0;
     const key = `column:${project.id}:${status}`;
     if (status === 'done') {
-      // Done shows what finished this week; the rest is one click away.
-      const at = (task) => String(finished?.week.get(task.id) || task.updatedAt || '');
-      column = column.sort((a, b) => Number(finished ? finished.recent(b) : 0) - Number(finished ? finished.recent(a) : 0) || at(b).localeCompare(at(a)));
+      // Done shows the newest of what finished this week; the rest is one click away.
+      // Times compare as instants, since finishes carry their commit's UTC
+      // offset; a finish the ledger has not indexed yet counts as the newest.
+      const time = (task) => {
+        const at = finished?.week.get(task.id);
+        if (at) return Date.parse(at) || 0;
+        return finished?.recent(task) ? Infinity : Date.parse(task.updatedAt) || 0;
+      };
+      column = column.sort((a, b) => Number(finished ? finished.recent(b) : 0) - Number(finished ? finished.recent(a) : 0) || (time(b) - time(a)) || 0);
       if (!cockpit.expanded.has(key)) {
-        const recent = finished ? column.filter(finished.recent) : column.slice(0, 10);
-        hidden = column.length - recent.length;
+        const recent = finished ? column.filter(finished.recent) : column;
+        week = finished ? recent.length : 0;
+        hidden = column.length - Math.min(recent.length, DONE_CARDS);
         heading = finished ? 'Done this week' : 'Done';
-        column = recent;
+        column = recent.slice(0, DONE_CARDS);
       }
     } else if (!cockpit.expanded.has(key) && column.length > COLUMN_CARDS) {
       hidden = column.length - COLUMN_CARDS;
@@ -465,7 +475,7 @@ function board(tasks, project) {
     }
     const total = column.length + hidden;
     const more = hidden ? `<button class="column-more" data-action="toggle-delta" data-value="${escape(key)}">Show all ${total}${status === 'done' ? ' done' : ''}</button>` : cockpit.expanded.has(key) ? `<button class="column-more" data-action="toggle-delta" data-value="${escape(key)}">Show fewer</button>` : '';
-    return `<section class="board-column" data-drop-status="${status}" aria-label="${label}"><header class="column-heading"><span class="status-dot status-${status}"></span><h2>${heading}</h2><span class="column-count ${status === 'in_progress' && limit && wip > limit ? 'is-over' : ''}">${status === 'done' && hidden ? `${column.length} of ${total}` : total}</span>${status === 'in_progress' && limit ? `<span class="column-limit" title="WIP limit, counting blocked work: ${wip} in progress or blocked">limit ${escape(limit)}</span>` : ''}${canAdd ? `<button class="icon-button" data-action="new-task" data-status="${status}" aria-label="Add task to ${label}">${icon('plus')}</button>` : ''}</header><div class="column-tasks">${column.map(taskCard).join('')}${!column.length ? `<div class="column-empty">${status === 'done' && hidden ? 'Nothing finished this week' : 'Nothing here'}</div>` : ''}</div>${more}${canAdd ? `<button class="column-add" data-action="new-task" data-status="${status}">${icon('plus')} Add task</button>` : ''}</section>`;
+    return `<section class="board-column" data-drop-status="${status}" aria-label="${label}"><header class="column-heading"><span class="status-dot status-${status}"></span><h2>${heading}</h2><span class="column-count ${status === 'in_progress' && limit && wip > limit ? 'is-over' : ''}">${status === 'done' && hidden && week !== total ? `${week || column.length} of ${total}` : total}</span>${status === 'in_progress' && limit ? `<span class="column-limit" title="WIP limit, counting blocked work: ${wip} in progress or blocked">limit ${escape(limit)}</span>` : ''}${canAdd ? `<button class="icon-button" data-action="new-task" data-status="${status}" aria-label="Add task to ${label}">${icon('plus')}</button>` : ''}</header><div class="column-tasks">${column.map(taskCard).join('')}${!column.length ? `<div class="column-empty">${status === 'done' && hidden ? 'Nothing finished this week' : 'Nothing here'}</div>` : ''}</div>${week > column.length ? `<p class="column-note">${week - column.length} more finished this week</p>` : ''}${more}${canAdd ? `<button class="column-add" data-action="new-task" data-status="${status}">${icon('plus')} Add task</button>` : ''}</section>`;
   }).join('')}</div>`;
 }
 
@@ -821,7 +831,7 @@ function drawerThread(task) {
   const line = (entry) => `<li><button type="button" class="task-link" data-action="open-task" data-id="${escape(entry.id)}"><span class="task-number">${escape(taskNumber(entry))}</span>${escape(entry.title)}</button> <span class="status-pill status-${entry.status}"><span class="status-dot"></span>${statuses[entry.status] || entry.status}</span></li>`;
   const thread = place.thread;
   const done = thread ? thread.tasks.length - thread.open.length : 0;
-  return `<section class="drawer-section drawer-thread"><h3>Thread</h3>${thread ? `<p class="drawer-thread-name">${icon('route')}<span><span class="task-number">${escape(taskNumber(thread.root))}</span> ${escape(thread.root.title)}</span><span class="muted">${done} of ${thread.tasks.length} done</span></p>` : ''}${place.needs.length ? `<h4>Builds on</h4><ul class="drawer-thread-list">${place.needs.map(line).join('')}</ul>` : ''}${place.children.length ? `<h4>Built on by</h4><ul class="drawer-thread-list">${place.children.map(line).join('')}</ul>` : ''}</section>`;
+  return `<section class="drawer-section drawer-thread"><h3>Thread</h3>${thread ? `<p class="drawer-thread-name">${icon('route')}<span class="drawer-thread-title"><span class="task-number">${escape(taskNumber(thread.root))}</span> ${escape(thread.root.title)}</span><span class="muted">${done} of ${thread.tasks.length} done</span></p>` : ''}${place.needs.length ? `<h4>Builds on</h4><ul class="drawer-thread-list">${place.needs.map(line).join('')}</ul>` : ''}${place.children.length ? `<h4>Built on by</h4><ul class="drawer-thread-list">${place.children.map(line).join('')}</ul>` : ''}</section>`;
 }
 
 function drawerTimeline(task, open) {
@@ -1614,7 +1624,7 @@ function actingApplies(agent, role) {
 // Agents: the sessions working on the boards now, and the pipeline's agents.
 function renderAgents() {
   const tabs = [['now', 'Working now'], ['pipeline', 'Pipeline agents']].map(([value, label]) => `<button class="view-tab ${state.agentsTab === value ? 'selected' : ''}" data-action="agents-tab" data-value="${value}" aria-pressed="${state.agentsTab === value}">${label}</button>`).join('');
-  const heading = `<section class="page-heading"><div><h1>Agents</h1><p>Who is doing the work: the agent sessions holding tasks on each board, and the agents the pipeline routes stages to.</p></div>${state.agentsTab === 'pipeline' ? `<button class="button button-secondary" data-action="add-agent">${icon('plus')}Add agent</button>` : ''}</section><div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Agents view">${tabs}</div></div>`;
+  const heading = `<section class="page-heading"><div><h1>Agents</h1><p>Who is doing the work: the agent sessions holding tasks on each board, and the agents the pipeline routes stages to.</p></div>${state.agentsTab === 'pipeline' ? `<button class="button button-secondary" data-action="add-agent">${icon('plus')}Add agent</button>` : ''}</section><div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Agents view">${tabs}</div></div>`;
   $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : workingNow());
 }
 
@@ -2035,6 +2045,7 @@ $('#sidebar').addEventListener('click', (event) => {
 });
 window.addEventListener('hashchange', () => {
   const previous = state.view;
+  const previousLayout = state.layout;
   readRoute();
   if (state.view !== previous) leaveHome(previous);
   // A project opens on its board unless the link names a tab.
@@ -2042,8 +2053,9 @@ window.addEventListener('hashchange', () => {
   if (state.view !== lastView || state.view === 'run') window.scrollTo(0, 0);
   lastView = state.view;
   render();
+  // A new view, or another tab of the same project, fetches what it shows.
   if (state.view === 'run' && state.run?.id !== state.runId) refresh().catch(monitorOffline);
-  else if (state.view !== previous) refreshCockpit(null, { force: state.view === 'home' }).then(() => { if (!refreshPaused()) renderMain(); }).catch(monitorOffline);
+  else if (state.view !== previous || state.layout !== previousLayout) refreshCockpit(null, { force: state.view === 'home' }).then(() => { if (!refreshPaused()) renderMain(); }).catch(monitorOffline);
 });
 document.addEventListener('keydown', (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey || anyDialogOpen() || event.target.closest('input,textarea,select,[contenteditable]')) return;

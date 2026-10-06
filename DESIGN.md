@@ -73,14 +73,17 @@ Sidebar  | Search                                   Add project
 Home     | AGEIS  Read-only
 Projects | ● Needs attention: 5 items past 2× usual, 2 stale agent claims.
 Agents   | Throughput 32 | WIP 6 | Cycle time 0.4 h | Service level 6.2 h
-Activity | Board  List  Flow  Method
- ● AGEIS | Backlog | In progress | Blocked | Done this week (Show all 80)
+Activity | Board  Threads  List  Flow  Method
+ ● AGEIS | Backlog | In progress | Blocked | Done this week, newest 10 (Show all 80)
 ```
 
 The empty workspace offers project creation and an explicitly chosen example.
-The task drawer keeps the board in context. On a phone the sidebar collapses,
-Home and the drawer read first, list rows stay one line, and the board's columns
-scroll sideways.
+The task drawer keeps the board in context and renders the task file as
+Markdown does: a line break inside a paragraph is a space, and an indented
+block is code. Below 1280 px a project's tabs sit above its filters and a list
+row's signals sit under its title, so neither is squeezed. On a phone the
+sidebar collapses, Home and the drawer read first, the tabs drop their icons,
+and the board's columns scroll sideways. No page scrolls sideways.
 
 The first design review removed ornamental metrics and a marketing hero: the
 application must open directly on work. Every count is computed from saved

@@ -27,7 +27,21 @@ test('headings shift under the page\'s own, and lists, task boxes, emphasis, and
   assert.equal(renderMarkdown('- one\n  - two\n- [x] done\n- [ ] open\n1. first'), '<ul><li>one<ul><li>two</li></ul></li><li><input type="checkbox" disabled checked aria-label="Done">done</li><li><input type="checkbox" disabled  aria-label="Not done">open</li></ul><ol><li>first</li></ol>');
   assert.equal(inline('**bold**, *it*, ~~old~~, snake_case_name'), '<strong>bold</strong>, <em>it</em>, <del>old</del>, snake_case_name');
   assert.equal(renderMarkdown('| a | b |\n|---|:-:|\n| 1 | **2** |'), '<table><thead><tr><th scope="col">a</th><th scope="col">b</th></tr></thead><tbody><tr><td>1</td><td><strong>2</strong></td></tr></tbody></table>');
-  assert.equal(renderMarkdown('one\ntwo\n\nthree'), '<p>one<br>two</p><p>three</p>');
+  // A line break inside a paragraph is a space, as in any Markdown viewer;
+  // two trailing spaces or a backslash keep it.
+  assert.equal(renderMarkdown('one\ntwo\n\nthree'), '<p>one two</p><p>three</p>');
+  assert.equal(renderMarkdown('one  \ntwo\\\nthree'), '<p>one<br>two<br>three</p>');
+  // A backslash breaks the line only when it is not escaped and a line follows.
+  assert.equal(renderMarkdown('Install to C:\\Program Files\\'), '<p>Install to C:\\Program Files\\</p>');
+  assert.equal(renderMarkdown('foo\\ \nbar'), '<p>foo\\ bar</p>');
+  assert.equal(renderMarkdown('foo\\\\\nbar'), '<p>foo\\\\ bar</p>');
+  // Emphasis and code may wrap across lines.
+  assert.equal(renderMarkdown('the join is **not\nindex-bound**, see `a\nb`'), '<p>the join is <strong>not index-bound</strong>, see <code>a b</code></p>');
+  // Lines indented four spaces are code, unless they continue a paragraph or
+  // follow a list.
+  assert.equal(renderMarkdown('Log:\n\n    baseline  GET /a -> 404\n    now       GET /a\\x00 -> 404\n\nAfter.'), '<p>Log:</p><pre><code>baseline  GET /a -&gt; 404\nnow       GET /a\\x00 -&gt; 404</code></pre><p>After.</p>');
+  assert.equal(renderMarkdown('one\n    two'), '<p>one two</p>');
+  assert.equal(renderMarkdown('- item\n\n    more'), '<ul><li>item</li></ul><p>more</p>');
 });
 
 test('hostile input stays fast and bounded: long headings, link runs, emphasis runs, and deep quotes', () => {

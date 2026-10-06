@@ -102,6 +102,20 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(home, new RegExp(`>${healthWord(brief.projects[0].health)}<`), 'health reads as words');
   assert.match(home, /Service level/);
   assert.doesNotMatch(home.replace(/data-metric="[^"]*"/g, ''), /\bP50\b|\bP85\b|percentile/i, 'the service level is named, not its percentile');
+  assert.doesNotMatch(home, /<\/button> \/ \d/, 'WIP states its limit once ("8 of 8"), not again after it');
+
+  // A task shows once, under its most pressing need; a need it also has is
+  // not called clear.
+  const alsoBlocked = { ...brief, needsYou: brief.needsYou.filter((row) => row.kind !== 'blocked') };
+  assert.ok(alsoBlocked.needsYou.some((row) => row.reasons?.includes('blocked')), 'the sample has a blocked task listed under another need');
+  const homeAlso = renderHome(alsoBlocked, { mode: 'previous-workday', expanded: new Set(), taskOf: (id) => byId.get(id), agentsByProject: new Map(), projects: [project] });
+  assert.match(homeAlso, /also blocked/);
+  assert.doesNotMatch(homeAlso, /nothing blocked/);
+  // Nor is a check that cannot run yet.
+  const young = { ...brief, needsYou: [], projects: brief.projects.map((entry) => ({ ...entry, kpis: { ...entry.kpis, aging: { ...entry.kpis.aging, status: 'insufficient' } } })) };
+  const homeYoung = renderHome(young, { mode: 'previous-workday', expanded: new Set(), taskOf: (id) => byId.get(id), agentsByProject: new Map(), projects: [project] });
+  assert.match(homeYoung, /Nothing needs you: no decisions waiting/);
+  assert.doesNotMatch(homeYoung, /no aging WIP/);
 
   // One badge vocabulary for every task that needs a person.
   const index = signalIndex(brief);
@@ -120,6 +134,8 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(flow, /data-metric="due_risk" data-project="[^"]+" data-task="T039"/);
   assert.match(flow, /Stale claims/);
   assert.match(flow, /class="limit-line"/, 'the WIP chart draws its limit');
+  assert.doesNotMatch(flow, />weekly mean [\d.]+</, 'the usual week is a number under its label');
+  assert.doesNotMatch(flow, /<small class="muted">\/ /, 'WIP states its limit once');
   assert.match(flow, /ledger <code title="[0-9a-f]{40}">[0-9a-f]{7}<\/code>/);
 
   const line = brief.projects.find((entry) => entry.projectId === project.id);
@@ -148,6 +164,7 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(activity, /&lt;img src=x/);
   assert.match(activity, /<code title="[^"]*">[0-9a-f]{7}<\/code>/, 'each change cites its commit');
   assert.ok((activity.match(/class="activity-row"/g) || []).length < feed.changes.length, 'a task\'s changes in a day share a row');
+  assert.doesNotMatch(activity, /class="field-change">[^<]*[a-z][A-Z]/, 'changed fields read as words, not field names');
 
   const history = await cockpit.taskHistory(`${project.id}:T040`);
   const timeline = renderTimeline(history, 'Europe/London');

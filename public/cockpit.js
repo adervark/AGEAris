@@ -171,12 +171,24 @@ function needGroups(brief, { expanded, taskOf, manyProjects }) {
   }).join('');
 }
 
-// The checks that found nothing, in one quiet line.
-function allClear(brief) {
-  const clear = NEEDS.filter((need) => !brief.needsYou.some((row) => row.kind === need.kind));
-  if (!clear.length) return '';
-  const words = { decision: 'no decisions waiting', overdue: 'nothing overdue', stale: 'no stale claims', due_risk: 'no dates at risk', aging: 'no aging WIP', blocked: 'nothing blocked', unassigned: 'all urgent work has an owner' };
-  return `<p class="all-clear home-clear">${icon('check')}<span>All clear: ${escape(clear.map((need) => words[need.kind]).join(' · '))}</span></p>`;
+const CLEAR_WORDS = { decision: 'no decisions waiting', overdue: 'nothing overdue', stale: 'no stale claims', due_risk: 'no dates at risk', aging: 'no aging WIP', blocked: 'nothing blocked', unassigned: 'all urgent work has an owner' };
+
+// The checks that found nothing, in words. A task is listed once, under its
+// most pressing need, so a need it also has is not clear; nor is a check that
+// cannot run yet because a project has too little history.
+function clearChecks(brief) {
+  const unchecked = new Set();
+  for (const line of brief.projects) {
+    if (line.state !== 'ready') continue;
+    if (line.kpis?.aging?.status !== 'ok') unchecked.add('aging');
+    if (line.kpis?.dueRisk?.status !== 'ok') unchecked.add('due_risk');
+  }
+  return NEEDS.filter((need) => !unchecked.has(need.kind) && !brief.needsYou.some((row) => row.kind === need.kind || row.reasons?.includes(need.kind))).map((need) => CLEAR_WORDS[need.kind]);
+}
+
+// The clear checks, in one quiet line.
+function allClear(words) {
+  return words.length ? `<p class="all-clear home-clear">${icon('check')}<span>All clear: ${escape(words.join(' · '))}</span></p>` : '';
 }
 
 export function sparkline(points = [], label = 'Finished per day') {
@@ -192,8 +204,9 @@ export function sparkline(points = [], label = 'Finished per day') {
   return `<svg class="spark" viewBox="0 0 ${points.length * (width + gap)} ${height}" preserveAspectRatio="none" role="img" aria-label="${escape(`${label}, last ${points.length} days, most ${max} in a day`)}">${bars}</svg>`;
 }
 
-function usualWeek(kpis) {
-  return kpis?.done4w?.status === 'ok' ? round1(kpis.done4w.value / 4) : null;
+// The usual week: the weekly mean of finishes over the 4 weeks before.
+export function usualWeek(metric) {
+  return metric?.status === 'ok' ? round1(metric.value / 4) : null;
 }
 
 // One project as a card: its health in words, why, and how work is flowing.
@@ -205,13 +218,13 @@ export function projectCard(line, { agents = 0, project } = {}) {
     return `<article class="project-card"><div class="project-card-head">${healthDot(null)}${name}<span class="health-word">${word}</span>${badges}</div><p class="project-card-indexing">${line.state === 'unavailable' ? icon('alert') : '<span class="spinner"></span>'}${escape(headline(line))}</p></article>`;
   }
   const k = line.kpis;
-  const usual = usualWeek(k);
+  const usual = usualWeek(k.done4w);
   const word = metricButton({ projectId: line.projectId, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' });
   const fact = (label, help, value) => `<div title="${escape(help)}"><dt>${escape(label)}</dt><dd>${value}</dd></div>`;
   return `<article class="project-card tone-${healthTone(line.health)}"><div class="project-card-head">${healthDot(line.health)}${name}${word}${badges}</div>
     <p class="project-card-sentence">${escape(headline(line))}</p>
     <div class="project-card-flow"><p><strong>${metricOf(line.projectId, k.done7d)}</strong>finished in 7 days${usual !== null ? `<br><span class="muted">usually ~${escape(usual)} a week</span>` : ''}</p>${sparkline(line.spark)}</div>
-    <dl class="project-card-facts">${fact(TERMS.wip[0], TERMS.wip[1], `${metricOf(line.projectId, k.wip)}${k.wipLimit ? ` / ${escape(k.wipLimit)}` : ''}`)}${k.cycle50 ? fact(TERMS.cycle[0], TERMS.cycle[1], metricOf(line.projectId, k.cycle50)) : ''}${k.cycle85 ? fact(TERMS.service[0], TERMS.service[1], metricOf(line.projectId, k.cycle85)) : ''}${fact('Agents', 'Agent sessions holding work in progress', escape(agents))}${project?.problems?.length ? fact('Unread files', 'Task files AgeAris could not read', escape(project.problems.length)) : ''}</dl></article>`;
+    <dl class="project-card-facts">${fact(TERMS.wip[0], TERMS.wip[1], metricOf(line.projectId, k.wip))}${k.cycle50 ? fact(TERMS.cycle[0], TERMS.cycle[1], metricOf(line.projectId, k.cycle50)) : ''}${k.cycle85 ? fact(TERMS.service[0], TERMS.service[1], metricOf(line.projectId, k.cycle85)) : ''}${fact('Agents', 'Agent sessions holding work in progress', escape(agents))}${project?.problems?.length ? fact('Unread files', 'Task files AgeAris could not read', escape(project.problems.length)) : ''}</dl></article>`;
 }
 
 function windowNote(brief) {
@@ -242,9 +255,10 @@ export function renderHome(brief, { mode, expanded, taskOf, agentsByProject, pro
   const sub = attention.length ? attention.map((line) => `${line.name} ${healthWord(line.health) === 'Watch' ? 'needs watching' : 'needs attention'}`).join(' · ') : brief.projects.length ? 'Every project is on track.' : '';
   const windowMenu = `<label class="window-menu"><span class="sr-only">Window for what changed</span><select data-brief-window>${Object.entries(WINDOWS).map(([value, label]) => `<option value="${value}" ${mode === value ? 'selected' : ''}>${escape(label)}</option>`).join('')}</select></label>`;
   const moved = DELTA_LABELS.map(([name, label]) => [name, label, brief.delta[name] || []]).filter(([, , items]) => items.length);
+  const clear = clearChecks(brief);
   const needs = count
-    ? `<div class="panel need-board">${needGroups(brief, { expanded, taskOf, manyProjects })}</div>${allClear(brief)}`
-    : `<p class="today-clear">${icon('check')}<span>Nothing needs you. ${escape(allClear(brief) ? 'No decisions, nothing overdue, no stale claims, no aging or blocked work.' : '')}</span></p>`;
+    ? `<div class="panel need-board">${needGroups(brief, { expanded, taskOf, manyProjects })}</div>${allClear(clear)}`
+    : `<p class="today-clear">${icon('check')}<span>Nothing needs you${clear.length ? `: ${escape(clear.join(' · '))}` : ''}.</span></p>`;
   const projectById = new Map((projects || []).map((project) => [project.id, project]));
   return `<section class="page-heading home-heading"><div><p class="home-date">${escape(formatDay(brief.asOf, tz))}</p><h1>${count ? `${plural(count, 'thing')} ${count === 1 ? 'needs' : 'need'} you` : 'Nothing needs you'}</h1>${sub ? `<p class="home-sub">${escape(sub)}</p>` : ''}</div></section>
     <section class="section" aria-labelledby="needs-heading"><div class="section-heading"><h2 id="needs-heading">Needs you</h2><span>What breaks the method’s checks, most pressing first</span></div>${needs}</section>
@@ -296,7 +310,8 @@ export function renderFlow(data, { projectId, wipLimit = 0 }) {
   const waiting = notReady(data);
   if (waiting) return waiting;
   const m = data.metrics;
-  const kpi = (metric, [term, help], suffix = '') => `<div class="flow-kpi"><span class="flow-label">${escape(term)}</span><span class="flow-value">${metricOf(projectId, metric)}${suffix}</span><span class="flow-help">${escape(help)}</span></div>`;
+  const usual = usualWeek(m.done_4w);
+  const kpi = (metric, [term, help]) => `<div class="flow-kpi"><span class="flow-label">${escape(term)}</span><span class="flow-value">${metricOf(projectId, metric)}</span><span class="flow-help">${escape(help)}</span></div>`;
   const task = (row) => taskLink(projectId, row.taskKey, row.title);
   const t = data.tables;
   const risk = [
@@ -313,7 +328,7 @@ export function renderFlow(data, { projectId, wipLimit = 0 }) {
   const unassigned = table('In progress with no owner', [['Task', task], ['Priority', (row) => escape(row.priority)]], t.unassigned, 'Every task in progress has an owner.');
   const anomalies = Object.entries(data.ledger.anomalies).map(([kind, n]) => `${n} ${kind.replace(/_/g, ' ')}`).join(', ');
   return `<p class="flow-intro">How work moves: what finishes, how long it takes, and how much is open at once. Each number opens its definition, formula and the tasks behind it.</p>
-    <section class="health-section" aria-label="Flow measures"><div class="flow-grid">${kpi(m.done_7d, TERMS.throughput)}${kpi(m.done_4w, TERMS.usualWeek)}${kpi(m.wip, TERMS.wip, wipLimit ? ` <small class="muted">/ ${escape(wipLimit)} limit</small>` : '')}${kpi(m.cycle_time_p50, TERMS.cycle)}${kpi(m.cycle_time_p85, TERMS.service)}${kpi(m.lead_time_p50, TERMS.lead)}${kpi(m.lead_time_p85, TERMS.lead85)}${kpi(m.blocked_share, TERMS.blockedShare)}${kpi(m.repeat_slips, TERMS.repeatSlips)}</div>
+    <section class="health-section" aria-label="Flow measures"><div class="flow-grid">${kpi(m.done_7d, TERMS.throughput)}${kpi(usual === null ? m.done_4w : { ...m.done_4w, display: String(usual) }, TERMS.usualWeek)}${kpi(m.wip, TERMS.wip)}${kpi(m.cycle_time_p50, TERMS.cycle)}${kpi(m.cycle_time_p85, TERMS.service)}${kpi(m.lead_time_p50, TERMS.lead)}${kpi(m.lead_time_p85, TERMS.lead85)}${kpi(m.blocked_share, TERMS.blockedShare)}${kpi(m.repeat_slips, TERMS.repeatSlips)}</div>
     <div class="series-row">${seriesChart(data.series.throughput, { title: 'Throughput', caption: 'finished per day, last 6 weeks', unit: 'finished' })}${seriesChart(data.series.wip, { title: 'WIP', caption: 'in progress or blocked per day, last 6 weeks', limit: wipLimit, unit: 'in progress' })}</div></section>
     <section class="health-section" aria-labelledby="risk-heading"><div class="section-heading"><h2 id="risk-heading">Risk</h2><span>The work behind each failing check</span></div>${risk}</section>
     <section class="health-section" aria-labelledby="people-heading"><div class="section-heading"><h2 id="people-heading">Load</h2><span>Who holds work in progress</span></div>${people}${agents}${unassigned}</section>
@@ -459,7 +474,7 @@ function activitySteps(entries) {
     else if (entry.kind === 'run') steps.push(`<span>${escape(RUN_EVENTS[entry.event] || entry.event)}</span>`);
   }
   const fields = [...new Set(ordered.filter((entry) => entry.kind === 'field').map((entry) => entry.field))];
-  if (fields.length) steps.push(`<span class="field-change">${escape(fields.join(', '))} changed</span>`);
+  if (fields.length) steps.push(`<span class="field-change">${escape(fields.map((field) => field.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()).join(', '))} changed</span>`);
   return steps.join(' ');
 }
 

@@ -50,17 +50,18 @@ appears.
 A project opens on its **Board** under a status line and four numbers:
 throughput, WIP against its limit, cycle time, and service level. Cards carry
 the same signal badges as Home (stale, aging, blocked, overdue) and the
-holder's latest note. Done shows what finished this week; **Show all** expands
-it. **Threads** organises tasks by what they build on, read from each task
-file's `depends:` line: a thread is a task and everything filed under it.
-Threads with open work come first, each showing its open tasks and the tasks
-they build on, with finished steps folded. A long chain stays in one column and
-only a branch indents; a task that needs more than one other task sits under
-the first and notes the rest. An open task whose dependency is not done is
-marked **Waiting on** that task, here, on its card, and in its drawer, which
-also lists what it builds on and what builds on it. **List** groups tasks by
-state, one line each. **Flow** holds every flow
-measure (throughput, usual week, WIP, cycle and lead time with their 85%
+holder's latest note. Done shows the newest ten of what finished this week and
+says how many more there are; **Show all** expands it. **Threads** organises
+tasks by what they build on, read from each task file's `depends:` line: a
+thread is a task and everything filed under it. Threads with open work come
+first, each showing its open tasks and the tasks they build on, with finished
+steps folded. A long chain stays in one column and only a branch indents; a
+task that needs more than one other task sits under the first and notes the
+rest. An open task whose dependency is not done is marked **Waiting on** that
+task, here, on its card, and in its drawer, which also lists what it builds on
+and what builds on it. **List** groups tasks by state, one line each (on
+narrower screens a task's signals sit under its title). **Flow** holds every
+flow measure (throughput, usual week, WIP, cycle and lead time with their 85%
 levels, blocked time, repeat slips), labeled charts, the risk and load tables,
 and the git history the numbers were computed from. **Method** shows the
 workflow and the policy behind each move, the health rules H2–H8 as named
