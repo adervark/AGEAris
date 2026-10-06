@@ -16,15 +16,16 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T23:03Z · 20 tasks: 14 backlog, 1 WIP (1 in progress), 5 delivered`
+`board · 2026-10-06T23:03Z · 20 tasks: 13 backlog, 2 WIP (2 in progress), 5 delivered`
 
-FLOW · **WIP 1/2** · throughput 1.2/wk (5 in 30d) · cycle time 50th 5m / 85th 33m (n=5)
-FLOW · Little's Law: 1 ÷ 1.2/wk ≈ 6d expected · lead time 85th 36m
+FLOW · **WIP 2/2** · throughput 1.2/wk (5 in 30d) · cycle time 50th 5m / 85th 33m (n=5)
+FLOW · Little's Law: 2 ÷ 1.2/wk ≈ 12d expected · lead time 85th 36m
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T019 | A Working page: everything in progress or blocked, on every board | adervark | 5m |  |
-| **BACKLOG** 14 | | `T002` `T003` `T004` `T007` `T008` `T009` +8 more (`--all`) | | | ⚑ 0 not ready |
+| **IN PROGRESS** 2/2 | T019 | A Working page: everything in progress or blocked, on every board | adervark | 5m |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | now |  |
+| **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 57m |  |
 |  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 66m |  |
 |  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 75m |  |
