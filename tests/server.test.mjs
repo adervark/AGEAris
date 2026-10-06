@@ -84,9 +84,13 @@ test('HTTP API performs a project and task CRUD round trip and reports client er
   response = await fetch(`${base}/api/projects`, { method: 'POST', body: JSON.stringify({ name: 'No type' }) });
   assert.equal(response.status, 415, 'a body without a JSON content type is refused');
 
-  response = await fetch(`${base}/favicon.svg`);
+  response = await fetch(`${base}/favicon.png`);
   assert.equal(response.status, 200);
-  assert.match(response.headers.get('content-type') ?? '', /^image\/svg\+xml/);
+  assert.equal(response.headers.get('content-type'), 'image/png');
+  response = await fetch(`${base}/logo.webp`);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('content-type'), 'image/webp');
+  assert.equal(Buffer.from(await response.arrayBuffer()).subarray(8, 12).toString(), 'WEBP');
 
   response = await fetch(`${base}/api/workspace`);
   assert.equal(response.status, 200);

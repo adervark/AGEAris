@@ -20,13 +20,16 @@ const STATIC_FILES = new Map([
   ['/words.js', 'words.js'],
   ['/markdown.js', 'markdown.js'],
   ['/threads.js', 'threads.js'],
-  ['/favicon.svg', 'favicon.svg'],
+  ['/favicon.png', 'favicon.png'],
+  ['/logo.webp', 'logo.webp'],
 ]);
 const MIME = new Map([
   ['.html', 'text/html; charset=utf-8'],
   ['.js', 'text/javascript; charset=utf-8'],
   ['.css', 'text/css; charset=utf-8'],
   ['.svg', 'image/svg+xml; charset=utf-8'],
+  ['.png', 'image/png'],
+  ['.webp', 'image/webp'],
 ]);
 const MAX_JSON_BYTES = 1024 * 1024;
 // Every task and project write made through the API is marked as made in the

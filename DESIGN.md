@@ -56,8 +56,8 @@ same signal badges on a Home row, a card, a list row, and the drawer, which
 always opens the same way.
 
 The shell is true black: the page and its panels are `#000`, separated by thin
-borders rather than shades of grey. A slim sidebar (Home, Projects, Agents,
-Activity, then the projects with a health dot each), a top bar with search and
+borders rather than shades of grey. A slim sidebar (the AgeAris logo and name,
+then Home, Projects, Agents, Activity, and the projects with a health dot each), a top bar with search and
 a secondary Add project button. Colour carries meaning only: red stuck or
 overdue, amber quiet or running long, blue in progress, green done. Health reads
 as words (On track, Watch, Needs attention) and the dot keeps the colour.
