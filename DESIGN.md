@@ -57,12 +57,14 @@ always opens the same way.
 
 The shell is true black: the page and its panels are `#000`, separated by thin
 borders rather than shades of grey. A slim sidebar (the AGE Aris logo and name,
-then Home, Projects, Agents, Activity, and the projects with a health dot each), a top bar with search and
-a secondary Add project button. Colour carries meaning only: red stuck or
-overdue, amber quiet or running long, blue in progress, green done. Health reads
-as words (On track, Watch, Needs attention) and the dot keeps the colour.
-Numbers are plain text that explain themselves on hover and focus. Charts carry
-date ticks and a maximum label.
+then Home, Projects, Agents, Activity, and the projects with a health dot each;
+the logo is `public/logo.webp` and the tab icon `public/planet.png`, both made
+from `docs/brand/age-aris-logo.png`), a top bar with search and a secondary Add
+project button. Colour carries meaning only: red stuck or overdue, amber quiet
+or running long, blue in progress, green done. Health reads as words (On track,
+Watch, Needs attention) and the dot keeps the colour. Numbers are plain text
+that explain themselves on hover and focus. Charts carry date ticks and a
+maximum label.
 
 All colour, space, and type come from CSS tokens. Body text is at least 13:1
 on black, muted text at least 6.5:1, and coloured fills carry black text. The type scale is 12/13/14/16/20/28px, nothing smaller than 12px. The
