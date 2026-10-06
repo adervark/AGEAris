@@ -18,3 +18,18 @@ its date, the number, and where the evidence is. Newest last.
     T016.
 - Evidence: the bug tasks T005 to T016, each with its failing input, and the
   Result of T001.
+
+## 2026-10-07 — T005 and T006: two of the review's bugs fixed
+
+- **T005** (a `$` pattern corrupts a task file on every edit): fixed. A task
+  whose title, assignee and blocked reason hold `$&`, `$'`, `` $` ``, `$1` and
+  `$$` keeps all three as typed through four edits; before the fix the title
+  grew until the file was refused as too large.
+- **T006** (a stray `AA/tasks/` switches the board): fixed. With a stray
+  `AA/` folder, an own `deaddrop/` project reads and writes there as before
+  (it used to fail with `ENOENT`). A tracked one keeps its WIP limit of 4,
+  `stale_hours` of 12 and its 8 tasks (it used to get 0, 24 and none). A
+  committed move to `AA/` is still followed.
+- `npm test` passed 369 of 369.
+- Evidence: the Results of T005 and T006 in `AA/tasks/done/`, and their tests
+  in `tests/workspace.test.mjs`.

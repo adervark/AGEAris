@@ -365,18 +365,24 @@ test('task updates preserve manually maintained STATE content and use template-c
   assert.match(config, /^id_prefix: T$/m);
 });
 
-test('a project AGE Aris made before the rename keeps its board in deaddrop/: tasks, STATE.md markers, and settings stay there', async () => {
-  const directory = await makeRepository();
-  const workspace = await openWorkspace(directory);
-  const project = await workspace.createProject({ name: 'Older project', wipLimit: 2 });
+// An own project with its board laid out as AGE Aris made it before
+// 2026-10-07: in deaddrop/, with deaddrop.yml and deaddrop: STATE.md markers.
+async function projectBeforeTheRename(workspace, directory, input) {
+  const project = await workspace.createProject(input);
   const projectDir = projectRepository(directory, project.id);
-  // The board as AGE Aris laid it out before 2026-10-07.
   await rename(path.join(projectDir, 'AA'), path.join(projectDir, 'deaddrop'));
   await rename(path.join(projectDir, 'deaddrop', 'AA.yml'), path.join(projectDir, 'deaddrop', 'deaddrop.yml'));
   const statePath = path.join(projectDir, 'deaddrop', 'STATE.md');
   await writeFile(statePath, (await readFile(statePath, 'utf8')).replace(/<!-- (\/?)AA:/g, '<!-- $1deaddrop:'));
   await git(projectDir, 'add', '-A');
   await git(projectDir, 'commit', '--quiet', '-m', 'Lay the board out as before the rename');
+  return { project, projectDir, statePath };
+}
+
+test('a project AGE Aris made before the rename keeps its board in deaddrop/: tasks, STATE.md markers, and settings stay there', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const { project, projectDir, statePath } = await projectBeforeTheRename(workspace, directory, { name: 'Older project', wipLimit: 2 });
 
   let task = await workspace.createTask({ projectId: project.id, title: 'Still here' });
   task = await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' });
@@ -394,6 +400,60 @@ test('a project AGE Aris made before the rename keeps its board in deaddrop/: ta
   assert.equal(await git(projectDir, 'status', '--porcelain'), '');
 });
 
+test('an AA/ folder that is not yet a board leaves an own project\'s deaddrop/ board in use, for reads and writes', async () => {
+  for (const stray of [['AA/tasks'], ['AA/tasks/done', 'AA/backlog']]) {
+    const directory = await makeRepository();
+    const workspace = await openWorkspace(directory);
+    const { project, projectDir } = await projectBeforeTheRename(workspace, directory, { name: 'Older project', wipLimit: 2 });
+    await workspace.createTask({ projectId: project.id, title: 'Made before' });
+    for (const folder of stray) await mkdir(path.join(projectDir, folder), { recursive: true });
+
+    assert.deepEqual(Object.keys(tasksOf(await workspace.read(), project.id)), ['T001'], stray.join(' and '));
+    const second = await workspace.createTask({ projectId: project.id, title: 'Made after' });
+    assert.equal(second.id, `${project.id}:T002`);
+    assert.ok((await stat(path.join(projectDir, 'deaddrop', 'backlog', 'T002-made-after.md'))).isFile());
+    assert.equal(await git(projectDir, 'ls-files', 'AA'), '', 'nothing is committed under AA/');
+    assert.equal(await git(projectDir, 'status', '--porcelain', '--untracked-files=all'), '');
+    assert.equal((await workspace.methodOf(project.id)).board, 'deaddrop');
+  }
+});
+
+test('a stray, empty AA/tasks/ beside a tracked deaddrop/ board changes nothing, whether it is there before or after linking', async () => {
+  const board = Object.fromEntries(Object.entries(legacyBoard()).map(([name, content]) => [name.replace(/^pm\//, 'deaddrop/'), content]));
+  for (const when of ['before', 'after']) {
+    const directory = await makeRepository();
+    const workspace = await openWorkspace(directory);
+    const repository = await makeTrackedRepository(board);
+    if (when === 'before') await mkdir(path.join(repository, 'AA', 'tasks'), { recursive: true });
+    const linked = await workspace.linkProject({ path: repository, name: 'Their board' });
+    if (when === 'after') await mkdir(path.join(repository, 'AA', 'tasks'), { recursive: true });
+
+    const snapshot = await workspace.read();
+    const project = snapshot.projects.find((candidate) => candidate.id === linked.id);
+    assert.deepEqual([linked.board, project.board, project.wipLimit], ['deaddrop', 'deaddrop', 4], when);
+    assert.equal(Object.keys(tasksOf(snapshot, linked.id)).length, 8, when);
+    const method = await workspace.methodOf(linked.id);
+    assert.deepEqual([method.board, method.config, method.wipLimit, method.staleHours], ['deaddrop', 'deaddrop/deaddrop.yml', 4, 12], when);
+  }
+});
+
+test('a tracked board moved from deaddrop/ to AA/ is followed once the move is committed', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const board = Object.fromEntries(Object.entries(legacyBoard()).map(([name, content]) => [name.replace(/^pm\//, 'deaddrop/'), content]));
+  const repository = await makeTrackedRepository(board);
+  const linked = await workspace.linkProject({ path: repository, name: 'Their board' });
+  await git(repository, 'mv', 'deaddrop', 'AA');
+  await git(repository, 'mv', 'AA/deaddrop.yml', 'AA/AA.yml');
+  await git(repository, 'commit', '--quiet', '-m', 'Move the board to AA/');
+
+  const snapshot = await workspace.read();
+  assert.equal(snapshot.projects.find((candidate) => candidate.id === linked.id).board, 'AA');
+  assert.equal(Object.keys(tasksOf(snapshot, linked.id)).length, 8);
+  const method = await workspace.methodOf(linked.id);
+  assert.deepEqual([method.board, method.config, method.wipLimit, method.staleHours], ['AA', 'AA/AA.yml', 4, 12]);
+});
+
 test('a STATE.md title or project name with $ patterns is written as given', async () => {
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
@@ -402,6 +462,32 @@ test('a STATE.md title or project name with $ patterns is written as given', asy
   const state = await readFile(path.join(projectRepository(directory, project.id), 'AA', 'STATE.md'), 'utf8');
   assert.match(state, /^# State — Costs \$& \$' and \$1$/m);
   assert.ok(state.includes("| T001 | Price in $& and $` units | backlog |"), state);
+});
+
+test('a title, owner, assignee or blocked reason with $ patterns is written as given, however often the task is edited', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.createProject({ name: 'Dollars' });
+  const projectDir = projectRepository(directory, project.id);
+  const title = "Pay $& $' $` $1 $$ later";
+  const assignee = "Ann $& $' $` $1 $$";
+  const blockedReason = "Waiting on $& $' $` $1 $$";
+  let task = await workspace.createTask({ projectId: project.id, title, assignee });
+  task = await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' });
+  task = await workspace.updateTask(task.id, { version: task.version, priority: 'high' });
+  task = await workspace.updateTask(task.id, { version: task.version, status: 'blocked', blockedReason });
+  task = await workspace.updateTask(task.id, { version: task.version, priority: 'low' });
+  const [file] = await readdir(path.join(projectDir, 'AA', 'tasks'), { withFileTypes: true })
+    .then((entries) => entries.filter((entry) => entry.isFile()).map((entry) => entry.name));
+  assert.equal(file, 'T001-pay-1-later.md');
+  const contents = await readFile(path.join(projectDir, 'AA', 'tasks', file), 'utf8');
+  assert.ok(contents.includes(`\ntitle: ${JSON.stringify(title)}\n`), contents);
+  assert.ok(contents.includes(`\nassignee: ${JSON.stringify(assignee)}\n`), contents);
+  assert.ok(contents.includes(`\nblockedReason: ${JSON.stringify(blockedReason)}\n`), contents);
+  assert.ok(contents.includes(`— working on ${title}"\n`), contents);
+  assert.ok(contents.includes(`\n# T001 — ${title}\n`), contents);
+  const read = taskByTitle(await workspace.read(), title);
+  assert.deepEqual([read.title, read.assignee, read.blockedReason], [title, assignee, blockedReason]);
 });
 
 test('external project metadata edits reject stale project saves', async () => {

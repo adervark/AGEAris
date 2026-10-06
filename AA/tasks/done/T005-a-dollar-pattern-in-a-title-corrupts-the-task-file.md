@@ -1,8 +1,8 @@
 ---
 id: T005
 title: "A dollar pattern in a task title corrupts the task file on every edit"
-status: claimed
-owner: adervark @k/ff713831 2026-10-07 — fixing dollar patterns in edits
+status: done
+owner: adervark @v/2e8b687e 2026-10-07 — dollar patterns written as typed (was: adervark @k/ff713831 2026-10-07)
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -36,11 +36,11 @@ A title, owner, assignee or blocked reason holding `$&`, `$'`, `` $` `` or
 
 ## Steps
 
-- [ ] A failing test: create a task with each pattern in its title, edit it
+- [x] A failing test: create a task with each pattern in its title, edit it
   twice (status, then priority), and compare the title, the heading and the
   file name.
-- [ ] Replacement functions in the three places.
-- [ ] Check every other `.replace(` whose replacement is built from user text.
+- [x] Replacement functions in the three places.
+- [x] Check every other `.replace(` whose replacement is built from user text.
 
 ## Decision rules — fixed in advance
 
@@ -52,10 +52,10 @@ A title, owner, assignee or blocked reason holding `$&`, `$'`, `` $` `` or
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/ff713831
-- **In flight:** the fix, in this session
-- **On disk:** nothing yet
-- **Resume with:** write the failing test first
+- **Last touched:** 2026-10-07, adervark @v/2e8b687e
+- **In flight:** nothing; done
+- **On disk:** committed with this task's move to `done/`
+- **Resume with:** nothing to resume
 - **Next decision:** none
 
 ## Verify
@@ -64,9 +64,22 @@ A title, owner, assignee or blocked reason holding `$&`, `$'`, `` $` `` or
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T005` — then
-retire the trail with `--delete`)*
+Pass, against the decision rules.
+
+- `updateFrontmatter` and the heading replacement in `updateTask`
+  (`lib/workspace.mjs`) and in `lib/fabricate.mjs` now pass replacement
+  functions, so `$&`, `$'`, `` $` ``, `$1` and `$$` are written as typed.
+- The new test gives a title, an assignee and a blocked reason each of those
+  patterns, then edits the task four times (status, priority, blocked,
+  priority). The title, heading, owner note, assignee, blocked reason and the
+  file name `T001-pay-1-later.md` all come out as typed. Before the fix it
+  failed: the title grew until the file was refused as too large.
+- No other `.replace(` in `lib/`, `server.mjs`, `agents/` or `public/` builds a
+  string replacement from user text. What remains are constant strings with
+  intentional group references (`'$1 $2'`, `'\\$&'`), which are safe.
+- `npm test`: 369 of 369 pass; `npm run check` passes. No spend, so no trail;
+  no independent review was run (that would be an agent fan-out spend).
+- Log: `PROGRESS.md`, 2026-10-07 — T005 and T006.
 
 ## Notes
 
