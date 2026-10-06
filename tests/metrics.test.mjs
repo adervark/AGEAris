@@ -216,6 +216,35 @@ test('a finish known only from a sweep commit is excluded from cycle, lead, and 
   assert.deepEqual(keys(metrics.delta_finished), [], 'a sweep move into done is not a finish in the delta either');
 });
 
+// Five tasks created at 08:00 on day 30, started at 09:00, and finished 6 min,
+// 12 min, 24 min, 2 h, and 6 h after the start: work that moves within hours.
+async function subDayFlow() {
+  const finishes = ['09:06', '09:12', '09:24', '11:00', '15:00'];
+  return fixture(timeline(finishes.flatMap((finish, index) => {
+    const id = `T00${index + 1}`;
+    return [[30, '08:00', `ade: create ${id} backlog "${id} work"`], [30, '09:00', `ade: move ${id} tasks`], [30, finish, `ade: move ${id} done`]];
+  })));
+}
+
+test('a cycle-time percentile under a day reads in hours ("0.4 h"), with its formula value to 0.001 day', async () => {
+  const { metrics } = compute((await subDayFlow()).ledger);
+  const p50 = metrics.cycle_time_p50;
+  assert.deepEqual([p50.status, p50.value, p50.display], ['ok', 0.017, '0.4 h']);
+  assert.equal(p50.formula, 'nearest-rank P50 = sorted[ceil(0.5 × 5) − 1] = sorted[2] = 0.017');
+  assert.deepEqual([metrics.cycle_time_p85.value, metrics.cycle_time_p85.display], [0.25, '6.0 h']);
+  assert.equal(metrics.cycle_time_p85.formula, 'nearest-rank P85 = sorted[ceil(0.85 × 5) − 1] = sorted[4] = 0.250');
+  assert.deepEqual([metrics.lead_time_p50.display, metrics.lead_time_p85.display], ['1.4 h', '7.0 h']);
+});
+
+test('cycle and lead items keep their value to 0.001 day, so work done within hours never reads as 0.0 days', async () => {
+  const { metrics } = compute((await subDayFlow()).ledger);
+  const cycle = metrics.cycle_time_p85.items;
+  assert.deepEqual(cycle.map((item) => [item.taskKey, item.value]), [['T001', 0.004], ['T002', 0.008], ['T003', 0.017], ['T004', 0.083], ['T005', 0.25]]);
+  assert.equal(cycle[0].days, 6 / 1440, 'the unrounded duration is kept beside the value');
+  assert.deepEqual(metrics.lead_time_p85.items.map((item) => item.value), [0.046, 0.05, 0.058, 0.125, 0.292]);
+  for (const item of [...cycle, ...metrics.lead_time_p85.items]) assert.equal(item.value, Math.round(item.days * 1000) / 1000, item.taskKey);
+});
+
 test('done counts: 7 days, the previous 4 weeks as a weekly mean, and a 6-week series with zero days', async () => {
   const { ledger, fabrication } = await fixture(timeline(
     // The previous 4 weeks (days 0–27).
@@ -493,6 +522,14 @@ test('stale 7: an uncommitted trail line 1 h ago keeps the claim alive now, and 
 
   // Without the live trail the same claim is stale.
   assert.deepEqual(staleKeys(compute(ledger)), ['T001']);
+});
+
+test('stale 7b: on a legacy pm/ board, a live trail keeps the claim alive and is cited from pm/checkpoints', async () => {
+  const { ledger } = await claimed();
+  const live = { readAt: ASOF, trails: { T001: `${JSON.stringify({ ts: '2026-10-05T07:00:00Z', run: 'x', kind: 'progress', what: 'live', next: 'go' })}\n` } };
+  const stale = compute(ledger, { live, project: { id: 'p1', wipLimit: 5, board: 'pm' } }).metrics.stale_claims;
+  assert.deepEqual(keys(stale), []);
+  assert.equal(stale.claims[0].lastLife.trail, 'pm/checkpoints/T001.jsonl');
 });
 
 test('stale 8: a run in flight with an event 1 h ago and no profile on owner: is an agent claim, not stale', async () => {

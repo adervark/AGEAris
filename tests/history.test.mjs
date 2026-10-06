@@ -10,7 +10,7 @@ import test from 'node:test';
 
 import { fabricate } from '../lib/fabricate.mjs';
 import {
-  agentIdentity, buildLedger, cycles, fingerprint, isUiClaim, ledgerAt, Ledgers, parseOwner, typeKey,
+  agentIdentity, BOARD_PATHS, buildLedger, cycles, fingerprint, isUiClaim, ledgerAt, Ledgers, parseOwner, typeKey,
 } from '../lib/history.mjs';
 import { Workspace } from '../lib/workspace.mjs';
 
@@ -812,4 +812,87 @@ test('project metadata: creation, renames, WIP limits, other edits, and pipeline
   assert.deepEqual(ledger.transitions.filter((transition) => transition.kind === 'project').map((transition) => [transition.change, transition.from ?? null, transition.to ?? null]), [
     ['created', null, 'Atlas'], ['renamed', 'Atlas', 'Atlas 2'], ['wipLimit', 3, 4], ['edited', null, null], ['pipeline', null, null],
   ]);
+});
+
+// --- tracked repositories: the board's paths, under either name -------------------
+
+// A tracked repository's ledger, as Ledgers builds it for one: BOARD_PATHS.
+async function boardLedger(script) {
+  const fabrication = await fabricate(path.join(await scratch(), 'repo'), script);
+  return { fabrication, ledger: await buildLedger(fabrication.dir, { paths: BOARD_PATHS, backlogFolder: false }) };
+}
+
+// A task file as an agent writes it on a legacy board, as a script string
+// for `write`: no backlog/ folder, so unclaimed work waits in tasks/ marked open.
+function boardFile(id, title, { status, owner = '—' }) {
+  return JSON.stringify(`---\nid: ${id}\ntitle: ${title}\nstatus: ${status}\nowner: ${owner}\ncreated: 2026-09-01\n---\n\n# ${id} — ${title}\n\n## Goal\n\nImport the archive.\n`);
+}
+
+test('tracked board: a pm/ → deaddrop/ rename in one commit is a move, so the task keeps one history and is never created twice', async () => {
+  const claimed = boardFile('T001', 'Importer', { status: 'claimed', owner: CLAIM });
+  const { fabrication, ledger } = await boardLedger(`
+    day 0 09:00 ade: write pm/tasks/T001-importer.md ${boardFile('T001', 'Importer', { status: 'open' })} subject="Add T001"
+    day 1 09:00 ade: write pm/tasks/T001-importer.md ${claimed} subject="Claim T001" label=claim
+    day 2 09:00 ade: write deaddrop/tasks/T001-importer.md ${claimed} subject="migrate: rename pm/ to deaddrop/" label=rename
+    + delete pm/tasks/T001-importer.md
+    day 3 09:00 ade: write deaddrop/tasks/done/T001-importer.md ${boardFile('T001', 'Importer', { status: 'done', owner: CLAIM })} subject="Finish T001" label=finish
+    + delete deaddrop/tasks/T001-importer.md
+  `);
+  assert.deepEqual(of(ledger, 'T001').map(shape), [
+    ['created'],
+    ['status', 'backlog', 'in_progress', AGENT],
+    ['field', 'owner', '', CLAIM],
+    ['status', 'in_progress', 'done'],
+  ]);
+  assert.deepEqual(Object.keys(ledger.tasks), ['T001']);
+  assert.equal(ledger.tasks.T001.present, true);
+  assert.deepEqual(ledger.anomalies, []);
+  const rename = ledger.commits.find((commit) => commit.sha === fabrication.sha('rename'));
+  assert.deepEqual(rename.touched, ['T001'], 'the rename follows the task to its new path');
+  assert.equal(of(ledger, 'T001').at(-1).path, 'deaddrop/tasks/done/T001-importer.md');
+  const [cycle] = cycles(ledger).T001;
+  assert.deepEqual([cycle.start.commit, cycle.end.commit, cycle.excluded], [fabrication.sha('claim'), fabrication.sha('finish'), '']);
+});
+
+test('tracked board: a legacy task created status: open in tasks/ starts in backlog, and its cycle starts when it is claimed', async () => {
+  const { fabrication, ledger } = await boardLedger(`
+    day 0 09:00 ade: write pm/tasks/T001-importer.md ${boardFile('T001', 'Importer', { status: 'open' })} label=create
+    day 2 09:00 ade: write pm/tasks/T001-importer.md ${boardFile('T001', 'Importer', { status: 'claimed', owner: CLAIM })} label=claim
+    day 5 09:00 ade: write pm/tasks/done/T001-importer.md ${boardFile('T001', 'Importer', { status: 'done', owner: CLAIM })} label=finish
+    + delete pm/tasks/T001-importer.md
+  `);
+  const [created, claim] = of(ledger, 'T001');
+  assert.equal(created.snapshot.status, 'backlog');
+  assert.equal(created.claimant, undefined, 'nobody claims a task by adding it');
+  assert.deepEqual(shape(claim), ['status', 'backlog', 'in_progress', AGENT]);
+  const [cycle] = cycles(ledger).T001;
+  assert.deepEqual(cycle.begin, { seq: 0, at: '2026-09-01T09:00:00+01:00', commit: fabrication.sha('create'), kind: 'created' });
+  assert.deepEqual(cycle.start, { seq: 1, at: '2026-09-03T09:00:00+01:00', commit: fabrication.sha('claim'), source: 'entry' });
+  assert.deepEqual(cycle.claimant, AGENT);
+  assert.deepEqual([cycle.end.commit, cycle.outcome], [fabrication.sha('finish'), 'done']);
+});
+
+test('tracked board: the repository\'s own project.json is not AGESight\'s, so its changes never reach the ledger', async () => {
+  const fabrication = await fabricate(path.join(await scratch(), 'repo'), `
+    day 0 08:00 ade: project {"name": "Their app", "version": "1.0.0"}
+    day 1 09:00 ade: create T001 backlog "Importer"
+    day 2 09:00 ade: project {"name": "Their app, renamed", "wipLimit": 2} label=manifest
+    day 3 09:00 ade: move T001 tasks {"owner": "${CLAIM}"} label=claim
+    + project {"version": "1.1.0"}
+    day 4 09:00 ade: project {"version": "1.2.0"} label=later
+  `);
+  const workspace = await openWorkspace();
+  const project = await workspace.linkProject({ path: fabrication.dir });
+  const ledgers = new Ledgers({ workspace });
+  const ledger = await ledgers.get(project.id);
+  ledgers.close();
+
+  assert.deepEqual(ledger.transitions.filter((transition) => transition.kind === 'project'), []);
+  assert.deepEqual(of(ledger, 'T001').map(shape), [['created'], ['status', 'backlog', 'in_progress', AGENT], ['field', 'owner', '', CLAIM]]);
+  assert.ok(!ledger.commits.some((commit) => commit.sha === fabrication.sha('manifest')), 'a commit touching only project.json is not read');
+  assert.equal(ledger.ledgerSha, fabrication.sha('claim'), 'the last commit touching the board');
+  assert.equal(ledger.headSha, fabrication.sha('later'));
+  // Read as an AGESight project, the same history has project transitions.
+  const own = await buildLedger(fabrication.dir);
+  assert.deepEqual(own.transitions.filter((transition) => transition.kind === 'project').map((transition) => transition.change), ['created', 'renamed', 'wipLimit', 'edited', 'edited']);
 });

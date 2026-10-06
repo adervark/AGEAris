@@ -1,14 +1,16 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { chmod, copyFile, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, writeFile } from 'node:fs/promises';
+import {
+  chmod, copyFile, mkdir, mkdtemp, readFile, readdir, readlink, realpath, rename, rm, stat, symlink, writeFile,
+} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import test from 'node:test';
 
 import {
-  blockedReasonOf, DEFAULT_NEXT_DECISION, git as workspaceGit, gitStream, taskState, Workspace,
+  blockedReasonOf, boardPolicy, DEFAULT_NEXT_DECISION, git as workspaceGit, gitStream, statusWord, taskState, Workspace,
 } from '../lib/workspace.mjs';
 
 const exec = promisify(execFile);
@@ -767,4 +769,365 @@ test('the async repository check passes a valid repository, is cached until .git
   await mkdir(path.join(nested, '.git'), { recursive: true });
   await expectRejected(workspace._verifyProjectRepoAsync(nested), 500, /root does not match|Git operation failed/);
   await expectRejected(workspace._verifyProjectRepoAsync(path.join(projectDir, 'missing')), 500, /missing/);
+});
+
+// --- tracked repositories: status words, board policy, link and unlink ------------
+
+const AGENT_CLAIM = 'ade @k/e857a8c8 2026-10-01 — importer';
+
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// A task file as a board AGESight did not write keeps it: the keys given, in
+// that order, values written verbatim.
+function boardTask(id, title, fields = {}) {
+  const header = Object.entries({ id, title, ...fields }).map(([key, value]) => `${key}: ${value}`).join('\n');
+  return `---\n${header}\n---\n\n# ${id} — ${title}\n\n## Goal\n\nWork tracked outside AGESight.\n`;
+}
+
+// A git repository outside the data folder, as an agent team keeps it: a
+// README and `files` (relative path → content), committed. Returns its real path.
+async function makeTrackedRepository(files = {}) {
+  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-tracked-')));
+  temporaryDirectories.add(directory);
+  await git(directory, 'init', '--quiet');
+  await git(directory, 'config', 'user.name', 'Repository Owner');
+  await git(directory, 'config', 'user.email', 'owner@example.invalid');
+  for (const [name, content] of Object.entries({ 'README.md': '# Their project\n', ...files })) {
+    await mkdir(path.dirname(path.join(directory, name)), { recursive: true });
+    await writeFile(path.join(directory, name), content);
+  }
+  await git(directory, 'add', '-A');
+  await git(directory, 'commit', '--quiet', '-m', 'Their first commit');
+  return directory;
+}
+
+async function scratchFolder() {
+  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-scratch-')));
+  temporaryDirectories.add(directory);
+  return directory;
+}
+
+// HEAD, git status, and every file outside .git with its content (a symlink
+// as its target): equal before and after means AGESight changed nothing.
+async function repositoryState(directory) {
+  const files = {};
+  async function visit(current) {
+    for (const entry of await readdir(current, { withFileTypes: true })) {
+      if (entry.name === '.git') continue;
+      const absolute = path.join(current, entry.name);
+      if (entry.isDirectory()) await visit(absolute);
+      else files[path.relative(directory, absolute)] = entry.isSymbolicLink() ? `-> ${await readlink(absolute)}` : await readFile(absolute, 'utf8');
+    }
+  }
+  await visit(directory);
+  return {
+    head: await git(directory, 'rev-parse', 'HEAD'),
+    status: await git(directory, 'status', '--porcelain', '--untracked-files=all'),
+    files,
+  };
+}
+
+// A board under its older name, pm/, from before backlog/ existed: unclaimed
+// work waits in tasks/ marked `status: open`, and status lines carry notes.
+function legacyBoard() {
+  return {
+    'pm/deaddrop.yml': 'wip:\n  in_progress: 4  # four agents\n  blocked: 2\nstale_hours: 12\n',
+    'pm/tasks/T001-write-the-importer.md': boardTask('T001', 'Write the importer', { status: 'open', owner: '—', priority: 'high' }),
+    'pm/tasks/T002-parse-dates.md': boardTask('T002', 'Parse dates', { status: '**claimed**', owner: AGENT_CLAIM, priority: 'High' }),
+    'pm/tasks/T003-load-the-archive.md': boardTask('T003', 'Load the archive', { status: 'blocked — waiting on the archive key', owner: AGENT_CLAIM }),
+    'pm/tasks/T004-review-the-schema.md': boardTask('T004', 'Review the schema', { status: 'In progress', owner: 'ana', priority: 'critical' }),
+    'pm/tasks/T005-try-a-faster-parser.md': boardTask('T005', 'Try a faster parser', { status: 'unclaimed' }),
+    'pm/tasks/T006-tidy-the-logs.md': boardTask('T006', 'Tidy the logs', { status: '' }),
+    'pm/tasks/done/T007-set-up-ci.md': boardTask('T007', 'Set up CI', { status: 'done — green on main' }),
+    'pm/tasks/done/T008-drop-xml.md': boardTask('T008', 'Drop XML', { status: 'killed — superseded by T001' }),
+  };
+}
+
+function tasksOf(snapshot, projectId) {
+  return Object.fromEntries(snapshot.tasks.filter((task) => task.projectId === projectId).map((task) => [task.id.split(':').at(-1), task]));
+}
+
+test('statusWord reads the first lowercase word of a status line, and in progress in any spelling is in_progress', () => {
+  assert.equal(statusWord('**claimed**'), 'claimed');
+  assert.equal(statusWord('done — out of memory'), 'done');
+  assert.equal(statusWord('  Blocked: waiting on the key'), 'blocked');
+  assert.equal(statusWord('KILLED'), 'killed');
+  for (const spelling of ['in progress', 'in-progress', 'in_progress', 'In Progress', '**in progress** since Monday']) {
+    assert.equal(statusWord(spelling), 'in_progress', spelling);
+  }
+  assert.equal(statusWord('inprogress'), 'inprogress', 'only a space, hyphen, or underscore joins the two words');
+  for (const empty of ['', '—', '42', undefined, null]) assert.equal(statusWord(empty), '', JSON.stringify(empty));
+});
+
+test('the state rule: in tasks/, an unclaimed status is backlog only on a board without backlog/; blocked is blocked, and any other word is in progress', () => {
+  for (const unclaimed of ['', 'open', 'unclaimed', 'backlog', 'Open — nobody yet', undefined]) {
+    assert.equal(taskState('tasks', unclaimed, { backlogFolder: false }), 'backlog', JSON.stringify(unclaimed));
+    assert.equal(taskState('tasks', unclaimed), 'in_progress', `${JSON.stringify(unclaimed)} where backlog/ exists, as board.sh reads it`);
+  }
+  assert.equal(taskState('tasks', 'blocked — waiting on the archive key'), 'blocked');
+  for (const working of ['claimed', '**claimed**', 'in progress', 'review', 'killed']) {
+    assert.equal(taskState('tasks', working), 'in_progress', working);
+  }
+});
+
+test('the state rule: the folder decides backlog and done, and a killed task in done/ is dropped whatever note follows', () => {
+  assert.equal(taskState('backlog', 'claimed'), 'backlog');
+  assert.equal(taskState('backlog', 'blocked'), 'backlog');
+  assert.equal(taskState('done', 'open'), 'done');
+  assert.equal(taskState('done', 'done — green on main'), 'done');
+  assert.equal(taskState('done', 'killed — superseded by T001'), 'dropped');
+  assert.equal(taskState('done', '**Killed**'), 'dropped');
+});
+
+test('boardPolicy reads the in-progress WIP limit and stale_hours, and gives 0 when no limit is set or it is still the placeholder', async () => {
+  assert.deepEqual(boardPolicy('wip:\n  in_progress: 3  # three agents\n  blocked: 2\nstale_hours: 12\n'), { staleHours: 12, wipLimit: 3 });
+  assert.deepEqual(boardPolicy(''), { staleHours: undefined, wipLimit: 0 });
+  assert.deepEqual(boardPolicy('stale_hours: 24\nlog: PROGRESS.md\n'), { staleHours: 24, wipLimit: 0 });
+  assert.deepEqual(boardPolicy('limits:\n  in_progress: 9\nwip:\n  blocked: 2\n'), { staleHours: undefined, wipLimit: 0 }, 'only the wip: block sets it');
+  const template = await readFile(new URL('../skills/deaddrop-init/template/deaddrop.yml', import.meta.url), 'utf8');
+  assert.match(template, /^ {2}in_progress: \{\{N\}\}$/m, 'the template still carries the placeholder');
+  assert.deepEqual(boardPolicy(template), { staleHours: 24, wipLimit: 0 });
+});
+
+test('linkProject refuses a missing, relative, absent, or non-folder path, and any folder inside the data folder', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const own = await workspace.createProject({ name: 'Own board' });
+  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const outside = await scratchFolder();
+  await symlink(projectRepository(directory, own.id), path.join(outside, 'alias'));
+
+  await expectRejected(workspace.linkProject({}), 400, /^path is required$/);
+  await expectRejected(workspace.linkProject({ path: 'code/project' }), 400, /full path/);
+  await expectRejected(workspace.linkProject({ path: path.join(repository, 'missing') }), 400, new RegExp(`^There is no folder at ${escapeRegExp(path.join(repository, 'missing'))}$`));
+  await expectRejected(workspace.linkProject({ path: path.join(repository, 'README.md') }), 400, /README\.md is not a folder$/);
+  // An AGESight project is a git repository with a board, so only its place refuses it.
+  for (const inside of [directory, projectRepository(directory, own.id), path.join(outside, 'alias'), `${repository}/../${path.basename(directory)}/projects`]) {
+    await expectRejected(workspace.linkProject({ path: inside }), 400, /inside AGESight's own data folder/);
+  }
+  assert.deepEqual(await readdir(path.join(directory, 'projects')), [own.id], 'nothing was written, not even a staging folder');
+});
+
+test('linkProject refuses a folder that is not a git repository, a subfolder of one, a worktree\'s .git file, and a repository without a board', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const plain = await scratchFolder();
+  await mkdir(path.join(plain, 'deaddrop', 'tasks'), { recursive: true });
+  await expectRejected(workspace.linkProject({ path: plain }), 400, new RegExp(`^${escapeRegExp(plain)} is not a git repository$`));
+
+  // A monorepo whose service keeps its own board: the repository root is what can be tracked.
+  const monorepo = await makeTrackedRepository({ 'services/api/deaddrop/tasks/T001-route.md': boardTask('T001', 'Route', { status: 'open' }) });
+  await expectRejected(
+    workspace.linkProject({ path: path.join(monorepo, 'services', 'api') }),
+    400,
+    new RegExp(`^${escapeRegExp(path.join(monorepo, 'services', 'api'))} is inside the repository at ${escapeRegExp(monorepo)}; give that folder instead$`),
+  );
+
+  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const worktree = path.join(await scratchFolder(), 'worktree');
+  await git(repository, 'worktree', 'add', '--quiet', '--detach', worktree);
+  assert.ok((await stat(path.join(worktree, 'deaddrop', 'tasks'))).isDirectory(), 'the worktree has the board');
+  await expectRejected(workspace.linkProject({ path: worktree }), 400, /\.git is not a folder: worktrees and submodules cannot be tracked yet$/);
+
+  const boardless = await makeTrackedRepository({
+    'deaddrop/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open' }),
+    'docs/tasks/T002-notes.md': boardTask('T002', 'Notes', { status: 'open' }),
+  });
+  await expectRejected(workspace.linkProject({ path: boardless }), 400, /has no task board: AGESight reads deaddrop\/tasks\/ \(or pm\/tasks\/, its older name\), and not through a symbolic link$/);
+  assert.deepEqual(await readdir(path.join(directory, 'projects')), []);
+});
+
+test('a repository can be tracked once: a second link is a 409 however its path is spelled', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const alias = path.join(await scratchFolder(), 'alias');
+  await symlink(repository, alias);
+
+  const first = await workspace.linkProject({ path: repository });
+  assert.equal(first.name, path.basename(repository), 'without a name, the project is named after the folder');
+  for (const spelling of [repository, `${repository}/`, `${repository}/deaddrop/..`, alias]) {
+    await expectRejected(workspace.linkProject({ path: spelling, name: 'Again' }), 409, new RegExp(`^${escapeRegExp(repository)} is already tracked as ${escapeRegExp(first.name)}$`));
+  }
+  assert.deepEqual(await readdir(path.join(directory, 'projects')), [first.id]);
+});
+
+test('linking a legacy pm/ board writes only project.json, and the project takes its WIP limit from pm/deaddrop.yml', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const repository = await makeTrackedRepository(legacyBoard());
+  const before = await repositoryState(repository);
+
+  const project = await workspace.linkProject({ path: repository, name: 'Legacy board', color: '#16A34A' });
+  assert.deepEqual(
+    [project.linked, project.board, project.repository, project.name, project.color, project.wipLimit],
+    [true, 'pm', repository, 'Legacy board', '#16a34a', 4],
+  );
+  const folder = projectRepository(directory, project.id);
+  assert.deepEqual(await readdir(path.join(directory, 'projects')), [project.id], 'no staging folder is left behind');
+  assert.deepEqual(await readdir(folder), ['project.json'], 'no .git and no board of its own');
+  const stored = JSON.parse(await readFile(path.join(folder, 'project.json'), 'utf8'));
+  assert.deepEqual([stored.repository, stored.board, 'wipLimit' in stored, 'linked' in stored], [repository, 'pm', false, false]);
+
+  const listed = (await workspace.read()).projects.find((candidate) => candidate.id === project.id);
+  assert.deepEqual([listed.linked, listed.wipLimit, listed.problems], [true, 4, []]);
+  assert.deepEqual(await repositoryState(repository), before, 'the repository is untouched');
+});
+
+test('a tracked board without backlog/ is read: each task takes its state from its folder and the first word of status:', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.linkProject({ path: await makeTrackedRepository(legacyBoard()) });
+  const tasks = tasksOf(await workspace.read(), project.id);
+  assert.deepEqual(Object.fromEntries(Object.entries(tasks).map(([id, task]) => [id, task.status])), {
+    T001: 'backlog', T002: 'in_progress', T003: 'blocked', T004: 'in_progress', T005: 'backlog', T006: 'backlog', T007: 'done', T008: 'done',
+  });
+  assert.equal(tasks.T001.file, 'pm/tasks/T001-write-the-importer.md', 'a tracked task names the file it is changed in');
+  assert.equal(tasks.T007.file, 'pm/tasks/done/T007-set-up-ci.md');
+});
+
+test('a tracked task keeps a valid priority in any case, reports whether one was given, and names the agent session claiming it', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const project = await workspace.linkProject({ path: await makeTrackedRepository(legacyBoard()) });
+  const tasks = tasksOf(await workspace.read(), project.id);
+  assert.deepEqual(
+    ['T001', 'T002', 'T003', 'T004'].map((id) => [id, tasks[id].priority, tasks[id].priorityGiven, tasks[id].claim]),
+    [
+      ['T001', 'high', true, ''],
+      ['T002', 'high', true, 'ade @k/e857a8c8'],
+      ['T003', 'medium', false, 'ade @k/e857a8c8'],
+      ['T004', 'medium', false, ''],
+    ],
+  );
+  const single = await workspace.getTask(tasks.T002.id);
+  assert.deepEqual([single.status, single.claim, single.file], ['in_progress', 'ade @k/e857a8c8', 'pm/tasks/T002-parse-dates.md']);
+});
+
+test('a tracked board reports unreadable task files and symlinks as problems and still reads every other task', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const elsewhere = await scratchFolder();
+  await writeFile(path.join(elsewhere, 'T009-elsewhere.md'), boardTask('T009', 'Elsewhere', { status: 'claimed' }));
+  const repository = await makeTrackedRepository({
+    'deaddrop/backlog/T001-good.md': boardTask('T001', 'Good', { status: 'open' }),
+    'deaddrop/tasks/T002-also-good.md': boardTask('T002', 'Also good', { status: 'claimed' }),
+    'deaddrop/tasks/T003-no-frontmatter.md': '# T003 — No frontmatter\n\nJust notes.\n',
+    'deaddrop/tasks/T004-wrong-id.md': boardTask('T005', 'Wrong id', { status: 'claimed' }),
+    'deaddrop/tasks/done/T002-copy.md': boardTask('T002', 'A copy', { status: 'done' }),
+  });
+  await symlink(path.join(elsewhere, 'T009-elsewhere.md'), path.join(repository, 'deaddrop', 'tasks', 'T009-elsewhere.md'));
+  await git(repository, 'add', '-A');
+  await git(repository, 'commit', '--quiet', '-m', 'Link a task from elsewhere');
+  const project = await workspace.linkProject({ path: repository, name: 'Messy board' });
+
+  const snapshot = await workspace.read();
+  const listed = snapshot.projects.find((candidate) => candidate.id === project.id);
+  // readdir order is the file system's; compare in code-point order.
+  assert.deepEqual([...listed.problems].sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0)), [
+    { file: 'deaddrop/tasks/T003-no-frontmatter.md', error: 'Task file has invalid frontmatter' },
+    { file: 'deaddrop/tasks/T004-wrong-id.md', error: 'Task file T004-wrong-id.md has an invalid id' },
+    { file: 'deaddrop/tasks/T009-elsewhere.md', error: 'Symbolic links are not read' },
+    { file: 'deaddrop/tasks/done/T002-copy.md', error: 'Duplicate task id T002 in project Messy board' },
+  ]);
+  assert.deepEqual(Object.keys(tasksOf(snapshot, project.id)).sort(), ['T001', 'T002']);
+  assert.equal(tasksOf(snapshot, project.id).T002.title, 'Also good');
+});
+
+test('a tracked repository\'s activity is the commits that touch its board, not the rest of its code', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  await writeFile(path.join(repository, 'README.md'), '# Their project, documented\n');
+  await git(repository, 'commit', '--quiet', '-am', 'Document the code');
+  const project = await workspace.linkProject({ path: repository });
+  const activity = (await workspace.read()).activity.filter((entry) => entry.projectId === project.id);
+  assert.deepEqual(activity.map((entry) => entry.message), ['Their first commit']);
+});
+
+test('a tracked repository refuses task and project writes with a 409 naming its board, and is left untouched', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const repository = await makeTrackedRepository(legacyBoard());
+  const project = await workspace.linkProject({ path: repository, name: 'Theirs' });
+  const task = await workspace.getTask(`${project.id}:T001`);
+  const before = await repositoryState(repository);
+  const readOnly = new RegExp(`^Theirs is a tracked repository, which AGESight only reads\\. Change its tasks in ${escapeRegExp(path.join(repository, 'pm'))}, where its agents work\\.$`);
+
+  await expectRejected(workspace.createTask({ projectId: project.id, title: 'One more' }), 409, readOnly);
+  await expectRejected(workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }), 409, readOnly);
+  await expectRejected(workspace.updateTask(task.id, { version: task.version, title: 'Renamed' }), 409, readOnly);
+  await expectRejected(workspace.updateProject(project.id, { version: project.version, name: 'Renamed' }), 409, readOnly);
+  assert.deepEqual(await repositoryState(repository), before);
+  assert.deepEqual(await readdir(projectRepository(directory, project.id)), ['project.json']);
+  assert.equal((await workspace.getTask(task.id)).status, 'backlog');
+});
+
+test('_commit and _resetPaths refuse any folder but an own project repository, so git never falls through to a repository above', async () => {
+  // Here the data folder is itself a git repository: a tracked project's
+  // folder has no .git, so a git command run there would reach this one.
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-read-me.md': boardTask('T001', 'Read me', { status: 'open' }) });
+  const project = await workspace.linkProject({ path: repository });
+  const folder = projectRepository(directory, project.id);
+  await writeFile(path.join(repository, 'deaddrop', 'tasks', 'T002-sneaked-in.md'), boardTask('T002', 'Sneaked in', { status: 'open' }));
+  const heads = async () => [await git(directory, 'rev-parse', 'HEAD'), await git(repository, 'rev-parse', 'HEAD')];
+  const before = await heads();
+
+  for (const target of [folder, repository, directory, path.join(directory, 'projects')]) {
+    const paths = [path.join(target, 'project.json'), path.join(target, 'deaddrop')];
+    assert.throws(() => workspace._commit(target, paths, 'Sneak a commit in'), (error) => error.status === 500 && /^AGESight writes only to the project repositories in its data folder$/.test(error.message), target);
+    assert.throws(() => workspace._resetPaths(target, paths), (error) => error.status === 500, target);
+  }
+  assert.deepEqual(await heads(), before, 'neither the data folder\'s repository nor the tracked one got a commit');
+  assert.match(await git(repository, 'status', '--porcelain'), /^\?\? deaddrop\/tasks\/T002-sneaked-in\.md$/);
+});
+
+test('unlinkProject removes only a tracked project\'s folder; an own project is a 409 and an unknown one a 404', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const own = await workspace.createProject({ name: 'Own' });
+  const repository = await makeTrackedRepository(legacyBoard());
+  const project = await workspace.linkProject({ path: repository, name: 'Theirs' });
+  const before = await repositoryState(repository);
+
+  await expectRejected(workspace.unlinkProject(own.id), 409, /^Own is an AGESight project; only a tracked repository can be removed$/);
+  await expectRejected(workspace.unlinkProject('00000000-0000-4000-8000-000000000000'), 404, /Project not found/);
+  await expectRejected(workspace.unlinkProject('../projects'), 404, /Project not found/);
+  assert.deepEqual(await workspace.unlinkProject(project.id), { id: project.id, name: 'Theirs' });
+
+  await assert.rejects(stat(projectRepository(directory, project.id)), { code: 'ENOENT' });
+  assert.deepEqual(await readdir(path.join(directory, 'projects')), [own.id], 'the own project stays');
+  const snapshot = await workspace.read();
+  assert.deepEqual(snapshot.projects.map((candidate) => candidate.id), [own.id]);
+  assert.deepEqual(snapshot.tasks, []);
+  assert.deepEqual(await repositoryState(repository), before, 'the repository\'s files and HEAD are unchanged');
+  await expectRejected(workspace.unlinkProject(project.id), 404, /Project not found/);
+  const again = await workspace.linkProject({ path: repository });
+  assert.notEqual(again.id, project.id, 'once removed, the repository can be tracked again');
+});
+
+test('an own project whose project.json names a repository is still an own project: the key is ignored', async () => {
+  const directory = await makeRepository();
+  const workspace = await openWorkspace(directory);
+  const repository = await makeTrackedRepository({ 'deaddrop/tasks/T001-theirs.md': boardTask('T001', 'Theirs', { status: 'claimed' }) });
+  const project = await workspace.createProject({ name: 'Own' });
+  await workspace.createTask({ projectId: project.id, title: 'Mine' });
+  const projectDir = projectRepository(directory, project.id);
+  const metadata = path.join(projectDir, 'project.json');
+  await writeFile(metadata, `${JSON.stringify({ ...JSON.parse(await readFile(metadata, 'utf8')), repository, board: 'deaddrop' }, null, 2)}\n`);
+  await git(projectDir, 'commit', '--quiet', '-am', 'An agent points project.json elsewhere');
+  const before = await repositoryState(repository);
+
+  const snapshot = await workspace.read();
+  const listed = snapshot.projects.find((candidate) => candidate.id === project.id);
+  assert.deepEqual([listed.linked, listed.problems, listed.wipLimit], [undefined, undefined, 6]);
+  assert.deepEqual(snapshot.tasks.map((task) => task.title), ['Mine']);
+  assert.equal((await workspace.createTask({ projectId: project.id, title: 'Still writable' })).id, `${project.id}:T002`);
+  assert.match(await git(projectDir, 'log', '-1', '--format=%s'), /^Create T002: Still writable$/);
+  await expectRejected(workspace.unlinkProject(project.id), 409, /is an AGESight project/);
+  assert.deepEqual(await repositoryState(repository), before);
 });

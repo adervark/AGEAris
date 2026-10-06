@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
 import { EventEmitter, once } from 'node:events';
 import { PassThrough } from 'node:stream';
-import { chmod, mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -667,4 +667,113 @@ test('the sample project is created only on request, through POST /api/projects/
   const brief = await json(await fetch(`${base}/api/brief`));
   assert.deepEqual(brief.projects.map((line) => [line.projectId, line.sample, line.state]), [[project.id, true, 'ready']]);
   assert.ok(brief.needsYou.length >= 5);
+});
+
+// --- tracked repositories ----------------------------------------------------------
+
+// A repository with its own deaddrop/ board, outside the data folder, as an
+// agent team keeps it; removed when the test ends. Its board sets a WIP limit of 3.
+async function trackedRepository(t) {
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-tracked-')));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const fabrication = await fabricate(path.join(root, 'repo'), `
+    day 0 09:00 ade: create T001 backlog "Read the archive"
+    day 1 09:00 ade: create T002 tasks "Parse the dates" {"owner": "ade @k/e857a8c8 2026-09-02 — importer"}
+    day 1 10:00 ade: write deaddrop/deaddrop.yml "wip:\\n  in_progress: 3\\n  blocked: 3\\n"
+  `);
+  return fabrication.dir;
+}
+
+// HEAD, git status, and the log of a repository: equal before and after means
+// nothing was written to it.
+async function repositoryState(directory) {
+  const run = async (...args) => (await exec('git', args, {
+    cwd: directory, env: { ...process.env, GIT_CONFIG_GLOBAL: os.devNull, GIT_CONFIG_NOSYSTEM: '1' },
+  })).stdout;
+  return { head: await run('rev-parse', 'HEAD'), status: await run('status', '--porcelain', '--untracked-files=all'), log: await run('log', '--format=%H %s') };
+}
+
+// A JSON request that asserts its status and returns the body.
+function caller(base, fetch) {
+  return async (method, url, body, status = 200) => {
+    const response = await fetch(`${base}${url}`, { method, headers: body === undefined ? {} : { 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) });
+    const value = await json(response);
+    assert.equal(response.status, status, `${method} ${url}: ${value.error}`);
+    return value;
+  };
+}
+
+test('POST /api/projects/link tracks a repository, which the brief then lists as linked with its board\'s WIP limit', async (t) => {
+  // The brief waits for every ledger, so the new project's line is ready.
+  const { base, fetch } = await tokenServer(t, { options: { cockpitOptions: { buildWaitMs: 60_000 } } });
+  const call = caller(base, fetch);
+  const repository = await trackedRepository(t);
+  const own = await call('POST', '/api/projects', { name: 'Own' }, 201);
+
+  const project = await call('POST', '/api/projects/link', { path: repository, name: 'Their repo' }, 201);
+  assert.deepEqual([project.name, project.linked, project.board, project.repository, project.wipLimit], ['Their repo', true, 'deaddrop', repository, 3]);
+  assert.match((await call('POST', '/api/projects/link', { path: repository }, 409)).error, /already tracked as Their repo$/);
+  assert.match((await call('POST', '/api/projects/link', { path: 'code/repo' }, 400)).error, /full path/);
+
+  const brief = await call('GET', '/api/brief');
+  const line = brief.projects.find((entry) => entry.projectId === project.id);
+  assert.deepEqual([line.name, line.linked, line.state, line.kpis.wipLimit, line.kpis.wip.value], ['Their repo', true, 'ready', 3, 1]);
+  assert.equal('linked' in brief.projects.find((entry) => entry.projectId === own.id), false, 'an own project is not marked linked');
+
+  const workspace = await call('GET', '/api/workspace');
+  assert.deepEqual(workspace.projects.find((entry) => entry.id === project.id).problems, []);
+  assert.deepEqual(workspace.tasks.filter((task) => task.projectId === project.id).map((task) => [task.id.split(':').at(-1), task.status, task.file]), [
+    ['T001', 'backlog', 'deaddrop/backlog/T001-read-the-archive.md'],
+    ['T002', 'in_progress', 'deaddrop/tasks/T002-parse-the-dates.md'],
+  ]);
+});
+
+test('every write to a tracked project is refused with a 409: its tasks, its project, its pipeline, and runs', async (t) => {
+  const { base, fetch } = await tokenServer(t);
+  const call = caller(base, fetch);
+  const repository = await trackedRepository(t);
+  const own = await call('POST', '/api/projects', { name: 'Own' }, 201);
+  const { stages } = await call('GET', `/api/projects/${own.id}/pipeline`);
+  const project = await call('POST', '/api/projects/link', { path: repository, name: 'Their repo' }, 201);
+  const task = (await call('GET', '/api/workspace')).tasks.find((entry) => entry.id === `${project.id}:T001`);
+  const before = await repositoryState(repository);
+
+  // Each request would succeed on an own project.
+  for (const [method, url, body] of [
+    ['POST', '/api/tasks', { projectId: project.id, title: 'One more' }],
+    ['PATCH', `/api/tasks/${encodeURIComponent(task.id)}`, { version: task.version, status: 'in_progress' }],
+    ['PATCH', `/api/projects/${project.id}`, { version: project.version, name: 'Renamed' }],
+    ['GET', `/api/projects/${project.id}/pipeline`],
+    ['PUT', `/api/projects/${project.id}/pipeline`, { stages, version: 'default' }],
+    ['POST', '/api/runs', { taskId: task.id }],
+  ]) {
+    assert.match((await call(method, url, body, 409)).error, /^Their repo is a tracked repository, which AGESight only reads\./, `${method} ${url}`);
+  }
+  assert.deepEqual(await call('GET', '/api/runs'), [], 'no run was started');
+  assert.deepEqual(await repositoryState(repository), before, 'the repository is untouched');
+  assert.equal((await call('GET', '/api/workspace')).tasks.find((entry) => entry.id === task.id).status, 'backlog');
+});
+
+test('DELETE /api/projects/:id stops tracking a repository; an own project is a 409 and an unknown one a 404', async (t) => {
+  const { base, fetch } = await tokenServer(t, { options: { cockpitOptions: { buildWaitMs: 60_000 } } });
+  const call = caller(base, fetch);
+  const repository = await trackedRepository(t);
+  const own = await call('POST', '/api/projects', { name: 'Own' }, 201);
+  const project = await call('POST', '/api/projects/link', { path: repository, name: 'Their repo' }, 201);
+  assert.ok((await call('GET', '/api/brief')).projects.some((line) => line.projectId === project.id && line.state === 'ready'));
+  const before = await repositoryState(repository);
+
+  assert.match((await call('DELETE', `/api/projects/${own.id}`, undefined, 409)).error, /^Own is an AGESight project; only a tracked repository can be removed$/);
+  await call('DELETE', '/api/projects/00000000-0000-4000-8000-000000000000', undefined, 404);
+  await call('DELETE', '/api/projects/not-a-project', undefined, 404);
+  assert.deepEqual(await call('DELETE', `/api/projects/${project.id}`), { id: project.id, name: 'Their repo' });
+
+  assert.deepEqual((await call('GET', '/api/brief')).projects.map((line) => line.projectId), [own.id]);
+  const workspace = await call('GET', '/api/workspace');
+  assert.deepEqual([workspace.projects.map((entry) => entry.id), workspace.tasks], [[own.id], []]);
+  await call('GET', `/api/projects/${project.id}/metrics`, undefined, 404);
+  await call('DELETE', `/api/projects/${project.id}`, undefined, 404);
+  assert.deepEqual(await repositoryState(repository), before, 'the repository is untouched');
+  // The same repository can be tracked again.
+  await call('POST', '/api/projects/link', { path: repository }, 201);
 });
