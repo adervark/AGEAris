@@ -1,8 +1,8 @@
 ---
 id: T018
 title: "/aa pulls up a project's board in any Claude Code session"
-status: open
-owner: —
+status: claimed
+owner: adervark @v/2e8b687e 2026-10-07 — writing /aa
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -56,8 +56,8 @@ and the link to it in AGE Aris, starting AGE Aris if it is not running.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @v/2e8b687e (registered)
-- **In flight:** nothing
+- **Last touched:** 2026-10-07, adervark @v/2e8b687e (claimed)
+- **In flight:** the script, in this session
 - **On disk:** nothing yet
 - **Resume with:** the script
 - **Next decision:** none
