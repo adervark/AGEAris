@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
-import { execFile, spawn } from 'node:child_process';
+import { execFile, execFileSync, spawn } from 'node:child_process';
+import { EventEmitter } from 'node:events';
 import { lstat, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { PassThrough } from 'node:stream';
 import { promisify } from 'node:util';
 import test from 'node:test';
 
@@ -264,6 +266,33 @@ test('cycle start: created in backlog, started only in a sweep: excluded, never 
   assert.deepEqual(cycles(ledger, '2026-09-01T12:00:00+01:00').T001[0].excluded, '');
 });
 
+test('cycle finish: a finish in a sweep commit is marked and excluded; a start exclusion takes precedence', async () => {
+  const { ledger } = await fabricated(`
+    day 0 09:00 ade: create T001 backlog "Finished by a sweep"
+    day 0 09:30 ade: create T002 backlog "Started and finished by sweeps"
+    day 0 10:00 ade: create T003 backlog "Finished by hand"
+    day 1 09:00 ade: move T001 tasks
+    day 1 10:00 ade: move T002 tasks subject="migrate: claim"
+    day 1 11:00 ade: move T003 tasks
+    day 2 09:00 ade: move T001 done subject="migrate: close finished tasks"
+    day 2 10:00 ade: move T002 done subject="ckpt: close"
+    day 2 11:00 ade: move T003 done
+  `);
+  const [swept] = cycles(ledger).T001;
+  assert.deepEqual([swept.start.seq, swept.start.source, swept.outcome], [3, 'entry', 'done']);
+  assert.equal(swept.end.sweep, true);
+  assert.equal(swept.excluded, 'finish known only from a sweep commit');
+
+  const [both] = cycles(ledger).T002;
+  assert.equal(both.end.sweep, true);
+  assert.equal(both.excluded, 'start known only from a sweep commit');
+
+  const [manual] = cycles(ledger).T003;
+  assert.equal(manual.end.sweep, undefined);
+  assert.equal(manual.excluded, '');
+  assert.equal(cycles(ledger, '2026-09-02T12:00:00+01:00').T001[0].excluded, '', 'before the sweep finish the cycle is open');
+});
+
 test('killed: a move into done/ as killed is dropped, and done edited to killed is done → dropped', async () => {
   const { ledger } = await fabricated(`
     day 0 09:00 ade: create T001 tasks "Cancelled"
@@ -367,7 +396,20 @@ test('clock: a commit dated in the future changes nothing at build time and is e
   assert.deepEqual(Object.keys(view.tasks), ['T001']);
   assert.equal(view.ledgerHeadAtAsOf, ledger.commits[0].sha);
   assert.equal(view.futureCommits, 2);
-  assert.equal(ledgerAt(ledger, '2027-01-01T09:04:00+00:00').futureCommits, 0, 'within 5 minutes is not future');
+  assert.equal(ledgerAt(ledger, '2027-01-01T09:04:00+00:00').futureCommits, 0, 'no commit lies past asOf');
+});
+
+test('clock: futureCommits counts every commit the view cuts, including those just past asOf', async () => {
+  const { ledger } = await fabricated(`
+    day 0 09:00 ade: create T001 backlog "A"
+    day 1 09:00 ade: create T002 backlog "B"
+    day 1 09:02 ade: create T003 backlog "Two minutes later"
+    day 3 09:00 ade: create T004 backlog "Days later"
+  `);
+  const view = ledgerAt(ledger, '2026-09-02T09:00:00+01:00');
+  assert.equal(view.commits.length, 2);
+  assert.equal(view.futureCommits, 2);
+  assert.equal(view.commits.length + view.futureCommits, ledger.commits.length);
 });
 
 test('ids: a split move is one incarnation, with the removal retracted', async () => {
@@ -391,6 +433,20 @@ test('ids: a split move is one incarnation, with the removal retracted', async (
   assert.equal(ledgerAt(ledger, '2026-09-02T12:00:00+01:00').tasks.T004.present, false);
 });
 
+test('ids: a past view between a split move\'s removal and re-add shows the removal unretracted', async () => {
+  const { ledger } = await fabricated(`
+    day 0 09:00 ade: create T004 backlog "Split" {"createdAt": "2026-09-01T09:00:00+01:00"}
+    day 1 09:00 ade: remove T004
+    day 2 09:00 ade: create T004 tasks "Split" {"createdAt": "2026-09-01T09:00:00+01:00"}
+  `);
+  const between = ledgerAt(ledger, '2026-09-02T12:00:00+01:00');
+  const removal = of(between, 'T004').find((transition) => transition.kind === 'removed');
+  assert.equal(removal.retracted, undefined, 'the re-add lies beyond the view');
+  assert.equal(of(ledger, 'T004').find((transition) => transition.kind === 'removed').retracted, true, 'the full ledger is unchanged');
+  const after = ledgerAt(ledger, '2026-09-03T12:00:00+01:00');
+  assert.equal(of(after, 'T004').find((transition) => transition.kind === 'removed').retracted, true);
+});
+
 test('ids: a different task re-added under a removed id is a new incarnation', async () => {
   const { ledger } = await fabricated(`
     day 0 09:00 ade: create T004 backlog "First"
@@ -412,6 +468,23 @@ test('ids: a second file with a present id raises duplicate_id and is ignored', 
   assert.equal(anomalies(ledger, 'duplicate_id').length, 1);
   assert.equal(ledger.tasks.T001.title, 'Original');
   assert.equal(ledger.tasks.T001.status, 'backlog');
+});
+
+test('ids: deleting the original of a duplicated id promotes the surviving duplicate', async () => {
+  const { fabrication, ledger } = await fabricated(`
+    day 0 09:00 ade: create T001 backlog "Original"
+    day 1 09:00 ade: write deaddrop/tasks/T001-copy.md "---\\nid: T001\\ntitle: \\"Copy\\"\\nstatus: claimed\\n---\\n"
+    day 2 09:00 ade: delete deaddrop/backlog/T001-original.md label=promote
+    day 3 09:00 ade: set T001 {"priority": "high"}
+  `);
+  assert.equal(anomalies(ledger, 'duplicate_id').length, 1);
+  const list = of(ledger, 'T001');
+  assert.equal(list.filter((transition) => transition.kind === 'removed').length, 0, 'the task was not removed');
+  const promoted = list.filter((transition) => transition.commit === fabrication.sha('promote'));
+  assert.deepEqual(promoted.map(shape), [['status', 'backlog', 'in_progress', { operator: '', profile: '', session: '' }], ['field', 'title', 'Original', 'Copy']]);
+  assert.equal(promoted[0].path, 'deaddrop/tasks/T001-copy.md');
+  assert.deepEqual(shape(list.at(-1)), ['field', 'priority', 'medium', 'high'], 'the promoted file is followed');
+  assert.deepEqual([ledger.tasks.T001.present, ledger.tasks.T001.title, ledger.tasks.T001.status, ledger.tasks.T001.priority], [true, 'Copy', 'in_progress', 'high']);
 });
 
 test('files: unsafe paths, checkpoints, non-ASCII content, and corrupt files become anomalies, never throws', async () => {
@@ -459,6 +532,81 @@ test('files: more than 1 MiB of task content builds, identically with a tiny chu
   assert.deepEqual(ledger.anomalies, []);
   const tiny = await buildLedger(fabrication.dir, { chunkSize: 7 });
   assert.deepEqual(tiny, ledger);
+});
+
+test('files: a checkpoint trail past 256 KB keeps producing life from its last 256 KB', async () => {
+  // The old lines are dated after the new ones, so a life ts from any old
+  // line would show that the tail was not diffed against the previous tail.
+  const old = [];
+  for (let index = 0; Buffer.byteLength(old.join('\n')) < 300 * 1024; index += 1) {
+    old.push(JSON.stringify({ ts: '2026-09-10T09:00:00Z', run: 'r', kind: 'did', what: `old ${index} ${'é'.repeat(60)}` }));
+  }
+  const { fabrication, ledger } = await fabricated(`
+    day 0 09:00 ade: create T001 tasks "Long trail" {"owner": "${CLAIM}"}
+    day 1 09:00 ade: write deaddrop/checkpoints/T001.jsonl ${JSON.stringify(`${old.join('\n')}\n`)}
+    day 2 09:00 ade: ckpt T001 did "after the cap" ts="day 2 08:00"
+    day 3 09:00 ade: ckpt T001 blocked "still going" ts="day 3 08:00"
+  `);
+  assert.ok((await lstat(path.join(fabrication.dir, 'deaddrop/checkpoints/T001.jsonl'))).size > 300 * 1024);
+  const life = of(ledger, 'T001').filter((transition) => transition.kind === 'life');
+  assert.deepEqual(life.map((transition) => transition.ts), ['2026-09-10T09:00:00.000Z', '2026-09-03T07:00:00.000Z', '2026-09-04T07:00:00.000Z']);
+  assert.equal(life[2].blocked, 'still going');
+  assert.deepEqual(ledger.anomalies, [], 'no oversized_blob, and the partial first line is not an unparseable checkpoint');
+  assert.deepEqual(await buildLedger(fabrication.dir, { chunkSize: 997 }), ledger);
+});
+
+test('files: a task file over 256 KB is read from its head and its state still moves', async () => {
+  const body = 'é日🚀 '.repeat(Math.ceil((300 * 1024) / 10));
+  const { fabrication } = await fabricated(`
+    day 0 09:00 ade: create T001 backlog "Big" {"body": "${body}"}
+    day 1 09:00 ade: move T001 done
+  `);
+  assert.ok((await lstat(path.join(fabrication.dir, 'deaddrop/tasks/done/T001-big.md'))).size > 300 * 1024);
+  const ledger = await buildLedger(fabrication.dir, { chunkSize: 1 });
+  assert.deepEqual(of(ledger, 'T001').map(shape), [['created'], ['status', 'backlog', 'done']]);
+  assert.equal(ledger.tasks.T001.status, 'done');
+  assert.deepEqual(ledger.anomalies, []);
+});
+
+test('files: frontmatter that does not close within 256 KB, and an oversized project.json, are oversized_blob', async () => {
+  const huge = 'x'.repeat(300 * 1024);
+  const { ledger } = await fabricated(`
+    day 0 09:00 ade: create T001 backlog "Huge frontmatter" {"milestone": "${huge}"}
+    day 0 10:00 ade: project {"name": "P", "notes": "${huge}"}
+  `);
+  assert.deepEqual(anomalies(ledger, 'oversized_blob').map((anomaly) => [anomaly.seq, anomaly.path]), [[0, 'deaddrop/backlog/T001-huge-frontmatter.md'], [1, 'project.json']]);
+  assert.match(anomalies(ledger, 'oversized_blob')[0].detail, /limit 262144/);
+  assert.equal(ledger.tasks.T001, undefined);
+  assert.equal(ledger.transitions.length, 0);
+});
+
+test('files: a task path whose blob is absent from the repository is missing_blob', async () => {
+  const dir = path.join(await scratch(), 'repo');
+  await mkdir(dir);
+  await git(dir, 'init', '--quiet');
+  const run = (args, input) => execFileSync('git', args, { cwd: dir, input, env: { ...process.env, GIT_CONFIG_GLOBAL: os.devNull, GIT_CONFIG_NOSYSTEM: '1' } }).toString().trim();
+  const ghost = '1'.repeat(40);
+  const tasks = run(['mktree', '--missing'], `100644 blob ${ghost}\tT002-ghost.md\n`);
+  const deaddrop = run(['mktree', '--missing'], `040000 tree ${tasks}\ttasks\n`);
+  const root = run(['mktree', '--missing'], `040000 tree ${deaddrop}\tdeaddrop\n`);
+  const commit = run(['-c', 'user.name=ade', '-c', 'user.email=ade@example.invalid', 'commit-tree', root, '-m', 'Ghost']);
+  await git(dir, 'update-ref', 'HEAD', commit);
+  const ledger = await buildLedger(dir);
+  assert.deepEqual(anomalies(ledger, 'missing_blob').map((anomaly) => [anomaly.path, anomaly.detail]), [['deaddrop/tasks/T002-ghost.md', 'deaddrop/tasks/T002-ghost.md could not be read']]);
+  assert.deepEqual(ledger.tasks, {});
+});
+
+test('fingerprint: a reftable repository changes its fingerprint on every commit', async (t) => {
+  const dir = path.join(await scratch(), 'reftable');
+  try { await git(await scratch(), 'init', '--quiet', '--ref-format=reftable', dir); }
+  catch { t.skip('this git does not support --ref-format=reftable'); return; }
+  const commit = (message) => git(dir, '-c', 'user.name=ade', '-c', 'user.email=ade@example.invalid', 'commit', '--quiet', '--allow-empty', '-m', message);
+  await commit('one');
+  assert.match(await readFile(path.join(dir, '.git', 'HEAD'), 'utf8'), /^ref: refs\/heads\/\.invalid/);
+  const first = await fingerprint(dir);
+  assert.equal(await fingerprint(dir), first);
+  await commit('two');
+  assert.notEqual(await fingerprint(dir), first);
 });
 
 test('fingerprint changes when only an inode changes', async () => {
@@ -536,17 +684,90 @@ test('memo: coarse timestamps — AGESight writes invalidate the memo, and raw c
   blind.close();
 });
 
+// A spawner whose first `rev-parse` runs at once (it sees the repository as it
+// is now) but whose result is held until `release()`; every other git process
+// runs as usual.
+function heldRevParse() {
+  let release;
+  let requested;
+  const gate = new Promise((resolve) => { release = resolve; });
+  const asked = new Promise((resolve) => { requested = resolve; });
+  let held = false;
+  return {
+    release,
+    asked,
+    spawn: (command, args, options) => {
+      if (held || args[args.indexOf('-C') + 2] !== 'rev-parse') return spawn(command, args, options);
+      held = true;
+      const stdout = execFileSync(command, args);
+      const child = new EventEmitter();
+      Object.assign(child, { stdout: new PassThrough(), stderr: new PassThrough(), kill: () => {} });
+      gate.then(() => {
+        child.stdout.end(stdout);
+        child.emit('close', 0);
+      });
+      requested();
+      return child;
+    },
+  };
+}
+
 test('memo: a read that arrives after an invalidation never gets a build that started before it', async () => {
   const workspace = await openWorkspace();
   const project = await workspace.createProject({ name: 'Race' });
   const task = await workspace.createTask({ projectId: project.id, title: 'Racing' });
-  const ledgers = new Ledgers({ workspace });
+  // Frozen stat: the fingerprint cannot see the commit, so only the
+  // generation check keeps the late read off the early build.
+  const frozen = async () => ({ ino: 1n, ctimeNs: 0n, mtimeNs: 0n, size: 0n });
+  const held = heldRevParse();
+  const ledgers = new Ledgers({ workspace, stat: frozen, spawn: held.spawn });
   const early = ledgers.get(project.id);
+  await held.asked;
   await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' });
-  const late = await ledgers.get(project.id);
-  assert.equal(late.tasks.T001.status, 'in_progress');
-  await early;
+  const late = ledgers.get(project.id);
+  held.release();
+  assert.equal((await early).tasks.T001.status, 'backlog', 'the early build resolved HEAD before the commit');
+  assert.equal((await late).tasks.T001.status, 'in_progress');
   ledgers.close();
+});
+
+test('memo: a commit listing the project root ("" or ".") invalidates the ledger', async () => {
+  const workspace = await openWorkspace();
+  const project = await workspace.createProject({ name: 'Root' });
+  const frozen = async () => ({ ino: 1n, ctimeNs: 0n, mtimeNs: 0n, size: 0n });
+  const counter = countingSpawn();
+  const ledgers = new Ledgers({ workspace, stat: frozen, spawn: counter.spawn });
+  await ledgers.get(project.id);
+  for (const root of ['', '.']) {
+    counter.calls.length = 0;
+    for (const listener of workspace._commitListeners) listener(project.id, { paths: [root] });
+    await ledgers.get(project.id);
+    assert.deepEqual(counter.calls, ['rev-parse', 'symbolic-ref', 'rev-list'], JSON.stringify(root));
+  }
+  ledgers.close();
+});
+
+test('memo: an invalid or unknown project id leaves no entry behind', async () => {
+  const workspace = await openWorkspace();
+  const ledgers = new Ledgers({ workspace });
+  await assert.rejects(ledgers.get('../escape'), /Project not found/);
+  await assert.rejects(ledgers.get('00000000-0000-4000-8000-000000000000'));
+  ledgers.invalidate('00000000-0000-4000-8000-000000000001');
+  assert.equal(ledgers._entries.size, 0);
+  assert.equal(ledgers.building('../escape'), null);
+  ledgers.close();
+});
+
+test('fabricate: a run that fails leaves the fabrication usable for later runs', async () => {
+  const fabrication = await fabricate(path.join(await scratch(), 'repo'), 'day 0 09:00 ade: create T001 backlog "A"');
+  await assert.rejects(fabrication.run('day 1 09:00 ade: create T002 backlog "B"\nday 2 09:00 ade: frobnicate T002'), /unknown operation frobnicate/);
+  await assert.rejects(fabrication.run('day 1 09:00 ade: create T002 backlog "B" label=lost\nbranch side\nday 2 09:00 ade: set T009 {"priority": "high"}'), /no task T009/);
+  await fabrication.run('day 3 09:00 ade: create T003 backlog "C" label=after');
+  const ledger = await buildLedger(fabrication.dir);
+  assert.deepEqual(Object.keys(ledger.tasks).sort(), ['T001', 'T003']);
+  assert.equal(ledger.commits.at(-1).sha, fabrication.sha('after'));
+  assert.throws(() => fabrication.sha('lost'));
+  assert.equal(fabrication.current, 'main');
 });
 
 test('real API: create → in progress → done through Workspace gives the expected transitions', async () => {
