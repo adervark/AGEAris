@@ -16,14 +16,15 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T22:57Z · 19 tasks: 14 backlog, 0 WIP (0 in progress), 5 delivered`
+`board · 2026-10-06T22:57Z · 19 tasks: 13 backlog, 1 WIP (1 in progress), 5 delivered`
 
-FLOW · **WIP 0/2** · throughput 1.2/wk (5 in 30d) · cycle time 50th 5m / 85th 33m (n=5)
-FLOW · Little's Law: 0 ÷ 1.2/wk ≈ now expected · lead time 85th 36m
+FLOW · **WIP 1/2** · throughput 1.2/wk (5 in 30d) · cycle time 50th 5m / 85th 33m (n=5)
+FLOW · Little's Law: 1 ÷ 1.2/wk ≈ 6d expected · lead time 85th 36m
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 14 | | `T002` `T003` `T004` `T007` `T008` `T009` +8 more (`--all`) | | | ⚑ 0 not ready |
+| **IN PROGRESS** 1/2 | T019 | A Working page: everything in progress or blocked, on every board | adervark | now |  |
+| **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 52m |  |
 |  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 60m |  |
 |  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 70m |  |

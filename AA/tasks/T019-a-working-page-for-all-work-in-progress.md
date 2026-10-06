@@ -1,8 +1,8 @@
 ---
 id: T019
 title: "A Working page: everything in progress or blocked, on every board"
-status: open
-owner: —
+status: claimed
+owner: adervark @v/2e8b687e 2026-10-07 — building the Working page
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -55,8 +55,8 @@ with how long it has been in progress and what its holder last said.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @v/2e8b687e (registered)
-- **In flight:** nothing
+- **Last touched:** 2026-10-07, adervark @v/2e8b687e (claimed)
+- **In flight:** the page, in this session
 - **On disk:** nothing yet
 - **Resume with:** `wipSince` in the brief
 - **Next decision:** none
