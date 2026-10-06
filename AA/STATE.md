@@ -6,8 +6,9 @@
 AA) are committed on `feature/pm-cockpit`, which is not on `main` yet.
 AGEION, AGEIS, Gem4A and RSNA have moved their boards to `AA/` too.
 
-**Next action:** the review's bugs (T001), two at a time: T007 with T012, then
-T011 with T013, and T008 with T010. T005 and T006 are done.
+**Next action:** T017 (owner-line regexes, quadratic on tracked task files),
+then the review's bugs (T001) two at a time: T007 with T012, T011 with T013,
+and T008 with T010.
 
 **Watch out for:** until T007 is fixed, AGE Aris reads RSNA's T120 as the
 task that reuses its id. AGE Aris must go on reading `deaddrop/` and `pm/`
@@ -16,17 +17,17 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-06T21:47Z · 16 tasks: 13 backlog, 0 WIP (0 in progress), 3 delivered`
+`board · 2026-10-06T21:54Z · 17 tasks: 14 backlog, 0 WIP (0 in progress), 3 delivered`
 
 FLOW · **WIP 0/2** · throughput 0.7/wk (3 in 30d) · cycle time: too few delivered with a claim commit (n=3)
 FLOW · Little's Law: 0 ÷ 0.7/wk ≈ now expected
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 13 | | `T002` `T003` `T004` `T007` `T008` `T009` +7 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | now |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | now |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 5m |  |
+| **BACKLOG** 14 | | `T002` `T003` `T004` `T007` `T008` `T009` +8 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 7m |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 7m |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 13m |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->
