@@ -76,6 +76,24 @@ function selectedProject() {
   return state.projects.find((project) => project.id === state.view);
 }
 
+function projectOf(task) {
+  return state.projects.find((project) => project.id === task.projectId);
+}
+
+// A tracked repository is read here and changed where its agents work.
+function writable(project) {
+  return Boolean(project) && !project.linked;
+}
+
+function writableProjects() {
+  return state.projects.filter(writable);
+}
+
+// Who holds a task: its assignee, else the agent session its owner line names.
+function ownerOf(task) {
+  return task.assignee || task.claim || '';
+}
+
 // The API token arrives as an HttpOnly cookie with the page, and same-origin
 // fetches send it. A 401 means this page's token is stale (AGESight restarted
 // with another data directory, or the cookie was cleared): only a reload helps.
@@ -208,7 +226,7 @@ function render() {
   const page = project?.name || ({ today: 'Today', work: 'Work', changes: 'Changes', decisions: 'Decisions', agents: 'Agents', run: state.run?.id === state.runId ? `Run ${state.run.localId}` : 'Run' }[state.view]);
   document.title = `${page} · AGESight`;
   $('#breadcrumb').innerHTML = `Workspace <span>/</span> <strong>${escape(page)}</strong>`;
-  $('#create-button').innerHTML = `${icon('plus')}<span>${state.projects.length ? 'New task' : 'New project'}</span>`;
+  $('#create-button').innerHTML = `${icon('plus')}<span>${writableProjects().length ? 'New task' : 'New project'}</span>`;
   renderMain();
 }
 
@@ -230,7 +248,7 @@ function filteredTasks() {
   const project = selectedProject();
   const query = state.query.trim().toLowerCase();
   const ordered = { urgent: 0, high: 1, medium: 2, low: 3 };
-  return state.tasks.filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !task.assignee : task.assignee === state.owner)) && (!query || `${task.title} ${task.description} ${task.assignee} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
+  return state.tasks.filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !ownerOf(task) : ownerOf(task) === state.owner)) && (!query || `${task.title} ${task.description} ${ownerOf(task)} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
 }
 
 // Re-rendering replaces #main, so keep what a person was doing: open <details>,
@@ -268,15 +286,36 @@ function renderPage() {
   const done = projectTasks.filter((task) => task.status === 'done').length;
   const active = projectTasks.filter((task) => ['in_progress', 'blocked'].includes(task.status)).length;
   const layout = state.layout === 'health' ? 'board' : state.layout;
-  $('#main').innerHTML = `<section class="page-heading"><div><div class="heading-title">${project ? `<span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span>` : ''}<h1>${escape(project?.name || (state.query ? 'Search results' : 'Work'))}</h1>${project ? `<button class="text-button project-settings" data-action="edit-project">Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>` : ''}</div><p>${escape(project?.description || (state.query ? `Tasks matching “${state.query}”` : 'Everything on your plate, across your projects.'))}</p></div>${project ? `<div class="project-heading-progress"><span><strong>${done}</strong> of ${projectTasks.length} tasks complete</span><progress max="${Math.max(projectTasks.length, 1)}" value="${done}" aria-label="Project completion"></progress></div>` : ''}</section>
+  $('#main').innerHTML = `<section class="page-heading"><div><div class="heading-title">${project ? `<span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span>` : ''}<h1>${escape(project?.name || (state.query ? 'Search results' : 'Work'))}</h1>${project ? projectActions(project) : ''}</div>${project?.linked ? trackedLine(project) : `<p>${escape(project?.description || (state.query ? `Tasks matching “${state.query}”` : 'Everything on your plate, across your projects.'))}</p>`}</div>${project ? `<div class="project-heading-progress"><span><strong>${done}</strong> of ${projectTasks.length} tasks complete</span><progress max="${Math.max(projectTasks.length, 1)}" value="${done}" aria-label="Project completion"></progress></div>` : ''}</section>
     <div class="view-toolbar"><div class="view-tabs" role="group" aria-label="Project view">${project && !state.query ? `<button class="view-tab ${health ? 'selected' : ''}" data-action="layout" data-value="health" aria-pressed="${health}">${icon('shield')} Health</button>` : ''}<button class="view-tab ${layout === 'board' && !health ? 'selected' : ''}" data-action="layout" data-value="board" aria-pressed="${layout === 'board' && !health}">${icon('board')} Board</button><button class="view-tab ${layout === 'list' && !health ? 'selected' : ''}" data-action="layout" data-value="list" aria-pressed="${layout === 'list' && !health}">${icon('list')} List</button></div>${health ? '' : `<div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div>`}</div>
-    ${health ? renderHealth(cockpit.metrics.get(project.id), { projectId: project.id }) : `<div class="board-meta"><span>${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}${state.query ? ' found' : ''}</span>${project ? `<span>${active} / ${project.wipLimit} in progress ${icon('circle', 'tiny-icon')}</span>` : '<span>Across all projects</span>'}</div>
+    ${health ? renderHealth(cockpit.metrics.get(project.id), { projectId: project.id }) : `<div class="board-meta"><span>${tasks.length} ${tasks.length === 1 ? 'task' : 'tasks'}${state.query ? ' found' : ''}</span>${project ? `<span>${active}${project.wipLimit ? ` / ${project.wipLimit}` : ''} in progress ${icon('circle', 'tiny-icon')}</span>` : '<span>Across all projects</span>'}</div>
+    ${project ? problemsNote(project) : ''}
     ${layout === 'board' ? board(tasks) : taskList(tasks)}
-    ${!projectTasks.length ? `<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>` : ''}`}`;
+    ${!projectTasks.length && writable(project) ? `<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>` : ''}`}`;
+}
+
+function projectActions(project) {
+  if (project.linked) return `<span class="readonly-badge" title="AGESight reads this repository and never writes to it.">Read-only</span><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
+  return `<button class="text-button project-settings" data-action="edit-project">Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>`;
+}
+
+// Where a tracked repository is, and that its tasks change there.
+function trackedLine(project) {
+  return `<p>${project.description ? `${escape(project.description)} ` : ''}<span class="tracked-line">Tracked from <code>${escape(project.repository)}</code>. AGESight reads its ${escape(project.board)}/ board and git history; its tasks change in the repository, where its agents work.</span></p>`;
+}
+
+// Task files in a tracked repository that could not be read; the rest of the
+// board is shown without them.
+function problemsNote(project) {
+  if (project.unavailable) return `<p class="window-note">${icon('alert')}<span>This repository cannot be read right now: ${escape(project.unavailable)} Its tasks show again once it can be read; Stop tracking removes it from AGESight.</span></p>`;
+  const problems = project.problems || [];
+  if (!problems.length) return '';
+  const listed = problems.slice(0, 5).map((problem) => `${problem.file} (${problem.error})`).join('; ');
+  return `<p class="window-note">${icon('alert')}<span>${problems.length === 1 ? '1 task file was' : `${problems.length} task files were`} not read: ${escape(listed)}${problems.length > 5 ? `; ${problems.length - 5} more` : ''}.</span></p>`;
 }
 
 function filterControls(tasks) {
-  const owners = [...new Set(tasks.map((task) => task.assignee).filter(Boolean))].sort();
+  const owners = [...new Set(tasks.map(ownerOf).filter(Boolean))].sort();
   return `<label class="filter-select"><span class="sr-only">Filter by owner</span><select data-filter="owner"><option value="">All owners</option><option value="__unassigned" ${state.owner === '__unassigned' ? 'selected' : ''}>Unassigned</option>${owners.map((owner) => `<option value="${escape(owner)}" ${state.owner === owner ? 'selected' : ''}>${escape(owner)}</option>`).join('')}</select></label><label class="filter-select"><span class="sr-only">Filter by priority</span><select data-filter="priority"><option value="">All priorities</option>${options(priorities, state.priority)}</select></label><label class="filter-select"><span class="sr-only">Filter by status</span><select data-filter="status"><option value="">All statuses</option>${options(statuses, state.status)}</select></label>`;
 }
 
@@ -285,15 +324,23 @@ function options(values, current) {
 }
 
 function board(tasks) {
+  // A tracked repository's board takes no new tasks; Work adds to the others.
+  const project = selectedProject();
+  const canAdd = project ? writable(project) : writableProjects().length > 0;
   return `<div class="board">${Object.entries(statuses).map(([status, label]) => {
     const column = tasks.filter((task) => task.status === status);
-    return `<section class="board-column" data-drop-status="${status}" aria-label="${label}"><header class="column-heading"><span class="status-dot status-${status}"></span><h2>${label}</h2><span class="column-count">${column.length}</span><button class="icon-button" data-action="new-task" data-status="${status}" aria-label="Add task to ${label}">${icon('plus')}</button></header><div class="column-tasks">${column.map(taskCard).join('')}${!column.length ? '<div class="column-empty">No tasks here yet</div>' : ''}</div><button class="column-add" data-action="new-task" data-status="${status}">${icon('plus')} Add task</button></section>`;
+    return `<section class="board-column" data-drop-status="${status}" aria-label="${label}"><header class="column-heading"><span class="status-dot status-${status}"></span><h2>${label}</h2><span class="column-count">${column.length}</span>${canAdd ? `<button class="icon-button" data-action="new-task" data-status="${status}" aria-label="Add task to ${label}">${icon('plus')}</button>` : ''}</header><div class="column-tasks">${column.map(taskCard).join('')}${!column.length ? '<div class="column-empty">No tasks here yet</div>' : ''}</div>${canAdd ? `<button class="column-add" data-action="new-task" data-status="${status}">${icon('plus')} Add task</button>` : ''}</section>`;
   }).join('')}</div>`;
+}
+
+function priorityBadge(task) {
+  return task.priorityGiven === false ? '' : `<span class="priority priority-${task.priority}">${icon('flag')}${priorities[task.priority]}</span>`;
 }
 
 function taskCard(task) {
   const project = state.projects.find((item) => item.id === task.projectId);
-  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="true" aria-label="Edit ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span><span class="priority priority-${task.priority}">${icon('flag')}${priorities[task.priority]}</span></span><span class="card-title">${escape(task.title)}</span>${task.description ? `<span class="card-description">${escape(task.description)}</span>` : ''}${!selectedProject() ? `<span class="card-project"><span class="project-dot color-${projectColor(project)}"></span>${escape(project?.name)}</span>` : ''}${runLine(task)}<span class="card-footer"><span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${task.dueDate ? `${icon('calendar')}${escape(formatDate(task.dueDate))}` : ''}</span>${avatar(task.assignee)}</span></button>`;
+  const editable = writable(project);
+  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="${editable ? 'Edit' : 'Open'} ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${task.description ? `<span class="card-description">${escape(task.description)}</span>` : ''}${!selectedProject() ? `<span class="card-project"><span class="project-dot color-${projectColor(project)}"></span>${escape(project?.name)}</span>` : ''}${runLine(task)}<span class="card-footer"><span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${task.dueDate ? `${icon('calendar')}${escape(formatDate(task.dueDate))}` : ''}</span>${avatar(ownerOf(task))}</span></button>`;
 }
 
 function avatar(name) {
@@ -302,11 +349,11 @@ function avatar(name) {
 
 function taskList(tasks) {
   if (!tasks.length) return `<div class="empty-results">${icon('tasks')}<h2>No tasks found</h2><p>${state.query || state.status || state.priority || state.owner ? 'Try another search or clear your filters.' : 'Create a task to start planning your project.'}</p><button class="button button-secondary" data-action="${state.query || state.status || state.priority || state.owner ? 'clear-filters' : 'new-task'}">${state.query || state.status || state.priority || state.owner ? 'Clear search and filters' : 'New task'}</button></div>`;
-  return `<div class="task-table-wrap"><table class="task-table"><thead><tr><th scope="col">Task</th><th scope="col">Status</th><th scope="col">Priority</th><th scope="col">Owner</th><th scope="col">Due date</th></tr></thead><tbody>${tasks.map((task) => `<tr><td><button class="task-name-button" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="list-task-title ${task.status === 'done' ? 'completed-title' : ''}">${escape(task.title)}</span>${!selectedProject() ? `<small>${escape(state.projects.find((project) => project.id === task.projectId)?.name)}</small>` : ''}${runLine(task)}</button></td><td><span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status]}</span></td><td><span class="priority priority-${task.priority}">${icon('flag')}${priorities[task.priority]}</span></td><td><span class="list-owner">${avatar(task.assignee)}<span>${escape(task.assignee || 'Unassigned')}</span></span></td><td><span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${task.dueDate ? escape(formatDate(task.dueDate)) : '—'}</span></td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="task-table-wrap"><table class="task-table"><thead><tr><th scope="col">Task</th><th scope="col">Status</th><th scope="col">Priority</th><th scope="col">Owner</th><th scope="col">Due date</th></tr></thead><tbody>${tasks.map((task) => `<tr><td><button class="task-name-button" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="list-task-title ${task.status === 'done' ? 'completed-title' : ''}">${escape(task.title)}</span>${!selectedProject() ? `<small>${escape(state.projects.find((project) => project.id === task.projectId)?.name)}</small>` : ''}${runLine(task)}</button></td><td><span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status]}</span></td><td>${priorityBadge(task) || '<span class="muted">—</span>'}</td><td><span class="list-owner">${avatar(ownerOf(task))}<span>${escape(ownerOf(task) || 'Unassigned')}</span></span></td><td><span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${task.dueDate ? escape(formatDate(task.dueDate)) : '—'}</span></td></tr>`).join('')}</tbody></table></div>`;
 }
 
 function renderEmptyWorkspace() {
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Today</h1><p>No projects yet.</p></div></section><section class="welcome-panel"><h2>Start with a project.</h2><p>Each morning, Today shows what needs you, what moved since your last visit, and how each project is doing.</p><button class="button button-primary" data-action="new-project">${icon('plus')} Create your first project</button><button class="text-button sample-button" data-action="sample-project">Explore a sample project with six weeks of history</button></section>`;
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>Today</h1><p>No projects yet.</p></div></section><section class="welcome-panel"><h2>Start with a project.</h2><p>Each morning, Today shows what needs you, what moved since your last visit, and how each project is doing.</p><button class="button button-primary" data-action="new-project">${icon('plus')} Create your first project</button><button class="button button-secondary track-button" data-action="link-project">${icon('git')} Track an existing repository</button><button class="text-button sample-button" data-action="sample-project">Explore a sample project with six weeks of history</button></section>`;
 }
 
 // --- Cockpit: Today, project health, changes, explain ----------------------------
@@ -352,7 +399,10 @@ async function refreshCockpit(workspace, { force = false, metrics = false } = {}
   const jobs = [];
   if (force || changed || stale || !cockpit.brief) jobs.push(loadBrief());
   if (project && state.layout === 'health' && !state.query && (force || metrics || changed || stale || !cockpit.metrics.has(project.id))) {
-    jobs.push(api(`/projects/${encodeURIComponent(project.id)}/metrics`).then((data) => { cockpit.metrics.set(project.id, data); }));
+    jobs.push(api(`/projects/${encodeURIComponent(project.id)}/metrics`).then((data) => { cockpit.metrics.set(project.id, data); }, (error) => {
+      if (error.status === 401) throw error;
+      cockpit.metrics.set(project.id, { state: 'error', error: error.message });
+    }));
   }
   if (state.view === 'changes') {
     const { kind, projectId } = cockpit.changesFilter;
@@ -364,7 +414,7 @@ async function refreshCockpit(workspace, { force = false, metrics = false } = {}
   }
   await Promise.all(jobs);
   // A project still indexing is asked again soon.
-  if (cockpit.brief?.projects.some((line) => line.state !== 'ready')) cockpit.briefAt = Date.now() - BRIEF_POLL_MS + 3000;
+  if (cockpit.brief?.projects.some((line) => line.state !== 'ready' && line.state !== 'unavailable')) cockpit.briefAt = Date.now() - BRIEF_POLL_MS + 3000;
 }
 
 function renderTodayPage() {
@@ -418,6 +468,7 @@ async function changeChangesFilter(field, value) {
 
 function openTask(id) {
   const task = state.tasks.find((entry) => entry.id === id);
+  // A tracked repository's task opens read-only (openTaskEditor redirects).
   if (task) openTaskEditor(task);
   else toast('This task is no longer on the board. Its history stays in Changes.', true);
 }
@@ -470,9 +521,14 @@ function anyDialogOpen() {
   return Boolean(document.querySelector('dialog[open]'));
 }
 
+function colorField(selected) {
+  return `<fieldset class="color-field"><legend>Project color</legend><div class="color-options">${colors.map((color) => `<label class="color-option color-${color}"><input type="radio" name="color" value="${color}" ${selected === color ? 'checked' : ''}><span aria-hidden="true">${icon('check')}</span><span class="sr-only">${color}</span></label>`).join('')}</div></fieldset>`;
+}
+
 function openProjectEditor(project = null) {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="project-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Your workspace</span><h2 id="project-dialog-title">${project ? 'Edit project' : 'New project'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close project editor">${icon('close')}</button></header><div class="dialog-fields"><label class="field">Project name<input name="name" required maxlength="100" placeholder="e.g. Website launch" value="${escape(project?.name || '')}" autofocus></label><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="3" maxlength="4000" placeholder="What are you working toward?">${escape(project?.description || '')}</textarea></label><fieldset class="color-field"><legend>Project color</legend><div class="color-options">${colors.map((color) => `<label class="color-option color-${color}"><input type="radio" name="color" value="${color}" ${(project ? projectColor(project) : 'blue') === color ? 'checked' : ''}><span aria-hidden="true">${icon('check')}</span><span class="sr-only">${color}</span></label>`).join('')}</div></fieldset><label class="field">Work in progress limit<input name="wipLimit" type="number" min="1" max="99" required value="${project?.wipLimit || 6}"><small>Limit how many tasks can be in progress or blocked at once.</small></label><p class="form-error" id="project-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${project ? 'Save changes' : 'Create project'}</button></footer></form>`;
+  dialog.innerHTML = `<form id="project-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Your workspace</span><h2 id="project-dialog-title">${project ? 'Edit project' : 'New project'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close project editor">${icon('close')}</button></header><div class="dialog-fields"><label class="field">Project name<input name="name" required maxlength="100" placeholder="e.g. Website launch" value="${escape(project?.name || '')}" autofocus></label><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="3" maxlength="4000" placeholder="What are you working toward?">${escape(project?.description || '')}</textarea></label>${colorField(project ? projectColor(project) : 'blue')}<label class="field">Work in progress limit<input name="wipLimit" type="number" min="1" max="99" required value="${project?.wipLimit || 6}"><small>Limit how many tasks can be in progress or blocked at once.</small></label><p class="form-error" id="project-error" role="alert"></p></div><footer class="dialog-footer">${project ? '' : '<button type="button" class="text-button dialog-switch" data-switch-link>Track an existing repository instead</button>'}<button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${project ? 'Save changes' : 'Create project'}</button></footer></form>`;
+  dialog.querySelector('[data-switch-link]')?.addEventListener('click', () => openLinkEditor());
   $('#project-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -492,6 +548,51 @@ function openProjectEditor(project = null) {
     } catch (error) { $('#project-error').textContent = error.message; } finally { button.disabled = false; }
   });
   setupDialog(dialog);
+  dialog.querySelector('[name="name"]').focus();
+}
+
+// Tracks an existing repository: AGESight reads its board and history.
+function openLinkEditor() {
+  const dialog = $('#project-dialog');
+  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Your workspace</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGESight reads the repository’s deaddrop/ task board (or pm/, its older name) and its git history, and shows them like a project’s. It never writes there: the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Create a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
+  const form = $('#link-form');
+  form.querySelector('[data-switch-new]').addEventListener('click', () => openProjectEditor());
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = form.querySelector('[type="submit"]');
+    const data = Object.fromEntries(new FormData(form));
+    button.disabled = true;
+    $('#link-error').textContent = '';
+    try {
+      const saved = await api('/projects/link', 'POST', { path: data.path.trim(), name: data.name.trim(), color: colorHex[data.color] });
+      closeDialog(dialog);
+      await refresh();
+      navigate(saved.id);
+      toast(`Tracking ${saved.name}. AGESight only reads it.`);
+    } catch (error) { $('#link-error').textContent = error.message; } finally { button.disabled = false; }
+  });
+  setupDialog(dialog);
+  form.elements.path.focus();
+}
+
+function openUnlinkDialog(project) {
+  if (!project?.linked) return;
+  const dialog = $('#action-dialog');
+  dialog.innerHTML = `<form id="unlink-form">${dialogHeading('Tracked repository', `Stop tracking ${escape(project.name)}?`, 'Close dialog')}<div class="dialog-fields"><p class="dialog-copy">It leaves Today, Work, and Changes. Nothing in <code>${escape(project.repository)}</code> changes, and you can track it again at any time.</p><p class="form-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close autofocus>Keep tracking</button><button type="submit" class="button button-danger">Stop tracking</button></footer></form>`;
+  const form = $('#unlink-form');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = form.querySelector('[type="submit"]');
+    button.disabled = true;
+    try {
+      await api(`/projects/${encodeURIComponent(project.id)}`, 'DELETE');
+      closeDialog(dialog);
+      await refresh();
+      navigate('today');
+      toast(`${project.name} is no longer tracked. The repository is unchanged.`);
+    } catch (error) { form.querySelector('.form-error').textContent = error.message; button.disabled = false; }
+  });
+  setupDialog(dialog);
 }
 
 // The grouping key of a task type, as the server computes it: lowercased,
@@ -504,12 +605,17 @@ function typeKey(value = '') {
 // `status` presets the status select: a new task's column, or Blocked when a
 // card is dropped there, so the editor can ask what would unblock it.
 function openTaskEditor(task = null, status = '') {
-  if (!state.projects.length) return openProjectEditor();
-  const projectId = task?.projectId || selectedProject()?.id || state.projects[0].id;
+  if (task && !writable(projectOf(task))) return openTaskViewer(task);
+  const here = selectedProject();
+  if (!task && here && !writable(here)) return toast(`${here.name} is read-only here: its tasks are added in the repository.`, true);
+  const choices = writableProjects();
+  if (!task && !choices.length) return openProjectEditor();
+  const current = selectedProject();
+  const projectId = task?.projectId || (writable(current) ? current.id : choices[0].id);
   const initialStatus = status || task?.status || 'backlog';
   const types = [...new Set(['feature', 'bug', 'chore', ...state.tasks.filter((entry) => entry.projectId === projectId).map((entry) => typeKey(entry.type))].filter(Boolean))];
   const dialog = $('#task-dialog');
-  dialog.innerHTML = `<form id="task-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${task ? escape(taskNumber(task)) : 'Plan your next step'}</span><h2 id="task-dialog-title">${task ? 'Task details' : 'New task'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header><div class="dialog-fields">${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${state.projects.map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type are timed together; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div><details class="drawer-history" data-key="history"><summary>History</summary><div id="task-history" data-task="${escape(task.id)}">${renderHistory(null)}</div></details>` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
+  dialog.innerHTML = `<form id="task-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">${task ? escape(taskNumber(task)) : 'Plan your next step'}</span><h2 id="task-dialog-title">${task ? 'Task details' : 'New task'}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header><div class="dialog-fields">${task ? taskRunPanel(task) : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${(task ? state.projects : choices).map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type are timed together; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div><details class="drawer-history" data-key="history"><summary>History</summary><div id="task-history" data-task="${escape(task.id)}">${renderHistory(null)}</div></details>` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
   const reasonField = $('#blocked-reason-field');
   $('#task-form [name="status"]').addEventListener('change', (event) => {
     reasonField.hidden = event.currentTarget.value !== 'blocked';
@@ -539,6 +645,24 @@ function openTaskEditor(task = null, status = '') {
   if (task) dialog.querySelector('.drawer-history').addEventListener('toggle', (event) => { if (event.currentTarget.open) loadTaskHistory(task); }, { once: true });
   setupDialog(dialog);
   if (status === 'blocked' && task) reasonField.querySelector('input').focus();
+}
+
+// A tracked repository's task: what its file says, and its history. It is
+// changed in the repository, so nothing here edits it.
+function openTaskViewer(task) {
+  const project = projectOf(task);
+  const dialog = $('#task-dialog');
+  const facts = [
+    ['Status', `<span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status]}</span>`],
+    ['Owner', escape(ownerOf(task) || 'Nobody')],
+    task.priorityGiven === false ? null : ['Priority', escape(priorities[task.priority])],
+    task.dueDate ? ['Due', escape(formatDate(task.dueDate, true))] : null,
+    task.type ? ['Type', escape(task.type)] : null,
+    task.createdAt ? ['Created', escape(formatDate(task.createdAt, true))] : null,
+  ].filter(Boolean);
+  dialog.innerHTML = `<div class="task-view"><header class="dialog-heading"><div><span class="dialog-eyebrow">${escape(taskNumber(task))} · ${escape(project?.name || '')}</span><h2 id="task-dialog-title">${escape(task.title)}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task">${icon('close')}</button></header><div class="dialog-fields"><p class="readonly-note">${icon('git')}<span>Read-only here. This task is <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code>; change it there and AGESight picks the change up.</span></p><dl class="fact-list task-facts">${facts.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl>${task.description ? `<h3 class="task-view-heading">Goal</h3><p class="task-goal">${escape(task.description)}</p>` : ''}<details class="drawer-history" data-key="history" open><summary>History</summary><div id="task-history" data-task="${escape(task.id)}">${renderHistory(null)}</div></details></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
+  setupDialog(dialog);
+  loadTaskHistory(task);
 }
 
 // Start a run from the drawer. Unsaved edits are saved first so the agents see
@@ -1502,6 +1626,7 @@ async function openPipelineEditor(project) {
 async function moveTask(id, status) {
   const task = state.tasks.find((entry) => entry.id === id);
   if (!task || task.status === status) return;
+  if (!writable(projectOf(task))) return toast(`${projectOf(task)?.name || 'This project'} is read-only here: move its tasks in the repository.`, true);
   // Moving to Blocked asks (optionally) what would unblock the task.
   if (status === 'blocked') return openTaskEditor(task, 'blocked');
   try {
@@ -1538,6 +1663,8 @@ $('#main').addEventListener('click', (event) => {
     case 'layout': state.layout = target.dataset.value; renderMain(); if (state.layout === 'health') refreshCockpit(null, { metrics: true }).then(renderMain).catch(monitorOffline); break;
     case 'clear-filters': state.priority = ''; state.status = ''; state.owner = ''; state.query = ''; $('#search').value = ''; renderMain(); break;
     case 'sample-project': createSample(target); break;
+    case 'link-project': openLinkEditor(); break;
+    case 'unlink-project': openUnlinkDialog(selectedProject()); break;
     case 'open-run': openRun(target.dataset.id); break;
     case 'edit-pipeline': openPipelineEditor(selectedProject()); break;
     case 'add-agent': openAgentEditor(); break;
@@ -1619,7 +1746,7 @@ $('#search-icon').innerHTML = icon('search');
 $('#menu-toggle').innerHTML = icon('menu');
 $('#refresh').innerHTML = icon('refresh');
 $('#sidebar-add').addEventListener('click', () => openProjectEditor());
-$('#create-button').addEventListener('click', () => state.projects.length ? openTaskEditor() : openProjectEditor());
+$('#create-button').addEventListener('click', () => (writableProjects().length ? openTaskEditor() : openProjectEditor()));
 $('#refresh').addEventListener('click', async () => {
   $('#refresh').disabled = true;
   try { await refresh(); toast('Workspace refreshed'); } catch (error) { toast(error.message, true); } finally { $('#refresh').disabled = false; }

@@ -15,9 +15,11 @@ npm start
 
 Open the sign-in link it prints, `http://127.0.0.1:4310/?token=…`. The browser
 stays signed in for that data folder; the token keeps other local users out of
-your workspace. Create your first project, or choose **Explore a sample
-project** to create one with six weeks of simulated history (marked **Simulated
-history** everywhere it appears).
+your workspace. Create your first project, track a repository whose agents
+already keep a deaddrop board (see
+[Track an existing repository](#track-an-existing-repository)), or choose
+**Explore a sample project** to create one with six weeks of simulated history
+(marked **Simulated history** everywhere it appears).
 
 ## Today
 
@@ -86,6 +88,33 @@ API using the token in `.agesight-data/.api-token`. Stages, gates,
 retry policy, routing, the audit format, and the API are described in
 [the pipeline guide](docs/PIPELINE.md).
 
+## Track an existing repository
+
+AGESight can watch a repository whose agents already keep a deaddrop task board
+(`deaddrop/`, or `pm/`, its older name). Choose **Track an existing
+repository** and give the repository's folder. AGESight only reads it: Today,
+health, changes, and each task's history come from the board's files and the
+repository's git history, and nothing is ever written there. Tasks change in the
+repository, where its agents work, and AGESight picks the changes up.
+
+- The folder must be the top of a git repository with a `.git` directory
+  (worktrees and submodules cannot be tracked yet) and contain `deaddrop/tasks/`
+  or `pm/tasks/`.
+- Older boards without a `backlog/` folder are read as they are: a task in
+  `tasks/` whose status is `open` or empty counts as backlog until it is
+  claimed. A rename from `pm/` to `deaddrop/` keeps each task's history.
+- The work in progress limit comes from the board's `deaddrop.yml`.
+- Task files AGESight cannot read are listed on the project page instead of
+  hiding the project.
+- Editing, the pipeline, and agent runs are not available for a tracked
+  repository.
+- **Stop tracking** removes AGESight's record of the repository and leaves the
+  repository unchanged.
+
+Scripts can do the same with the `X-AGESight-Token` header:
+`POST /api/projects/link` with `{"path": "/absolute/path", "name": "optional"}`
+returns the project, and `DELETE /api/projects/<id>` stops tracking it.
+
 ## Storage and behavior
 
 The first version manages local project repositories under
@@ -103,6 +132,9 @@ pipeline/pipeline.json        the project's stages (after the first edit)
 pipeline/runs/R001/           one run: events.jsonl audit log, RUN.md, attempts/
 .git/                         project history
 ```
+
+A tracked repository's folder holds only `project.json`, which records the
+repository's path and its board folder.
 
 Agents are registered in `.agesight-data/registry/agents.json`, a separate git
 repository. Agents start in `.agesight-data/workdirs/` unless configured

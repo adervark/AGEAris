@@ -22,7 +22,9 @@ an item that used the uncommitted trail cites the trail file with `live: true`.
 - **Checkpoint time.** Stale claims also read checkpoint lines' own `ts`.
 - **Days** follow the workspace time zone (`settings.json`, `timezone`).
   Working days are `settings.workdays` (ISO weekdays, default Monday–Friday).
-- **Durations** are elapsed calendar days, shown to one decimal. Approval
+- **Durations** are elapsed calendar days, shown to one decimal: in hours below
+  one day (`0.4 h`), otherwise in days. Item values keep three decimals of a
+  day, so short cycles do not round to zero. Approval
   latency, blocked-for, and decision-wait checks subtract every whole
   non-working local day inside the interval, at its real length (a 25-hour day
   removes 25 hours).
@@ -35,9 +37,18 @@ an item that used the uncommitted trail cites the trail file with `live: true`.
 ## Shared definitions
 
 **States** follow the directory, refined by frontmatter: `backlog/` is backlog;
-`tasks/` is blocked with `status: blocked`, otherwise in progress; `tasks/done/`
-is dropped with `status: killed`, otherwise done. WIP is in progress plus
-blocked. Open work is backlog plus WIP.
+`tasks/` is blocked with `status: blocked`, backlog with an unclaimed status
+(`open`, `unclaimed`, `backlog`, or none: older boards have no `backlog/` and
+file new work in `tasks/`), otherwise in progress; `tasks/done/` is dropped with
+`status: killed`, otherwise done. The status is its first word, lowercased, and
+`in progress` in any spelling is in progress. WIP is in progress plus blocked.
+Open work is backlog plus WIP.
+
+**Boards.** A project created in AGESight reads `deaddrop/` and its pipeline
+runs. A tracked repository reads only its board's `backlog/`, `tasks/`, and
+`checkpoints/`, under `deaddrop/` and under `pm/`, the board's older name. A
+commit that moves a task from `pm/` to `deaddrop/` is a move, not a deletion
+and a creation, so the task's history continues.
 
 **Cycle start.** A cycle begins at creation or at a reopen (leaving done or
 dropped). Its start is its first entry into WIP: creation in WIP, backlog →
@@ -356,6 +367,7 @@ files. It is a precedent, not an oracle: AGESight differs on purpose here.
 | Sweep commits | Ignored for timing (131, 137) | Ignored; a sweep-only start falls back to the first later non-sweep commit, otherwise the item is excluded; a sweep-only finish is excluded | Same intent; exclusions are listed with reasons. |
 | Timestamps | Author time (`%at`, 127) | Committer time, clamped so it never decreases; "since last visit" uses a head cursor | Rebased or merged agent work must appear when it landed. |
 | Status detection | Diffs of `status:` lines (`-G'^status:'`) | The directory plus the frontmatter of each full file version | The directory is the state (RULES.md); a move without a `status:` edit is real. |
+| Unclaimed tasks in `tasks/` | WIP, by location (93) | Backlog while the status is `open`, `unclaimed`, `backlog`, or empty | Older boards had no `backlog/`; counting unclaimed work as WIP inflates WIP and starts cycle clocks before anyone took the task. |
 | Blocked item age | Measured from the move into blocked (275) | Aging from cycle start; blocker age shown separately, from the move into blocked | Aging measures the item's whole time in flight. |
 | Aging reference | Per-type P85, else global, with no minimum (280) | Per-`typeKey` P85 when the type has ≥5 finishes, else the project P85; `insufficient` under 5 | Same idea, with a minimum sample. |
 | Type normalization | Lowercase, `{…}` → untyped, other characters removed (89–91) | The same (`typeKey`); the stored value is kept as written; untyped items use the project reference | Kept identical on purpose. |
@@ -367,4 +379,4 @@ files. It is a precedent, not an oracle: AGESight differs on purpose here.
 | Trail source | The **working tree**, `$CK/*.jsonl` (102) | Committed trail lines from git; the live working-tree trail only for a value computed now, labelled not reproducible | Past values must be reproducible; today's value must not miss uncommitted entries. |
 | Windows | 30-day throughput by default | 7 days against the previous 4 weeks; percentiles over 90 days, minimum 5 | A daily view against a steadier baseline. |
 | Reopened items | Delivered at the latest `done` or `killed` line, still counted after a reopen (139) | Counted once, at the final finish as of `asOf`; an item reopened and still open has no finish (its earlier finish is listed as withdrawn) | Work reopened is not delivered; counting it would also inflate forecasts. |
-| Display | Whole units (`3d`, `14h`) | Days and hours to one decimal | Comparing percentiles needs the extra resolution. |
+| Display | Whole units (`3d`, `14h`) | One decimal: hours below a day, days above | Comparing percentiles needs the extra resolution. |

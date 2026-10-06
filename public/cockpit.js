@@ -121,6 +121,7 @@ function windowNote(brief) {
 
 function projectLine(line) {
   const name = `<a class="project-line-name" href="#project/${escape(line.projectId)}">${escape(line.name)}</a>`;
+  if (line.state === 'unavailable') return `<li class="project-line">${healthDot(null)}<div><p>${name}<span class="health-label">Unavailable</span></p><p class="project-line-sentence">${escape(line.unavailable)}</p></div></li>`;
   if (line.state !== 'ready') return `<li class="project-line">${healthDot(null)}<div><p>${name}<span class="health-label">Indexing</span>${sampleBadge(line.sample)}</p><p class="project-line-sentence">${escape(line.sentence)}</p></div></li>`;
   const label = metricButton({ projectId: line.projectId, metricId: 'health', display: line.health.label, className: `health-label tone-${HEALTH_TONES[line.health.level] || 'idle'}`, title: line.health.rules.filter((rule) => rule.level !== 'ok').map((rule) => rule.message).join(' · ') || 'Explain health' });
   const k = line.kpis;
@@ -181,6 +182,7 @@ function ownerText(owner) {
 
 export function renderHealth(data, { projectId }) {
   if (!data) return '<div class="loading-state"><span class="spinner"></span>Computing metrics…</div>';
+  if (data.state === 'error') return `<p class="today-clear">${icon('alert')}${escape(data.error)}</p>`;
   if (data.state !== 'ready') return `<p class="today-clear">${icon('clock')}Indexing this project’s history (${escape(data.building?.commitsSeen ?? 0)} commits so far). This page fills in when it is done.</p>`;
   const m = data.metrics;
   const number = (metric) => metricOf(projectId, metric);
@@ -202,7 +204,7 @@ export function renderHealth(data, { projectId }) {
   const unassigned = table('In progress with no owner', [['Task', task], ['Priority', (row) => escape(row.priority)]], t.unassigned, 'Every task in progress has an owner.');
   const anomalies = Object.entries(data.ledger.anomalies).map(([kind, n]) => `${n} ${kind.replace(/_/g, ' ')}`).join(', ');
   return `<section class="health-header tone-${HEALTH_TONES[data.health.level] || 'idle'}"><div class="health-verdict">${healthDot(data.health)}${metricButton({ projectId, metricId: 'health', display: data.health.label, className: 'health-label' })}</div><ul class="rules">${rules}</ul></section>
-    <section class="health-section" aria-labelledby="flow-heading"><div class="section-heading"><h2 id="flow-heading">Flow</h2><span>Finished work and time to finish</span></div><div class="flow-grid">${kpi(m.done_7d, 'Done, last 7 days')}${kpi(m.done_4w, 'Done, last 4 weeks')}${kpi(m.cycle_time_p50, 'Cycle time, median')}${kpi(m.cycle_time_p85, 'Cycle time, 85th pct')}${kpi(m.lead_time_p50, 'Lead time, median')}${kpi(m.lead_time_p85, 'Lead time, 85th pct')}${kpi(m.wip, 'Work in progress')}${kpi(m.blocked_share, 'Blocked share, 30 days')}${kpi(m.repeat_slips, 'Repeat slips')}</div><div class="series-row">${seriesChart(data.series.throughput, 'Finished per day, last 6 weeks')}${seriesChart(data.series.wip, 'Work in progress per day, last 6 weeks')}</div></section>
+    <section class="health-section" aria-labelledby="flow-heading"><div class="section-heading"><h2 id="flow-heading">Flow</h2><span>Finished work and time to finish</span></div><div class="flow-grid">${kpi(m.done_7d, 'Done, last 7 days')}${kpi(m.done_4w, 'Done, previous 4 weeks')}${kpi(m.cycle_time_p50, 'Cycle time, median')}${kpi(m.cycle_time_p85, 'Cycle time, 85th pct')}${kpi(m.lead_time_p50, 'Lead time, median')}${kpi(m.lead_time_p85, 'Lead time, 85th pct')}${kpi(m.wip, 'Work in progress')}${kpi(m.blocked_share, 'Blocked share, 30 days')}${kpi(m.repeat_slips, 'Repeat slips')}</div><div class="series-row">${seriesChart(data.series.throughput, 'Finished per day, last 6 weeks')}${seriesChart(data.series.wip, 'Work in progress per day, last 6 weeks')}</div></section>
     <section class="health-section" aria-labelledby="risk-heading"><div class="section-heading"><h2 id="risk-heading">Risk</h2></div>${risk}</section>
     <section class="health-section" aria-labelledby="people-heading"><div class="section-heading"><h2 id="people-heading">People and agents</h2></div>${people}${agents}${unassigned}</section>
     <p class="data-line">${icon('git')}Computed ${escape(formatWhen(data.asOf, data.timezone))} from ${plural(data.ledger.commits, 'commit')} on ${escape(data.ledger.branch || 'the default branch')}${data.ledger.clamped ? ` (${plural(data.ledger.clamped, 'commit')} with clamped times)` : ''}${anomalies ? ` · ${escape(anomalies)}` : ''} · ledger <code>${escape(shortSha(data.build.ledgerSha))}</code>${data.ledger.live ? ' · includes the live trail' : ''}</p>`;

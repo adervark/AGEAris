@@ -17,6 +17,9 @@ from backlog to completion without losing ownership or handoff context.
   commits.
 - Persist tasks and history across application restarts.
 - Reject stale edits and claims beyond the project's work in progress limit.
+- Track an existing repository's deaddrop board read-only. AGESight never
+  writes to a repository it did not create; that repository's agents keep
+  working there, and AGESight reads their files and history.
 
 Accounts, remote collaboration, and external integrations belong to later
 versions. The application serves one local operator.

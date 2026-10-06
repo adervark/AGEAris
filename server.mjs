@@ -224,9 +224,18 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       if (request.method === 'POST' && pathname === '/api/projects') {
         return sendJson(response, 201, await workspace.createProject(await readJson(request), VIA_UI));
       }
+      if (request.method === 'POST' && pathname === '/api/projects/link') {
+        return sendJson(response, 201, await workspace.linkProject(await readJson(request)));
+      }
       const projectMatch = /^\/api\/projects\/([^/]+)$/.exec(pathname);
       if (request.method === 'PATCH' && projectMatch) {
         return sendJson(response, 200, await workspace.updateProject(projectMatch[1], await readJson(request), VIA_UI));
+      }
+      // Stops tracking a repository; AGESight projects are never deleted here.
+      if (request.method === 'DELETE' && projectMatch) {
+        const removed = await workspace.unlinkProject(projectMatch[1]);
+        cockpit.forget(removed.id);
+        return sendJson(response, 200, removed);
       }
       if (request.method === 'POST' && pathname === '/api/tasks') {
         return sendJson(response, 201, await workspace.createTask(await readJson(request), VIA_UI));

@@ -198,7 +198,7 @@ dialog { border: 0; color: var(--ink); background: white; padding: 0; }
 dialog::backdrop { background: #12213960; backdrop-filter: blur(2px); }
 .project-dialog { width: min(480px,calc(100vw - 32px)); border-radius: 10px; box-shadow: 0 20px 80px #15223a40; max-height: calc(100dvh - 40px); }
 .task-dialog { position: fixed; inset: 0 0 0 auto; margin: 0; width: min(530px,100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh; box-shadow: -12px 0 50px #15223a25; }
-.task-dialog form { display: flex; flex-direction: column; min-height: 100%; }
+.task-dialog form, .task-dialog .task-view { display: flex; flex-direction: column; min-height: 100%; }
 .dialog-heading { display: flex; align-items: center; justify-content: space-between; padding: 25px 28px 20px; border-bottom: 1px solid var(--line); }
 .dialog-eyebrow { display: block; color: #8b98ad; font-size: 11px; margin-bottom: 7px; }
 .dialog-heading h2 { font-size: 21px; font-weight: 620; letter-spacing: -.5px; }
@@ -728,7 +728,7 @@ button.delta-item:hover { color: var(--blue); }
 .flow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); background: white; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .flow-kpi { padding: 14px 16px; display: grid; gap: 6px; box-shadow: 1px 0 0 var(--line), 0 1px 0 var(--line); }
 .flow-kpi > span { font-size: 11px; color: #8592a6; }
-.flow-kpi .metric-number { font-size: 19px; justify-self: start; }
+.flow-kpi .metric-number { font-size: 19px; justify-self: start; text-align: left; }
 .series-row { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin-top: 16px; }
 .series { margin: 0; background: white; border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px 10px; }
 .series svg { display: block; width: 100%; height: 56px; fill: #8fa9e4; }
@@ -770,6 +770,18 @@ code { font-family: var(--mono); font-size: 11px; color: #52627a; white-space: n
 .explain-facts dd { margin: 0; color: #34445d; overflow-wrap: anywhere; line-height: 1.6; }
 .explain-excluded { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.8; }
 .explain-id { font-size: 11px; }
+
+/* --- Tracked repositories: read here, changed where their agents work -------- */
+.readonly-badge { display: inline-block; padding: 1px 7px; border-radius: 4px; background: var(--idle-tint); color: var(--idle-ink); font-size: 10px; font-weight: 600; white-space: nowrap; }
+.tracked-line { color: #7a889d; }
+.tracked-line code, .readonly-note code, .dialog-copy code { font-family: var(--mono); font-size: 11px; color: #43536c; overflow-wrap: anywhere; }
+.track-button { margin-top: 2px; }
+.dialog-switch { margin-right: auto; }
+.readonly-note { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; line-height: 1.65; color: #55657d; background: var(--idle-tint); border-radius: 6px; padding: 9px 12px; margin-bottom: 20px; }
+.readonly-note .icon { width: 14px; height: 14px; margin-top: 1px; color: var(--idle); }
+.task-facts { margin-bottom: 20px; }
+.task-view-heading { font-size: 12px; font-weight: 600; color: #43536c; margin-bottom: 8px; }
+.task-goal { font-size: 12px; line-height: 1.7; color: #34445d; white-space: pre-wrap; overflow-wrap: anywhere; margin-bottom: 20px; }
 @media (max-width: 680px) {
   .today-heading { flex-direction: column; }
   .today-actions { justify-content: flex-start; width: 100%; }
