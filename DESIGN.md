@@ -55,7 +55,8 @@ that is fine collapses into one "All clear" line. One task has one look: the
 same signal badges on a Home row, a card, a list row, and the drawer, which
 always opens the same way.
 
-The shell is light and calm: a slim white sidebar (Home, Projects, Agents,
+The shell is true black: the page and its panels are `#000`, separated by thin
+borders rather than shades of grey. A slim sidebar (Home, Projects, Agents,
 Activity, then the projects with a health dot each), a top bar with search and
 a secondary Add project button. Colour carries meaning only: red stuck or
 overdue, amber quiet or running long, blue in progress, green done. Health reads
@@ -63,8 +64,8 @@ as words (On track, Watch, Needs attention) and the dot keeps the colour.
 Numbers are plain text that explain themselves on hover and focus. Charts carry
 date ticks and a maximum label.
 
-All colour, space, and type come from CSS tokens; dark mode uses the same
-tokens. The type scale is 12/13/14/16/20/28px, nothing smaller than 12px. The
+All colour, space, and type come from CSS tokens. Body text is at least 13:1
+on black, muted text at least 6.5:1, and coloured fills carry black text. The type scale is 12/13/14/16/20/28px, nothing smaller than 12px. The
 content security policy allows no inline styles, so agent colours are classes.
 
 ```text
