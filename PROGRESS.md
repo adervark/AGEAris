@@ -103,3 +103,27 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` 445 of 445 and `npm run e2e` 19 of 19 at 1de20b2; `npm run check`
   passes.
 - Evidence: `tests/tracked.test.mjs` and the Result of T021.
+
+## 2026-10-08 — T023: task actions on tracked AA boards
+
+- Claim, release, block, unblock and done now work on a tracked AA board, in
+  both layouts, once the operator switches task actions on. Each is one commit
+  of one task file on the pinned branch. AGENTS.md's read-only rule is replaced
+  by plan §2's rule; the acceptance grep prints exactly the four permitted
+  lines.
+- `npm run e2e` 24 of 24 at 4bae6ce (headless Chrome 152). The five new tracked
+  scenarios cover:
+  - the switch's disclosures;
+  - claim, block and done with `backlog/`;
+  - claim in place without it;
+  - an own agent's hold with a dead run, confirmed once and warned;
+  - a live run refusing every action.
+
+  No console or CSP errors.
+- `npm test` 473 of 473; `npm run check` passes.
+- Independent review: REQUEST CHANGES. A HIGH finding (a discarded uncommitted
+  edit could be committed) and a MEDIUM one (a symlinked trail gave a 500) were
+  both reproduced and are fixed in 4bae6ce. A mutation check confirmed that the
+  regression test fails without its fix. The remaining LOWs are T026.
+- Evidence: `tests/task-actions.test.mjs`, `tests/e2e/task-actions.e2e.mjs`,
+  and the Result of T023.
