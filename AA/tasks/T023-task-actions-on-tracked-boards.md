@@ -2,7 +2,7 @@
 id: T023
 title: "Task actions on tracked AA boards, end to end; the read-only rule lifted"
 status: claimed
-owner: adervark @k/578f7ba9 2026-10-08 — wiring task actions into tracked AA boards
+owner: adervark @v/b384188f 2026-10-08 — finishing T023 after its session died (was @k/578f7ba9 2026-10-08 — wiring task actions into tracked AA boards)
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -48,10 +48,10 @@ Claim, release, block, unblock and done work from AGE Aris on a tracked AA board
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/578f7ba9 (claimed; a worker subagent builds it in its own worktree, the owner verifies and commits)
-- **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** read the plan's section for T023
+- **Last touched:** 2026-10-08, adervark @v/b384188f (took the claim back after session 578f7ba9 and its worker died mid-UI; worker run reaped on the trail)
+- **In flight:** an independent review run (`b384188f.3177`) of the uncommitted diff
+- **On disk:** worktree `.claude/worktrees/agent-a16813091227f8118`, uncommitted: workspace actOnTask and switch, server route, drawer action bar on tracked tasks, CONFIRM dialog, header switch, every read-only string and the §2 rule in AGENTS/DESIGN/README/skills, tests (unit, server, e2e 5 tracked scenarios). `npm test` 470/470, `npm run check` ok, `npm run e2e` 24/24, acceptance grep prints the four permitted lines — all verified 2026-10-08 in that worktree
+- **Resume with:** read the review findings (or re-run a review if lost), fix the confirmed ones, re-run the three suites, commit the worktree's diff onto `feature/pm-cockpit` as one commit, record the e2e run in PROGRESS.md
 - **Next decision:** none
 
 ## Verify
