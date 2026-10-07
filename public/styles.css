@@ -525,6 +525,18 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
 .mono-input { font-family: var(--mono) !important; font-size: 13px !important; }
 .drawer-summary { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; margin-bottom: 16px; font-size: 13px; color: var(--muted); }
 .drawer-summary .status-pill { font-weight: 600; color: var(--ink); }
+.action-bar { margin: 0 0 18px; }
+.action-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.action-item { position: relative; display: inline-flex; }
+.action-button[aria-disabled="true"] { color: var(--faint); border-style: dashed; cursor: not-allowed; }
+.action-button[aria-disabled="true"]:hover { background: var(--surface); color: var(--faint); }
+.action-why { position: absolute; z-index: 2; left: 0; bottom: calc(100% + 6px); width: max-content; max-width: min(280px, calc(100vw - 48px)); padding: 6px 10px; background: var(--surface-3); border: 1px solid var(--line-2); border-radius: var(--radius-sm); color: var(--ink); font-size: 12px; line-height: 1.5; visibility: hidden; pointer-events: none; }
+.action-item:hover .action-why, .action-item:focus-within .action-why { visibility: visible; }
+.action-input { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; margin-top: 12px; }
+.action-input .field { flex: 1 1 220px; margin-bottom: 0; }
+.action-note { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.action-note:empty, .action-error:empty { display: none; }
+.action-error { margin-top: 8px; }
 .drawer-note { margin: 0 0 18px; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
 .drawer-note p { font-size: 14px; color: var(--ink); line-height: 1.55; overflow-wrap: anywhere; }
 .drawer-note small { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; font-size: 12px; color: var(--muted); }

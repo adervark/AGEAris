@@ -1,3 +1,4 @@
+import { actionFor, actionRequest, availability, TASK_ACTIONS } from './actions.js';
 import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, usualWeek, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
@@ -157,6 +158,9 @@ async function api(path, method = 'GET', data) {
   if (!response.ok) {
     const error = new Error(result.error || 'Changes could not be saved. Try again.');
     error.status = response.status;
+    // A refusal can name its reason (`code`) and what to do about it (`remedy`).
+    if (result.code) error.code = result.code;
+    if (result.remedy) error.remedy = result.remedy;
     throw error;
   }
   return result;
@@ -728,9 +732,21 @@ function setupDialog(dialog) {
     const rect = dialog.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeDialog(dialog);
   };
-  const opener = document.activeElement;
-  dialog.addEventListener('close', () => { if (opener?.isConnected && !document.querySelector('dialog[open]')) opener.focus({ preventScroll: true }); }, { once: true });
-  if (!dialog.open) dialog.showModal();
+  if (!dialog.open) {
+    // Focus goes back to what opened the dialog, or to the same task's card when
+    // a refresh has replaced it.
+    const opener = document.activeElement;
+    const taskId = opener?.dataset?.action === 'open-task' ? opener.dataset.id : '';
+    dialog.addEventListener('close', () => {
+      if (document.querySelector('dialog[open]')) return;
+      const target = opener?.isConnected ? opener : taskId && $('#main').querySelector(`[data-action="open-task"][data-id="${CSS.escape(taskId)}"]`);
+      target?.focus({ preventScroll: true });
+    }, { once: true });
+    dialog.showModal();
+  } else {
+    // The content was swapped in place (a linked task): focus starts where a fresh open's would.
+    dialog.querySelector('[autofocus], [data-close]')?.focus();
+  }
 }
 
 function anyDialogOpen() {
@@ -863,7 +879,7 @@ function openTaskEditor(task = null, status = '') {
   const dialog = $('#task-dialog');
   const head = task ? drawerHead(task, { editable: true }) : null;
   const heading = head ? head.heading : `<header class="dialog-heading"><div><span class="dialog-eyebrow">Plan your next step</span><h2 id="task-dialog-title">New task</h2></div><button type="button" class="icon-button" data-close aria-label="Close task editor">${icon('close')}</button></header>`;
-  dialog.innerHTML = `<form id="task-form">${heading}<div class="dialog-fields">${head ? `${head.summary}${head.note}` : ''}${task ? `${drawerThread(task)}${taskRunPanel(task)}` : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${(task ? state.projects : choices).map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type share a service level; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>${drawerTimeline(task, false)}` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
+  dialog.innerHTML = `<form id="task-form" ${task ? `data-task="${escape(task.id)}"` : ''}>${heading}<div class="dialog-fields">${head ? `${head.summary}${head.note}${actionBar(task)}` : ''}${task ? `${drawerThread(task)}${taskRunPanel(task)}` : ''}<label class="field">Task title<input name="title" required maxlength="200" placeholder="What needs to get done?" value="${escape(task?.title || '')}" autofocus></label><label class="field">Project<select name="projectId" ${task ? 'disabled' : ''}>${(task ? state.projects : choices).map((project) => `<option value="${escape(project.id)}" ${projectId === project.id ? 'selected' : ''}>${escape(project.name)}</option>`).join('')}</select></label><div class="field-row"><label class="field">Status<select name="status">${options(statuses, initialStatus)}</select></label><label class="field">Priority<select name="priority">${options(priorities, task?.priority || 'medium')}</select></label></div><label class="field" id="blocked-reason-field" ${initialStatus === 'blocked' ? '' : 'hidden'}>What would unblock it? <span class="field-optional">optional</span><input name="blockedReason" maxlength="200" placeholder="e.g. Waiting on the API key from Ops" value="${escape(task?.blockedReason || '')}"><small>One line. It is cleared when the task leaves Blocked.</small></label><label class="field">Type <span class="field-optional">optional</span><input name="type" maxlength="40" list="type-suggestions" placeholder="e.g. feature or bug" value="${escape(task?.type || '')}"><datalist id="type-suggestions">${types.map((type) => `<option value="${escape(type)}"></option>`).join('')}</datalist><small>Tasks of one type share a service level; bug counts as defect work.</small></label><div class="field-row"><label class="field">Owner <span class="field-optional">optional</span><input name="assignee" maxlength="100" list="owner-suggestions" placeholder="Unassigned" value="${escape(task?.assignee || '')}"><datalist id="owner-suggestions">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist></label><label class="field">Due date <span class="field-optional">optional</span><input name="dueDate" type="date" value="${escape(task?.dueDate || '')}"></label></div><label class="field">Description <span class="field-optional">optional</span><textarea name="description" rows="8" maxlength="20000" placeholder="Add context, a clear next step, or what done looks like…">${escape(task?.description || '')}</textarea></label>${task ? `<div class="task-timestamps"><span>Created ${escape(formatDate(task.createdAt, true))}</span><span>Updated ${escape(formatDate(task.updatedAt, true))}</span></div>${drawerTimeline(task, false)}` : ''}<p class="form-error" id="task-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">${task ? 'Save changes' : 'Create task'}</button></footer></form>`;
   const reasonField = $('#blocked-reason-field');
   $('#task-form [name="status"]').addEventListener('change', (event) => {
     reasonField.hidden = event.currentTarget.value !== 'blocked';
@@ -905,6 +921,91 @@ function openTaskViewer(task) {
   setupDialog(dialog);
   loadTaskBody(task);
   loadTaskHistory(task);
+}
+
+// --- Task actions --------------------------------------------------------------
+// One registry (actions.js) says what can be done and why not. The drawer's bar
+// and a column change by drag both go through performAction.
+
+// What an action that asks for input says: its label, a placeholder, a length.
+const actionPrompts = { block: ['What would unblock it?', 'e.g. Waiting on the API key from Ops', 200], priority: ['Priority'], assign: ['Owner', 'Leave empty for nobody', 100] };
+
+function wipCountOf(task) {
+  return state.tasks.filter((entry) => entry.projectId === task.projectId && ['in_progress', 'blocked'].includes(entry.status)).length;
+}
+
+function actionBar(task) {
+  const buttons = availability(task, projectOf(task), { operator: state.operator, wipCount: wipCountOf(task) }).filter((entry) => entry.relevant).map((entry) => {
+    const action = TASK_ACTIONS.find((candidate) => candidate.id === entry.id);
+    const why = `action-why-${entry.id}`;
+    return `<span class="action-item"><button type="button" class="button button-secondary action-button" data-action="act" data-act="${entry.id}" data-id="${escape(task.id)}" ${entry.enabled ? '' : `aria-disabled="true" aria-describedby="${why}"`}>${icon(action.icon)}${action.label}</button>${entry.enabled ? '' : `<span class="action-why" id="${why}" role="tooltip">${escape(entry.why)}</span>`}</span>`;
+  }).join('');
+  return `<div class="action-bar" role="group" aria-label="Task actions"><div class="action-buttons">${buttons}</div><div class="action-slot" id="action-slot"></div><p class="action-note" id="action-note" role="status"></p><p class="form-error action-error" id="action-error" role="alert"></p></div>`;
+}
+
+// The task the open drawer shows, if any.
+function drawerTaskId() {
+  return $('#task-dialog').open ? $('#task-form')?.dataset.task || '' : '';
+}
+
+// A person's answer to an action that asks for one: a line, or one choice.
+function showActionInput(id, task) {
+  const action = TASK_ACTIONS.find((entry) => entry.id === id);
+  const [label, placeholder, max] = actionPrompts[id];
+  $('#action-error').textContent = '';
+  $('#action-note').textContent = '';
+  const field = id === 'priority'
+    ? `<select name="input" data-action-input>${options(priorities, task.priority)}</select>`
+    : `<input name="input" data-action-input maxlength="${max}" placeholder="${escape(placeholder)}" ${id === 'assign' ? `list="action-owners" value="${escape(task.assignee)}"` : ''}>${id === 'assign' ? `<datalist id="action-owners">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist>` : ''}`;
+  $('#action-slot').innerHTML = `<div class="action-input" role="group" aria-label="${action.label}"><label class="field">${label}${action.needs === 'reason' ? ' <span class="field-optional">optional</span>' : ''}${field}</label><button type="button" class="button button-primary" data-action="act-confirm" data-act="${id}" data-id="${escape(task.id)}">${action.label}</button><button type="button" class="button button-secondary" data-action="act-cancel" data-act="${id}">Cancel</button></div>`;
+  $('#action-slot [data-action-input]').focus();
+}
+
+function closeActionInput(id) {
+  $('#action-slot').innerHTML = '';
+  $('#task-dialog').querySelector(`[data-action="act"][data-act="${id}"]`)?.focus();
+}
+
+// The single entry point for changing a task by action. A refusal is shown in
+// the drawer (as an alert) and as a toast, and nothing is shown as done until
+// the server has said so.
+async function performAction(id, taskId, { input } = {}) {
+  const task = state.tasks.find((entry) => entry.id === taskId);
+  const action = TASK_ACTIONS.find((entry) => entry.id === id);
+  if (!task || !action) return toast('This task is no longer on the board. Its history stays in Activity.', true);
+  const refuse = (message) => {
+    if (drawerTaskId() === taskId) $('#action-error').textContent = message;
+    toast(message, true);
+  };
+  const entry = availability(task, projectOf(task), { operator: state.operator, wipCount: wipCountOf(task) }).find((candidate) => candidate.id === id);
+  if (!entry.enabled) return refuse(entry.why);
+  if (action.needs && input === undefined) {
+    if (drawerTaskId() !== taskId) openTask(taskId);
+    return showActionInput(id, task);
+  }
+  let request;
+  try { request = actionRequest(id, task, input); } catch (error) { return refuse(error.message); }
+  const typed = drawerTaskId() === taskId ? Object.fromEntries(new FormData($('#task-form'))) : null;
+  state.acting = true;
+  try {
+    await api(request.path, request.method, request.body);
+    await refresh();
+  } catch (error) {
+    return refuse(error.status === 409 ? `${error.message}. Nothing was changed.` : error.message);
+  } finally { state.acting = false; }
+  toast(action.done);
+  // Only a drawer still showing this task follows it; one closed meanwhile stays closed.
+  if (!typed || drawerTaskId() !== taskId) return;
+  // The drawer follows the task and keeps what was typed in the fields the
+  // action does not touch.
+  const fresh = state.tasks.find((candidate) => candidate.id === taskId);
+  if (!fresh) return closeDialog($('#task-dialog'));
+  openTaskEditor(fresh);
+  for (const name of ['title', 'type', 'dueDate', 'description']) {
+    if (typed[name] !== (task[name] || '')) $('#task-form').elements[name].value = typed[name];
+  }
+  const bar = $('#task-dialog .action-bar');
+  (bar.querySelector(`[data-act="${id}"]:not([aria-disabled])`) || bar.querySelector('.action-button:not([aria-disabled])') || $('#task-dialog-title')).focus();
 }
 
 // Start a run from the drawer. Unsaved edits are saved first so the agents see
@@ -1892,17 +1993,15 @@ async function openPipelineEditor(project) {
   });
 }
 
-async function moveTask(id, status) {
+// A column change is the action that makes it. Block asks (optionally) what
+// would unblock the task.
+function moveTask(id, status) {
   const task = state.tasks.find((entry) => entry.id === id);
   if (!task || task.status === status) return;
   if (!writable(projectOf(task))) return toast(`${projectOf(task)?.name || 'This project'} is read-only here: move its tasks in the repository.`, true);
-  // Moving to Blocked asks (optionally) what would unblock the task.
-  if (status === 'blocked') return openTaskEditor(task, 'blocked');
-  try {
-    await api(`/tasks/${encodeURIComponent(id)}`, 'PATCH', { status, version: task.version });
-    await refresh();
-    toast(`Task moved to ${statuses[status].toLowerCase()}`);
-  } catch (error) { toast(error.message, true); }
+  const action = actionFor(task.status, status);
+  if (!action) return toast(`A ${statuses[task.status].toLowerCase()} task cannot move to ${statuses[status].toLowerCase()}.`, true);
+  return performAction(action.id, id);
 }
 
 async function createSample(button) {
@@ -1926,10 +2025,15 @@ function setLayout(layout) {
   refreshCockpit(null).then(() => { if (!refreshPaused()) renderMain(); }).catch(monitorOffline);
 }
 
-$('#main').addEventListener('click', (event) => {
+// One delegated handler serves the page and the task drawer, so a control does
+// the same wherever it is and a linked task swaps the drawer's content in place.
+function onAction(event) {
   const target = event.target.closest('[data-action]');
   if (!target) return;
   switch (target.dataset.action) {
+    case 'act': if (target.getAttribute('aria-disabled') === 'true') $('#action-note').textContent = target.nextElementSibling?.textContent || ''; else performAction(target.dataset.act, target.dataset.id); break;
+    case 'act-confirm': performAction(target.dataset.act, target.dataset.id, { input: $('#action-slot [data-action-input]').value }); break;
+    case 'act-cancel': closeActionInput(target.dataset.act); break;
     case 'new-project': openProjectEditor(); break;
     case 'edit-project': openProjectEditor(selectedProject()); break;
     case 'new-task': openTaskEditor(null, target.dataset.status || 'backlog'); break;
@@ -1946,7 +2050,7 @@ $('#main').addEventListener('click', (event) => {
     case 'sample-project': createSample(target); break;
     case 'link-project': openLinkEditor(); break;
     case 'unlink-project': openUnlinkDialog(selectedProject()); break;
-    case 'open-run': openRun(target.dataset.id); break;
+    case 'open-run': closeDialog($('#task-dialog')); openRun(target.dataset.id); break;
     case 'edit-pipeline': openPipelineEditor(selectedProject()); break;
     case 'add-agent': openAgentEditor(); break;
     case 'edit-agent': openAgentEditor(state.agents.find((agent) => agent.id === target.dataset.id)); break;
@@ -1961,7 +2065,9 @@ $('#main').addEventListener('click', (event) => {
     case 'more-options': state.decisionMode = 'reject'; state.decisionRun = target.dataset.id; break;
     case 'focus-comment': $('#comment-text')?.focus(); break;
   }
-});
+}
+$('#main').addEventListener('click', onAction);
+$('#task-dialog').addEventListener('click', onAction);
 
 $('#main').addEventListener('change', (event) => {
   saveDraft(event.target);
@@ -2021,14 +2127,15 @@ $('#main').addEventListener('dragend', () => {
   document.querySelectorAll('.dragging, .drop-target').forEach((entry) => entry.classList.remove('dragging', 'drop-target'));
 });
 
-// A task named in the drawer (what it builds on, what builds on it) opens in
-// the same drawer.
-$('#task-dialog').addEventListener('click', (event) => {
-  const link = event.target.closest('[data-action="open-task"]');
-  if (!link) return;
+// Enter in an action's field does the action instead of saving the whole form;
+// Escape closes the field and leaves the drawer open.
+$('#task-dialog').addEventListener('keydown', (event) => {
+  const field = event.target.closest('[data-action-input]');
+  if (!field || !['Enter', 'Escape'].includes(event.key)) return;
   event.preventDefault();
-  closeDialog($('#task-dialog'));
-  openTask(link.dataset.id);
+  const confirm = field.closest('.action-input').querySelector('[data-action="act-confirm"]');
+  if (event.key === 'Enter') performAction(confirm.dataset.act, confirm.dataset.id, { input: field.value });
+  else closeActionInput(confirm.dataset.act);
 });
 $('#search').addEventListener('input', (event) => { state.query = event.target.value; renderMain(); });
 $('#sidebar-add').innerHTML = icon('plus');
