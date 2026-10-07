@@ -1006,14 +1006,14 @@ test('the state rule: the folder decides backlog and done, and a killed task in 
   assert.equal(taskState('done', '**Killed**'), 'dropped');
 });
 
-test('boardPolicy reads the in-progress WIP limit and stale_hours, and gives 0 when no limit is set or it is still the placeholder', async () => {
-  assert.deepEqual(boardPolicy('wip:\n  in_progress: 3  # three agents\n  blocked: 2\nstale_hours: 12\n'), { staleHours: 12, wipLimit: 3 });
-  assert.deepEqual(boardPolicy(''), { staleHours: undefined, wipLimit: 0 });
-  assert.deepEqual(boardPolicy('stale_hours: 24\nlog: PROGRESS.md\n'), { staleHours: 24, wipLimit: 0 });
-  assert.deepEqual(boardPolicy('limits:\n  in_progress: 9\nwip:\n  blocked: 2\n'), { staleHours: undefined, wipLimit: 0 }, 'only the wip: block sets it');
+test('boardPolicy reads the WIP limits and stale_hours: 0 when no limit is set or it is still the placeholder, and 24 hours by default', async () => {
+  assert.deepEqual(boardPolicy('wip:\n  in_progress: 3  # three agents\n  blocked: 2\nstale_hours: 12\n'), { staleHours: 12, wipLimit: 3, blockedLimit: 2 });
+  assert.deepEqual(boardPolicy(''), { staleHours: 24, wipLimit: 0, blockedLimit: 0 });
+  assert.deepEqual(boardPolicy('stale_hours: 24\nlog: PROGRESS.md\n'), { staleHours: 24, wipLimit: 0, blockedLimit: 0 });
+  assert.deepEqual(boardPolicy('limits:\n  in_progress: 9\nwip:\n  blocked: 2\n'), { staleHours: 24, wipLimit: 0, blockedLimit: 2 }, 'only the wip: block sets it');
   const template = await readFile(new URL('../skills/aa-init/template/AA.yml', import.meta.url), 'utf8');
   assert.match(template, /^ {2}in_progress: \{\{N\}\}$/m, 'the template still carries the placeholder');
-  assert.deepEqual(boardPolicy(template), { staleHours: 24, wipLimit: 0 });
+  assert.deepEqual(boardPolicy(template), { staleHours: 24, wipLimit: 0, blockedLimit: 0 });
 });
 
 test('linkProject refuses a missing, relative, absent, or non-folder path, and any folder inside the data folder', async () => {
