@@ -864,8 +864,7 @@ function drawerTimeline(task, open) {
   return `<details class="drawer-history" data-key="history" ${open ? 'open' : ''}><summary>Timeline</summary><div id="task-history" data-task="${escape(task.id)}">${renderTimeline(null)}</div></details><div id="task-evidence"></div>`;
 }
 
-// `status` presets the status select: a new task's column, or Blocked when a
-// card is dropped there, so the editor can ask what would unblock it.
+// `status` presets a new task's column.
 function openTaskEditor(task = null, status = '') {
   if (task && !writable(projectOf(task))) return openTaskViewer(task);
   const here = selectedProject();
@@ -908,7 +907,6 @@ function openTaskEditor(task = null, status = '') {
     dialog.querySelector('.drawer-history').addEventListener('toggle', (event) => { if (event.currentTarget.open) loadTaskHistory(task); }, { once: true });
   }
   setupDialog(dialog);
-  if (status === 'blocked' && task) reasonField.querySelector('input').focus();
 }
 
 // A tracked repository's task: the task file as written, its timeline, and the
@@ -958,7 +956,9 @@ function showActionInput(id, task) {
     ? `<select name="input" data-action-input>${options(priorities, task.priority)}</select>`
     : `<input name="input" data-action-input maxlength="${max}" placeholder="${escape(placeholder)}" ${id === 'assign' ? `list="action-owners" value="${escape(task.assignee)}"` : ''}>${id === 'assign' ? `<datalist id="action-owners">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist>` : ''}`;
   $('#action-slot').innerHTML = `<div class="action-input" role="group" aria-label="${action.label}"><label class="field">${label}${action.needs === 'reason' ? ' <span class="field-optional">optional</span>' : ''}${field}</label><button type="button" class="button button-primary" data-action="act-confirm" data-act="${id}" data-id="${escape(task.id)}">${action.label}</button><button type="button" class="button button-secondary" data-action="act-cancel" data-act="${id}">Cancel</button></div>`;
-  $('#action-slot [data-action-input]').focus();
+  const answer = $('#action-slot [data-action-input]');
+  answer.focus();
+  if (answer.select) answer.select();
 }
 
 function closeActionInput(id) {
@@ -966,10 +966,31 @@ function closeActionInput(id) {
   $('#task-dialog').querySelector(`[data-action="act"][data-act="${id}"]`)?.focus();
 }
 
+// The fields a person has changed in the drawer's full form, by name, except
+// those in `skip` (the ones an action is about to set).
+function dirtyFields(form, skip) {
+  const dirty = {};
+  for (const element of form.elements) {
+    if (!element.name || element.name === 'input' || element.disabled || skip.includes(element.name)) continue;
+    const initial = element.tagName === 'SELECT' ? ([...element.options].find((option) => option.defaultSelected) || element.options[0])?.value : element.defaultValue;
+    if (element.value !== initial) dirty[element.name] = element.value;
+  }
+  return dirty;
+}
+
+// While a request is out the bar says so and does nothing more.
+function setBarBusy(busy) {
+  const bar = $('#task-dialog .action-bar');
+  if (!bar) return;
+  if (busy) bar.setAttribute('aria-busy', 'true');
+  else bar.removeAttribute('aria-busy');
+}
+
 // The single entry point for changing a task by action. A refusal is shown in
 // the drawer (as an alert) and as a toast, and nothing is shown as done until
-// the server has said so.
+// the server has said so. One action is in flight at a time.
 async function performAction(id, taskId, { input } = {}) {
+  if (state.acting) return;
   const task = state.tasks.find((entry) => entry.id === taskId);
   const action = TASK_ACTIONS.find((entry) => entry.id === id);
   if (!task || !action) return toast('This task is no longer on the board. Its history stays in Activity.', true);
@@ -980,32 +1001,50 @@ async function performAction(id, taskId, { input } = {}) {
   const entry = availability(task, projectOf(task), { operator: state.operator, wipCount: wipCountOf(task) }).find((candidate) => candidate.id === id);
   if (!entry.enabled) return refuse(entry.why);
   if (action.needs && input === undefined) {
-    if (drawerTaskId() !== taskId) openTask(taskId);
+    if (drawerTaskId() !== taskId) {
+      // Focus goes back to this task's card when the drawer closes.
+      $('#main').querySelector(`[data-action="open-task"][data-id="${CSS.escape(taskId)}"]`)?.focus({ preventScroll: true });
+      openTask(taskId);
+    }
     return showActionInput(id, task);
   }
   let request;
   try { request = actionRequest(id, task, input); } catch (error) { return refuse(error.message); }
-  const typed = drawerTaskId() === taskId ? Object.fromEntries(new FormData($('#task-form'))) : null;
+  const inDrawer = drawerTaskId() === taskId;
+  const dirty = inDrawer ? dirtyFields($('#task-form'), Object.keys(request.body)) : {};
   state.acting = true;
-  try {
-    await api(request.path, request.method, request.body);
-    await refresh();
-  } catch (error) {
-    return refuse(error.status === 409 ? `${error.message}. Nothing was changed.` : error.message);
-  } finally { state.acting = false; }
-  toast(action.done);
+  setBarBusy(true);
+  let failure = '';
+  let refreshed = true;
+  try { await api(request.path, request.method, request.body); } catch (error) { failure = error.status === 409 ? `${error.message}. Nothing was changed.` : error.message; }
+  // The refresh is its own step: a failed one must not turn a saved action into a refusal,
+  // and after a refusal it brings the drawer's version up to date for the retry.
+  try { await refresh(); } catch { refreshed = false; }
+  state.acting = false;
+  setBarBusy(false);
+  if (failure) toast(failure, true);
+  else toast(refreshed ? action.done : `${action.done}, but AGE Aris could not refresh. Use the refresh button.`);
   // Only a drawer still showing this task follows it; one closed meanwhile stays closed.
-  if (!typed || drawerTaskId() !== taskId) return;
-  // The drawer follows the task and keeps what was typed in the fields the
-  // action does not touch.
+  if (drawerTaskId() !== taskId) return;
   const fresh = state.tasks.find((candidate) => candidate.id === taskId);
   if (!fresh) return closeDialog($('#task-dialog'));
-  openTaskEditor(fresh);
-  for (const name of ['title', 'type', 'dueDate', 'description']) {
-    if (typed[name] !== (task[name] || '')) $('#task-form').elements[name].value = typed[name];
+  if (!refreshed) {
+    if (failure) $('#action-error').textContent = failure;
+    return;
   }
-  const bar = $('#task-dialog .action-bar');
-  (bar.querySelector(`[data-act="${id}"]:not([aria-disabled])`) || bar.querySelector('.action-button:not([aria-disabled])') || $('#task-dialog-title')).focus();
+  // The drawer follows the task and keeps what was typed in the fields the action does not set.
+  openTaskEditor(fresh);
+  const form = $('#task-form');
+  for (const [name, value] of Object.entries(dirty)) if (form.elements[name]) form.elements[name].value = value;
+  if (failure && action.needs) {
+    // A refusal keeps the person's answer in its field, ready to send again.
+    showActionInput(id, fresh);
+    $('#action-slot [data-action-input]').value = input;
+  } else if (!failure) {
+    const bar = $('#task-dialog .action-bar');
+    (bar.querySelector(`[data-act="${id}"]:not([aria-disabled])`) || bar.querySelector('.action-button:not([aria-disabled])') || $('#task-dialog-title')).focus();
+  }
+  if (failure) $('#action-error').textContent = failure;
 }
 
 // Start a run from the drawer. Unsaved edits are saved first so the agents see

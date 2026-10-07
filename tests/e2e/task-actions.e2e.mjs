@@ -78,6 +78,9 @@ before(async () => {
   await make('Dragged to block');
   await make('Parent');
   await make('Child');
+  await make('Double click me');
+  await make('Double enter me');
+  await make('Edits survive Done');
   // A task builds on another through `depends`, which the API does not set.
   const dir = path.join(server.workspace.projectsDir, projectId, 'AA');
   for (const folder of ['backlog', 'tasks']) {
@@ -312,11 +315,10 @@ test('dragging a card to Blocked opens its drawer asking for the reason, and Ent
   await until(async () => (await task('Dragged to block')).status === 'blocked', 'the task was not blocked');
   assert.equal((await task('Dragged to block')).blockedReason, 'Needs a decision');
   await pillIs('Blocked');
-  await page.keyboard.press('Escape');
-  await page.waitForSelector('#task-dialog:not([open])');
+  await closeDrawerAndExpectFocusOn('Dragged to block');
 });
 
-test('a refusal is shown in the drawer as an alert, and nothing changes', async () => {
+test('a refusal is shown in the drawer as an alert, the drawer catches up, and the retry in the same drawer succeeds', async () => {
   await openDrawer('Assign me');
   // Another session changes the task while the drawer is open, so the version is stale.
   const current = await task('Assign me');
@@ -328,9 +330,56 @@ test('a refusal is shown in the drawer as an alert, and nothing changes', async 
   assert.match(await page.$eval('#action-error', (element) => element.textContent), /Task has changed; refresh and try again\. Nothing was changed\./);
   assert.equal(await page.$eval('#action-error', (element) => element.getAttribute('role')), 'alert');
   assert.equal((await task('Assign me')).assignee, 'Ada Lovelace');
-  await page.keyboard.press('Escape');
+  // The drawer caught up with the other change, and kept the answer for a retry.
+  await summaryHas('Low');
+  assert.equal(await page.$eval('#action-slot [data-action-input]', (element) => element.value), 'Grace Hopper');
+  await page.keyboard.press('Enter');
+  await until(async () => (await task('Assign me')).assignee === 'Grace Hopper', 'the retry did not go through');
+  await summaryHas('Grace Hopper');
+  assert.equal(await page.$eval('#action-error', (element) => element.textContent), '', 'a success clears the refusal');
   await page.keyboard.press('Escape');
   await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('a double click is one action, not an action and a false refusal', async () => {
+  await openDrawer('Double click me');
+  // Two clicks in the same instant, as a fast double click delivers them.
+  await page.$eval(bar('done'), (button) => { button.click(); button.click(); });
+  await until(async () => (await task('Double click me')).status === 'done', 'the task was not finished');
+  await pillIs('Done');
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  assert.equal(await page.$eval('#action-error', (element) => element.textContent), '');
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('a double Enter is one action, not an action and a false refusal', async () => {
+  await openDrawer('Double enter me');
+  await page.click(bar('assign'));
+  await page.keyboard.type('Ada Lovelace');
+  await Promise.all([page.keyboard.press('Enter'), page.keyboard.press('Enter')]);
+  await until(async () => (await task('Double enter me')).assignee === 'Ada Lovelace', 'the owner was not set');
+  await summaryHas('Ada Lovelace');
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  assert.equal(await page.$eval('#action-error', (element) => element.textContent), '');
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('unsaved Priority and Owner edits in the full form survive an action, and save afterwards', async () => {
+  await openDrawer('Edits survive Done');
+  await page.select('#task-form select[name="priority"]', 'high');
+  await page.type('#task-form [name="assignee"]', 'Grace Hopper');
+  await page.click(bar('done'));
+  await until(async () => (await task('Edits survive Done')).status === 'done', 'the task was not finished');
+  await pillIs('Done');
+  assert.equal(await page.$eval('#task-form select[name="priority"]', (element) => element.value), 'high');
+  assert.equal(await page.$eval('#task-form [name="assignee"]', (element) => element.value), 'Grace Hopper');
+  assert.equal((await task('Edits survive Done')).priority, 'medium', 'the action saved nothing else');
+  await page.click('#task-form [type="submit"]');
+  await until(async () => (await task('Edits survive Done')).priority === 'high', 'the edit was not saved');
+  const saved = await task('Edits survive Done');
+  assert.deepEqual([saved.assignee, saved.status], ['Grace Hopper', 'done']);
 });
 
 test('a tracked repository\'s task still opens the read-only viewer, with no action bar', async () => {
