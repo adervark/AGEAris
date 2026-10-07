@@ -919,9 +919,12 @@ test('a crash after the index is installed but before the lock is released: reco
   assert.deepEqual(await snapshot(repo.dir), settled);
 });
 
-test('a failure while cleaning up does not leave the repository busy, and a failure while taking the lock leaves no lock', async () => {
+test('a failure while cleaning up after a commit still reports the commit, with a warning, and does not leave the repository busy; a failure while taking the lock leaves no lock', async () => {
   const repo = await makeRepo();
-  await assert.rejects(act(repo, { seams: { beforeRelease: () => { throw new Error('disk full'); } } }), /disk full/);
+  const first = await act(repo, { seams: { beforeRelease: () => { throw new Error('disk full'); } } });
+  assert.equal(await g(repo.dir, 'rev-parse', BRANCH), first.commit);
+  assert.deepEqual(first.warnings.map((warning) => warning.code), ['CLEANUP_FAILED']);
+  assert.match(first.warnings[0].message, new RegExp(`^Committed ${first.commit.slice(0, 7)}, but cleaning up after it failed \\(disk full\\)`));
   const next = await act(repo, { from: `AA/backlog/${T004}`, to: `AA/tasks/${T004}` });
   assert.deepEqual(next.warnings.map((warning) => warning.code), ['INTERRUPTED_RECOVERED'], 'the first write was found finished');
   await assertCommitted(repo, next, [`AA/tasks/${T012}`, `AA/tasks/${T004}`]);
@@ -930,6 +933,45 @@ test('a failure while cleaning up does not leave the repository busy, and a fail
   await assert.rejects(act(fresh, { seams: { lockOpened: () => { throw new Error('no space left'); } } }), /no space left/);
   await assertUnchanged(fresh, before);
   await assertCommitted(fresh, await act(fresh), [`AA/tasks/${T012}`]);
+});
+
+test('a failure while taking the lock never removes a lock someone else took meanwhile', async () => {
+  const repo = await makeRepo();
+  const lock = path.join(repo.dir, '.git', 'index.lock');
+  const takeOver = async () => {
+    await unlink(lock);
+    await writeFile(lock, 'another process\n');
+    throw new Error('interrupted');
+  };
+  await assert.rejects(act(repo, { seams: { lockOpened: takeOver } }), /interrupted/);
+  assert.equal(await readFile(lock, 'utf8'), 'another process\n');
+});
+
+test('a timeout before HEAD is read, with a ref lock left behind: INTERRUPTED, nothing committed, the ref lock named', async () => {
+  const repo = await makeRepo();
+  const before = await snapshot(repo.dir);
+  const refLock = path.join(repo.dir, '.git', 'refs', 'heads', 'main.lock');
+  let calls = 0;
+  // The second symbolic-ref is the one under the lock, before HEAD is read.
+  const spawnProcess = spawnWith((args) => (args.includes('symbolic-ref') && ++calls === 2 ? `: > "${refLock}"; exec sleep 5` : null));
+  await assert.rejects(act(repo, { seams: { spawn: spawnProcess, timeouts: FAST } }), (error) => {
+    assert.ok(error instanceof TrackedError, `${error.name}: ${error.message}`);
+    assert.equal(error.code, 'INTERRUPTED');
+    assert.ok(error.message.startsWith('Nothing was committed, but a git call timed out.'), error.message);
+    assert.ok(error.message.includes(`${refLock} was left by a timed-out git call`), error.message);
+    return true;
+  });
+  assert.equal(JSON.parse(await readFile(MARKER(repo), 'utf8')).phase, 'interrupted');
+  await unlink(refLock);
+  const after = await snapshot(repo.dir);
+  assert.deepEqual(after, before, 'nothing else changed');
+});
+
+test('editFrontmatter keeps the comment on a key with an empty value', () => {
+  assert.equal(
+    editFrontmatter('---\nid: T001\nstatus: # set on claim\nnote:\t# tabbed\n---\n', { status: 'claimed', note: 'x' }),
+    '---\nid: T001\nstatus: claimed # set on claim\nnote: x # tabbed\n---\n',
+  );
 });
 
 test('a check that never settles is cut off at the hold\'s deadline: GIT_BUSY, nothing changed', async () => {
