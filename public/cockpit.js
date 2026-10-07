@@ -261,7 +261,7 @@ export function usualWeek(metric) {
 // One project as a card: its health in words, why, and how work is flowing.
 export function projectCard(line, { agents = 0, project } = {}) {
   const name = `<a class="project-card-name" href="#project/${escape(line.projectId)}">${escape(line.name)}</a>`;
-  const badges = `${line.linked ? '<span class="readonly-badge" title="AGE Aris reads this repository and never writes to it.">Read-only</span>' : ''}${sampleBadge(line.sample)}`;
+  const badges = `${line.linked ? `<span class="readonly-badge" title="${project?.actions?.on ? 'AGE Aris changes this repository’s tasks only through task actions.' : 'AGE Aris reads this repository; task actions are off.'}">Tracked</span>` : ''}${sampleBadge(line.sample)}`;
   if (line.state !== 'ready') {
     const word = line.state === 'unavailable' ? 'Unavailable' : 'Indexing';
     return `<article class="project-card"><div class="project-card-head">${healthDot(null)}${name}<span class="health-word">${word}</span>${badges}</div><p class="project-card-indexing">${line.state === 'unavailable' ? icon('alert') : '<span class="spinner"></span>'}${escape(headline(line))}</p></article>`;

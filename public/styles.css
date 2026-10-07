@@ -547,6 +547,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
 .drawer-evidence .icon { width: 14px; height: 14px; margin-top: 2px; }
 .readonly-note { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 1.55; color: var(--ink-2); background: var(--idle-tint); border-radius: var(--radius); padding: 9px 12px; margin-bottom: 16px; }
 .readonly-note .icon { width: 15px; height: 15px; margin-top: 2px; color: var(--muted); }
+.confirm-reasons { margin: 0 0 4px; padding-left: 18px; display: grid; gap: 8px; font-size: 14px; line-height: 1.55; color: var(--ink); overflow-wrap: anywhere; }
 .fact-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px 18px; margin: 0; }
 .fact-list > div { min-width: 0; }
 .fact-list dt { font-size: 12px; color: var(--muted); margin-bottom: 2px; }

@@ -41,7 +41,21 @@ operator, so an account-plan switch mid-task is a continuation, not a new claim
   cut from it. Never design or substitute a mark.
 - No npm dependencies. The page runs under a strict CSP: no inline scripts or
   styles, images from the app itself and `data:` only.
-- AGE Aris never writes to a repository it tracks.
+- AGE Aris writes to a repository it tracks only through a task action the
+  operator takes, and only after the operator has switched task actions on for
+  that repository. The switch pins a branch. Each action is one commit on that
+  branch, changing one task file on an `AA/` board, the file's folder
+  included. The commit is authored as the repository's own git identity and
+  made with git plumbing while git's index lock is held: no hooks, filters or
+  signing. No other path in the index or working tree changes; at most, git
+  gains unreferenced objects that `git gc` removes. AGE Aris refuses when the
+  task file is not clean and committed, when the branch is not the pinned one
+  or a merge or rebase is in progress, when another operator holds the task,
+  when a checkpoint run on it is live, or when the WIP limit is reached. It
+  never pushes, never runs the repository's scripts, and never touches
+  `STATE.md`, checkpoints, or anything outside the board's task folders.
+  Boards under the older folder names `deaddrop/` and `pm/` stay as they are.
+  Tests act only on temporary repositories.
 - Task text is untrusted: no regex that can backtrack on it (no nested or
   end-anchored quantifiers), and inline markup stops at `MAX_INLINE`.
 - `npm test` and `npm run check` pass before every commit.

@@ -849,12 +849,14 @@ test('a write is refused while another in this process holds the same repository
   await assertCommitted(repo, result, [`AA/tasks/${T012}`]);
 });
 
-test('the product does not reach the engine yet, and the read-only rule still stands', async () => {
-  const agents = await readFile(new URL('../AGENTS.md', import.meta.url), 'utf8');
-  assert.ok(agents.includes('never writes to a repository it tracks'));
-  for (const file of ['../server.mjs', '../lib/workspace.mjs']) {
-    assert.ok(!(await readFile(new URL(file, import.meta.url), 'utf8')).includes('tracked.mjs'), file);
-  }
+test('the product reaches the engine only through the workspace\'s task actions, under the rule that replaced the read-only one', async () => {
+  const agents = (await readFile(new URL('../AGENTS.md', import.meta.url), 'utf8')).replace(/\s+/g, ' ');
+  assert.ok(agents.includes('AGE Aris writes to a repository it tracks only through a task action the operator takes, and only after the operator has switched task actions on for that repository.'));
+  assert.ok(!agents.includes('never writes to a repository it tracks'));
+  assert.ok(!(await readFile(new URL('../server.mjs', import.meta.url), 'utf8')).includes('tracked.mjs'), 'the server goes through the workspace');
+  const workspace = await readFile(new URL('../lib/workspace.mjs', import.meta.url), 'utf8');
+  assert.ok(!workspace.includes('from \'./tracked.mjs\''), 'imported where it is used, never statically');
+  assert.ok(workspace.includes('import(\'./tracked.mjs\')'));
 });
 
 test('an executable task file keeps its mode', async () => {

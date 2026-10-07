@@ -1172,20 +1172,39 @@ test('a tracked repository\'s activity is the commits that touch its board, not 
   assert.deepEqual(activity.map((entry) => entry.message), ['Their first commit']);
 });
 
-test('a tracked repository refuses task and project writes with a 409 naming its board, and is left untouched', async () => {
+test('a tracked repository refuses the edit form, new tasks and project edits with a 409 naming its board, refuses task actions while they are off, and is left untouched', async () => {
   const directory = await makeRepository();
   const workspace = await openWorkspace(directory);
   const repository = await makeTrackedRepository(legacyBoard());
   const project = await workspace.linkProject({ path: repository, name: 'Theirs' });
   const task = await workspace.getTask(`${project.id}:T001`);
   const before = await repositoryState(repository);
-  const readOnly = new RegExp(`^Theirs is a tracked repository, which AGE Aris only reads\\. Change its tasks in ${escapeRegExp(path.join(repository, 'pm'))}, where its agents work\\.$`);
+  const tracked = new RegExp(`^Theirs is a tracked repository: AGE Aris changes its tasks only through task actions\\. Make any other change in ${escapeRegExp(path.join(repository, 'pm'))}, where its agents work\\.$`);
 
-  await expectRejected(workspace.createTask({ projectId: project.id, title: 'One more' }), 409, readOnly);
-  await expectRejected(workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }), 409, readOnly);
-  await expectRejected(workspace.updateTask(task.id, { version: task.version, title: 'Renamed' }), 409, readOnly);
-  await expectRejected(workspace.updateProject(project.id, { version: project.version, name: 'Renamed' }), 409, readOnly);
+  await expectRejected(workspace.createTask({ projectId: project.id, title: 'One more' }), 409, tracked);
+  await expectRejected(workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }), 409, tracked);
+  await expectRejected(workspace.updateTask(task.id, { version: task.version, title: 'Renamed' }), 409, tracked);
+  await expectRejected(workspace.updateProject(project.id, { version: project.version, name: 'Renamed' }), 409, tracked);
+  await expectRejected(workspace.updateProject(project.id, { version: project.version, name: 'Renamed', taskActions: { on: true } }), 409, tracked);
+  // A pm/ board is never acted on, and cannot be switched on.
+  assert.deepEqual(project.actions, { on: false, branch: '', reason: 'This board is in pm/, an older folder name. AGE Aris acts only on AA/ boards.' });
+  for (const promise of [
+    workspace.actOnTask(task.id, { action: 'claim', version: task.version }),
+    workspace.updateProject(project.id, { version: project.version, taskActions: { on: true } }),
+  ]) {
+    const error = await promise.then(() => null, (caught) => caught);
+    assert.deepEqual([error?.status, error?.code], [409, 'LEGACY_BOARD']);
+  }
+  // An AA/ board is acted on only once its switch is on.
+  const aa = await makeTrackedRepository({ 'AA/tasks/T001-write-the-importer.md': boardTask('T001', 'Write the importer', { status: 'open', owner: '—' }) });
+  const linked = await workspace.linkProject({ path: aa, name: 'Ours' });
+  assert.deepEqual(linked.actions, { on: false, branch: '', reason: 'Task actions are off for Ours. Switch them on in the project header.' });
+  const aaBefore = await repositoryState(aa);
+  const off = await workspace.actOnTask(`${linked.id}:T001`, { action: 'claim', version: (await workspace.getTask(`${linked.id}:T001`)).version }).then(() => null, (caught) => caught);
+  assert.deepEqual([off?.status, off?.code, off?.message, off?.remedy], [409, 'ACTIONS_OFF', 'Task actions are off for Ours. Switch them on in the project header.', 'Switch task actions on in the project header.']);
+
   assert.deepEqual(await repositoryState(repository), before);
+  assert.deepEqual(await repositoryState(aa), aaBefore);
   assert.deepEqual(await readdir(projectRepository(directory, project.id)), ['project.json']);
   assert.equal((await workspace.getTask(task.id)).status, 'backlog');
 });

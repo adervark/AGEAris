@@ -751,11 +751,100 @@ test('every write to a tracked project is refused with a 409: its tasks, its pro
     ['PUT', `/api/projects/${project.id}/pipeline`, { stages, version: 'default' }],
     ['POST', '/api/runs', { taskId: task.id }],
   ]) {
-    assert.match((await call(method, url, body, 409)).error, /^Their repo is a tracked repository, which AGE Aris only reads\./, `${method} ${url}`);
+    assert.match((await call(method, url, body, 409)).error, /^Their repo is a tracked repository: AGE Aris changes its tasks only through task actions\./, `${method} ${url}`);
   }
   assert.deepEqual(await call('GET', '/api/runs'), [], 'no run was started');
   assert.deepEqual(await repositoryState(repository), before, 'the repository is untouched');
   assert.equal((await call('GET', '/api/workspace')).tasks.find((entry) => entry.id === task.id).status, 'backlog');
+});
+
+// What the server writes to stderr while `run` runs.
+async function stderrOf(run) {
+  const lines = [];
+  const original = console.error;
+  console.error = (...args) => { lines.push(args.join(' ')); };
+  try { await run(); } finally { console.error = original; }
+  return lines;
+}
+
+test('POST /api/tasks/:id/actions on a tracked repository: the token, the switch with its confirmation, a claim committed with AGESight-Via: ui, refusals with code and remedy, and one stderr line each', async (t) => {
+  const { base, fetch } = await tokenServer(t);
+  const call = caller(base, fetch);
+  const repository = await trackedRepository(t);
+  await exec('git', ['config', 'user.email', 'ade@example.invalid'], { cwd: repository });
+  const project = await call('POST', '/api/projects/link', { path: repository, name: 'Their repo' }, 201);
+  const taskOf = async (id) => (await call('GET', '/api/workspace')).tasks.find((entry) => entry.id === `${project.id}:${id}`);
+  const actions = (id) => `/api/tasks/${encodeURIComponent(`${project.id}:${id}`)}/actions`;
+  let task = await taskOf('T001');
+  const before = await repositoryState(repository);
+
+  let response = await globalThis.fetch(`${base}${actions('T001')}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'claim', version: task.version }) });
+  assert.equal(response.status, 401, 'actions need the token');
+  const lines = await stderrOf(async () => {
+    const off = await call('POST', actions('T001'), { action: 'claim', version: task.version }, 409);
+    assert.deepEqual([off.code, off.error, off.remedy], ['ACTIONS_OFF', 'Task actions are off for Their repo. Switch them on in the project header.', 'Switch task actions on in the project header.']);
+  });
+  assert.deepEqual(lines, [`tracked action ACTIONS_OFF: Their repo T001 claim`]);
+  // The edit form stays refused on a tracked task.
+  await call('PATCH', `/api/tasks/${encodeURIComponent(task.id)}`, { version: task.version, status: 'in_progress' }, 409);
+  assert.deepEqual(await repositoryState(repository), before);
+
+  // Switching on: a confirmation that discloses, then the switch.
+  const asked = await call('PATCH', `/api/projects/${project.id}`, { version: project.version, taskActions: { on: true } }, 409);
+  assert.equal(asked.code, 'CONFIRM');
+  assert.ok(asked.reasons.some((reason) => /one commit to main/.test(reason.text)), JSON.stringify(asked.reasons));
+  const on = await call('PATCH', `/api/projects/${project.id}`, { version: project.version, taskActions: { on: true }, confirm: asked.confirmToken });
+  assert.deepEqual([on.actions.on, on.actions.branch], [true, 'main']);
+  assert.deepEqual((await call('GET', '/api/workspace')).projects.find((entry) => entry.id === project.id).actions.on, true);
+
+  const claimed = await call('POST', actions('T001'), { action: 'claim', version: task.version });
+  assert.deepEqual([claimed.task.status, claimed.branch, claimed.warnings], ['in_progress', 'main', []]);
+  const log = (await exec('git', ['log', '-1', '--format=%H%n%s%n%(trailers:key=AGESight-Via,valueonly)'], { cwd: repository })).stdout.trim().split('\n');
+  assert.deepEqual(log, [claimed.commit, 'claim T001: working on Read the archive', 'ui']);
+
+  // A refusal: code and remedy in the response, one line on stderr, nothing changed.
+  task = await taskOf('T001');
+  const after = await repositoryState(repository);
+  const refused = await stderrOf(async () => {
+    const stale = await call('POST', actions('T001'), { action: 'release', version: 'not-the-version' }, 409);
+    assert.deepEqual([stale.code, typeof stale.remedy], ['STALE', 'string']);
+    const missing = await call('POST', actions('T001'), { action: 'block', version: task.version }, 400);
+    assert.deepEqual([missing.code, missing.field], ['BAD_INPUT', 'reason']);
+  });
+  assert.deepEqual(refused, ['tracked action STALE: Their repo T001 release', 'tracked action BAD_INPUT: Their repo T001 block']);
+  assert.deepEqual(await repositoryState(repository), after);
+});
+
+test('POST /api/tasks/:id/actions on an AGE Aris project changes the task as PATCH does', async (t) => {
+  const { base, fetch } = await tokenServer(t);
+  const call = caller(base, fetch);
+  const project = await call('POST', '/api/projects', { name: 'Own' }, 201);
+  const task = await call('POST', '/api/tasks', { projectId: project.id, title: 'Act on me' }, 201);
+  const result = await call('POST', `/api/tasks/${encodeURIComponent(task.id)}/actions`, { action: 'start', version: task.version });
+  assert.deepEqual([result.task.status, result.warnings, result.task.holder.profile], ['in_progress', [], 'agesight']);
+  const refused = await call('POST', `/api/tasks/${encodeURIComponent(task.id)}/actions`, { action: 'start', version: result.task.version }, 409);
+  assert.equal(refused.code, 'NOT_ALLOWED');
+});
+
+test('AGESIGHT_TRACKED_WRITES=0 overrides a switch that is on', async (t) => {
+  const repository = await trackedRepository(t);
+  const first = await tokenServer(t);
+  const call = caller(first.base, first.fetch);
+  const project = await call('POST', '/api/projects/link', { path: repository, name: 'Their repo' }, 201);
+  const asked = await call('PATCH', `/api/projects/${project.id}`, { version: project.version, taskActions: { on: true } }, 409);
+  await call('PATCH', `/api/projects/${project.id}`, { version: project.version, taskActions: { on: true }, confirm: asked.confirmToken });
+  first.server.close();
+  process.env.AGESIGHT_TRACKED_WRITES = '0';
+  let second;
+  try { second = await tokenServer(t, { dataDir: first.dir }); } finally { delete process.env.AGESIGHT_TRACKED_WRITES; }
+  const again = caller(second.base, second.fetch);
+  const before = await repositoryState(repository);
+  const listed = (await again('GET', '/api/workspace')).projects.find((entry) => entry.id === project.id);
+  assert.deepEqual([listed.actions.on, listed.actions.reason], [false, 'Task actions are off for every tracked repository: AGESIGHT_TRACKED_WRITES=0.']);
+  const task = (await again('GET', '/api/workspace')).tasks.find((entry) => entry.id === `${project.id}:T001`);
+  const off = await again('POST', `/api/tasks/${encodeURIComponent(task.id)}/actions`, { action: 'claim', version: task.version }, 409);
+  assert.equal(off.code, 'ACTIONS_OFF');
+  assert.deepEqual(await repositoryState(repository), before);
 });
 
 test('DELETE /api/projects/:id stops tracking a repository; an own project is a 409 and an unknown one a 404', async (t) => {

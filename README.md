@@ -130,10 +130,11 @@ retry policy, routing, the audit format, and the API are described in
 
 AGE Aris can watch a repository whose agents already keep an AA task board
 (`AA/`, or `deaddrop/` or `pm/`, its older names). Choose **Track an existing
-repository** and give the repository's folder. AGE Aris only reads it: Home,
-health, changes, and each task's history come from the board's files and the
-repository's git history, and nothing is ever written there. Tasks change in the
-repository, where its agents work, and AGE Aris picks the changes up.
+repository** and give the repository's folder. Home, health, changes, and each
+task's history come from the board's files and the repository's git history.
+Tasks change in the repository, where its agents work, and AGE Aris picks the
+changes up. Nothing there changes from AGE Aris until you switch task actions
+on for it (below).
 
 - The folder must be the top of a git repository with a `.git` directory
   (worktrees and submodules cannot be tracked yet) and contain `AA/tasks/`,
@@ -146,10 +147,82 @@ repository, where its agents work, and AGE Aris picks the changes up.
   an older board).
 - Task files AGE Aris cannot read are listed on the project page instead of
   hiding the project.
-- Editing, the pipeline, and agent runs are not available for a tracked
-  repository.
+- The full edit form, adding tasks, the pipeline, and agent runs are not
+  available for a tracked repository. New tasks are added in the repository;
+  AGE Aris acts on the tasks already there.
 - **Stop tracking** removes AGE Aris's record of the repository and leaves the
   repository unchanged.
+
+### Task actions on a tracked board
+
+**Task actions** (claim, release, block, unblock, done) are off for every
+tracked repository until you switch them on in its project header. The switch
+shows what it means for that repository before you confirm:
+
+- **The branch it pins.** Each action is one commit to the branch checked out
+  when you switched on. While another branch is checked out, actions are
+  refused; switching off and on again pins the current one.
+- **Who commits.** Commits are authored as the repository's own git identity
+  (`user.name`), carry the trailer `AGESight-Via: ui`, and are never pushed.
+- **No hooks.** The commit is made with git plumbing under git's index lock:
+  the repository's hooks, filters and signing do not run, and no script of the
+  repository is run.
+- **Other worktrees** do not see the commits until they merge.
+- **STATE.md is left alone.** On a board with `board.sh`, run
+  `AA/board.sh --write` after acting; on a board whose STATE.md is kept by hand,
+  each commit names the board line that is now behind.
+
+The choice is kept in AGE Aris's own `project.json`, in its data folder, never
+in the repository. Starting AGE Aris with `AGESIGHT_TRACKED_WRITES=0` turns
+task actions off for every tracked repository.
+
+Each action changes one task file, its folder included, and nothing else in
+the index or working tree. On a board with `backlog/`, claim moves the file
+from `backlog/` to `tasks/` and release moves it back; on an older board
+without one, both change the file in place. Done moves it to `tasks/done/` and,
+when its `## Result` is still a placeholder, asks for one line to put there.
+Only `status:`, `owner:`, `blockedReason:` and `## Result` are written; priority
+and assignee do not exist on an AA board and stay disabled.
+
+AGE Aris refuses an action, and changes nothing, when:
+
+- task actions are off, or the board is in `deaddrop/` or `pm/` (rename it to
+  `AA/` first);
+- the repository is on another branch than the pinned one, or a merge, rebase
+  or other operation is in progress, or git's index lock is held;
+- git `user.name` is not set, or two task files claim the same id;
+- another operator holds the task (AA rule 2);
+- a checkpoint run on the task has not ended and wrote within `stale_hours`.
+  The refusal names the run and the `AA/ckpt.sh log … end` line that reaps it
+  if its session is gone;
+- claiming would pass the WIP limit;
+- the task file has uncommitted changes, is not committed yet, or changed
+  while you acted.
+
+Each refusal says what to do next, and AGE Aris also prints it to its own
+stderr as one line. Some actions ask for a confirmation first, in one dialog
+that lists every reason: a task held by one of your own agent sessions (with
+its last sign of life), and runs that never ended or trail lines that do not
+parse. A run that never ended is not reaped for you: the result names the
+`AA/ckpt.sh` command to run.
+
+**Done leaves the checkpoint trail in place.** AA's Done retires the trail
+with `AA/ckpt.sh close <ID> --delete`; AGE Aris does not write trails or run
+`ckpt.sh`, so a done on a task that has a trail reminds you to run that
+command. This is a deliberate deviation from the board's Done.
+
+**What agents in the repository see.** While AGE Aris commits (normally tens
+of milliseconds, at most 3 seconds) git's index lock is held, so an agent's
+`git commit` or `git add` can fail once with "index.lock exists"; `ckpt.sh`
+retries, and a bare git command should be retried. If AGE Aris dies while
+holding it, `.git/index.lock` reads `agesight <nonce>` and is safe to delete
+when AGE Aris is not running. An action that was interrupted is named on the
+project page, and actions there are refused until you have checked it and
+removed the marker it names.
+
+Repositories using reftable refs, a sparse checkout, a split index, or a
+detached HEAD, and task folders where hard links fail, cannot have task
+actions switched on.
 
 Scripts can do the same with the `X-AGESight-Token` header:
 `POST /api/projects/link` with `{"path": "/absolute/path", "name": "optional"}`
@@ -180,15 +253,19 @@ pipeline/runs/R001/           one run: events.jsonl audit log, RUN.md, attempts/
 ```
 
 A tracked repository's folder holds only `project.json`, which records the
-repository's path and its board folder.
+repository's path, its board folder, and whether task actions are on and which
+branch they pin. `.agesight-data/tracked-inflight/` holds a marker while a task
+action on a tracked repository is being written, so an interrupted one is
+settled, or named, when AGE Aris starts again.
 
 Agents are registered in `.agesight-data/registry/agents.json`, a separate git
 repository. Agents start in `.agesight-data/workdirs/` unless configured
 otherwise. `.agesight-data/.api-token` holds the local API token.
 
 The task's directory determines its state. Creating, editing, or moving work
-records a commit in that project's repository. Nothing is automatically pushed
-to a remote. Task and project saves reject stale versions rather than overwrite
+records a commit in that project's repository; a task action on a tracked
+repository records one commit there, on its pinned branch. Nothing is
+automatically pushed to a remote. Task and project saves reject stale versions rather than overwrite
 changes made since an editor opened. Blocked work counts toward the work in
 progress limit. Unchanged saves add no commit. Every metric is computed from
 that git history (first-parent, with commit times clamped so they never go

@@ -1,4 +1,4 @@
-import { actionFor, actionRequest, availability, TASK_ACTIONS } from './actions.js';
+import { actionFor, actionRequest, availability, inputFor, projectKind, TASK_ACTIONS } from './actions.js';
 import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, usualWeek, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
@@ -92,9 +92,19 @@ function projectOf(task) {
   return state.projects.find((project) => project.id === task.projectId);
 }
 
-// A tracked repository is read here and changed where its agents work.
+// The full edit form, new tasks and the pipeline are for AGE Aris's own
+// projects; a tracked repository's tasks change only through task actions.
 function writable(project) {
   return Boolean(project) && !project.linked;
+}
+
+// What a tracked task's file adds to the task as listed (its Result still a
+// placeholder, a live run on its trail), kept while its version is the same.
+const taskDetails = new Map();
+
+function withDetails(task) {
+  const details = task && taskDetails.get(task.id);
+  return details && details.version === task.version ? { ...task, ...details.fields } : task;
 }
 
 function writableProjects() {
@@ -158,20 +168,25 @@ async function api(path, method = 'GET', data) {
   if (!response.ok) {
     const error = new Error(result.error || 'Changes could not be saved. Try again.');
     error.status = response.status;
-    // A refusal can name its reason (`code`) and what to do about it (`remedy`).
+    // A refusal can name its reason (`code`) and what to do about it (`remedy`);
+    // a confirmation carries its reasons and token, a bad input its field.
     if (result.code) error.code = result.code;
     if (result.remedy) error.remedy = result.remedy;
+    if (Array.isArray(result.reasons)) error.reasons = result.reasons;
+    if (result.confirmToken) error.confirmToken = result.confirmToken;
+    if (result.field) error.field = result.field;
     throw error;
   }
   return result;
 }
 
-function toast(message, error = false) {
+// `duration` (ms) keeps a long message, such as a remedy to copy, up longer.
+function toast(message, error = false, duration = 0) {
   if (error && state.authLost) return; // the reconnect banner already says what to do
   clearTimeout(toastTimer);
   $('#toast').textContent = message;
   $('#toast').className = `toast visible${error ? ' toast-error' : ''}`;
-  toastTimer = setTimeout(() => $('#toast').classList.remove('visible'), error ? 7000 : 3500);
+  toastTimer = setTimeout(() => $('#toast').classList.remove('visible'), duration || (error ? 7000 : 3500));
 }
 
 // #monitor-state is a live region, so its text changes only when the state does.
@@ -400,12 +415,28 @@ function renderProjectPage(project) {
 
 function projectHeader(project, line) {
   const where = project.linked
-    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history; its tasks change in the repository, where its agents work.</p>`
+    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}`
     : project.description ? `<p class="project-where">${escape(project.description)}</p>` : '';
   const status = line?.state === 'ready'
     ? `<p class="project-status tone-${healthTone(line.health)}">${healthDot(line.health)}${metricButton({ projectId: project.id, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' })}<span>${escape(headline(line))}</span></p>`
     : `<p class="project-status">${healthDot(null)}<span>${escape(headline(line) || 'Reading this project’s history…')}</span></p>`;
-  return `<header class="project-header"><div class="project-title-row"><span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span><h1>${escape(project.name)}</h1>${project.linked ? '<span class="readonly-badge" title="AGE Aris reads this repository and never writes to it.">Read-only</span>' : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${vitals(project, line)}</header>`;
+  return `<header class="project-header"><div class="project-title-row"><span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span><h1>${escape(project.name)}</h1>${project.linked ? trackedBadge(project) : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${vitals(project, line)}</header>`;
+}
+
+// A tracked repository's badge: what AGE Aris may do there.
+function trackedBadge(project) {
+  const title = project.actions?.on
+    ? `AGE Aris changes this repository's tasks only through task actions, committed to ${project.actions.branch}.`
+    : 'AGE Aris reads this repository; task actions are off.';
+  return `<span class="readonly-badge" title="${escape(title)}">Tracked</span>`;
+}
+
+// A task action that was interrupted stays named here until the operator
+// has checked it and removed the marker.
+function interruptedNote(project) {
+  const left = project.actions?.interrupted;
+  if (!left) return '';
+  return `<p class="window-note problems-note" role="status">${icon('alert')}<span>A task action was interrupted: ${escape(left.message)} Once it is checked, remove <code>${escape(left.marker)}</code>; until then task actions here are refused.</span></p>`;
 }
 
 // The four numbers a project is run by, each with its plain meaning.
@@ -420,7 +451,13 @@ function vitals(project, line) {
 }
 
 function projectActions(project) {
-  if (project.linked) return `<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
+  if (project.linked) {
+    const on = Boolean(project.actions?.on);
+    const label = on ? `Task actions on · ${escape(project.actions.branch)}` : 'Task actions off';
+    const title = on ? 'Switch task actions off: AGE Aris stops committing here' : (project.actions?.reason || 'Switch task actions on');
+    const toggle = project.unavailable ? '' : `<button class="text-button project-settings" data-action="task-actions" aria-pressed="${on}" title="${escape(title)}">${icon('git')}${label}</button>`;
+    return `${toggle}<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
+  }
   return `<button class="text-button project-settings" data-action="edit-project">${icon('edit')}Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>`;
 }
 
@@ -505,7 +542,7 @@ function holder(task) {
 // in the drawer.
 function taskCard(task) {
   const project = projectOf(task);
-  const editable = writable(project);
+  const editable = writable(project) || Boolean(project?.actions?.on);
   const signal = signals().get(task.id);
   const footer = `${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${icon('calendar')}${escape(formatDate(task.dueDate))}</span>` : '<span></span>'}${holder(task) || (task.status === 'done' ? '' : '<span class="muted">Unclaimed</span>')}`;
   return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${task.status !== 'done' && (signal || placeOf(task)?.waitingOn.length || placeOf(task)?.thread) ? `<span class="card-signals">${signal ? signalBadges(signal) : ''}${waitingChip(placeOf(task))}${threadTag(placeOf(task))}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></button>`;
@@ -539,7 +576,7 @@ function renderEmptyWorkspace() {
 
 // The two ways to add a project, plus the sample.
 function addChoices() {
-  return `<div class="choice-cards"><button type="button" class="choice-card" data-action="link-project">${icon('git')}<span><strong>Track an existing repository</strong><span>Its agents already keep an AA/ board (or deaddrop/, its older name). AGE Aris reads the board and git history and never writes there.</span></span></button><button type="button" class="choice-card" data-action="new-project">${icon('folder')}<span><strong>Start a new project here</strong><span>AGE Aris keeps its board in a git repository of its own. Add tasks, set a WIP limit, and run them with agents.</span></span></button><button type="button" class="choice-card" data-action="sample-project">${icon('activity')}<span><strong>Explore a sample project</strong><span>Six weeks of simulated history, so every view has something to show.</span></span></button></div>`;
+  return `<div class="choice-cards"><button type="button" class="choice-card" data-action="link-project">${icon('git')}<span><strong>Track an existing repository</strong><span>Its agents already keep an AA/ board (or deaddrop/, its older name). AGE Aris reads the board and git history, and changes its tasks only through task actions you switch on.</span></span></button><button type="button" class="choice-card" data-action="new-project">${icon('folder')}<span><strong>Start a new project here</strong><span>AGE Aris keeps its board in a git repository of its own. Add tasks, set a WIP limit, and run them with agents.</span></span></button><button type="button" class="choice-card" data-action="sample-project">${icon('activity')}<span><strong>Explore a sample project</strong><span>Six weeks of simulated history, so every view has something to show.</span></span></button></div>`;
 }
 
 function openAddProject() {
@@ -715,10 +752,19 @@ async function loadTaskHistory(task) {
 async function loadTaskBody(task) {
   let text = '';
   let failed = '';
-  try { text = (await api(`/tasks/${encodeURIComponent(task.id)}`)).body || ''; } catch (error) { failed = error.message; }
+  let read = null;
+  try { read = await api(`/tasks/${encodeURIComponent(task.id)}`); text = read.body || ''; } catch (error) { failed = error.message; }
   const slot = $('#task-body');
   if (!slot || slot.dataset.task !== task.id) return;
   slot.innerHTML = failed ? `<p class="muted">${escape(failed)}</p>` : text.trim() ? `<div class="markdown">${renderMarkdown(text, { shift: 2 })}</div>` : '<p class="muted">The task file has no text below its header.</p>';
+  // A tracked task's file says whether Done asks for a Result line and
+  // whether a live run holds every action; the bar learns it here.
+  if (read && 'liveRun' in read) {
+    taskDetails.set(task.id, { version: read.version, fields: { liveRun: read.liveRun, resultPending: read.resultPending } });
+    const bar = $('#task-dialog .action-bar');
+    const current = state.tasks.find((entry) => entry.id === task.id);
+    if (bar && current && !$('#action-slot')?.childElementCount && !bar.contains(document.activeElement) && !state.acting) bar.outerHTML = actionBar(current);
+  }
 }
 
 function closeDialog(dialog) {
@@ -786,7 +832,7 @@ function openProjectEditor(project = null) {
 // Tracks an existing repository: AGE Aris reads its board and history.
 function openLinkEditor() {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. It never writes there: the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
+  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. Nothing there changes unless you switch task actions on for it; then each claim, block or done is one commit of one task file, and the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
   const form = $('#link-form');
   form.querySelector('[data-switch-new]').addEventListener('click', () => openProjectEditor());
   form.addEventListener('submit', async (event) => {
@@ -800,7 +846,7 @@ function openLinkEditor() {
       closeDialog(dialog);
       await refresh();
       navigate(saved.id);
-      toast(`Tracking ${saved.name}. AGE Aris only reads it.`);
+      toast(`Tracking ${saved.name}. Task actions are off until you switch them on.`);
     } catch (error) { $('#link-error').textContent = error.message; } finally { button.disabled = false; }
   });
   setupDialog(dialog);
@@ -827,6 +873,35 @@ function openUnlinkDialog(project) {
   setupDialog(dialog);
 }
 
+// The switch for task actions on a tracked repository. Switching on shows
+// what it means there (the branch it pins, the identity, skipped hooks, other
+// worktrees, STATE.md), as the server lists it, and needs a confirmation;
+// switching off takes one click.
+async function switchTaskActions(project, button) {
+  if (!project?.linked) return;
+  const on = !project.actions?.on;
+  const send = (confirm) => api(`/projects/${encodeURIComponent(project.id)}`, 'PATCH', { version: project.version, taskActions: { on }, ...(confirm ? { confirm } : {}) });
+  button.disabled = true;
+  try {
+    let saved;
+    try { saved = await send(); } catch (error) {
+      if (error.code !== 'CONFIRM') throw error;
+      button.disabled = false;
+      const go = await confirmAction({ eyebrow: project.name, title: `Switch task actions on for ${project.name}?`, reasons: error.reasons || [], confirm: 'Switch on' });
+      if (!go) return button.focus();
+      button.disabled = true;
+      saved = await send(error.confirmToken);
+    }
+    await refresh();
+    toast(saved.actions?.on ? `Task actions are on for ${project.name}: each one is a commit to ${saved.actions.branch}, not pushed.` : `Task actions are off for ${project.name}.`);
+    $('#main').querySelector('[data-action="task-actions"]')?.focus();
+  } catch (error) {
+    toast(refusalText(error), true);
+  } finally {
+    if (button.isConnected) button.disabled = false;
+  }
+}
+
 async function copyPath(path) {
   try { await navigator.clipboard.writeText(path); toast('Repository path copied'); } catch { toast(path); }
 }
@@ -843,7 +918,7 @@ function typeKey(value = '') {
 function drawerHead(task, { editable }) {
   const project = projectOf(task);
   const signal = signals().get(task.id);
-  const eyebrow = `<span class="dialog-eyebrow"><span class="task-number">${escape(taskNumber(task))}</span><span>${escape(project?.name || '')}</span>${project?.linked ? '<span class="readonly-badge">Read-only</span>' : ''}</span>`;
+  const eyebrow = `<span class="dialog-eyebrow"><span class="task-number">${escape(taskNumber(task))}</span><span>${escape(project?.name || '')}</span>${project?.linked ? '<span class="readonly-badge">Tracked</span>' : ''}</span>`;
   const heading = `<header class="dialog-heading"><div>${eyebrow}<h2 id="task-dialog-title">${escape(task.title)}</h2></div><button type="button" class="icon-button" data-close aria-label="Close task">${icon('close')}</button></header>`;
   const summary = `<div class="drawer-summary"><span class="status-pill status-${task.status}"><span class="status-dot"></span>${statuses[task.status] || task.status}</span>${holder(task) || '<span>Unclaimed</span>'}${signal && task.status !== 'done' ? signalBadges(signal) : ''}${task.priorityGiven === false ? '' : priorityBadge(task)}${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${icon('calendar')}Due ${escape(formatDate(task.dueDate, true))}</span>` : ''}${task.type ? `<span class="needs-tag">${escape(task.type)}</span>` : ''}${!editable && task.createdAt ? `<span>Filed ${escape(formatDate(task.createdAt, true))}</span>` : ''}</div>`;
   const note = `${task.status === 'blocked' && task.blockedReason ? `<div class="drawer-note"><small>Blocked because</small><p>${escape(task.blockedReason)}</p></div>` : ''}${task.claimNote ? `<div class="drawer-note"><small>${ownerChip(task.claim)} latest note</small><p>${escape(task.claimNote)}</p></div>` : ''}`;
@@ -868,7 +943,7 @@ function drawerTimeline(task, open) {
 function openTaskEditor(task = null, status = '') {
   if (task && !writable(projectOf(task))) return openTaskViewer(task);
   const here = selectedProject();
-  if (!task && here && !writable(here)) return toast(`${here.name} is read-only here: its tasks are added in the repository.`, true);
+  if (!task && here && !writable(here)) return toast(`New tasks for ${here.name} are added in the repository; AGE Aris acts on the tasks already there.`, true);
   const choices = writableProjects();
   if (!task && !choices.length) return openAddProject();
   const current = selectedProject();
@@ -909,13 +984,18 @@ function openTaskEditor(task = null, status = '') {
   setupDialog(dialog);
 }
 
-// A tracked repository's task: the task file as written, its timeline, and the
-// commits behind it. It is changed in the repository, so nothing here edits it.
+// A tracked repository's task: the task file as written, its timeline, the
+// commits behind it, and the task actions its board allows. Anything else is
+// changed in the repository.
 function openTaskViewer(task) {
   const project = projectOf(task);
   const dialog = $('#task-dialog');
   const head = drawerHead(task, { editable: false });
-  dialog.innerHTML = `<div class="task-view">${head.heading}<div class="dialog-fields">${head.summary}${drawerThread(task)}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>Read-only here. Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AGE Aris picks the change up.</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
+  const actions = project?.actions;
+  const where = actions?.on
+    ? `Commits to <code>${escape(actions.branch)}</code> in <code>${escape(project.repository)}</code> as ${escape(actions.operator || '')}; not pushed. Anything else about <code>${escape(task.file || taskNumber(task))}</code> changes in the repository, and AGE Aris picks it up.`
+    : `${escape(actions?.reason || 'Task actions are off.')} Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AGE Aris picks the change up.`;
+  dialog.innerHTML = `<div class="task-view" data-task="${escape(task.id)}">${head.heading}<div class="dialog-fields">${head.summary}${actionBar(task)}${drawerThread(task)}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>${where}</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
   setupDialog(dialog);
   loadTaskBody(task);
   loadTaskHistory(task);
@@ -926,36 +1006,42 @@ function openTaskViewer(task) {
 // and a column change by drag both go through performAction.
 
 // What an action that asks for input says: its label, a placeholder, a length.
-const actionPrompts = { block: ['What would unblock it?', 'e.g. Waiting on the API key from Ops', 200], priority: ['Priority'], assign: ['Owner', 'Leave empty for nobody', 100] };
+const actionPrompts = { block: ['What would unblock it?', 'e.g. Waiting on the API key from Ops', 200], done: ['What came of it?', 'One line for the task’s Result', 200], priority: ['Priority'], assign: ['Owner', 'Leave empty for nobody', 100] };
 
 function wipCountOf(task) {
   return state.tasks.filter((entry) => entry.projectId === task.projectId && ['in_progress', 'blocked'].includes(entry.status)).length;
 }
 
+function actionsFor(task) {
+  return availability(withDetails(task), projectOf(task), { operator: state.operator, wipCount: wipCountOf(task) });
+}
+
 function actionBar(task) {
-  const buttons = availability(task, projectOf(task), { operator: state.operator, wipCount: wipCountOf(task) }).filter((entry) => entry.relevant).map((entry) => {
+  const buttons = actionsFor(task).filter((entry) => entry.relevant).map((entry) => {
     const action = TASK_ACTIONS.find((candidate) => candidate.id === entry.id);
     const why = `action-why-${entry.id}`;
-    return `<span class="action-item"><button type="button" class="button button-secondary action-button" data-action="act" data-act="${entry.id}" data-id="${escape(task.id)}" ${entry.enabled ? '' : `aria-disabled="true" aria-describedby="${why}"`}>${icon(action.icon)}${action.label}</button>${entry.enabled ? '' : `<span class="action-why" id="${why}" role="tooltip">${escape(entry.why)}</span>`}</span>`;
+    return `<span class="action-item"><button type="button" class="button button-secondary action-button" data-action="act" data-act="${entry.id}" data-id="${escape(task.id)}" ${entry.enabled ? '' : `aria-disabled="true" aria-describedby="${why}"`}>${icon(action.icon)}${escape(entry.label)}</button>${entry.enabled ? '' : `<span class="action-why" id="${why}" role="tooltip">${escape(entry.why)}</span>`}</span>`;
   }).join('');
   return `<div class="action-bar" role="group" aria-label="Task actions"><div class="action-buttons">${buttons}</div><div class="action-slot" id="action-slot"></div><p class="action-note" id="action-note" role="status"></p><p class="form-error action-error" id="action-error" role="alert"></p></div>`;
 }
 
-// The task the open drawer shows, if any.
+// The task the open drawer shows, if any: in the edit form, or in a tracked
+// task's view.
 function drawerTaskId() {
-  return $('#task-dialog').open ? $('#task-form')?.dataset.task || '' : '';
+  return $('#task-dialog').open ? ($('#task-form') || $('#task-dialog .task-view'))?.dataset.task || '' : '';
 }
 
 // A person's answer to an action that asks for one: a line, or one choice.
 function showActionInput(id, task) {
-  const action = TASK_ACTIONS.find((entry) => entry.id === id);
-  const [label, placeholder, max] = actionPrompts[id];
+  const asks = inputFor(id, withDetails(task), projectOf(task)) || { needs: 'result', required: true };
+  const label = actionsFor(task).find((entry) => entry.id === id)?.label || id;
+  const [prompt, placeholder, max] = actionPrompts[id];
   $('#action-error').textContent = '';
   $('#action-note').textContent = '';
   const field = id === 'priority'
     ? `<select name="input" data-action-input>${options(priorities, task.priority)}</select>`
-    : `<input name="input" data-action-input maxlength="${max}" placeholder="${escape(placeholder)}" ${id === 'assign' ? `list="action-owners" value="${escape(task.assignee)}"` : ''}>${id === 'assign' ? `<datalist id="action-owners">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist>` : ''}`;
-  $('#action-slot').innerHTML = `<div class="action-input" role="group" aria-label="${action.label}"><label class="field">${label}${action.needs === 'reason' ? ' <span class="field-optional">optional</span>' : ''}${field}</label><button type="button" class="button button-primary" data-action="act-confirm" data-act="${id}" data-id="${escape(task.id)}">${action.label}</button><button type="button" class="button button-secondary" data-action="act-cancel" data-act="${id}">Cancel</button></div>`;
+    : `<input name="input" data-action-input maxlength="${max}" placeholder="${escape(placeholder)}" ${asks.required ? 'required aria-required="true"' : ''} ${id === 'assign' ? `list="action-owners" value="${escape(task.assignee)}"` : ''}>${id === 'assign' ? `<datalist id="action-owners">${[...new Set([state.operator, ...state.tasks.map((entry) => entry.assignee)].filter(Boolean))].map((owner) => `<option value="${escape(owner)}"></option>`).join('')}</datalist>` : ''}`;
+  $('#action-slot').innerHTML = `<div class="action-input" role="group" aria-label="${escape(label)}"><label class="field">${prompt}${asks.needs === 'reason' && !asks.required ? ' <span class="field-optional">optional</span>' : ''}${field}</label><button type="button" class="button button-primary" data-action="act-confirm" data-act="${id}" data-id="${escape(task.id)}">${escape(label)}</button><button type="button" class="button button-secondary" data-action="act-cancel" data-act="${id}">Cancel</button></div>`;
   const answer = $('#action-slot [data-action-input]');
   answer.focus();
   if (answer.select) answer.select();
@@ -986,21 +1072,60 @@ function setBarBusy(busy) {
   else bar.removeAttribute('aria-busy');
 }
 
+// A refusal as the person reads it: what happened, that nothing changed, and
+// what to do about it.
+function refusalText(error) {
+  const said = error.message.endsWith('.') ? error.message : `${error.message}.`;
+  const unchanged = error.status === 409 && !/nothing was changed/i.test(said) ? ' Nothing was changed.' : '';
+  return `${said}${unchanged}${error.remedy ? ` ${error.remedy}` : ''}`;
+}
+
+// What a committed task action says: the commit, the branch, that it was not
+// pushed, and any warning with its remedy.
+function committedText(action, task, result) {
+  const done = `${action.aa?.done || action.done} ${taskNumber(task)} · ${result.commit.slice(0, 7)} on ${result.branch} · not pushed`;
+  return [done, ...(result.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`)].join(' · ');
+}
+
+// One confirmation for an action, listing every reason it needs one. Resolves
+// true when the person confirms.
+function confirmAction({ eyebrow, title, reasons, confirm }) {
+  return new Promise((resolve) => {
+    const dialog = $('#action-dialog');
+    dialog.innerHTML = `<form id="confirm-form">${dialogHeading(escape(eyebrow), escape(title), 'Close dialog')}<div class="dialog-fields"><ul class="confirm-reasons">${reasons.map((reason) => `<li>${escape(reason.text)}</li>`).join('')}</ul></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary" autofocus>${escape(confirm)}</button></footer></form>`;
+    let confirmed = false;
+    $('#confirm-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      confirmed = true;
+      closeDialog(dialog);
+    });
+    dialog.addEventListener('close', () => resolve(confirmed), { once: true });
+    setupDialog(dialog);
+    dialog.querySelector('[type="submit"]').focus();
+  });
+}
+
 // The single entry point for changing a task by action. A refusal is shown in
 // the drawer (as an alert) and as a toast, and nothing is shown as done until
-// the server has said so. One action is in flight at a time.
-async function performAction(id, taskId, { input } = {}) {
+// the server has said so. One action is in flight at a time. On a tracked
+// board a CONFIRM refusal becomes one confirmation, and confirming resends
+// the action with its token.
+async function performAction(id, taskId, { input, confirm } = {}) {
   if (state.acting) return;
-  const task = state.tasks.find((entry) => entry.id === taskId);
+  const listed = state.tasks.find((entry) => entry.id === taskId);
   const action = TASK_ACTIONS.find((entry) => entry.id === id);
-  if (!task || !action) return toast('This task is no longer on the board. Its history stays in Activity.', true);
+  if (!listed || !action) return toast('This task is no longer on the board. Its history stays in Activity.', true);
+  const task = withDetails(listed);
+  const project = projectOf(task);
+  const tracked = projectKind(project) === 'aa';
   const refuse = (message) => {
     if (drawerTaskId() === taskId) $('#action-error').textContent = message;
     toast(message, true);
   };
-  const entry = availability(task, projectOf(task), { operator: state.operator, wipCount: wipCountOf(task) }).find((candidate) => candidate.id === id);
+  const entry = actionsFor(task).find((candidate) => candidate.id === id);
   if (!entry.enabled) return refuse(entry.why);
-  if (action.needs && input === undefined) {
+  const asks = inputFor(id, task, project);
+  if (asks && input === undefined) {
     if (drawerTaskId() !== taskId) {
       // Focus goes back to this task's card when the drawer closes.
       $('#main').querySelector(`[data-action="open-task"][data-id="${CSS.escape(taskId)}"]`)?.focus({ preventScroll: true });
@@ -1008,22 +1133,40 @@ async function performAction(id, taskId, { input } = {}) {
     }
     return showActionInput(id, task);
   }
+  if (asks?.required && !String(input).trim()) return refuse(`${actionPrompts[id][0]} One line is needed.`);
   let request;
-  try { request = actionRequest(id, task, input); } catch (error) { return refuse(error.message); }
+  try { request = actionRequest(id, task, input, project, { confirm }); } catch (error) { return refuse(error.message); }
   const inDrawer = drawerTaskId() === taskId;
-  const dirty = inDrawer ? dirtyFields($('#task-form'), Object.keys(request.body)) : {};
+  const dirty = inDrawer && $('#task-form') ? dirtyFields($('#task-form'), Object.keys(request.body)) : {};
   state.acting = true;
   setBarBusy(true);
   let failure = '';
+  let refused = null;
+  let result = null;
   let refreshed = true;
-  try { await api(request.path, request.method, request.body); } catch (error) { failure = error.status === 409 ? `${error.message}. Nothing was changed.` : error.message; }
+  try { result = await api(request.path, request.method, request.body); } catch (error) { refused = error; failure = refusalText(error); }
+  if (refused?.code === 'CONFIRM') {
+    state.acting = false;
+    setBarBusy(false);
+    const go = await confirmAction({ eyebrow: `${taskNumber(task)} · ${project?.name || ''}`, title: `${entry.label} ${taskNumber(task)}?`, reasons: refused.reasons || [], confirm: entry.label });
+    if (go) return performAction(id, taskId, { input, confirm: refused.confirmToken });
+    if (drawerTaskId() === taskId) $('#task-dialog').querySelector(`[data-act="${id}"]`)?.focus();
+    return;
+  }
+  // Done on a board whose Result turned out to be a placeholder: ask for the line.
+  if (refused?.field === 'result') taskDetails.set(taskId, { version: task.version, fields: { ...taskDetails.get(taskId)?.fields, resultPending: true } });
   // The refresh is its own step: a failed one must not turn a saved action into a refusal,
   // and after a refusal it brings the drawer's version up to date for the retry.
   try { await refresh(); } catch { refreshed = false; }
+  if (refused?.field === 'result') {
+    const now = state.tasks.find((candidate) => candidate.id === taskId);
+    if (now) taskDetails.set(taskId, { version: now.version, fields: { ...taskDetails.get(taskId)?.fields, resultPending: true } });
+  }
   state.acting = false;
   setBarBusy(false);
+  const done = tracked && result ? committedText(action, task, result) : action.done;
   if (failure) toast(failure, true);
-  else toast(refreshed ? action.done : `${action.done}, but AGE Aris could not refresh. Use the refresh button.`);
+  else toast(refreshed ? done : `${done}, but AGE Aris could not refresh. Use the refresh button.`, false, result?.warnings?.length ? 12000 : 0);
   // Only a drawer still showing this task follows it; one closed meanwhile stays closed.
   if (drawerTaskId() !== taskId) return;
   const fresh = state.tasks.find((candidate) => candidate.id === taskId);
@@ -1035,14 +1178,16 @@ async function performAction(id, taskId, { input } = {}) {
   // The drawer follows the task and keeps what was typed in the fields the action does not set.
   openTaskEditor(fresh);
   const form = $('#task-form');
-  for (const [name, value] of Object.entries(dirty)) if (form.elements[name]) form.elements[name].value = value;
-  if (failure && action.needs) {
+  if (form) for (const [name, value] of Object.entries(dirty)) if (form.elements[name]) form.elements[name].value = value;
+  if (failure && (asks || refused?.field === 'result')) {
     // A refusal keeps the person's answer in its field, ready to send again.
     showActionInput(id, fresh);
-    $('#action-slot [data-action-input]').value = input;
+    $('#action-slot [data-action-input]').value = input ?? '';
   } else if (!failure) {
     const bar = $('#task-dialog .action-bar');
     (bar.querySelector(`[data-act="${id}"]:not([aria-disabled])`) || bar.querySelector('.action-button:not([aria-disabled])') || $('#task-dialog-title')).focus();
+    // Warnings stay in the drawer after the toast has gone.
+    if (result?.warnings?.length) $('#action-note').textContent = result.warnings.map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`).join(' ');
   }
   if (failure) $('#action-error').textContent = failure;
 }
@@ -2037,8 +2182,9 @@ async function openPipelineEditor(project) {
 function moveTask(id, status) {
   const task = state.tasks.find((entry) => entry.id === id);
   if (!task || task.status === status) return;
-  if (!writable(projectOf(task))) return toast(`${projectOf(task)?.name || 'This project'} is read-only here: move its tasks in the repository.`, true);
-  const action = actionFor(task.status, status);
+  // The registry decides, and performAction refuses with its reason (task
+  // actions off, another operator's task, …).
+  const action = actionFor(task.status, status, projectKind(projectOf(task)));
   if (!action) return toast(`A ${statuses[task.status].toLowerCase()} task cannot move to ${statuses[status].toLowerCase()}.`, true);
   return performAction(action.id, id);
 }
@@ -2089,6 +2235,7 @@ function onAction(event) {
     case 'sample-project': createSample(target); break;
     case 'link-project': openLinkEditor(); break;
     case 'unlink-project': openUnlinkDialog(selectedProject()); break;
+    case 'task-actions': switchTaskActions(selectedProject(), target); break;
     case 'open-run': closeDialog($('#task-dialog')); openRun(target.dataset.id); break;
     case 'edit-pipeline': openPipelineEditor(selectedProject()); break;
     case 'add-agent': openAgentEditor(); break;

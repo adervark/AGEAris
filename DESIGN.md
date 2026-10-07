@@ -20,9 +20,11 @@ from backlog to completion without losing ownership or handoff context.
   beside each.
 - Persist tasks and history across application restarts.
 - Reject stale edits and claims beyond the project's work in progress limit.
-- Track an existing repository's AA board read-only. AGE Aris never
-  writes to a repository it did not create; that repository's agents keep
-  working there, and AGE Aris reads their files and history.
+- Track an existing repository's AA board. AGE Aris reads its files and
+  history; that repository's agents keep working there. Once the operator
+  switches task actions on for it, claim, release, block, unblock and done
+  each commit one task file to the pinned branch, and nothing else there
+  changes (the rule is in `AGENTS.md`).
 
 Accounts, remote collaboration, and external integrations belong to later
 versions. The application serves one local operator.
@@ -72,7 +74,7 @@ content security policy allows no inline styles, so agent colours are classes.
 
 ```text
 Sidebar  | Search                                   Add project
-Home     | AGEIS  Read-only
+Home     | AGEIS  Tracked
 Projects | ● Needs attention: 5 items past 2× usual, 2 stale agent claims.
 Working  | Throughput 32 | WIP 6 | Cycle time 0.4 h | Service level 6.2 h
 Agents   | Board  Threads  List  Flow  Method

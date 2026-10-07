@@ -1,17 +1,19 @@
 // End to end: the task drawer's action bar in headless Chrome, on an AGE Aris
-// project. Run with `npm run e2e`; it is outside `npm test` because it needs a
+// project and on tracked AA boards in both layouts. Run with `npm run e2e`; it is outside `npm test` because it needs a
 // browser. Puppeteer is not a dependency: it is loaded from AGESIGHT_PUPPETEER
 // (a node_modules folder that holds it) and Chrome from AGESIGHT_CHROME.
 //
 // The server is the real one, on a free port with a fresh temporary data
-// folder. Nothing outside that folder and a temporary tracked repository is read
-// or written.
+// folder. Nothing outside that folder and the temporary tracked repositories
+// is read or written.
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
 import { once } from 'node:events';
-import { readdir, readFile, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
+import { promisify } from 'node:util';
 import test, { after, before } from 'node:test';
 
 import { fabricate } from '../../lib/fabricate.mjs';
@@ -38,6 +40,31 @@ let projectId;
 let trackedProjectId;
 const ids = {};
 const problems = [];
+// The tracked AA boards acted on: { dir, id } each.
+const boards = {};
+const exec = promisify(execFile);
+const git = async (dir, ...args) => (await exec('git', args, { cwd: dir, env: process.env })).stdout.trim();
+
+function aaTask(id, title, fields = {}) {
+  const header = Object.entries({ id, title: JSON.stringify(title), status: 'open', owner: '—', blockedReason: '""', ...fields }).map(([key, value]) => `${key}: ${value}`).join('\n');
+  return `---\n${header}\n---\n\n# ${id} — ${title}\n\n## Goal\n\nSomething to do.\n\n## Result\n\n*(pending)*\n\n## Notes\n`;
+}
+
+// A git repository with `files` committed by `ade`, linked as a tracked project.
+async function trackedBoard(name, files) {
+  const dir = path.join(root, name);
+  await mkdir(dir);
+  await git(dir, 'init', '--quiet', '--initial-branch=main');
+  await git(dir, 'config', 'user.name', 'ade');
+  await git(dir, 'config', 'user.email', 'ade@example.invalid');
+  for (const [file, content] of Object.entries({ 'AA/STATE.md': '# State\n', ...files })) {
+    await mkdir(path.dirname(path.join(dir, file)), { recursive: true });
+    await writeFile(path.join(dir, file), content);
+  }
+  await git(dir, 'add', '-A');
+  await git(dir, 'commit', '--quiet', '-m', 'fixture');
+  return { dir, id: (await api('POST', '/projects/link', { path: dir, name: `Board ${name}` })).id };
+}
 
 async function api(method, url, body) {
   const response = await fetch(`${base}/api${url}`, { method, headers: { 'x-agesight-token': server.apiToken, ...(body ? { 'content-type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
@@ -91,9 +118,27 @@ before(async () => {
     }
   }
 
-  // A tracked repository, which AGE Aris only reads.
+  // A tracked repository whose task actions stay off.
   const repository = (await fabricate(path.join(root, 'tracked'), 'day 0 09:00 ade: create T001 backlog "Read the archive"\nday 1 10:00 ade: write AA/AA.yml "wip:\\n  in_progress: 3\\n  blocked: 3\\n"')).dir;
   trackedProjectId = (await api('POST', '/projects/link', { path: repository, name: 'Their repo' })).id;
+
+  // Two tracked AA boards to act on: one with backlog/, and one in the older
+  // layout (as AGEIS), where T002 is the operator's own agent's claim with a
+  // run that died 22 days ago and T003's run is live.
+  const ago = (hours) => new Date(Date.now() - hours * 3_600_000).toISOString().replace(/\.\d{3}Z$/, 'Z');
+  const trail = (run, hours, act) => `${JSON.stringify({ ts: ago(hours + 1), run, kind: 'open', brief: act, next: 'start' })}\n${JSON.stringify({ ts: ago(hours), run, kind: 'doing', act, next: 'resume at epoch 5' })}\n`;
+  boards.withBacklog = await trackedBoard('with-backlog', {
+    'AA/backlog/T001-read-the-archive.md': aaTask('T001', 'Read the archive'),
+    'AA/tasks/.gitkeep': '',
+    'AA/AA.yml': 'wip:\n  in_progress: 3\n  blocked: 3\nstale_hours: 24\n',
+  });
+  boards.older = await trackedBoard('older', {
+    'AA/tasks/T001-sort-the-logs.md': aaTask('T001', 'Sort the logs'),
+    'AA/tasks/T002-fold-two.md': aaTask('T002', 'Fold two', { status: 'claimed', owner: 'ade @k/b6192924 2026-09-16 — fold 2 of 5' }),
+    'AA/checkpoints/T002.jsonl': trail('7c1e2a90', 22 * 24, 'train fold 2'),
+    'AA/tasks/T003-fold-three.md': aaTask('T003', 'Fold three', { status: 'claimed', owner: 'ade @k/c0ffee00 2026-10-08 — fold 3 of 5' }),
+    'AA/checkpoints/T003.jsonl': trail('c0ffee00', 0.2, 'fold 3'),
+  });
 
   const puppeteer = loadPuppeteer();
   browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--no-sandbox'] });
@@ -382,13 +427,172 @@ test('unsaved Priority and Owner edits in the full form survive an action, and s
   assert.deepEqual([saved.assignee, saved.status], ['Grace Hopper', 'done']);
 });
 
-test('a tracked repository\'s task still opens the read-only viewer, with no action bar', async () => {
+// ---- Tracked AA boards (T023)
+
+const trackedCard = (board, id) => `[data-action="open-task"][data-id="${board.id}:${id}"]`;
+const trackedFile = async (board, file) => readFile(path.join(board.dir, file), 'utf8');
+const toastSays = (pattern) => page.waitForFunction((source) => new RegExp(source).test(document.querySelector('#toast').textContent), {}, pattern);
+
+async function openTracked(board, id) {
+  await page.goto('about:blank');
+  await page.goto(`${base}/#project/${board.id}`);
+  await clickCard(trackedCard(board, id));
+  await page.waitForSelector(`#task-dialog[open] .task-view[data-task="${board.id}:${id}"]`);
+  // The task file's details (a placeholder Result, a live run) reach the bar
+  // once the file is read.
+  await page.waitForFunction(() => !/Reading the task file/.test(document.querySelector('#task-body')?.textContent || ''));
+}
+
+// The repository is clean, on `main`, and its newest commit was AGE Aris's.
+async function assertCommittedByUi(board) {
+  assert.equal(await git(board.dir, 'status', '--porcelain'), '', 'index and working tree are clean');
+  assert.equal(await git(board.dir, 'rev-parse', '--abbrev-ref', 'HEAD'), 'main');
+  assert.match(await git(board.dir, 'log', '-1', '--format=%an%n%B'), /^ade\n[\s\S]*AGESight-Via: ui/);
+}
+
+async function switchOnByApi(board) {
+  const project = () => api('GET', '/workspace').then((workspace) => workspace.projects.find((entry) => entry.id === board.id));
+  const asked = await fetch(`${base}/api/projects/${board.id}`, { method: 'PATCH', headers: { 'x-agesight-token': server.apiToken, 'content-type': 'application/json' }, body: JSON.stringify({ version: (await project()).version, taskActions: { on: true } }) }).then((response) => response.json());
+  assert.equal(asked.code, 'CONFIRM');
+  await api('PATCH', `/projects/${board.id}`, { version: (await project()).version, taskActions: { on: true }, confirm: asked.confirmToken });
+}
+
+test('a tracked repository\'s task opens in the viewer, and while task actions are off the bar says so and changes nothing', async () => {
+  await page.goto('about:blank');
   await page.goto(`${base}/#project/${trackedProjectId}`);
   await clickCard(`[data-action="open-task"][data-id="${trackedProjectId}:T001"]`);
   await page.waitForSelector('#task-dialog[open] .task-view');
-  assert.equal(await page.$('#task-dialog .action-bar'), null);
-  assert.equal(await page.$('#task-dialog #task-form'), null);
-  assert.match(await page.$eval('#task-dialog .readonly-note', (element) => element.textContent), /Read-only here/);
+  assert.equal(await page.$('#task-dialog #task-form'), null, 'no full edit form');
+  const claim = '#task-dialog .action-bar [data-act="start"]';
+  assert.equal(await page.$eval(claim, (element) => element.textContent.trim()), 'Claim');
+  assert.equal(await page.$eval(claim, (element) => element.getAttribute('aria-disabled')), 'true');
+  assert.match(await page.$eval(claim, (element) => document.getElementById(element.getAttribute('aria-describedby')).textContent), /Task actions are off for Their repo/);
+  assert.match(await page.$eval('#task-dialog .readonly-note', (element) => element.textContent), /Task actions are off/);
+  assert.equal(await page.$eval('[data-action="task-actions"]', (element) => element.getAttribute('aria-pressed')), 'false');
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('switching task actions on shows what it means there, and needs a confirmation', async () => {
+  const board = boards.withBacklog;
+  await page.goto('about:blank');
+  await page.goto(`${base}/#project/${board.id}`);
+  await clickCard('[data-action="task-actions"]');
+  await page.waitForSelector('#action-dialog[open] .confirm-reasons');
+  const reasons = await page.$$eval('#action-dialog .confirm-reasons li', (items) => items.map((item) => item.textContent));
+  assert.match(reasons.join('\n'), /one commit to main/);
+  assert.match(reasons.join('\n'), /authored as ade/);
+  assert.match(reasons.join('\n'), /skip this repository's hooks/);
+  assert.match(reasons.join('\n'), /STATE\.md is kept by hand/);
+  // Cancel changes nothing.
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#action-dialog:not([open])');
+  assert.equal((await api('GET', '/workspace')).projects.find((entry) => entry.id === board.id).actions.on, false);
+  await clickCard('[data-action="task-actions"]');
+  await page.waitForSelector('#action-dialog[open] [type="submit"]');
+  await page.click('#action-dialog [type="submit"]');
+  await toastSays('Task actions are on for Board with-backlog: each one is a commit to main, not pushed');
+  await page.waitForSelector('[data-action="task-actions"][aria-pressed="true"]');
+  assert.match(await page.$eval('.project-where', (element) => element.textContent), /Task actions commit to main as ade/);
+  assert.equal(await git(board.dir, 'rev-list', '--count', 'HEAD'), '1', 'switching on commits nothing');
+});
+
+test('Claim, Block and Done on a board with backlog/: each is one commit, the file moves, and Block and Done ask for their line', async () => {
+  const board = boards.withBacklog;
+  await openTracked(board, 'T001');
+  await page.click('#task-dialog .action-bar [data-act="start"]');
+  await toastSays('^Claimed T001 · [0-9a-f]{7} on main · not pushed');
+  const claimed = await trackedFile(board, 'AA/tasks/T001-read-the-archive.md');
+  assert.match(claimed, /^status: claimed$/m);
+  assert.match(claimed, /^owner: ade @agesight\/web \d{4}-\d{2}-\d{2} — /m);
+  await assert.rejects(readFile(path.join(board.dir, 'AA/backlog/T001-read-the-archive.md')), 'the file left backlog/');
+  await assertCommittedByUi(board);
+
+  // Block needs its reason on an AA board.
+  await page.waitForSelector('#task-dialog .action-bar [data-act="block"]:not([aria-disabled])');
+  await page.click('#task-dialog .action-bar [data-act="block"]');
+  await page.waitForSelector('#action-slot [data-action-input][required]');
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => /One line is needed/.test(document.querySelector('#action-error').textContent));
+  assert.equal(await git(board.dir, 'rev-list', '--count', 'HEAD'), '2', 'an empty reason commits nothing');
+  await page.type('#action-slot [data-action-input]', 'Waiting on the archive key');
+  await page.keyboard.press('Enter');
+  await toastSays('^Blocked T001 · ');
+  const blocked = await trackedFile(board, 'AA/tasks/T001-read-the-archive.md');
+  assert.match(blocked, /^status: blocked$/m);
+  assert.match(blocked, /^blockedReason: "Waiting on the archive key"$/m);
+  await assertCommittedByUi(board);
+
+  // Done asks for the Result line while the Result is a placeholder.
+  await page.waitForSelector('#task-dialog .action-bar [data-act="done"]:not([aria-disabled])');
+  await page.click('#task-dialog .action-bar [data-act="done"]');
+  await page.waitForSelector('#action-slot [data-action-input][required]');
+  await page.type('#action-slot [data-action-input]', 'Read; nothing missing');
+  await page.keyboard.press('Enter');
+  await toastSays('^Done T001 · ');
+  const done = await trackedFile(board, 'AA/tasks/done/T001-read-the-archive.md');
+  assert.match(done, /^status: done$/m);
+  assert.match(done, /## Result\n\nRead; nothing missing\n/);
+  assert.doesNotMatch(done, /\(pending\)/);
+  await assertCommittedByUi(board);
+  assert.equal(await git(board.dir, 'rev-list', '--count', 'HEAD'), '4', 'one commit per action');
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('on a board without backlog/ Claim changes the file in place', async () => {
+  const board = boards.older;
+  await switchOnByApi(board);
+  await openTracked(board, 'T001');
+  await page.click('#task-dialog .action-bar [data-act="start"]');
+  await toastSays('^Claimed T001 · ');
+  assert.match(await trackedFile(board, 'AA/tasks/T001-sort-the-logs.md'), /^status: claimed$/m);
+  await assertCommittedByUi(board);
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('releasing a task an own agent session holds, with a run that never ended, is one confirmation naming both, then a warning with the reap command', async () => {
+  const board = boards.older;
+  const before = await git(board.dir, 'rev-parse', 'HEAD');
+  await openTracked(board, 'T002');
+  await page.click('#task-dialog .action-bar [data-act="release"]');
+  await page.waitForSelector('#action-dialog[open] .confirm-reasons');
+  const reasons = (await page.$$eval('#action-dialog .confirm-reasons li', (items) => items.map((item) => item.textContent))).join('\n');
+  assert.match(reasons, /@k\/b6192924/);
+  assert.match(reasons, /7c1e2a90/);
+  // Cancelling changes nothing.
+  await page.click('#action-dialog [data-close]');
+  await page.waitForSelector('#action-dialog:not([open])');
+  assert.equal(await git(board.dir, 'rev-parse', 'HEAD'), before);
+  await page.click('#task-dialog .action-bar [data-act="release"]');
+  await page.waitForSelector('#action-dialog[open] [type="submit"]');
+  await page.click('#action-dialog [type="submit"]');
+  await toastSays('^Released T002 · ');
+  await page.waitForFunction(() => /ckpt\.sh log T002 end --run 7c1e2a90/.test(document.querySelector('#action-note').textContent));
+  const released = await trackedFile(board, 'AA/tasks/T002-fold-two.md');
+  assert.match(released, /^status: open$/m);
+  assert.match(released, /^owner: — \(released \d{4}-\d{2}-\d{2}; was ade @k\/b6192924/m);
+  assert.equal((await trackedFile(board, 'AA/checkpoints/T002.jsonl')).split('\n').filter(Boolean).length, 2, 'the trail is not written');
+  await assertCommittedByUi(board);
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('a live run holds every action on its task: the bar says why, and the server refuses too', async () => {
+  const board = boards.older;
+  const before = await git(board.dir, 'rev-parse', 'HEAD');
+  await openTracked(board, 'T003');
+  const release = '#task-dialog .action-bar [data-act="release"]';
+  await page.waitForSelector(`${release}[aria-disabled="true"]`);
+  assert.match(await page.$eval(release, (element) => document.getElementById(element.getAttribute('aria-describedby')).textContent), /c0ffee00[\s\S]*Every action waits for it to end/);
+  await page.click(release);
+  const listed = (await api('GET', '/workspace')).tasks.find((entry) => entry.id === `${board.id}:T003`);
+  const refused = await fetch(`${base}/api/tasks/${encodeURIComponent(listed.id)}/actions`, { method: 'POST', headers: { 'x-agesight-token': server.apiToken, 'content-type': 'application/json' }, body: JSON.stringify({ action: 'release', version: listed.version }) });
+  assert.equal(refused.status, 409);
+  assert.equal((await refused.json()).code, 'RUN_LIVE');
+  assert.equal(await git(board.dir, 'rev-parse', 'HEAD'), before, 'nothing was committed');
+  assert.equal(await git(board.dir, 'status', '--porcelain'), '');
   await page.keyboard.press('Escape');
   await page.waitForSelector('#task-dialog:not([open])');
 });

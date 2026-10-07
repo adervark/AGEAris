@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { AgentRegistry } from './lib/agents.mjs';
 import { Cockpit } from './lib/brief.mjs';
 import { PipelineEngine } from './lib/pipeline.mjs';
-import { Workspace, WorkspaceError } from './lib/workspace.mjs';
+import { redactEmails, Workspace, WorkspaceError } from './lib/workspace.mjs';
 
 const PUBLIC_DIR = fileURLToPath(new URL('./public/', import.meta.url));
 const STATIC_FILES = new Map([
@@ -154,11 +154,24 @@ async function serveStatic(pathname, request, response) {
   return true;
 }
 
+// Every refusal and failure of a task action on a tracked repository leaves one
+// line on stderr, emails redacted: `tracked action <code>: <project> <task>
+// <action> [<step>]`. A confirmation asked for is neither.
+function logTrackedAction(error) {
+  if (!error?.tracked || error.code === 'CONFIRM') return;
+  const { project, task, action } = error.tracked;
+  const code = error.code || (error.status >= 500 ? 'FAILED' : 'REFUSED');
+  const step = error.status >= 500 ? ` [${error.code === 'INTERRUPTED' ? 'settle' : 'commit'}]` : '';
+  console.error(redactEmails(`tracked action ${code}: ${project} ${task} ${String(action)}${step}`.replace(/[\r\n\u2028\u2029]/g, ' ')));
+}
+
 // `clock` (milliseconds, like Date.now) is the time the engine and the cockpit
 // compute their read models at; tests inject it, and `ledgerOptions` (spawn,
 // stat) for the history ledgers.
 export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || join(process.cwd(), '.agesight-data'), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {} } = {}) {
-  const workspace = await new Workspace({ dataDir }).init();
+  // AGESIGHT_TRACKED_WRITES=0 turns task actions off on every tracked
+  // repository, whatever each one's switch says.
+  const workspace = await new Workspace({ dataDir, trackedWrites: process.env.AGESIGHT_TRACKED_WRITES !== '0' }).init();
   const registry = await new AgentRegistry({ dataDir: workspace.dataDir, operator: workspace.operator, email: workspace.email, ...registryOptions }).init();
   const engine = await new PipelineEngine({ workspace, registry, ...engineOptions, ...(clock ? { clock } : {}) }).init();
   const cockpit = new Cockpit({ workspace, engine, clock: clock || (() => Date.now()), ledgerOptions, ...cockpitOptions });
@@ -254,6 +267,18 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       if (request.method === 'PATCH' && taskMatch) {
         return sendJson(response, 200, await workspace.updateTask(taskMatch[1], await readJson(request), VIA_UI));
       }
+      // A task action: one click on an AGE Aris project's task, and on a tracked
+      // AA board's (once its switch is on) one commit to its pinned branch.
+      const actionMatch = /^\/api\/tasks\/([^/]+)\/actions$/.exec(pathname);
+      if (request.method === 'POST' && actionMatch) {
+        const body = await readJson(request);
+        try {
+          return sendJson(response, 200, await workspace.actOnTask(actionMatch[1], body, VIA_UI));
+        } catch (error) {
+          logTrackedAction(error);
+          throw error;
+        }
+      }
       if (request.method === 'GET' && (pathname === '/' || pathname === '/index.html') && url.searchParams.has('token')) {
         if (!sameToken(url.searchParams.get('token') || '', token)) {
           response.statusCode = 303;
@@ -272,8 +297,12 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       return sendJson(response, 404, { error: 'Not found' });
     } catch (error) {
       if (error instanceof URIError) return sendJson(response, 400, { error: 'Invalid request URL' });
-      const status = error instanceof WorkspaceError ? error.status : 500;
-      return sendJson(response, status, { error: error?.message || 'Internal server error' });
+      if (!(error instanceof WorkspaceError)) return sendJson(response, 500, { error: error?.message || 'Internal server error' });
+      // A refusal names its reason and what to do about it; a confirmation
+      // carries its reasons and token.
+      return sendJson(response, error.status, {
+        error: error.message, ...(error.code ? { code: error.code } : {}), ...(error.remedy ? { remedy: error.remedy } : {}), ...(error.details || {}),
+      });
     }
   });
   server.workspace = workspace;
