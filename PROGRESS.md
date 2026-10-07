@@ -68,3 +68,19 @@ its date, the number, and where the evidence is. Newest last.
   London; the old test fails at 00:30.
 - `npm test` passed 372 of 372.
 - Evidence: the Results of T019 and T020 in `AA/tasks/done/`.
+
+## 2026-10-08 — T022: one-click task actions in the drawer
+
+- On AGE Aris projects, Start, Unblock, Block, Done, Release, Reopen, Priority
+  and Assign each take one click, or one click and Enter, from the drawer.
+- `npm run e2e` (new, headless Chrome 152, its own server and temporary data):
+  19 of 19 pass at 4d78075, run twice by the worker and once by the owner. It
+  covers each action, a disabled action's reason on hover and focus, focus
+  return, the in-place swap, drag through actions, a refusal followed by a
+  retry, a double click and a double Enter, and unsaved form edits kept across
+  an action. No console or CSP errors.
+- `npm test` 383 of 383; `npm run check` passes.
+- Independent review: APPROVE; its three medium findings are fixed in
+  4d78075.
+- Evidence: `tests/e2e/task-actions.e2e.mjs`, `tests/actions.test.mjs`, and the
+  Result of T022.

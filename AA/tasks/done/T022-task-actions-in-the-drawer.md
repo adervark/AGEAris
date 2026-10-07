@@ -1,8 +1,8 @@
 ---
 id: T022
 title: "Task actions in the drawer, on AGE Aris projects first"
-status: claimed
-owner: adervark @k/578f7ba9 2026-10-07 — building the drawer action bar on AGE Aris projects
+status: done
+owner: adervark @k/578f7ba9 2026-10-07 — drawer action bar built
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -47,10 +47,10 @@ On an AGE Aris project, Start, Block, Done, Release, Priority and Assign each ta
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/578f7ba9 (claimed; a worker subagent builds it in its own worktree, the owner verifies and commits)
-- **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** read the plan's section for T022
+- **Last touched:** 2026-10-08, adervark @k/578f7ba9
+- **In flight:** nothing; done
+- **On disk:** committed as 1858a92 and 4d78075, with this task's move to `done/`
+- **Resume with:** nothing to resume
 - **Next decision:** none
 
 ## Verify
@@ -59,9 +59,44 @@ On an AGE Aris project, Start, Block, Done, Release, Priority and Assign each ta
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T022` — then
-retire the trail with `--delete`)*
+Pass, against the decision rules.
+
+- **Built** (1858a92, by a worker subagent in its own worktree):
+  - `public/actions.js`, a pure registry: `TASK_ACTIONS`, `availability`,
+    `actionRequest` and `actionFor`. Priority and Assign sit behind
+    `CAPABILITIES`; they are off on AA boards with "AA is pull-based: claim it
+    or leave it in the queue" (Q1).
+  - `performAction` in `public/app.js`, the single entry point, with the
+    drawer action bar: Start, Unblock, Block (with an optional reason), Done,
+    Release, Reopen, Priority and Assign. Each takes one click, or one click
+    and Enter, with no "Save changes".
+  - One delegated handler serves `#main` and `#task-dialog`. A linked task now
+    swaps the drawer in place, and a drag goes through `actionFor`.
+  - `server.mjs` serves `actions.js`; there are no new routes.
+- **Independent review** (code-reviewer, opus): APPROVE, with three medium
+  findings. Fixed in 4d78075:
+  - a refusal left the drawer stale, so every retry failed;
+  - nothing guarded a second action in flight;
+  - unsaved Priority and Owner edits were dropped after an action.
+
+  Each fix has an e2e test that fails without it. The worker checked this by
+  reverting each fix in turn.
+- Tracked tasks still open the read-only viewer, with no action bar.
+- On `feature/pm-cockpit` at 4d78075: `npm run check` passes, `npm test`
+  passes 383 of 383, and `npm run e2e` passes 19 of 19.
+- **Spend:** `agent-fan-out`, three runs:
+  - a worker (sonnet), cut off once by the usage limit and resumed from its
+    trail;
+  - its fix pass;
+  - one review (opus).
+
+  Nothing was pushed or migrated.
+- **Run digest:**
+  - 578f7ba9.9b59 (worker): commits 3c8f9e0 and 4411895, landed as 1858a92
+    and 4d78075.
+  - 578f7ba9.e89a (reviewer): APPROVE on 3c8f9e0.
+  - 578f7ba9: one misfiled `doing`, corrected.
+- **Log:** `PROGRESS.md`, 2026-10-08 — T022.
 
 ## Notes
 
