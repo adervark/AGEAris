@@ -1,8 +1,8 @@
 ---
 id: T023
 title: "Task actions on tracked AA boards, end to end; the read-only rule lifted"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/578f7ba9 2026-10-08 — wiring task actions into tracked AA boards
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -48,7 +48,7 @@ Claim, release, block, unblock and done work from AGE Aris on a tracked AA board
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/578f7ba9 (registered, never claimed)
+- **Last touched:** 2026-10-08, adervark @k/578f7ba9 (claimed; a worker subagent builds it in its own worktree, the owner verifies and commits)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** read the plan's section for T023
