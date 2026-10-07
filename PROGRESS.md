@@ -84,3 +84,22 @@ its date, the number, and where the evidence is. Newest last.
   4d78075.
 - Evidence: `tests/e2e/task-actions.e2e.mjs`, `tests/actions.test.mjs`, and the
   Result of T022.
+
+## 2026-10-08 — T021: a tracked-write engine, reviewed adversarially
+
+- `lib/tracked.mjs` commits one task-file change to a pinned branch under
+  `.git/index.lock`. Every outcome is committed, unchanged, or reported as
+  interrupted. It is not reachable from the API yet.
+- `tests/tracked.test.mjs`: 62 tests on real temporary repositories.
+  - Agent `git commit` and `commit -a` in each of five windows.
+  - Crashes in each phase, with recovery run twice.
+  - Stolen and leaked locks.
+  - Hooks, filters, gpg signing and replace refs leaving no trace.
+  - Symlinked task folders, in the working tree and committed.
+  - Timeouts (SIGTERM, then SIGKILL).
+- Independent review: REQUEST CHANGES (a symlinked folder escaped the
+  repository, reproduced), then APPROVE. Mutation checks confirmed that the
+  key tests fail without their fixes.
+- `npm test` 445 of 445 and `npm run e2e` 19 of 19 at 1de20b2; `npm run check`
+  passes.
+- Evidence: `tests/tracked.test.mjs` and the Result of T021.

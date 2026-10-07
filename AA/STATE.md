@@ -19,26 +19,24 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-07T18:58Z · 25 tasks: 16 backlog, 1 WIP (1 in progress), 8 delivered`
+`board · 2026-10-07T19:13Z · 25 tasks: 16 backlog, 0 WIP (0 in progress), 9 delivered`
 
-FLOW · **WIP 1/2** · throughput 1.6/wk (7 in 30d) · cycle time 50th 5m / 85th 7m (n=7)
-FLOW · Little's Law: 1 ÷ 1.6/wk ≈ 4d expected · flow efficiency 97% (touch 1h of 1h, n=1 trails) · lead time 85th 7m
+FLOW · **WIP 0/2** · throughput 1.9/wk (8 in 30d) · cycle time 50th 5m / 85th 33m (n=8)
+FLOW · Little's Law: 0 ÷ 1.9/wk ≈ now expected · lead time 85th 36m
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 1h | ⚙⚠ |
 | **BACKLOG** 16 | | `T002` `T003` `T004` `T007` `T008` `T009` +10 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T019 | A Working page: everything in progress or blocked, on every board | adervark | 19h |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 19h |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 20h |  |
+| **DONE** | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14m |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 20h |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 20h |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 21h |  |
 |  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 21h |  |
 |  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 21h |  |
 |  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 21h |  |
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 21h |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚙ a run is IN FLIGHT (a `doing` nothing closed) — `ckpt.sh live` before you spend anything
-- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 <!-- /AA:generated -->
 
 <!--
