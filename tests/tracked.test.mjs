@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFile, execFileSync, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { chmod, lstat, mkdir, mkdtemp, readdir, readFile, realpath, rename, rm, unlink, utimes, writeFile } from 'node:fs/promises';
+import { chmod, lstat, mkdir, mkdtemp, readdir, readFile, readlink, realpath, rename, rm, symlink, unlink, utimes, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -110,7 +110,9 @@ async function snapshot(dir) {
     for (const entry of await readdir(path.join(dir, relative), { withFileTypes: true })) {
       const name = relative ? `${relative}/${entry.name}` : entry.name;
       if (name === '.git') continue;
-      if (entry.isDirectory()) {
+      if (entry.isSymbolicLink()) {
+        files[name] = `link to ${await readlink(path.join(dir, name))}`;
+      } else if (entry.isDirectory()) {
         files[`${name}/`] = 'folder';
         await visit(name);
       } else {
@@ -360,7 +362,7 @@ test('readTrail reports malformed lines by number, reads no file as no runs, and
   const { runs, malformed } = await readTrail(file, { now: NOW });
   assert.deepEqual(malformed, [2, 3, 5]);
   assert.deepEqual(runs.map((run) => [run.id, run.live]), [['aaaa1111', true]]);
-  assert.deepEqual(await readTrail(path.join(path.dirname(file), 'T999.jsonl')), { runs: [], malformed: [], truncated: false });
+  assert.deepEqual(await readTrail(path.join(path.dirname(file), 'T999.jsonl')), { runs: [], malformed: [], truncated: false, numbered: true });
   const filler = line('0ld00000', 'did', 400, { what: 'x'.repeat(1000) });
   const count = Math.ceil((1.2 * 1024 * 1024) / filler.length);
   const big = await trailFile([...Array(count).fill(filler), '{broken', line('2e8b687e', 'doing', 1)]);
@@ -480,6 +482,12 @@ test('no repository code runs: hooks, a filter driver and a signing program leav
   const repo = await makeRepo({ gitattributes: '*.md filter=mark\n' });
   const seen = await tempDir('foreign');
   const touch = (name) => `#!/bin/sh\ntouch "${seen}/${name}"\n`;
+  // Racily clean: an entry newer than the index, recorded by a refresh made
+  // before any hook or filter exists. Writing any copy of this index re-checks
+  // it through the clean filter.
+  const later = new Date(Date.now() + 60_000);
+  await utimes(path.join(repo.dir, 'AA', 'backlog', T004), later, later);
+  await g(repo.dir, 'update-index', '--refresh');
   for (const hook of ['pre-commit', 'post-commit', 'reference-transaction', 'post-index-change', 'pre-auto-gc']) {
     await writeFile(path.join(repo.dir, '.git', 'hooks', hook), touch(hook), { mode: 0o755 });
   }
@@ -489,10 +497,6 @@ test('no repository code runs: hooks, a filter driver and a signing program leav
   await g(repo.dir, 'config', 'filter.mark.smudge', `sh -c 'touch "${seen}/smudge"; cat'`);
   await g(repo.dir, 'config', 'commit.gpgSign', 'true');
   await g(repo.dir, 'config', 'gpg.program', path.join(programs, 'gpg'));
-  // Racily clean: an entry newer than the index is re-checked through its
-  // clean filter whenever an index is written.
-  const later = new Date(Date.now() + 60_000);
-  await utimes(path.join(repo.dir, 'AA', 'backlog', T004), later, later);
   const result = await act(repo);
   assert.deepEqual(await readdir(seen), [], 'no hook, filter or signing program ran');
   assert.ok(!(await g(repo.dir, 'cat-file', 'commit', result.commit)).includes('gpgsig'), 'the commit is unsigned');
@@ -806,7 +810,7 @@ test('INTERRUPTED: a plumbing writer moves the branch on after the CAS; C stays 
     assert.equal(result.outcome, 'interrupted');
     assert.deepEqual(await snapshot(repo.dir), after, 'recovery never touches an interrupted write');
   }
-  await refused(act(repo, { from: `AA/backlog/${T004}`, to: `AA/tasks/${T004}` }), 'INTERRUPTED', 409);
+  await refused(act(repo, { from: `AA/backlog/${T004}`, to: `AA/tasks/${T004}` }), 'INTERRUPTED_PENDING', 409);
 });
 
 test('INTERRUPTED: a stolen lock, then the CAS back lost to a plumbing writer; C stays in history and nothing more is touched', async () => {
@@ -860,4 +864,154 @@ test('an executable task file keeps its mode', async () => {
   const result = await act(repo, { from: `AA/tasks/${T012}`, to: `AA/tasks/${T012}` });
   assert.match(await g(repo.dir, 'ls-tree', result.commit, '--', `AA/tasks/${T012}`), /^100755 /);
   await assertCommitted(repo, result, [`AA/tasks/${T012}`]);
+});
+
+// ---- Review fixes (second commit)
+
+// Every file under a folder, with its bytes' hash.
+async function filesUnder(root) {
+  const found = {};
+  async function visit(relative) {
+    for (const entry of await readdir(path.join(root, relative), { withFileTypes: true })) {
+      const name = relative ? `${relative}/${entry.name}` : entry.name;
+      if (entry.isDirectory()) await visit(name);
+      else found[name] = createHash('sha256').update(await readFile(path.join(root, name))).digest('hex');
+    }
+  }
+  await visit('');
+  return found;
+}
+
+for (const folder of ['AA', 'AA/tasks', 'AA/backlog']) {
+  for (const where of ['in the working tree', 'committed']) {
+    test(`a symbolic link at ${folder}, ${where}, is refused and nothing is written outside the repository`, async () => {
+      const repo = await makeRepo();
+      const outside = path.join(await tempDir('outside'), 'target');
+      const linkPath = path.join(repo.dir, ...folder.split('/'));
+      await rename(linkPath, outside);
+      await symlink(outside, linkPath);
+      if (where === 'committed') {
+        await g(repo.dir, 'add', '-A');
+        await g(repo.dir, 'commit', '--quiet', '-m', `link ${folder}`);
+      }
+      const [outsideBefore, before] = [await filesUnder(outside), await snapshot(repo.dir)];
+      await refused(commitTaskChange(repo.dir, {
+        from: `AA/backlog/${T012}`, to: `AA/tasks/${T012}`, content: claimed(await fixture(T012)), message: MESSAGE, branch: BRANCH, dataDir: repo.dataDir, projectId: 'p1',
+      }), 'UNSUPPORTED_REPO');
+      assert.deepEqual(await filesUnder(outside), outsideBefore, 'nothing was written through the link');
+      await assertUnchanged(repo, before);
+      await assert.rejects(probeRepository(repo.dir), (error) => error.code === 'UNSUPPORTED_REPO' && /not a real folder/.test(error.message));
+      assert.deepEqual(await filesUnder(outside), outsideBefore, 'the probe wrote nothing through the link');
+    });
+  }
+}
+
+test('a crash after the index is installed but before the lock is released: recovery removes the lock and finds the write finished', async () => {
+  const repo = await makeRepo();
+  let commit;
+  await assert.rejects(act(repo, { seams: { installed: (info) => { commit = info.C; crash(); } } }), /simulated crash/);
+  assert.match(await readFile(path.join(repo.dir, '.git', 'index.lock'), 'utf8'), /^agesight [0-9a-f]{32}\n$/, 'the lock still carries the nonce');
+  const [result] = await recoverInflight(repo.dataDir, repo.dir);
+  assert.equal(result.outcome, 'committed');
+  await assertCommitted(repo, { commit }, [`AA/backlog/${T012}`, `AA/tasks/${T012}`]);
+  const settled = await snapshot(repo.dir);
+  assert.deepEqual(await recoverInflight(repo.dataDir, repo.dir), []);
+  assert.deepEqual(await snapshot(repo.dir), settled);
+});
+
+test('a failure while cleaning up does not leave the repository busy, and a failure while taking the lock leaves no lock', async () => {
+  const repo = await makeRepo();
+  await assert.rejects(act(repo, { seams: { beforeRelease: () => { throw new Error('disk full'); } } }), /disk full/);
+  const next = await act(repo, { from: `AA/backlog/${T004}`, to: `AA/tasks/${T004}` });
+  assert.deepEqual(next.warnings.map((warning) => warning.code), ['INTERRUPTED_RECOVERED'], 'the first write was found finished');
+  await assertCommitted(repo, next, [`AA/tasks/${T012}`, `AA/tasks/${T004}`]);
+  const fresh = await makeRepo();
+  const before = await snapshot(fresh.dir);
+  await assert.rejects(act(fresh, { seams: { lockOpened: () => { throw new Error('no space left'); } } }), /no space left/);
+  await assertUnchanged(fresh, before);
+  await assertCommitted(fresh, await act(fresh), [`AA/tasks/${T012}`]);
+});
+
+test('a check that never settles is cut off at the hold\'s deadline: GIT_BUSY, nothing changed', async () => {
+  const repo = await makeRepo();
+  const before = await snapshot(repo.dir);
+  const started = Date.now();
+  await refused(act(repo, { check: () => new Promise(() => {}), seams: { timeouts: FAST } }), 'GIT_BUSY');
+  assert.ok(Date.now() - started < FAST.hold + 500, `released in time (${Date.now() - started} ms)`);
+  await assertUnchanged(repo, before);
+});
+
+test('replace refs are ignored: the commit is built from HEAD\'s real tree', async () => {
+  const repo = await makeRepo();
+  const head = await g(repo.dir, 'rev-parse', 'HEAD');
+  const indexFile = path.join(repo.dir, '.git', 'replace-index');
+  gSync(repo.dir, ['read-tree', head], { env: { GIT_INDEX_FILE: indexFile } });
+  gSync(repo.dir, ['update-index', '--force-remove', 'README.md'], { env: { GIT_INDEX_FILE: indexFile } });
+  const tree = gSync(repo.dir, ['write-tree'], { env: { GIT_INDEX_FILE: indexFile } });
+  await unlink(indexFile);
+  await g(repo.dir, 'replace', head, gSync(repo.dir, ['commit-tree', tree, '-m', 'a stand-in']));
+  const result = await act(repo);
+  const files = (await g(repo.dir, '--no-replace-objects', 'ls-tree', '-r', '--name-only', result.commit)).split('\n');
+  assert.ok(files.includes('README.md'), 'README.md is still in the commit');
+  assert.ok(files.includes(`AA/tasks/${T012}`));
+});
+
+test('an aside file already there is never overwritten: STALE, and the task file is as it was', async () => {
+  const repo = await makeRepo({ backlog: false });
+  const file = path.join(repo.dir, 'AA', 'tasks', T012);
+  const original = await readFile(file, 'utf8');
+  const head = await g(repo.dir, 'rev-parse', BRANCH);
+  await refused(act(repo, {
+    from: `AA/tasks/${T012}`, to: `AA/tasks/${T012}`,
+    seams: { afterCas: async () => writeFile(JSON.parse(await readFile(MARKER(repo), 'utf8')).aside, 'a copy that is not the task\n') },
+  }), 'STALE');
+  assert.equal(await readFile(file, 'utf8'), original);
+  assert.equal(await g(repo.dir, 'rev-parse', BRANCH), head, 'the branch was rolled back');
+  assert.deepEqual(await markers(repo), []);
+});
+
+test('an operation that starts while the lock is held is caught under the lock: GIT_BUSY', async () => {
+  const repo = await makeRepo();
+  const before = await snapshot(repo.dir);
+  const mergeHead = path.join(repo.dir, '.git', 'MERGE_HEAD');
+  await refused(act(repo, { seams: { locked: async () => writeFile(mergeHead, `${before.ref}\n`) } }), 'GIT_BUSY');
+  await unlink(mergeHead);
+  await assertUnchanged(repo, before);
+});
+
+test('INTERRUPTED says "may have committed" when the branch cannot be read', async () => {
+  const repo = await makeRepo();
+  const refLock = path.join(repo.dir, '.git', 'refs', 'heads', 'main.lock');
+  let updated = false;
+  const spawnProcess = spawnWith((args) => {
+    if (args.includes('update-ref')) {
+      updated = true;
+      return `"$@"; : > "${refLock}"; exec sleep 5`;
+    }
+    return updated && args.includes('rev-parse') && args.includes('-q') ? 'exit 1' : null;
+  });
+  await assert.rejects(act(repo, { seams: { spawn: spawnProcess, timeouts: FAST } }), (error) => {
+    assert.equal(error.code, 'INTERRUPTED');
+    assert.match(error.message, /^AGE Aris may have committed [0-9a-f]{7} \(the branch could not be read\)/);
+    return true;
+  });
+});
+
+test('readTrail stops counting lines more than 8 MB before its window, and says so', async () => {
+  const filler = line('0ld00000', 'did', 400, { what: 'x'.repeat(4000) });
+  const count = Math.ceil((9.5 * 1024 * 1024) / filler.length);
+  const file = await trailFile([...Array(count).fill(filler), '{broken', line('2e8b687e', 'doing', 1)]);
+  const capped = await readTrail(file, { now: NOW });
+  assert.deepEqual([capped.truncated, capped.numbered], [true, false]);
+  assert.equal(capped.malformed.length, 1);
+  assert.ok(capped.malformed[0] < 300, 'numbered from the window');
+  assert.equal(capped.runs.find((run) => run.id === '2e8b687e').live, true);
+});
+
+test('editFrontmatter keeps a trailing # comment on the line it replaces', () => {
+  const content = '---\nid: T001\nstatus: open  # the AA word\nblockedReason: "a # inside" # why it waits\nowner: \'x\'\'s\' # quoted\nnote: a#b\n---\n';
+  assert.equal(
+    editFrontmatter(content, { status: 'claimed', blockedReason: 'waiting', owner: 'y', note: 'c' }),
+    '---\nid: T001\nstatus: claimed  # the AA word\nblockedReason: "waiting" # why it waits\nowner: "y" # quoted\nnote: c\n---\n',
+  );
 });
