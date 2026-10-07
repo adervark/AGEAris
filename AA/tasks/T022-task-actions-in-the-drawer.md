@@ -1,8 +1,8 @@
 ---
 id: T022
 title: "Task actions in the drawer, on AGE Aris projects first"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/578f7ba9 2026-10-07 — building the drawer action bar on AGE Aris projects
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -47,7 +47,7 @@ On an AGE Aris project, Start, Block, Done, Release, Priority and Assign each ta
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/578f7ba9 (registered, never claimed)
+- **Last touched:** 2026-10-07, adervark @k/578f7ba9 (claimed; a worker subagent builds it in its own worktree, the owner verifies and commits)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** read the plan's section for T022

@@ -19,15 +19,16 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-07T17:13Z · 25 tasks: 17 backlog, 1 WIP (1 in progress), 7 delivered`
+`board · 2026-10-07T17:13Z · 25 tasks: 16 backlog, 2 WIP (2 in progress), 7 delivered`
 
-FLOW · **WIP 1/2** · throughput 1.6/wk (7 in 30d) · cycle time 50th 5m / 85th 7m (n=7)
-FLOW · Little's Law: 1 ÷ 1.6/wk ≈ 4d expected · lead time 85th 7m
+FLOW · **WIP 2/2** · throughput 1.6/wk (7 in 30d) · cycle time 50th 5m / 85th 7m (n=7)
+FLOW · Little's Law: 2 ÷ 1.6/wk ≈ 8d expected · lead time 85th 7m
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T021 | A tracked-write engine that commits one task file under git's lock | adervark | now |  |
-| **BACKLOG** 17 | | `T002` `T003` `T004` `T007` `T008` `T009` +11 more (`--all`) | | | ⚑ 0 not ready |
+| **IN PROGRESS** 2/2 | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | now |  |
+|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | now |  |
+| **BACKLOG** 16 | | `T002` `T003` `T004` `T007` `T008` `T009` +10 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T019 | A Working page: everything in progress or blocked, on every board | adervark | 18h |  |
 |  | T020 | A cockpit test fails when run in the early hours | adervark | 18h |  |
 |  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 19h |  |
