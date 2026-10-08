@@ -227,3 +227,12 @@ its date, the number, and where the evidence is. Newest last.
   1280 and 390 px with no console errors.
 - A new test requires every module the page imports to be served (a new
   `public/` file had 404'd). `npm test` 491 of 491.
+
+## 2026-10-08 — T032: the forecast
+
+- A seeded Monte Carlo over 41 whole days of throughput answers "when will
+  the open tasks be done?" and "how many in the next 14 days?" at 50/85/95%.
+- On the sample (28 finished in 41 days, 14 open): 50% by 28 Oct, 85% by
+  4 Nov, 95% by 8 Nov; 85% likely 6 or more in 14 days. The same numbers came
+  back a minute apart, once seeded by the day rather than the instant.
+- `npm test` 492 of 492.

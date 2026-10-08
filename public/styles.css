@@ -423,6 +423,15 @@ button.delta-item:hover { color: var(--accent); }
 .chart-dot:hover circle:last-child, .chart-dot:focus-visible circle:last-child { stroke: var(--ink); stroke-width: 2.5; }
 .chart-dot:focus-visible .dot-ring, .chart-dot:focus-visible circle:last-child { stroke: var(--focus); stroke-width: 3; }
 .chart-note { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.forecast-answers { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 24px; margin: 0 0 12px; }
+.forecast-answers dt { font-size: 14px; color: var(--ink-2); margin-bottom: 6px; }
+.forecast-answers dd { margin: 2px 0; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.forecast-answers .forecast-main { font-size: 16px; color: var(--ink); font-weight: 600; }
+.forecast-p { display: inline-block; min-width: 3.2em; color: var(--muted); font-weight: 400; }
+.forecast-main .forecast-p { color: var(--wait-ink); }
+.forecast-line { margin: 0; font-size: 14px; color: var(--ink-2); }
+.forecast-bar { fill: var(--chart); }
+.flow-chart svg.forecast-spread { min-width: 650px; }
 .health-header { display: flex; gap: 22px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--tone); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 24px; }
 .health-verdict { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; font-size: 17px; font-weight: 650; }
 .health-verdict .health-dot { width: 12px; height: 12px; }

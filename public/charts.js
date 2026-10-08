@@ -140,3 +140,50 @@ export function cycleChart(chart, { projectId, timezone }) {
   if (chart.excluded) notes.push(`${chart.excluded} finished or dropped ${chart.excluded === 1 ? 'task is' : 'tasks are'} left out: no recorded start, a board sweep, or dropped.`);
   return frame({ title, meaning, svg, label: `${title}: ${chart.items.length} finished in the last 90 days${bands ? `, service level ${days(bands.p85)}` : ''}`, note: escape(notes.join(' ')) });
 }
+
+const dateWords = (date) => new Date(`${date}T12:00:00`).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+
+// The forecast: when everything open is likely done, and how many are likely
+// to finish in the next two weeks, from the project's own throughput. The
+// sentences carry the answer; the bars show the spread of simulated finishes.
+export function forecastChart(chart, { explain = '' } = {}) {
+  if (!chart) return '';
+  const title = 'Forecast';
+  const meaning = 'No estimates: each simulated day finishes as many tasks as a random past day did, 10,000 times over.';
+  const { basis } = chart;
+  const source = `From ${days(basis.days)} of throughput, ${basis.from ? escape(dateWords(basis.from)) : ''} to ${basis.to ? escape(dateWords(basis.to)) : ''}: ${basis.finished} finished.${explain ? ` ${explain}` : ''}`;
+  if (chart.status === 'nothing-open') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">Nothing is open, so there is nothing to forecast.</p></figure>`;
+  if (chart.status === 'no-history') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">No task finished in the last ${days(basis.days)}, so there is no pace to forecast ${chart.open} open ${chart.open === 1 ? 'task' : 'tasks'} from.</p><p class="chart-note">${source}</p></figure>`;
+  const { when, ahead, histogram } = chart;
+  const by = (point) => (point.days === null ? `not within ${when.horizonDays} days` : `by ${dateWords(point.date)}`);
+  const open = `${chart.open} open ${chart.open === 1 ? 'task' : 'tasks'}`;
+  const sentences = `<dl class="forecast-answers">
+    <div><dt>When will the ${escape(open)} be done?</dt><dd><span class="forecast-p">50%</span> ${escape(by(when.p50))}</dd><dd class="forecast-main"><span class="forecast-p">85%</span> ${escape(by(when.p85))}</dd><dd><span class="forecast-p">95%</span> ${escape(by(when.p95))}</dd></div>
+    <div><dt>How many will finish in the next ${ahead.days} days, by ${escape(dateWords(ahead.date))}?</dt><dd><span class="forecast-p">50%</span> ${ahead.p50} or more</dd><dd class="forecast-main"><span class="forecast-p">85%</span> ${ahead.p85} or more</dd><dd><span class="forecast-p">95%</span> ${ahead.p95} or more</dd></div>
+  </dl>`;
+  // The spread of simulated finish days, with the three percentiles marked.
+  const last = Math.max(...histogram.map((bar) => bar.days), when.p95.days || 0);
+  const peak = Math.max(1, ...histogram.map((bar) => bar.n));
+  const h = 96;
+  // Day d (1 = tomorrow) occupies one equal slot across the plot.
+  const slot = PLOT_W / Math.max(1, last);
+  const xOf = (day) => PAD.left + (day - 0.5) * slot;
+  let svg = histogram.map((bar) => `<rect class="forecast-bar" x="${xOf(bar.days) - slot / 2 + 0.5}" y="${12 + h - (bar.n / peak) * (h - 10)}" width="${Math.max(1, slot - 1)}" height="${(bar.n / peak) * (h - 10)}"/>`).join('');
+  for (const [kind, point] of [['p50', when.p50], ['p85', when.p85], ['p95', when.p95]]) {
+    if (point.days === null) continue;
+    const x = xOf(point.days);
+    svg += `<line class="chart-line chart-line-${kind}" x1="${x}" x2="${x}" y1="18" y2="${12 + h}"/>`;
+  }
+  // Their labels sit above the bars, pushed apart when the days are close.
+  let right = -Infinity;
+  for (const [kind, point] of [['p50', when.p50], ['p85', when.p85], ['p95', when.p95]]) {
+    if (point.days === null) continue;
+    const x = Math.max(xOf(point.days), right + 44);
+    right = x;
+    svg += `<text class="chart-line-label chart-line-label-${kind}" x="${x}" y="13" text-anchor="middle">${kind.slice(1)}%</text>`;
+  }
+  svg += `<text class="chart-tick" x="${PAD.left}" y="${12 + h + 22}">today</text><text class="chart-tick" x="${PAD.left + PLOT_W}" y="${12 + h + 22}" text-anchor="end">${escape(`${last} days`)}</text>`;
+  const spread = `<div class="chart-scroll"><svg class="forecast-spread" viewBox="0 0 ${W} ${h + 40}" role="img" aria-label="${escape(`Simulated finish days for the ${open}: half by day ${when.p50.days ?? 'none'}, 85% by day ${when.p85.days ?? 'none'}`)}">${svg}</svg></div>`;
+  const beyond = when.beyondHorizon ? ` In ${when.beyondHorizon} of ${basis.trials} runs the work was not done within ${when.horizonDays} days.` : '';
+  return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption>${sentences}${spread}<p class="chart-note">${source}${escape(beyond)} The pace assumes the coming weeks look like the last six; new work added changes the answer.</p></figure>`;
+}

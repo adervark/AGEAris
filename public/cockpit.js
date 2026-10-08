@@ -1,4 +1,4 @@
-import { agingChart, cycleChart } from './charts.js';
+import { agingChart, cycleChart, forecastChart } from './charts.js';
 import { icon } from './icons.js';
 import { WINDOWS } from './cursor.js';
 import { renderMarkdown } from './markdown.js';
@@ -380,7 +380,7 @@ export function renderFlow(data, { projectId, wipLimit = 0 }) {
   return `<p class="flow-intro">How work moves: what finishes, how long it takes, and how much is open at once. Each number opens its definition, formula and the tasks behind it.</p>
     <section class="health-section" aria-label="Flow measures"><div class="flow-grid">${kpi(m.done_7d, TERMS.throughput)}${kpi(usual === null ? m.done_4w : { ...m.done_4w, display: String(usual) }, TERMS.usualWeek)}${kpi(m.wip, TERMS.wip)}${kpi(m.cycle_time_p50, TERMS.cycle)}${kpi(m.cycle_time_p85, TERMS.service)}${kpi(m.lead_time_p50, TERMS.lead)}${kpi(m.lead_time_p85, TERMS.lead85)}${kpi(m.blocked_share, TERMS.blockedShare)}${kpi(m.repeat_slips, TERMS.repeatSlips)}</div>
     <div class="series-row">${seriesChart(data.series.throughput, { title: 'Throughput', caption: 'finished per day, last 6 weeks', unit: 'finished' })}${seriesChart(data.series.wip, { title: 'WIP', caption: 'in progress or blocked per day, last 6 weeks', limit: wipLimit, unit: 'in progress' })}</div>
-    <div class="chart-stack">${agingChart(data.charts?.aging, { projectId })}${cycleChart(data.charts?.cycles, { projectId, timezone: data.timezone })}</div></section>
+    <div class="chart-stack">${forecastChart(data.charts?.forecast, { explain: metricButton({ projectId, metricId: 'throughput_series', display: 'See the days it samples.' }) })}${agingChart(data.charts?.aging, { projectId })}${cycleChart(data.charts?.cycles, { projectId, timezone: data.timezone })}</div></section>
     <section class="health-section" aria-labelledby="risk-heading"><div class="section-heading"><h2 id="risk-heading">Risk</h2><span>The work behind each failing check</span></div>${risk}</section>
     <section class="health-section" aria-labelledby="people-heading"><div class="section-heading"><h2 id="people-heading">Load</h2><span>Who holds work in progress</span></div>${people}${agents}${unassigned}</section>
     <p class="data-line">${icon('git')}Computed ${escape(formatWhen(data.asOf, data.timezone))} from ${plural(data.ledger.commits, 'commit')} on ${escape(data.ledger.branch || 'the default branch')}${data.ledger.clamped ? ` (${plural(data.ledger.clamped, 'commit')} with clamped times)` : ''}${anomalies ? ` · ${escape(anomalies)}` : ''} · ledger <code title="${escape(data.build.ledgerSha)}">${escape(shortSha(data.build.ledgerSha))}</code>${data.ledger.live ? ' · includes the live trail' : ''}</p>`;

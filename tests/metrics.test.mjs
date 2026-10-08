@@ -868,3 +868,23 @@ test('lib/metrics.mjs never reads the clock', async () => {
   assert.doesNotMatch(source, /Date\.now\(/);
   assert.doesNotMatch(source, /new Date\(\s*\)/);
 });
+
+test('the forecast: exact on a steady history, reproducible, ordered, and silent without history or open work (T032)', async () => {
+  const { forecast } = await import('../lib/metrics.mjs');
+  // One finish every day: 5 open tasks take exactly 5 days, at every percentile.
+  const steady = forecast({ history: Array(41).fill(1), open: 5, today: '2026-10-08' });
+  assert.deepEqual([steady.when.p50, steady.when.p85, steady.when.p95], [{ days: 5, date: '2026-10-13' }, { days: 5, date: '2026-10-13' }, { days: 5, date: '2026-10-13' }]);
+  assert.deepEqual([steady.ahead.p50, steady.ahead.p85, steady.ahead.p95, steady.ahead.date], [14, 14, 14, '2026-10-22']);
+  // A lumpy history: the same inputs give the same numbers; later percentiles are later.
+  const history = [0, 0, 3, 0, 1, 0, 0, 2, 0, 0, 0, 1, 4, 0, 0, 1, 0, 0, 2, 0, 0];
+  const one = forecast({ history, open: 12, today: '2026-10-08', seed: 'x' });
+  assert.deepEqual(forecast({ history, open: 12, today: '2026-10-08', seed: 'x' }), one);
+  assert.ok(one.when.p50.days <= one.when.p85.days && one.when.p85.days <= one.when.p95.days);
+  assert.ok(one.ahead.p95 <= one.ahead.p85 && one.ahead.p85 <= one.ahead.p50, '85% likely at least fewer than the median');
+  assert.equal(one.histogram.reduce((sum, bar) => sum + bar.n, 0) + one.when.beyondHorizon, one.basis.trials);
+  assert.equal(forecast({ history: Array(41).fill(0), open: 3, today: '2026-10-08' }).status, 'no-history');
+  assert.equal(forecast({ history, open: 0, today: '2026-10-08' }).status, 'nothing-open');
+  // Past the horizon is not a date.
+  const slow = forecast({ history: [1, ...Array(40).fill(0)], open: 50, today: '2026-10-08' });
+  assert.equal(slow.when.p95.days, null);
+});

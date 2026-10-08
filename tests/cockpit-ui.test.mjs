@@ -156,6 +156,13 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(flow, /class="chart-line chart-line-p85"/);
   assert.match(flow, new RegExp(`85% · ${metrics.charts.cycles.bands.p85} days`));
   assert.ok(dots.some(([, , label]) => /past the service level|past twice the service level/.test(label)), 'an aging task says so');
+  // The forecast answers in sentences and cites the throughput it samples (T032).
+  assert.equal(metrics.charts.forecast.status, 'ok');
+  assert.match(flow, new RegExp(`When will the ${metrics.charts.forecast.open} open tasks be done\\?`));
+  assert.match(flow, /<dd class="forecast-main"><span class="forecast-p">85%<\/span> by /);
+  assert.match(flow, /data-metric="throughput_series"/);
+  const again = await cockpit.projectMetrics(project.id, {});
+  assert.deepEqual(again.charts.forecast, metrics.charts.forecast, 'the same history gives the same forecast');
   assert.doesNotMatch(flow, />weekly mean [\d.]+</, 'the usual week is a number under its label');
   assert.doesNotMatch(flow, /<small class="muted">\/ /, 'WIP states its limit once');
   assert.match(flow, /ledger <code title="[0-9a-f]{40}">[0-9a-f]{7}<\/code>/);
