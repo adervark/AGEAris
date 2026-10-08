@@ -20,24 +20,25 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-07T20:00Z · 26 tasks: 16 backlog, 0 WIP (0 in progress), 10 delivered`
+`board · 2026-10-08T04:45Z · 27 tasks: 16 backlog, 0 WIP (0 in progress), 11 delivered`
 
-FLOW · **WIP 0/2** · throughput 2.3/wk (10 in 30d) · cycle time 50th 6m / 85th 1h (n=10)
-FLOW · Little's Law: 0 ÷ 2.3/wk ≈ now expected · lead time 85th 2h
+FLOW · **WIP 0/2** · throughput 2.6/wk (11 in 30d) · cycle time 50th 6m / 85th 1h (n=11)
+FLOW · Little's Law: 0 ÷ 2.6/wk ≈ now expected · lead time 85th 2h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 16 | | `T002` `T003` `T004` `T007` `T008` `T009` +10 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | now |  |
-|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 47m |  |
-|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 62m |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 20h |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 20h |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 21h |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 22h |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 22h |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 22h |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 22h |  |
+| **DONE** | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | now |  |
+|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 8h |  |
+|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 9h |  |
+|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 9h |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 29h |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 29h |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 30h |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 30h |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 30h |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 30h |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 31h |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->
