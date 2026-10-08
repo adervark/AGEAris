@@ -1,25 +1,191 @@
+<p align="center">
+  <img src="docs/brand/age-aris-logo.png" alt="AGE Aris" width="420">
+</p>
+
 # AGE Aris
 
-A local project management application with a main dashboard for monitoring
-project state and tasks. People use the web interface; tasks and history remain
-available as Markdown files and git commits.
+A local project-management app for teams where some of the workers are AI
+agents.
 
-## Run the application
+The task board lives **in git**, as one Markdown file per task in an `AA/`
+folder. People and agents pick up work, report progress and hand it over by
+committing to that folder. No server has to be running, and no two sessions
+have to be awake at the same time. AGE Aris reads the board and the git history
+behind it and shows you three things: what needs you, how work is flowing, and
+whether the work follows the method the board sets.
 
-Requires **Node.js 22 or newer** and **git**. There are no npm dependencies to
-install.
+- **Runs on your machine.** Node.js 22 and git. No npm dependencies, no
+  accounts, no cloud.
+- **Everything is a commit.** Every task, claim, status change and agent step
+  is in git, so any number on screen can be traced to the commits behind it.
+- **The method is the product.** Work-in-progress limits, claims, checkpoints,
+  stale claims and service levels are shown and checked, using their own names.
+
+## Quick start
 
 ```sh
+git clone -b feature/pm-cockpit https://github.com/adervark/AGEAris.git
+cd AGEAris
 npm start
 ```
 
-Open the sign-in link it prints, `http://127.0.0.1:4310/?token=…`. The browser
-stays signed in for that data folder; the token keeps other local users out of
-your workspace. Create your first project, track a repository whose agents
-already keep an AA board (see
-[Track an existing repository](#track-an-existing-repository)), or choose
-**Explore a sample project** to create one with six weeks of simulated history
-(marked **Simulated history** everywhere it appears).
+The app is on the `feature/pm-cockpit` branch until it is merged; `main`
+holds only the `aa-init` plugin.
+
+Open the sign-in link it prints, `http://127.0.0.1:4310/?token=…`, then choose
+**Explore a sample project** to get six weeks of simulated history to look
+around in. The [ten-minute tour](#a-ten-minute-tour) below walks through it.
+
+> [!WARNING]
+> If the `claude` CLI is on your `PATH`, **Run with agents** uses real Claude
+> models on your account. In the Implement stage they run with
+> `--dangerously-skip-permissions`, so they can run any command you can. To try
+> the pipeline offline, open **Agents → Pipeline agents**, switch the Claude
+> agents off and switch the **Rehearsal agent** on.
+
+## How the workflow works
+
+### The board is a folder
+
+Each task is a Markdown file with its goal, steps, decision rules, handoff and
+result. **The folder a file is in is its state.**
+
+```text
+AA/
+  backlog/       ideas and registered work. No owner, free to reorder or drop.
+  tasks/         committed work: in progress or blocked. Counts against the WIP limit.
+  tasks/done/    delivered, or deliberately dropped. A "no" is a result too.
+  checkpoints/   one append-only trail per running task (T012.jsonl)
+  STATE.md       the board: a hand-written NOW note plus a generated table
+  AA.yml         this project's WIP limit, stale threshold and what counts as a "spend"
+  RULES.md       the protocol, one page, the same in every repository
+```
+
+### A task's life
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    state "Backlog" as B
+    state "In progress" as P
+    state "Blocked" as K
+    state "Done" as D
+    [*] --> B: new file in backlog/
+    B --> P: claim (a commit)
+    P --> K: block, saying what unblocks it
+    K --> P: unblock
+    P --> B: release
+    P --> D: done, with a Result
+    D --> [*]
+```
+
+| Step | Who | What lands in git | What AGE Aris shows |
+|---|---|---|---|
+| **Add** | person or agent | a new file in `backlog/` | the task in Backlog |
+| **Claim** | the operator, through an agent or AGE Aris | the file moves to `tasks/` with an owner line, in one commit | In progress; WIP goes up; the age clock starts |
+| **Work** | the claim holder | commits, plus checkpoint lines: `doing` *before* anything costly, `did` after, `end` on stopping | the holder's latest note; **stale** if nothing is heard within the stale threshold |
+| **Block / unblock** | the claim holder | `status: blocked` and a one-line `blockedReason:` | Blocked, and an entry under **Needs you** |
+| **Done** | the claim holder | the file moves to `tasks/done/` with its `## Result` | Done; cycle time and throughput update |
+
+The rules that keep this honest, in full in [`AA/RULES.md`](AA/RULES.md):
+
+- **A claim is a commit.** If two agents claim the same task, the second gets a
+  merge conflict. That is by design.
+- **Work in progress is limited.** When the board is at its limit, the next move
+  is to finish or release something, not to start something new.
+- **Decision rules come before a spend.** Anything you can't undo, or would pay
+  for twice (a push, a migration, a long agent run), needs pass/fail criteria
+  written into the task first.
+- **Checkpoint before you spend.** If a session dies, its trail still says
+  what was in flight, so the next one doesn't redo it.
+- **The handoff stays current.** A task's `## Handoff` is kept true while it is
+  claimed, so anyone can resume it cold.
+- **The board is generated.** `AA/board.sh --write` renders `STATE.md` from
+  the task files and git, and `--check` fails when it is stale.
+
+### Who does what
+
+```mermaid
+flowchart LR
+    you(["You"])
+    agents(["AI agents<br/>Claude Code, Codex, …"])
+    repo[("git repository<br/>AA/ task board")]
+    aris["AGE Aris<br/>local web app"]
+    agents -- "claim, checkpoint, commit" --> repo
+    aris -- "reads task files and git history" --> repo
+    you -- "reads Home, decides, acts" --> aris
+    aris -. "task actions, only if you switch them on:<br/>one commit per action" .-> repo
+```
+
+There are three ways to use AGE Aris. They work the same way and differ in
+where the board lives:
+
+1. **Your own projects.** *Start a new project here* gives each project its own
+   git repository in AGE Aris's data folder. You add, edit and drag tasks in
+   the app, and every change is a commit.
+2. **A repository your agents already work in.** *Track an existing repository*
+   points AGE Aris at a repository that has an `AA/` board. Agents keep working
+   there as usual, and AGE Aris reads their commits. It changes nothing there
+   unless you switch on [task actions](#task-actions-on-a-tracked-board) for
+   that repository. With them on, claim, release, block, unblock and done are
+   each one commit on a branch you pin. To give a repository a board, install
+   the `aa-init` skill ([plugin guide](docs/PLUGIN.md)) and run `/aa-init` in
+   it.
+3. **The agent pipeline.** On your own projects, **Run with agents** carries a
+   task through stages, with a person approving at the gates:
+
+   ```mermaid
+   flowchart LR
+       T[Triage] --> P[Plan] --> G1{{You approve}} --> I[Implement] --> R[Review] --> G2{{You approve}} --> V[Verify] --> D([Done])
+       R -. "fails" .-> I
+       V -. "fails" .-> I
+   ```
+
+   Each stage goes to the agent with the best measured record for that kind of
+   work. Every prompt, output and approval goes into a hash-chained audit log
+   committed to git. See [the pipeline guide](docs/PIPELINE.md).
+
+### Your day with it
+
+1. Open **Home**. **Needs you** lists what is waiting on a person, grouped by
+   what it breaks: runs waiting at a gate, overdue work, stale claims, aging
+   work, blocked work. **Since your last visit** says what moved.
+2. Open a task from there. The drawer shows its state, who holds it, their
+   latest note, and a timeline with the commit behind every change.
+3. Act: approve or send back a pipeline run, move a task, or unblock someone.
+4. If a number surprises you, click it. **Explain** shows how it was computed,
+   which tasks it counted and which it left out, and the commits behind them.
+
+## A ten-minute tour
+
+1. `npm start`, open the sign-in link, and choose **Explore a sample project**.
+   Its history is simulated and labelled as such everywhere.
+2. **Home**: read **Needs you** and the project card with its health in words
+   ("On track", "Watch", "Needs attention").
+3. Open the project. Look at **Board**, then **Threads** (tasks by what they
+   build on), **List**, **Flow** (throughput, cycle time, WIP, charts) and
+   **Method** (the workflow, its policies, and which tasks break which check).
+4. Click any number, a cycle time or a WIP count, to open **Explain**.
+5. Drag a task from In progress to Done, or open it and change its status.
+   The move is a commit in the project's own repository, under
+   `.agesight-data/projects/`. (The sample sits at its WIP limit on purpose,
+   so it refuses new work in progress until something finishes.)
+6. Try the pipeline on a project of your own. Choose **Start a new project
+   here**, add a task, open it and choose **Run with agents**. With the
+   Rehearsal agent (see the warning above), each stage takes seconds. The run
+   stops twice under **Needs you**: after Plan and after Review. Approve both
+   times and the task reaches Done, with every step committed.
+7. Optional: track a real board. Clone this repository a second time somewhere
+   else (`git clone -b feature/pm-cockpit … aris-board`), choose **Track an
+   existing repository**, and give it that clone's path. AGE Aris tracks its
+   own development on an `AA/` board, so this shows a real project's history.
+
+Ideas and bugs are welcome as GitHub issues.
+
+---
+
+*The rest of this page is reference: every view, the pipeline, tracking a
+repository, storage, and development.*
 
 ## Home, projects, agents, activity
 
