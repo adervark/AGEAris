@@ -223,3 +223,15 @@ test('the brief\'s only percentiles are cycle time and its service level, and no
     assert.doesNotMatch(text, /\bP50\b|\bP85\b|percentile/i);
   }
 });
+
+test('a blocked task keeps its Handoff reason after its file is renamed and nothing else changes (T012)', async () => {
+  const file = JSON.stringify('---\nid: T001\ntitle: Licence\nstatus: blocked\nowner: ade\nblockedReason: ""\ncreated: 2026-09-01\n---\n\n## Handoff\n\n- **Next decision:** ask legal whether the dataset licence allows redistribution\n');
+  const { cockpit, ids } = await workspaceWith([{ name: 'Data', script: `
+    day 1 09:00 ade: write AA/tasks/T001-licence.md ${file} subject="Block T001"
+    day 2 09:00 ade: write AA/tasks/T001-dataset-licence.md ${file} subject="Rename T001's file"
+    + delete AA/tasks/T001-licence.md
+  ` }]);
+  const blocked = await cockpit.explain('blocked', { projectId: ids[0], asOf: ASOF });
+  const item = blocked.items.find((entry) => entry.taskKey === 'T001');
+  assert.deepEqual([item.reason, item.reasonSource], ['ask legal whether the dataset licence allows redistribution', 'handoff']);
+});

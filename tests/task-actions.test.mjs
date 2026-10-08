@@ -357,6 +357,67 @@ test('WIP at the limit refuses a claim while done and release are allowed; block
   assert.equal((await act(repo, 'T012', 'claim')).task.status, 'in_progress');
 });
 
+test('overlapping refusals come in §4\'s order: the switch before the folder, the holder before a live run, the confirmation before the column, the limit before the version (T026)', async () => {
+  // A deaddrop/ board with the switch off is off first.
+  const legacy = await board({ on: false, files: { [`AA/backlog/${T004}`]: null, [`AA/backlog/${T012}`]: null, [`AA/tasks/done/${T019}`]: null, 'AA/AA.yml': null, 'AA/STATE.md': null, 'AA/tasks/.gitkeep': null, 'deaddrop/tasks/T001-old.md': taskFile('T001', 'Old'), 'deaddrop/STATE.md': '# State\n' } });
+  await refused(legacy, () => act(legacy, 'T001', 'claim'), 409, 'ACTIONS_OFF');
+
+  const live = trailLine('2e8b687e', 'doing', 0.2, { act: 'fold 0' });
+  const repo = await board({ files: {
+    'AA/tasks/T040-theirs.md': taskFile('T040', 'Theirs', { status: 'claimed', owner: 'alice @k/0f0f0f0f 2026-10-01 — hers' }),
+    'AA/checkpoints/T040.jsonl': live,
+    'AA/tasks/T041-agent.md': taskFile('T041', 'Agent', { status: 'claimed', owner: `${OPERATOR} @k/b6192924 2026-09-20 — fold 2` }),
+  } });
+  await refused(repo, () => act(repo, 'T040', 'release'), 409, 'HELD_BY_OTHER');
+  // Unblock does not fit a claimed task, but the own agent's hold is asked about first.
+  await refused(repo, () => act(repo, 'T041', 'unblock'), 409, 'CONFIRM');
+  // At the limit (T040 and T041 are WIP 2 of 2) with a stale version: the limit.
+  const stale = await current(repo, 'T004');
+  await refused(repo, () => repo.workspace.actOnTask(stale.id, { action: 'claim', version: `${stale.version.slice(0, -1)}0` }), 409, 'WIP_LIMIT');
+});
+
+test('DIRTY_FILE for a change only in the index and for a file already at the target; GIT_BUSY on a detached HEAD (T026)', async () => {
+  const repo = await board();
+  const file = path.join(repo.dir, 'AA', 'backlog', T004);
+  const original = await readFile(file, 'utf8');
+  await writeFile(file, `${original}\nstaged\n`);
+  await g(repo.dir, 'add', '--', file);
+  await writeFile(file, original);
+  await refused(repo, () => act(repo, 'T004', 'claim'), 409, 'DIRTY_FILE');
+  await g(repo.dir, 'reset', '--quiet', '--', file);
+
+  await mkdir(path.join(repo.dir, 'AA', 'tasks', T004));
+  await refused(repo, () => act(repo, 'T004', 'claim'), 409, 'DIRTY_FILE');
+  await rm(path.join(repo.dir, 'AA', 'tasks', T004), { recursive: true });
+
+  await g(repo.dir, 'checkout', '--quiet', '--detach');
+  assert.match((await refused(repo, () => act(repo, 'T004', 'claim'), 409, 'GIT_BUSY')).message, /detached HEAD/);
+  await g(repo.dir, 'checkout', '--quiet', 'main');
+  assert.equal((await act(repo, 'T004', 'claim')).task.status, 'in_progress');
+});
+
+test('a settings file past 64 KB is not read under the lock either: its WIP limit does not apply, as everywhere else (T026)', async () => {
+  const repo = await board({ files: {
+    'AA/AA.yml': `wip:\n  in_progress: 1\n  blocked: 1\nstale_hours: 24\n${'#'.repeat(70 * 1024)}\n`,
+    'AA/tasks/T050-mine.md': taskFile('T050', 'Mine', { status: 'claimed', owner: `${OPERATOR} @agesight/web 2026-10-01 — mine` }),
+  } });
+  assert.equal((await act(repo, 'T004', 'claim')).task.status, 'in_progress');
+});
+
+test('claiming a queued task the operator\'s own agent holds takes it back and keeps the agent\'s line inline (T026, rule 3)', async () => {
+  const repo = await board({ backlog: false, files: { 'AA/tasks/T032-queued.md': taskFile('T032', 'Queued', { status: 'open', owner: `${OPERATOR} @k/b6192924 2026-09-20 — paused` }) } });
+  const asked = await refused(repo, () => act(repo, 'T032', 'claim'), 409, 'CONFIRM');
+  assert.match(asked.details.reasons[0].text, /^Your agent session @k\/b6192924 holds T032/);
+  const task = await current(repo, 'T032');
+  await repo.workspace.actOnTask(task.id, { action: 'claim', version: task.version, confirm: asked.details.confirmToken });
+  const owner = frontmatter(await readFile(path.join(repo.dir, 'AA', 'tasks', 'T032-queued.md'), 'utf8')).owner;
+  assert.match(owner, new RegExp(`^${OPERATOR} @agesight/web \\d{4}-\\d{2}-\\d{2} — working on Queued; was ${OPERATOR} @k/b6192924 2026-09-20 — paused$`));
+  // An unclaimed task names no one displaced.
+  const free = await current(repo, 'T012');
+  await repo.workspace.actOnTask(free.id, { action: 'claim', version: free.version });
+  assert.doesNotMatch(frontmatter(await readFile(path.join(repo.dir, 'AA', 'tasks', T012), 'utf8')).owner, /; was/);
+});
+
 // ---- Holders, runs and the one confirmation
 
 function trailLine(run, kind, ageHours, extra = {}) {
@@ -472,6 +533,18 @@ test('a tracked task shows its holder and whether its Result is still a placehol
 });
 
 // ---- board.sh reads what AGE Aris writes
+
+test('board.sh reads the history from before a board rename: a migrated board prints what its never-migrated twin does (T011)', async () => {
+  const script = new URL('fixtures/board/board-rename.sh', import.meta.url);
+  const { stdout } = await exec('bash', [script.pathname, new URL('.', TEMPLATE).pathname]).catch((error) => assert.fail(`the boards differ:\n${error.stdout}${error.stderr}`));
+  assert.equal(stdout, '');
+});
+
+test('ckpt.sh check exits 0 when every line parses and 1 when one does not, whichever trail comes last (T016)', async () => {
+  const script = new URL('fixtures/board/ckpt-check.sh', import.meta.url);
+  const { stdout } = await exec('bash', [script.pathname, new URL('ckpt.sh', TEMPLATE).pathname]);
+  assert.equal(stdout, 'clean: 0\nbad: 1\nbad then clean: 1\n');
+});
 
 test('board.sh compatibility: a claim is IN PROGRESS with the operator, done is DONE, unblock starts a new stint, and --check is stale until --write', async () => {
   for (const tool of ['bash', 'jq']) {

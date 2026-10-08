@@ -1188,12 +1188,14 @@ test('a tracked repository refuses the edit form, new tasks and project edits wi
   await expectRejected(workspace.updateProject(project.id, { version: project.version, name: 'Renamed', taskActions: { on: true } }), 409, tracked);
   // A pm/ board is never acted on, and cannot be switched on.
   assert.deepEqual(project.actions, { on: false, branch: '', reason: 'This board is in pm/, an older folder name. AGE Aris acts only on AA/ boards.' });
-  for (const promise of [
-    workspace.actOnTask(task.id, { action: 'claim', version: task.version }),
-    workspace.updateProject(project.id, { version: project.version, taskActions: { on: true } }),
+  // An action is refused as off first, as §4 orders it; switching on is
+  // refused for the folder.
+  for (const [promise, code] of [
+    [workspace.actOnTask(task.id, { action: 'claim', version: task.version }), 'ACTIONS_OFF'],
+    [workspace.updateProject(project.id, { version: project.version, taskActions: { on: true } }), 'LEGACY_BOARD'],
   ]) {
     const error = await promise.then(() => null, (caught) => caught);
-    assert.deepEqual([error?.status, error?.code], [409, 'LEGACY_BOARD']);
+    assert.deepEqual([error?.status, error?.code], [409, code]);
   }
   // An AA/ board is acted on only once its switch is on.
   const aa = await makeTrackedRepository({ 'AA/tasks/T001-write-the-importer.md': boardTask('T001', 'Write the importer', { status: 'open', owner: '—' }) });
@@ -1322,6 +1324,11 @@ test('methodOf reads a board\'s policy and its own method documents, skipping sy
   const ownMethod = await workspace.methodOf(own.id);
   assert.deepEqual([ownMethod.linked, ownMethod.board, ownMethod.config, ownMethod.wipLimit, ownMethod.staleHours], [false, 'AA', 'AA/AA.yml', 5, 24]);
   await expectRejected(workspace.methodOf('missing-project'), 404, /./);
+
+  // A board without a settings file names none; its defaults apply (T013).
+  const bare = await workspace.linkProject({ path: await makeTrackedRepository({ 'AA/tasks/T001-work.md': boardTask('T001', 'Work', { status: 'open' }) }) });
+  const bareMethod = await workspace.methodOf(bare.id);
+  assert.deepEqual([bareMethod.config, bareMethod.staleHours, bareMethod.wipLimit], ['', 24, 0]);
 });
 
 test('a task lists what it builds on from depends:, in order, without itself, repeats, or text that is not a task id', async () => {

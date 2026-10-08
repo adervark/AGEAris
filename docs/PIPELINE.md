@@ -26,8 +26,8 @@ history.
 The board card of a task with an active run shows its current stage and a
 **Needs you** marker when it is waiting on a decision.
 
-A tracked repository (see the README) has no pipeline. AGE Aris only reads it,
-so pipeline edits and runs there are refused with 409.
+A tracked repository (see the README) has no pipeline: its agents work in the
+repository itself, so pipeline edits and runs there are refused with 409.
 
 ## Stages
 

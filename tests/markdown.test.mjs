@@ -70,3 +70,65 @@ test('emphasis never reaches inside a link target, and a closing run of #s is dr
   assert.equal(inline('[**bold** label](https://x.com/**)'), '<a href="https://x.com/**" target="_blank" rel="noopener noreferrer"><strong>bold</strong> label</a>');
   assert.equal(renderMarkdown('## Plan ##\n# C#'), '<h4>Plan</h4><h3>C#</h3>');
 });
+
+test('a wrapped list line holding a line or paragraph separator renders instead of throwing (T008)', () => {
+  assert.equal(renderMarkdown('- a\n  b\u2028c'), '<ul><li>a b\u2028c</li></ul>');
+  assert.equal(renderMarkdown('1. a\n   b\u2029c'), '<ol><li>a b\u2029c</li></ol>');
+});
+
+test('a block indented less than the last item\'s content column ends the list\'s hold, as in CommonMark (T010)', () => {
+  assert.equal(renderMarkdown('- item\n\n text\n\n    code'), '<ul><li>item</li></ul><p>text</p><pre><code>code</code></pre>');
+  assert.equal(renderMarkdown('1. Step\n\n  Para A\n\n    Para B'), '<ol><li>Step</li></ol><p>Para A</p><pre><code>Para B</code></pre>');
+  assert.equal(renderMarkdown('- item\n\n ---\n\n    code'), '<ul><li>item</li></ul><hr><pre><code>code</code></pre>');
+  assert.equal(renderMarkdown('-   item\n\n  text\n\n    code'), '<ul><li>item</li></ul><p>text</p><pre><code>code</code></pre>');
+  // U+00A0 is not indentation.
+  assert.match(renderMarkdown('- item\n\n\u00a0text\n\n    code'), /<pre><code>code<\/code><\/pre>$/);
+  // Indented to the content column, a block still continues the item.
+  assert.equal(renderMarkdown('1. Step\n\n   Para A\n\n    Para B'), '<ol><li>Step</li></ol><p>Para A</p><p>Para B</p>');
+});
+
+test('bold and links may hold inline code, and code stays literal (T002)', () => {
+  assert.equal(inline('**see `x`**'), '<strong>see <code>x</code></strong>');
+  assert.equal(inline('[the `y` docs](https://example.com)'), '<a href="https://example.com" target="_blank" rel="noopener noreferrer">the <code>y</code> docs</a>');
+  assert.equal(inline('`**not bold**` and `[not](https://a.b)`'), '<code>**not bold**</code> and <code>[not](https://a.b)</code>');
+  assert.equal(inline('*a `b*c` d*'), '<em>a <code>b*c</code> d</em>');
+  // Text that already holds a span mark keeps the old reading, and forges nothing.
+  assert.equal(inline('\uE0000\uE001 `x` **y**'), '\uE0000\uE001 <code>x</code> <strong>y</strong>');
+});
+
+test('block patterns take linear time on one long line (T009)', () => {
+  const n = 80000;
+  for (const [name, text] of Object.entries({
+    'a closing run of #s': `# ${'#'.repeat(n)}x`,
+    'a heading of spaces before a line separator': `# ${' '.repeat(n)}a\u2028b`,
+    'a list item of spaces before a line separator': `- ${' '.repeat(n)}a\u2028b`,
+    'a task box of spaces before a line separator': `- [ ] ${' '.repeat(n)}a\u2028b`,
+    'a table separator of spaces': `a|b\n${' '.repeat(n)}x|`,
+    'a table separator after dashes': `a|b\n|---${' '.repeat(n)}x|`,
+  })) {
+    const start = performance.now();
+    renderMarkdown(text);
+    assert.ok(performance.now() - start < 100, `${name}: ${(performance.now() - start).toFixed(0)} ms`);
+  }
+  // The same lines still read as before.
+  assert.equal(renderMarkdown('## Plan ##'), '<h4>Plan</h4>');
+  assert.equal(renderMarkdown('## C#'), '<h4>C#</h4>');
+  assert.equal(renderMarkdown('| a | b |\n| :-- | --: |\n| 1 | 2 |'), '<table><thead><tr><th scope="col">a</th><th scope="col">b</th></tr></thead><tbody><tr><td>1</td><td>2</td></tr></tbody></table>');
+  assert.equal(renderMarkdown('a | b\n--- | x\nc | d'), '<p>a | b --- | x c | d</p>');
+});
+
+test('a paragraph too long to read as one stretch keeps every line\'s hard break (T014)', () => {
+  const html = renderMarkdown(`don\`t  \n${'x'.repeat(2100)}  \n${'x'.repeat(2100)}  \nwon\`t`);
+  assert.equal(html.match(/<br>/g)?.length, 3);
+  assert.doesNotMatch(html, /<code>/);
+});
+
+test('a backtick run closes only on a run of the same length, and an opener without one is text (T015)', () => {
+  assert.equal(renderMarkdown('don``t stop'), '<p>don``t stop</p>');
+  assert.equal(inline('``a`b``'), '<code>a`b</code>');
+  assert.equal(inline('``a` b'), '``a` b');
+  assert.equal(inline('`a`` b` c'), '<code>a`` b</code> c');
+  assert.equal(inline('```x``` and `y`'), '<code>x</code> and <code>y</code>');
+  // The same spans decide line breaks: an unclosed run does not hold a break.
+  assert.equal(renderMarkdown('one ``two  \nthree'), '<p>one ``two<br>three</p>');
+});

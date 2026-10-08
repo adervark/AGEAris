@@ -467,7 +467,10 @@ Acting on a *self via an agent* task needs a one-step confirmation. It names
 the session and its last sign of life, which is the newer of its trail's newest
 entry and the last commit touching the task by anyone but AGE Aris (rule 4):
 "Your agent session @k/b6192924 holds T077; last sign of life 3 h ago. Act as
-the same operator?" The owner line is kept, except on Release. This is in scope
+the same operator?" The owner line is kept, except on Release, and on Claim,
+which takes the task back (rule 3) and keeps the agent's line inline:
+`<new owner line>; was <old owner line>` (amended 2026-10-08, T026, the
+operator's decision). This is in scope
 because every open AGEIS task is held this way. A separate "take over"
 (continue) action is a follow-up.
 
@@ -512,7 +515,7 @@ overrides `RUN_LIVE`, which is re-checked under the lock.
 
 | Action | AA with `backlog/` | AA without `backlog/` (AGEIS, AGEION, RSNA) | Fields | Commit subject |
 |---|---|---|---|---|
-| **Claim** | `backlog/` → `tasks/` | in place, from `open`/`unclaimed`/empty in `tasks/` | `status: claimed`, `owner:` new line | `claim T012: <note>` |
+| **Claim** | `backlog/` → `tasks/` | in place, from `open`/`unclaimed`/empty in `tasks/` | `status: claimed`, `owner:` new line; over the operator's own agent, `; was <old owner>` after it | `claim T012: <note>` |
 | **Release** | `tasks/` → `backlog/` | in place | `status: open`, `owner: — (released <date>; was <old owner>)`, `blockedReason: ""` | `release T012: back to the queue` |
 | **Block** | in `tasks/` | in `tasks/` | `status: blocked`, `blockedReason: "<one line, required>"` | `block T012: <reason>` |
 | **Unblock** | in `tasks/` | in `tasks/` | `status: claimed`, `blockedReason: ""` | `unblock T012` |
@@ -558,7 +561,17 @@ Anything else is real content.
 
 **Refusals.** All are HTTP 409 `{ error, code, remedy }`, except `NOT_FOUND`
 (404) and `BAD_INPUT` (400). They are checked in this order, and each check runs
-again on every retry:
+again on every retry. Two amendments (2026-10-08, T026), where the code's order
+is the better one:
+
+- A request that cannot be acted on at all is refused before the repository
+  is read, right after `ACTIONS_OFF` and `LEGACY_BOARD`: `NOT_FOUND`,
+  `BAD_INPUT` for a missing `version`, and `NOT_ALLOWED` for an action an AA
+  board does not have (Priority, Assign). The rest of `BAD_INPUT` stays last.
+- `NOT_COMMITTED`, and `DIRTY_FILE` for a task file that is not a regular file
+  in HEAD, come right after `GIT_BUSY`: every check from `DUPLICATE_ID` on
+  reads the file from HEAD.
+
 
 | Code | When | Message |
 |---|---|---|

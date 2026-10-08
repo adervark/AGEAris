@@ -2,7 +2,7 @@
 # AA board — the Kanban board, computed and never stored.
 #
 #   visualise the work      the columns              (Kanban core practice 1)
-#   limit work in progress  wip: in AA.yml     (practice 2)
+#   limit work in progress  wip: in AA.yml           (practice 2)
 #   manage flow             throughput, cycle time, work item age, flow efficiency (3)
 #   policies explicit       the limit, the DoR and the DoD are checked here (4)
 #   the commitment point    backlog/ -> tasks/. After it, an item is WIP.
@@ -124,8 +124,10 @@ board_history() { # TSV: task, created, entered WIP (latest claim), delivered, b
   # One pass. -G keeps only commits that touched a status line, which is the
   # state-transition history. A bulk sweep is excluded by subject, or the day of
   # the sweep becomes every task's claim date (WHY § the staleness clock).
+  # The older folder names keep the history from before a board rename, which
+  # is itself a migrate: sweep and so is never read.
   git -C "$ROOT" -c core.quotePath=false log --format='%x01%at%x09%s' -p -G'^status:' \
-      -- AA/tasks AA/backlog 2>/dev/null \
+      -- AA/tasks AA/backlog deaddrop/tasks deaddrop/backlog pm/tasks pm/backlog 2>/dev/null \
   | LC_ALL=C awk '
       /^\001/ { split(substr($0,2), h, "\t"); ts=h[1]+0
                  mech = (h[2] ~ /^(migrate|ckpt): /) ? 1 : 0
@@ -147,7 +149,8 @@ board_history() { # TSV: task, created, entered WIP (latest claim), delivered, b
 board_commits() { # TSV: task, epoch, author, mechanical — the sign-of-life fallback (rule 4)
   git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1 || return 0
   git -C "$ROOT" -c core.quotePath=false log --format='%x01%at%x09%an%x09%s' --name-only \
-      -- AA/tasks AA/backlog AA/checkpoints 2>/dev/null \
+      -- AA/tasks AA/backlog AA/checkpoints deaddrop/tasks deaddrop/backlog deaddrop/checkpoints \
+         pm/tasks pm/backlog pm/checkpoints 2>/dev/null \
   | LC_ALL=C awk -F'\t' '
       /^\001/ { ts=substr($1,2)+0; who=$2; mech=($3 ~ /^(migrate|ckpt): /) ? 1 : 0; next }
       NF==1 && $1 != "" && ts>0 {

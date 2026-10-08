@@ -140,3 +140,79 @@ its date, the number, and where the evidence is. Newest last.
   run.
 - `npm test` 473 of 473; `npm run check` passes.
 - Evidence: the Result of T027.
+
+## 2026-10-08 — T028: a README that explains the workflow
+
+- README.md opens with the workflow and a ten-minute tour; commit 34af27b,
+  pushed to `origin/feature/pm-cockpit` so a first-time tester sees it.
+- The tour was run against a scratch server: the sample refuses a run at its
+  WIP limit of 8, and a new project's run stops at both gates and reaches Done.
+- GitHub renders the three Mermaid diagrams (3 mermaid sections in its HTML).
+- `npm test` 473 of 473.
+
+## 2026-10-08 — T007 and T012: the ledger across a board move
+
+- **T007** (a moved board follows the wrong duplicate): fixed. RSNA's T120
+  reads "Check T119 series-safe windows for regressions" with no transitions
+  at 38c58e5; before the fix it took the duplicate's title and owner. T081 and
+  T098 unchanged.
+- **T012** (a moved blocked task loses its Handoff reason): fixed. A blocked
+  task renamed with nothing else changed gives the Handoff line (`handoff`);
+  before, "No reason given" (`none`).
+- `npm test` 476 of 476.
+
+## 2026-10-08 — T011 and T013: board.sh across a rename; the Method view's settings file
+
+- **T011** (board.sh loses history across a rename): fixed. A migrated
+  `deaddrop/` board prints the same `board.sh --all` as a never-migrated twin;
+  before, ages `?` and cycle time n=0 (twin: 33d, 34d, n=1). The global
+  `aa-init` copy is synced.
+- **T013** (the Method view names a missing settings file): fixed. A board
+  without one says the defaults apply.
+- `npm test` 477 of 477.
+
+## 2026-10-08 — T008 and T010: list items and the list's hold
+
+- **T008** (a line separator in a list crashes the renderer): fixed. Found
+  live in this board's own T017 task file, whose drawer threw; it renders now.
+- **T010** (an under-indented paragraph keeps the list's hold): fixed. The
+  four inputs render their last block as code, as in CommonMark.
+- 307 task files on five boards rendered before and after: T017's is the only
+  render that changed. `npm test` 479 of 479.
+
+## 2026-10-08 — T002 and T009: code inside bold and links; linear-time block patterns
+
+- **T002** (bold or a link holding inline code shows raw markers): fixed.
+  AGEIS blocks showing raw markers: 101 → 7 (97 files). 595 blocks changed on
+  four boards, all only by markers becoming markup; code text byte-identical.
+  The 4 MB adversarial input: 21 ms before, 21 ms after.
+- **T009** (quadratic block patterns): fixed. At n = 80,000 the five inputs
+  took 4,097–5,069 ms before and 1–3 ms after. No AGEIS block changes from it.
+- `npm test` 481 of 481.
+
+## 2026-10-08 — T014 and T015: code spans as CommonMark finds them; long paragraphs keep their breaks
+
+- **T015** (code spans differ from CommonMark): fixed. One linear scan, shared
+  by inline markup and line breaks. 4 MB of lone backticks: 48 → 261 ms (a
+  million spans); the 4 MB adversarial input 21 → 55 ms.
+- **T014** (a long paragraph drops hard breaks): fixed. The input gives three
+  `<br>`.
+- No render changes on AGEIS, AGEION, RSNA or Gem4A. `npm test` 483 of 483.
+
+## 2026-10-08 — T016: ckpt.sh check's exit code
+
+- Fixed. The exit was inverted (a clean trail 1, a bad one 0); it is now 0
+  and 1, and 1 for a bad trail before a clean one.
+- Patched here, in the template, in the global copy, and, on the operator's
+  word, in AGEION, AGEIS, Gem4A and RSNA (uncommitted there).
+- `npm test` 484 of 484.
+
+## 2026-10-08 — T026: the task-action review's last findings
+
+- The switch is checked before the folder name; §4 amended where the code's
+  order is better. Overlapping refusals tested.
+- Claim over the operator's own agent takes it back and keeps the agent's line
+  (`; was …`), on the operator's decision.
+- The AA.yml read under the lock is capped at 64 KB, as elsewhere.
+- Missing tests added (index-only DIRTY_FILE, target exists, detached HEAD,
+  email redaction). `npm test` 489 of 489.

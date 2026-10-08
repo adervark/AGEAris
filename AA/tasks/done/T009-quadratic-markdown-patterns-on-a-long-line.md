@@ -1,8 +1,8 @@
 ---
 id: T009
 title: "Four markdown patterns take quadratic time on one long line"
-status: open
-owner: —
+status: done
+owner: adervark @k/adccab68 2026-10-08 — inline code inside bold and links; linear-time block patterns
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -32,8 +32,8 @@ paragraph does.
 
 ## Steps
 
-- [ ] A timing test for each input at n = 80,000.
-- [ ] Count trailing `#` by hand; `([^]*)` without `$` in the heading and list
+- [x] A timing test for each input at n = 80,000.
+- [x] Count trailing `#` by hand; `([^]*)` without `$` in the heading and list
   patterns; trim the separator line and test each cell against `/^:?-+:?$/`.
 
 ## Decision rules — fixed in advance
@@ -47,10 +47,10 @@ paragraph does.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/ff713831 (registered, never claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (done)
 - **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** measure the five inputs, then write the timing test
+- **On disk:** nothing
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -59,9 +59,24 @@ paragraph does.
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T009` — then
-retire the trail with `--delete`)*
+**Done.** The heading, list-item and task-box patterns end in `([^]*)`, with
+no `.` and no `$`. The closing run of `#` and a code span's backticks are
+counted by hand. The table separator is read cell by cell
+(`tableSeparator`), not by a pattern.
+
+Against the decision rules, at n = 80,000 (before → after, one run each):
+
+- `'# ' + '#'.repeat(n) + 'x'`: 4,190 ms → 2 ms.
+- `'# ' + ' '.repeat(n) + 'a\u2028b'`: 5,037 ms → 1 ms.
+- `'- ' + ' '.repeat(n) + 'a\u2028b'`: 5,069 ms → 3 ms.
+- The table line `a|b` over `' '.repeat(n) + 'x|'`: 4,954 ms → 1 ms.
+- The table line `a|b` over `'|---' + ' '.repeat(n) + 'x|'`: 4,097 ms → 1 ms.
+- `tests/markdown.test.mjs` has a timing test for each, plus the task box, at
+  under 100 ms. It fails before the fix and passes after.
+- With T002's change set aside, no rendered block changes on AGEIS, AGEION,
+  RSNA or Gem4A.
+- `npm test` 481 of 481 and `npm run check` pass. No spend.
+- Log: PROGRESS.md, 2026-10-08 — T002 and T009.
 
 ## Notes
 

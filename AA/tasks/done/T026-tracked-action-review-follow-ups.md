@@ -1,8 +1,8 @@
 ---
 id: T026
 title: "Tracked task actions: the review's remaining low findings"
-status: open
-owner: —
+status: done
+owner: adervark @k/adccab68 2026-10-08 — ckpt.sh check's exit; the task-action review's last findings
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -41,10 +41,10 @@ The refusals on a tracked board come in §4's order, Claim on a task the operato
 
 ## Steps
 
-- [ ] Ask the operator about Claim over an own agent's hold.
-- [ ] Put the checks in §4's order, or amend §4 where the code's order is the better one, and test the overlaps.
-- [ ] Cap the AA.yml read under the lock.
-- [ ] The missing tests above.
+- [x] Ask the operator about Claim over an own agent's hold.
+- [x] Put the checks in §4's order, or amend §4 where the code's order is the better one, and test the overlaps.
+- [x] Cap the AA.yml read under the lock.
+- [x] The missing tests above.
 
 ## Decision rules — fixed in advance
 
@@ -62,11 +62,11 @@ The refusals on a tracked board come in §4's order, Claim on a task the operato
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @v/b384188f (registered, never claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (done)
 - **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** the Context above, then T023's Result
-- **Next decision:** Claim over an own agent's hold (operator)
+- **On disk:** nothing
+- **Resume with:** nothing
+- **Next decision:** none
 
 ## Verify
 
@@ -74,11 +74,48 @@ A test per overlapping pair asserts which code wins and an unchanged repository;
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T026` — then
-retire the trail with `--delete`)*
+**Done.** Each item in Context, in turn:
+
+- **Order.** Fixed where §4 was right: the switch (`ACTIONS_OFF`) is now
+  checked before the folder name (`LEGACY_BOARD`). Amended in §4 where the
+  code's order is the better one:
+  - `NOT_FOUND`, a missing `version` and a non-AA action are refused before
+    the repository is read.
+  - `NOT_COMMITTED` and a non-regular file in HEAD come right after
+    `GIT_BUSY`, because every later check reads the file from HEAD.
+
+  Tested, with each overlap refused in that order:
+  - a `deaddrop/` board with the switch off is `ACTIONS_OFF`;
+  - another operator's task with a live run is `HELD_BY_OTHER`;
+  - an own agent's task asked to unblock while claimed is `CONFIRM`, not
+    `NOT_ALLOWED`;
+  - a claim at the WIP limit with a stale version is `WIP_LIMIT`.
+- **Claim over an own agent's hold.** The operator decided (Notes): take it
+  back. Claim writes the AGE Aris owner line and keeps the agent's after it
+  (`; was …`), as AA rule 3 says. §4's Holders paragraph and Claim row, and
+  README, say so. Tested; a claim on an unclaimed task names no one.
+- **AA.yml under the lock.** `head.read` takes `max`; the WIP limit's read
+  uses `BOARD_CONFIG_MAX` (64 KB), the cap `readBoardConfig` has. Tested: a
+  75 KB `AA.yml` with a limit of 1 does not refuse a claim, as everywhere else.
+- **Test gaps.** All covered:
+  - `DIRTY_FILE` for a change only in the index, and for a target that
+    already exists;
+  - `GIT_BUSY` on a detached HEAD;
+  - email redaction in the server's stderr line (`Ops [email redacted]`).
+
+  These four passed before too; they are coverage. The order, Claim and cap
+  tests fail without the change.
+- Also: `docs/PIPELINE.md` no longer says AGE Aris "only reads" a tracked
+  repository (found in T028).
+- No fan-out was used; tests write only to temporary repositories; no push.
+  `npm test` 489 of 489 and `npm run check` pass.
+- Log: PROGRESS.md, 2026-10-08 — T026.
 
 ## Notes
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-08, the operator (asked by adervark @k/adccab68): Claim over an own
+  agent's hold takes it back. It writes the AGE Aris owner line and keeps the
+  agent's line after it (`; was …`), as AA rule 3 says; plan §4 is amended to match.
