@@ -319,3 +319,10 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
   views.
 - Evidence: the Result of T039.
+
+## 2026-10-09 — T040: Aris under the logo, centred
+
+- The sidebar wordmark reads "Aris", centred under the logo; the link's
+  accessible name stays "AGE Aris: Home".
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.

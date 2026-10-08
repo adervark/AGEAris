@@ -58,7 +58,7 @@ same signal badges on a Home row, a card, a list row, and the drawer, which
 always opens the same way.
 
 The shell is true black: the page and its panels are `#000`, separated by thin
-borders rather than shades of grey. A slim sidebar (the AGE Aris logo and name,
+borders rather than shades of grey. A slim sidebar (the AGE Aris logo with "Aris" centred under it,
 then Home, Projects, Working, Agents, Activity, and the projects with a health dot each;
 the logo is `public/logo.webp` and the tab icon `public/planet.png`, both made
 from `docs/brand/age-aris-logo.png`), a top bar with search and a secondary Add
@@ -68,7 +68,7 @@ the logo, so it never reads as a status: links, focus rings, switches and
 neutral chart bars. Silver on black reads as grey unless it looks like metal,
 and metal needs a horizon: a bright top, a sharp dark band just below the
 middle, a lighter reflection under it. So silver appears in few places, all
-of them polished chrome: the AGE Aris wordmark, the avatar, the primary
+of them polished chrome: the Aris wordmark, the avatar, the primary
 button (bevelled, black text at 10:1 or more), a chrome bar on the selected
 sidebar item and under the selected tab. Hairlines and lit edges only read
 as grey, so surfaces keep their plain borders. Health reads as words (On track,
