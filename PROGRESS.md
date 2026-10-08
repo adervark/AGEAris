@@ -286,3 +286,14 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` passed 501 of 501. The browser walk found 0 problems in 72 page
   views.
 - Evidence: the Result of T036.
+
+## 2026-10-08 — T037: the page fills a wide screen
+
+- At 3440 wide the page was a 1240 px strip with about 1,100 px of black on
+  each side. The column cap is gone: the page takes the window's width, a
+  board column tiles its cards, and method checks sit in columns. Prose stops
+  at 90 characters.
+- `npm test` passed 501 of 501. A new browser walk (17 pages × 390, 1280,
+  1440, 1920, 2560 and 3440 wide) found 0 problems in 102 page views: no page
+  error, no failed request, no sideways scroll.
+- Evidence: the Result of T037.

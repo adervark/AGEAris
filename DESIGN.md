@@ -102,6 +102,12 @@ row's signals sit under its title, so neither is squeezed. On a phone the
 sidebar collapses, Home and the drawer read first, the tabs drop their icons,
 and the board's columns scroll sideways. No page scrolls sideways.
 
+The page takes the window's width, up to an ultrawide monitor: no column cap,
+only a gutter that grows a little with the window. Width buys more columns, not
+wider ones: a board column tiles its cards once it is wide enough for two, and
+project cards, method checks and policies fill as many columns as fit. Prose
+keeps a reading measure of 90 characters, whatever the width.
+
 The first design review removed ornamental metrics and a marketing hero: the
 application must open directly on work. Every count is computed from saved
 history and cites it; a metric without enough history shows — and says why.
