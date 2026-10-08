@@ -75,6 +75,17 @@ Watch, Needs attention) and the dot keeps the colour. Numbers are plain text
 that explain themselves on hover and focus. Charts carry date ticks and a
 maximum label.
 
+A chart is drawn at the width it is shown at, so its text stays the page's
+12–13 px on any screen, and redraws when the window is resized; below 650 px it
+scrolls. Durations on a chart sit on a log scale with ticks people think in
+(1 min, 15 min, 1 h, 1 day, 1 week), because cycle times run from minutes to
+weeks and a linear axis piles them all at zero. They read in the same words as
+the numbers: minutes under an hour, hours under a day. A chart with nothing to
+draw (a board younger than a week, nothing in progress, too little history to
+forecast) is one line saying what it needs, never an empty frame. The Flow tab
+does not repeat the four numbers above every tab; on a wide screen its aging
+and cycle-time charts sit side by side.
+
 All colour, space, and type come from CSS tokens. Body text is at least 13:1
 on black, muted text at least 6.5:1, and coloured fills carry black text. The type scale is 12/13/14/16/20/28px, nothing smaller than 12px. The
 content security policy allows no inline styles, so agent colours are classes.
@@ -83,7 +94,7 @@ content security policy allows no inline styles, so agent colours are classes.
 Sidebar  | Search                                   Add project
 Home     | AGEIS  Tracked
 Projects | ● Needs attention: 5 items past 2× usual, 2 stale agent claims.
-Working  | Throughput 32 | WIP 6 | Cycle time 0.4 h | Service level 6.2 h
+Working  | Throughput 32 | WIP 6 | Cycle time 24 min | Service level 6.2 h
 Agents   | Board  Threads  List  Flow  Method
 Activity | Backlog | In progress | Blocked | Done this week, newest 10 (Show all 80)
  ● AGEIS |

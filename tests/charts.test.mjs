@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { forecast } from '../lib/metrics.mjs';
-import { agingChart, cycleChart, dateWords, forecastChart, swarm } from '../public/charts.js';
+import { agingChart, cycleChart, dateWords, duration, forecastChart, geometry, swarm, timeScale } from '../public/charts.js';
 
 // The circles a chart draws: [cx, cy] of each dot's own circle (not its ring).
 function dots(svg) {
@@ -50,11 +50,48 @@ test('the cycle-time axis never repeats a date, and its dots do not cover each o
   assert.ok(apart(dots(svg), 12));
 });
 
-test('a crowd of zero-day cycle times stays inside the plot: no dot drops below the zero line (T033)', () => {
+test('a crowd of zero-day cycle times stays inside the plot: no dot drops below the bottom line (T033)', () => {
   const items = Array.from({ length: 40 }, (_, index) => ({ taskKey: `T${index}`, title: 'quick', days: 0, at: `2026-09-${String(10 + (index % 3)).padStart(2, '0')}T10:00:00Z` }));
   const svg = cycleChart({ window: { from: '2026-07-10T00:00:00Z', to: '2026-10-08T09:00:00Z' }, bands: { p50: 0, p70: 0.5, p85: 1, p95: 2, n: 40 }, items, excluded: 0, minSample: 5 }, { projectId: 'p' });
-  const zero = Number(/<line class="chart-grid" x1="\d+" x2="\d+" y1="([\d.]+)" y2="[\d.]+"\/><text class="chart-tick" x="\d+" y="[\d.]+" text-anchor="end">0<\/text>/.exec(svg)[1]);
-  assert.ok(dots(svg).every(([, y]) => y <= zero), 'every dot is at or above zero');
+  const bottom = Math.max(...[...svg.matchAll(/<line class="chart-grid" x1="\d+" x2="\d+" y1="([\d.]+)"/g)].map(([, y]) => Number(y)));
+  assert.ok(dots(svg).every(([, y]) => y <= bottom), 'every dot is at or above the bottom line');
+});
+
+test('durations read in minutes under an hour, hours under a day, then days (T038)', () => {
+  assert.deepEqual([4 / 1440, 13 / 1440, 0.25, 0.9, 1, 2.44, 33.5].map(duration), ['4 min', '13 min', '6.0 h', '21.6 h', '1.0 d', '2.4 d', '33.5 d']);
+});
+
+test('time is drawn on a log scale, so minutes and weeks both spread over the plot (T038)', () => {
+  const minutes = [1, 3, 4, 6, 7, 9, 13, 35, 48, 105, 120].map((m) => m / 1440);
+  const scale = timeScale(minutes);
+  assert.deepEqual(scale.ticks.map(([, label]) => label), ['1 min', '5 min', '15 min', '1 h', '4 h']);
+  const ys = minutes.map(scale.y);
+  const height = Math.max(...ys) - Math.min(...ys);
+  assert.ok(height > 0.8 * (scale.y(scale.bottom) - scale.y(scale.top)), 'the dots use most of the height');
+  // A spread from a minute to a month keeps its ticks in order, bottom to top.
+  const wide = timeScale([0, 0.02, 1.6, 33.5]);
+  assert.deepEqual(wide.ticks.map(([, label]) => label), ['1 min', '5 min', '15 min', '1 h', '4 h', '1 day', '1 week', '30 days', '90 days']);
+  assert.ok(wide.ticks.every(([value], index, all) => !index || wide.y(value) < wide.y(all[index - 1][0])));
+});
+
+test('a chart is drawn at the width it is shown, so its text stays the page size; narrow, it scrolls (T038)', () => {
+  const items = [{ taskKey: 'T1', title: 'a', days: 0.01, at: '2026-10-07T10:00:00Z' }, { taskKey: 'T2', title: 'b', days: 0.2, at: '2026-10-08T10:00:00Z' }];
+  const chart = { window: { from: '2026-07-10T00:00:00Z', to: '2026-10-08T12:00:00Z' }, bands: null, items, excluded: 0, minSample: 5 };
+  for (const width of [900, 3000]) {
+    const svg = cycleChart(chart, { projectId: 'p', width });
+    assert.match(svg, new RegExp(`viewBox="0 0 ${width} 260" width="${width}" height="260"`));
+  }
+  assert.equal(geometry(320).W, 650, 'below 650 px the chart keeps its size and scrolls');
+});
+
+test('a chart with nothing to draw is one line saying why, never an empty frame (T038)', () => {
+  const aging = agingChart({ bands, items: [], unstarted: 0, minSample: 5 }, { projectId: 'p' });
+  assert.match(aging, /^<p class="chart-pending"><strong>Aging work in progress<\/strong> Nothing is in progress or blocked\.<\/p>$/);
+  const cycles = cycleChart({ window: { from: '2026-07-10T00:00:00Z', to: '2026-10-08T12:00:00Z' }, bands: null, items: [], excluded: 0, minSample: 5 }, { projectId: 'p' });
+  assert.match(cycles, /^<p class="chart-pending">/);
+  const young = forecastChart(forecast({ history: [7], open: 5, today: '2026-10-08', from: '2026-10-07', to: '2026-10-07' }));
+  assert.match(young, /^<p class="chart-pending"><strong>Forecast<\/strong>/);
+  assert.doesNotMatch(aging + cycles + young, /<figure|<svg/);
 });
 
 test('a forecast date outside this year says its year, and one inside does not (T033)', () => {

@@ -1,5 +1,5 @@
 import { actionFor, actionRequest, availability, inputFor, projectKind, TASK_ACTIONS } from './actions.js';
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, usualWeek, waitingChip } from './cockpit.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
@@ -407,10 +407,18 @@ function renderProjectPage(project) {
   const filters = taskView ? `<div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div>` : '';
   let body;
   if (layout === 'threads') body = `${problemsNote(project)}${renderThreads(threadsFor(project.id), { signals: signals(), expanded: cockpit.expanded, holder })}`;
-  else if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0 });
+  else if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0, width: mainWidth() });
   else if (layout === 'method') body = renderMethod({ project, method: cockpit.method.get(project.id), data: cockpit.metrics.get(project.id), line, tasks: projectTasks, pipeline: cockpit.pipelines.get(project.id) });
   else body = `${problemsNote(project)}${layout === 'board' ? board(tasks, project) : taskList(tasks)}${!projectTasks.length && writable(project) ? '<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>' : ''}`;
   $('#main').innerHTML = `${projectHeader(project, line)}<div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Project view">${tabs}</div>${filters}</div>${body}`;
+}
+
+// The width #main lays its content out in: the Flow tab draws its charts at
+// it, so their text stays the page's size on any screen.
+function mainWidth() {
+  const main = $('#main');
+  const style = getComputedStyle(main);
+  return main.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
 }
 
 function projectHeader(project, line) {
@@ -443,7 +451,7 @@ function interruptedNote(project) {
 function vitals(project, line) {
   if (line?.state !== 'ready') return '';
   const k = line.kpis;
-  const usual = usualWeek(k.done4w);
+  const usual = line.usualWeek ?? null;
   const number = (metric) => (metric ? metricButton({ projectId: project.id, metricId: metric.id, display: metric.display, title: metric.status === 'ok' ? '' : metric.reason }) : '—');
   const over = k.wipLimit && k.wip?.value > k.wipLimit;
   const vital = (label, value, help, alert = false) => `<div class="vital"><span class="vital-label">${escape(label)}</span><span class="vital-value ${alert ? 'is-alert' : ''}">${value}</span><span class="vital-help">${escape(help)}</span></div>`;
@@ -2402,6 +2410,17 @@ document.addEventListener('visibilitychange', () => {
   else if (state.view === 'home') homeShownAt = Date.now();
 });
 window.addEventListener('pagehide', () => leaveHome(state.view));
+// Charts are drawn at the width they are shown at, so a resize redraws them.
+let drawnWidth = 0;
+let resizeTimer = 0;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const width = mainWidth();
+    if (state.layout === 'flow' && selectedProject() && Math.abs(width - drawnWidth) > 8) renderMain();
+    drawnWidth = width;
+  }, 150);
+});
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !refreshing && !state.authLost && !editingMain()) refresh().catch(monitorOffline); });
 
 lastView = state.view;

@@ -579,7 +579,11 @@ test('the cockpit API: brief, project metrics, explain, task history, and change
   assert.equal(metrics.state, 'ready');
   assert.equal(metrics.metrics.wip.value, 1);
   assert.equal(metrics.ledger.branch.length > 0, true);
-  assert.equal(metrics.series.throughput.length, 42);
+  // The per-day series start on the board's first day, not 42 days back: this
+  // board was made today, so it has one (T038).
+  assert.equal(metrics.series.throughput.length, 1);
+  assert.equal(metrics.series.wip.length, 1);
+  assert.equal(metrics.usualWeek, null, 'a board younger than a week has no usual week');
 
   const explained = await call('GET', `/api/explain/wip?projectId=${project.id}`);
   assert.deepEqual([explained.id, explained.kind, explained.value, explained.items[0].taskKey], ['wip', 'count', 1, 'T001']);

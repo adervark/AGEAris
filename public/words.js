@@ -48,7 +48,7 @@ export const CHECKS = {
 // Flow terms with their one-line meaning.
 export const TERMS = {
   throughput: ['Throughput', 'Tasks finished in the last 7 days'],
-  usualWeek: ['Usual week', 'Weekly mean over the 4 weeks before'],
+  usualWeek: ['Usual week', 'Finished per week in the 4 weeks before this one'],
   wip: ['WIP', 'Work in progress: tasks in progress or blocked'],
   cycle: ['Cycle time', 'Median time from the claim to done'],
   service: ['Service level', '85% of tasks finish within this cycle time'],

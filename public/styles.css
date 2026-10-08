@@ -388,7 +388,7 @@ button.delta-item:hover { color: var(--accent); }
 
 /* Flow (a project's metrics, one level down from the header) */
 .flow-intro { font-size: 13px; color: var(--muted); margin: -4px 0 16px; max-width: 760px; line-height: 1.6; }
-.flow-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.flow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
 .flow-kpi { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; box-shadow: 1px 0 0 var(--line), 0 1px 0 var(--line); min-width: 0; }
 .flow-kpi > .flow-label { font-size: 12px; font-weight: 650; color: var(--muted); text-transform: uppercase; letter-spacing: .02em; }
 .flow-kpi > .flow-value { font-size: 22px; font-weight: 700; letter-spacing: -.3px; font-variant-numeric: tabular-nums; line-height: 1.35; }
@@ -408,6 +408,13 @@ button.delta-item:hover { color: var(--accent); }
 .series-axis { display: flex; justify-content: space-between; margin: 6px 0 0 26px; font-size: 12px; color: var(--muted); }
 /* Flow charts (public/charts.js): aging WIP and cycle times. */
 .chart-stack { display: grid; gap: 12px; margin-top: 12px; }
+.chart-list { display: grid; gap: 12px; }
+.chart-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+/* A chart with nothing to draw is a line, not an empty frame. */
+.chart-waiting { display: grid; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+.chart-pending { margin: 0; padding: 10px 16px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+.chart-pending + .chart-pending { border-top: 1px solid var(--line); }
+.chart-pending strong { color: var(--ink-2); font-weight: 600; margin-right: 6px; }
 .flow-chart { margin: 0; padding: 14px 16px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); min-width: 0; }
 .flow-chart figcaption { font-size: 14px; font-weight: 600; color: var(--ink-2); margin-bottom: 10px; }
 .flow-chart figcaption small { display: block; margin-top: 4px; font-size: 13px; font-weight: 400; color: var(--muted); }
@@ -415,7 +422,8 @@ button.delta-item:hover { color: var(--accent); }
 .flow-chart svg { display: block; width: 100%; min-width: 650px; height: auto; }
 .chart-grid { stroke: var(--line); stroke-width: 1; }
 .chart-divider { stroke: var(--line-2); stroke-width: 1; }
-.chart-tick, .chart-column, .chart-axis-title, .chart-line-label { font-family: var(--sans); font-size: 15px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.chart-tick, .chart-column, .chart-axis-title, .chart-line-label { font-family: var(--sans); font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.chart-column, .chart-line-label { font-size: 13px; }
 .chart-column { fill: var(--ink-2); font-weight: 600; }
 .chart-line { stroke-width: 1.5; }
 .chart-line-p50 { stroke: var(--idle); stroke-dasharray: 2 4; }

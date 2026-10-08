@@ -226,10 +226,10 @@ async function subDayFlow() {
   })));
 }
 
-test('a cycle-time percentile under a day reads in hours ("0.4 h"), with its formula value to 0.001 day', async () => {
+test('a cycle-time percentile under an hour reads in minutes ("24 min"), under a day in hours, with its formula value to 0.001 day (T038)', async () => {
   const { metrics } = compute((await subDayFlow()).ledger);
   const p50 = metrics.cycle_time_p50;
-  assert.deepEqual([p50.status, p50.value, p50.display], ['ok', 0.017, '0.4 h']);
+  assert.deepEqual([p50.status, p50.value, p50.display], ['ok', 0.017, '24 min']);
   assert.equal(p50.formula, 'nearest-rank P50 = sorted[ceil(0.5 × 5) − 1] = sorted[2] = 0.017');
   assert.deepEqual([metrics.cycle_time_p85.value, metrics.cycle_time_p85.display], [0.25, '6.0 h']);
   assert.equal(metrics.cycle_time_p85.formula, 'nearest-rank P85 = sorted[ceil(0.85 × 5) − 1] = sorted[4] = 0.250');

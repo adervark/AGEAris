@@ -7,6 +7,7 @@ import test from 'node:test';
 import { Cockpit } from '../lib/brief.mjs';
 import { METRIC_DEFINITIONS } from '../lib/metrics.mjs';
 import { Workspace } from '../lib/workspace.mjs';
+import { duration } from '../public/charts.js';
 import { escape, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, renderWorking, signalBadges, signalIndex } from '../public/cockpit.js';
 import { agentShort, healthWord } from '../public/words.js';
 import { briefQuery, CURSOR_KEY, cursorFromBrief, readCursor, readWindow, WINDOW_KEY, writeCursor, writeWindow } from '../public/cursor.js';
@@ -144,7 +145,10 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.ok(metrics.tables.finishedWeek.every((row) => typeof row.taskKey === 'string' && typeof row.at === 'string'));
   const flow = renderFlow(metrics, { projectId: project.id, wipLimit: 6 });
   checkMarkup(flow, 'Flow');
-  for (const id of ['done_7d', 'cycle_time_p85', 'lead_time_p50', 'wip', 'blocked_share']) assert.match(flow, new RegExp(`data-metric="${id}"`));
+  for (const id of ['done_4w', 'lead_time_p50', 'lead_time_p85', 'blocked_share']) assert.match(flow, new RegExp(`data-metric="${id}"`));
+  // Throughput, WIP, cycle time and service level stand above every tab, so
+  // the Flow tab does not repeat them (T038).
+  for (const id of ['done_7d', 'wip', 'cycle_time_p50', 'cycle_time_p85']) assert.doesNotMatch(flow, new RegExp(`data-metric="${id}"`));
   assert.match(flow, /data-metric="due_risk" data-project="[^"]+" data-task="T039"/);
   assert.match(flow, /Stale claims/);
   assert.match(flow, /class="limit-line"/, 'the WIP chart draws its limit');
@@ -154,7 +158,7 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.ok(dots.every(([, id]) => id.startsWith(`${project.id}:T`)));
   assert.match(flow, /Aging work in progress/);
   assert.match(flow, /class="chart-line chart-line-p85"/);
-  assert.match(flow, new RegExp(`85% · ${metrics.charts.cycles.bands.p85} days`));
+  assert.match(flow, new RegExp(`85% · ${duration(metrics.charts.cycles.bands.p85)}`));
   assert.ok(dots.some(([, , label]) => /past the service level|past twice the service level/.test(label)), 'an aging task says so');
   // The forecast answers in sentences and cites the throughput it samples (T032).
   assert.equal(metrics.charts.forecast.status, 'ok');

@@ -1,4 +1,4 @@
-import { agingChart, cycleChart, forecastChart } from './charts.js';
+import { agingChart, cycleChart, duration, forecastChart } from './charts.js';
 import { icon } from './icons.js';
 import { WINDOWS } from './cursor.js';
 import { renderMarkdown } from './markdown.js';
@@ -254,11 +254,6 @@ export function sparkline(points = [], label = 'Finished per day') {
   return `<svg class="spark" viewBox="0 0 ${points.length * (width + gap)} ${height}" preserveAspectRatio="none" role="img" aria-label="${escape(`${label}, last ${points.length} days, most ${max} in a day`)}">${bars}</svg>`;
 }
 
-// The usual week: the weekly mean of finishes over the 4 weeks before.
-export function usualWeek(metric) {
-  return metric?.status === 'ok' ? round1(metric.value / 4) : null;
-}
-
 // One project as a card: its health in words, why, and how work is flowing.
 export function projectCard(line, { agents = 0, project } = {}) {
   const name = `<a class="project-card-name" href="#project/${escape(line.projectId)}">${escape(line.name)}</a>`;
@@ -268,7 +263,7 @@ export function projectCard(line, { agents = 0, project } = {}) {
     return `<article class="project-card"><div class="project-card-head">${healthDot(null)}${name}<span class="health-word">${word}</span>${badges}</div><p class="project-card-indexing">${line.state === 'unavailable' ? icon('alert') : '<span class="spinner"></span>'}${escape(headline(line))}</p></article>`;
   }
   const k = line.kpis;
-  const usual = usualWeek(k.done4w);
+  const usual = line.usualWeek ?? null;
   const word = metricButton({ projectId: line.projectId, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' });
   const fact = (label, help, value) => `<div title="${escape(help)}"><dt>${escape(label)}</dt><dd>${value}</dd></div>`;
   return `<article class="project-card tone-${healthTone(line.health)}"><div class="project-card-head">${healthDot(line.health)}${name}${word}${badges}</div>
@@ -328,6 +323,9 @@ export function decisionsSummary(brief) {
 
 // --- Project Flow tab --------------------------------------------------------------
 
+// A week of days is the least a per-day chart says anything with.
+const SERIES_MIN_DAYS = 7;
+
 function seriesChart(points, { title, caption, limit: rawLimit = 0, unit }) {
   if (!points?.length) return '';
   const limit = Number.isInteger(rawLimit) && rawLimit > 0 ? rawLimit : 0;
@@ -356,19 +354,24 @@ function notReady(data) {
   return '';
 }
 
-export function renderFlow(data, { projectId, wipLimit = 0 }) {
+// The Flow tab. `width` is the px the tab is shown in, so charts are drawn at
+// the size they are seen at; wide enough, aging and cycle times sit side by side.
+const CHART_PAIR_MIN = 1500;
+const FRAME_INSET = 34;
+
+export function renderFlow(data, { projectId, wipLimit = 0, width = 0 }) {
   const waiting = notReady(data);
   if (waiting) return waiting;
   const m = data.metrics;
-  const usual = usualWeek(m.done_4w);
+  const usual = data.usualWeek ?? null;
   const kpi = (metric, [term, help]) => `<div class="flow-kpi"><span class="flow-label">${escape(term)}</span><span class="flow-value">${metricOf(projectId, metric)}</span><span class="flow-help">${escape(help)}</span></div>`;
   const task = (row) => taskLink(projectId, row.taskKey, row.title);
   const t = data.tables;
   const risk = [
     table('Overdue', [['Task', task], ['Due', (row) => escape(row.dueDate)], ['Days late', (row) => escape(row.daysOverdue)], ['Owner', (row) => ownerChip(row.owner) || '—']], t.overdue, 'Nothing is overdue.'),
     table('Due-date forecasts', [['Task', task], ['Due', (row) => escape(row.dueDate)], ['On time', (row) => metricButton({ projectId, metricId: 'due_risk', taskKey: row.taskKey, display: row.display, title: row.reason })], ['Basis', (row) => escape(row.reason || row.reference)]], t.dueRisk.filter((row) => row.status === 'ok' || row.display !== '—'), 'No open task with a due date has a forecast yet.'),
-    table('Aging WIP', [['Task', task], ['Days in progress', (row) => escape(row.value)], ['Level', (row) => escape(row.level === 'critical' ? 'past 2× service level' : 'past service level')], ['Owner', (row) => ownerChip(row.owner) || '—']], t.aging, m.aging.status === 'ok' ? 'Nothing is older than the service level.' : m.aging.reason, NEED.aging.help),
-    table('Blocked', [['Task', task], ['Days', (row) => escape(round1(row.value))], ['Why', (row) => escape(row.reason || '—')], ['Owner', (row) => ownerChip(row.owner) || '—']], t.blocked, 'Nothing is blocked.'),
+    table('Aging WIP', [['Task', task], ['In progress for', (row) => escape(duration(row.age ?? row.value))], ['Level', (row) => escape(row.level === 'critical' ? 'past 2× service level' : 'past service level')], ['Owner', (row) => ownerChip(row.owner) || '—']], t.aging, m.aging.status === 'ok' ? 'Nothing is older than the service level.' : m.aging.reason, NEED.aging.help),
+    table('Blocked', [['Task', task], ['Blocked for', (row) => escape(duration(row.blockedSince ? (Date.parse(data.asOf) - Date.parse(row.blockedSince)) / 86_400_000 : row.value))], ['Why', (row) => escape(row.reason || '—')], ['Owner', (row) => ownerChip(row.owner) || '—']], t.blocked, 'Nothing is blocked.'),
     table('Stale claims', [['Task', task], ['Quiet for', (row) => escape(formatAge(row.value))], ['Claimed by', (row) => ownerChip(row.owner) || '—']], t.stale, 'Every agent claim shows recent life.', NEED.stale.help),
     table('Due-date slips, last 30 days', [['Task', task], ['From', (row) => escape(row.from || 'none')], ['To', (row) => escape(row.to || 'none')], ['When', (row) => escape(formatWhen(row.at, data.timezone))]], t.slips, 'No due date moved later.'),
   ].join('');
@@ -377,10 +380,22 @@ export function renderFlow(data, { projectId, wipLimit = 0 }) {
   const agents = table('Agent sessions', [['Agent', (row) => agentChip(row.owner)], ['WIP', (row) => escape(row.wip)], ['Tasks', held]], t.agents, 'No agent holds work in progress.');
   const unassigned = table('In progress with no owner', [['Task', task], ['Priority', (row) => escape(row.priority)]], t.unassigned, 'Every task in progress has an owner.');
   const anomalies = Object.entries(data.ledger.anomalies).map(([kind, n]) => `${n} ${kind.replace(/_/g, ' ')}`).join(', ');
-  return `<p class="flow-intro">How work moves: what finishes, how long it takes, and how much is open at once. Each number opens its definition, formula and the tasks behind it.</p>
-    <section class="health-section" aria-label="Flow measures"><div class="flow-grid">${kpi(m.done_7d, TERMS.throughput)}${kpi(usual === null ? m.done_4w : { ...m.done_4w, display: String(usual) }, TERMS.usualWeek)}${kpi(m.wip, TERMS.wip)}${kpi(m.cycle_time_p50, TERMS.cycle)}${kpi(m.cycle_time_p85, TERMS.service)}${kpi(m.lead_time_p50, TERMS.lead)}${kpi(m.lead_time_p85, TERMS.lead85)}${kpi(m.blocked_share, TERMS.blockedShare)}${kpi(m.repeat_slips, TERMS.repeatSlips)}</div>
-    <div class="series-row">${seriesChart(data.series.throughput, { title: 'Throughput', caption: 'finished per day, last 6 weeks', unit: 'finished' })}${seriesChart(data.series.wip, { title: 'WIP', caption: 'in progress or blocked per day, last 6 weeks', limit: wipLimit, unit: 'in progress' })}</div>
-    <div class="chart-stack">${forecastChart(data.charts?.forecast, { explain: metricButton({ projectId, metricId: 'throughput_series', display: 'See the days it samples.' }) })}${agingChart(data.charts?.aging, { projectId })}${cycleChart(data.charts?.cycles, { projectId, timezone: data.timezone })}</div></section>
+  // Throughput, WIP, cycle time and service level stand above every tab; this
+  // tab adds what they do not say.
+  const pair = width >= CHART_PAIR_MIN && data.charts?.aging?.items.length > 0 && data.charts?.cycles?.items.length > 0;
+  const chartWidth = (pair ? (width - 12) / 2 : width || 760) - FRAME_INSET;
+  const days = data.series.throughput.length;
+  const series = days >= SERIES_MIN_DAYS
+    ? `<div class="series-row">${seriesChart(data.series.throughput, { title: 'Throughput', caption: `finished per day, last ${days} days`, unit: 'finished' })}${seriesChart(data.series.wip, { title: 'WIP', caption: `in progress or blocked per day, last ${days} days`, limit: wipLimit, unit: 'in progress' })}</div>`
+    : `<p class="chart-pending"><strong>Throughput and WIP per day</strong> Drawn once the board is ${SERIES_MIN_DAYS} days old; it is ${days === 1 ? '1 day' : `${days} days`} old.</p>`;
+  const forecast = forecastChart(data.charts?.forecast, { width: width - FRAME_INSET, explain: metricButton({ projectId, metricId: 'throughput_series', display: 'See the days it samples.' }) });
+  const shapes = [agingChart(data.charts?.aging, { projectId, width: chartWidth }), cycleChart(data.charts?.cycles, { projectId, timezone: data.timezone, width: chartWidth })];
+  const drawn = shapes.filter((html) => html.startsWith('<figure'));
+  const unshown = [series, forecast, ...shapes].filter((html) => html.startsWith('<p class="chart-pending"'));
+  return `<p class="flow-intro">How work moves: how long it takes, what is aging, and when the open work is likely done. Each number opens its definition, formula and the tasks behind it.</p>
+    <section class="health-section" aria-label="Flow measures"><div class="flow-grid">${kpi(usual === null ? m.done_4w : { ...m.done_4w, display: String(usual) }, TERMS.usualWeek)}${kpi(m.lead_time_p50, TERMS.lead)}${kpi(m.lead_time_p85, TERMS.lead85)}${kpi(m.blocked_share, TERMS.blockedShare)}${kpi(m.repeat_slips, TERMS.repeatSlips)}</div>
+    ${days >= SERIES_MIN_DAYS ? series : ''}
+    <div class="chart-stack">${forecast.startsWith('<figure') ? forecast : ''}${drawn.length ? `<div class="${pair ? 'chart-pair' : 'chart-list'}">${drawn.join('')}</div>` : ''}${unshown.length ? `<div class="chart-waiting">${unshown.join('')}</div>` : ''}</div></section>
     <section class="health-section" aria-labelledby="risk-heading"><div class="section-heading"><h2 id="risk-heading">Risk</h2><span>The work behind each failing check</span></div>${risk}</section>
     <section class="health-section" aria-labelledby="people-heading"><div class="section-heading"><h2 id="people-heading">Load</h2><span>Who holds work in progress</span></div>${people}${agents}${unassigned}</section>
     <p class="data-line">${icon('git')}Computed ${escape(formatWhen(data.asOf, data.timezone))} from ${plural(data.ledger.commits, 'commit')} on ${escape(data.ledger.branch || 'the default branch')}${data.ledger.clamped ? ` (${plural(data.ledger.clamped, 'commit')} with clamped times)` : ''}${anomalies ? ` · ${escape(anomalies)}` : ''} · ledger <code title="${escape(data.build.ledgerSha)}">${escape(shortSha(data.build.ledgerSha))}</code>${data.ledger.live ? ' · includes the live trail' : ''}</p>`;

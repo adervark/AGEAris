@@ -297,3 +297,15 @@ its date, the number, and where the evidence is. Newest last.
   1440, 1920, 2560 and 3440 wide) found 0 problems in 102 page views: no page
   error, no failed request, no sideways scroll.
 - Evidence: the Result of T037.
+
+## 2026-10-09 — T038: the Flow tab shows only what the data supports
+
+- Charts are drawn at the width they are shown at, so their text is the
+  page's size (measured scale 1.000 at 1440 and 3440). Durations sit on a log
+  axis (1 min … 90 days), so minute-long and week-long tasks both spread out.
+  A chart with nothing to draw is one line. The usual week counts only the
+  weeks the board existed. Durations under an hour read in minutes. The tab
+  no longer repeats the four numbers above it.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+- Evidence: the Result of T038.
