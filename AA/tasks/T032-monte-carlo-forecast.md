@@ -1,8 +1,8 @@
 ---
 id: T032
 title: "A forecast from throughput: when, and how many"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/adccab68 2026-10-08 — the Monte Carlo forecast
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -40,7 +40,7 @@ The Flow tab answers "when will the backlog be done?" and "how many by a date?" 
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/adccab68 (registered)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** the Steps
