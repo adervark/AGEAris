@@ -40,29 +40,65 @@ function textWithLinks(text) {
 const SPAN_OPEN = '\uE000';
 const SPAN_CLOSE = '\uE001';
 
-function codeSpan(part) {
-  let open = 0;
-  while (open < part.length && part[open] === '`') open += 1;
-  let close = 0;
-  while (close < part.length - open && part[part.length - 1 - close] === '`') close += 1;
-  return `<code>${escape(part.slice(open, part.length - close))}</code>`;
+// The code spans of a text, as CommonMark finds them: a run of backticks opens
+// one, and only the next run of the same length closes it; a run that is never
+// closed is text. Linear: one pass finds the runs, one pass backwards links
+// each to the next run of its length, and one pass forwards pairs them.
+export function codeSpans(text) {
+  const starts = [];
+  const lengths = [];
+  for (let at = text.indexOf('`'); at >= 0; at = text.indexOf('`', at)) {
+    let end = at;
+    while (end < text.length && text[end] === '`') end += 1;
+    starts.push(at);
+    lengths.push(end - at);
+    at = end;
+  }
+  const nextSame = new Int32Array(starts.length);
+  const seen = [];
+  for (let index = starts.length - 1; index >= 0; index -= 1) {
+    nextSame[index] = seen[lengths[index]] ?? -1;
+    seen[lengths[index]] = index;
+  }
+  const spans = [];
+  for (let index = 0; index < starts.length; index += 1) {
+    const close = nextSame[index];
+    if (close < 0) continue;
+    spans.push({ start: starts[index], end: starts[close] + lengths[close], fence: lengths[close] });
+    index = close;
+  }
+  return spans;
+}
+
+function codeSpan(text, span) {
+  return `<code>${escape(text.slice(span.start + span.fence, span.end - span.fence))}</code>`;
 }
 
 // Inline markup over one line of text that is not yet escaped.
 export function inline(text) {
   const line = String(text);
   if (line.length > MAX_INLINE) return escape(line);
-  const parts = line.split(/(`+[^`]*?`+)/);
+  const found = codeSpans(line);
+  if (!found.length) return textWithLinks(line);
   // Text that already holds a mark keeps the spans apart, as markup cannot be
   // told from a forged mark.
-  if (line.includes(SPAN_OPEN)) return parts.map((part, index) => (index % 2 ? codeSpan(part) : textWithLinks(part))).join('');
-  const spans = [];
-  const marked = parts.map((part, index) => {
-    if (!(index % 2)) return part;
-    spans.push(codeSpan(part));
-    return `${SPAN_OPEN}${spans.length - 1}${SPAN_CLOSE}`;
-  }).join('');
-  if (!spans.length) return textWithLinks(line);
+  if (line.includes(SPAN_OPEN)) {
+    let html = '';
+    let last = 0;
+    for (const span of found) {
+      html += textWithLinks(line.slice(last, span.start)) + codeSpan(line, span);
+      last = span.end;
+    }
+    return html + textWithLinks(line.slice(last));
+  }
+  const spans = found.map((span) => codeSpan(line, span));
+  let marked = '';
+  let last = 0;
+  found.forEach((span, index) => {
+    marked += `${line.slice(last, span.start)}${SPAN_OPEN}${index}${SPAN_CLOSE}`;
+    last = span.end;
+  });
+  marked += line.slice(last);
   let html = '';
   const rendered = textWithLinks(marked);
   let at = 0;
@@ -175,17 +211,25 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
     for (const { text } of paragraph) ends.push((ends.at(-1) ?? -1) + text.length + 1);
     const inSpan = new Set();
     let next = 0;
-    for (const span of joined.matchAll(/`+[^`]*?`+/g)) {
-      while (next < ends.length && ends[next] < span.index) next += 1;
-      while (next < ends.length && ends[next] < span.index + span[0].length) inSpan.add(next++);
+    for (const span of codeSpans(joined)) {
+      while (next < ends.length && ends[next] < span.start) next += 1;
+      while (next < ends.length && ends[next] < span.end) inSpan.add(next++);
     }
+    // A line breaks when it is hard and is not the last; a stretch runs to
+    // the next break that no span covers.
+    const breaks = paragraph.map(({ hard }, at) => hard && at < paragraph.length - 1);
+    const textAt = (at, broken) => (broken && paragraph[at].slash ? paragraph[at].text.slice(0, -1) : paragraph[at].text);
     const stretches = [[]];
-    paragraph.forEach(({ text, hard, slash }, at) => {
-      const breaks = hard && at < paragraph.length - 1 && !inSpan.has(at);
-      stretches.at(-1).push(breaks && slash ? text.slice(0, -1) : text);
-      if (breaks) stretches.push([]);
+    paragraph.forEach((line, at) => {
+      stretches.at(-1).push(at);
+      if (breaks[at] && !inSpan.has(at)) stretches.push([]);
     });
-    out.push(`<p>${stretches.map((lines) => (lines.join(' ').length <= MAX_INLINE ? inline(lines.join(' ')) : lines.map(inline).join(' '))).join('<br>')}</p>`);
+    out.push(`<p>${stretches.map((ats) => {
+      const whole = ats.map((at) => textAt(at, breaks[at] && !inSpan.has(at))).join(' ');
+      if (whole.length <= MAX_INLINE) return inline(whole);
+      // Read line by line, no span crosses a line end, so every break holds.
+      return ats.map((at, index) => inline(textAt(at, breaks[at])) + (index < ats.length - 1 ? (breaks[at] ? '<br>' : ' ') : '')).join('');
+    }).join('<br>')}</p>`);
     paragraph = [];
   };
   // After a list, indented paragraphs continue its last item and read as

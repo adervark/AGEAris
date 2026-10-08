@@ -189,3 +189,12 @@ its date, the number, and where the evidence is. Newest last.
 - **T009** (quadratic block patterns): fixed. At n = 80,000 the five inputs
   took 4,097–5,069 ms before and 1–3 ms after. No AGEIS block changes from it.
 - `npm test` 481 of 481.
+
+## 2026-10-08 — T014 and T015: code spans as CommonMark finds them; long paragraphs keep their breaks
+
+- **T015** (code spans differ from CommonMark): fixed. One linear scan, shared
+  by inline markup and line breaks. 4 MB of lone backticks: 48 → 261 ms (a
+  million spans); the 4 MB adversarial input 21 → 55 ms.
+- **T014** (a long paragraph drops hard breaks): fixed. The input gives three
+  `<br>`.
+- No render changes on AGEIS, AGEION, RSNA or Gem4A. `npm test` 483 of 483.

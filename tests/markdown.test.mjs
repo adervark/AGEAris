@@ -116,3 +116,19 @@ test('block patterns take linear time on one long line (T009)', () => {
   assert.equal(renderMarkdown('| a | b |\n| :-- | --: |\n| 1 | 2 |'), '<table><thead><tr><th scope="col">a</th><th scope="col">b</th></tr></thead><tbody><tr><td>1</td><td>2</td></tr></tbody></table>');
   assert.equal(renderMarkdown('a | b\n--- | x\nc | d'), '<p>a | b --- | x c | d</p>');
 });
+
+test('a paragraph too long to read as one stretch keeps every line\'s hard break (T014)', () => {
+  const html = renderMarkdown(`don\`t  \n${'x'.repeat(2100)}  \n${'x'.repeat(2100)}  \nwon\`t`);
+  assert.equal(html.match(/<br>/g)?.length, 3);
+  assert.doesNotMatch(html, /<code>/);
+});
+
+test('a backtick run closes only on a run of the same length, and an opener without one is text (T015)', () => {
+  assert.equal(renderMarkdown('don``t stop'), '<p>don``t stop</p>');
+  assert.equal(inline('``a`b``'), '<code>a`b</code>');
+  assert.equal(inline('``a` b'), '``a` b');
+  assert.equal(inline('`a`` b` c'), '<code>a`` b</code> c');
+  assert.equal(inline('```x``` and `y`'), '<code>x</code> and <code>y</code>');
+  // The same spans decide line breaks: an unclosed run does not hold a break.
+  assert.equal(renderMarkdown('one ``two  \nthree'), '<p>one ``two<br>three</p>');
+});
