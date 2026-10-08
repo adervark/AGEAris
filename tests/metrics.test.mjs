@@ -885,6 +885,8 @@ test('the forecast: exact on a steady history, reproducible, ordered, and silent
   assert.equal(forecast({ history: Array(41).fill(0), open: 3, today: '2026-10-08' }).status, 'no-history');
   assert.equal(forecast({ history, open: 0, today: '2026-10-08' }).status, 'nothing-open');
   // Past the horizon is not a date.
-  const slow = forecast({ history: [1, ...Array(40).fill(0)], open: 50, today: '2026-10-08' });
+  // Five finishes in 41 days cannot clear 200 tasks within a year.
+  const slow = forecast({ history: [1, 1, 1, 1, 1, ...Array(36).fill(0)], open: 200, today: '2026-10-08' });
+  assert.equal(slow.status, 'ok');
   assert.equal(slow.when.p95.days, null);
 });

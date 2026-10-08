@@ -55,11 +55,30 @@ function dot({ x, y, kind, label, projectId, taskKey, ring = false }) {
   return `<g class="chart-dot dot-${kind}${ring ? ' dot-stale' : ''}" role="button" tabindex="0" data-action="open-task" data-id="${escape(`${projectId}:${localId(taskKey)}`)}" aria-label="${escape(label)}"><title>${escape(label)}</title>${ring ? `<circle class="dot-ring" cx="${x}" cy="${y}" r="${R + 4}"/>` : ''}<circle cx="${x}" cy="${y}" r="${R}"/></g>`;
 }
 
-// Dots that share a column spread sideways in a fixed pattern, so the same
-// data always draws the same picture.
-function spread(index, width) {
-  const offsets = [0, -1, 1, -2, 2, -3, 3];
-  return offsets[index % offsets.length] * Math.min(16, width / 8);
+// Places dots so none covers another: each moves sideways from where it
+// belongs, nearest free spot first, within `room` of it (a beeswarm). Only
+// when a whole row is taken does a dot move up or down a row; its label still
+// says its exact value, and no row leaves the plot, so nothing reads as below
+// zero. The order is fixed by the input, so the same data always draws the
+// same picture.
+export function swarm(points, room, { top = PAD.top + R, bottom = PAD.top + PLOT_H - R } = {}) {
+  const placed = [];
+  const gap = 2 * R + 2;
+  const sideways = Math.floor(room / gap);
+  const free = (x, y) => placed.every((other) => Math.hypot(other.x - x, other.y - y) >= gap);
+  return points.map(({ x, y }) => {
+    let spot = { x, y };
+    search: for (let row = 0; row <= 6; row += 1) {
+      const dy = (row % 2 ? -1 : 1) * Math.ceil(row / 2) * gap;
+      if (row && (y + dy < top || y + dy > bottom)) continue;
+      for (let step = 0; step <= sideways * 2; step += 1) {
+        const dx = (step % 2 ? 1 : -1) * Math.ceil(step / 2) * gap;
+        if (free(x + dx, y + dy)) { spot = { x: x + dx, y: y + dy }; break search; }
+      }
+    }
+    placed.push(spot);
+    return spot;
+  });
 }
 
 function frame({ title, meaning, svg, label, note }) {
@@ -91,9 +110,10 @@ export function agingChart(chart, { projectId }) {
   svg += columns.map((column, index) => {
     const x = PAD.left + columnW * index + columnW / 2;
     const items = chart.items.filter((item) => item.status === column);
+    const spots = swarm(items.map((item) => ({ x, y: yOf(item.age, top) })), columnW / 2 - R - 6);
     const header = `<text class="chart-column" x="${x}" y="${H - 8}" text-anchor="middle">${escape(`${column === 'blocked' ? 'Blocked' : 'In progress'} · ${items.length}`)}</text>`;
     return `${index ? `<line class="chart-divider" x1="${PAD.left + columnW * index}" x2="${PAD.left + columnW * index}" y1="${PAD.top}" y2="${PAD.top + PLOT_H}"/>` : ''}${header}${items.map((item, at) => dot({
-      x: x + spread(at, columnW), y: yOf(item.age, top), kind: item.level, ring: item.stale, projectId, taskKey: item.taskKey,
+      x: spots[at].x, y: spots[at].y, kind: item.level, ring: item.stale, projectId, taskKey: item.taskKey,
       label: `${localId(item.taskKey)} ${item.title}: ${days(item.age)} ${COLUMN_WORDS[column]}, ${LEVEL_WORDS[item.level]}${item.stale ? '; agent claim is stale' : ''}`,
     })).join('')}`;
   }).join('');
@@ -122,16 +142,20 @@ export function cycleChart(chart, { projectId, timezone }) {
   const xOf = (at) => PAD.left + ((Date.parse(at) - from) / span) * PLOT_W;
   const top = ceiling([...chart.items.map((item) => item.days), ...(bands ? [bands.p95] : [])]);
   let svg = yAxis(top);
-  // Four date ticks across the window.
+  // Up to four date ticks across the axis, none repeated on a short span.
+  let previous = '';
   for (let index = 0; index <= 3; index += 1) {
     const at = new Date(from + (span * index) / 3);
     const x = PAD.left + (PLOT_W * index) / 3;
     const text = at.toLocaleDateString(undefined, { month: 'short', day: 'numeric', ...(timezone ? { timeZone: timezone } : {}) });
+    if (text === previous) continue;
+    previous = text;
     svg += `<text class="chart-tick" x="${x}" y="${H - 8}" text-anchor="${index === 0 ? 'start' : index === 3 ? 'end' : 'middle'}">${escape(text)}</text>`;
   }
   if (bands) svg += percentileLines(bands, top);
-  svg += chart.items.map((item) => dot({
-    x: xOf(item.at), y: yOf(item.days, top), kind: bands && item.days > bands.p85 ? 'slow' : 'done', projectId, taskKey: item.taskKey,
+  const spots = swarm(chart.items.map((item) => ({ x: xOf(item.at), y: yOf(item.days, top) })), 3 * (2 * R + 2));
+  svg += chart.items.map((item, at) => dot({
+    x: spots[at].x, y: spots[at].y, kind: bands && item.days > bands.p85 ? 'slow' : 'done', projectId, taskKey: item.taskKey,
     label: `${localId(item.taskKey)} ${item.title}: took ${days(item.days)}, finished ${new Date(item.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', ...(timezone ? { timeZone: timezone } : {}) })}${bands && item.days > bands.p85 ? ', longer than the service level' : ''}`,
   })).join('');
   svg += `<text class="chart-axis-title" x="12" y="${PAD.top + PLOT_H / 2}" transform="rotate(-90 12 ${PAD.top + PLOT_H / 2})" text-anchor="middle">days from claim to done</text>`;
@@ -141,7 +165,11 @@ export function cycleChart(chart, { projectId, timezone }) {
   return frame({ title, meaning, svg, label: `${title}: ${chart.items.length} finished in the last 90 days${bands ? `, service level ${days(bands.p85)}` : ''}`, note: escape(notes.join(' ')) });
 }
 
-const dateWords = (date) => new Date(`${date}T12:00:00`).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+// A date as a person reads it; the year only when it is not this one.
+export function dateWords(date, now = new Date()) {
+  const day = new Date(`${date}T12:00:00`);
+  return day.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', ...(day.getFullYear() === now.getFullYear() ? {} : { year: 'numeric' }) });
+}
 
 // The forecast: when everything open is likely done, and how many are likely
 // to finish in the next two weeks, from the project's own throughput. The
@@ -153,13 +181,15 @@ export function forecastChart(chart, { explain = '' } = {}) {
   const { basis } = chart;
   const source = `From ${days(basis.days)} of throughput, ${basis.from ? escape(dateWords(basis.from)) : ''} to ${basis.to ? escape(dateWords(basis.to)) : ''}: ${basis.finished} finished.${explain ? ` ${explain}` : ''}`;
   if (chart.status === 'nothing-open') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">Nothing is open, so there is nothing to forecast.</p></figure>`;
+  if (chart.status === 'thin') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">Too little history to forecast from: ${basis.finished} ${basis.finished === 1 ? 'task' : 'tasks'} finished in the last ${days(basis.days)}, and a forecast needs ${chart.minSample}.</p><p class="chart-note">${source}</p></figure>`;
   if (chart.status === 'no-history') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">No task finished in the last ${days(basis.days)}, so there is no pace to forecast ${chart.open} open ${chart.open === 1 ? 'task' : 'tasks'} from.</p><p class="chart-note">${source}</p></figure>`;
   const { when, ahead, histogram } = chart;
+  const atLeast = (n) => (n ? `${n} or more` : 'possibly none');
   const by = (point) => (point.days === null ? `not within ${when.horizonDays} days` : `by ${dateWords(point.date)}`);
   const open = `${chart.open} open ${chart.open === 1 ? 'task' : 'tasks'}`;
   const sentences = `<dl class="forecast-answers">
     <div><dt>When will the ${escape(open)} be done?</dt><dd><span class="forecast-p">50%</span> ${escape(by(when.p50))}</dd><dd class="forecast-main"><span class="forecast-p">85%</span> ${escape(by(when.p85))}</dd><dd><span class="forecast-p">95%</span> ${escape(by(when.p95))}</dd></div>
-    <div><dt>How many will finish in the next ${ahead.days} days, by ${escape(dateWords(ahead.date))}?</dt><dd><span class="forecast-p">50%</span> ${ahead.p50} or more</dd><dd class="forecast-main"><span class="forecast-p">85%</span> ${ahead.p85} or more</dd><dd><span class="forecast-p">95%</span> ${ahead.p95} or more</dd></div>
+    <div><dt>How many will finish in the next ${ahead.days} days, by ${escape(dateWords(ahead.date))}?</dt><dd><span class="forecast-p">50%</span> ${atLeast(ahead.p50)}</dd><dd class="forecast-main"><span class="forecast-p">85%</span> ${atLeast(ahead.p85)}</dd><dd><span class="forecast-p">95%</span> ${atLeast(ahead.p95)}</dd></div>
   </dl>`;
   // The spread of simulated finish days, with the three percentiles marked.
   const last = Math.max(...histogram.map((bar) => bar.days), when.p95.days || 0);

@@ -236,3 +236,22 @@ its date, the number, and where the evidence is. Newest last.
   4 Nov, 95% by 8 Nov; 85% likely 6 or more in 14 days. The same numbers came
   back a minute apart, once seeded by the day rather than the instant.
 - `npm test` 492 of 492.
+
+## 2026-10-08 — T033: the charts on real boards
+
+- The test and regression check before pushing T030–T032:
+  - `npm test` and `npm run check` passed.
+  - The metrics and the brief are identical to those of the pre-chart code.
+  - The Flow page is unchanged apart from the new charts.
+- The real boards showed five chart defects, all now fixed:
+  - a forecast date a year out showed no year;
+  - a forecast was drawn from one finished task;
+  - an axis repeated a date;
+  - 31 aging dots were stacked on top of each other;
+  - the fix for the stacked dots could put a dot below zero.
+- After the fixes:
+  - `npm test` passed 498 of 498.
+  - The browser walk over six boards at two widths found 0 problems in 72
+    page views.
+  - The real repositories were unchanged.
+- Evidence: the Result of T033, and `tests/charts.test.mjs`.
