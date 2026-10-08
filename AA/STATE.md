@@ -20,26 +20,28 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T05:46Z · 28 tasks: 16 backlog, 0 WIP (0 in progress), 12 delivered`
+`board · 2026-10-08T09:04Z · 28 tasks: 14 backlog, 0 WIP (0 in progress), 14 delivered`
 
-FLOW · **WIP 0/2** · throughput 2.8/wk (12 in 30d) · cycle time 50th 6m / 85th 1h (n=12)
-FLOW · Little's Law: 0 ÷ 2.8/wk ≈ now expected · lead time 85th 2h
+FLOW · **WIP 0/2** · throughput 3.3/wk (14 in 30d) · cycle time 50th 5m / 85th 46m (n=14)
+FLOW · Little's Law: 0 ÷ 3.3/wk ≈ now expected · lead time 85th 2h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 16 | | `T002` `T003` `T004` `T007` `T008` `T009` +10 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T028 | A README that explains the workflow, for a first-time tester | adervark | now |  |
-|  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 60m |  |
-|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 9h |  |
-|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 10h |  |
-|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 10h |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 30h |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 30h |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 31h |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 31h |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 31h |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 31h |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 32h |  |
+| **BACKLOG** 14 | | `T002` `T003` `T004` `T008` `T009` `T010` +8 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | now |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | now |  |
+|  | T028 | A README that explains the workflow, for a first-time tester | adervark | 3h |  |
+|  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 4h |  |
+|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 13h |  |
+|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 13h |  |
+|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14h |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 33h |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 33h |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 34h |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 35h |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 35h |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 35h |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 35h |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->
