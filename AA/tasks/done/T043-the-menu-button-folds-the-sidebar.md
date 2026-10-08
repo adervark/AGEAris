@@ -1,7 +1,7 @@
 ---
 id: T043
 title: "The menu button does nothing on a desktop: it should fold the sidebar away"
-status: claimed
+status: done
 owner: adervark @k/c1e9ef11 2026-10-09 — the menu button folds the sidebar
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
@@ -28,11 +28,11 @@ every screen.
 
 ## Steps
 
-- [ ] On a wide screen the button folds the sidebar away and back; the page
+- [x] On a wide screen the button folds the sidebar away and back; the page
       takes the width; the choice is remembered in this browser.
-- [ ] On a phone it slides the sidebar over the page, as before.
-- [ ] `aria-expanded` and the label say whether the sidebar is shown.
-- [ ] The Flow charts redraw when the sidebar folds, as on a resize.
+- [x] On a phone it slides the sidebar over the page, as before.
+- [x] `aria-expanded` and the label say whether the sidebar is shown.
+- [x] The Flow charts redraw when the sidebar folds, as on a resize.
 
 ## Decision rules — fixed in advance
 
@@ -45,10 +45,10 @@ every screen.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-09, adervark @k/c1e9ef11 (claimed)
+- **Last touched:** 2026-10-09, adervark @k/c1e9ef11 (done)
 - **In flight:** nothing
 - **On disk:** nothing
-- **Resume with:** the Steps
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -56,6 +56,24 @@ every screen.
 A browser script clicking the button at 1440 and 390.
 
 ## Result
+
+Pass. A browser script clicked the button:
+
+- **1440:** the sidebar folds away (`#main` 1208 → 1440 px) and comes back;
+  a reload keeps it folded (`localStorage` `agearis.sidebar`, read and written
+  in try/catch, so a browser without storage just starts with it shown).
+  The Flow charts redraw at scale 1.000 after the fold: the redraw now
+  watches `#main`'s width with a ResizeObserver, not window resizes only.
+- **390:** the sidebar slides over the page and Escape closes it, as before;
+  a folded choice from a wide screen does not apply (the rule is inside
+  `min-width: 861px`).
+- **Labels:** `aria-expanded` and "Hide navigation" / "Show navigation"
+  follow the sidebar on both, and the button names `aria-controls="sidebar"`.
+- **Cause:** `.mobile-menu { display: none }` lost to the later
+  `.icon-button { display: inline-flex }`, so the phone-only button showed
+  everywhere and did nothing above 860 px.
+- `npm test` passed 505 of 505, and `npm run check` passed. The browser walk
+  found 0 problems in 102 page views; no page error during the clicks.
 
 ## Notes
 

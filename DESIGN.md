@@ -112,7 +112,10 @@ Markdown does: a line break inside a paragraph is a space, and an indented
 block is code. Below 1280 px a project's tabs sit above its filters and a list
 row's signals sit under its title, so neither is squeezed. On a phone the
 sidebar collapses, Home and the drawer read first, the tabs drop their icons,
-and the board's columns scroll sideways. No page scrolls sideways.
+and the board's columns scroll sideways. No page scrolls sideways. The menu
+button at the left of the top bar hides and shows the sidebar everywhere: on a
+phone it slides over the page; on a wider screen it folds away so the page
+takes the width, and the browser remembers the choice.
 
 The page takes the window's width, up to an ultrawide monitor: no column cap,
 only a gutter that grows a little with the window. Width buys more columns, not

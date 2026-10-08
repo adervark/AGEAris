@@ -287,8 +287,7 @@ function navigate(view) {
   if (isProject) state.layout = 'board';
   const route = isProject ? `project/${view}` : view;
   if (location.hash === `#${route}`) { readRoute(); render(); } else location.hash = route;
-  $('#sidebar').classList.remove('is-open');
-  $('#menu-toggle').setAttribute('aria-expanded', 'false');
+  closeSlideOver();
 }
 
 const PAGE_NAMES = { home: 'Home', projects: 'Projects', work: 'All tasks', working: 'Working', activity: 'Activity', decisions: 'Decisions', agents: 'Agents' };
@@ -604,6 +603,23 @@ function openAddProject() {
 
 function storage() {
   try { return window.localStorage; } catch { return null; }
+}
+
+// The menu button hides and shows the sidebar. On a phone the sidebar slides
+// over the page and closes on navigation; on a wider screen it folds away, and
+// this browser remembers the choice.
+const narrowScreen = window.matchMedia('(max-width: 860px)');
+const SIDEBAR_KEY = 'agearis.sidebar';
+
+function syncMenuButton() {
+  const shown = narrowScreen.matches ? $('#sidebar').classList.contains('is-open') : !$('.app-shell').classList.contains('sidebar-hidden');
+  $('#menu-toggle').setAttribute('aria-expanded', String(shown));
+  $('#menu-toggle').setAttribute('aria-label', shown ? 'Hide navigation' : 'Show navigation');
+}
+
+function closeSlideOver() {
+  $('#sidebar').classList.remove('is-open');
+  syncMenuButton();
 }
 
 function cockpitSignature() {
@@ -2349,10 +2365,16 @@ $('#refresh').addEventListener('click', async () => {
   try { await refresh(); toast('Workspace refreshed'); } catch (error) { toast(error.message, true); } finally { $('#refresh').disabled = false; }
 });
 $('#menu-toggle').addEventListener('click', () => {
-  const open = $('#sidebar').classList.toggle('is-open');
-  $('#menu-toggle').setAttribute('aria-expanded', String(open));
-  $('#menu-toggle').setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  if (narrowScreen.matches) $('#sidebar').classList.toggle('is-open');
+  else {
+    const hidden = $('.app-shell').classList.toggle('sidebar-hidden');
+    try { storage()?.setItem(SIDEBAR_KEY, hidden ? 'hidden' : 'shown'); } catch { /* the choice lasts this page only */ }
+  }
+  syncMenuButton();
 });
+try { if (storage()?.getItem(SIDEBAR_KEY) === 'hidden') $('.app-shell').classList.add('sidebar-hidden'); } catch { /* shown, the default */ }
+narrowScreen.addEventListener('change', syncMenuButton);
+syncMenuButton();
 $('#sidebar').addEventListener('click', (event) => {
   const link = event.target.closest('a');
   if (!link) return;
@@ -2378,7 +2400,7 @@ document.addEventListener('keydown', (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey || anyDialogOpen() || event.target.closest('input,textarea,select,[contenteditable]')) return;
   if (event.key === '/') { event.preventDefault(); $('#search').focus(); }
   if (event.key.toLowerCase() === 'n' && writableProjects().length) { event.preventDefault(); openTaskEditor(); }
-  if (event.key === 'Escape') { $('#sidebar').classList.remove('is-open'); $('#menu-toggle').setAttribute('aria-expanded', 'false'); }
+  if (event.key === 'Escape') closeSlideOver();
 });
 
 function monitorOffline(error) {
@@ -2410,17 +2432,19 @@ document.addEventListener('visibilitychange', () => {
   else if (state.view === 'home') homeShownAt = Date.now();
 });
 window.addEventListener('pagehide', () => leaveHome(state.view));
-// Charts are drawn at the width they are shown at, so a resize redraws them.
+// Charts are drawn at the width they are shown at, so they redraw when #main
+// changes width: a window resize, or the sidebar folding away.
 let drawnWidth = 0;
 let resizeTimer = 0;
-window.addEventListener('resize', () => {
+new ResizeObserver(() => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     const width = mainWidth();
-    if (state.layout === 'flow' && selectedProject() && Math.abs(width - drawnWidth) > 8) renderMain();
+    if (Math.abs(width - drawnWidth) <= 8) return;
+    if (drawnWidth && state.layout === 'flow' && selectedProject()) renderMain();
     drawnWidth = width;
   }, 150);
-});
+}).observe($('#main'));
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !refreshing && !state.authLost && !editingMain()) refresh().catch(monitorOffline); });
 
 lastView = state.view;

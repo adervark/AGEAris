@@ -344,3 +344,11 @@ its date, the number, and where the evidence is. Newest last.
   it from six treatments rendered beside the logo.
 - `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
   views.
+
+## 2026-10-09 — T043: the menu button folds the sidebar
+
+- The menu button showed on every screen but only worked on phones. It now
+  folds the sidebar away on a wide screen (remembered in the browser) and
+  slides it over the page on a phone; the Flow charts redraw when it folds.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
