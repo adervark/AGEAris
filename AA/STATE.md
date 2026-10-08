@@ -18,39 +18,42 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T09:49Z · 29 tasks: 4 backlog, 0 WIP (0 in progress), 25 delivered`
+`board · 2026-10-08T10:09Z · 32 tasks: 5 backlog, 0 WIP (0 in progress), 27 delivered`
 
-FLOW · **WIP 0/2** · throughput 5.8/wk (25 in 30d) · cycle time 50th 3m / 85th 33m (n=25)
-FLOW · Little's Law: 0 ÷ 5.8/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 6.3/wk (27 in 30d) · cycle time 50th 4m / 85th 8m (n=27)
+FLOW · Little's Law: 0 ÷ 6.3/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** | T003 | Track the repository AGE Aris runs from without moving its data | — | 36h |  |
-|  | T004 | Keep one copy of the aa-init template | — | 36h |  |
+| **BACKLOG** | T003 | Track the repository AGE Aris runs from without moving its data | — | 37h |  |
+|  | T004 | Keep one copy of the aa-init template | — | 37h |  |
 |  | T024 | The card menu, the keyboard map, and drag through the action registry | — | 16h |  |
 |  | T025 | Say on the project page that STATE.md is behind, or kept by hand | — | 16h |  |
-| **DONE** | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | now |  |
-|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 17m |  |
-|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 22m |  |
-|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 30m |  |
-|  | T015 | Code spans are not found as CommonMark finds them | adervark | 30m |  |
-|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 34m |  |
-|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 34m |  |
-|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 38m |  |
-|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 38m |  |
-|  | T011 | board.sh loses the history from before a board rename | adervark | 41m |  |
-|  | T013 | The Method view names a settings file the board does not have | adervark | 41m |  |
-|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 44m |  |
-|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 44m |  |
+|  | T032 | A forecast from throughput: when, and how many | — | 6m |  |
+| **DONE** | T030 | An aging WIP chart: what is not moving | adervark | now |  |
+|  | T031 | A cycle-time scatterplot with the service level | adervark | now |  |
+|  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 19m |  |
+|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 36m |  |
+|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 41m |  |
+|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 50m |  |
+|  | T015 | Code spans are not found as CommonMark finds them | adervark | 50m |  |
+|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 53m |  |
+|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 53m |  |
+|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 58m |  |
+|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 58m |  |
+|  | T011 | board.sh loses the history from before a board rename | adervark | 60m |  |
+|  | T013 | The Method view names a settings file the board does not have | adervark | 60m |  |
+|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 64m |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 64m |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 4h |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 5h |  |
-|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 13h |  |
+|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 14h |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 14h |  |
-|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14h |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 34h |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 34h |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 35h |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 35h |  |
+|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 15h |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 35h |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 35h |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 36h |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 36h |  |
 |  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 36h |  |
 |  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 36h |  |
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 36h |  |
