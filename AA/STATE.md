@@ -21,10 +21,10 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T19:35Z · 42 tasks: 4 backlog, 0 WIP (0 in progress), 38 delivered`
+`board · 2026-10-08T19:40Z · 43 tasks: 4 backlog, 0 WIP (0 in progress), 39 delivered`
 
-FLOW · **WIP 0/2** · throughput 8.9/wk (38 in 30d) · cycle time 50th 4m / 85th 13m (n=38)
-FLOW · Little's Law: 0 ÷ 8.9/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 9.1/wk (39 in 30d) · cycle time 50th 4m / 85th 13m (n=39)
+FLOW · Little's Law: 0 ÷ 9.1/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
@@ -32,12 +32,13 @@ FLOW · Little's Law: 0 ÷ 8.9/wk ≈ now expected · lead time 85th 35h
 |  | T004 | Keep one copy of the aa-init template | — | 46h |  |
 |  | T024 | The card menu, the keyboard map, and drag through the action registry | — | 26h |  |
 |  | T025 | Say on the project page that STATE.md is behind, or kept by hand | — | 26h |  |
-| **DONE** | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | now |  |
-|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 5m |  |
-|  | T040 | Aris under the logo, centred | adervark | 11m |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 55m |  |
-|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 60m |  |
-|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 82m |  |
+| **DONE** | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | now |  |
+|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 4m |  |
+|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 9m |  |
+|  | T040 | Aris under the logo, centred | adervark | 16m |  |
+|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 60m |  |
+|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 65m |  |
+|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 86m |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 7h |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 7h |  |
 |  | T034 | Silver accents, taken from the logo | adervark | 8h |  |
