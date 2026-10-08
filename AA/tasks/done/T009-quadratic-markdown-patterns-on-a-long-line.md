@@ -66,14 +66,11 @@ counted by hand. The table separator is read cell by cell
 
 Against the decision rules, at n = 80,000 (before → after, one run each):
 
-| input | before | after |
-|---|---|---|
-| `'# ' + '#'.repeat(n) + 'x'` | 4,190 ms | 2 ms |
-| `'# ' + ' '.repeat(n) + 'a\u2028b'` | 5,037 ms | 1 ms |
-| `'- ' + ' '.repeat(n) + 'a\u2028b'` | 5,069 ms | 3 ms |
-| `'a|b\n' + ' '.repeat(n) + 'x|'` | 4,954 ms | 1 ms |
-| `'a|b\n|---' + ' '.repeat(n) + 'x|'` | 4,097 ms | 1 ms |
-
+- `'# ' + '#'.repeat(n) + 'x'`: 4,190 ms → 2 ms.
+- `'# ' + ' '.repeat(n) + 'a\u2028b'`: 5,037 ms → 1 ms.
+- `'- ' + ' '.repeat(n) + 'a\u2028b'`: 5,069 ms → 3 ms.
+- The table line `a|b` over `' '.repeat(n) + 'x|'`: 4,954 ms → 1 ms.
+- The table line `a|b` over `'|---' + ' '.repeat(n) + 'x|'`: 4,097 ms → 1 ms.
 - `tests/markdown.test.mjs` has a timing test for each, plus the task box, at
   under 100 ms. It fails before the fix and passes after.
 - With T002's change set aside, no rendered block changes on AGEIS, AGEION,
