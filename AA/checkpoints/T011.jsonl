@@ -1,0 +1,4 @@
+{"ts":"2026-10-08T09:07:53Z","run":"adccab68","kind":"open","operator":"adervark","profile":"k","session":"adccab68-e06b-49bc-88d8-f5d159d25c74","brief":"board.sh reads older board names; sync the global aa-init copy"}
+{"ts":"2026-10-08T09:07:53Z","run":"adccab68","kind":"doing","act":"copy template board.sh and SKILL.md to ~/.claude/skills/aa-init/","tell":"cmp skills/aa-init/template/board.sh ~/.claude/skills/aa-init/template/board.sh","cost":"global-config","next":"cmp both files, then close T011"}
+{"ts":"2026-10-08T09:07:53Z","run":"adccab68","kind":"did","what":"global aa-init board.sh and SKILL.md synced to the repository's copies","where":"~/.claude/skills/aa-init/","next":"close T011"}
+{"ts":"2026-10-08T09:07:53Z","run":"adccab68","kind":"end","changed":"board.sh pathspecs, SKILL.md alignment, global copy","cost":"global-config: 2 files","left":"nothing","next":"none"}
