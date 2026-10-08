@@ -2,21 +2,19 @@
 
 <!-- AA:now -->
 **Standing:** AGE Aris tracks its own development on this board from
-2026-10-07. The UI revamp and the renames (the product, AGE Aris; its board,
-AA) are committed on `feature/pm-cockpit`, which is not on `main` yet.
-AGEION, AGEIS, Gem4A and RSNA have moved their boards to `AA/` too.
+2026-10-07. The UI revamp, the renames and task actions on tracked AA boards
+are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
+pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
+found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**Next action:** one-click task actions (plan `docs/plans/task-control.md`,
-approved 2026-10-07): T021, T022 and T023 are done, so task actions work on
-tracked AA boards once switched on. T024 (card menu, keys, drag) and T025
-(STATE.md behind) are next; T026 holds the T023 review's low findings and one
-operator decision. The review's bugs (T007 with T012, T011 with T013, T008
-with T010) follow.
+**Next action:** T024 (card menu, keys, drag) and T025 (STATE.md behind), from
+`docs/plans/task-control.md`. T003 needs the operator's choice in its file
+before it can be claimed.
 
-**Watch out for:** until T007 is fixed, AGE Aris reads RSNA's T120 as the
-task that reuses its id. AGE Aris must go on reading `deaddrop/` and `pm/`
-boards. Its data folder must stay outside this repository, or it refuses to
-track it (T003).
+**Watch out for:** T016 patched `AA/ckpt.sh` in AGEION, AGEIS, Gem4A and RSNA
+and left it uncommitted there; each repository's own session commits it.
+AGE Aris must go on reading `deaddrop/` and `pm/` boards. Its data folder
+must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
