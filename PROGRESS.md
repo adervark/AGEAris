@@ -255,3 +255,14 @@ its date, the number, and where the evidence is. Newest last.
     page views.
   - The real repositories were unchanged.
 - Evidence: the Result of T033, and `tests/charts.test.mjs`.
+
+## 2026-10-08 — T034: silver accents
+
+- The accent is silver, taken from the logo, in place of a blue that also
+  meant "in progress". Only CSS tokens changed, plus a sheen on the primary
+  button and on the wordmark.
+- Accent text is 12.9:1 on black. `npm test` passed 498 of 498. The browser
+  walk found 0 problems in 72 page views.
+- Found on the way: the forecast samples days from before a young board
+  existed (T035).
+- Evidence: the Result of T034.

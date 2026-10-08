@@ -1,7 +1,7 @@
 ---
 id: T034
 title: "Silver accents, taken from the logo"
-status: claimed
+status: done
 owner: adervark @k/adccab68 2026-10-08 — silver accents
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -30,12 +30,12 @@ The interface's accent is silver, as the logo is, tasteful and minimal.
 
 ## Steps
 
-- [ ] The accent, hover, tint and focus tokens become silver; status colours
+- [x] The accent, hover, tint and focus tokens become silver; status colours
       stay as they are.
-- [ ] Neutral chart bars become a quiet silver; status-coloured dots stay.
-- [ ] At most two small flourishes: a silver sheen on the primary button
+- [x] Neutral chart bars become a quiet silver; status-coloured dots stay.
+- [x] At most two small flourishes: a silver sheen on the primary button
       and on the wordmark.
-- [ ] DESIGN.md and the stylesheet's header say what silver is for.
+- [x] DESIGN.md and the stylesheet's header say what silver is for.
 
 ## Decision rules — fixed in advance
 
@@ -49,10 +49,10 @@ The interface's accent is silver, as the logo is, tasteful and minimal.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (done)
 - **In flight:** nothing
 - **On disk:** nothing
-- **Resume with:** the Steps
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -61,7 +61,25 @@ Screenshots of Home, a board and the Flow tab before and after; the walk.
 
 ## Result
 
-*(placeholder)*
+Pass. The accent is silver, as the logo is.
+
+- **Tokens:** `--accent` is #c5cbd3, `--accent-hover` #e6e9ed, `--accent-tint`
+  #16181b and `--focus` #d6dbe1. Links, the selected tab and sidebar item,
+  focus rings and switches all follow. The neutral chart bars (`--chart`) are
+  #8d949f. The status colours are unchanged, so blue now means only "in
+  progress". Project and agent colours, which the operator picks, stay.
+- **Two flourishes:** a metallic sheen on the primary button, and a white to
+  silver fade on the AGE Aris wordmark.
+- **Contrast on black:** accent text 12.9:1 (10.9:1 on its tint), the focus
+  ring 15.1:1, black text on the button's darkest silver 11.7:1, the
+  wordmark's darkest point 8.1:1, chart bars 6.9:1.
+- DESIGN.md and the stylesheet's header say what silver is for.
+- `npm test` passed 498 of 498 and `npm run check` passed. The browser walk
+  over six boards at two widths found no problem in 72 page views.
+  Screenshots of the board, the Flow tab, the sidebar and the New project
+  dialog were checked by eye.
+- Found on the way: T035, the forecast samples days from before a young
+  board existed.
 
 ## Notes
 

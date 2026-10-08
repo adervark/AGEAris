@@ -63,7 +63,11 @@ then Home, Projects, Working, Agents, Activity, and the projects with a health d
 the logo is `public/logo.webp` and the tab icon `public/planet.png`, both made
 from `docs/brand/age-aris-logo.png`), a top bar with search and a secondary Add
 project button. Colour carries meaning only: red stuck or overdue, amber quiet
-or running long, blue in progress, green done. Health reads as words (On track,
+or running long, blue in progress, green done. The accent is silver, taken from
+the logo, so it never reads as a status: links, the selected tab and sidebar
+item, focus rings, switches and neutral chart bars. Two touches go further, a
+metallic sheen on the primary button and on the AGE Aris wordmark, and no
+more. Health reads as words (On track,
 Watch, Needs attention) and the dot keeps the colour. Numbers are plain text
 that explain themselves on hover and focus. Charts carry date ticks and a
 maximum label.
