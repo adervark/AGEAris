@@ -1,8 +1,8 @@
 ---
 id: T035
 title: "The forecast samples days from before the board existed"
-status: backlog
-owner: ""
+status: claimed
+owner: adervark @k/adccab68 2026-10-08 — forecast from the board's own days
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -48,7 +48,7 @@ The forecast draws only from days when the board could have finished work.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing
 - **Resume with:** the Steps
