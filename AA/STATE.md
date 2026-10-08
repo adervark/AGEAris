@@ -20,22 +20,29 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T09:15Z · 28 tasks: 8 backlog, 0 WIP (0 in progress), 20 delivered`
+`board · 2026-10-08T09:18Z · 28 tasks: 6 backlog, 0 WIP (0 in progress), 22 delivered`
 
-FLOW · **WIP 0/2** · throughput 4.7/wk (20 in 30d) · cycle time 50th 4m / 85th 33m (n=20)
-FLOW · Little's Law: 0 ÷ 4.7/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 5.1/wk (22 in 30d) · cycle time 50th 3m / 85th 33m (n=22)
+FLOW · Little's Law: 0 ÷ 5.1/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 8 | | `T003` `T004` `T014` `T015` `T016` `T024` +2 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T002 | Bold or a link that contains inline code shows raw markers | adervark | now |  |
-|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | now |  |
-|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 4m |  |
-|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 4m |  |
-|  | T011 | board.sh loses the history from before a board rename | adervark | 6m |  |
-|  | T013 | The Method view names a settings file the board does not have | adervark | 6m |  |
-|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 10m |  |
-|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 10m |  |
+| **BACKLOG** | T003 | Track the repository AGE Aris runs from without moving its data | — | 36h |  |
+|  | T004 | Keep one copy of the aa-init template | — | 36h |  |
+|  | T016 | ckpt.sh check exits 1 on a clean trail | — | 35h |  |
+|  | T024 | The card menu, the keyboard map, and drag through the action registry | — | 16h |  |
+|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | — | 16h |  |
+|  | T026 | Tracked task actions: the review's remaining low findings | — | 13h |  |
+| **DONE** | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | now |  |
+|  | T015 | Code spans are not found as CommonMark finds them | adervark | now |  |
+|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 3m |  |
+|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 3m |  |
+|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 7m |  |
+|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 7m |  |
+|  | T011 | board.sh loses the history from before a board rename | adervark | 10m |  |
+|  | T013 | The Method view names a settings file the board does not have | adervark | 10m |  |
+|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 13m |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 13m |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 3h |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 4h |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 13h |  |
