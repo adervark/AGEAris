@@ -69,7 +69,7 @@ Against the decision rules:
   "a`b" are one span; an unclosed double run is text and does not hold a line
   break; runs of 1 and 2 no longer pair. All fail before and pass after.
 - No regex at all in the scan. Timings, before → after: the 4 MB adversarial
-  input 21 → 55 ms; 4 MB of lone backticks (`'a`'` × 2,000,000, a million
+  input 21 → 55 ms; 4 MB of lone backticks (``'a`'`` × 2,000,000, a million
   spans) 48 → 261 ms; 2,000 unmatched runs of growing length 3 → 6 ms. All
   linear; the cost is the span objects.
 - Renders: no change on AGEIS, AGEION, RSNA or Gem4A. In this repository,
