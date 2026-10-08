@@ -20,14 +20,19 @@
   --accent: #c5cbd3;
   --accent-hover: #e6e9ed;
   --accent-tint: #16181b;
-  /* Polished metal: a bright top, a sharp dark horizon just below the middle,
-     a lighter reflection under it. The horizon is what makes it read as
-     metal and not as grey. --chrome is for the wordmark, large text whose
-     darkest band keeps 4:1 on black; the button's sheen is softer, so black
-     text on it keeps 10:1 everywhere. */
-  --chrome: linear-gradient(180deg, #ffffff 0%, #eef0f3 30%, #b9c0c9 48%, #6b727c 52%, #959ca6 64%, #e6e9ed 88%, #ffffff 100%);
-  --accent-sheen: linear-gradient(180deg, #ffffff 0%, #eceff2 40%, #b4bbc4 50%, #c6ccd3 70%, #f1f3f5 100%);
-  --accent-sheen-hover: linear-gradient(180deg, #ffffff 0%, #f4f6f8 40%, #c4cad2 50%, #d4d9df 70%, #ffffff 100%);
+  /* Silver the way the logo has it: black surfaces lit by fine silver, never
+     silver-filled shapes. --glass is the black of a lit surface; --rim the
+     silver edge, brightest where light catches it at the top and bottom;
+     --sheen silver lit from above, for the wordmark and the selected bar;
+     --grain the fine stipple the logo is drawn in (an SVG noise tile, which
+     the CSP allows as a data: image). */
+  --glass: linear-gradient(180deg, #1c1e21, #08090a);
+  --glass-hover: linear-gradient(180deg, #26292d, #0e0f11);
+  --rim: conic-gradient(from 180deg, #3a3f46, #f4f6f8 18%, #5d636b 32%, #2a2d31 50%, #5d636b 68%, #f4f6f8 82%, #3a3f46);
+  --rim-hover: conic-gradient(from 180deg, #5d636b, #ffffff 18%, #8a919a 32%, #3a3f46 50%, #8a919a 68%, #ffffff 82%, #5d636b);
+  --sheen: linear-gradient(180deg, #ffffff 0%, #e4e7eb 40%, #aab1b9 100%);
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  --glow: 0 8px 24px -8px rgb(214 219 225 / .25);
   --on-accent: #000000;
   --focus: #d6dbe1;
   --silver: #c9ced5;
@@ -147,8 +152,8 @@ kbd { font: inherit; font-size: 12px; line-height: 1.3; border: 1px solid var(--
 /* --- Primitives ---------------------------------------------------------------- */
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-size: 13px; font-weight: 600; padding: 7px 14px; min-height: 36px; border-radius: var(--radius); white-space: nowrap; border: 1px solid transparent; }
 .button .icon { width: 16px; height: 16px; }
-.button-primary { background: var(--accent-sheen); color: var(--on-accent); box-shadow: var(--shadow-sm); }
-.button-primary:hover { background: var(--accent-sheen-hover); }
+.button-primary { background: var(--glass) padding-box, var(--rim) border-box; border: 1px solid transparent; color: var(--ink); box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), var(--glow); }
+.button-primary:hover { background: var(--glass-hover) padding-box, var(--rim-hover) border-box; color: #ffffff; }
 .button-secondary { background: var(--surface); border-color: var(--line-2); color: var(--ink-2); }
 .button-secondary:hover { background: var(--surface-2); color: var(--ink); }
 .button-danger { background: var(--fail); color: #000; }
@@ -975,18 +980,16 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
 .stage-edit .field { margin-bottom: 14px; }
 .stage-edit .field input, .stage-edit .field select, .stage-edit .field textarea { margin-top: 6px; padding: 7px 9px; }
 
-/* Silver, as the logo is, and only where it is clearly metal: the wordmark,
-   the avatar, the primary button and what is selected. Silver says "this is
-   AGE Aris", never a status. Grey lines and edges are not silver, so the
-   surfaces keep their plain borders. */
-.brand > span { font-family: 'Michroma', var(--sans); font-size: 22px; font-weight: 400; text-transform: uppercase; letter-spacing: .22em; margin-right: -.22em; line-height: 1.2; background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgb(255 255 255 / .12)); }
-.user-avatar { background: var(--accent-sheen); color: var(--on-accent); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .5), 0 0 0 1px #3a3f46; text-shadow: 0 1px 0 rgb(255 255 255 / .6); }
-.button-primary { color: var(--on-accent); border-color: #8a929c; box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 rgb(0 0 0 / .25), 0 1px 0 rgb(0 0 0 / .6); text-shadow: 0 1px 0 rgb(255 255 255 / .55); }
-.button-primary:hover { border-color: #b4bbc4; }
-.nav-link.active { position: relative; background: linear-gradient(90deg, rgb(214 219 225 / .14), rgb(214 219 225 / 0) 85%); color: var(--ink); }
-.nav-link.active::before { content: ""; position: absolute; left: 0; top: 4px; bottom: 4px; width: 3px; border-radius: 2px; background: linear-gradient(180deg, #ffffff, #b9c0c9 45%, #555c66 55%, #e6e9ed); }
+/* Silver, as the logo has it: light on black. The primary button and the
+   avatar are black glass with a silver rim and a faint glow, the wordmark is
+   grained silver lit from above, and what is selected carries a light silver
+   bar. Silver says "this is AGE Aris", never a status. */
+.brand > span { font-family: 'Michroma', var(--sans); font-size: 22px; font-weight: 400; text-transform: uppercase; letter-spacing: .22em; margin-right: -.22em; line-height: 1.2; background: var(--grain) 0 0 / 160px, var(--sheen); background-blend-mode: overlay, normal; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.user-avatar { background: var(--glass) padding-box, var(--rim) border-box; border: 1px solid transparent; color: var(--ink); box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), var(--glow); }
+.nav-link.active { position: relative; background: linear-gradient(90deg, rgb(214 219 225 / .12), rgb(214 219 225 / 0) 85%); color: var(--ink); }
+.nav-link.active::before { content: ""; position: absolute; left: 0; top: 4px; bottom: 4px; width: 2px; border-radius: 2px; background: var(--sheen); box-shadow: 0 0 8px rgb(214 219 225 / .45); }
 .nav-link.active > .icon { color: var(--silver-hi); }
-.view-tab.selected { border-bottom-color: transparent; background: linear-gradient(180deg, #ffffff, #b9c0c9 45%, #555c66 70%, #c6ccd3) bottom / 100% 3px no-repeat; }
+.view-tab.selected { border-bottom-color: transparent; background: linear-gradient(90deg, rgb(214 219 225 / 0), #ffffff 30%, #ffffff 70%, rgb(214 219 225 / 0)) bottom / 100% 2px no-repeat; }
 
 /* --- Narrow screens ------------------------------------------------------------- */
 /* Until tabs and filters fit on one line, the tabs sit above the filters and

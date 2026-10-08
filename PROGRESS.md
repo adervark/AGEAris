@@ -334,3 +334,13 @@ its date, the number, and where the evidence is. Newest last.
   four glyphs, SIL OFL 1.1, licence in `docs/brand/`.
 - `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
   views.
+
+## 2026-10-09 — T042: black glass with a silver edge
+
+- T039's gradient chrome looked like a stock app. Silver is now light on
+  black, as in the logo: the primary button and avatar are black glass with a
+  silver rim and a faint glow, the wordmark is grained silver lit from above,
+  and the selected item and tab carry a light silver bar. The operator chose
+  it from six treatments rendered beside the logo.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.

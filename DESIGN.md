@@ -66,12 +66,12 @@ project button. Colour carries meaning only: red stuck or overdue, amber quiet
 or running long, blue in progress, green done. The accent is silver, taken from
 the logo, so it never reads as a status: links, focus rings, switches and
 neutral chart bars. Silver on black reads as grey unless it looks like metal,
-and metal needs a horizon: a bright top, a sharp dark band just below the
-middle, a lighter reflection under it. So silver appears in few places, all
-of them polished chrome: the Aris wordmark, the avatar, the primary
-button (bevelled, black text at 10:1 or more), a chrome bar on the selected
-sidebar item and under the selected tab. Hairlines and lit edges only read
-as grey, so surfaces keep their plain borders. Health reads as words (On track,
+and silver-filled shapes with a gradient read as a stock app. So silver is
+light on black, as in the logo: the primary button and the avatar are black
+glass with a fine silver rim that catches the light and a faint glow (white
+text, 15:1); the Aris wordmark is silver lit from above with the logo's fine
+grain; the selected sidebar item and tab carry a light silver bar. Surfaces
+keep their plain borders. Health reads as words (On track,
 Watch, Needs attention) and the dot keeps the colour. Numbers are plain text
 that explain themselves on hover and focus. Charts carry date ticks and a
 maximum label.
