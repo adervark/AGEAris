@@ -216,3 +216,14 @@ its date, the number, and where the evidence is. Newest last.
 - The AA.yml read under the lock is capped at 64 KB, as elsewhere.
 - Missing tests added (index-only DIRTY_FILE, target exists, detached HEAD,
   email redaction). `npm test` 489 of 489.
+
+## 2026-10-08 — T030 and T031: aging WIP chart and cycle-time scatterplot
+
+- Both on the Flow tab, from data the metrics already count: on the sample,
+  the aging dots past the service level are exactly the `aging` metric's
+  items, and the scatterplot's dots and 50th/85th lines are exactly
+  `cycle_time_p50`/`p85`'s.
+- Every dot opens its task by mouse and keyboard; read in headless Chrome at
+  1280 and 390 px with no console errors.
+- A new test requires every module the page imports to be served (a new
+  `public/` file had 404'd). `npm test` 491 of 491.

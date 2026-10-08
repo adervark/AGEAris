@@ -905,3 +905,20 @@ test('GET /api/tasks/:id returns the task with its text, GET /api/projects/:id/m
   assert.deepEqual(Object.keys(line.wipSince).sort(), working.map((entry) => entry.id.split(':')[1]).sort());
   assert.ok(Object.values(line.wipSince).every((at) => !Number.isNaN(Date.parse(at))), JSON.stringify(line.wipSince));
 });
+
+test('every module the page imports is served: a new public/ file not added to the server leaves the page loading forever', async (t) => {
+  const { base } = await tokenServer(t);
+  const publicDir = new URL('../public/', import.meta.url);
+  const queue = ['app.js'];
+  const seen = new Set();
+  while (queue.length) {
+    const name = queue.shift();
+    if (seen.has(name)) continue;
+    seen.add(name);
+    const response = await globalThis.fetch(`${base}/${name}`);
+    assert.equal(response.status, 200, `/${name} is served`);
+    const source = await readFile(new URL(name, publicDir), 'utf8');
+    for (const [, imported] of source.matchAll(/^import [^;]*? from '\.\/([^']+)';$/gm)) queue.push(imported);
+  }
+  assert.ok(seen.has('charts.js') && seen.has('markdown.js'), [...seen].join(', '));
+});

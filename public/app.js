@@ -2253,6 +2253,12 @@ function onAction(event) {
   }
 }
 $('#main').addEventListener('click', onAction);
+// A chart's dots are SVG with the role of a button: Enter and Space press them.
+$('#main').addEventListener('keydown', (event) => {
+  if ((event.key !== 'Enter' && event.key !== ' ') || !event.target.matches?.('[role="button"][data-action]:not(button)')) return;
+  event.preventDefault();
+  event.target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+});
 $('#task-dialog').addEventListener('click', onAction);
 
 $('#main').addEventListener('change', (event) => {

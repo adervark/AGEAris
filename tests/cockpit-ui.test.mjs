@@ -148,6 +148,14 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(flow, /data-metric="due_risk" data-project="[^"]+" data-task="T039"/);
   assert.match(flow, /Stale claims/);
   assert.match(flow, /class="limit-line"/, 'the WIP chart draws its limit');
+  // The aging and cycle-time charts: one focusable dot per task, each opening it (T030, T031).
+  const dots = [...flow.matchAll(/<g class="chart-dot [^"]*" role="button" tabindex="0" data-action="open-task" data-id="([^"]+)" aria-label="([^"]+)">/g)];
+  assert.equal(dots.length, metrics.charts.aging.items.length + metrics.charts.cycles.items.length);
+  assert.ok(dots.every(([, id]) => id.startsWith(`${project.id}:T`)));
+  assert.match(flow, /Aging work in progress/);
+  assert.match(flow, /class="chart-line chart-line-p85"/);
+  assert.match(flow, new RegExp(`85% · ${metrics.charts.cycles.bands.p85} days`));
+  assert.ok(dots.some(([, , label]) => /past the service level|past twice the service level/.test(label)), 'an aging task says so');
   assert.doesNotMatch(flow, />weekly mean [\d.]+</, 'the usual week is a number under its label');
   assert.doesNotMatch(flow, /<small class="muted">\/ /, 'WIP states its limit once');
   assert.match(flow, /ledger <code title="[0-9a-f]{40}">[0-9a-f]{7}<\/code>/);

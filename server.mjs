@@ -17,6 +17,7 @@ const STATIC_FILES = new Map([
   ['/styles.css', 'styles.css'],
   ['/icons.js', 'icons.js'],
   ['/cockpit.js', 'cockpit.js'],
+  ['/charts.js', 'charts.js'],
   ['/cursor.js', 'cursor.js'],
   ['/words.js', 'words.js'],
   ['/markdown.js', 'markdown.js'],

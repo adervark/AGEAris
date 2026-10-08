@@ -1,7 +1,7 @@
 ---
 id: T031
 title: "A cycle-time scatterplot with the service level"
-status: claimed
+status: done
 owner: adervark @k/adccab68 2026-10-08 — aging WIP chart and cycle-time scatterplot
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
@@ -27,9 +27,9 @@ The Flow tab shows each task finished in the flow window as a dot by finish date
 
 ## Steps
 
-- [ ] Chart data from `projectMetrics`: the cycle sample with finish dates; the percentiles; what was left out.
-- [ ] The chart, with a one-line meaning; dots open the task.
-- [ ] Tests.
+- [x] Chart data from `projectMetrics`: the cycle sample with finish dates; the percentiles; what was left out.
+- [x] The chart, with a one-line meaning; dots open the task.
+- [x] Tests.
 
 ## Decision rules — fixed in advance
 
@@ -40,10 +40,10 @@ The Flow tab shows each task finished in the flow window as a dot by finish date
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (done)
 - **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** the Steps
+- **On disk:** nothing
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -52,7 +52,22 @@ The Flow tab shows each task finished in the flow window as a dot by finish date
 
 ## Result
 
-*(placeholder)*
+**Done.** The Flow tab draws a cycle-time scatterplot (`cycleChart`) from
+`charts.cycles`. Each task finished in the 90-day flow window with a known
+start is a dot, placed by finish date and by days from claim to done. Lines
+mark the 50th, 85th (the service level) and 95th percentiles, and dots above
+the 85th line are amber. Left-out tasks are counted under the chart. The axis
+starts a day before the first finish, so a young project is not squeezed.
+
+Against the decision rules:
+
+- The dots are exactly `cycle_time_p85`'s items. The 50th and 85th lines
+  equal `cycle_time_p50` and `cycle_time_p85` to a tenth of a day, and the
+  left-out count equals the metric's excluded list (`tests/sample.test.mjs`).
+- Close labels (6.1 and 7 days) are pushed apart and keep their order;
+  screenshots read at 1280 and 390 px.
+- `npm test` 491 of 491 and `npm run check` pass. No spend.
+- Log: PROGRESS.md, 2026-10-08 — T030 and T031.
 
 ## Notes
 

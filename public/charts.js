@@ -1,0 +1,142 @@
+// The Flow tab's shapes: aging WIP and cycle times. Each is inline SVG (no
+// library, and no inline styles under the page's CSP: colour comes from
+// classes). Every dot is a task: it opens the task drawer on click, and on
+// Enter or Space, since it is focusable with the role of a button.
+
+import { escape } from './words.js';
+
+const W = 760;
+const H = 260;
+const PAD = { top: 12, right: 132, bottom: 30, left: 44 };
+const PLOT_W = W - PAD.left - PAD.right;
+const PLOT_H = H - PAD.top - PAD.bottom;
+const R = 6;
+
+const localId = (taskKey) => String(taskKey || '').split('#')[0];
+const days = (value) => `${value} ${value === 1 ? 'day' : 'days'}`;
+
+// The top of the y axis: a round number above the largest value shown.
+function ceiling(values) {
+  const max = Math.max(1, ...values);
+  const step = max <= 5 ? 1 : max <= 20 ? 5 : max <= 60 ? 10 : 30;
+  return Math.ceil((max * 1.08) / step) * step;
+}
+
+function ticks(top) {
+  const step = top <= 5 ? 1 : top <= 20 ? 5 : top <= 60 ? 10 : 30;
+  const out = [];
+  for (let value = 0; value <= top; value += step) out.push(value);
+  return out;
+}
+
+const yOf = (value, top) => PAD.top + PLOT_H - (Math.min(value, top) / top) * PLOT_H;
+
+function yAxis(top) {
+  return ticks(top).map((value) => {
+    const y = yOf(value, top);
+    return `<line class="chart-grid" x1="${PAD.left}" x2="${PAD.left + PLOT_W}" y1="${y}" y2="${y}"/><text class="chart-tick" x="${PAD.left - 8}" y="${y + 4}" text-anchor="end">${value}</text>`;
+  }).join('');
+}
+
+// The 50th, 85th and 95th percentile lines across the plot, labelled in the
+// right margin. Labels close together are pushed apart, keeping their order.
+const LABEL_GAP = 18;
+
+function percentileLines(bands, top) {
+  const lines = [['p50', bands.p50], ['p85', bands.p85], ['p95', bands.p95]].map(([kind, value]) => ({ kind, value, y: yOf(value, top), at: yOf(value, top) }));
+  // From the bottom (largest y) up: each label sits at least LABEL_GAP above the one below.
+  for (let index = 1; index < lines.length; index += 1) lines[index].at = Math.min(lines[index].at, lines[index - 1].at - LABEL_GAP);
+  const overTop = PAD.top + 4 - Math.min(...lines.map((line) => line.at));
+  if (overTop > 0) for (const line of lines) line.at += overTop;
+  return lines.map(({ kind, value, y, at }) => `<line class="chart-line chart-line-${kind}" x1="${PAD.left}" x2="${PAD.left + PLOT_W}" y1="${y}" y2="${y}"/><text class="chart-line-label chart-line-label-${kind}" x="${PAD.left + PLOT_W + 8}" y="${at + 5}">${escape(`${kind.slice(1)}% · ${days(value)}`)}</text>`).join('');
+}
+
+function dot({ x, y, kind, label, projectId, taskKey, ring = false }) {
+  return `<g class="chart-dot dot-${kind}${ring ? ' dot-stale' : ''}" role="button" tabindex="0" data-action="open-task" data-id="${escape(`${projectId}:${localId(taskKey)}`)}" aria-label="${escape(label)}"><title>${escape(label)}</title>${ring ? `<circle class="dot-ring" cx="${x}" cy="${y}" r="${R + 4}"/>` : ''}<circle cx="${x}" cy="${y}" r="${R}"/></g>`;
+}
+
+// Dots that share a column spread sideways in a fixed pattern, so the same
+// data always draws the same picture.
+function spread(index, width) {
+  const offsets = [0, -1, 1, -2, 2, -3, 3];
+  return offsets[index % offsets.length] * Math.min(16, width / 8);
+}
+
+function frame({ title, meaning, svg, label, note }) {
+  return `<figure class="flow-chart"><figcaption>${escape(title)}<small>${escape(meaning)}</small></figcaption><div class="chart-scroll"><svg viewBox="0 0 ${W} ${H}" role="group" aria-label="${escape(label)}">${svg}</svg></div>${note ? `<p class="chart-note">${note}</p>` : ''}</figure>`;
+}
+
+const LEVEL_WORDS = { ok: 'within the service level', aging: 'past the service level', critical: 'past twice the service level', unknown: 'no service level yet' };
+const COLUMN_WORDS = { in_progress: 'in progress', blocked: 'blocked' };
+
+// Aging WIP: what is not moving. Columns are In progress and Blocked; height
+// is the age since the cycle started; bands are past cycle times.
+export function agingChart(chart, { projectId }) {
+  if (!chart) return '';
+  const title = 'Aging work in progress';
+  const meaning = 'Each dot is an open task, by how long since it was claimed. Higher than the 85% line, it is older than most finished work ever got.';
+  if (!chart.items.length) return frame({ title, meaning, svg: '', label: `${title}: nothing is in progress`, note: 'Nothing is in progress or blocked.' });
+  const { bands } = chart;
+  const top = ceiling([...chart.items.map((item) => item.age), ...(bands ? [bands.p95] : [])]);
+  const columns = ['in_progress', 'blocked'];
+  const columnW = PLOT_W / columns.length;
+  let svg = '';
+  if (bands) {
+    // Zones under each percentile: the higher, the further past usual.
+    const edges = [[0, bands.p50, 'zone-50'], [bands.p50, bands.p70, 'zone-70'], [bands.p70, bands.p85, 'zone-85'], [bands.p85, bands.p95, 'zone-95'], [bands.p95, top, 'zone-over']];
+    svg += edges.filter(([from, to]) => to > from).map(([from, to, kind]) => `<rect class="chart-zone ${kind}" x="${PAD.left}" y="${yOf(to, top)}" width="${PLOT_W}" height="${yOf(from, top) - yOf(to, top)}"/>`).join('');
+  }
+  svg += yAxis(top);
+  if (bands) svg += percentileLines(bands, top);
+  svg += columns.map((column, index) => {
+    const x = PAD.left + columnW * index + columnW / 2;
+    const items = chart.items.filter((item) => item.status === column);
+    const header = `<text class="chart-column" x="${x}" y="${H - 8}" text-anchor="middle">${escape(`${column === 'blocked' ? 'Blocked' : 'In progress'} · ${items.length}`)}</text>`;
+    return `${index ? `<line class="chart-divider" x1="${PAD.left + columnW * index}" x2="${PAD.left + columnW * index}" y1="${PAD.top}" y2="${PAD.top + PLOT_H}"/>` : ''}${header}${items.map((item, at) => dot({
+      x: x + spread(at, columnW), y: yOf(item.age, top), kind: item.level, ring: item.stale, projectId, taskKey: item.taskKey,
+      label: `${localId(item.taskKey)} ${item.title}: ${days(item.age)} ${COLUMN_WORDS[column]}, ${LEVEL_WORDS[item.level]}${item.stale ? '; agent claim is stale' : ''}`,
+    })).join('')}`;
+  }).join('');
+  svg += `<text class="chart-axis-title" x="12" y="${PAD.top + PLOT_H / 2}" transform="rotate(-90 12 ${PAD.top + PLOT_H / 2})" text-anchor="middle">days since claimed</text>`;
+  const notes = [];
+  if (!bands) notes.push(`Bands appear once ${chart.minSample} tasks have finished in the last 90 days.`);
+  if (chart.items.some((item) => item.stale)) notes.push('A ring marks an agent claim with no recent sign of life.');
+  if (chart.unstarted) notes.push(`${chart.unstarted} more ${chart.unstarted === 1 ? 'task has' : 'tasks have'} no recorded start and ${chart.unstarted === 1 ? 'is' : 'are'} not drawn.`);
+  const late = chart.items.filter((item) => item.level === 'aging' || item.level === 'critical').length;
+  return frame({ title, meaning, svg, label: `${title}: ${chart.items.length} open, ${late} past the service level`, note: escape(notes.join(' ')) });
+}
+
+// Cycle times: how long finished work took, over the last 90 days, with the
+// percentile lines; the 85% line is the service level.
+export function cycleChart(chart, { projectId, timezone }) {
+  if (!chart) return '';
+  const title = 'Cycle times';
+  const meaning = 'Each dot is a finished task: when it finished, and how long it took from the claim. 85% of dots sit under the service level line.';
+  if (!chart.items.length) return frame({ title, meaning, svg: '', label: `${title}: nothing finished`, note: 'Nothing with a recorded start finished in the last 90 days.' });
+  const { bands } = chart;
+  // The axis starts a day before the first finish, not at the window's edge,
+  // so a young project's dots are not squeezed to one side.
+  const to = Date.parse(chart.window.to);
+  const from = Math.max(Date.parse(chart.window.from), Math.min(...chart.items.map((item) => Date.parse(item.at))) - 86_400_000);
+  const span = Math.max(1, to - from);
+  const xOf = (at) => PAD.left + ((Date.parse(at) - from) / span) * PLOT_W;
+  const top = ceiling([...chart.items.map((item) => item.days), ...(bands ? [bands.p95] : [])]);
+  let svg = yAxis(top);
+  // Four date ticks across the window.
+  for (let index = 0; index <= 3; index += 1) {
+    const at = new Date(from + (span * index) / 3);
+    const x = PAD.left + (PLOT_W * index) / 3;
+    const text = at.toLocaleDateString(undefined, { month: 'short', day: 'numeric', ...(timezone ? { timeZone: timezone } : {}) });
+    svg += `<text class="chart-tick" x="${x}" y="${H - 8}" text-anchor="${index === 0 ? 'start' : index === 3 ? 'end' : 'middle'}">${escape(text)}</text>`;
+  }
+  if (bands) svg += percentileLines(bands, top);
+  svg += chart.items.map((item) => dot({
+    x: xOf(item.at), y: yOf(item.days, top), kind: bands && item.days > bands.p85 ? 'slow' : 'done', projectId, taskKey: item.taskKey,
+    label: `${localId(item.taskKey)} ${item.title}: took ${days(item.days)}, finished ${new Date(item.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', ...(timezone ? { timeZone: timezone } : {}) })}${bands && item.days > bands.p85 ? ', longer than the service level' : ''}`,
+  })).join('');
+  svg += `<text class="chart-axis-title" x="12" y="${PAD.top + PLOT_H / 2}" transform="rotate(-90 12 ${PAD.top + PLOT_H / 2})" text-anchor="middle">days from claim to done</text>`;
+  const notes = [];
+  if (!bands) notes.push(`Lines appear once ${chart.minSample} tasks have finished.`);
+  if (chart.excluded) notes.push(`${chart.excluded} finished or dropped ${chart.excluded === 1 ? 'task is' : 'tasks are'} left out: no recorded start, a board sweep, or dropped.`);
+  return frame({ title, meaning, svg, label: `${title}: ${chart.items.length} finished in the last 90 days${bands ? `, service level ${days(bands.p85)}` : ''}`, note: escape(notes.join(' ')) });
+}

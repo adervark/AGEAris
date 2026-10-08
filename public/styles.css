@@ -390,6 +390,39 @@ button.delta-item:hover { color: var(--accent); }
 .series rect:hover { fill: var(--accent); }
 .series .limit-line { stroke: var(--fail); stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
 .series-axis { display: flex; justify-content: space-between; margin: 6px 0 0 26px; font-size: 12px; color: var(--muted); }
+/* Flow charts (public/charts.js): aging WIP and cycle times. */
+.chart-stack { display: grid; gap: 12px; margin-top: 12px; }
+.flow-chart { margin: 0; padding: 14px 16px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); min-width: 0; }
+.flow-chart figcaption { font-size: 14px; font-weight: 600; color: var(--ink-2); margin-bottom: 10px; }
+.flow-chart figcaption small { display: block; margin-top: 4px; font-size: 13px; font-weight: 400; color: var(--muted); }
+.chart-scroll { overflow-x: auto; }
+.flow-chart svg { display: block; width: 100%; min-width: 650px; height: auto; }
+.chart-grid { stroke: var(--line); stroke-width: 1; }
+.chart-divider { stroke: var(--line-2); stroke-width: 1; }
+.chart-tick, .chart-column, .chart-axis-title, .chart-line-label { font-family: var(--sans); font-size: 15px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.chart-column { fill: var(--ink-2); font-weight: 600; }
+.chart-line { stroke-width: 1.5; }
+.chart-line-p50 { stroke: var(--idle); stroke-dasharray: 2 4; }
+.chart-line-p85 { stroke: var(--wait); }
+.chart-line-p95 { stroke: var(--fail); stroke-dasharray: 6 4; }
+.chart-line-label-p85 { fill: var(--wait-ink); font-weight: 600; }
+.chart-line-label-p95 { fill: var(--fail-ink); }
+.chart-zone { stroke: none; }
+.zone-50 { fill: var(--surface-2); }
+.zone-70 { fill: var(--surface-2); }
+.zone-85 { fill: var(--surface-3); }
+.zone-95 { fill: var(--wait-tint); }
+.zone-over { fill: var(--fail-tint); }
+.chart-dot { cursor: pointer; outline: none; }
+.chart-dot circle { stroke: var(--bg); stroke-width: 1.5; }
+.dot-ok circle, .dot-unknown circle { fill: var(--run); }
+.dot-aging circle, .dot-slow circle { fill: var(--wait); }
+.dot-critical circle { fill: var(--fail); }
+.dot-done circle { fill: var(--done); }
+.chart-dot .dot-ring { fill: none; stroke: var(--wait-ink); stroke-width: 1.5; stroke-dasharray: 3 2; }
+.chart-dot:hover circle:last-child, .chart-dot:focus-visible circle:last-child { stroke: var(--ink); stroke-width: 2.5; }
+.chart-dot:focus-visible .dot-ring, .chart-dot:focus-visible circle:last-child { stroke: var(--focus); stroke-width: 3; }
+.chart-note { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
 .health-header { display: flex; gap: 22px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--tone); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 24px; }
 .health-verdict { display: flex; align-items: center; gap: 9px; flex: 0 0 auto; font-size: 17px; font-weight: 650; }
 .health-verdict .health-dot { width: 12px; height: 12px; }
