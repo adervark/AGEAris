@@ -149,3 +149,14 @@ its date, the number, and where the evidence is. Newest last.
   WIP limit of 8, and a new project's run stops at both gates and reaches Done.
 - GitHub renders the three Mermaid diagrams (3 mermaid sections in its HTML).
 - `npm test` 473 of 473.
+
+## 2026-10-08 — T007 and T012: the ledger across a board move
+
+- **T007** (a moved board follows the wrong duplicate): fixed. RSNA's T120
+  reads "Check T119 series-safe windows for regressions" with no transitions
+  at 38c58e5; before the fix it took the duplicate's title and owner. T081 and
+  T098 unchanged.
+- **T012** (a moved blocked task loses its Handoff reason): fixed. A blocked
+  task renamed with nothing else changed gives the Handoff line (`handoff`);
+  before, "No reason given" (`none`).
+- `npm test` 476 of 476.

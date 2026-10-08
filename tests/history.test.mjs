@@ -10,7 +10,7 @@ import test from 'node:test';
 
 import { fabricate } from '../lib/fabricate.mjs';
 import {
-  agentIdentity, BOARD_PATHS, buildLedger, cycles, fingerprint, isUiClaim, ledgerAt, Ledgers, parseOwner, typeKey,
+  agentIdentity, BOARD_PATHS, buildLedger, cycles, fingerprint, isUiClaim, ledgerAt, Ledgers, parseOwner, taskPaths, typeKey,
 } from '../lib/history.mjs';
 import { ownerNote, Workspace } from '../lib/workspace.mjs';
 
@@ -904,6 +904,38 @@ test('tracked board: a deaddrop/ → AA/ rename in one commit is a move, trail a
   assert.equal(of(ledger, 'T001').at(-1).path, 'AA/tasks/done/T001-importer.md');
   const [cycle] = cycles(ledger).T001;
   assert.deepEqual([cycle.start.commit, cycle.end.commit, cycle.excluded], [fabrication.sha('claim'), fabrication.sha('finish'), '']);
+});
+
+test('tracked board: a board moved in one commit follows each file to its own new path, even with a duplicated id (T007)', async () => {
+  const review = boardFile('T001', 'Review', { status: 'done', owner: CLAIM });
+  const accumulate = boardFile('T001', 'Accumulate', { status: 'done', owner: 'ben @b/e59f85a4 2026-09-03 — accumulate' });
+  const { fabrication, ledger } = await boardLedger(`
+    day 0 09:00 ade: write deaddrop/tasks/done/T001-review.md ${review} subject="Add T001"
+    day 1 09:00 ade: write deaddrop/tasks/done/T001-accumulate.md ${accumulate} subject="Add a second T001"
+    day 2 09:00 ade: write AA/tasks/done/T001-review.md ${review} subject="migrate: rename deaddrop/ to AA/" label=rename
+    + write AA/tasks/done/T001-accumulate.md ${accumulate}
+    + delete deaddrop/tasks/done/T001-review.md
+    + delete deaddrop/tasks/done/T001-accumulate.md
+    day 3 09:00 ade: write AA/tasks/done/T001-review.md ${boardFile('T001', 'Review, revised', { status: 'done', owner: CLAIM })} subject="Edit T001" label=edit
+  `);
+  const atRename = of(ledger, 'T001').filter((transition) => transition.commit === fabrication.sha('rename'));
+  assert.deepEqual(atRename, [], 'no field changes at the move');
+  assert.deepEqual([ledger.tasks.T001.title, ledger.tasks.T001.owner.raw], ['Review, revised', CLAIM], 'the original file is still the one followed');
+  assert.deepEqual(of(ledger, 'T001').at(-1).path, 'AA/tasks/done/T001-review.md');
+});
+
+test('tracked board: taskPaths knows where a task file is after a move that changes nothing else (T012)', async () => {
+  const blocked = JSON.stringify(`---\nid: T001\ntitle: Licence\nstatus: blocked\nowner: ${CLAIM}\nblockedReason: ""\ncreated: 2026-09-01\n---\n\n## Handoff\n\n- **Next decision:** ask legal whether the dataset licence allows redistribution\n`);
+  const { fabrication, ledger } = await boardLedger(`
+    day 0 09:00 ade: write deaddrop/tasks/T001-licence.md ${blocked} subject="Block T001" label=block
+    day 1 09:00 ade: write AA/tasks/T001-licence.md ${blocked} subject="migrate: rename deaddrop/ to AA/" label=rename
+    + delete deaddrop/tasks/T001-licence.md
+  `);
+  assert.deepEqual(of(ledger, 'T001').map(shape), [['created']], 'the move is not a transition');
+  assert.equal(taskPaths(ledger).get('T001'), 'AA/tasks/T001-licence.md');
+  const before = ledgerAt(ledger, ledger.commits[0].at);
+  assert.equal(taskPaths(before).get('T001'), 'deaddrop/tasks/T001-licence.md', 'a past view reads the path it had then');
+  assert.equal(ledger.commits.at(-1).sha, fabrication.sha('rename'));
 });
 
 test('tracked board: a legacy task created status: open in tasks/ starts in backlog, and its cycle starts when it is claimed', async () => {
