@@ -20,24 +20,26 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T09:04Z · 28 tasks: 14 backlog, 0 WIP (0 in progress), 14 delivered`
+`board · 2026-10-08T09:08Z · 28 tasks: 12 backlog, 0 WIP (0 in progress), 16 delivered`
 
-FLOW · **WIP 0/2** · throughput 3.3/wk (14 in 30d) · cycle time 50th 5m / 85th 46m (n=14)
-FLOW · Little's Law: 0 ÷ 3.3/wk ≈ now expected · lead time 85th 2h
+FLOW · **WIP 0/2** · throughput 3.7/wk (16 in 30d) · cycle time 50th 5m / 85th 46m (n=16)
+FLOW · Little's Law: 0 ÷ 3.7/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 14 | | `T002` `T003` `T004` `T008` `T009` `T010` +8 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | now |  |
-|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | now |  |
+| **BACKLOG** 12 | | `T002` `T003` `T004` `T008` `T009` `T010` +6 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T011 | board.sh loses the history from before a board rename | adervark | now |  |
+|  | T013 | The Method view names a settings file the board does not have | adervark | now |  |
+|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 3m |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 3m |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 3h |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 4h |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 13h |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 13h |  |
 |  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14h |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 33h |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 33h |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 34h |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 34h |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 34h |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 35h |  |
 |  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 35h |  |
 |  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 35h |  |
 |  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 35h |  |
