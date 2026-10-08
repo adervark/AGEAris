@@ -60,6 +60,10 @@
   text-rendering: optimizeLegibility;
 }
 
+/* The wordmark's face, served by AGE Aris itself (the CSP allows nothing
+   else): Michroma, SIL OFL 1.1, cut down to A, R, I and S. */
+@font-face { font-family: 'Michroma'; src: url('/michroma.woff2') format('woff2'); font-weight: 400; font-display: block; }
+
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); }
@@ -975,7 +979,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
    the avatar, the primary button and what is selected. Silver says "this is
    AGE Aris", never a status. Grey lines and edges are not silver, so the
    surfaces keep their plain borders. */
-.brand > span { font-size: 20px; font-weight: 800; letter-spacing: -.3px; background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgb(255 255 255 / .12)); }
+.brand > span { font-family: 'Michroma', var(--sans); font-size: 22px; font-weight: 400; text-transform: uppercase; letter-spacing: .22em; margin-right: -.22em; line-height: 1.2; background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgb(255 255 255 / .12)); }
 .user-avatar { background: var(--accent-sheen); color: var(--on-accent); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .5), 0 0 0 1px #3a3f46; text-shadow: 0 1px 0 rgb(255 255 255 / .6); }
 .button-primary { color: var(--on-accent); border-color: #8a929c; box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 rgb(0 0 0 / .25), 0 1px 0 rgb(0 0 0 / .6); text-shadow: 0 1px 0 rgb(255 255 255 / .55); }
 .button-primary:hover { border-color: #b4bbc4; }

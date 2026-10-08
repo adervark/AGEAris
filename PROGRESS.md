@@ -326,3 +326,11 @@ its date, the number, and where the evidence is. Newest last.
   accessible name stays "AGE Aris: Home".
 - `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
   views.
+
+## 2026-10-09 — T041: the Aris wordmark in Michroma
+
+- ARIS under the logo is set in Michroma, chosen by the operator from eight
+  faces rendered in chrome. AGE Aris serves it itself: a 3.5 KB woff2 of the
+  four glyphs, SIL OFL 1.1, licence in `docs/brand/`.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.

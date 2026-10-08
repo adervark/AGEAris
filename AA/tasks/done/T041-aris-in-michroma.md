@@ -1,7 +1,7 @@
 ---
 id: T041
 title: "The Aris wordmark in Michroma: the plain sans looked too basic"
-status: claimed
+status: done
 owner: adervark @k/c1e9ef11 2026-10-09 — Aris in Michroma
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -29,10 +29,10 @@ The wordmark under the logo has a display face of its own, in chrome.
 
 ## Steps
 
-- [ ] `public/michroma.woff2` served as `font/woff2`; its licence in
+- [x] `public/michroma.woff2` served as `font/woff2`; its licence in
       `docs/brand/`.
-- [ ] The wordmark in Michroma, capitals, spaced, chrome, centred.
-- [ ] DESIGN.md says so.
+- [x] The wordmark in Michroma, capitals, spaced, chrome, centred.
+- [x] DESIGN.md says so.
 
 ## Decision rules — fixed in advance
 
@@ -46,10 +46,10 @@ The wordmark under the logo has a display face of its own, in chrome.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-09, adervark @k/c1e9ef11 (claimed)
+- **Last touched:** 2026-10-09, adervark @k/c1e9ef11 (done)
 - **In flight:** nothing
 - **On disk:** nothing
-- **Resume with:** the Steps
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -57,6 +57,19 @@ The wordmark under the logo has a display face of its own, in chrome.
 A close-up of the sidebar; the font's request in the walk.
 
 ## Result
+
+Pass. The wordmark reads ARIS in Michroma: 22 px, capitals, 0.22 em apart,
+in the T039 chrome, centred under the logo.
+
+- **The font:** `public/michroma.woff2`, 3.5 KB, the glyphs A, R, I and S
+  only (another letter would fall back to the sans); served at
+  `/michroma.woff2` as `font/woff2`, under the page's `default-src 'self'`.
+  Its licence, SIL OFL 1.1, is `docs/brand/michroma-OFL.txt`.
+- **Checked:** the browser reports the wordmark drawn in Michroma (4 glyphs,
+  web font), not a fallback. The server test fetches the font and checks its
+  type and its `wOF2` signature.
+- `npm test` passed 505 of 505, and `npm run check` passed. The browser walk
+  found 0 problems in 102 page views, with no failed request.
 
 ## Notes
 

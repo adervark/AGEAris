@@ -91,6 +91,10 @@ test('HTTP API performs a project and task CRUD round trip and reports client er
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'image/webp');
   assert.equal(Buffer.from(await response.arrayBuffer()).subarray(8, 12).toString(), 'WEBP');
+  response = await fetch(`${base}/michroma.woff2`);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('content-type'), 'font/woff2', 'the wordmark face is served as a font (T041)');
+  assert.equal(Buffer.from(await response.arrayBuffer()).subarray(0, 4).toString(), 'wOF2');
 
   response = await fetch(`${base}/api/workspace`);
   assert.equal(response.status, 200);

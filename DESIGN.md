@@ -58,7 +58,7 @@ same signal badges on a Home row, a card, a list row, and the drawer, which
 always opens the same way.
 
 The shell is true black: the page and its panels are `#000`, separated by thin
-borders rather than shades of grey. A slim sidebar (the AGE Aris logo with "Aris" centred under it,
+borders rather than shades of grey. A slim sidebar (the AGE Aris logo with ARIS centred under it in Michroma, a wide space-age face served by AGE Aris itself as a four-glyph woff2 under the SIL Open Font License,
 then Home, Projects, Working, Agents, Activity, and the projects with a health dot each;
 the logo is `public/logo.webp` and the tab icon `public/planet.png`, both made
 from `docs/brand/age-aris-logo.png`), a top bar with search and a secondary Add

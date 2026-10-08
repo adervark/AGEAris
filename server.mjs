@@ -24,6 +24,9 @@ const STATIC_FILES = new Map([
   ['/threads.js', 'threads.js'],
   ['/planet.png', 'planet.png'],
   ['/logo.webp', 'logo.webp'],
+  // The wordmark's face: Michroma (SIL OFL 1.1, docs/brand/michroma-OFL.txt),
+  // cut down to the glyphs A, R, I and S.
+  ['/michroma.woff2', 'michroma.woff2'],
 ]);
 const MIME = new Map([
   ['.html', 'text/html; charset=utf-8'],
@@ -32,6 +35,7 @@ const MIME = new Map([
   ['.svg', 'image/svg+xml; charset=utf-8'],
   ['.png', 'image/png'],
   ['.webp', 'image/webp'],
+  ['.woff2', 'font/woff2'],
 ]);
 const MAX_JSON_BYTES = 1024 * 1024;
 // Every task and project write made through the API is marked as made in the
