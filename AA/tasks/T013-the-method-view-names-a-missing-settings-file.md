@@ -1,8 +1,8 @@
 ---
 id: T013
 title: "The Method view names a settings file the board does not have"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/adccab68 2026-10-08 — board.sh across a rename; Method view without a settings file
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -46,7 +46,7 @@ instead of naming a file that is not there.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/ff713831 (registered, never claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** write the failing test first
