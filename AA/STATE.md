@@ -20,24 +20,26 @@ track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T09:10Z · 28 tasks: 10 backlog, 0 WIP (0 in progress), 18 delivered`
+`board · 2026-10-08T09:15Z · 28 tasks: 8 backlog, 0 WIP (0 in progress), 20 delivered`
 
-FLOW · **WIP 0/2** · throughput 4.2/wk (18 in 30d) · cycle time 50th 4m / 85th 46m (n=18)
-FLOW · Little's Law: 0 ÷ 4.2/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 4.7/wk (20 in 30d) · cycle time 50th 4m / 85th 33m (n=20)
+FLOW · Little's Law: 0 ÷ 4.7/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 10 | | `T002` `T003` `T004` `T009` `T014` `T015` +4 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T008 | A line separator in a wrapped list line crashes the renderer | adervark | now |  |
-|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | now |  |
-|  | T011 | board.sh loses the history from before a board rename | adervark | 2m |  |
-|  | T013 | The Method view names a settings file the board does not have | adervark | 2m |  |
-|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 5m |  |
-|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 5m |  |
+| **BACKLOG** 8 | | `T003` `T004` `T014` `T015` `T016` `T024` +2 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T002 | Bold or a link that contains inline code shows raw markers | adervark | now |  |
+|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | now |  |
+|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 4m |  |
+|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 4m |  |
+|  | T011 | board.sh loses the history from before a board rename | adervark | 6m |  |
+|  | T013 | The Method view names a settings file the board does not have | adervark | 6m |  |
+|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 10m |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 10m |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 3h |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 4h |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 13h |  |
-|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 13h |  |
+|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 14h |  |
 |  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14h |  |
 |  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 34h |  |
 |  | T020 | A cockpit test fails when run in the early hours | adervark | 34h |  |
