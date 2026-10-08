@@ -1,8 +1,8 @@
 ---
 id: T026
 title: "Tracked task actions: the review's remaining low findings"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/adccab68 2026-10-08 — ckpt.sh check's exit; the task-action review's last findings
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -62,7 +62,7 @@ The refusals on a tracked board come in §4's order, Claim on a task the operato
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @v/b384188f (registered, never claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** the Context above, then T023's Result
@@ -82,3 +82,7 @@ retire the trail with `--delete`)*
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-08, the operator (asked by adervark @k/adccab68): Claim over an own
+  agent's hold takes it back. It writes the AGE Aris owner line and keeps the
+  agent's line after it (`; was …`), as AA rule 3 says; plan §4 is amended to match.
