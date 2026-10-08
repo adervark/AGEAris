@@ -21,10 +21,10 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T18:34Z · 39 tasks: 5 backlog, 0 WIP (0 in progress), 34 delivered`
+`board · 2026-10-08T18:40Z · 39 tasks: 4 backlog, 0 WIP (0 in progress), 35 delivered`
 
-FLOW · **WIP 0/2** · throughput 7.9/wk (34 in 30d) · cycle time 50th 4m / 85th 13m (n=34)
-FLOW · Little's Law: 0 ÷ 7.9/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 8.2/wk (35 in 30d) · cycle time 50th 4m / 85th 13m (n=35)
+FLOW · Little's Law: 0 ÷ 8.2/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
@@ -32,9 +32,9 @@ FLOW · Little's Law: 0 ÷ 7.9/wk ≈ now expected · lead time 85th 35h
 |  | T004 | Keep one copy of the aa-init template | — | 45h |  |
 |  | T024 | The card menu, the keyboard map, and drag through the action registry | — | 25h |  |
 |  | T025 | Say on the project page that STATE.md is behind, or kept by hand | — | 25h |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | "" | 27m |  |
-| **DONE** | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | now |  |
-|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 21m |  |
+| **DONE** | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | now |  |
+|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 5m |  |
+|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 26m |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 6h |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 6h |  |
 |  | T034 | Silver accents, taken from the logo | adervark | 7h |  |
@@ -69,10 +69,6 @@ FLOW · Little's Law: 0 ÷ 7.9/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 44h |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-
-**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
-
-- **1** backlog task(s) carrying an owner — a claim is a move to tasks/, not a line edit: T039
 <!-- /AA:generated -->
 
 <!--
