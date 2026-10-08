@@ -206,3 +206,13 @@ its date, the number, and where the evidence is. Newest last.
 - Patched here, in the template, in the global copy, and, on the operator's
   word, in AGEION, AGEIS, Gem4A and RSNA (uncommitted there).
 - `npm test` 484 of 484.
+
+## 2026-10-08 — T026: the task-action review's last findings
+
+- The switch is checked before the folder name; §4 amended where the code's
+  order is better. Overlapping refusals tested.
+- Claim over the operator's own agent takes it back and keeps the agent's line
+  (`; was …`), on the operator's decision.
+- The AA.yml read under the lock is capped at 64 KB, as elsewhere.
+- Missing tests added (index-only DIRTY_FILE, target exists, detached HEAD,
+  email redaction). `npm test` 489 of 489.

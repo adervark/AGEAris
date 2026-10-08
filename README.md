@@ -371,6 +371,9 @@ that lists every reason: a task held by one of your own agent sessions (with
 its last sign of life), and runs that never ended or trail lines that do not
 parse. A run that never ended is not reaped for you: the result names the
 `AA/ckpt.sh` command to run.
+Claim on a task one of your own agent sessions holds takes it back (AA rule
+3): your owner line is written, with the agent's old line kept after it as
+`; was …`. Other actions keep the agent's owner line.
 
 **Done leaves the checkpoint trail in place.** AA's Done retires the trail
 with `AA/ckpt.sh close <ID> --delete`; AGE Aris does not write trails or run

@@ -815,6 +815,16 @@ test('POST /api/tasks/:id/actions on a tracked repository: the token, the switch
   assert.deepEqual(await repositoryState(repository), after);
 });
 
+test('the stderr line of a refused task action redacts an email in the project\'s name (T026)', async (t) => {
+  const { base, fetch } = await tokenServer(t);
+  const call = caller(base, fetch);
+  const repository = await trackedRepository(t);
+  const project = await call('POST', '/api/projects/link', { path: repository, name: 'Ops ada@example.org' }, 201);
+  const task = (await call('GET', '/api/workspace')).tasks.find((entry) => entry.id === `${project.id}:T001`);
+  const lines = await stderrOf(() => call('POST', `/api/tasks/${encodeURIComponent(task.id)}/actions`, { action: 'claim', version: task.version }, 409));
+  assert.deepEqual(lines, ['tracked action ACTIONS_OFF: Ops [email redacted] T001 claim']);
+});
+
 test('POST /api/tasks/:id/actions on an AGE Aris project changes the task as PATCH does', async (t) => {
   const { base, fetch } = await tokenServer(t);
   const call = caller(base, fetch);
