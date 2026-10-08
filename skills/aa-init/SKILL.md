@@ -18,7 +18,7 @@ It holds no rules; `template/RULES.md` does.
 AA/
   RULES.md            the protocol, one page, binding     <- read always
   WHY.md              the reasons, one section per rule   <- read on challenge
-  AA.yml        spend words, WIP limit, log, map    <- the only per-discipline file
+  AA.yml              spend words, WIP limit, log, map    <- the only per-discipline file
   STATE.md            NOW block (hand-written) + generated board
   ckpt.sh             writes and reads the trail
   board.sh            renders the board: --write / --check

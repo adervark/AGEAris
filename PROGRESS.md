@@ -160,3 +160,13 @@ its date, the number, and where the evidence is. Newest last.
   task renamed with nothing else changed gives the Handoff line (`handoff`);
   before, "No reason given" (`none`).
 - `npm test` 476 of 476.
+
+## 2026-10-08 — T011 and T013: board.sh across a rename; the Method view's settings file
+
+- **T011** (board.sh loses history across a rename): fixed. A migrated
+  `deaddrop/` board prints the same `board.sh --all` as a never-migrated twin;
+  before, ages `?` and cycle time n=0 (twin: 33d, 34d, n=1). The global
+  `aa-init` copy is synced.
+- **T013** (the Method view names a missing settings file): fixed. A board
+  without one says the defaults apply.
+- `npm test` 477 of 477.

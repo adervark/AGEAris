@@ -473,6 +473,12 @@ test('a tracked task shows its holder and whether its Result is still a placehol
 
 // ---- board.sh reads what AGE Aris writes
 
+test('board.sh reads the history from before a board rename: a migrated board prints what its never-migrated twin does (T011)', async () => {
+  const script = new URL('fixtures/board/board-rename.sh', import.meta.url);
+  const { stdout } = await exec('bash', [script.pathname, new URL('.', TEMPLATE).pathname]).catch((error) => assert.fail(`the boards differ:\n${error.stdout}${error.stderr}`));
+  assert.equal(stdout, '');
+});
+
 test('board.sh compatibility: a claim is IN PROGRESS with the operator, done is DONE, unblock starts a new stint, and --check is stale until --write', async () => {
   for (const tool of ['bash', 'jq']) {
     await exec('sh', ['-c', `command -v ${tool}`]).catch(() => assert.fail(`${tool} is required for the board.sh compatibility test; install it`));

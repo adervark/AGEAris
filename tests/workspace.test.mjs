@@ -1322,6 +1322,11 @@ test('methodOf reads a board\'s policy and its own method documents, skipping sy
   const ownMethod = await workspace.methodOf(own.id);
   assert.deepEqual([ownMethod.linked, ownMethod.board, ownMethod.config, ownMethod.wipLimit, ownMethod.staleHours], [false, 'AA', 'AA/AA.yml', 5, 24]);
   await expectRejected(workspace.methodOf('missing-project'), 404, /./);
+
+  // A board without a settings file names none; its defaults apply (T013).
+  const bare = await workspace.linkProject({ path: await makeTrackedRepository({ 'AA/tasks/T001-work.md': boardTask('T001', 'Work', { status: 'open' }) }) });
+  const bareMethod = await workspace.methodOf(bare.id);
+  assert.deepEqual([bareMethod.config, bareMethod.staleHours, bareMethod.wipLimit], ['', 24, 0]);
 });
 
 test('a task lists what it builds on from depends:, in order, without itself, repeats, or text that is not a task id', async () => {

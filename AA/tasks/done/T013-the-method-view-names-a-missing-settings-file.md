@@ -1,7 +1,7 @@
 ---
 id: T013
 title: "The Method view names a settings file the board does not have"
-status: claimed
+status: done
 owner: adervark @k/adccab68 2026-10-08 — board.sh across a rename; Method view without a settings file
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
@@ -32,8 +32,8 @@ instead of naming a file that is not there.
 
 ## Steps
 
-- [ ] A failing test for a board without a settings file.
-- [ ] `methodOf` sets `config` only when the file exists; `renderMethod` says
+- [x] A failing test for a board without a settings file.
+- [x] `methodOf` sets `config` only when the file exists; `renderMethod` says
   "No settings file; the defaults apply" otherwise.
 
 ## Decision rules — fixed in advance
@@ -46,10 +46,10 @@ instead of naming a file that is not there.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (done)
 - **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** write the failing test first
+- **On disk:** nothing
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -58,9 +58,19 @@ instead of naming a file that is not there.
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T013` — then
-retire the trail with `--delete`)*
+**Done.** `methodOf` sets `config` only when the board's settings file is
+there (`''` otherwise). `renderMethod` then says "No settings file; the
+defaults apply" for the WIP limit and the stale threshold, instead of naming a
+file that does not exist.
+
+Against the decision rules:
+
+- Tests: a tracked `AA/` board without `AA.yml` gives `config: ''` (workspace
+  test), and its Method view names no `.yml` and says the defaults apply twice
+  (cockpit-ui test). Both fail without the fix. The `deaddrop/deaddrop.yml`
+  board still names its file, and so does an own project's `AA/AA.yml`.
+- `npm test` 477 of 477 and `npm run check` pass. No spend.
+- Log: PROGRESS.md, 2026-10-08 — T011 and T013.
 
 ## Notes
 

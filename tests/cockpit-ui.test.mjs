@@ -153,7 +153,7 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.match(flow, /ledger <code title="[0-9a-f]{40}">[0-9a-f]{7}<\/code>/);
 
   const line = brief.projects.find((entry) => entry.projectId === project.id);
-  const method = renderMethod({ project, method: { linked: false, board: 'AA', staleHours: 24, wipLimit: 6, docs: [{ name: 'WORKFLOW.md', path: 'AA/WORKFLOW.md', text: '# Flow\n\n<script>x</script> [x](javascript:alert(1))' }] }, data: metrics, line, tasks: tasks.filter((entry) => entry.projectId === project.id), pipeline: { stages: [{ name: 'Plan', role: 'plan', gate: true }] } });
+  const method = renderMethod({ project, method: { linked: false, board: 'AA', config: 'AA/AA.yml', staleHours: 24, wipLimit: 6, docs: [{ name: 'WORKFLOW.md', path: 'AA/WORKFLOW.md', text: '# Flow\n\n<script>x</script> [x](javascript:alert(1))' }] }, data: metrics, line, tasks: tasks.filter((entry) => entry.projectId === project.id), pipeline: { stages: [{ name: 'Plan', role: 'plan', gate: true }] } });
   checkMarkup(method, 'Method');
   for (const id of line.health.rules.map((rule) => rule.id)) assert.match(method, new RegExp(`class="check-code"[^>]*>${id}<`), `check ${id} is listed`);
   assert.match(method, /At most 6 at once/);
@@ -161,6 +161,10 @@ test('the cockpit views render the sample project, escape what they show, and ci
   const older = renderMethod({ project, method: { linked: true, board: 'deaddrop', config: 'deaddrop/deaddrop.yml', staleHours: 12, wipLimit: 4, docs: [] }, data: metrics, line, tasks: [], pipeline: { stages: [] } });
   assert.match(older, /From deaddrop\/deaddrop\.yml/, 'a board under its older name names its own settings file');
   assert.match(older, /Lives in deaddrop\/backlog\//);
+  // A board without a settings file names none (T013).
+  const bare = renderMethod({ project, method: { linked: true, board: 'AA', config: '', staleHours: 24, wipLimit: 0, docs: [] }, data: metrics, line, tasks: [], pipeline: { stages: [] } });
+  assert.doesNotMatch(bare, /AA\.yml/);
+  assert.equal(bare.match(/No settings file; the defaults apply/g)?.length, 2, 'for the WIP limit and the stale threshold');
   assert.match(method, /&lt;script&gt;x&lt;\/script&gt;/);
   assert.doesNotMatch(method, /href="javascript/);
   assert.match(method, /data-action="edit-pipeline"/);
