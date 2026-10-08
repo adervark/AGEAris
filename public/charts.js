@@ -70,7 +70,7 @@ function percentileLines(bands, scale, PW) {
   for (let index = 1; index < lines.length; index += 1) lines[index].at = Math.min(lines[index].at, lines[index - 1].at - LABEL_GAP);
   const overTop = PAD.top + 4 - Math.min(...lines.map((line) => line.at));
   if (overTop > 0) for (const line of lines) line.at += overTop;
-  return lines.map(({ kind, value, y, at }) => `<line class="chart-line chart-line-${kind}" x1="${PAD.left}" x2="${PAD.left + PW}" y1="${y}" y2="${y}"/><text class="chart-line-label chart-line-label-${kind}" x="${PAD.left + PW + 8}" y="${at + 5}">${escape(`${kind.slice(1)}% · ${duration(value)}`)}</text>`).join('');
+  return lines.map(({ kind, value, y, at }) => `<line class="chart-line chart-line-${kind}" x1="${PAD.left}" x2="${PAD.left + PW}" y1="${y}" y2="${y}"/><text class="chart-line-label chart-line-label-${kind}" x="${PAD.left + PW + 8}" y="${at + 5}">${escape(`${kind.slice(1)}%: ${duration(value)}`)}</text>`).join('');
 }
 
 function dot({ x, y, kind, label, projectId, taskKey, ring = false }) {
@@ -134,7 +134,7 @@ export function agingChart(chart, { projectId, width } = {}) {
     const x = PAD.left + columnW * index + columnW / 2;
     const items = chart.items.filter((item) => item.status === column);
     const spots = swarm(items.map((item) => ({ x, y: scale.y(item.age) })), columnW / 2 - R - 6);
-    const header = `<text class="chart-column" x="${x}" y="${H - 8}" text-anchor="middle">${escape(`${column === 'blocked' ? 'Blocked' : 'In progress'} · ${items.length}`)}</text>`;
+    const header = `<text class="chart-column" x="${x}" y="${H - 8}" text-anchor="middle">${escape(`${column === 'blocked' ? 'Blocked' : 'In progress'} (${items.length})`)}</text>`;
     return `${index ? `<line class="chart-divider" x1="${PAD.left + columnW * index}" x2="${PAD.left + columnW * index}" y1="${PAD.top}" y2="${PAD.top + PLOT_H}"/>` : ''}${header}${items.map((item, at) => dot({
       x: spots[at].x, y: spots[at].y, kind: item.level, ring: item.stale, projectId, taskKey: item.taskKey,
       label: `${localId(item.taskKey)} ${item.title}: ${duration(item.age)} ${COLUMN_WORDS[column]}, ${LEVEL_WORDS[item.level]}${item.stale ? '; agent claim is stale' : ''}`,

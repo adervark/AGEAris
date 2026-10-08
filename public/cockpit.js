@@ -2,6 +2,7 @@ import { agingChart, cycleChart, duration, forecastChart } from './charts.js';
 import { icon } from './icons.js';
 import { WINDOWS } from './cursor.js';
 import { renderMarkdown } from './markdown.js';
+import { flowStrip } from './strip.js';
 import { visibleRows } from './threads.js';
 import { agentChip, agentShort, CHECKS, escape, healthTone, healthWord, NEED, NEEDS, ownerChip, TERMS } from './words.js';
 
@@ -185,10 +186,10 @@ function workingRow(task, start, signal, now) {
 function needDetail(row) {
   const metric = (display, title = '') => metricButton({ projectId: row.projectId, metricId: row.metricId, display, title, taskKey: row.kind === 'due_risk' ? row.taskKey : '' });
   switch (row.kind) {
-    case 'decision': return `${escape({ gate: 'Approval', input: 'Input requested', waiting: 'No agent free', failed: 'Run failed', unclaimed: 'Unclaimed', integrity: 'Audit check failed' }[row.reason] || 'Decision')} · waiting ${metric(formatAge(row.age), row.workingHours !== undefined ? `${row.workingHours} working hours` : '')}`;
+    case 'decision': return `${escape({ gate: 'Approval', input: 'Input requested', waiting: 'No agent free', failed: 'Run failed', unclaimed: 'Unclaimed', integrity: 'Audit check failed' }[row.reason] || 'Decision')}, waiting ${metric(formatAge(row.age), row.workingHours !== undefined ? `${row.workingHours} working hours` : '')}`;
     case 'overdue': return `${metric(plural(row.daysOverdue, 'day'))} past ${escape(shortDate(row.dueDate))}`;
     case 'stale': return `quiet ${metric(formatAge(row.hours))}`;
-    case 'due_risk': return `${metric(`${Math.round((row.probability ?? 0) * 100)}% on time`, row.reasonText)} · due ${escape(shortDate(row.dueDate))}`;
+    case 'due_risk': return `${metric(`${Math.round((row.probability ?? 0) * 100)}% on time`, row.reasonText)}, due ${escape(shortDate(row.dueDate))}`;
     case 'aging': return `in progress ${metric(`${row.ageDays} d`)}`;
     case 'blocked': return `blocked ${metric(plural(round1(row.days), 'day'))}`;
     case 'unassigned': return `${escape(row.priority)} priority`;
@@ -238,38 +239,48 @@ function clearChecks(brief) {
 
 // The clear checks, in one quiet line.
 function allClear(words) {
-  return words.length ? `<p class="all-clear home-clear">${icon('check')}<span>All clear: ${escape(words.join(' · '))}</span></p>` : '';
+  return words.length ? `<p class="all-clear home-clear">${icon('check')}<span>All clear: ${escape(words.join(', '))}</span></p>` : '';
 }
 
-export function sparkline(points = [], label = 'Finished per day') {
-  if (!points.length) return '';
-  const max = Math.max(1, ...points.map((point) => point.n));
-  const width = 4;
-  const gap = 1;
-  const height = 34;
-  const bars = points.map((point, index) => {
-    const h = point.n ? Math.max(3, Math.round((point.n / max) * height)) : 2;
-    return `<rect class="${point.n ? '' : 'is-zero'}" x="${index * (width + gap)}" y="${height - h}" width="${width}" height="${h}" rx="1"><title>${escape(shortDate(point.date))}: ${point.n} finished</title></rect>`;
-  }).join('');
-  return `<svg class="spark" viewBox="0 0 ${points.length * (width + gap)} ${height}" preserveAspectRatio="none" role="img" aria-label="${escape(`${label}, last ${points.length} days, most ${max} in a day`)}">${bars}</svg>`;
+// The width of the Home column the strips are drawn in, for a page `width`
+// px wide: below HOME_SPLIT the side column sits above them; above it, the
+// side column takes 30% of the page (300 to 440 px) and a gap. The CSS grid
+// says the same (.home-grid).
+const HOME_SPLIT = 1000;
+const HOME_GAP = 56;
+export function homeStripWidth(width) {
+  if (width < HOME_SPLIT) return width;
+  return width - Math.min(440, Math.max(300, width * 0.3)) - HOME_GAP;
 }
 
-// One project as a card: its health in words, why, and how work is flowing.
-export function projectCard(line, { agents = 0, project } = {}) {
-  const name = `<a class="project-card-name" href="#project/${escape(line.projectId)}">${escape(line.name)}</a>`;
+// One board: its name and health, a quiet line of its numbers, and its flow
+// strip. `tasks` are the board's tasks (for its backlog); `width` is the
+// width the strip is shown at.
+export function boardStrip(line, { agents = 0, project, tasks = [], width = 760, height } = {}) {
+  const name = `<a class="board-name" href="#project/${escape(line.projectId)}">${escape(line.name)}</a>`;
   const badges = `${line.linked ? `<span class="readonly-badge" title="${project?.actions?.on ? 'AGE Aris changes this repository’s tasks only through task actions.' : 'AGE Aris reads this repository; task actions are off.'}">Tracked</span>` : ''}${sampleBadge(line.sample)}`;
   if (line.state !== 'ready') {
     const word = line.state === 'unavailable' ? 'Unavailable' : 'Indexing';
-    return `<article class="project-card"><div class="project-card-head">${healthDot(null)}${name}<span class="health-word">${word}</span>${badges}</div><p class="project-card-indexing">${line.state === 'unavailable' ? icon('alert') : '<span class="spinner"></span>'}${escape(headline(line))}</p></article>`;
+    return `<article class="board-strip"><header class="board-head">${healthDot(null)}${name}<span class="health-word">${word}</span>${badges}</header><p class="board-sentence">${line.state === 'unavailable' ? icon('alert') : '<span class="spinner"></span>'}${escape(headline(line))}</p></article>`;
   }
   const k = line.kpis;
   const usual = line.usualWeek ?? null;
   const word = metricButton({ projectId: line.projectId, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' });
-  const fact = (label, help, value) => `<div title="${escape(help)}"><dt>${escape(label)}</dt><dd>${value}</dd></div>`;
-  return `<article class="project-card tone-${healthTone(line.health)}"><div class="project-card-head">${healthDot(line.health)}${name}${word}${badges}</div>
-    <p class="project-card-sentence">${escape(headline(line))}</p>
-    <div class="project-card-flow"><p><strong>${metricOf(line.projectId, k.done7d)}</strong>finished in 7 days${usual !== null ? `<br><span class="muted">usually ~${escape(usual)} a week</span>` : ''}</p>${sparkline(line.spark)}</div>
-    <dl class="project-card-facts">${fact(TERMS.wip[0], TERMS.wip[1], metricOf(line.projectId, k.wip))}${k.cycle50 ? fact(TERMS.cycle[0], TERMS.cycle[1], metricOf(line.projectId, k.cycle50)) : ''}${k.cycle85 ? fact(TERMS.service[0], TERMS.service[1], metricOf(line.projectId, k.cycle85)) : ''}${fact('Agents', 'Agent sessions holding work in progress', escape(agents))}${project?.problems?.length ? fact('Unread files', 'Task files AGE Aris could not read', escape(project.problems.length)) : ''}</dl></article>`;
+  const fact = (label, help, value, extra = '') => `<div title="${escape(help)}"><dt>${escape(label)}</dt><dd>${value}${extra}</dd></div>`;
+  const facts = [
+    fact('Finished this week', TERMS.throughput[1], metricOf(line.projectId, k.done7d), usual !== null ? `<span class="muted">, usually ${escape(usual)}</span>` : ''),
+    k.cycle50 ? fact(TERMS.cycle[0], TERMS.cycle[1], metricOf(line.projectId, k.cycle50)) : '',
+    k.cycle85 ? fact(TERMS.service[0], TERMS.service[1], metricOf(line.projectId, k.cycle85)) : '',
+    agents ? fact('Agents', 'Agent sessions holding work in progress', escape(agents)) : '',
+    project?.problems?.length ? fact('Unread files', 'Task files AGE Aris could not read', escape(project.problems.length)) : '',
+  ].join('');
+  const quiet = line.health.level === 'green';
+  const backlog = tasks.filter((task) => task.status === 'backlog').map((task) => ({ taskKey: keyOf(task), title: task.title }));
+  const strip = flowStrip({
+    projectId: line.projectId, name: line.name, backlog, wip: line.wipAges || [], days: (line.spark || []).slice(-7),
+    serviceLevel: k.cycle85?.status === 'ok' ? k.cycle85.value : null, wipLimit: k.wipLimit > 0 ? k.wipLimit : 0,
+  }, { width, height });
+  return `<article class="board-strip tone-${healthTone(line.health)}"><header class="board-head">${healthDot(line.health)}${name}${word}${badges}</header>${quiet ? '' : `<p class="board-sentence">${escape(headline(line))}</p>`}<dl class="board-facts">${facts}</dl>${strip}</article>`;
 }
 
 function windowNote(brief) {
@@ -287,28 +298,39 @@ function deltaList(name, items, timezone, manyProjects) {
     const target = item.taskKey ? openItem({ projectId: item.projectId, taskKey: item.taskKey }) : '';
     const what = item.from !== undefined && item.to !== undefined && name !== 'reopened' ? ` <small>${escape(item.from || 'none')} → ${escape(item.to || 'none')}</small>` : '';
     const title = `${item.taskKey ? `<span class="task-number">${escape(localId(item.taskKey))}</span>` : ''}${escape(item.title || item.taskKey || `Run ${item.runId}`)}${what}`;
-    return `<li>${target ? `<button type="button" class="delta-item" ${target}>${title}</button>` : `<span class="delta-item">${title}</span>`}<span class="delta-meta">${manyProjects ? `${escape(item.projectName)} · ` : ''}${escape(formatWhen(item.at, timezone))}</span></li>`;
+    return `<li>${target ? `<button type="button" class="delta-item" ${target}>${title}</button>` : `<span class="delta-item">${title}</span>`}<span class="delta-meta">${manyProjects ? `${escape(item.projectName)}, ` : ''}${escape(formatWhen(item.at, timezone))}</span></li>`;
   }).join('');
   return `<ol class="delta-list" id="delta-${escape(name)}">${rows}${items.length > 100 ? `<li class="muted">${items.length - 100} more in Activity</li>` : ''}</ol>`;
 }
 
-export function renderHome(brief, { mode, expanded, taskOf, agentsByProject, projects }) {
+// Home: what needs you, and every board as a strip. Below HOME_SPLIT the
+// side column (Needs you, what changed) sits above the strips.
+export function renderHome(brief, { mode, expanded, taskOf, agentsByProject, projects, tasks = [], width = 1200 }) {
   const tz = brief.timezone;
   const manyProjects = brief.projects.length > 1;
   const count = brief.needsYou.length;
   const attention = brief.projects.filter((line) => line.state === 'ready' && ['red', 'amber'].includes(line.health.level));
-  const sub = attention.length ? attention.map((line) => `${line.name} ${healthWord(line.health) === 'Watch' ? 'needs watching' : 'needs attention'}`).join(' · ') : brief.projects.length ? 'Every project is on track.' : '';
+  const sub = attention.length ? `${attention.map((line) => `${line.name} ${healthWord(line.health) === 'Watch' ? 'needs watching' : 'needs attention'}`).join('; ')}.` : brief.projects.length ? 'Every board is on track.' : '';
   const windowMenu = `<label class="window-menu"><span class="sr-only">Window for what changed</span><select data-brief-window>${Object.entries(WINDOWS).map(([value, label]) => `<option value="${value}" ${mode === value ? 'selected' : ''}>${escape(label)}</option>`).join('')}</select></label>`;
   const moved = DELTA_LABELS.map(([name, label]) => [name, label, brief.delta[name] || []]).filter(([, , items]) => items.length);
   const clear = clearChecks(brief);
   const needs = count
-    ? `<div class="panel need-board">${needGroups(brief, { expanded, taskOf, manyProjects })}</div>${allClear(clear)}`
-    : `<p class="today-clear">${icon('check')}<span>Nothing needs you${clear.length ? `: ${escape(clear.join(' · '))}` : ''}.</span></p>`;
+    ? `<div class="need-board">${needGroups(brief, { expanded, taskOf, manyProjects })}</div>${allClear(clear)}`
+    : `<p class="today-clear">${icon('check')}<span>Nothing needs you${clear.length ? `: ${escape(clear.join(', '))}` : ''}.</span></p>`;
   const projectById = new Map((projects || []).map((project) => [project.id, project]));
-  return `<section class="page-heading home-heading"><div><p class="home-date">${escape(formatDay(brief.asOf, tz))}</p><h1>${count ? `${plural(count, 'thing')} ${count === 1 ? 'needs' : 'need'} you` : 'Nothing needs you'}</h1>${sub ? `<p class="home-sub">${escape(sub)}</p>` : ''}</div></section>
-    <section class="section" aria-labelledby="needs-heading"><div class="section-heading"><h2 id="needs-heading">Needs you</h2><span>What breaks the method’s checks, most pressing first</span></div>${needs}</section>
-    <section class="section" aria-labelledby="projects-heading"><div class="section-heading"><h2 id="projects-heading">Projects</h2><a href="#projects">All projects</a></div><div class="project-cards">${brief.projects.map((line) => projectCard(line, { agents: agentsByProject.get(line.projectId) || 0, project: projectById.get(line.projectId) })).join('')}</div></section>
-    <section class="section" aria-labelledby="delta-heading"><div class="section-heading"><h2 id="delta-heading">${escape(capital(brief.window.label))}</h2><div class="heading-actions">${windowMenu}<button type="button" class="button button-secondary button-small" data-action="mark-seen" title="Start the next “since your last visit” from now">${icon('check')}Mark seen</button></div></div>${windowNote(brief)}${moved.length ? `<div class="delta-chips">${moved.map(([name, label, items]) => `<button type="button" class="delta-chip ${expanded.has(name) ? 'selected' : ''}" data-action="toggle-delta" data-value="${name}" aria-expanded="${expanded.has(name)}" aria-controls="delta-${name}"><strong>${items.length}</strong>${escape(label.toLowerCase())}</button>`).join('')}</div>${moved.filter(([name]) => expanded.has(name)).map(([name, label, items]) => `<div class="delta-group"><h3>${escape(label)}</h3>${deltaList(name, items, tz, manyProjects)}</div>`).join('')}` : '<p class="today-clear">Nothing moved in this window.</p>'}<a class="section-link" href="#activity">See all activity${icon('chevron')}</a></section>`;
+  const stripWidth = homeStripWidth(width);
+  const boards = brief.projects.map((line) => boardStrip(line, { agents: agentsByProject.get(line.projectId) || 0, project: projectById.get(line.projectId), tasks: tasks.filter((task) => task.projectId === line.projectId), width: stripWidth, height: Math.min(170, Math.max(118, stripWidth * 0.07)) })).join('');
+  const changes = moved.length
+    ? `<ul class="delta-rows">${moved.map(([name, label, items]) => `<li><button type="button" class="delta-row ${expanded.has(name) ? 'selected' : ''}" data-action="toggle-delta" data-value="${name}" aria-expanded="${expanded.has(name)}" aria-controls="delta-${name}"><strong>${items.length}</strong>${escape(label.toLowerCase())}</button>${expanded.has(name) ? deltaList(name, items, tz, manyProjects) : ''}</li>`).join('')}</ul>`
+    : '<p class="today-clear">Nothing moved in this window.</p>';
+  return `<section class="home-hero"><div><h1>${count ? `${plural(count, 'thing')} ${count === 1 ? 'needs' : 'need'} you` : 'Nothing needs you'}</h1>${sub ? `<p class="home-sub">${escape(sub)}</p>` : ''}</div><p class="home-date">${escape(formatDay(brief.asOf, tz))}</p></section>
+    <div class="home-grid ${width >= HOME_SPLIT ? 'is-split' : ''}">
+      <div class="home-side">
+        <section class="home-section" aria-labelledby="needs-heading"><h2 id="needs-heading">Needs you</h2><p class="section-meaning">What breaks the method’s checks, most pressing first.</p>${needs}</section>
+        <section class="home-section" aria-labelledby="delta-heading"><div class="home-section-head"><h2 id="delta-heading">${escape(capital(brief.window.label))}</h2>${windowMenu}</div>${windowNote(brief)}${changes}<div class="home-section-foot"><a class="text-link" href="#activity">All activity</a><button type="button" class="text-button" data-action="mark-seen" title="Start the next “since your last visit” from now">${icon('check')}Mark seen</button></div></section>
+      </div>
+      <section class="home-boards" aria-labelledby="boards-heading"><h2 id="boards-heading" class="sr-only">Boards</h2>${boards}</section>
+    </div>`;
 }
 
 // --- Decisions header ------------------------------------------------------------
@@ -398,7 +420,7 @@ export function renderFlow(data, { projectId, wipLimit = 0, width = 0 }) {
     <div class="chart-stack">${forecast.startsWith('<figure') ? forecast : ''}${drawn.length ? `<div class="${pair ? 'chart-pair' : 'chart-list'}">${drawn.join('')}</div>` : ''}${unshown.length ? `<div class="chart-waiting">${unshown.join('')}</div>` : ''}</div></section>
     <section class="health-section" aria-labelledby="risk-heading"><div class="section-heading"><h2 id="risk-heading">Risk</h2><span>The work behind each failing check</span></div>${risk}</section>
     <section class="health-section" aria-labelledby="people-heading"><div class="section-heading"><h2 id="people-heading">Load</h2><span>Who holds work in progress</span></div>${people}${agents}${unassigned}</section>
-    <p class="data-line">${icon('git')}Computed ${escape(formatWhen(data.asOf, data.timezone))} from ${plural(data.ledger.commits, 'commit')} on ${escape(data.ledger.branch || 'the default branch')}${data.ledger.clamped ? ` (${plural(data.ledger.clamped, 'commit')} with clamped times)` : ''}${anomalies ? ` · ${escape(anomalies)}` : ''} · ledger <code title="${escape(data.build.ledgerSha)}">${escape(shortSha(data.build.ledgerSha))}</code>${data.ledger.live ? ' · includes the live trail' : ''}</p>`;
+    <p class="data-line">${icon('git')}Computed ${escape(formatWhen(data.asOf, data.timezone))} from ${plural(data.ledger.commits, 'commit')} on ${escape(data.ledger.branch || 'the default branch')}${data.ledger.clamped ? ` (${plural(data.ledger.clamped, 'commit')} with clamped times)` : ''}${anomalies ? `, ${escape(anomalies)}` : ''}, ledger <code title="${escape(data.build.ledgerSha)}">${escape(shortSha(data.build.ledgerSha))}</code>${data.ledger.live ? ', includes the live trail' : ''}</p>`;
 }
 
 // --- Project Method tab ---------------------------------------------------------------
@@ -480,7 +502,7 @@ function explainItems(value) {
   const items = own ? value.items : value.denominator?.items || [];
   if (!items.length) return '';
   const extra = [...new Set(items.slice(0, 50).flatMap((item) => Object.keys(item).filter((key) => !ITEM_SKIP.has(key) && typeof item[key] !== 'object')))].slice(0, 5);
-  return `<h3>${own ? 'Items' : 'Finished items compared'} <span>${items.length}</span></h3><div class="task-table-wrap"><table class="task-table compact-table"><thead><tr><th scope="col">Item</th>${extra.map((key) => `<th scope="col">${escape(key)}</th>`).join('')}<th scope="col">Source</th></tr></thead><tbody>${items.slice(0, 200).map((item) => `<tr><td>${item.taskKey ? `<span class="task-number">${escape(localId(item.taskKey))}</span>${escape(item.title || '')}` : escape(typeof item.owner === 'string' ? item.owner : item.title || (item.runId ? `Run ${item.runId}` : ''))}${item.owner && typeof item.owner !== 'string' ? `<small class="muted"> · ${ownerChip(item.owner)}</small>` : ''}</td>${extra.map((key) => `<td>${itemValue(item[key])}</td>`).join('')}<td>${citation(item)}</td></tr>`).join('')}</tbody></table></div>${items.length > 200 ? `<p class="muted">${items.length - 200} more not shown.</p>` : ''}`;
+  return `<h3>${own ? 'Items' : 'Finished items compared'} <span>${items.length}</span></h3><div class="task-table-wrap"><table class="task-table compact-table"><thead><tr><th scope="col">Item</th>${extra.map((key) => `<th scope="col">${escape(key)}</th>`).join('')}<th scope="col">Source</th></tr></thead><tbody>${items.slice(0, 200).map((item) => `<tr><td>${item.taskKey ? `<span class="task-number">${escape(localId(item.taskKey))}</span>${escape(item.title || '')}` : escape(typeof item.owner === 'string' ? item.owner : item.title || (item.runId ? `Run ${item.runId}` : ''))}${item.owner && typeof item.owner !== 'string' ? `<small class="muted">, ${ownerChip(item.owner)}</small>` : ''}</td>${extra.map((key) => `<td>${itemValue(item[key])}</td>`).join('')}<td>${citation(item)}</td></tr>`).join('')}</tbody></table></div>${items.length > 200 ? `<p class="muted">${items.length - 200} more not shown.</p>` : ''}`;
 }
 
 function definitionList(entries) {
@@ -494,7 +516,7 @@ export function renderExplain(value) {
   const window = value.window ? `${escape(value.window.from || value.window.since || '')} → ${escape(value.window.to || '')}${value.window.mode ? ` (${escape(value.window.mode)})` : ''}${value.window.fallback ? `<br><small>${escape(value.window.fallback)}</small>` : ''}` : '';
   const rules = value.kind === 'health' && value.rules ? `<h3>Method checks</h3><ul class="rules">${value.rules.map((rule) => `<li class="rule rule-${escape(rule.level)}"><span class="rule-id">${escape(rule.id)}</span>${escape(CHECKS[rule.id]?.name ? `${CHECKS[rule.id].name}: ` : '')}${escape(rule.message)}</li>`).join('')}</ul>` : '';
   const excluded = value.excluded?.length ? `<h3>Left out <span>${value.excluded.length}</span></h3><ul class="explain-excluded">${value.excluded.slice(0, 100).map((entry) => `<li>${entry.taskKey ? `<span class="task-number">${escape(localId(entry.taskKey))}</span>` : ''}${escape(entry.title || (entry.runId ? `Run ${entry.runId}` : ''))} <span class="muted">${escape(entry.reason || entry.excluded || '')}</span></li>`).join('')}</ul>` : '';
-  return `<header class="dialog-heading"><div><span class="dialog-eyebrow">${escape(value.project?.name || '')}${value.task?.taskKey ? ` · ${escape(localId(value.task.taskKey))}` : ''}</span><h2 id="explain-dialog-title">${escape(value.label || value.id)}</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header>
+  return `<header class="dialog-heading"><div><span class="dialog-eyebrow">${escape(value.project?.name || '')}${value.task?.taskKey ? ` ${escape(localId(value.task.taskKey))}` : ''}</span><h2 id="explain-dialog-title">${escape(value.label || value.id)}</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header>
     <div class="dialog-fields explain-body"><p class="explain-value"><strong>${escape(value.display)}</strong>${value.unit && value.status === 'ok' ? `<span>${escape(value.value === 1 ? value.unit.replace(/s$/, '') : value.unit)}</span>` : ''}</p>${value.status !== 'ok' ? `<p class="window-note">${icon('alert')}${escape(value.reason || value.status)}</p>` : value.reason ? `<p class="explain-reason">${escape(value.reason)}</p>` : ''}
     <p class="explain-definition">${escape(value.definition)}</p>
     ${definitionList([
@@ -516,7 +538,7 @@ function changeSentence(entry) {
     case 'removed': return `${task} was <strong>removed</strong>`;
     case 'field': return `${task} ${escape(entry.field)}: ${escape(entry.from || 'none')} → <strong>${escape(entry.to || 'none')}</strong>`;
     case 'project': return `Project ${escape(entry.change || 'changed')}${entry.field ? ` (${escape(entry.field)})` : ''}`;
-    case 'run': return `${task} <a href="#run/${escape(encodeURIComponent(entry.globalRunId))}">${escape(RUN_EVENTS[entry.event] || entry.event)} · Run ${escape(entry.runId)}</a>${entry.reason ? ` <span class="muted">${escape(entry.reason)}</span>` : ''}`;
+    case 'run': return `${task} <a href="#run/${escape(encodeURIComponent(entry.globalRunId))}">${escape(RUN_EVENTS[entry.event] || entry.event)} (run ${escape(entry.runId)})</a>${entry.reason ? ` <span class="muted">${escape(entry.reason)}</span>` : ''}`;
     default: return escape(entry.subject || entry.kind);
   }
 }
@@ -524,7 +546,7 @@ function changeSentence(entry) {
 function rawRow(entry, timezone) {
   const actor = typeof entry.actor === 'object' ? entry.actor?.id || entry.actor?.type : entry.actor;
   const source = entry.commit ? `<code title="${escape(entry.subject || '')} (${escape(entry.commit)})">${escape(shortSha(entry.commit))}</code>` : entry.hash ? `<a href="#run/${escape(encodeURIComponent(entry.globalRunId))}" title="Audit event ${escape(entry.hash)}">event #${escape(entry.seq)}</a>` : '';
-  return `<li class="change-row change-${escape(entry.kind)}"><time datetime="${escape(entry.at)}">${escape(formatClock(entry.at, timezone))}</time><div><p>${changeSentence(entry)}</p><p class="change-meta">${actor ? `${escape(actor)}` : ''}${entry.via ? ` · via ${escape(entry.via)}` : ''} · ${source}${entry.subject ? ` · ${escape(entry.subject)}` : ''}</p></div></li>`;
+  return `<li class="change-row change-${escape(entry.kind)}"><time datetime="${escape(entry.at)}">${escape(formatClock(entry.at, timezone))}</time><div><p>${changeSentence(entry)}</p><p class="change-meta">${actor ? `${escape(actor)}` : ''}${entry.via ? `, via ${escape(entry.via)}` : ''}, ${source}${entry.subject ? `, ${escape(entry.subject)}` : ''}</p></div></li>`;
 }
 
 const statusPill = (status) => `<span class="status-pill status-${escape(status)}"><span class="status-dot"></span>${escape(STATUS_WORDS[status] || status)}</span>`;
@@ -574,7 +596,7 @@ export function renderActivity(feed, { kind, projectId, projects, timezone }) {
     const first = entries.at(-1);
     const span = entries.length > 1 && formatClock(first.at, timezone) !== formatClock(latest.at, timezone) ? `${formatClock(first.at, timezone)}–${formatClock(latest.at, timezone)}` : formatClock(latest.at, timezone);
     const title = latest.taskKey ? taskLink(latest.projectId, latest.taskKey, latest.title) : `<span>${changeSentence(latest)}</span>`;
-    return `<li class="activity-row"><time datetime="${escape(latest.at)}">${escape(span)}</time><div class="activity-main"><p class="activity-title">${title}</p><p class="activity-steps">${latest.taskKey ? activitySteps(entries) : ''} ${activityWho(entries)}${manyProjects ? `<span class="muted">· ${escape(latest.projectName)}</span>` : ''}</p><details class="activity-raw" data-key="raw-${escape(key)}-${escape(day)}"><summary>${icon('chevron')}${escape(plural(entries.length, 'change'))} and ${entries.length === 1 ? 'its commit' : 'their commits'}</summary><ol>${entries.map((entry) => rawRow(entry, timezone)).join('')}</ol></details></div></li>`;
+    return `<li class="activity-row"><time datetime="${escape(latest.at)}">${escape(span)}</time><div class="activity-main"><p class="activity-title">${title}</p><p class="activity-steps">${latest.taskKey ? activitySteps(entries) : ''} ${activityWho(entries)}${manyProjects ? `<span class="muted">in ${escape(latest.projectName)}</span>` : ''}</p><details class="activity-raw" data-key="raw-${escape(key)}-${escape(day)}"><summary>${icon('chevron')}${escape(plural(entries.length, 'change'))} and ${entries.length === 1 ? 'its commit' : 'their commits'}</summary><ol>${entries.map((entry) => rawRow(entry, timezone)).join('')}</ol></details></div></li>`;
   }).join('')}`).join('');
   return `${heading}<ol class="activity-list">${rows}</ol>${feed.more ? '<p class="board-hint">Showing the latest 200 changes. Filter by project or kind to see further back.</p>' : ''}`;
 }
@@ -600,7 +622,7 @@ function timelineWhat(entry) {
 
 function timelineRow(entry, history, timezone) {
   const marks = [entry.clamped ? '<span class="needs-tag" title="This commit’s time was earlier than the commit before it, so it takes that time.">clamped time</span>' : '', entry.sweep && entry.kind !== 'life' ? '<span class="needs-tag" title="A board sweep moved it, so the real finish time is unknown.">sweep</span>' : '', history.incarnations.length > 1 ? `<span class="needs-tag">${escape(entry.taskKey)}</span>` : ''].join('');
-  return `<li><time datetime="${escape(entry.at)}">${escape(formatWhen(entry.at, timezone))}</time><div><p>${timelineWhat(entry)}${marks}</p><p class="change-meta">${escape(entry.actor || '')}${entry.via ? ` · via ${escape(entry.via)}` : ''}${entry.runId ? ` · Run ${escape(entry.runId)}` : ''} · <code title="${escape(entry.subject || '')} (${escape(entry.commit)})">${escape(shortSha(entry.commit))}</code></p></div></li>`;
+  return `<li><time datetime="${escape(entry.at)}">${escape(formatWhen(entry.at, timezone))}</time><div><p>${timelineWhat(entry)}${marks}</p><p class="change-meta">${escape(entry.actor || '')}${entry.via ? `, via ${escape(entry.via)}` : ''}${entry.runId ? `, Run ${escape(entry.runId)}` : ''}, <code title="${escape(entry.subject || '')} (${escape(entry.commit)})">${escape(shortSha(entry.commit))}</code></p></div></li>`;
 }
 
 // Oldest first. Checkpoints in a row fold into one line that expands.
@@ -626,7 +648,7 @@ export function renderTimeline(history, timezone) {
 // The commits behind a task: its file and the first and latest commits.
 export function renderEvidence(task, history) {
   const commits = history?.transitions?.length ? [...new Set([history.transitions[0].commit, history.transitions.at(-1).commit])] : [];
-  return `<p class="drawer-evidence">${icon('git')}<span>${task.file ? `<code>${escape(task.file)}</code>` : ''}${commits.map((sha) => ` · <code title="${escape(sha)}">${escape(shortSha(sha))}</code>`).join('')}${history?.transitions ? ` · ${escape(plural(history.transitions.length, 'change'))} on record` : ''}</span></p>`;
+  return `<p class="drawer-evidence">${icon('git')}<span>${task.file ? `<code>${escape(task.file)}</code>` : ''}${commits.map((sha) => `, <code title="${escape(sha)}">${escape(shortSha(sha))}</code>`).join('')}${history?.transitions ? `, ${escape(plural(history.transitions.length, 'change'))} on record` : ''}</span></p>`;
 }
 
 export { agentShort };
@@ -684,5 +706,5 @@ export function renderThreads(built, { signals, expanded, holder }) {
   return `<p class="flow-intro">Tasks organised by what they build on, read from each task file’s <code>depends:</code>. Open work shows with the tasks it builds on; finished steps fold away.</p>
     <section class="section" aria-labelledby="threads-active"><div class="section-heading"><h2 id="threads-active">Threads with open work</h2><span>${active.length}</span></div>${active.length ? `<div class="thread-list">${active.map((thread) => threadCard(thread, place, options)).join('')}</div>` : `<p class="all-clear">${icon('check')}Every thread is finished.</p>`}</section>
     <section class="section" aria-labelledby="threads-alone"><div class="section-heading"><h2 id="threads-alone">On their own</h2><span>Tasks that build on nothing and that nothing builds on</span></div>${aloneOpen.length ? `<ol class="thread-rows panel thread-alone">${aloneOpen.map((task) => threadRow({ task, depth: 0, link: 'root' }, place, options)).join('')}</ol>` : `<p class="all-clear">${icon('check')}No open task stands on its own.</p>`}${aloneDone ? `<p class="muted thread-note">${escape(plural(aloneDone, 'finished task'))} on their own; see Board or List.</p>` : ''}</section>
-    ${finished.length ? `<section class="section" aria-labelledby="threads-finished"><div class="section-heading"><h2 id="threads-finished">Finished threads</h2><button type="button" class="text-button" data-action="toggle-delta" data-value="threads:finished" aria-expanded="${finishedOpen}">${finishedOpen ? 'Hide' : `Show ${finished.length}`}</button></div>${finishedOpen ? `<div class="thread-list">${finished.map((thread) => threadCard(thread, place, options)).join('')}</div>` : `<p class="muted">${escape(finished.map((thread) => `${thread.root.id.split(':').at(-1)} (${thread.tasks.length})`).join(' · '))}</p>`}</section>` : ''}`;
+    ${finished.length ? `<section class="section" aria-labelledby="threads-finished"><div class="section-heading"><h2 id="threads-finished">Finished threads</h2><button type="button" class="text-button" data-action="toggle-delta" data-value="threads:finished" aria-expanded="${finishedOpen}">${finishedOpen ? 'Hide' : `Show ${finished.length}`}</button></div>${finishedOpen ? `<div class="thread-list">${finished.map((thread) => threadCard(thread, place, options)).join('')}</div>` : `<p class="muted">${escape(finished.map((thread) => `${thread.root.id.split(':').at(-1)} (${thread.tasks.length})`).join(', '))}</p>`}</section>` : ''}`;
 }

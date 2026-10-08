@@ -91,10 +91,12 @@ test('HTTP API performs a project and task CRUD round trip and reports client er
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'image/webp');
   assert.equal(Buffer.from(await response.arrayBuffer()).subarray(8, 12).toString(), 'WEBP');
-  response = await fetch(`${base}/michroma.woff2`);
-  assert.equal(response.status, 200);
-  assert.equal(response.headers.get('content-type'), 'font/woff2', 'the wordmark face is served as a font (T041)');
-  assert.equal(Buffer.from(await response.arrayBuffer()).subarray(0, 4).toString(), 'wOF2');
+  for (const face of ['michroma', 'hanken-grotesk']) {
+    response = await fetch(`${base}/${face}.woff2`);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('content-type'), 'font/woff2', `${face} is served as a font (T041, T044)`);
+    assert.equal(Buffer.from(await response.arrayBuffer()).subarray(0, 4).toString(), 'wOF2');
+  }
 
   response = await fetch(`${base}/api/workspace`);
   assert.equal(response.status, 200);
@@ -912,6 +914,12 @@ test('GET /api/tasks/:id returns the task with its text, GET /api/projects/:id/m
   const working = (await call('GET', '/api/workspace')).tasks.filter((entry) => entry.projectId === project.id && ['in_progress', 'blocked'].includes(entry.status));
   assert.deepEqual(Object.keys(line.wipSince).sort(), working.map((entry) => entry.id.split(':')[1]).sort());
   assert.ok(Object.values(line.wipSince).every((at) => !Number.isNaN(Date.parse(at))), JSON.stringify(line.wipSince));
+  // The flow strip's: the same tasks, each with its state, age and aging level.
+  assert.deepEqual(line.wipAges.map((entry) => entry.taskKey).sort(), Object.keys(line.wipSince).sort());
+  for (const entry of line.wipAges) {
+    assert.deepEqual(Object.keys(entry).sort(), ['age', 'level', 'status', 'taskKey', 'title']);
+    assert.ok(['in_progress', 'blocked'].includes(entry.status) && entry.age >= 0 && ['ok', 'aging', 'critical', 'unknown'].includes(entry.level), JSON.stringify(entry));
+  }
 });
 
 test('every module the page imports is served: a new public/ file not added to the server leaves the page loading forever', async (t) => {

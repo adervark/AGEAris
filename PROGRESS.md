@@ -352,3 +352,15 @@ its date, the number, and where the evidence is. Newest last.
   slides it over the page on a phone; the Flow charts redraw when it folds.
 - `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
   views.
+
+## 2026-10-09 — T044: the interface restructured around flow strips
+
+- Each board is a flow strip: Backlog, In progress, Blocked, Done this week on
+  one track, work in progress placed by age against the service level, the
+  week's finishes stacked by day. Home pairs Needs you with every board's
+  strip; a project page leads with its title, one line of figures and its
+  strip. The card kit, caps labels and middle-dot strings are gone; Michroma
+  sets titles and Hanken Grotesk the rest. The operator approved a mock on
+  the real boards first.
+- `npm test` passed 513 of 513. The browser walk found 0 problems in 102 page
+  views.

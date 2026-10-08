@@ -18,15 +18,18 @@ const STATIC_FILES = new Map([
   ['/icons.js', 'icons.js'],
   ['/cockpit.js', 'cockpit.js'],
   ['/charts.js', 'charts.js'],
+  ['/strip.js', 'strip.js'],
   ['/cursor.js', 'cursor.js'],
   ['/words.js', 'words.js'],
   ['/markdown.js', 'markdown.js'],
   ['/threads.js', 'threads.js'],
   ['/planet.png', 'planet.png'],
   ['/logo.webp', 'logo.webp'],
-  // The wordmark's face: Michroma (SIL OFL 1.1, docs/brand/michroma-OFL.txt),
-  // cut down to the glyphs A, R, I and S.
+  // The faces, both under the SIL OFL 1.1 and cut to Latin: Michroma for the
+  // wordmark and titles (docs/brand/michroma-OFL.txt), Hanken Grotesk for
+  // everything else (docs/brand/hanken-grotesk-OFL.txt).
   ['/michroma.woff2', 'michroma.woff2'],
+  ['/hanken-grotesk.woff2', 'hanken-grotesk.woff2'],
 ]);
 const MIME = new Map([
   ['.html', 'text/html; charset=utf-8'],

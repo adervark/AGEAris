@@ -137,7 +137,7 @@ test('the cockpit views render the sample project, escape what they show, and ci
   const overdueTask = index.get(`${project.id}:T040`);
   assert.ok(overdueTask.reasons.includes('overdue'));
   assert.match(signalBadges(overdueTask), /class="chip tone-fail"[^>]*>Overdue \d+ d</);
-  assert.equal(agentShort('agent ade @k/b6192924'), 'k·b619');
+  assert.equal(agentShort('agent ade @k/b6192924'), 'k/b619');
 
   const metrics = await cockpit.projectMetrics(project.id, {});
   // Done this week on the board: every finish in the last 7 days, sweeps included.
@@ -158,7 +158,7 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.ok(dots.every(([, id]) => id.startsWith(`${project.id}:T`)));
   assert.match(flow, /Aging work in progress/);
   assert.match(flow, /class="chart-line chart-line-p85"/);
-  assert.match(flow, new RegExp(`85% · ${duration(metrics.charts.cycles.bands.p85)}`));
+  assert.match(flow, new RegExp(`85%: ${duration(metrics.charts.cycles.bands.p85)}`));
   assert.ok(dots.some(([, , label]) => /past the service level|past twice the service level/.test(label)), 'an aging task says so');
   // The forecast answers in sentences and cites the throughput it samples (T032).
   assert.equal(metrics.charts.forecast.status, 'ok');

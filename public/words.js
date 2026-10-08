@@ -58,12 +58,12 @@ export const TERMS = {
   repeatSlips: ['Repeat slips', 'Tasks whose due date moved later more than once'],
 };
 
-// An agent session's short name: "adervark @k/b6192924" is "k·b619". The
+// An agent session's short name: "adervark @k/b6192924" is "k/b619". The
 // full identity goes in the title. Anything else is shown as given.
 export function agentShort(identity) {
   const text = String(identity || '').replace(/^agent\s+/, '');
   const match = /@([^\s/]+)\/(\S+)/.exec(text);
-  return match ? `${match[1]}·${match[2].slice(0, 4)}` : text;
+  return match ? `${match[1]}/${match[2].slice(0, 4)}` : text;
 }
 
 // One of eight dot colours, stable per identity (the CSP allows no inline
