@@ -1,8 +1,8 @@
 ---
 id: T039
 title: "Silver that reads as metal: T036's chrome still looks like flat grey"
-status: backlog
-owner: ""
+status: claimed
+owner: adervark @k/c1e9ef11 2026-10-09 — silver that reads as metal
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -48,7 +48,7 @@ highlight and shadow, not grey lines everywhere.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, registered
+- **Last touched:** 2026-10-09, adervark @k/c1e9ef11 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing
 - **Resume with:** the Steps
