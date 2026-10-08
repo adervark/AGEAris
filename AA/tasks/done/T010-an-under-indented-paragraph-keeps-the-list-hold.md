@@ -1,7 +1,7 @@
 ---
 id: T010
 title: "A paragraph indented less than a list item's content keeps the list's hold"
-status: claimed
+status: done
 owner: adervark @k/adccab68 2026-10-08 — the renderer's list items and list hold
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
@@ -36,8 +36,8 @@ the list, so a later 4-space block is code, as in CommonMark.
 
 ## Steps
 
-- [ ] Failing tests for the four inputs and the U+00A0 line.
-- [ ] Record the content column of the list's last top-level item; reset the
+- [x] Failing tests for the four inputs and the U+00A0 line.
+- [x] Record the content column of the list's last top-level item; reset the
   hold when a non-blank line outside a paragraph is indented less than it.
 
 ## Decision rules — fixed in advance
@@ -50,10 +50,10 @@ the list, so a later 4-space block is code, as in CommonMark.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (done)
 - **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** write the failing tests first
+- **On disk:** nothing
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -62,9 +62,23 @@ the list, so a later 4-space block is code, as in CommonMark.
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T010` — then
-retire the trail with `--delete`)*
+**Done.** After a list, the hold is the content column of its last top-level
+item: the marker's indent, plus its width, plus the 1 to 4 spaces after it
+(one if more). A non-blank line outside a paragraph that starts left of that
+column ends the hold. Indentation counts spaces and tabs only (tab stops of 4),
+so U+00A0 is not indentation.
+
+Against the decision rules:
+
+- The four inputs now end in `<pre><code>`, as markdown-it does. So does
+  the U+00A0 line. The commit's own case (`'1. Step\n\n   Para A\n\n    Para B'`)
+  still gives two paragraphs. All in `tests/markdown.test.mjs`, which passes.
+  markdown-it itself was not run (no dependency here); the expected outputs
+  are the ones the task file records from it.
+- AGEIS: 307 task files on five boards rendered before and after. No AGEIS
+  block changed; the only changed render is T017's (T008).
+- `npm test` 479 of 479 and `npm run check` pass. No spend.
+- Log: PROGRESS.md, 2026-10-08 — T008 and T010.
 
 ## Notes
 

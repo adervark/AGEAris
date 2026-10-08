@@ -70,3 +70,19 @@ test('emphasis never reaches inside a link target, and a closing run of #s is dr
   assert.equal(inline('[**bold** label](https://x.com/**)'), '<a href="https://x.com/**" target="_blank" rel="noopener noreferrer"><strong>bold</strong> label</a>');
   assert.equal(renderMarkdown('## Plan ##\n# C#'), '<h4>Plan</h4><h3>C#</h3>');
 });
+
+test('a wrapped list line holding a line or paragraph separator renders instead of throwing (T008)', () => {
+  assert.equal(renderMarkdown('- a\n  b c'), '<ul><li>a b c</li></ul>');
+  assert.equal(renderMarkdown('1. a\n   b c'), '<ol><li>a b c</li></ol>');
+});
+
+test('a block indented less than the last item\'s content column ends the list\'s hold, as in CommonMark (T010)', () => {
+  assert.equal(renderMarkdown('- item\n\n text\n\n    code'), '<ul><li>item</li></ul><p>text</p><pre><code>code</code></pre>');
+  assert.equal(renderMarkdown('1. Step\n\n  Para A\n\n    Para B'), '<ol><li>Step</li></ol><p>Para A</p><pre><code>Para B</code></pre>');
+  assert.equal(renderMarkdown('- item\n\n ---\n\n    code'), '<ul><li>item</li></ul><hr><pre><code>code</code></pre>');
+  assert.equal(renderMarkdown('-   item\n\n  text\n\n    code'), '<ul><li>item</li></ul><p>text</p><pre><code>code</code></pre>');
+  // U+00A0 is not indentation.
+  assert.match(renderMarkdown('- item\n\n text\n\n    code'), /<pre><code>code<\/code><\/pre>$/);
+  // Indented to the content column, a block still continues the item.
+  assert.equal(renderMarkdown('1. Step\n\n   Para A\n\n    Para B'), '<ol><li>Step</li></ol><p>Para A</p><p>Para B</p>');
+});

@@ -44,12 +44,31 @@ export function inline(text) {
 
 const LIST_ITEM = /^(\s*)([-*+]|\d+[.)])\s+(.*)$/;
 
-function listHtml(lines) {
-  // Each item: its indent, ordered or not, and its text. Deeper indents nest.
-  const items = lines.map((line) => {
-    const [, indent, marker, text] = LIST_ITEM.exec(line);
-    return { depth: indent.replace(/\t/g, '  ').length, ordered: /\d/.test(marker), text };
-  });
+// A list item, parsed once when it is collected: its indent, ordered or not,
+// its text, and its content column (CommonMark's: the marker's indent, plus its
+// width, plus the 1 to 4 spaces after it; with more, just one).
+function listItem(match, line) {
+  const [, indent, marker, text] = match;
+  const start = indent.length + marker.length;
+  let gap = 0;
+  while (start + gap < line.length && line[start + gap] === ' ') gap += 1;
+  return { depth: indent.replace(/\t/g, '  ').length, ordered: /\d/.test(marker), text, column: columns(indent) + marker.length + (gap >= 1 && gap <= 4 ? gap : 1) };
+}
+
+// How far a line's leading spaces and tabs reach, tabs stopping every 4
+// columns. Other white space, U+00A0 among them, is not indentation.
+function columns(line) {
+  let column = 0;
+  for (const char of line) {
+    if (char === ' ') column += 1;
+    else if (char === '\t') column += 4 - (column % 4);
+    else break;
+  }
+  return column;
+}
+
+function listHtml(items) {
+  // Deeper indents nest.
   let html = '';
   const stack = [];
   for (const item of items) {
@@ -121,11 +140,12 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
     paragraph = [];
   };
   // After a list, indented paragraphs continue its last item and read as
-  // text, until a block starts at the margin again.
+  // text, until a block starts left of that item's content column.
   let afterList = false;
+  let listColumn = 0;
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
-    if (!paragraph.length && line.trim() && !/^\s/.test(line)) afterList = false;
+    if (!paragraph.length && line.trim() && columns(line) < listColumn) afterList = false;
     const fence = /^\s*(```|~~~)/.exec(line);
     if (fence) {
       flush();
@@ -158,11 +178,17 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
       flush();
       const items = [];
       for (; index < lines.length && (LIST_ITEM.test(lines[index]) || (/^\s{2,}\S/.test(lines[index]) && items.length)); index += 1) {
-        // A wrapped line belongs to the item above it.
-        if (LIST_ITEM.test(lines[index])) items.push(lines[index]); else items[items.length - 1] += ` ${lines[index].trim()}`;
+        // A wrapped line belongs to the item above it, and joins its parsed
+        // text: LIST_ITEM never runs on joined text, where a line separator
+        // (U+2028) would stop its `.`.
+        const match = LIST_ITEM.exec(lines[index]);
+        if (match) items.push(listItem(match, lines[index])); else items.at(-1).text += ` ${lines[index].trim()}`;
       }
       index -= 1;
       out.push(listHtml(items));
+      // The hold is the last top-level item's content column.
+      const top = Math.min(...items.map((item) => item.depth));
+      listColumn = items.findLast((item) => item.depth === top).column;
       afterList = true;
       continue;
     }

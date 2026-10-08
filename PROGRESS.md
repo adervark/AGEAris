@@ -170,3 +170,12 @@ its date, the number, and where the evidence is. Newest last.
 - **T013** (the Method view names a missing settings file): fixed. A board
   without one says the defaults apply.
 - `npm test` 477 of 477.
+
+## 2026-10-08 — T008 and T010: list items and the list's hold
+
+- **T008** (a line separator in a list crashes the renderer): fixed. Found
+  live in this board's own T017 task file, whose drawer threw; it renders now.
+- **T010** (an under-indented paragraph keeps the list's hold): fixed. The
+  four inputs render their last block as code, as in CommonMark.
+- 307 task files on five boards rendered before and after: T017's is the only
+  render that changed. `npm test` 479 of 479.
