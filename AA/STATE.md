@@ -21,10 +21,10 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-08T19:24Z · 40 tasks: 4 backlog, 0 WIP (0 in progress), 36 delivered`
+`board · 2026-10-08T19:30Z · 41 tasks: 4 backlog, 0 WIP (0 in progress), 37 delivered`
 
-FLOW · **WIP 0/2** · throughput 8.4/wk (36 in 30d) · cycle time 50th 4m / 85th 13m (n=36)
-FLOW · Little's Law: 0 ÷ 8.4/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 8.6/wk (37 in 30d) · cycle time 50th 4m / 85th 13m (n=37)
+FLOW · Little's Law: 0 ÷ 8.6/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
@@ -32,10 +32,11 @@ FLOW · Little's Law: 0 ÷ 8.4/wk ≈ now expected · lead time 85th 35h
 |  | T004 | Keep one copy of the aa-init template | — | 46h |  |
 |  | T024 | The card menu, the keyboard map, and drag through the action registry | — | 26h |  |
 |  | T025 | Say on the project page that STATE.md is behind, or kept by hand | — | 26h |  |
-| **DONE** | T040 | Aris under the logo, centred | adervark | now |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 44m |  |
-|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 49m |  |
-|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 70m |  |
+| **DONE** | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | now |  |
+|  | T040 | Aris under the logo, centred | adervark | 6m |  |
+|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 50m |  |
+|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 55m |  |
+|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 76m |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 7h |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 7h |  |
 |  | T034 | Silver accents, taken from the logo | adervark | 8h |  |
@@ -45,7 +46,7 @@ FLOW · Little's Law: 0 ÷ 8.4/wk ≈ now expected · lead time 85th 35h
 |  | T031 | A cycle-time scatterplot with the service level | adervark | 9h |  |
 |  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 9h |  |
 |  | T026 | Tracked task actions: the review's remaining low findings | adervark | 9h |  |
-|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 9h |  |
+|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 10h |  |
 |  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 10h |  |
 |  | T015 | Code spans are not found as CommonMark finds them | adervark | 10h |  |
 |  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 10h |  |
