@@ -20,10 +20,18 @@
   --accent: #c5cbd3;
   --accent-hover: #e6e9ed;
   --accent-tint: #16181b;
-  --accent-sheen: linear-gradient(180deg, #eef0f3, #bcc2cb);
+  --accent-sheen: linear-gradient(180deg, #ffffff 0%, #dde1e6 46%, #b3bac3 54%, #e4e7eb 100%);
   --accent-sheen-hover: linear-gradient(180deg, #f7f8fa, #d3d8de);
   --on-accent: #000000;
   --focus: #d6dbe1;
+  --silver: #c9ced5;
+  --silver-hi: #f4f6f8;
+  --silver-mid: #5d636c;
+  --silver-lo: #7f8691;
+  --silver-edge: #33373d;
+  --silver-lit: rgb(214 219 225 / .2);
+  --silver-line: rgb(214 219 225 / .45);
+  --chrome: linear-gradient(180deg, #ffffff 0%, #dde1e6 46%, #9ea5af 54%, #e4e7eb 100%);
   --run: #6f9dff; --run-tint: #0b1630; --run-ink: #a9c3ff;
   --wait: #f0b23f; --wait-tint: #241a06; --wait-ink: #f5c86e;
   --fail: #f06b75; --fail-tint: #2a0e12; --fail-ink: #ff9ca4;
@@ -80,7 +88,6 @@ kbd { font: inherit; font-size: 12px; line-height: 1.3; border: 1px solid var(--
 .sidebar { position: sticky; top: 0; display: flex; flex-direction: column; height: 100dvh; background: var(--surface); border-right: 1px solid var(--line); padding: 16px 12px 20px; overflow-y: auto; }
 .brand { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 6px 10px 20px; color: var(--ink); font-size: 18px; font-weight: 700; letter-spacing: -.2px; }
 .brand-logo { display: block; width: 100%; height: auto; }
-.brand > span { background: linear-gradient(180deg, #ffffff 25%, #9aa2ad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .nav-link { display: flex; align-items: center; gap: 10px; padding: 7px 10px; margin-bottom: 2px; border-radius: var(--radius-sm); color: var(--ink-2); font-size: 14px; font-weight: 500; min-width: 0; }
 .nav-link > .icon { width: 18px; height: 18px; color: var(--faint); }
 .nav-link:hover { background: var(--surface-3); color: var(--ink); }
@@ -955,6 +962,23 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
 /* --- Narrow screens ------------------------------------------------------------- */
 /* Until tabs and filters fit on one line, the tabs sit above the filters and
    a list row's signals sit under its title, so neither is squeezed. */
+/* Silver, as the logo is. Silver says "this is AGE Aris", never a status:
+   a lit top edge on the main surfaces, a brushed hairline along the shell,
+   and polished metal on the wordmark, the selected item and tab, the avatar
+   and the primary button. */
+.topbar { border-bottom-color: transparent; border-image: linear-gradient(90deg, transparent, var(--silver-line) 18%, var(--silver-line) 82%, transparent) 1; }
+.sidebar { border-right-color: transparent; border-image: linear-gradient(180deg, transparent, var(--silver-line) 12%, var(--silver-line) 88%, transparent) 1; }
+.panel, .vitals, .series, .flow-chart, .board-column, .project-card, .task-rows, .today-clear, .delta-list, .health-header, .task-table-wrap, .checks, .method-doc, .activity-list, .session-list, .working-list, .role-card, .agent-card, .table-scroll {
+  border-color: var(--silver-edge); box-shadow: inset 0 1px 0 var(--silver-lit);
+}
+.brand > span { background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.nav-link.active { background: linear-gradient(90deg, rgb(214 219 225 / .16), rgb(214 219 225 / .02)); color: var(--ink); box-shadow: inset 2px 0 0 var(--silver); }
+.nav-link.active > .icon { color: var(--silver); }
+.view-tab.selected { border-bottom-color: transparent; background: linear-gradient(90deg, var(--silver-lo), var(--silver-hi) 50%, var(--silver-lo)) bottom / 100% 2px no-repeat; }
+.user-avatar { background: var(--chrome); color: var(--on-accent); }
+.button-secondary { border-color: var(--silver-mid); }
+.button-secondary:hover { border-color: var(--silver); }
+
 @media (max-width: 1279px) {
   .view-toolbar.has-tabs { flex-direction: column; align-items: stretch; gap: 10px; border-bottom: 0; }
   .view-toolbar.has-tabs .view-tabs { align-self: stretch; margin-bottom: 0; box-shadow: inset 0 -1px 0 var(--line); }

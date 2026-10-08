@@ -277,3 +277,12 @@ its date, the number, and where the evidence is. Newest last.
   after the fix. `npm test` passed 501 of 501. The browser walk found 0
   problems in 72 page views.
 - Evidence: the Result of T035.
+
+## 2026-10-08 — T036: silver you can see
+
+- T034's silver accent read as grey on black. Silver now shows as metal: a
+  brushed hairline along the shell, lit edges on the surfaces, and chrome on
+  the wordmark, the avatar, the primary button and the selected tab.
+- `npm test` passed 501 of 501. The browser walk found 0 problems in 72 page
+  views.
+- Evidence: the Result of T036.
