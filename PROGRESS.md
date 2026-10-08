@@ -179,3 +179,13 @@ its date, the number, and where the evidence is. Newest last.
   four inputs render their last block as code, as in CommonMark.
 - 307 task files on five boards rendered before and after: T017's is the only
   render that changed. `npm test` 479 of 479.
+
+## 2026-10-08 — T002 and T009: code inside bold and links; linear-time block patterns
+
+- **T002** (bold or a link holding inline code shows raw markers): fixed.
+  AGEIS blocks showing raw markers: 101 → 7 (97 files). 595 blocks changed on
+  four boards, all only by markers becoming markup; code text byte-identical.
+  The 4 MB adversarial input: 21 ms before, 21 ms after.
+- **T009** (quadratic block patterns): fixed. At n = 80,000 the five inputs
+  took 4,097–5,069 ms before and 1–3 ms after. No AGEIS block changes from it.
+- `npm test` 481 of 481.

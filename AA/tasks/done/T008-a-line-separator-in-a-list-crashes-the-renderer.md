@@ -66,8 +66,8 @@ on joined text. No new regex.
 
 Against the decision rules:
 
-- Test: `'- a\n  b c'` gives `<ul><li>a b c</li></ul>` and
-  `'1. a\n   b c'` gives `<ol><li>a b c</li></ol>`; both threw
+- Test: `'- a\n  b\u2028c'` gives `<ul><li>a b\u2028c</li></ul>` and
+  `'1. a\n   b\u2029c'` gives `<ol><li>a b\u2029c</li></ol>`; both threw
   before. `tests/markdown.test.mjs` passes.
 - Found live: this repository's own `AA/tasks/done/T017-…md` holds a U+2028
   in a wrapped list line, and its drawer threw before the fix. It renders now.

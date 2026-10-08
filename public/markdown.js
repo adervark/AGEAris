@@ -21,28 +21,62 @@ function emphasis(text) {
 }
 
 // Plain text with links: links are cut out first, so emphasis never reaches
-// inside a link's target.
+// inside a link's target. A target holding a code span is no link.
 function textWithLinks(text) {
   let html = '';
   let last = 0;
   for (const match of text.matchAll(LINK)) {
     html += emphasis(text.slice(last, match.index));
     const [, label, href] = match;
-    html += SAFE_LINK.test(href) ? `<a href="${escape(href)}" target="_blank" rel="noopener noreferrer">${emphasis(label)}</a>` : emphasis(label);
+    html += SAFE_LINK.test(href) && !href.includes(SPAN_OPEN) ? `<a href="${escape(href)}" target="_blank" rel="noopener noreferrer">${emphasis(label)}</a>` : emphasis(label);
     last = match.index + match[0].length;
   }
   return html + emphasis(text.slice(last));
 }
 
-// Inline markup over one line of text that is not yet escaped. Code spans are
-// cut out first so nothing inside them is read as emphasis or links.
+// Code spans stand in the text as these private-use marks around their index
+// while emphasis and links are read, so bold or a link can hold a span and
+// nothing inside a span is read as markup.
+const SPAN_OPEN = '\uE000';
+const SPAN_CLOSE = '\uE001';
+
+function codeSpan(part) {
+  let open = 0;
+  while (open < part.length && part[open] === '`') open += 1;
+  let close = 0;
+  while (close < part.length - open && part[part.length - 1 - close] === '`') close += 1;
+  return `<code>${escape(part.slice(open, part.length - close))}</code>`;
+}
+
+// Inline markup over one line of text that is not yet escaped.
 export function inline(text) {
   const line = String(text);
   if (line.length > MAX_INLINE) return escape(line);
-  return line.split(/(`+[^`]*?`+)/).map((part, index) => (index % 2 ? `<code>${escape(part.replace(/^`+|`+$/g, ''))}</code>` : textWithLinks(part))).join('');
+  const parts = line.split(/(`+[^`]*?`+)/);
+  // Text that already holds a mark keeps the spans apart, as markup cannot be
+  // told from a forged mark.
+  if (line.includes(SPAN_OPEN)) return parts.map((part, index) => (index % 2 ? codeSpan(part) : textWithLinks(part))).join('');
+  const spans = [];
+  const marked = parts.map((part, index) => {
+    if (!(index % 2)) return part;
+    spans.push(codeSpan(part));
+    return `${SPAN_OPEN}${spans.length - 1}${SPAN_CLOSE}`;
+  }).join('');
+  if (!spans.length) return textWithLinks(line);
+  let html = '';
+  const rendered = textWithLinks(marked);
+  let at = 0;
+  for (let open = rendered.indexOf(SPAN_OPEN); open >= 0; open = rendered.indexOf(SPAN_OPEN, at)) {
+    const close = rendered.indexOf(SPAN_CLOSE, open);
+    html += rendered.slice(at, open) + spans[Number(rendered.slice(open + 1, close))];
+    at = close + 1;
+  }
+  return html + rendered.slice(at);
 }
 
-const LIST_ITEM = /^(\s*)([-*+]|\d+[.)])\s+(.*)$/;
+// `[^]*` and no `$`: `.` stops at U+2028, and with `$` after it a long run of
+// spaces before one would be retried from every split.
+const LIST_ITEM = /^(\s*)([-*+]|\d+[.)])\s+([^]*)/;
 
 // A list item, parsed once when it is collected: its indent, ordered or not,
 // its text, and its content column (CommonMark's: the marker's indent, plus its
@@ -80,7 +114,7 @@ function listHtml(items) {
       stack.push({ depth: item.depth, tag });
       html += `<${tag}><li>`;
     } else html += '</li><li>';
-    const box = /^\[([ xX])\]\s+(.*)$/.exec(item.text);
+    const box = /^\[([ xX])\]\s+([^]*)/.exec(item.text);
     html += box ? `<input type="checkbox" disabled ${box[1] === ' ' ? '' : 'checked'} aria-label="${box[1] === ' ' ? 'Not done' : 'Done'}">${inline(box[2])}` : inline(item.text);
   }
   while (stack.length) html += `</li></${stack.pop().tag}>`;
@@ -99,6 +133,21 @@ function tableHtml(lines) {
 const MAX_QUOTE_DEPTH = 8;
 // Outside a paragraph, a line indented four spaces or a tab is code.
 const INDENTED = /^( {4}|\t)/;
+
+// A table's separator row: cells of dashes, each with an optional colon at
+// either end, between optional outer pipes. Read cell by cell, not by a
+// pattern, which would retry a long line from every split.
+function tableSeparator(line) {
+  let row = line.trim();
+  if (row.startsWith('|')) row = row.slice(1);
+  if (row.endsWith('|')) row = row.slice(0, -1);
+  return row.split('|').every((raw) => {
+    let cell = raw.trim();
+    if (cell.startsWith(':')) cell = cell.slice(1);
+    if (cell.endsWith(':')) cell = cell.slice(0, -1);
+    return cell.length > 0 && [...cell].every((char) => char === '-');
+  });
+}
 
 // A line that ends in a backslash, itself not escaped, breaks the line. The
 // run is counted by hand: a pattern anchored at the end would backtrack.
@@ -155,13 +204,15 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
       continue;
     }
     if (!line.trim()) { flush(); continue; }
-    const heading = /^(#{1,6})\s+(.*)$/.exec(line);
+    const heading = /^(#{1,6})\s+([^]*)/.exec(line);
     if (heading) {
       flush();
       const level = Math.min(6, heading[1].length + shift);
-      // A closing run of #s is decoration (`## Plan ##`).
+      // A closing run of #s is decoration (`## Plan ##`), counted by hand.
       const words = heading[2].trimEnd();
-      const closed = words.replace(/#+$/, '');
+      let hashes = 0;
+      while (hashes < words.length && words[words.length - 1 - hashes] === '#') hashes += 1;
+      const closed = words.slice(0, words.length - hashes);
       out.push(`<h${level}>${inline((closed === words || /\s$/.test(closed) ? closed : words).trimEnd())}</h${level}>`);
       continue;
     }
@@ -192,7 +243,7 @@ export function renderMarkdown(source, { shift = 2, depth = 0 } = {}) {
       afterList = true;
       continue;
     }
-    if (line.includes('|') && (lines[index + 1] || '').includes('|') && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(lines[index + 1] || '')) {
+    if (line.includes('|') && (lines[index + 1] || '').includes('|') && tableSeparator(lines[index + 1])) {
       flush();
       const rows = [line, lines[index + 1]];
       for (index += 2; index < lines.length && lines[index].includes('|') && lines[index].trim(); index += 1) rows.push(lines[index]);
