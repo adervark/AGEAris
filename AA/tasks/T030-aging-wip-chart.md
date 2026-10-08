@@ -1,8 +1,8 @@
 ---
 id: T030
 title: "An aging WIP chart: what is not moving"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/adccab68 2026-10-08 — aging WIP chart and cycle-time scatterplot
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -40,7 +40,7 @@ The Flow tab shows every task in progress or blocked as a dot by column and age,
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/adccab68 (registered)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** the Steps

@@ -1,8 +1,8 @@
 ---
 id: T031
 title: "A cycle-time scatterplot with the service level"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/adccab68 2026-10-08 — aging WIP chart and cycle-time scatterplot
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -40,7 +40,7 @@ The Flow tab shows each task finished in the flow window as a dot by finish date
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @k/adccab68 (registered)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** the Steps
