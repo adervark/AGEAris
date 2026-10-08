@@ -181,7 +181,8 @@ export function forecastChart(chart, { explain = '' } = {}) {
   const { basis } = chart;
   const source = `From ${days(basis.days)} of throughput, ${basis.from ? escape(dateWords(basis.from)) : ''} to ${basis.to ? escape(dateWords(basis.to)) : ''}: ${basis.finished} finished.${explain ? ` ${explain}` : ''}`;
   if (chart.status === 'nothing-open') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">Nothing is open, so there is nothing to forecast.</p></figure>`;
-  if (chart.status === 'thin') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">Too little history to forecast from: ${basis.finished} ${basis.finished === 1 ? 'task' : 'tasks'} finished in the last ${days(basis.days)}, and a forecast needs ${chart.minSample}.</p><p class="chart-note">${source}</p></figure>`;
+  if (chart.status === 'thin') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">Too little history to forecast from: ${chart.short === 'days' ? `the board has ${basis.days === 1 ? 'one whole day' : `${basis.days} whole days`} of work behind it, and a forecast needs ${chart.minSample}` : `${basis.finished} ${basis.finished === 1 ? 'task' : 'tasks'} finished in the last ${days(basis.days)}, and a forecast needs ${chart.minSample}`}.</p><p class="chart-note">${source}</p></figure>`;
+  if (chart.status === 'no-history' && !basis.days) return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">The board is new today, so there is no whole day of work to forecast from yet.</p></figure>`;
   if (chart.status === 'no-history') return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption><p class="forecast-line">No task finished in the last ${days(basis.days)}, so there is no pace to forecast ${chart.open} open ${chart.open === 1 ? 'task' : 'tasks'} from.</p><p class="chart-note">${source}</p></figure>`;
   const { when, ahead, histogram } = chart;
   const atLeast = (n) => (n ? `${n} or more` : 'possibly none');
@@ -212,8 +213,8 @@ export function forecastChart(chart, { explain = '' } = {}) {
     right = x;
     svg += `<text class="chart-line-label chart-line-label-${kind}" x="${x}" y="13" text-anchor="middle">${kind.slice(1)}%</text>`;
   }
-  svg += `<text class="chart-tick" x="${PAD.left}" y="${12 + h + 22}">today</text><text class="chart-tick" x="${PAD.left + PLOT_W}" y="${12 + h + 22}" text-anchor="end">${escape(`${last} days`)}</text>`;
+  svg += `<text class="chart-tick" x="${PAD.left}" y="${12 + h + 22}">today</text><text class="chart-tick" x="${PAD.left + PLOT_W}" y="${12 + h + 22}" text-anchor="end">${escape(days(last))}</text>`;
   const spread = `<div class="chart-scroll"><svg class="forecast-spread" viewBox="0 0 ${W} ${h + 40}" role="img" aria-label="${escape(`Simulated finish days for the ${open}: half by day ${when.p50.days ?? 'none'}, 85% by day ${when.p85.days ?? 'none'}`)}">${svg}</svg></div>`;
   const beyond = when.beyondHorizon ? ` In ${when.beyondHorizon} of ${basis.trials} runs the work was not done within ${when.horizonDays} days.` : '';
-  return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption>${sentences}${spread}<p class="chart-note">${source}${escape(beyond)} The pace assumes the coming weeks look like the last six; new work added changes the answer.</p></figure>`;
+  return `<figure class="flow-chart forecast"><figcaption>${title}<small>${escape(meaning)}</small></figcaption>${sentences}${spread}<p class="chart-note">${source}${escape(beyond)} The pace assumes the coming weeks look like those days; new work added changes the answer.</p></figure>`;
 }

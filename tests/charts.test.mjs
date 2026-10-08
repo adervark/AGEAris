@@ -75,3 +75,17 @@ test('the forecast needs five finishes, as every flow measure does, and never pr
   assert.doesNotMatch(html, /\b0 or more/);
   if (slow.ahead.p95 === 0) assert.match(html, /possibly none/);
 });
+
+test('a forecast needs five whole days too: one busy day has no spread to sample (T035)', () => {
+  const young = forecast({ history: [7], open: 5, today: '2026-10-08', from: '2026-10-07', to: '2026-10-07' });
+  assert.deepEqual([young.status, young.short], ['thin', 'days']);
+  const html = forecastChart(young);
+  assert.match(html, /the board has one whole day of work behind it, and a forecast needs 5\./);
+  assert.doesNotMatch(html, /or more|1 days/);
+});
+
+test('a board born today has no whole day to forecast from, and says so plainly (T035)', () => {
+  const html = forecastChart(forecast({ history: [], open: 4, today: '2026-10-08' }));
+  assert.match(html, /new today/);
+  assert.doesNotMatch(html, /0 days|From .* to :/);
+});

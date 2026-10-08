@@ -890,3 +890,14 @@ test('the forecast: exact on a steady history, reproducible, ordered, and silent
   assert.equal(slow.status, 'ok');
   assert.equal(slow.when.p95.days, null);
 });
+
+test('a board younger than the window is forecast from its own days, not from days before it existed (T035)', async () => {
+  // The first commit is day 28 (Tuesday 29 September); asOf is day 34 (Monday 5 October).
+  const tasks = ['T001', 'T002', 'T003', 'T004', 'T005', 'T006'].map((id, index) => flowTask(id, { create: 28, start: 28, finish: 28 + Math.min(index, 5) }));
+  const { ledger } = await fixture(timeline(...tasks, [[30, '10:00', 'ade: create T007 backlog "T007 open"']]));
+  const { charts: { forecast } } = compute(ledger);
+  assert.equal(forecast.status, 'ok');
+  assert.deepEqual([forecast.basis.from, forecast.basis.to, forecast.basis.days, forecast.basis.finished], ['2026-09-29', '2026-10-04', 6, 6]);
+  // Six finishes in six days clear one open task within a day or two, not weeks.
+  assert.ok(forecast.when.p95.days <= 2, `95%: ${forecast.when.p95.days} days`);
+});

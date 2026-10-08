@@ -266,3 +266,14 @@ its date, the number, and where the evidence is. Newest last.
 - Found on the way: the forecast samples days from before a young board
   existed (T035).
 - Evidence: the Result of T034.
+
+## 2026-10-08 — T035: a young board's forecast
+
+- The forecast sampled 41 days even for a board with 2 days of history, so
+  AGE Aris's own board said "85% by Dec 25" for 5 tasks. It now samples only
+  days from the board's first commit on. It also needs 5 whole days, since
+  one day sampled has no spread.
+- The forecasts of the sample, AGEIS, AGEION and RSNA are identical before and
+  after the fix. `npm test` passed 501 of 501. The browser walk found 0
+  problems in 72 page views.
+- Evidence: the Result of T035.
