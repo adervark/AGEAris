@@ -1,6 +1,6 @@
 ---
 name: aa
-description: Pull up this project's AA board — the NOW block, the columns and WIP, or the open tasks on an older board — and its page in AGE Aris, starting AGE Aris if it is not running. Read-only. Use when the user types /aa or asks to see, show or pull up the board.
+description: Pull up this project's AA board — the NOW block, the columns and WIP, or the open tasks on an older board — and its page in AGE Aris, starting AGE Aris if it is not running and restarting it if its code has changed since. Read-only. Use when the user types /aa or asks to see, show or pull up the board.
 argument-hint: "[open | link]"
 allowed-tools: Bash(bash *aa/aa.sh*)
 ---

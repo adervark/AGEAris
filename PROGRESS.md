@@ -127,3 +127,16 @@ its date, the number, and where the evidence is. Newest last.
   regression test fails without its fix. The remaining LOWs are T026.
 - Evidence: `tests/task-actions.test.mjs`, `tests/e2e/task-actions.e2e.mjs`,
   and the Result of T023.
+
+## 2026-10-08 — T027: /aa restarts a server older than its code
+
+- The cause of "Aris is not working": a server started 2026-10-07 13:52 was
+  still running after T021–T023 landed. The new page met the old API:
+  `/api/tasks/:id/actions` gave 404, and projects had no `actions`. Restarting
+  it fixed it.
+- `aa.sh` now restarts this checkout's server when it started before the newest
+  change to `server.mjs` or `lib/`. Fresh server: PID kept. After `touch
+  lib/workspace.mjs`: restarted, answers 200, not restarted again on the next
+  run.
+- `npm test` 473 of 473; `npm run check` passes.
+- Evidence: the Result of T027.

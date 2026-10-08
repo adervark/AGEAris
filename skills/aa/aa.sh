@@ -2,7 +2,8 @@
 # /aa — pull up this project's AA board, and its page in AGE Aris.
 #
 #   aa.sh            print the board, then the AGE Aris link (starting AGE Aris
-#                    if it is not running)
+#                    if it is not running, and restarting it if its code has
+#                    changed since it started)
 #   aa.sh --open     the same, and open the link signed in, in the browser
 #   aa.sh --link     track this repository in AGE Aris first, if it is not
 #
@@ -116,14 +117,51 @@ project_id() {
   done
 }
 
+start() {
+  mkdir -p "$(dirname "$LOG")"
+  # setsid -f forks, so the server outlives this script and holds none of its output.
+  (cd "$APP" && AGESIGHT_DATA_DIR="$DATA" PORT="$PORT" exec setsid -f node server.mjs >>"$LOG" 2>&1 < /dev/null)
+  for _ in $(seq 50); do sleep 0.2; state=$(api); [ "$state" = 000 ] || break; done
+}
+
+# The PID of this checkout's AGE Aris on the port, if it started before the
+# newest change to server.mjs or lib/: the page in public/ is read on every
+# request, the server's code only at start, so an old server meets a new page.
+# Prints nothing when any of it cannot be told (no ss or /proc, another
+# program, another checkout); that server is left alone.
+stale_pid() {
+  local pid cmd started newest
+  command -v ss >/dev/null || return 0
+  pid=$(ss -ltnpH "sport = :$PORT" 2>/dev/null | grep -o 'pid=[0-9]*' | head -1 | cut -d= -f2)
+  [ -n "$pid" ] && [ -d "/proc/$pid" ] || return 0
+  [ "$(readlink "/proc/$pid/cwd" 2>/dev/null)" = "$(realpath "$APP")" ] || return 0
+  cmd=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null)
+  case "$cmd" in node\ server.mjs\ |*/node\ server.mjs\ ) ;; *) return 0 ;; esac
+  started=$(ps -o etimes= -p "$pid" 2>/dev/null | tr -d ' ')
+  [ -n "$started" ] || return 0
+  started=$(( $(date +%s) - started ))
+  newest=$(stat -c %Y "$APP/server.mjs" "$APP"/lib/*.mjs 2>/dev/null | sort -n | tail -1)
+  [ -n "$newest" ] && [ "$newest" -gt "$started" ] && echo "$pid"
+}
+
 state=$(api)
+if [ "$state" = 200 ] && [ -f "$APP/server.mjs" ]; then
+  old=$(stale_pid)
+  if [ -n "$old" ]; then
+    kill "$old" 2>/dev/null
+    for _ in $(seq 50); do kill -0 "$old" 2>/dev/null || break; sleep 0.1; done
+    if kill -0 "$old" 2>/dev/null; then
+      echo "AGE Aris (PID $old) is older than its code and did not stop; restart it by hand."
+    else
+      start
+      [ "$state" = 200 ] && echo "Restarted AGE Aris on port $PORT: its code had changed since it started (log: $LOG)."
+    fi
+  fi
+fi
 if [ "$state" != 200 ]; then
   if [ "$state" = 000 ]; then
     if [ ! -f "$APP/server.mjs" ]; then echo "AGE Aris is not running, and there is no checkout at $APP to start (set AGEARIS_HOME)."; exit 0; fi
-    mkdir -p "$(dirname "$LOG")"
-    # setsid -f forks, so the server outlives this script and holds none of its output.
-    (cd "$APP" && AGESIGHT_DATA_DIR="$DATA" PORT="$PORT" exec setsid -f node server.mjs >>"$LOG" 2>&1 < /dev/null)
-    for _ in $(seq 50); do sleep 0.2; state=$(api); [ "$state" = 000 ] || break; done
+    start
     [ "$state" = 200 ] && echo "Started AGE Aris on port $PORT (log: $LOG)."
   fi
   if [ "$state" != 200 ]; then

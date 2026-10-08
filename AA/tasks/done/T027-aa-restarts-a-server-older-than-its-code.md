@@ -1,7 +1,7 @@
 ---
 id: T027
 title: "/aa restarts an AGE Aris server that is older than its code"
-status: claimed
+status: done
 owner: adervark @v/b384188f 2026-10-08 — restart a stale server from aa.sh
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
@@ -29,9 +29,9 @@ created: 2026-10-08
 
 ## Steps
 
-- [ ] In `aa.sh`, when AGE Aris answers, find the process listening on the port; if it is `node server.mjs` running from `$APP` and started before the newest change to `server.mjs` or `lib/*.mjs`, stop it and start it again as a fresh start does.
-- [ ] Anything it cannot determine (no `ss`, no `/proc`, another program, another checkout) leaves the server alone.
-- [ ] Sync the installed copy.
+- [x] In `aa.sh`, when AGE Aris answers, find the process listening on the port; if it is `node server.mjs` running from `$APP` and started before the newest change to `server.mjs` or `lib/*.mjs`, stop it and start it again as a fresh start does.
+- [x] Anything it cannot determine (no `ss`, no `/proc`, another program, another checkout) leaves the server alone.
+- [x] Sync the installed copy.
 
 ## Decision rules — fixed in advance
 
@@ -46,10 +46,10 @@ created: 2026-10-08
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-08, adervark @v/b384188f (claimed)
+- **Last touched:** 2026-10-08, adervark @v/b384188f (done)
 - **In flight:** nothing
-- **On disk:** nothing yet
-- **Resume with:** the Steps
+- **On disk:** nothing
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -58,9 +58,23 @@ Fresh server: `aa.sh` keeps its PID. After `touch lib/workspace.mjs`: `aa.sh` pr
 
 ## Result
 
-*(on completion: the outcome against the decision rules above, a pointer to the
-entry in the log, and the digest from `AA/ckpt.sh close T027` — then
-retire the trail with `--delete`)*
+**Done.** `aa.sh` finds the process listening on the port with `ss`. It
+restarts that process only when it is `node server.mjs` running from `$APP` and
+started (`ps -o etimes`) before the newest mtime of `server.mjs` or
+`lib/*.mjs`, and it says so when it does. Anything it cannot tell leaves the
+server alone. The installed copy in `~/.claude/skills/aa/` is synced; its
+SKILL.md had also kept the old read-only line.
+
+Against the decision rules:
+
+- With a fresh server, `/aa` kept PID 1030703.
+- After `touch lib/workspace.mjs`, `/aa` printed the restart. The new PID,
+  1575909, runs from this checkout and `/api/settings` answers 200. A second
+  run does not restart it again.
+- `npm test` 473 of 473 and `npm run check` pass. No spend; no trail was opened.
+- The process start time comes from `ps -o etimes`, not the mtime of
+  `/proc/<pid>`, which procfs can set long after the process starts.
+- Log: PROGRESS.md, 2026-10-08 — T027.
 
 ## Notes
 
