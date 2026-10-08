@@ -1,8 +1,8 @@
 ---
 id: T015
 title: "Code spans are not found as CommonMark finds them"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/adccab68 2026-10-08 — code spans as CommonMark finds them; hard breaks in long paragraphs
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -45,7 +45,7 @@ stays literal text. A lone double backtick no longer vanishes.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-07, adervark @k/ff713831 (registered, never claimed)
+- **Last touched:** 2026-10-08, adervark @k/adccab68 (claimed)
 - **In flight:** nothing
 - **On disk:** nothing yet
 - **Resume with:** write the failing tests first
