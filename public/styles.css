@@ -20,18 +20,19 @@
   --accent: #c5cbd3;
   --accent-hover: #e6e9ed;
   --accent-tint: #16181b;
-  --accent-sheen: linear-gradient(180deg, #ffffff 0%, #dde1e6 46%, #b3bac3 54%, #e4e7eb 100%);
-  --accent-sheen-hover: linear-gradient(180deg, #f7f8fa, #d3d8de);
+  /* Polished metal: a bright top, a sharp dark horizon just below the middle,
+     a lighter reflection under it. The horizon is what makes it read as
+     metal and not as grey. --chrome is for the wordmark, large text whose
+     darkest band keeps 4:1 on black; the button's sheen is softer, so black
+     text on it keeps 10:1 everywhere. */
+  --chrome: linear-gradient(180deg, #ffffff 0%, #eef0f3 30%, #b9c0c9 48%, #6b727c 52%, #959ca6 64%, #e6e9ed 88%, #ffffff 100%);
+  --accent-sheen: linear-gradient(180deg, #ffffff 0%, #eceff2 40%, #b4bbc4 50%, #c6ccd3 70%, #f1f3f5 100%);
+  --accent-sheen-hover: linear-gradient(180deg, #ffffff 0%, #f4f6f8 40%, #c4cad2 50%, #d4d9df 70%, #ffffff 100%);
   --on-accent: #000000;
   --focus: #d6dbe1;
   --silver: #c9ced5;
-  --silver-hi: #f4f6f8;
-  --silver-mid: #5d636c;
-  --silver-lo: #7f8691;
-  --silver-edge: #33373d;
-  --silver-lit: rgb(214 219 225 / .2);
-  --silver-line: rgb(214 219 225 / .45);
-  --chrome: linear-gradient(180deg, #ffffff 0%, #dde1e6 46%, #9ea5af 54%, #e4e7eb 100%);
+  --silver-hi: #ffffff;
+  --silver-lo: #6b727c;
   --run: #6f9dff; --run-tint: #0b1630; --run-ink: #a9c3ff;
   --wait: #f0b23f; --wait-tint: #241a06; --wait-ink: #f5c86e;
   --fail: #f06b75; --fail-tint: #2a0e12; --fail-ink: #ff9ca4;
@@ -970,26 +971,22 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(2px); }
 .stage-edit .field { margin-bottom: 14px; }
 .stage-edit .field input, .stage-edit .field select, .stage-edit .field textarea { margin-top: 6px; padding: 7px 9px; }
 
+/* Silver, as the logo is, and only where it is clearly metal: the wordmark,
+   the avatar, the primary button and what is selected. Silver says "this is
+   AGE Aris", never a status. Grey lines and edges are not silver, so the
+   surfaces keep their plain borders. */
+.brand > span { font-size: 20px; font-weight: 800; letter-spacing: -.3px; background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 1px 0 rgb(255 255 255 / .12)); }
+.user-avatar { background: var(--accent-sheen); color: var(--on-accent); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .5), 0 0 0 1px #3a3f46; text-shadow: 0 1px 0 rgb(255 255 255 / .6); }
+.button-primary { color: var(--on-accent); border-color: #8a929c; box-shadow: inset 0 1px 0 #ffffff, inset 0 -1px 0 rgb(0 0 0 / .25), 0 1px 0 rgb(0 0 0 / .6); text-shadow: 0 1px 0 rgb(255 255 255 / .55); }
+.button-primary:hover { border-color: #b4bbc4; }
+.nav-link.active { position: relative; background: linear-gradient(90deg, rgb(214 219 225 / .14), rgb(214 219 225 / 0) 85%); color: var(--ink); }
+.nav-link.active::before { content: ""; position: absolute; left: 0; top: 4px; bottom: 4px; width: 3px; border-radius: 2px; background: linear-gradient(180deg, #ffffff, #b9c0c9 45%, #555c66 55%, #e6e9ed); }
+.nav-link.active > .icon { color: var(--silver-hi); }
+.view-tab.selected { border-bottom-color: transparent; background: linear-gradient(180deg, #ffffff, #b9c0c9 45%, #555c66 70%, #c6ccd3) bottom / 100% 3px no-repeat; }
+
 /* --- Narrow screens ------------------------------------------------------------- */
 /* Until tabs and filters fit on one line, the tabs sit above the filters and
    a list row's signals sit under its title, so neither is squeezed. */
-/* Silver, as the logo is. Silver says "this is AGE Aris", never a status:
-   a lit top edge on the main surfaces, a brushed hairline along the shell,
-   and polished metal on the wordmark, the selected item and tab, the avatar
-   and the primary button. */
-.topbar { border-bottom-color: transparent; border-image: linear-gradient(90deg, transparent, var(--silver-line) 18%, var(--silver-line) 82%, transparent) 1; }
-.sidebar { border-right-color: transparent; border-image: linear-gradient(180deg, transparent, var(--silver-line) 12%, var(--silver-line) 88%, transparent) 1; }
-.panel, .vitals, .series, .flow-chart, .board-column, .project-card, .task-rows, .today-clear, .delta-list, .health-header, .task-table-wrap, .checks, .method-doc, .activity-list, .session-list, .working-list, .role-card, .agent-card, .table-scroll {
-  border-color: var(--silver-edge); box-shadow: inset 0 1px 0 var(--silver-lit);
-}
-.brand > span { background: var(--chrome); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.nav-link.active { background: linear-gradient(90deg, rgb(214 219 225 / .16), rgb(214 219 225 / .02)); color: var(--ink); box-shadow: inset 2px 0 0 var(--silver); }
-.nav-link.active > .icon { color: var(--silver); }
-.view-tab.selected { border-bottom-color: transparent; background: linear-gradient(90deg, var(--silver-lo), var(--silver-hi) 50%, var(--silver-lo)) bottom / 100% 2px no-repeat; }
-.user-avatar { background: var(--chrome); color: var(--on-accent); }
-.button-secondary { border-color: var(--silver-mid); }
-.button-secondary:hover { border-color: var(--silver); }
-
 @media (max-width: 1279px) {
   .view-toolbar.has-tabs { flex-direction: column; align-items: stretch; gap: 10px; border-bottom: 0; }
   .view-toolbar.has-tabs .view-tabs { align-self: stretch; margin-bottom: 0; box-shadow: inset 0 -1px 0 var(--line); }

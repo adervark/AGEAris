@@ -66,11 +66,12 @@ project button. Colour carries meaning only: red stuck or overdue, amber quiet
 or running long, blue in progress, green done. The accent is silver, taken from
 the logo, so it never reads as a status: links, focus rings, switches and
 neutral chart bars. Silver on black reads as grey unless it looks like metal,
-so the shell carries metal cues: a brushed hairline along the sidebar and
-under the top bar, a lit top edge on the main surfaces, a silver bar on the
-selected sidebar item and a chrome underline on the selected tab. Polished
-chrome is kept for the AGE Aris wordmark, the avatar and the primary
-button. Health reads as words (On track,
+and metal needs a horizon: a bright top, a sharp dark band just below the
+middle, a lighter reflection under it. So silver appears in few places, all
+of them polished chrome: the AGE Aris wordmark, the avatar, the primary
+button (bevelled, black text at 10:1 or more), a chrome bar on the selected
+sidebar item and under the selected tab. Hairlines and lit edges only read
+as grey, so surfaces keep their plain borders. Health reads as words (On track,
 Watch, Needs attention) and the dot keeps the colour. Numbers are plain text
 that explain themselves on hover and focus. Charts carry date ticks and a
 maximum label.

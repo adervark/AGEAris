@@ -1,7 +1,7 @@
 ---
 id: T039
 title: "Silver that reads as metal: T036's chrome still looks like flat grey"
-status: claimed
+status: done
 owner: adervark @k/c1e9ef11 2026-10-09 — silver that reads as metal
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -30,11 +30,11 @@ highlight and shadow, not grey lines everywhere.
 
 ## Steps
 
-- [ ] Chrome on the wordmark, the primary button and the selected tab and
+- [x] Chrome on the wordmark, the primary button and the selected tab and
       sidebar item, with a highlight and a shadow band.
-- [ ] Remove the touches that read only as grey.
-- [ ] Status colours unchanged; contrast still passes WCAG AA.
-- [ ] DESIGN.md says so.
+- [x] Remove the touches that read only as grey.
+- [x] Status colours unchanged; contrast still passes WCAG AA.
+- [x] DESIGN.md says so.
 
 ## Decision rules — fixed in advance
 
@@ -48,10 +48,10 @@ highlight and shadow, not grey lines everywhere.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-09, adervark @k/c1e9ef11 (claimed)
+- **Last touched:** 2026-10-09, adervark @k/c1e9ef11 (done)
 - **In flight:** nothing
 - **On disk:** nothing
-- **Resume with:** the Steps
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -59,6 +59,26 @@ highlight and shadow, not grey lines everywhere.
 Close-up screenshots beside the avatar.
 
 ## Result
+
+Pass, judged by eye in screenshots at 2× and 1×. The operator has not seen it
+yet.
+
+- **Why T036 read as grey:** its gradients shifted a few shades over 18 px of
+  text, and the hairlines and lit edges were grey lines. Metal needs a
+  horizon: a bright top, a sharp dark band just below the middle, a lighter
+  reflection under it.
+- **Chrome now:** the wordmark (20 px, 800 weight, horizon #6b727c: 4.3:1 on
+  black, above the 3:1 large text needs); the primary button, bevelled with a
+  white top edge and a dark rim (its darkest band gives black text 10.9:1,
+  12.7:1 on hover); the avatar on the same sheen; a 3 px chrome bar on the
+  selected sidebar item and under the selected tab.
+- **Removed:** the brushed hairlines on the sidebar and top bar, the silver
+  edges and lit tops on every surface, and the silver rims on secondary
+  buttons. Surfaces keep their plain borders.
+- **Unchanged:** the status colours, and "Add project", which is a secondary
+  button by design.
+- `npm test` passed 505 of 505, and `npm run check` passed. The browser walk
+  found 0 problems in 102 page views.
 
 ## Notes
 

@@ -309,3 +309,13 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
   views.
 - Evidence: the Result of T038.
+
+## 2026-10-09 — T039: silver that reads as metal
+
+- T036's silver still read as grey. Silver is now polished chrome with a dark
+  horizon, in few places: the wordmark, the avatar, the primary button and
+  the selected item and tab. The grey hairlines and edges are gone. Text on
+  chrome keeps 10.9:1; the wordmark's darkest band is 4.3:1 on black.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+- Evidence: the Result of T039.
