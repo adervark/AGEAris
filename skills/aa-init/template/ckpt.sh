@@ -202,13 +202,18 @@ cmd_last() { # last <TASK>
 
 cmd_check() { # check [TASK] — every line must parse
   shopt -s nullglob; local t="${1:-}"; [ -n "$t" ] && valid_task "$t"
-  local files=("$CK"/${t:-*}.jsonl) f bad
+  local files=("$CK"/${t:-*}.jsonl) f bad rc=0
   for f in "${files[@]}"; do
     bad=$(badlines "$f")
     printf '%-16s %4s records, %s unparseable\n' "$(basename "$f" .jsonl)" "$(records "$f" | wc -l)" "$bad"
-    [ "$bad" -gt 0 ] && jq -Rr 'select(length>0) | input_line_number as $n | . as $l |
-      (try (fromjson|empty) catch "  line \($n): \($l[0:90])")' "$f"
+    # The exit is the verdict on every trail, not the last test run in the loop.
+    if [ "$bad" -gt 0 ]; then
+      rc=1
+      jq -Rr 'select(length>0) | input_line_number as $n | . as $l |
+        (try (fromjson|empty) catch "  line \($n): \($l[0:90])")' "$f"
+    fi
   done
+  return "$rc"
 }
 
 cmd_close() { # close <TASK> [--delete] [--force]

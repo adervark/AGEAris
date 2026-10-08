@@ -198,3 +198,11 @@ its date, the number, and where the evidence is. Newest last.
 - **T014** (a long paragraph drops hard breaks): fixed. The input gives three
   `<br>`.
 - No render changes on AGEIS, AGEION, RSNA or Gem4A. `npm test` 483 of 483.
+
+## 2026-10-08 — T016: ckpt.sh check's exit code
+
+- Fixed. The exit was inverted (a clean trail 1, a bad one 0); it is now 0
+  and 1, and 1 for a bad trail before a clean one.
+- Patched here, in the template, in the global copy, and, on the operator's
+  word, in AGEION, AGEIS, Gem4A and RSNA (uncommitted there).
+- `npm test` 484 of 484.
