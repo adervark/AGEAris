@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Run projects with people and agents: what needs you, how work flows, and whether the method is being followed.">
+    <title>AGE Aris</title>
+    <link rel="icon" href="/planet.png" type="image/png">
+    <link rel="stylesheet" href="/styles.css">
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Workspace navigation">
+        <a class="brand" href="#home" aria-label="AGE Aris: Home"><img class="brand-logo" src="/logo.webp" alt="" width="376" height="215"><span>AGE Aris</span></a>
+        <nav id="navigation" aria-label="Main navigation"></nav>
+        <div class="projects-label"><span>Projects</span><button id="sidebar-add" class="icon-button" aria-label="Add a project" title="Add a project"></button></div>
+        <nav id="project-navigation" class="project-navigation" aria-label="Projects"></nav>
+        <p class="sidebar-foot">Everything here is read from git on this machine.</p>
+      </aside>
+      <div class="workspace">
+        <header class="topbar">
+          <button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation" aria-expanded="false"></button>
+          <div class="breadcrumb" id="breadcrumb"></div>
+          <span class="monitor-state" id="monitor-state" role="status"><span class="status-dot"></span><span>Live</span></span>
+          <label class="search-box"><span id="search-icon"></span><input id="search" type="search" placeholder="Search tasks…" aria-label="Search tasks"><kbd>/</kbd></label>
+          <button class="icon-button refresh-button" id="refresh" title="Refresh" aria-label="Refresh"></button>
+          <button class="button button-primary topbar-create" id="create-button"></button>
+          <span class="user-avatar" id="user-avatar" title="Local operator">A</span>
+        </header>
+        <div id="connection-banner" class="connection-banner" role="alert" hidden></div>
+        <main id="main" tabindex="-1" aria-busy="true"><div class="loading-state"><span class="spinner"></span>Loading your workspace…</div></main>
+      </div>
+    </div>
+    <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title"></dialog>
+    <dialog id="task-dialog" class="task-dialog" aria-labelledby="task-dialog-title"></dialog>
+    <dialog id="action-dialog" class="project-dialog" aria-labelledby="action-dialog-title"></dialog>
+    <dialog id="explain-dialog" class="task-dialog explain-dialog" aria-labelledby="explain-dialog-title"></dialog>
+    <dialog id="pipeline-dialog" class="pipeline-dialog" aria-labelledby="pipeline-dialog-title"></dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
