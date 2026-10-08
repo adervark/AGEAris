@@ -140,3 +140,12 @@ its date, the number, and where the evidence is. Newest last.
   run.
 - `npm test` 473 of 473; `npm run check` passes.
 - Evidence: the Result of T027.
+
+## 2026-10-08 — T028: a README that explains the workflow
+
+- README.md opens with the workflow and a ten-minute tour; commit 34af27b,
+  pushed to `origin/feature/pm-cockpit` so a first-time tester sees it.
+- The tour was run against a scratch server: the sample refuses a run at its
+  WIP limit of 8, and a new project's run stops at both gates and reaches Done.
+- GitHub renders the three Mermaid diagrams (3 mermaid sections in its HTML).
+- `npm test` 473 of 473.
