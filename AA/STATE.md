@@ -7,9 +7,12 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**Next action:** T024 (card menu, keys, drag) and T025 (STATE.md behind), from
-`docs/plans/task-control.md`. T003 needs the operator's choice in its file
-before it can be claimed.
+**Next action:** the Flow tab's first slice of charts is done (T030–T032:
+aging WIP, cycle-time scatterplot, forecast). The rest of
+`docs/plans/visualisation.md` (CFD, burnup, where a task's time went, process
+behaviour charts) is registered only when the operator chooses. Otherwise
+T024 (card menu, keys, drag) and T025 (STATE.md behind). T003 needs the
+operator's choice in its file before it can be claimed.
 
 **Watch out for:** T016 patched `AA/ckpt.sh` in AGEION, AGEIS, Gem4A and RSNA
 and left it uncommitted there; each repository's own session commits it.
