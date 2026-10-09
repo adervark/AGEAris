@@ -31,6 +31,40 @@ for arg in "$@"; do
   esac
 done
 
+# What /aa needs, checked together before anything runs: each missing tool is
+# named once, with the line that installs it, rather than surfacing later as a
+# failure that does not say what is wrong.
+OS=$(uname -s)
+case "$OS" in
+  MINGW*|MSYS*|CYGWIN*) echo "On Windows, AGE Aris runs inside WSL: run Claude Code there, and install the plugin there."; exit 1 ;;
+esac
+tools=()
+# Run, not looked up: on a Mac without its developer tools, /usr/bin/git is a
+# stub that only offers to install them.
+for tool in git jq curl; do "$tool" --version >/dev/null 2>&1 || tools+=("$tool"); done
+node_v=$(node --version 2>/dev/null)
+node_major=${node_v#v}
+node_major=${node_major%%.*}
+case "$node_major" in ''|*[!0-9]*) node_major=0 ;; esac
+if [ "${#tools[@]}" -gt 0 ] || [ "$node_major" -lt 22 ]; then
+  printf 'AGE Aris needs these, and this machine does not have them:\n\n'
+  [ "${#tools[@]}" -eq 0 ] || printf '  - %s\n' "${tools[@]}"
+  [ "$node_major" -ge 22 ] || printf '  - Node 22 or newer%s\n' "${node_v:+ (this machine has $node_v)}"
+  printf '\nInstall them, then run /aa again:\n\n'
+  if [ "${#tools[@]}" -gt 0 ]; then
+    if [ "$OS" = Darwin ]; then
+      printf '  brew install %s\n' "${tools[*]}"
+      command -v brew >/dev/null || printf '  (Homebrew itself: https://brew.sh)\n'
+    elif command -v apt-get >/dev/null; then printf '  sudo apt-get install -y %s\n' "${tools[*]}"
+    elif command -v dnf >/dev/null; then printf '  sudo dnf install -y %s\n' "${tools[*]}"
+    elif command -v pacman >/dev/null; then printf '  sudo pacman -S --needed %s\n' "${tools[*]}"
+    else printf '  %s, with your package manager\n' "${tools[*]}"
+    fi
+  fi
+  [ "$node_major" -ge 22 ] || printf '  Node 22 or newer: https://nodejs.org/en/download\n'
+  exit 1
+fi
+
 ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
 ROOT=$(realpath "$ROOT")
 NAME=$(basename "$ROOT")
@@ -106,15 +140,14 @@ APP=${AGEARIS_HOME:-}
 [ -n "$APP" ] || { [ -f "$HERE/../../server.mjs" ] && APP=$(realpath "$HERE/../..") || APP=$HOME/Code/AGEAris; }
 LOG=${XDG_STATE_HOME:-$HOME/.local/state}/agearis/server.log
 
-command -v curl >/dev/null && command -v jq >/dev/null || { echo "AGE Aris: needs curl and jq for the link."; exit 0; }
-
 token() { [ -f "$DATA/.api-token" ] && tr -d '\n' < "$DATA/.api-token"; }
 api() { curl -s -o /dev/null -w '%{http_code}' --max-time 2 -H "X-AGESight-Token: $(token)" "$URL/api/settings"; }
 
 # The project tracking this repository, or this project's own folder.
 project_id() {
   local p
-  case "$ROOT/" in "$(realpath -m "$DATA")/projects/"*) basename "$ROOT"; return ;; esac
+  # Not `realpath -m`: macOS's realpath has no -m.
+  case "$ROOT/" in "$(realpath "$DATA" 2>/dev/null || printf '%s' "$DATA")/projects/"*) basename "$ROOT"; return ;; esac
   for p in "$DATA"/projects/*/project.json; do
     [ -f "$p" ] || continue
     jq -er --arg r "$ROOT" 'select(.repository == $r) | .id' "$p" 2>/dev/null && return
@@ -122,9 +155,18 @@ project_id() {
 }
 
 start() {
-  mkdir -p "$(dirname "$LOG")"
-  # setsid -f forks, so the server outlives this script and holds none of its output.
-  (cd "$APP" && AGESIGHT_DATA_DIR="$DATA" PORT="$PORT" exec setsid -f node server.mjs >>"$LOG" 2>&1 < /dev/null)
+  # The server prints its sign-in link to the log, so the log is the operator's
+  # alone, wherever the folder's own mode would let others read it.
+  mkdir -p "$(dirname "$LOG")" && chmod 700 "$(dirname "$LOG")"
+  [ ! -f "$LOG" ] || chmod 600 "$LOG"
+  # A detached child leads a new session, so the server outlives this script and
+  # holds none of its output. Node does this on Linux and macOS alike; setsid(1)
+  # is Linux-only. argv0 keeps the command line `node server.mjs`, which
+  # stale_pid matches, where node is a link to a binary named node-22.
+  (cd "$APP" && AGESIGHT_DATA_DIR="$DATA" PORT="$PORT" node -e '
+    const log = require("node:fs").openSync(process.argv[1], "a", 0o600);
+    require("node:child_process").spawn(process.execPath, ["server.mjs"], { argv0: "node", detached: true, stdio: ["ignore", log, log] }).unref();
+  ' "$LOG")
   for _ in $(seq 50); do sleep 0.2; state=$(api); [ "$state" = 000 ] || break; done
 }
 

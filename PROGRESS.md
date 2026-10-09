@@ -372,3 +372,18 @@ its date, the number, and where the evidence is. Newest last.
   profile lands on the project page with every API call answering 200.
 - `npm test` 513 of 513, `npm run check` passes. Installed copy synced.
 - Evidence: the Result of T045.
+
+## 2026-10-09 — T046 and T048: a one-line install, named AGE Aris
+
+- **T046:** `/aa` names every missing prerequisite at once (git, jq, curl,
+  Node 22), with one install line for the OS, before anything runs; five tests
+  on stubbed PATHs pass under bash 5.3 and 3.2.57. The server starts through
+  Node's detached spawn, so `/aa` no longer needs Linux's `setsid`; it leads
+  its own session, outlives the command and restarts when its code changes,
+  also where `node` is a link to `node-22`. The log holding the sign-in link
+  is now 600.
+- **T048:** the plugin, marketplace and package are `agearis`. A clean-config
+  install of this checkout gives `agearis@agearis` with `aa` and `aa-init`.
+- `npm test` 518 of 518, `npm run check` passes. One independent review, two
+  rounds: nothing blocking; every finding fixed.
+- Evidence: the Results of T046 and T048.

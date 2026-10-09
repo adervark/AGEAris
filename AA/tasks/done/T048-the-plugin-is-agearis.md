@@ -1,7 +1,7 @@
 ---
 id: T048
 title: "The plugin is agearis: the install and the plugin list still said agesight"
-status: claimed
+status: done
 owner: adervark @k/edd32d65 2026-10-09 — rename the plugin, marketplace and package
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
@@ -38,11 +38,11 @@ reads about the plugin calls it agesight.
 
 ## Steps
 
-- [ ] Manifests and `package.json`: `agearis`; descriptions say AGE Aris; the repository URL is `adervark/AGEAris`.
-- [ ] README, `docs/PLUGIN.md`, the `AA.yml` comment: the new install line and name.
-- [ ] `AGENTS.md`: the plugin and package leave the list of kept names.
-- [ ] The clone's remote URL; the project memory note.
-- [ ] Independent check.
+- [x] Manifests and `package.json`: `agearis`; descriptions say AGE Aris; the repository URL is `adervark/AGEAris`.
+- [x] README, `docs/PLUGIN.md`, the `AA.yml` comment: the new install line and name.
+- [x] `AGENTS.md`: the plugin and package leave the list of kept names.
+- [x] The clone's remote URL; the project memory note.
+- [x] Independent check.
 
 ## Decision rules — fixed in advance
 
@@ -62,11 +62,10 @@ reads about the plugin calls it agesight.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-09, adervark @k/edd32d65 (claimed)
-- **In flight:** waiting for T046 to commit; it changes README and
-  `docs/PLUGIN.md` too
-- **On disk:** nothing beyond this claim
-- **Resume with:** the Steps above, after T046's done commit
+- **Last touched:** 2026-10-09, adervark @k/edd32d65 (done)
+- **In flight:** nothing
+- **On disk:** nothing
+- **Resume with:** nothing
 - **Next decision:** none
 
 ## Verify
@@ -74,6 +73,34 @@ reads about the plugin calls it agesight.
 The clean-config install above, and the `git grep`.
 
 ## Result
+
+**Done.** The plugin, its marketplace and the package are `agearis`; their
+descriptions start with AGE Aris and the repository URL is `adervark/AGEAris`.
+README and `docs/PLUGIN.md` install `agearis@agearis`. `AGENTS.md` lists the
+old names kept in stored data, until T049 migrates them, and no longer the
+plugin. The clone's remote is `https://github.com/adervark/AGEAris.git`, and
+the project memory note says the plugin is `agearis`.
+
+Against the decision rules:
+
+- In a clean `CLAUDE_CONFIG_DIR`, `claude plugin marketplace add` on this
+  checkout and `claude plugin install agearis@agearis` installed the skills
+  `aa` and `aa-init`; `claude plugin validate` passes on both manifests (the
+  reviewer, Claude Code 2.1.295).
+- `git grep -i agesight` finds the old name only in stored-data names, in
+  history and in test fixtures.
+- `npm test` 518 of 518 and `npm run check` pass. The check (reviewer run
+  `edd32d65.ea4b`) found nothing blocking; its two nits, the incomplete list
+  of kept names and a new `agesight-aa-` temp prefix, are fixed.
+- The install line works against GitHub only once this branch is on `main`,
+  whose manifests still say `agesight`.
+- Trail digest:
+  - **edd32d65** (session @k/edd32d65): .claude-plugin manifests,
+    package.json, AGENTS.md, AA.yml comment, README and docs/PLUGIN.md install
+    lines; remote URL; memory note · cost shared reviewer run · left: nothing
+  - **edd32d65.ea4b** (reviewer @k/edd32d65): nothing · cost reads only ·
+    left: the boards sentence in AGENTS.md, since fixed
+- Log: PROGRESS.md, 2026-10-09 — T046 and T048.
 
 ## Notes
 

@@ -24,17 +24,23 @@ whether the work follows the method the board sets.
 ## Quick start
 
 ```sh
-git clone -b feature/pm-cockpit https://github.com/adervark/AGEAris.git
+git clone https://github.com/adervark/AGEAris.git
 cd AGEAris
 npm start
 ```
 
-The app is on the `feature/pm-cockpit` branch until it is merged; `main`
-holds only the `aa-init` plugin.
+It needs Node 22 or newer. To use it from Claude Code instead, install the
+[plugin](#agent-plugin) and run `/aa`.
 
 Open the sign-in link it prints, `http://127.0.0.1:4310/?token=…`, then choose
 **Explore a sample project** to get six weeks of simulated history to look
 around in. The [ten-minute tour](#a-ten-minute-tour) below walks through it.
+
+The token in that link is kept in `.api-token` in the data folder. To change
+it, stop AGE Aris, delete that file, and start AGE Aris again with `npm start`
+or `/aa`; every browser then needs the new link. When `/aa` started it, AGE
+Aris runs in the background: `kill $(lsof -ti tcp:4310 -sTCP:LISTEN)` stops
+it.
 
 > [!WARNING]
 > If the `claude` CLI is on your `PATH`, **Run with agents** uses real Claude
@@ -487,9 +493,18 @@ skills/aa-init/               existing agent task-board integration
 
 ## Agent plugin
 
-The existing `aa-init` plugin remains available for scaffolding task boards
-into other repositories. Its installation and protocol documentation are in
-[the plugin guide](docs/PLUGIN.md).
+The AGE Aris plugin, `agearis`, gives Claude Code two commands: `/aa-init`
+sets up an AA board in a repository, and `/aa` shows a repository's board and
+the link to its page in AGE Aris, starting AGE Aris when it is not running
+(`/aa open` opens the page). Install it from a terminal, in one line:
+
+```sh
+claude plugin marketplace add adervark/AGEAris && claude plugin install agearis@agearis
+```
+
+The first `/aa` checks for Node 22 or newer, git, jq and curl, and lists
+whatever is missing, with how to install it. On Windows, run it
+inside WSL. More in [the plugin guide](docs/PLUGIN.md).
 
 ## License
 
