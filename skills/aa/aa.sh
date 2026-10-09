@@ -35,14 +35,15 @@ done
 # named once, with the line that installs it, rather than surfacing later as a
 # failure that does not say what is wrong.
 OS=$(uname -s)
-case "$OS" in
-  MINGW*|MSYS*|CYGWIN*) echo "On Windows, AGE Aris runs inside WSL: run Claude Code there, and install the plugin there."; exit 1 ;;
-esac
+# Windows: the Git Bash (or Cygwin) that Claude Code runs commands in there.
+WIN=0
+case "$OS" in MINGW*|MSYS*|CYGWIN*) WIN=1 ;; esac
 tools=()
 # Run, not looked up: on a Mac without its developer tools, /usr/bin/git is a
 # stub that only offers to install them.
 for tool in git jq curl; do "$tool" --version >/dev/null 2>&1 || tools+=("$tool"); done
 node_v=$(node --version 2>/dev/null)
+node_v=${node_v%$'\r'}
 node_major=${node_v#v}
 node_major=${node_major%%.*}
 case "$node_major" in ''|*[!0-9]*) node_major=0 ;; esac
@@ -50,9 +51,16 @@ if [ "${#tools[@]}" -gt 0 ] || [ "$node_major" -lt 22 ]; then
   printf 'AGE Aris needs these, and this machine does not have them:\n\n'
   [ "${#tools[@]}" -eq 0 ] || printf '  - %s\n' "${tools[@]}"
   [ "$node_major" -ge 22 ] || printf '  - Node 22 or newer%s\n' "${node_v:+ (this machine has $node_v)}"
-  printf '\nInstall them, then run /aa again:\n\n'
+  # winget changes PATH for programs started afterwards, not for Claude Code.
+  again='then run /aa again'
+  [ "$WIN" = 0 ] || again='restart Claude Code, then run /aa again'
+  printf '\nInstall them, %s:\n\n' "$again"
   if [ "${#tools[@]}" -gt 0 ]; then
-    if [ "$OS" = Darwin ]; then
+    if [ "$WIN" = 1 ]; then
+      for tool in "${tools[@]}"; do
+        case "$tool" in git) printf '  winget install Git.Git\n' ;; jq) printf '  winget install jqlang.jq\n' ;; curl) printf '  winget install cURL.cURL\n' ;; esac
+      done
+    elif [ "$OS" = Darwin ]; then
       printf '  brew install %s\n' "${tools[*]}"
       command -v brew >/dev/null || printf '  (Homebrew itself: https://brew.sh)\n'
     elif command -v apt-get >/dev/null; then printf '  sudo apt-get install -y %s\n' "${tools[*]}"
@@ -61,7 +69,10 @@ if [ "${#tools[@]}" -gt 0 ] || [ "$node_major" -lt 22 ]; then
     else printf '  %s, with your package manager\n' "${tools[*]}"
     fi
   fi
-  [ "$node_major" -ge 22 ] || printf '  Node 22 or newer: https://nodejs.org/en/download\n'
+  if [ "$node_major" -lt 22 ]; then
+    if [ "$WIN" = 1 ]; then printf '  winget install OpenJS.NodeJS.LTS\n'
+    else printf '  Node 22 or newer: https://nodejs.org/en/download\n'; fi
+  fi
   exit 1
 fi
 
@@ -86,7 +97,7 @@ done
 
 # One frontmatter value, unquoted: `key: value` between the first two `---`.
 field() {
-  awk -v k="$2" 'NR == 1 && $0 != "---" { exit } NR > 1 && $0 == "---" { exit }
+  awk -v k="$2" '{ sub(/\r$/, "") } NR == 1 && $0 != "---" { exit } NR > 1 && $0 == "---" { exit }
     NR > 1 && index($0, k ": ") == 1 { v = substr($0, length(k) + 3); gsub(/^"|"$/, "", v); print v; exit }' "$1"
 }
 clip() { local s="$1" n="$2"; [ "${#s}" -gt "$n" ] && s="${s:0:$((n - 1))}…"; printf '%s' "$s"; }
@@ -140,17 +151,29 @@ APP=${AGEARIS_HOME:-}
 [ -n "$APP" ] || { [ -f "$HERE/../../server.mjs" ] && APP=$(realpath "$HERE/../..") || APP=$HOME/Code/AGEAris; }
 LOG=${XDG_STATE_HOME:-$HOME/.local/state}/agearis/server.log
 
+# A path as Node and AGE Aris take it: on Windows, C:\... rather than Git Bash's
+# /c/..., which Node cannot open.
+native() { if [ "$WIN" = 1 ]; then cygpath -w "$1"; else printf '%s' "$1"; fi; }
+# jq from winget is a native jq.exe, which ends its lines CRLF. Not -b, which
+# jq 1.6 does not have; pipefail keeps jq's exit status.
+jqlf() { if [ "$WIN" = 1 ]; then jq "$@" | tr -d '\r'; else jq "$@"; fi; }
+
 token() { [ -f "$DATA/.api-token" ] && tr -d '\n' < "$DATA/.api-token"; }
 api() { curl -s -o /dev/null -w '%{http_code}' --max-time 2 -H "X-AGESight-Token: $(token)" "$URL/api/settings"; }
 
 # The project tracking this repository, or this project's own folder.
 project_id() {
-  local p
+  local p r
+  r=$(native "$ROOT")
   # Not `realpath -m`: macOS's realpath has no -m.
   case "$ROOT/" in "$(realpath "$DATA" 2>/dev/null || printf '%s' "$DATA")/projects/"*) basename "$ROOT"; return ;; esac
   for p in "$DATA"/projects/*/project.json; do
     [ -f "$p" ] || continue
-    jq -er --arg r "$ROOT" 'select(.repository == $r) | .id' "$p" 2>/dev/null && return
+    # AGE Aris stores the path from Node's realpath; on Windows that is the
+    # disk's own letter case, which Git Bash's path need not share.
+    jqlf -er --arg r "$r" --argjson fold "$WIN" \
+      'select(if $fold == 1 then (.repository | ascii_downcase) == ($r | ascii_downcase) else .repository == $r end) | .id' \
+      "$p" 2>/dev/null && return
   done
 }
 
@@ -163,10 +186,11 @@ start() {
   # holds none of its output. Node does this on Linux and macOS alike; setsid(1)
   # is Linux-only. argv0 keeps the command line `node server.mjs`, which
   # stale_pid matches, where node is a link to a binary named node-22.
-  (cd "$APP" && AGESIGHT_DATA_DIR="$DATA" PORT="$PORT" node -e '
+  # windowsHide: on Windows a detached child otherwise gets a console window.
+  (cd "$APP" && AGESIGHT_DATA_DIR="$(native "$DATA")" PORT="$PORT" node -e '
     const log = require("node:fs").openSync(process.argv[1], "a", 0o600);
-    require("node:child_process").spawn(process.execPath, ["server.mjs"], { argv0: "node", detached: true, stdio: ["ignore", log, log] }).unref();
-  ' "$LOG")
+    require("node:child_process").spawn(process.execPath, ["server.mjs"], { argv0: "node", detached: true, windowsHide: true, stdio: ["ignore", log, log] }).unref();
+  ' "$(native "$LOG")")
   for _ in $(seq 50); do sleep 0.2; state=$(api); [ "$state" = 000 ] || break; done
 }
 
@@ -219,22 +243,27 @@ fi
 
 ID=$(project_id)
 if [ -z "$ID" ] && [ "$LINK" = 1 ] && [ -n "$BOARD" ]; then
-  body=$(jq -cn --arg path "$ROOT" --arg name "$NAME" '{path: $path, name: $name}')
+  body=$(jqlf -cn --arg path "$(native "$ROOT")" --arg name "$NAME" '{path: $path, name: $name}')
   reply=$(curl -s --max-time 30 -H "X-AGESight-Token: $(token)" -H 'Content-Type: application/json' -d "$body" "$URL/api/projects/link")
-  ID=$(jq -r '.id // empty' <<<"$reply" 2>/dev/null)
+  ID=$(jqlf -r '.id // empty' <<<"$reply" 2>/dev/null)
   if [ -n "$ID" ]; then echo "Now tracking $NAME in AGE Aris."
-  else echo "AGE Aris could not track $NAME: $(jq -r '.error // .' <<<"$reply" 2>/dev/null)"; exit 0; fi
+  else echo "AGE Aris could not track $NAME: $(jqlf -r '.error // .' <<<"$reply" 2>/dev/null)"; exit 0; fi
 fi
 if [ -z "$ID" ]; then
   [ -n "$BOARD" ] && echo "AGE Aris is running at $URL/?token=$(token) but does not track $NAME yet: \`/aa link\` tracks it (AGE Aris only reads it)."
   exit 0
 fi
 
+# A project id is a UUID. Anything else came from a hand-edited project.json,
+# and goes to no browser opener, cmd's least of all.
+case "$ID" in *[!0-9a-fA-F-]*) echo "AGE Aris has a project here whose id is not one: $ID"; exit 1 ;; esac
 # The sign-in answer redirects to / without a fragment, so #project/ survives it.
 LINK_URL="$URL/?token=$(token)#project/$ID"
 echo "AGE Aris: $LINK_URL"
 if [ "$OPEN" = 1 ]; then
-  if command -v xdg-open >/dev/null; then xdg-open "$LINK_URL" >/dev/null 2>&1 &
+  # Git Bash rewrites a /c argument into a path unless told not to.
+  if [ "$WIN" = 1 ]; then MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*' cmd.exe /c start "" "$LINK_URL" >/dev/null 2>&1 &
+  elif command -v xdg-open >/dev/null; then xdg-open "$LINK_URL" >/dev/null 2>&1 &
   elif command -v open >/dev/null; then open "$LINK_URL" &
   else echo "No browser opener found; open the link above."; fi
 fi

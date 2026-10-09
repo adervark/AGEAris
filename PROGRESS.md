@@ -387,3 +387,17 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` 518 of 518, `npm run check` passes. One independent review, two
   rounds: nothing blocking; every finding fixed.
 - Evidence: the Results of T046 and T048.
+
+## 2026-10-09 — T050: /aa on Windows without WSL
+
+- `/aa` now runs natively in Git Bash, the shell Claude Code uses on Windows.
+  It hands Node and AGE Aris Windows paths, finds a tracked project by its
+  Windows path in any letter case, and opens the page through `cmd`. The
+  server and its git children start hidden, and missing tools get `winget`
+  lines. `.gitattributes` keeps the scripts LF in an autocrlf clone.
+- Six tests on a stubbed Git Bash; Linux unchanged apart from a UUID guard on
+  the project id. `npm test` 523 of 523, `npm run check` passes. Independent
+  review, three rounds: no open defect.
+- Not tested on a Windows machine. Known limits: ASCII-only case-folding,
+  `subst` drives; restarting an old server off Linux is T051.
+- Evidence: the Result of T050.

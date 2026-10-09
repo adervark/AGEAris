@@ -1,1 +1,6 @@
 AA/checkpoints/*.jsonl    diff merge=union linguist-generated=true
+# LF on Windows too, where git otherwise checks text out with CRLF line endings
+# and bash cannot run the scripts.
+*.sh                      text eol=lf
+AA/**                     text eol=lf
+skills/**                 text eol=lf

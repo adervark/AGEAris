@@ -12,7 +12,7 @@ argument through, and show its output **exactly as printed**: no summary, no
 commentary, no next steps unless the user asks.
 
 ```sh
-bash <this skill's base directory>/aa.sh $ARGUMENTS
+bash "<this skill's base directory>/aa.sh" $ARGUMENTS
 ```
 
 - No argument: print the board, then the AGE Aris link. The link carries the

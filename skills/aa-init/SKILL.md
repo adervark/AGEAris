@@ -81,11 +81,14 @@ Two properties to protect above all others:
      agent gets them from git. If `.gitignore` ignores `.claude/`, narrow it to
      `.claude/*` plus `!.claude/commands/`.
    - `TASK.md` is the skeleton for task files. Do not copy it as-is.
-   - Append to `.gitattributes` (create if absent), so the trail stays out of
-     review and two clones appending to one task's trail merge cleanly:
+   - Append to `.gitattributes` (create if absent). The first line keeps the
+     trail out of review and lets two clones appending to one task's trail
+     merge cleanly. The second keeps the board's files LF on Windows, where git
+     otherwise checks them out with CRLF and bash cannot run the scripts:
 
      ```
      AA/checkpoints/*.jsonl    diff merge=union linguist-generated=true
+     AA/**                     text eol=lf
      ```
 4. **Point `map:` at what already exists.** Most repos have a README, an
    ARCHITECTURE.md or an orientation doc that answers *"how does this work"*.

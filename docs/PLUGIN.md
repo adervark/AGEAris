@@ -106,7 +106,9 @@ AA/ckpt.sh close <ID>             # digest the trail into the task's Result
 - `jq`
 - for `/aa` and AGE Aris: Node 22 or newer, and `curl`
 
-Linux, or WSL on Windows. macOS should work but has not been tested.
+Tested on Linux only. macOS should work. Windows support, in the Git Bash that
+Claude Code uses there with no WSL, is written but has never run on a Windows
+machine; there, the first `/aa` lists `winget` lines for anything missing.
 
 A harness that cannot run bash can still take part: the checkpoint format is the contract, and appending a valid line of JSON is equivalent to using the script.
 

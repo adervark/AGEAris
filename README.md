@@ -503,8 +503,9 @@ claude plugin marketplace add adervark/AGEAris && claude plugin install agearis@
 ```
 
 The first `/aa` checks for Node 22 or newer, git, jq and curl, and lists
-whatever is missing, with how to install it. On Windows, run it
-inside WSL. More in [the plugin guide](docs/PLUGIN.md).
+whatever is missing, with how to install it. On Windows it runs in the Git
+Bash that Claude Code uses there, with no WSL; that has not been tried on a
+Windows machine yet. More in [the plugin guide](docs/PLUGIN.md).
 
 ## License
 
