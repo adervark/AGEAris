@@ -11,7 +11,7 @@ const NEEDS = new Set([null, 'reason', 'result', 'choice']);
 // operator, profile and session, and `claim` names an agent session.
 const HOLDERS = {
   unclaimed: { holder: { operator: '', profile: '', session: '' }, claim: '' },
-  self: { holder: { operator: OPERATOR, profile: 'agesight', session: 'web' }, claim: '' },
+  self: { holder: { operator: OPERATOR, profile: 'agearis', session: 'web' }, claim: '' },
   agent: { holder: { operator: OPERATOR, profile: 'k', session: 'b6192924' }, claim: `${OPERATOR} @k/b6192924` },
   other: { holder: { operator: 'someone-else', profile: 'k', session: '0f0f0f0f' }, claim: 'someone-else @k/0f0f0f0f' },
 };
@@ -66,7 +66,8 @@ test('the four kinds of holder are told apart', () => {
   for (const [kind, fields] of Object.entries(HOLDERS)) assert.equal(holderKind({ status: 'backlog', ...fields }, OPERATOR), kind);
   assert.equal(holderKind(HOLDERS.agent, ''), 'agent', 'without a known operator nobody is another');
   assert.equal(holderKind({ holder: { operator: OPERATOR, profile: '', session: '' } }, OPERATOR), 'agent', 'a claim of the operator\'s that names no session');
-  assert.equal(holderKind({ holder: { operator: 'someone-else', profile: 'agesight', session: 'web' } }, OPERATOR), 'other');
+  assert.equal(holderKind({ holder: { operator: 'someone-else', profile: 'agearis', session: 'web' } }, OPERATOR), 'other');
+  assert.equal(holderKind({ holder: { operator: OPERATOR, profile: 'agesight', session: 'web' } }, OPERATOR), 'self', '@agesight/web, the old name');
   assert.equal(holderKind({}, OPERATOR), 'unclaimed');
 });
 

@@ -1,4 +1,6 @@
 .omc/
-.agesight-data/
+.agearis-data/
+# The link left where the data folder was before it was renamed.
+.agesight-data
 node_modules/
 coverage/

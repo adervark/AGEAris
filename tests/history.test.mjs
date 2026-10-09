@@ -24,7 +24,7 @@ test.after(async () => {
 });
 
 async function scratch() {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'agesight-history-'));
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'agearis-history-'));
   temporaryDirectories.add(directory);
   return directory;
 }
@@ -73,8 +73,8 @@ async function openWorkspace() {
 }
 
 test('parseOwner splits operator, profile, and session; isUiClaim and agentIdentity follow from them', () => {
-  const ui = parseOwner('ade @agesight/web 2026-10-01 — working on X');
-  assert.deepEqual(ui, { raw: 'ade @agesight/web 2026-10-01 — working on X', operator: 'ade', profile: 'agesight', session: 'web' });
+  const ui = parseOwner('ade @agearis/web 2026-10-01 — working on X');
+  assert.deepEqual(ui, { raw: 'ade @agearis/web 2026-10-01 — working on X', operator: 'ade', profile: 'agearis', session: 'web' });
   assert.equal(isUiClaim(ui), true);
   assert.equal(agentIdentity(ui), '');
 
@@ -83,7 +83,8 @@ test('parseOwner splits operator, profile, and session; isUiClaim and agentIdent
   assert.equal(isUiClaim(agent), false);
   assert.equal(agentIdentity(agent), 'ade @k/e857a8c8.a4f2');
 
-  assert.equal(isUiClaim(parseOwner('ade @agesight/other 2026-10-01 — x')), false);
+  assert.equal(isUiClaim(parseOwner('ade @agearis/other 2026-10-01 — x')), false);
+  assert.equal(isUiClaim(parseOwner('ade @agesight/web 2026-10-01 — x')), true, 'the tag under its old name');
   const bare = parseOwner('ade');
   assert.deepEqual([bare.operator, bare.profile, bare.session], ['ade', '', '']);
   assert.equal(agentIdentity(bare), '');
@@ -678,7 +679,7 @@ test('memo: coarse timestamps — AGE Aris writes invalidate the memo, and raw c
   const ledgers = new Ledgers({ workspace, stat: coarse });
   assert.equal((await ledgers.get(project.id)).tasks.T001.status, 'backlog');
 
-  await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }, { trailers: { 'AGESight-Via': 'ui' } });
+  await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }, { trailers: { 'AGEAris-Via': 'ui' } });
   assert.equal((await ledgers.get(project.id)).tasks.T001.status, 'in_progress');
 
   const file = path.join(dir, 'AA', 'tasks', 'T001-coarse-task.md');
@@ -792,9 +793,21 @@ test('fabricate: a run that fails leaves the fabrication usable for later runs',
   assert.equal(fabrication.current, 'main');
 });
 
+test('a commit with the old AGESight-Via trailer is still an edit made in AGE Aris', async () => {
+  const workspace = await openWorkspace();
+  const old = { trailers: { 'AGESight-Via': 'ui' } };
+  const project = await workspace.createProject({ name: 'Old' }, old);
+  const task = await workspace.createTask({ projectId: project.id, title: 'Old task', type: 'feature' }, old);
+  await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' });
+  const ledgers = new Ledgers({ workspace });
+  const ledger = await ledgers.get(project.id);
+  ledgers.close();
+  assert.deepEqual(of(ledger, 'T001').filter((transition) => transition.kind !== 'field').map((transition) => transition.via), ['ui', '']);
+});
+
 test('real API: create → in progress → done through Workspace gives the expected transitions', async () => {
   const workspace = await openWorkspace();
-  const ui = { trailers: { 'AGESight-Via': 'ui' } };
+  const ui = { trailers: { 'AGEAris-Via': 'ui' } };
   const project = await workspace.createProject({ name: 'Real' }, ui);
   let task = await workspace.createTask({ projectId: project.id, title: 'Real task', type: 'feature' }, ui);
   task = await workspace.updateTask(task.id, { version: task.version, status: 'in_progress' }, ui);
@@ -807,7 +820,7 @@ test('real API: create → in progress → done through Workspace gives the expe
   const list = of(ledger, 'T001');
   assert.deepEqual(list.map((transition) => transition.kind === 'field' ? ['field', transition.field, transition.from] : shape(transition)), [
     ['created'],
-    ['status', 'backlog', 'in_progress', { operator: 'ade', profile: 'agesight', session: 'web' }],
+    ['status', 'backlog', 'in_progress', { operator: 'ade', profile: 'agearis', session: 'web' }],
     ['field', 'owner', ''],
     ['status', 'in_progress', 'done'],
   ]);

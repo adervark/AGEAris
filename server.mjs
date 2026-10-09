@@ -6,7 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { AgentRegistry } from './lib/agents.mjs';
 import { Cockpit } from './lib/brief.mjs';
 import { PipelineEngine } from './lib/pipeline.mjs';
-import { redactEmails, Workspace, WorkspaceError } from './lib/workspace.mjs';
+import { dataFolder, redactEmails, trackedWritesOff, Workspace, WorkspaceError } from './lib/workspace.mjs';
 
 const PUBLIC_DIR = fileURLToPath(new URL('./public/', import.meta.url));
 const STATIC_FILES = new Map([
@@ -43,7 +43,7 @@ const MIME = new Map([
 const MAX_JSON_BYTES = 1024 * 1024;
 // Every task and project write made through the API is marked as made in the
 // UI, so the history ledger never reads a person's edit as a sign of agent life.
-const VIA_UI = { trailers: { 'AGESight-Via': 'ui' } };
+const VIA_UI = { trailers: { 'AGEAris-Via': 'ui' } };
 
 function securityHeaders(response) {
   response.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; object-src 'none'; frame-ancestors 'none'");
@@ -106,10 +106,16 @@ async function apiToken(dataDir) {
   return token;
 }
 
-function presentedToken(request) {
-  const header = request.headers['x-agesight-token'];
-  if (typeof header === 'string' && header) return header;
-  return /(?:^|;\s*)agesight_token=([A-Za-z0-9_-]+)/.exec(String(request.headers.cookie || ''))?.[1] || '';
+// The tokens a request presents: the header, else the cookies, each under AGE
+// Aris's name and the old AGESight one. Cookies ignore the port, so a browser
+// can hold a stale one under one name and this server's under the other.
+function presentedTokens(request) {
+  for (const name of ['x-agearis-token', 'x-agesight-token']) {
+    const header = request.headers[name];
+    if (typeof header === 'string' && header) return [header];
+  }
+  const cookie = String(request.headers.cookie || '');
+  return [/(?:^|;\s*)agearis_token=([A-Za-z0-9_-]+)/.exec(cookie)?.[1], /(?:^|;\s*)agesight_token=([A-Za-z0-9_-]+)/.exec(cookie)?.[1]].filter(Boolean);
 }
 
 function sameToken(presented, token) {
@@ -176,10 +182,10 @@ function logTrackedAction(error) {
 // `clock` (milliseconds, like Date.now) is the time the engine and the cockpit
 // compute their read models at; tests inject it, and `ledgerOptions` (spawn,
 // stat) for the history ledgers.
-export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || join(process.cwd(), '.agesight-data'), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {} } = {}) {
-  // AGESIGHT_TRACKED_WRITES=0 turns task actions off on every tracked
+export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DATA_DIR || process.env.AGESIGHT_DATA_DIR || undefined), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {} } = {}) {
+  // AGEARIS_TRACKED_WRITES=0 turns task actions off on every tracked
   // repository, whatever each one's switch says.
-  const workspace = await new Workspace({ dataDir, trackedWrites: process.env.AGESIGHT_TRACKED_WRITES !== '0' }).init();
+  const workspace = await new Workspace({ dataDir, trackedWrites: !trackedWritesOff() }).init();
   const registry = await new AgentRegistry({ dataDir: workspace.dataDir, operator: workspace.operator, email: workspace.email, ...registryOptions }).init();
   const engine = await new PipelineEngine({ workspace, registry, ...engineOptions, ...(clock ? { clock } : {}) }).init();
   const cockpit = new Cockpit({ workspace, engine, clock: clock || (() => Date.now()), ledgerOptions, ...cockpitOptions });
@@ -195,8 +201,8 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
       try { url = new URL(request.url, `http://${request.headers.host}`); }
       catch { return sendJson(response, 400, { error: 'Invalid request URL' }); }
       const pathname = decodeURIComponent(url.pathname);
-      if (pathname.startsWith('/api/') && !sameToken(presentedToken(request), token)) {
-        return sendJson(response, 401, { error: 'Open the sign-in link AGE Aris printed when it started. Scripts send the X-AGESight-Token header from the data directory\'s .api-token file.' });
+      if (pathname.startsWith('/api/') && !presentedTokens(request).some((presented) => sameToken(presented, token))) {
+        return sendJson(response, 401, { error: 'Open the sign-in link AGE Aris printed when it started. Scripts send the X-AGEAris-Token header from the data directory\'s .api-token file.' });
       }
 
       if (request.method === 'GET' && pathname === '/api/workspace') {
@@ -295,7 +301,8 @@ export async function createServer({ dataDir = process.env.AGESIGHT_DATA_DIR || 
         }
         // Exchange the sign-in link for a cookie and drop the token from the address bar.
         response.statusCode = 303;
-        response.setHeader('Set-Cookie', `agesight_token=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=31536000`);
+        // The old name's cookie, if this browser has one, goes.
+        response.setHeader('Set-Cookie', [`agearis_token=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=31536000`, 'agesight_token=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0']);
         response.setHeader('Location', '/');
         return response.end();
       }

@@ -62,7 +62,8 @@ export function holderKind(task, operator = '') {
   const holder = task.holder || {};
   if (!holder.operator) return 'unclaimed';
   if (operator && holder.operator !== operator) return 'other';
-  return holder.profile === 'agesight' && holder.session === 'web' ? 'self' : 'agent';
+  // agesight: the same tag under its old name.
+  return (holder.profile === 'agearis' || holder.profile === 'agesight') && holder.session === 'web' ? 'self' : 'agent';
 }
 
 function holderName(task) {

@@ -13,13 +13,13 @@ import { Workspace } from '../../lib/workspace.mjs';
 
 // The perf budgets of plan §8 S4, on 10 projects, 500 tasks, about 5,000
 // commits, and 50 runs. Run with `npm run perf`; the default run allows 3× each
-// budget, AGESIGHT_PERF_STRICT=1 holds the exact budgets. (The 3 dated
+// budget, AGEARIS_PERF_STRICT=1 holds the exact budgets. (The 3 dated
 // milestones per project arrive with milestones in Cut 2.)
 
 process.env.GIT_CONFIG_GLOBAL = os.devNull;
 process.env.GIT_CONFIG_NOSYSTEM = '1';
 
-const STRICT = process.env.AGESIGHT_PERF_STRICT === '1';
+const STRICT = process.env.AGEARIS_PERF_STRICT === '1';
 const SLACK = STRICT ? 1 : 3;
 const PROJECTS = 10;
 const TASKS = 50;
@@ -64,7 +64,7 @@ function runLog(projectId, localId, taskId, startMs) {
   const events = [];
   let previous = null;
   const push = (type, ms, data) => {
-    previous = buildEvent(previous, { type, actor: { type: 'system', id: 'agesight' }, data, at: new Date(ms).toISOString() });
+    previous = buildEvent(previous, { type, actor: { type: 'system', id: 'agearis' }, data, at: new Date(ms).toISOString() });
     events.push(previous);
   };
   push('run_started', startMs, { runId: localId, taskId: `${projectId}:${taskId}`, taskTitle: taskId, pipeline: [{ id: 'plan', name: 'Plan', role: 'plan', tier: 'opus', executor: 'agent', gate: 'approve', verdict: false, maxAttempts: 1, onFail: 'retry', instructions: '' }] });
@@ -75,7 +75,7 @@ function runLog(projectId, localId, taskId, startMs) {
 }
 
 test('brief, project metrics, and ledger rebuilds stay within their budgets', { timeout: 600000 }, async (t) => {
-  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agesight-perf-'));
+  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agearis-perf-'));
   t.after(() => rm(dataDir, { recursive: true, force: true }));
   const workspace = await new Workspace({ dataDir, operator: 'ade', email: 'ade@example.invalid' }).init();
   await writeFile(path.join(dataDir, 'settings.json'), '{"timezone": "Europe/London", "workdays": [1, 2, 3, 4, 5]}');

@@ -16,7 +16,8 @@
 # has included. The token is no barrier against processes running as the
 # operator (server.mjs), and the server prints the same link to its log.
 #
-# AGESIGHT_DATA_DIR  the data folder           (default ~/.agesight-data)
+# AGEARIS_DATA_DIR  the data folder           (default ~/.agearis-data;
+#                    AGESIGHT_DATA_DIR, its old name, is still read)
 # AGEARIS_PORT       the port AGE Aris uses    (default 4310)
 # AGEARIS_HOME       the AGE Aris checkout     (default: the one this script
 #                    is in, else ~/Code/AGEAris)
@@ -143,7 +144,15 @@ fi
 echo
 
 # --- AGE Aris -----------------------------------------------------------------
-DATA=${AGESIGHT_DATA_DIR:-$HOME/.agesight-data}
+# The data folder. Its old default, ~/.agesight-data, is read until AGE Aris
+# next starts here, which moves it to ~/.agearis-data (start()): a server
+# still running on it would find its folder gone.
+DATA=${AGEARIS_DATA_DIR:-${AGESIGHT_DATA_DIR:-}}
+MOVE=
+if [ -z "$DATA" ]; then
+  DATA=$HOME/.agearis-data
+  if [ ! -e "$DATA" ] && [ -d "$HOME/.agesight-data" ] && [ ! -L "$HOME/.agesight-data" ]; then MOVE=$DATA DATA=$HOME/.agesight-data; fi
+fi
 PORT=${AGEARIS_PORT:-4310}
 URL="http://127.0.0.1:$PORT"
 HERE=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
@@ -159,7 +168,10 @@ native() { if [ "$WIN" = 1 ]; then cygpath -w "$1"; else printf '%s' "$1"; fi; }
 jqlf() { if [ "$WIN" = 1 ]; then jq "$@" | tr -d '\r'; else jq "$@"; fi; }
 
 token() { [ -f "$DATA/.api-token" ] && tr -d '\n' < "$DATA/.api-token"; }
-api() { curl -s -o /dev/null -w '%{http_code}' --max-time 2 -H "X-AGESight-Token: $(token)" "$URL/api/settings"; }
+# The token under the old header name too, for an AGE Aris started before the
+# rename, until it restarts.
+signed() { local t; t=$(token); curl -H "X-AGEAris-Token: $t" -H "X-AGESight-Token: $t" "$@"; }
+api() { signed -s -o /dev/null -w '%{http_code}' --max-time 2 "$URL/api/settings"; }
 
 # The project tracking this repository, or this project's own folder.
 project_id() {
@@ -182,16 +194,21 @@ start() {
   # alone, wherever the folder's own mode would let others read it.
   mkdir -p "$(dirname "$LOG")" && chmod 700 "$(dirname "$LOG")"
   [ ! -f "$LOG" ] || chmod 600 "$LOG"
+  # Nothing runs on the old data folder now: the server moves it as it starts.
+  [ -z "$MOVE" ] || DATA=$MOVE
   # A detached child leads a new session, so the server outlives this script and
   # holds none of its output. Node does this on Linux and macOS alike; setsid(1)
   # is Linux-only. argv0 keeps the command line `node server.mjs`, which
   # stale_pid matches, where node is a link to a binary named node-22.
   # windowsHide: on Windows a detached child otherwise gets a console window.
-  (cd "$APP" && AGESIGHT_DATA_DIR="$(native "$DATA")" PORT="$PORT" node -e '
+  (cd "$APP" && AGEARIS_DATA_DIR="$(native "$DATA")" PORT="$PORT" node -e '
     const log = require("node:fs").openSync(process.argv[1], "a", 0o600);
     require("node:child_process").spawn(process.execPath, ["server.mjs"], { argv0: "node", detached: true, windowsHide: true, stdio: ["ignore", log, log] }).unref();
   ' "$(native "$LOG")")
   for _ in $(seq 50); do sleep 0.2; state=$(api); [ "$state" = 000 ] || break; done
+  # The move failed (on Windows, while something held the folder), and the
+  # server went on in the old one.
+  if [ -n "$MOVE" ] && [ ! -e "$MOVE" ]; then DATA=$HOME/.agesight-data; state=$(api); fi
 }
 
 # The PID of this checkout's AGE Aris on the port, if it started before the
@@ -244,7 +261,7 @@ fi
 ID=$(project_id)
 if [ -z "$ID" ] && [ "$LINK" = 1 ] && [ -n "$BOARD" ]; then
   body=$(jqlf -cn --arg path "$(native "$ROOT")" --arg name "$NAME" '{path: $path, name: $name}')
-  reply=$(curl -s --max-time 30 -H "X-AGESight-Token: $(token)" -H 'Content-Type: application/json' -d "$body" "$URL/api/projects/link")
+  reply=$(signed -s --max-time 30 -H 'Content-Type: application/json' -d "$body" "$URL/api/projects/link")
   ID=$(jqlf -r '.id // empty' <<<"$reply" 2>/dev/null)
   if [ -n "$ID" ]; then echo "Now tracking $NAME in AGE Aris."
   else echo "AGE Aris could not track $NAME: $(jqlf -r '.error // .' <<<"$reply" 2>/dev/null)"; exit 0; fi

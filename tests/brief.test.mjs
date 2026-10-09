@@ -31,7 +31,7 @@ function at(day, time = '09:00') {
 // A workspace whose projects are fabricated histories; every commit is the
 // workspace operator's, as in a real AGE Aris project.
 async function workspaceWith(projects, { runs = {} } = {}) {
-  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agesight-brief-'));
+  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agearis-brief-'));
   directories.add(dataDir);
   const workspace = await new Workspace({ dataDir, operator: 'ade', email: 'ade@example.invalid' }).init();
   await import('node:fs/promises').then(({ writeFile }) => writeFile(path.join(dataDir, 'settings.json'), SETTINGS));
@@ -58,7 +58,7 @@ async function brief(cockpit, query = {}) {
 function gateRun(projectId, localId, taskId, openedAt) {
   const events = [];
   let previous = null;
-  const push = (type, when, data, actor = { type: 'system', id: 'agesight' }) => {
+  const push = (type, when, data, actor = { type: 'system', id: 'agearis' }) => {
     previous = buildEvent(previous, { type, actor, data, at: when });
     events.push(previous);
   };
@@ -198,7 +198,7 @@ test('the brief validates its window and cursor parameters', async () => {
 test('an idle project and a new one read grey in plain words; unassigned urgent work comes last in Needs you', async () => {
   const { cockpit } = await workspaceWith([
     { name: 'Dune', startDay: -100, script: 'day -99 09:00 ade: create T001 backlog "Once"\nday -99 10:00 ade: move T001 tasks\nday -98 09:00 ade: move T001 done' },
-    { name: 'Echo', startDay: 32, script: 'day 32 09:00 ade: create T001 tasks "Fresh" {"priority": "urgent", "owner": "ade @agesight/web 2026-10-03 — working on Fresh"}' },
+    { name: 'Echo', startDay: 32, script: 'day 32 09:00 ade: create T001 tasks "Fresh" {"priority": "urgent", "owner": "ade @agearis/web 2026-10-03 — working on Fresh"}' },
   ]);
   const result = await brief(cockpit);
   const [dune, echo] = result.projects;

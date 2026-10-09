@@ -21,7 +21,7 @@ process.env.GIT_CONFIG_NOSYSTEM = '1';
 const ASOF = '2026-10-05T09:12:00+01:00';
 const SETTINGS = { timezone: 'Europe/London', workdays: [1, 2, 3, 4, 5], personalWipLimit: 3, deltaFallback: 'previous-workday' };
 const CLAIM = 'ade @k/e857a8c8 2026-10-04 — importer';
-const UI = 'ade @agesight/web 2026-10-04 — working on it';
+const UI = 'ade @agearis/web 2026-10-04 — working on it';
 const temporaryDirectories = new Set();
 // Every result computed in this file, for the §3.2 property test at the end.
 const computed = [];
@@ -33,7 +33,7 @@ test.after(async () => {
 // Every fixture is fabricated as in the default setup: the workspace operator
 // `ade` authors every commit unless a line names someone else.
 async function fixture(script) {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'agesight-metrics-'));
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'agearis-metrics-'));
   temporaryDirectories.add(directory);
   const fabrication = await fabricate(path.join(directory, 'repo'), script);
   return { fabrication, ledger: await buildLedger(fabrication.dir, { projectId: 'p1' }) };
@@ -71,7 +71,7 @@ function at(day, time = '09:00') {
 function runLog(localId, taskId, steps) {
   const events = [];
   let previous = null;
-  const push = (type, when, data, actor = { type: 'system', id: 'agesight' }) => {
+  const push = (type, when, data, actor = { type: 'system', id: 'agearis' }) => {
     previous = buildEvent(previous, { type, actor, data, at: when });
     events.push(previous);
   };
@@ -406,7 +406,7 @@ test('effective owner: assignee, then the active run\'s agent, then the agent cl
   const { metrics } = compute(ledger, { runs, project: { id: 'p1', wipLimit: 20 } });
   const ownerOf = (key) => metrics.wip.items.find((item) => item.taskKey === key).owner;
   assert.deepEqual(ownerOf('T001'), { kind: 'agent', name: 'ade @k/e857a8c8', step: 'claim' });
-  assert.deepEqual([ownerOf('T002').kind, ownerOf('T002').reason], ['unassigned', 'the owner line is UI bookkeeping (@agesight/web)']);
+  assert.deepEqual([ownerOf('T002').kind, ownerOf('T002').reason], ['unassigned', 'the owner line is UI bookkeeping (@agearis/web)']);
   assert.deepEqual(ownerOf('T003'), { kind: 'agent', name: 'claude-sonnet', step: 'run', via: 'via run R001', runId: 'R001' });
   assert.equal(ownerOf('T004').kind, 'unassigned', 'a run waiting at a human stage gives no owner');
   assert.deepEqual(ownerOf('T005'), { kind: 'person', name: 'Ana', step: 'assignee' });
@@ -441,7 +441,7 @@ function staleKeys(result) {
   return keys(result.metrics.stale_claims);
 }
 
-test('stale 1: a human @agesight/web claim untouched for 72 h is not stale (aging only)', async () => {
+test('stale 1: a human @agearis/web claim untouched for 72 h is not stale (aging only)', async () => {
   const { ledger } = await fixture(`
     day 20 09:00 ade: create T001 backlog "Human work"
     day 31 09:00 ade: move T001 tasks {"owner": "${UI}"} via=ui
@@ -478,7 +478,7 @@ test('stale 4: a ckpt: commit 2 h ago whose lines are dated 30 h ago is stale (t
 test('stale 5 (N1): a UI edit 2 h ago never counts as life; the same edit by raw git does', async () => {
   const ui = compute((await claimed('day 34 07:00 ade: set T001 {"priority": "high"} via=ui')).ledger).metrics.stale_claims;
   assert.deepEqual(keys(ui), ['T001']);
-  assert.deepEqual(ui.claims[0].ignored.map((entry) => entry.reason), ['AGESight-Via: ui (an edit made in AGE Aris)']);
+  assert.deepEqual(ui.claims[0].ignored.map((entry) => entry.reason), ['Via: ui (an edit made in AGE Aris)']);
 
   const raw = compute((await claimed('day 34 07:00 ade: set T001 {"priority": "high"}')).ledger).metrics.stale_claims;
   assert.deepEqual(keys(raw), []);

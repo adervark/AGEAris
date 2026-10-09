@@ -14,7 +14,7 @@ import { Workspace } from '../lib/workspace.mjs';
 
 process.env.GIT_CONFIG_GLOBAL = os.devNull;
 process.env.GIT_CONFIG_NOSYSTEM = '1';
-delete process.env.AGESIGHT_TRACKED_WRITES;
+delete process.env.AGEARIS_TRACKED_WRITES;
 
 const exec = promisify(execFile);
 const FIXTURES = new URL('./fixtures/tracked/', import.meta.url);
@@ -31,7 +31,7 @@ test.after(async () => {
 });
 
 async function tempDir(kind) {
-  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), `agesight-actions-${kind}-`)));
+  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), `agearis-actions-${kind}-`)));
   temporary.add(directory);
   return directory;
 }
@@ -91,7 +91,7 @@ const current = (repo, id) => repo.workspace.getTask(taskId(repo, id));
 
 async function act(repo, id, action, input = {}) {
   const task = await current(repo, id);
-  return repo.workspace.actOnTask(taskId(repo, id), { action, version: task.version, ...input }, { trailers: { 'AGESight-Via': 'ui' } });
+  return repo.workspace.actOnTask(taskId(repo, id), { action, version: task.version, ...input }, { trailers: { 'AGEAris-Via': 'ui' } });
 }
 
 // The ref, the index's bytes, git status and every file outside .git: equal
@@ -143,7 +143,7 @@ async function committed(repo, result, { subject, status, paths }) {
   const body = await g(repo.dir, 'log', '-1', '--format=%B', result.commit);
   assert.match(body, new RegExp(`Made in AGE Aris by ${OPERATOR}\\.`));
   assert.match(body, /AA\/STATE\.md (was not regenerated: run AA\/board\.sh --write\.|is kept by hand: T\d+'s board line still says its old status\.)/);
-  assert.equal(await g(repo.dir, 'log', '-1', '--format=%(trailers:key=AGESight-Via,valueonly)', result.commit), 'ui');
+  assert.equal(await g(repo.dir, 'log', '-1', '--format=%(trailers:key=AGEAris-Via,valueonly)', result.commit), 'ui');
   assert.match(await g(repo.dir, 'show', '--name-status', '--format=', result.commit), paths, 'one task file: renamed on a move, modified in place');
   assert.equal(await g(repo.dir, 'status', '--porcelain', '--untracked-files=all', '--', 'AA'), '', 'the index and the working tree agree for the task');
   if (status) assert.equal(result.task.status, status);
@@ -194,9 +194,9 @@ test('a hand-kept STATE.md is disclosed as kept by hand, and a repository the en
   assert.deepEqual([error.status, error.code], [409, 'UNSUPPORTED_REPO']);
 });
 
-test('AGESIGHT_TRACKED_WRITES=0 overrides the switch: actions and switching on are refused', async () => {
+test('AGEARIS_TRACKED_WRITES=0 overrides the switch: actions and switching on are refused', async () => {
   const repo = await board({ on: false, trackedWrites: false });
-  assert.match(repo.project.actions.reason, /AGESIGHT_TRACKED_WRITES=0/);
+  assert.match(repo.project.actions.reason, /AGEARIS_TRACKED_WRITES=0/);
   const error = await refusal(repo.workspace.updateProject(repo.project.id, { version: repo.project.version, taskActions: { on: true } }));
   assert.equal(error.code, 'ACTIONS_OFF');
   // A project switched on before the kill switch was set.
@@ -219,12 +219,12 @@ test('claim with backlog/: the file moves to tasks/ with status claimed and the 
   const text = await readFile(path.join(repo.dir, 'AA', 'tasks', T012), 'utf8');
   const fields = frontmatter(text);
   assert.equal(fields.status, 'claimed');
-  assert.match(fields.owner, new RegExp(`^${OPERATOR} @agesight/web \\d{4}-\\d{2}-\\d{2} — working on A blocked task`));
+  assert.match(fields.owner, new RegExp(`^${OPERATOR} @agearis/web \\d{4}-\\d{2}-\\d{2} — working on A blocked task`));
   // Only the named keys changed: comments, order and every other byte stay.
   const before = await fixture(T012);
   assert.deepEqual(text.split('\n').filter((line, index) => line !== before.split('\n')[index]).map((line) => line.split(':')[0]), ['status', 'owner']);
   assert.deepEqual([await g(repo.dir, 'diff', '--cached'), await g(repo.dir, 'diff')], [cached, unstaged], 'the operator\'s own staged and unstaged changes are as they were');
-  assert.deepEqual(result.task.holder, { operator: OPERATOR, profile: 'agesight', session: 'web' });
+  assert.deepEqual(result.task.holder, { operator: OPERATOR, profile: 'agearis', session: 'web' });
   assert.deepEqual(result.warnings, []);
 });
 
@@ -248,7 +248,7 @@ test('block needs a reason, unblock clears it, release puts the task back with t
     await committed(repo, result, { subject: 'block T012: waiting on the archive key', status: 'blocked', paths: IN_PLACE });
     let fields = frontmatter(await readFile(path.join(repo.dir, ...where.split('/'), T012), 'utf8'));
     assert.deepEqual([fields.status, fields.blockedReason], ['blocked', '"waiting on the archive key"']);
-    assert.match(fields.owner, /@agesight\/web/, 'the owner line is kept');
+    assert.match(fields.owner, /@agearis\/web/, 'the owner line is kept');
 
     result = await act(repo, 'T012', 'unblock');
     await committed(repo, result, { subject: 'unblock T012', status: 'in_progress', paths: IN_PLACE });
@@ -262,7 +262,7 @@ test('block needs a reason, unblock clears it, release puts the task back with t
     assert.equal(await g(repo.dir, 'log', '-1', '--format=%s', result.commit), 'release T012: back to the queue');
     fields = frontmatter(await readFile(path.join(repo.dir, ...back.split('/'), T012), 'utf8'));
     assert.equal(fields.status, 'open');
-    assert.match(fields.owner, new RegExp(`^— \\(released \\d{4}-\\d{2}-\\d{2}; was ${OPERATOR} @agesight/web \\d{4}-\\d{2}-\\d{2} — working on `));
+    assert.match(fields.owner, new RegExp(`^— \\(released \\d{4}-\\d{2}-\\d{2}; was ${OPERATOR} @agearis/web \\d{4}-\\d{2}-\\d{2} — working on `));
     assert.deepEqual(result.task.holder, { operator: '', profile: '', session: '' }, 'a released task has no holder');
 
     await act(repo, 'T012', 'claim');
@@ -277,7 +277,7 @@ test('block needs a reason, unblock clears it, release puts the task back with t
 });
 
 test('done keeps a real Result and asks for nothing; reopen, priority and assign are not AA actions', async () => {
-  const repo = await board({ files: { 'AA/tasks/T050-shipped.md': taskFile('T050', 'Shipped', { status: 'claimed', owner: `${OPERATOR} @agesight/web 2026-10-01 — shipping` }, 'Shipped on 2026-10-07; see RESULTS.md.') } });
+  const repo = await board({ files: { 'AA/tasks/T050-shipped.md': taskFile('T050', 'Shipped', { status: 'claimed', owner: `${OPERATOR} @agearis/web 2026-10-01 — shipping` }, 'Shipped on 2026-10-07; see RESULTS.md.') } });
   const result = await act(repo, 'T050', 'done', { result: 'ignored' });
   assert.equal(await g(repo.dir, 'log', '-1', '--format=%s', result.commit), 'T050 done: Shipped');
   assert.match(await readFile(path.join(repo.dir, 'AA', 'tasks', 'done', 'T050-shipped.md'), 'utf8'), /## Result\n\nShipped on 2026-10-07; see RESULTS\.md\.\n/);
@@ -347,7 +347,7 @@ test('a deaddrop/ board is never acted on, even with a switch written by hand', 
 });
 
 test('WIP at the limit refuses a claim while done and release are allowed; blocking past the blocked limit warns in board.sh\'s words', async () => {
-  const repo = await board({ files: { 'AA/tasks/T050-mine.md': taskFile('T050', 'Mine', { status: 'claimed', owner: `${OPERATOR} @agesight/web 2026-10-01 — mine` }), 'AA/tasks/T051-also.md': taskFile('T051', 'Also mine', { status: 'blocked', owner: `${OPERATOR} @agesight/web 2026-10-01 — also`, blockedReason: '"keys"' }) } });
+  const repo = await board({ files: { 'AA/tasks/T050-mine.md': taskFile('T050', 'Mine', { status: 'claimed', owner: `${OPERATOR} @agearis/web 2026-10-01 — mine` }), 'AA/tasks/T051-also.md': taskFile('T051', 'Also mine', { status: 'blocked', owner: `${OPERATOR} @agearis/web 2026-10-01 — also`, blockedReason: '"keys"' }) } });
   const error = await refused(repo, () => act(repo, 'T012', 'claim'), 409, 'WIP_LIMIT');
   assert.equal(error.message, 'WIP is 2 of 2. Finish or release something before claiming (rule 10).');
   const blocked = await act(repo, 'T050', 'block', { reason: 'waiting on review' });
@@ -399,7 +399,7 @@ test('DIRTY_FILE for a change only in the index and for a file already at the ta
 test('a settings file past 64 KB is not read under the lock either: its WIP limit does not apply, as everywhere else (T026)', async () => {
   const repo = await board({ files: {
     'AA/AA.yml': `wip:\n  in_progress: 1\n  blocked: 1\nstale_hours: 24\n${'#'.repeat(70 * 1024)}\n`,
-    'AA/tasks/T050-mine.md': taskFile('T050', 'Mine', { status: 'claimed', owner: `${OPERATOR} @agesight/web 2026-10-01 — mine` }),
+    'AA/tasks/T050-mine.md': taskFile('T050', 'Mine', { status: 'claimed', owner: `${OPERATOR} @agearis/web 2026-10-01 — mine` }),
   } });
   assert.equal((await act(repo, 'T004', 'claim')).task.status, 'in_progress');
 });
@@ -411,7 +411,7 @@ test('claiming a queued task the operator\'s own agent holds takes it back and k
   const task = await current(repo, 'T032');
   await repo.workspace.actOnTask(task.id, { action: 'claim', version: task.version, confirm: asked.details.confirmToken });
   const owner = frontmatter(await readFile(path.join(repo.dir, 'AA', 'tasks', 'T032-queued.md'), 'utf8')).owner;
-  assert.match(owner, new RegExp(`^${OPERATOR} @agesight/web \\d{4}-\\d{2}-\\d{2} — working on Queued; was ${OPERATOR} @k/b6192924 2026-09-20 — paused$`));
+  assert.match(owner, new RegExp(`^${OPERATOR} @agearis/web \\d{4}-\\d{2}-\\d{2} — working on Queued; was ${OPERATOR} @k/b6192924 2026-09-20 — paused$`));
   // An unclaimed task names no one displaced.
   const free = await current(repo, 'T012');
   await repo.workspace.actOnTask(free.id, { action: 'claim', version: free.version });
@@ -448,7 +448,7 @@ test('the operator\'s own agent claim and a dead run need one confirmation namin
 });
 
 test('a malformed trail line needs a confirmation naming its line, then warns with the ckpt.sh check remedy', async () => {
-  const repo = await board({ backlog: false, files: { 'AA/tasks/T012-a-moved-blocked-task-loses-its-handoff-reason.md': null, 'AA/checkpoints/T012.jsonl': `${trailLine('aa11bb22', 'open', 5)}${trailLine('aa11bb22', 'end', 4)}{"half a line\n`, [`AA/tasks/${T012}`]: (await fixture(T012)).replace('status: open', 'status: claimed').replace('owner: —', `owner: ${OPERATOR} @agesight/web 2026-10-01 — mine`) } });
+  const repo = await board({ backlog: false, files: { 'AA/tasks/T012-a-moved-blocked-task-loses-its-handoff-reason.md': null, 'AA/checkpoints/T012.jsonl': `${trailLine('aa11bb22', 'open', 5)}${trailLine('aa11bb22', 'end', 4)}{"half a line\n`, [`AA/tasks/${T012}`]: (await fixture(T012)).replace('status: open', 'status: claimed').replace('owner: —', `owner: ${OPERATOR} @agearis/web 2026-10-01 — mine`) } });
   const asked = await refused(repo, () => act(repo, 'T012', 'release'), 409, 'CONFIRM');
   assert.deepEqual(asked.details.reasons.map((reason) => reason.text), ['Line 3 of AA/checkpoints/T012.jsonl cannot be read.']);
   const result = await act(repo, 'T012', 'release', { confirm: asked.details.confirmToken });
@@ -479,6 +479,19 @@ test('a confirmation is for one action: its token does not confirm another', asy
   assert.notEqual(other.details.confirmToken, asked.details.confirmToken);
 });
 
+test('a sign of life in git skips commits made in AGE Aris, under the Via trailer\'s new name or its old one', async () => {
+  const repo = await board({ backlog: false });
+  const file = path.join(repo.dir, 'AA', 'tasks', T030);
+  const commit = async (when, ...message) => {
+    await writeFile(file, `${await readFile(file, 'utf8')}\n${when}\n`);
+    await exec('git', ['commit', '--quiet', '-am', ...message], { cwd: repo.dir, env: { ...process.env, GIT_COMMITTER_DATE: when, GIT_AUTHOR_DATE: when } });
+  };
+  await commit('2026-10-01T10:00:00Z', 'by the agent');
+  await commit('2026-10-02T10:00:00Z', 'in AGE Aris', '-m', 'AGEAris-Via: ui');
+  await commit('2026-10-03T10:00:00Z', 'in AGE Aris, before the rename', '-m', 'AGESight-Via: ui');
+  assert.equal(repo.workspace._lastSignInGit(repo.dir, 'AA', T030), Date.parse('2026-10-01T10:00:00Z'));
+});
+
 test('an uncommitted edit read before the lock and discarded before it is taken is not committed: DIRTY_FILE', async () => {
   const repo = await board({ backlog: false });
   const file = path.join(repo.dir, 'AA', 'tasks', T030);
@@ -503,7 +516,7 @@ test('a live run refuses claim, release, block, unblock and done, even with a co
   const repo = await board({ backlog: false, files: {
     'AA/checkpoints/T030.jsonl': live,
     'AA/checkpoints/T012.jsonl': live,
-    'AA/tasks/T031-blocked.md': taskFile('T031', 'Blocked', { status: 'blocked', owner: `${OPERATOR} @agesight/web 2026-10-01 — mine`, blockedReason: '"keys"' }),
+    'AA/tasks/T031-blocked.md': taskFile('T031', 'Blocked', { status: 'blocked', owner: `${OPERATOR} @agearis/web 2026-10-01 — mine`, blockedReason: '"keys"' }),
     'AA/checkpoints/T031.jsonl': live,
   } });
   for (const [id, action] of [['T012', 'claim'], ['T030', 'release'], ['T030', 'block'], ['T031', 'unblock'], ['T030', 'done']]) {
@@ -621,18 +634,18 @@ test('an AGE Aris project\'s actions produce the same file as the equivalent PAT
 
 // ---- Recovery at start
 
-test('a write a dead process left locked is settled when the workspace starts', async () => {
+for (const name of ['agearis', 'agesight']) test(`a write a dead process left locked is settled when the workspace starts (a lock reading ${name} <nonce>)`, async () => {
   const repo = await board();
   const nonce = 'ab'.repeat(16);
   const lock = path.join(repo.dir, '.git', 'index.lock');
-  await writeFile(lock, `agesight ${nonce}\n`);
+  await writeFile(lock, `${name} ${nonce}\n`);
   const { ino } = await lstat(lock);
   const gitDir = path.join(repo.dir, '.git');
   const marker = {
     phase: 'locked', dir: repo.dir, gitDir, commonDir: gitDir, format: 'sha1', branch: 'refs/heads/main',
     from: `AA/backlog/${T012}`, to: `AA/tasks/${T012}`, nonce, lockIno: ino,
-    aside: path.join(repo.dir, 'AA', 'backlog', `.${T012}.agesight-${nonce}`), temp: path.join(repo.dir, 'AA', 'tasks', `.${T012}.agesight-${nonce}.tmp`),
-    S: path.join(gitDir, `agesight-S-${nonce}`), N: path.join(gitDir, `agesight-N-${nonce}`), startedAt: new Date().toISOString(),
+    aside: path.join(repo.dir, 'AA', 'backlog', `.${T012}.${name}-${nonce}`), temp: path.join(repo.dir, 'AA', 'tasks', `.${T012}.${name}-${nonce}.tmp`),
+    S: path.join(gitDir, `${name}-S-${nonce}`), N: path.join(gitDir, `${name}-N-${nonce}`), startedAt: new Date().toISOString(),
   };
   await mkdir(path.join(repo.dataDir, 'tracked-inflight'), { recursive: true });
   await writeFile(path.join(repo.dataDir, 'tracked-inflight', `${repo.project.id}.json`), JSON.stringify(marker));

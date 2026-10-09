@@ -108,8 +108,9 @@ AGE Aris starts the command and sends the stage prompt on standard input.
 Standard output becomes the stage output. A zero exit code means success.
 Standard error is stored next to the output. AGE Aris stops the agent after
 `timeoutSec`, together with any processes it started. The process receives
-`AGESIGHT_RUN`, `AGESIGHT_TASK`, `AGESIGHT_STAGE`, `AGESIGHT_ATTEMPT`, and
-`AGESIGHT_WORKDIR` in its environment. The exact argument list of every attempt
+`AGEARIS_RUN`, `AGEARIS_TASK`, `AGEARIS_STAGE`, `AGEARIS_ATTEMPT`, and
+`AGEARIS_WORKDIR` in its environment, and the same values under the old
+`AGEARIS_*` names for agents written against them. The exact argument list of every attempt
 is recorded in the audit log.
 
 Unless an agent sets `cwd`, it starts in a working folder for the run,
@@ -137,19 +138,19 @@ A pull agent runs anywhere that can reach the local API. It polls for work,
 holds a lease while working, and reports the result:
 
 ```sh
-TOKEN=$(cat .agesight-data/.api-token)
+TOKEN=$(cat .agearis-data/.api-token)
 
 # Claim the oldest queued attempt routed to this agent ({"work": null} if none)
 curl -s -X POST http://127.0.0.1:4310/api/agents/my-agent/claim \
-  -H "x-agesight-token: $TOKEN" -H 'content-type: application/json' -d '{}'
+  -H "x-agearis-token: $TOKEN" -H 'content-type: application/json' -d '{}'
 
 # Extend the lease (default 10 minutes) while working
 curl -s -X POST http://127.0.0.1:4310/api/attempts/<attemptId>/heartbeat \
-  -H "x-agesight-token: $TOKEN" -H 'content-type: application/json' -d '{"agentId":"my-agent"}'
+  -H "x-agearis-token: $TOKEN" -H 'content-type: application/json' -d '{"agentId":"my-agent"}'
 
 # Report the result
 curl -s -X POST http://127.0.0.1:4310/api/attempts/<attemptId>/complete \
-  -H "x-agesight-token: $TOKEN" -H 'content-type: application/json' \
+  -H "x-agearis-token: $TOKEN" -H 'content-type: application/json' \
   -d '{"agentId":"my-agent","outcome":"succeeded","output":"..."}'
 ```
 
@@ -202,7 +203,7 @@ All endpoints accept and return JSON on `127.0.0.1`. They check the Host and
 Origin headers, require `Content-Type: application/json` for request bodies,
 and require the workspace token. A browser receives the token as an HttpOnly,
 SameSite=Strict cookie by opening the sign-in link printed at startup
-(`/?token=…`). Scripts send it as the `X-AGESight-Token` header, read from
+(`/?token=…`). Scripts send it as the `X-AGEAris-Token` header, read from
 `<data dir>/.api-token` (mode 0600). Without the token the API answers 401. The
 token keeps out other local users. It does not keep out processes running as
 you, including agents, because they can read the file.

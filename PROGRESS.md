@@ -401,3 +401,17 @@ its date, the number, and where the evidence is. Newest last.
 - Not tested on a Windows machine. Known limits: ASCII-only case-folding,
   `subst` drives; restarting an old server off Linux is T051.
 - Evidence: the Result of T050.
+
+## 2026-10-09 — T049: every name is AGE Aris's, the old ones still read
+
+- AGE Aris writes only its own names: the `AGEAris-Via` trailer, the
+  `X-AGEAris-Token` header and `agearis_token` cookie, `.agearis-data`,
+  `AGEARIS_*`, `@agearis/web`, `agearis <nonce>` locks, `agearis.*` browser
+  keys. Each old AGESight name is still read, each with a test.
+- `.agesight-data` moves to `.agearis-data` the first time AGE Aris starts on
+  it, leaving a link. The operator's two folders were moved, with copies kept
+  first. Afterwards: the same projects and token, and the old header and
+  cookie still answer 200.
+- `npm test` 534 of 534, `npm run check` passes. Independent review, two
+  rounds: no open defect. The Windows junction is untested.
+- Evidence: the Result of T049.

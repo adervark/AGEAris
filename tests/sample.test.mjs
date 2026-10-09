@@ -17,7 +17,7 @@ process.env.GIT_CONFIG_NOSYSTEM = '1';
 const NOW = Date.parse('2026-10-05T09:12:00+01:00');
 
 async function sample(t, now = NOW) {
-  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agesight-sample-'));
+  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agearis-sample-'));
   t.after(() => rm(dataDir, { recursive: true, force: true }));
   const workspace = await new Workspace({ dataDir, operator: 'ade', email: 'ade@example.invalid' }).init();
   await writeFile(path.join(dataDir, 'settings.json'), '{"timezone": "Europe/London"}');

@@ -21,7 +21,7 @@
 # ---------------------------------------------------------------------------
 spend:
   - push               # to github.com/adervark/AGEAris: once others have it, it stays out there
-  - data-migration     # rewriting a stored format in .agesight-data, or anything in a tracked repository
+  - data-migration     # rewriting a stored format in .agearis-data, or anything in a tracked repository
   - global-config      # ~/.claude, ~/.codex, ~/.agents: every project and agent session reads them
   - agent-fan-out      # subagents and long agent runs draw on the account's shared usage limit
 

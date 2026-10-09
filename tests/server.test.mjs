@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
 import { EventEmitter, once } from 'node:events';
 import { PassThrough } from 'node:stream';
-import { chmod, mkdir, mkdtemp, readFile, realpath, rm, stat, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, readlink, realpath, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -21,7 +21,7 @@ async function git(directory, ...args) {
 }
 
 async function repository() {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'agesight-server-'));
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'agearis-server-'));
   await git(directory, 'init', '--quiet');
   await git(directory, 'config', 'user.name', 'HTTP Tester');
   await git(directory, 'config', 'user.email', 'http@example.invalid');
@@ -62,7 +62,7 @@ test('HTTP API performs a project and task CRUD round trip and reports client er
   assert.ok(address && typeof address === 'object');
   const base = `http://127.0.0.1:${address.port}`;
   // Every API request carries the workspace token, as the browser does via its cookie.
-  const fetch = (url, options = {}) => globalThis.fetch(url, { ...options, headers: { 'x-agesight-token': server.apiToken, ...(options.headers || {}) } });
+  const fetch = (url, options = {}) => globalThis.fetch(url, { ...options, headers: { 'x-agearis-token': server.apiToken, ...(options.headers || {}) } });
 
   let response = await globalThis.fetch(`${base}/api/workspace`);
   assert.equal(response.status, 401, 'the API refuses requests without the token');
@@ -75,11 +75,18 @@ test('HTTP API performs a project and task CRUD round trip and reports client er
   response = await globalThis.fetch(`${base}/?token=${server.apiToken}`, { redirect: 'manual' });
   assert.equal(response.status, 303);
   assert.equal(response.headers.get('location'), '/');
-  const cookie = response.headers.get('set-cookie') ?? '';
-  assert.match(cookie, /^agesight_token=[A-Za-z0-9_-]{43}; HttpOnly; SameSite=Strict; Path=\/; Max-Age=31536000$/);
+  const [cookie = '', ...cleared] = response.headers.getSetCookie();
+  assert.match(cookie, /^agearis_token=[A-Za-z0-9_-]{43}; HttpOnly; SameSite=Strict; Path=\/; Max-Age=31536000$/);
+  assert.deepEqual(cleared, ['agesight_token=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'], 'the old name\'s cookie goes');
   response = await globalThis.fetch(`${base}/api/workspace`, { headers: { cookie: cookie.split(';')[0] } });
   assert.equal(response.status, 200, 'the page cookie authorizes the browser');
-  response = await globalThis.fetch(`${base}/api/workspace`, { headers: { 'x-agesight-token': 'x'.repeat(43) } });
+  response = await globalThis.fetch(`${base}/api/workspace`, { headers: { cookie: `agesight_token=${server.apiToken}` } });
+  assert.equal(response.status, 200, 'a cookie under the old name still signs the browser in');
+  response = await globalThis.fetch(`${base}/api/workspace`, { headers: { cookie: `agearis_token=${'x'.repeat(43)}; agesight_token=${server.apiToken}` } });
+  assert.equal(response.status, 200, 'another server\'s cookie under the new name does not hide this one\'s under the old');
+  response = await globalThis.fetch(`${base}/api/workspace`, { headers: { 'x-agesight-token': server.apiToken } });
+  assert.equal(response.status, 200, 'a script sending the old header still gets in');
+  response = await globalThis.fetch(`${base}/api/workspace`, { headers: { 'x-agearis-token': 'x'.repeat(43) } });
   assert.equal(response.status, 401, 'a wrong token is refused');
   response = await fetch(`${base}/api/projects`, { method: 'POST', body: JSON.stringify({ name: 'No type' }) });
   assert.equal(response.status, 415, 'a body without a JSON content type is refused');
@@ -207,7 +214,7 @@ async function eventually(check, message, timeout = 10000) {
 }
 
 test('HTTP API drives an agent pipeline run, enforces stale and cross-origin protections, and serves the pull runner', async (t) => {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'agesight-server-run-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'agearis-server-run-'));
   await mkdir(path.join(root, 'scripts'));
   const script = path.join(root, 'scripts', 'ok.mjs');
   await writeFile(script, OK_AGENT_SCRIPT);
@@ -243,7 +250,7 @@ test('HTTP API drives an agent pipeline run, enforces stale and cross-origin pro
   assert.ok(address && typeof address === 'object');
   const base = `http://127.0.0.1:${address.port}`;
   // Every API request carries the workspace token, as the browser does via its cookie.
-  const fetch = (url, options = {}) => globalThis.fetch(url, { ...options, headers: { 'x-agesight-token': server.apiToken, ...(options.headers || {}) } });
+  const fetch = (url, options = {}) => globalThis.fetch(url, { ...options, headers: { 'x-agearis-token': server.apiToken, ...(options.headers || {}) } });
 
   async function call(method, route, body, headers = {}) {
     const response = await fetch(`${base}${route}`, {
@@ -392,7 +399,7 @@ test('HTTP API drives an agent pipeline run, enforces stale and cross-origin pro
 
 // A server on a fresh data dir with no agents, so nothing is ever spawned by these tests.
 async function tokenServer(t, { dataDir, listen = true, options = {}, prepare } = {}) {
-  const root = dataDir ? '' : await mkdtemp(path.join(os.tmpdir(), 'agesight-token-'));
+  const root = dataDir ? '' : await mkdtemp(path.join(os.tmpdir(), 'agearis-token-'));
   const dir = dataDir ?? path.join(root, 'data');
   await prepare?.(dir);
   const server = await createServer({ dataDir: dir, registryOptions: { seed: () => [] }, ...options });
@@ -409,7 +416,7 @@ async function tokenServer(t, { dataDir, listen = true, options = {}, prepare } 
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
   const base = `http://127.0.0.1:${server.address().port}`;
-  const fetch = (url, options = {}) => globalThis.fetch(url, { ...options, headers: { 'x-agesight-token': server.apiToken, ...(options.headers || {}) } });
+  const fetch = (url, options = {}) => globalThis.fetch(url, { ...options, headers: { 'x-agearis-token': server.apiToken, ...(options.headers || {}) } });
   return { server, dir, base, fetch };
 }
 
@@ -421,7 +428,7 @@ test('the API refuses requests without the token with a 401', async (t) => {
   response = await globalThis.fetch(`${base}/api/agents/x/claim`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
   assert.equal(response.status, 401);
   assert.equal(typeof (await json(response)).error, 'string');
-  response = await globalThis.fetch(`${base}/api/runs`, { headers: { 'x-agesight-token': 'wrong-token' } });
+  response = await globalThis.fetch(`${base}/api/runs`, { headers: { 'x-agearis-token': 'wrong-token' } });
   assert.equal(response.status, 401);
 });
 
@@ -444,7 +451,7 @@ test('the sign-in link sets an HttpOnly token cookie that authorizes POST /api/r
   assert.match(cookie, /; HttpOnly/);
   assert.match(cookie, /; SameSite=Strict/);
   const pair = cookie.split(';')[0];
-  assert.match(pair, /^agesight_token=[A-Za-z0-9_-]{43}$/);
+  assert.match(pair, /^agearis_token=[A-Za-z0-9_-]{43}$/);
 
   const refused = await globalThis.fetch(`${base}/api/runs`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ taskId: task.id }) });
   assert.equal(refused.status, 401, 'without the cookie the same request is refused');
@@ -504,7 +511,7 @@ test('GET /api/settings returns the defaults without a settings file and the fil
   assert.match((await json(response)).error, /workdays/);
 });
 
-test('every task and project write through the API is committed with AGESight-Via: ui, and a run\'s task move with Run instead', async (t) => {
+test('every task and project write through the API is committed with AGEAris-Via: ui, and a run\'s task move with Run instead', async (t) => {
   const { base, fetch, server } = await tokenServer(t);
   const committed = [];
   server.workspace.onCommit((projectId) => committed.push(projectId));
@@ -521,7 +528,7 @@ test('every task and project write through the API is committed with AGESight-Vi
   const assertViaUi = async (projectId, subject, ...paths) => {
     const message = await lastMessage(projectId, ...paths);
     assert.match(message, subject);
-    assert.match(message, /\n\nAGESight-Via: ui$/, `"${message}" ends with the trailer`);
+    assert.match(message, /\n\nAGEAris-Via: ui$/, `"${message}" ends with the trailer`);
   };
 
   let project = await send('POST', '/api/projects', { name: 'Via UI' }, 201);
@@ -547,7 +554,7 @@ test('every task and project write through the API is committed with AGESight-Vi
   await send('POST', '/api/runs', { taskId: task.id }, 201);
   const moved = await lastMessage(project.id, 'AA/tasks');
   assert.match(moved, /^Update T001: Typed\n\nRun: R001$/);
-  assert.doesNotMatch(moved, /AGESight-Via/);
+  assert.doesNotMatch(moved, /AGEAris-Via/);
   const current = await send('GET', '/api/workspace');
   const stored = current.tasks.find((entry) => entry.id === task.id);
   assert.equal(stored.status, 'in_progress');
@@ -605,7 +612,7 @@ test('the cockpit API: brief, project metrics, explain, task history, and change
 
   const history = await call('GET', `/api/tasks/${encodeURIComponent(task.id)}/history`);
   // The commit of the HTTP update (the run's own move comes after it).
-  const sha = (await exec('git', ['log', '--format=%H', '--grep', 'AGESight-Via: ui', '-1', '--', 'AA'], {
+  const sha = (await exec('git', ['log', '--format=%H', '--grep', 'AGEAris-Via: ui', '-1', '--', 'AA'], {
     cwd: path.join(dir, 'projects', project.id), env: { ...process.env, GIT_CONFIG_GLOBAL: os.devNull, GIT_CONFIG_NOSYSTEM: '1' },
   })).stdout.trim();
   assert.match(sha, /^[0-9a-f]{40}$/);
@@ -688,7 +695,7 @@ test('the sample project is created only on request, through POST /api/projects/
 // A repository with its own AA/ board, outside the data folder, as an
 // agent team keeps it; removed when the test ends. Its board sets a WIP limit of 3.
 async function trackedRepository(t) {
-  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-tracked-')));
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agearis-tracked-')));
   t.after(() => rm(root, { recursive: true, force: true }));
   const fabrication = await fabricate(path.join(root, 'repo'), `
     day 0 09:00 ade: create T001 backlog "Read the archive"
@@ -777,7 +784,7 @@ async function stderrOf(run) {
   return lines;
 }
 
-test('POST /api/tasks/:id/actions on a tracked repository: the token, the switch with its confirmation, a claim committed with AGESight-Via: ui, refusals with code and remedy, and one stderr line each', async (t) => {
+test('POST /api/tasks/:id/actions on a tracked repository: the token, the switch with its confirmation, a claim committed with AGEAris-Via: ui, refusals with code and remedy, and one stderr line each', async (t) => {
   const { base, fetch } = await tokenServer(t);
   const call = caller(base, fetch);
   const repository = await trackedRepository(t);
@@ -809,7 +816,7 @@ test('POST /api/tasks/:id/actions on a tracked repository: the token, the switch
 
   const claimed = await call('POST', actions('T001'), { action: 'claim', version: task.version });
   assert.deepEqual([claimed.task.status, claimed.branch, claimed.warnings], ['in_progress', 'main', []]);
-  const log = (await exec('git', ['log', '-1', '--format=%H%n%s%n%(trailers:key=AGESight-Via,valueonly)'], { cwd: repository })).stdout.trim().split('\n');
+  const log = (await exec('git', ['log', '-1', '--format=%H%n%s%n%(trailers:key=AGEAris-Via,valueonly)'], { cwd: repository })).stdout.trim().split('\n');
   assert.deepEqual(log, [claimed.commit, 'claim T001: working on Read the archive', 'ui']);
 
   // A refusal: code and remedy in the response, one line on stderr, nothing changed.
@@ -841,12 +848,12 @@ test('POST /api/tasks/:id/actions on an AGE Aris project changes the task as PAT
   const project = await call('POST', '/api/projects', { name: 'Own' }, 201);
   const task = await call('POST', '/api/tasks', { projectId: project.id, title: 'Act on me' }, 201);
   const result = await call('POST', `/api/tasks/${encodeURIComponent(task.id)}/actions`, { action: 'start', version: task.version });
-  assert.deepEqual([result.task.status, result.warnings, result.task.holder.profile], ['in_progress', [], 'agesight']);
+  assert.deepEqual([result.task.status, result.warnings, result.task.holder.profile], ['in_progress', [], 'agearis']);
   const refused = await call('POST', `/api/tasks/${encodeURIComponent(task.id)}/actions`, { action: 'start', version: result.task.version }, 409);
   assert.equal(refused.code, 'NOT_ALLOWED');
 });
 
-test('AGESIGHT_TRACKED_WRITES=0 overrides a switch that is on', async (t) => {
+test('AGEARIS_TRACKED_WRITES=0 overrides a switch that is on', async (t) => {
   const repository = await trackedRepository(t);
   const first = await tokenServer(t);
   const call = caller(first.base, first.fetch);
@@ -854,17 +861,47 @@ test('AGESIGHT_TRACKED_WRITES=0 overrides a switch that is on', async (t) => {
   const asked = await call('PATCH', `/api/projects/${project.id}`, { version: project.version, taskActions: { on: true } }, 409);
   await call('PATCH', `/api/projects/${project.id}`, { version: project.version, taskActions: { on: true }, confirm: asked.confirmToken });
   first.server.close();
-  process.env.AGESIGHT_TRACKED_WRITES = '0';
+  process.env.AGEARIS_TRACKED_WRITES = '0';
   let second;
-  try { second = await tokenServer(t, { dataDir: first.dir }); } finally { delete process.env.AGESIGHT_TRACKED_WRITES; }
+  try { second = await tokenServer(t, { dataDir: first.dir }); } finally { delete process.env.AGEARIS_TRACKED_WRITES; }
   const again = caller(second.base, second.fetch);
   const before = await repositoryState(repository);
   const listed = (await again('GET', '/api/workspace')).projects.find((entry) => entry.id === project.id);
-  assert.deepEqual([listed.actions.on, listed.actions.reason], [false, 'Task actions are off for every tracked repository: AGESIGHT_TRACKED_WRITES=0.']);
+  assert.deepEqual([listed.actions.on, listed.actions.reason], [false, 'Task actions are off for every tracked repository: AGEARIS_TRACKED_WRITES=0.']);
   const task = (await again('GET', '/api/workspace')).tasks.find((entry) => entry.id === `${project.id}:T001`);
   const off = await again('POST', `/api/tasks/${encodeURIComponent(task.id)}/actions`, { action: 'claim', version: task.version }, 409);
   assert.equal(off.code, 'ACTIONS_OFF');
   assert.deepEqual(await repositoryState(repository), before);
+});
+
+test('the data folder from AGEARIS_DATA_DIR, or the old AGESIGHT_DATA_DIR; an old .agesight-data moves to .agearis-data with the same projects and token', async (t) => {
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agearis-move-')));
+  t.after(() => rm(root, { recursive: true, force: true, maxRetries: 5 }));
+  const [current, old] = ['.agearis-data', '.agesight-data'].map((name) => path.join(root, name));
+  const saved = { AGEARIS_DATA_DIR: process.env.AGEARIS_DATA_DIR, AGESIGHT_DATA_DIR: process.env.AGESIGHT_DATA_DIR };
+  t.after(() => { for (const [key, value] of Object.entries(saved)) if (value === undefined) delete process.env[key]; else process.env[key] = value; });
+  const open = async (env, project) => {
+    delete process.env.AGEARIS_DATA_DIR;
+    delete process.env.AGESIGHT_DATA_DIR;
+    Object.assign(process.env, env);
+    const server = await createServer({ registryOptions: { seed: () => [] } });
+    await server.engine.stop();
+    if (project) await server.workspace.createProject({ name: project });
+    return { dataDir: server.workspace.dataDir, token: server.apiToken, projects: (await server.workspace.read()).projects.map((project) => project.name).sort() };
+  };
+
+  // A folder made under the old name, as AGE Aris did before the rename.
+  const made = await createServer({ dataDir: old, registryOptions: { seed: () => [] } });
+  await made.engine.stop();
+  await made.workspace.createProject({ name: 'Kept' });
+  const before = { token: made.apiToken, projects: (await made.workspace.read()).projects.map((project) => project.name).sort() };
+  assert.ok(before.projects.includes('Kept'));
+
+  const moved = await open({ AGESIGHT_DATA_DIR: old });
+  assert.deepEqual(moved, { ...before, dataDir: current }, 'the old variable is read, and the folder it names moves, with the same projects and token');
+  assert.equal(await readlink(old), current);
+  assert.deepEqual(await open({ AGESIGHT_DATA_DIR: old }), moved, 'the old path, now the link, is the moved folder');
+  assert.deepEqual(await open({ AGEARIS_DATA_DIR: current }), moved);
 });
 
 test('DELETE /api/projects/:id stops tracking a repository; an own project is a 409 and an unknown one a 404', async (t) => {

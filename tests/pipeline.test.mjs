@@ -59,7 +59,8 @@ setInterval(() => {}, 1000);
 
 const scriptEcho = `${PRELUDE}
 process.stdout.write(prompt);
-process.stdout.write('ENV ' + [process.env.AGESIGHT_RUN, process.env.AGESIGHT_TASK, process.env.AGESIGHT_STAGE, process.env.AGESIGHT_ATTEMPT].join('|') + '\\n');
+process.stdout.write('OLD ' + [process.env.AGESIGHT_RUN, process.env.AGESIGHT_TASK, process.env.AGESIGHT_STAGE, process.env.AGESIGHT_ATTEMPT, process.env.AGESIGHT_WORKDIR === process.env.AGEARIS_WORKDIR].join('|') + '\\n');
+process.stdout.write('ENV ' + [process.env.AGEARIS_RUN, process.env.AGEARIS_TASK, process.env.AGEARIS_STAGE, process.env.AGEARIS_ATTEMPT].join('|') + '\\n');
 `;
 
 function commandAgent(id, script, overrides = {}) {
@@ -122,7 +123,7 @@ async function expectStatus(promise, status, message) {
 // Builds a workspace, registry, and engine in a temp dir. `agents` receives a
 // `script(name, source)` writer and returns the agent list that seeds the registry.
 async function setup(t, { agents = async () => [], engineOptions = {} } = {}) {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'agesight-pipeline-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'agearis-pipeline-'));
   const dataDir = path.join(root, 'data');
   const scriptsDir = path.join(root, 'scripts');
   await mkdir(scriptsDir, { recursive: true });
@@ -292,6 +293,7 @@ test('a command agent receives the prompt on stdin and the run identifiers in it
   assert.equal(attempt.exitCode, 0);
   assert.ok(attempt.output.startsWith(attempt.prompt), 'the agent echoed exactly what it received');
   assert.match(attempt.output, new RegExp(`ENV ${started.id}\\|${task.id}\\|implement\\|1\\n$`));
+  assert.ok(attempt.output.includes(`OLD ${started.id}|${task.id}|implement|1|true\n`), 'an agent written against the old names gets them too');
   assert.match(attempt.prompt, /^Role: implement$/m);
   assert.match(attempt.prompt, /Make the thing work\./);
 });
@@ -994,7 +996,7 @@ test('after a restart an attempt that was running is failed as interrupted and t
   const run = await restarted.getRun(started.id);
   assert.equal(run.attempts[0].status, 'failed');
   assert.match(run.attempts[0].error, /Interrupted/);
-  assert.equal(run.attempts[0].finishedBy, 'agesight');
+  assert.equal(run.attempts[0].finishedBy, 'agearis');
   assert.equal(run.status, 'failed');
   assert.match(run.error, /Interrupted/);
   assert.equal(run.audit.chain.ok, true);
@@ -1272,7 +1274,7 @@ test('a run started before a pipeline save keeps its original stages and later r
 // --- Agent registry ----------------------------------------------------------------------------------------
 
 async function registryContext(t, seed = () => [commandAgent('seeded', process.execPath)]) {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'agesight-registry-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'agearis-registry-'));
   t.after(() => rm(root, { recursive: true, force: true, maxRetries: 5 }));
   const registry = await new AgentRegistry({ dataDir: root, operator: OPERATOR, email: EMAIL, seed }).init();
   return { root, registry, dir: path.join(root, 'registry') };
@@ -1915,7 +1917,7 @@ test('a failed run leaves the task blocked with the run named as the reason, in 
   assert.equal(taskCommits.length, 3, 'blocked, claimed by the run, created');
   for (const body of taskCommits.slice(0, 2)) {
     assert.match(body, /\n\nRun: R001$/);
-    assert.doesNotMatch(body, /AGESight-Via/);
+    assert.doesNotMatch(body, /AGEAris-Via/);
   }
   assert.doesNotMatch(taskCommits[2], /Run:/, 'the task was created outside the run');
 
@@ -2104,7 +2106,7 @@ test('a run superseded later still needs a person at an earlier asOf', async (t)
 });
 
 test('a clock injected into createServer decides when unclaimed work starts waiting for a person', async (t) => {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'agesight-clock-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'agearis-clock-'));
   const clock = { now: Date.now() };
   const server = await createServer({
     dataDir: path.join(root, 'data'),
@@ -2131,7 +2133,7 @@ test('a clock injected into createServer decides when unclaimed work starts wait
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
   const runs = async () => {
-    const response = await fetch(`http://127.0.0.1:${server.address().port}/api/runs`, { headers: { 'x-agesight-token': server.apiToken } });
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/api/runs`, { headers: { 'x-agearis-token': server.apiToken } });
     assert.equal(response.status, 200);
     return (await response.json()).find((run) => run.id === started.id);
   };
