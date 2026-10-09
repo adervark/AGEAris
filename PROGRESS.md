@@ -364,3 +364,11 @@ its date, the number, and where the evidence is. Newest last.
   the real boards first.
 - `npm test` passed 513 of 513. The browser walk found 0 problems in 102 page
   views.
+
+## 2026-10-09 — T045: /aa prints the signed-in link
+
+- The plain link `/aa` printed gave a sign-in error in any browser that had
+  not signed in before. It now carries the token: a fresh headless Chrome
+  profile lands on the project page with every API call answering 200.
+- `npm test` 513 of 513, `npm run check` passes. Installed copy synced.
+- Evidence: the Result of T045.

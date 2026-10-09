@@ -15,8 +15,9 @@ commentary, no next steps unless the user asks.
 bash <this skill's base directory>/aa.sh $ARGUMENTS
 ```
 
-- No argument: print the board, then the AGE Aris link.
-- `open`: the same, and open the link in the browser, signed in.
+- No argument: print the board, then the AGE Aris link. The link carries the
+  sign-in token, so it opens in any browser without a sign-in error.
+- `open`: the same, and open the link in the browser.
 - `link`: track this repository in AGE Aris first. Do this only when the user
   asked for it. AGE Aris reads the repository; it changes the board's task
   files only through task actions the user switches on in AGE Aris.
