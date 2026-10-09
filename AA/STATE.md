@@ -21,51 +21,50 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-09T05:58Z · 45 tasks: 4 backlog, 0 WIP (0 in progress), 41 delivered`
+`board · 2026-10-09T08:42Z · 50 tasks: 7 backlog, 0 WIP (0 in progress), 43 delivered`
 
-FLOW · **WIP 0/2** · throughput 9.6/wk (41 in 30d) · cycle time 50th 4m / 85th 13m (n=41)
-FLOW · Little's Law: 0 ÷ 9.6/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 10.0/wk (43 in 30d) · cycle time 50th 4m / 85th 25m (n=43)
+FLOW · Little's Law: 0 ÷ 10.0/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** | T003 | Track the repository AGE Aris runs from without moving its data | — | 2d |  |
-|  | T004 | Keep one copy of the aa-init template | — | 2d |  |
-|  | T024 | The card menu, the keyboard map, and drag through the action registry | — | 36h |  |
-|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | — | 36h |  |
-| **DONE** | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | now |  |
-|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 9h |  |
-|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 10h |  |
-|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 10h |  |
-|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 10h |  |
-|  | T040 | Aris under the logo, centred | adervark | 10h |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 11h |  |
-|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 11h |  |
-|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 11h |  |
-|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 17h |  |
-|  | T035 | The forecast samples days from before the board existed | adervark | 17h |  |
-|  | T034 | Silver accents, taken from the logo | adervark | 19h |  |
-|  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 19h |  |
-|  | T032 | A forecast from throughput: when, and how many | adervark | 19h |  |
-|  | T030 | An aging WIP chart: what is not moving | adervark | 19h |  |
-|  | T031 | A cycle-time scatterplot with the service level | adervark | 19h |  |
-|  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 20h |  |
-|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 20h |  |
-|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 20h |  |
-|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 20h |  |
-|  | T015 | Code spans are not found as CommonMark finds them | adervark | 20h |  |
-|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 20h |  |
-|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 20h |  |
-|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 20h |  |
-|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 20h |  |
-|  | T011 | board.sh loses the history from before a board rename | adervark | 20h |  |
-|  | T013 | The Method view names a settings file the board does not have | adervark | 20h |  |
-|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 20h |  |
-|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 20h |  |
-|  | T028 | A README that explains the workflow, for a first-time tester | adervark | 24h |  |
-|  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 25h |  |
-|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 33h |  |
-|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 34h |  |
-|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 34h |  |
+| **BACKLOG** 7 | | `T003` `T004` `T024` `T025` `T047` `T049` +1 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | now |  |
+|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | now |  |
+|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 2h |  |
+|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 12h |  |
+|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 13h |  |
+|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 13h |  |
+|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 13h |  |
+|  | T040 | Aris under the logo, centred | adervark | 13h |  |
+|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 14h |  |
+|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 14h |  |
+|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 14h |  |
+|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 20h |  |
+|  | T035 | The forecast samples days from before the board existed | adervark | 20h |  |
+|  | T034 | Silver accents, taken from the logo | adervark | 21h |  |
+|  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 22h |  |
+|  | T032 | A forecast from throughput: when, and how many | adervark | 22h |  |
+|  | T030 | An aging WIP chart: what is not moving | adervark | 22h |  |
+|  | T031 | A cycle-time scatterplot with the service level | adervark | 22h |  |
+|  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 22h |  |
+|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 23h |  |
+|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 23h |  |
+|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 23h |  |
+|  | T015 | Code spans are not found as CommonMark finds them | adervark | 23h |  |
+|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 23h |  |
+|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 23h |  |
+|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 23h |  |
+|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 23h |  |
+|  | T011 | board.sh loses the history from before a board rename | adervark | 23h |  |
+|  | T013 | The Method view names a settings file the board does not have | adervark | 23h |  |
+|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 23h |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 23h |  |
+|  | T028 | A README that explains the workflow, for a first-time tester | adervark | 26h |  |
+|  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 27h |  |
+|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 36h |  |
+|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 37h |  |
+|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 37h |  |
 |  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 2d |  |
 |  | T020 | A cockpit test fails when run in the early hours | adervark | 2d |  |
 |  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 2d |  |
