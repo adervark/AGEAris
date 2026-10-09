@@ -113,7 +113,7 @@ Against the decision rules:
   update, `/aa` does not restart an old server on macOS or Windows: T051.
 - Spends: reviewer subagent runs; the installed `~/.claude/skills/aa/` synced
   (`diff -r` empty). No push.
-- Trail digest (the trail was never committed, so this is all that is left of it):
+- Trail digest (the full trail is in git, commit 76bfde7):
   - **edd32d65** (session @k/edd32d65): the implementation and round-1
     fixes, uncommitted · cost one reviewer run · left: the session stopped
     during round 2
