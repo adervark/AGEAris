@@ -1,8 +1,8 @@
 ---
 id: T049
 title: "Every AGESight name becomes AGE Aris's, and the old ones are still read"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/edd32d65 2026-10-09 — new names written, old ones read, data folders moved
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: migration
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -80,8 +80,9 @@ existing data folders, scripts, task files and commits keep working.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-09, registered
-- **In flight:** nothing
+- **Last touched:** 2026-10-09, adervark @k/edd32d65 (claimed)
+- **In flight:** reading where each old name is written and read; no edits
+  until T050, under review, is committed (both change `skills/aa/aa.sh`)
 - **On disk:** nothing
 - **Resume with:** the Steps above
 - **Next decision:** none
