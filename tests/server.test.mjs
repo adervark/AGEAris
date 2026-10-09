@@ -91,6 +91,12 @@ test('HTTP API performs a project and task CRUD round trip and reports client er
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'image/webp');
   assert.equal(Buffer.from(await response.arrayBuffer()).subarray(8, 12).toString(), 'WEBP');
+  for (const face of ['michroma', 'hanken-grotesk']) {
+    response = await fetch(`${base}/${face}.woff2`);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('content-type'), 'font/woff2', `${face} is served as a font (T041, T044)`);
+    assert.equal(Buffer.from(await response.arrayBuffer()).subarray(0, 4).toString(), 'wOF2');
+  }
 
   response = await fetch(`${base}/api/workspace`);
   assert.equal(response.status, 200);
@@ -579,7 +585,11 @@ test('the cockpit API: brief, project metrics, explain, task history, and change
   assert.equal(metrics.state, 'ready');
   assert.equal(metrics.metrics.wip.value, 1);
   assert.equal(metrics.ledger.branch.length > 0, true);
-  assert.equal(metrics.series.throughput.length, 42);
+  // The per-day series start on the board's first day, not 42 days back: this
+  // board was made today, so it has one (T038).
+  assert.equal(metrics.series.throughput.length, 1);
+  assert.equal(metrics.series.wip.length, 1);
+  assert.equal(metrics.usualWeek, null, 'a board younger than a week has no usual week');
 
   const explained = await call('GET', `/api/explain/wip?projectId=${project.id}`);
   assert.deepEqual([explained.id, explained.kind, explained.value, explained.items[0].taskKey], ['wip', 'count', 1, 'T001']);
@@ -904,4 +914,27 @@ test('GET /api/tasks/:id returns the task with its text, GET /api/projects/:id/m
   const working = (await call('GET', '/api/workspace')).tasks.filter((entry) => entry.projectId === project.id && ['in_progress', 'blocked'].includes(entry.status));
   assert.deepEqual(Object.keys(line.wipSince).sort(), working.map((entry) => entry.id.split(':')[1]).sort());
   assert.ok(Object.values(line.wipSince).every((at) => !Number.isNaN(Date.parse(at))), JSON.stringify(line.wipSince));
+  // The flow strip's: the same tasks, each with its state, age and aging level.
+  assert.deepEqual(line.wipAges.map((entry) => entry.taskKey).sort(), Object.keys(line.wipSince).sort());
+  for (const entry of line.wipAges) {
+    assert.deepEqual(Object.keys(entry).sort(), ['age', 'level', 'status', 'taskKey', 'title']);
+    assert.ok(['in_progress', 'blocked'].includes(entry.status) && entry.age >= 0 && ['ok', 'aging', 'critical', 'unknown'].includes(entry.level), JSON.stringify(entry));
+  }
+});
+
+test('every module the page imports is served: a new public/ file not added to the server leaves the page loading forever', async (t) => {
+  const { base } = await tokenServer(t);
+  const publicDir = new URL('../public/', import.meta.url);
+  const queue = ['app.js'];
+  const seen = new Set();
+  while (queue.length) {
+    const name = queue.shift();
+    if (seen.has(name)) continue;
+    seen.add(name);
+    const response = await globalThis.fetch(`${base}/${name}`);
+    assert.equal(response.status, 200, `/${name} is served`);
+    const source = await readFile(new URL(name, publicDir), 'utf8');
+    for (const [, imported] of source.matchAll(/^import [^;]*? from '\.\/([^']+)';$/gm)) queue.push(imported);
+  }
+  assert.ok(seen.has('charts.js') && seen.has('markdown.js'), [...seen].join(', '));
 });

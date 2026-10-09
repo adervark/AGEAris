@@ -88,3 +88,26 @@ test('the sample is the same history for the same now', async (t) => {
   const subjects = async (dir) => (await exec('git', ['-C', dir, 'log', '--format=%cI %s'])).stdout;
   assert.equal(await subjects(first.dir), await subjects(second.dir));
 });
+
+test('the Flow charts draw what the metrics count: every WIP task by age and level, every finished cycle, and the percentile lines (T030, T031)', async (t) => {
+  const { workspace, project } = await sample(t);
+  const cockpit = new Cockpit({ workspace, engine: { eventsByProject: () => new Map() }, clock: () => NOW });
+  const data = await cockpit.projectMetrics(project.id, {});
+  const { aging, cycles } = data.charts;
+  const p50 = await cockpit.explain('cycle_time_p50', { projectId: project.id });
+  const p85 = await cockpit.explain('cycle_time_p85', { projectId: project.id });
+  const agingMetric = await cockpit.explain('aging', { projectId: project.id });
+
+  // Aging WIP: one dot per task in progress or blocked with a start.
+  assert.equal(aging.items.length + aging.unstarted, data.metrics.wip.value);
+  assert.ok(aging.items.every((item) => ['in_progress', 'blocked'].includes(item.status)));
+  assert.deepEqual(aging.items.filter((item) => item.level !== 'ok' && item.level !== 'unknown').map((item) => item.taskKey).sort(), agingMetric.items.map((item) => item.taskKey).sort(), 'its levels agree with the aging metric');
+  assert.deepEqual(aging.items.filter((item) => item.stale).map((item) => item.taskKey), data.tables.stale.map((item) => item.taskKey));
+  assert.ok(aging.bands.p50 <= aging.bands.p70 && aging.bands.p70 <= aging.bands.p85 && aging.bands.p85 <= aging.bands.p95);
+
+  // Cycle times: the dots are the metric's items, and its lines its values.
+  assert.deepEqual(cycles.items.map((item) => item.taskKey).sort(), p85.items.map((item) => item.taskKey).sort());
+  assert.equal(cycles.bands.p50, Math.round(p50.value * 10) / 10);
+  assert.equal(cycles.bands.p85, Math.round(p85.value * 10) / 10);
+  assert.equal(cycles.excluded, p85.excluded.length);
+});

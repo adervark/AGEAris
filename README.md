@@ -160,8 +160,9 @@ where the board lives:
 
 1. `npm start`, open the sign-in link, and choose **Explore a sample project**.
    Its history is simulated and labelled as such everywhere.
-2. **Home**: read **Needs you** and the project card with its health in words
-   ("On track", "Watch", "Needs attention").
+2. **Home**: read **Needs you** and the project's flow strip, its work moving
+   from backlog to done, with its health in words ("On track", "Watch",
+   "Needs attention").
 3. Open the project. Look at **Board**, then **Threads** (tasks by what they
    build on), **List**, **Flow** (throughput, cycle time, WIP, charts) and
    **Method** (the workflow, its policies, and which tasks break which check).

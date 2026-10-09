@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
 # /aa — pull up this project's AA board, and its page in AGE Aris.
 #
-#   aa.sh            print the board, then the AGE Aris link (starting AGE Aris
-#                    if it is not running, and restarting it if its code has
-#                    changed since it started)
-#   aa.sh --open     the same, and open the link signed in, in the browser
+#   aa.sh            print the board, then the AGE Aris sign-in link (starting
+#                    AGE Aris if it is not running, and restarting it if its
+#                    code has changed since it started)
+#   aa.sh --open     the same, and open the link in the browser
 #   aa.sh --link     track this repository in AGE Aris first, if it is not
 #
 # Read-only on the repository: it runs `board.sh` without arguments, which
 # prints and writes nothing, and reads task files. It writes only what AGE Aris
 # itself writes when it starts or links a repository, all of it in its data
 # folder, and the server's log.
+#
+# The link carries the API token, so it signs in any browser, one that never
+# has included. The token is no barrier against processes running as the
+# operator (server.mjs), and the server prints the same link to its log.
 #
 # AGESIGHT_DATA_DIR  the data folder           (default ~/.agesight-data)
 # AGEARIS_PORT       the port AGE Aris uses    (default 4310)
@@ -180,14 +184,15 @@ if [ -z "$ID" ] && [ "$LINK" = 1 ] && [ -n "$BOARD" ]; then
   else echo "AGE Aris could not track $NAME: $(jq -r '.error // .' <<<"$reply" 2>/dev/null)"; exit 0; fi
 fi
 if [ -z "$ID" ]; then
-  [ -n "$BOARD" ] && echo "AGE Aris is running at $URL/ but does not track $NAME yet: \`/aa link\` tracks it (AGE Aris only reads it)."
+  [ -n "$BOARD" ] && echo "AGE Aris is running at $URL/?token=$(token) but does not track $NAME yet: \`/aa link\` tracks it (AGE Aris only reads it)."
   exit 0
 fi
 
-echo "AGE Aris: $URL/#project/$ID"
+# The sign-in answer redirects to / without a fragment, so #project/ survives it.
+LINK_URL="$URL/?token=$(token)#project/$ID"
+echo "AGE Aris: $LINK_URL"
 if [ "$OPEN" = 1 ]; then
-  # The sign-in link carries the token; it goes to the browser, not the screen.
-  if command -v xdg-open >/dev/null; then xdg-open "$URL/?token=$(token)#project/$ID" >/dev/null 2>&1 &
-  elif command -v open >/dev/null; then open "$URL/?token=$(token)#project/$ID" &
+  if command -v xdg-open >/dev/null; then xdg-open "$LINK_URL" >/dev/null 2>&1 &
+  elif command -v open >/dev/null; then open "$LINK_URL" &
   else echo "No browser opener found; open the link above."; fi
 fi

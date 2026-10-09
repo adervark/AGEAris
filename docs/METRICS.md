@@ -22,8 +22,8 @@ an item that used the uncommitted trail cites the trail file with `live: true`.
 - **Checkpoint time.** Stale claims also read checkpoint lines' own `ts`.
 - **Days** follow the workspace time zone (`settings.json`, `timezone`).
   Working days are `settings.workdays` (ISO weekdays, default Monday–Friday).
-- **Durations** are elapsed calendar days, shown to one decimal: in hours below
-  one day (`0.4 h`), otherwise in days. Item values keep three decimals of a
+- **Durations** are elapsed calendar days, shown in minutes below an hour
+  (`24 min`), to one decimal in hours below a day (`6.0 h`), otherwise in days. Item values keep three decimals of a
   day, so short cycles do not round to zero. Approval
   latency, blocked-for, and decision-wait checks subtract every whole
   non-working local day inside the interval, at its real length (a 25-hour day
@@ -229,13 +229,19 @@ What moved in a window, one list each:
 ### `done_4w` — Done, previous 4 weeks (8b)
 
 - **Definition:** final finishes in the 28 local days before the `done_7d`
-  window, displayed as a weekly mean (value ÷ 4).
+  window, displayed as a weekly mean: value ÷ 4, or, on a board whose first
+  commit falls inside those days, value ÷ the weeks it existed in them, with
+  its window starting at that commit. With less than a week of them the
+  metric is insufficient and there is no usual week: a board finished nothing
+  before it existed, and those days are not slow ones.
 - **Clock:** `at`.
 
 ### `throughput_series` — Throughput series (8s)
 
 - **Definition:** final finishes per local day for the last 42 days, days with
   none included. A series has no headline value; each point lists its items.
+  `params.born` is the local day of the board's first commit: the Flow tab
+  draws only the days from it, and only once there are 7.
 - **Clock:** `at`.
 
 ### `cycle_time_p50`, `cycle_time_p85` — Cycle time (9)

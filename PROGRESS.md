@@ -216,3 +216,159 @@ its date, the number, and where the evidence is. Newest last.
 - The AA.yml read under the lock is capped at 64 KB, as elsewhere.
 - Missing tests added (index-only DIRTY_FILE, target exists, detached HEAD,
   email redaction). `npm test` 489 of 489.
+
+## 2026-10-08 — T030 and T031: aging WIP chart and cycle-time scatterplot
+
+- Both on the Flow tab, from data the metrics already count: on the sample,
+  the aging dots past the service level are exactly the `aging` metric's
+  items, and the scatterplot's dots and 50th/85th lines are exactly
+  `cycle_time_p50`/`p85`'s.
+- Every dot opens its task by mouse and keyboard; read in headless Chrome at
+  1280 and 390 px with no console errors.
+- A new test requires every module the page imports to be served (a new
+  `public/` file had 404'd). `npm test` 491 of 491.
+
+## 2026-10-08 — T032: the forecast
+
+- A seeded Monte Carlo over 41 whole days of throughput answers "when will
+  the open tasks be done?" and "how many in the next 14 days?" at 50/85/95%.
+- On the sample (28 finished in 41 days, 14 open): 50% by 28 Oct, 85% by
+  4 Nov, 95% by 8 Nov; 85% likely 6 or more in 14 days. The same numbers came
+  back a minute apart, once seeded by the day rather than the instant.
+- `npm test` 492 of 492.
+
+## 2026-10-08 — T033: the charts on real boards
+
+- The test and regression check before pushing T030–T032:
+  - `npm test` and `npm run check` passed.
+  - The metrics and the brief are identical to those of the pre-chart code.
+  - The Flow page is unchanged apart from the new charts.
+- The real boards showed five chart defects, all now fixed:
+  - a forecast date a year out showed no year;
+  - a forecast was drawn from one finished task;
+  - an axis repeated a date;
+  - 31 aging dots were stacked on top of each other;
+  - the fix for the stacked dots could put a dot below zero.
+- After the fixes:
+  - `npm test` passed 498 of 498.
+  - The browser walk over six boards at two widths found 0 problems in 72
+    page views.
+  - The real repositories were unchanged.
+- Evidence: the Result of T033, and `tests/charts.test.mjs`.
+
+## 2026-10-08 — T034: silver accents
+
+- The accent is silver, taken from the logo, in place of a blue that also
+  meant "in progress". Only CSS tokens changed, plus a sheen on the primary
+  button and on the wordmark.
+- Accent text is 12.9:1 on black. `npm test` passed 498 of 498. The browser
+  walk found 0 problems in 72 page views.
+- Found on the way: the forecast samples days from before a young board
+  existed (T035).
+- Evidence: the Result of T034.
+
+## 2026-10-08 — T035: a young board's forecast
+
+- The forecast sampled 41 days even for a board with 2 days of history, so
+  AGE Aris's own board said "85% by Dec 25" for 5 tasks. It now samples only
+  days from the board's first commit on. It also needs 5 whole days, since
+  one day sampled has no spread.
+- The forecasts of the sample, AGEIS, AGEION and RSNA are identical before and
+  after the fix. `npm test` passed 501 of 501. The browser walk found 0
+  problems in 72 page views.
+- Evidence: the Result of T035.
+
+## 2026-10-08 — T036: silver you can see
+
+- T034's silver accent read as grey on black. Silver now shows as metal: a
+  brushed hairline along the shell, lit edges on the surfaces, and chrome on
+  the wordmark, the avatar, the primary button and the selected tab.
+- `npm test` passed 501 of 501. The browser walk found 0 problems in 72 page
+  views.
+- Evidence: the Result of T036.
+
+## 2026-10-08 — T037: the page fills a wide screen
+
+- At 3440 wide the page was a 1240 px strip with about 1,100 px of black on
+  each side. The column cap is gone: the page takes the window's width, a
+  board column tiles its cards, and method checks sit in columns. Prose stops
+  at 90 characters.
+- `npm test` passed 501 of 501. A new browser walk (17 pages × 390, 1280,
+  1440, 1920, 2560 and 3440 wide) found 0 problems in 102 page views: no page
+  error, no failed request, no sideways scroll.
+- Evidence: the Result of T037.
+
+## 2026-10-09 — T038: the Flow tab shows only what the data supports
+
+- Charts are drawn at the width they are shown at, so their text is the
+  page's size (measured scale 1.000 at 1440 and 3440). Durations sit on a log
+  axis (1 min … 90 days), so minute-long and week-long tasks both spread out.
+  A chart with nothing to draw is one line. The usual week counts only the
+  weeks the board existed. Durations under an hour read in minutes. The tab
+  no longer repeats the four numbers above it.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+- Evidence: the Result of T038.
+
+## 2026-10-09 — T039: silver that reads as metal
+
+- T036's silver still read as grey. Silver is now polished chrome with a dark
+  horizon, in few places: the wordmark, the avatar, the primary button and
+  the selected item and tab. The grey hairlines and edges are gone. Text on
+  chrome keeps 10.9:1; the wordmark's darkest band is 4.3:1 on black.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+- Evidence: the Result of T039.
+
+## 2026-10-09 — T040: Aris under the logo, centred
+
+- The sidebar wordmark reads "Aris", centred under the logo; the link's
+  accessible name stays "AGE Aris: Home".
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+
+## 2026-10-09 — T041: the Aris wordmark in Michroma
+
+- ARIS under the logo is set in Michroma, chosen by the operator from eight
+  faces rendered in chrome. AGE Aris serves it itself: a 3.5 KB woff2 of the
+  four glyphs, SIL OFL 1.1, licence in `docs/brand/`.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+
+## 2026-10-09 — T042: black glass with a silver edge
+
+- T039's gradient chrome looked like a stock app. Silver is now light on
+  black, as in the logo: the primary button and avatar are black glass with a
+  silver rim and a faint glow, the wordmark is grained silver lit from above,
+  and the selected item and tab carry a light silver bar. The operator chose
+  it from six treatments rendered beside the logo.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+
+## 2026-10-09 — T043: the menu button folds the sidebar
+
+- The menu button showed on every screen but only worked on phones. It now
+  folds the sidebar away on a wide screen (remembered in the browser) and
+  slides it over the page on a phone; the Flow charts redraw when it folds.
+- `npm test` passed 505 of 505. The browser walk found 0 problems in 102 page
+  views.
+
+## 2026-10-09 — T044: the interface restructured around flow strips
+
+- Each board is a flow strip: Backlog, In progress, Blocked, Done this week on
+  one track, work in progress placed by age against the service level, the
+  week's finishes stacked by day. Home pairs Needs you with every board's
+  strip; a project page leads with its title, one line of figures and its
+  strip. The card kit, caps labels and middle-dot strings are gone; Michroma
+  sets titles and Hanken Grotesk the rest. The operator approved a mock on
+  the real boards first.
+- `npm test` passed 513 of 513. The browser walk found 0 problems in 102 page
+  views.
+
+## 2026-10-09 — T045: /aa prints the signed-in link
+
+- The plain link `/aa` printed gave a sign-in error in any browser that had
+  not signed in before. It now carries the token: a fresh headless Chrome
+  profile lands on the project page with every API call answering 200.
+- `npm test` 513 of 513, `npm run check` passes. Installed copy synced.
+- Evidence: the Result of T045.

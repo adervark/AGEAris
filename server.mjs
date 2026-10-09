@@ -17,12 +17,19 @@ const STATIC_FILES = new Map([
   ['/styles.css', 'styles.css'],
   ['/icons.js', 'icons.js'],
   ['/cockpit.js', 'cockpit.js'],
+  ['/charts.js', 'charts.js'],
+  ['/strip.js', 'strip.js'],
   ['/cursor.js', 'cursor.js'],
   ['/words.js', 'words.js'],
   ['/markdown.js', 'markdown.js'],
   ['/threads.js', 'threads.js'],
   ['/planet.png', 'planet.png'],
   ['/logo.webp', 'logo.webp'],
+  // The faces, both under the SIL OFL 1.1 and cut to Latin: Michroma for the
+  // wordmark and titles (docs/brand/michroma-OFL.txt), Hanken Grotesk for
+  // everything else (docs/brand/hanken-grotesk-OFL.txt).
+  ['/michroma.woff2', 'michroma.woff2'],
+  ['/hanken-grotesk.woff2', 'hanken-grotesk.woff2'],
 ]);
 const MIME = new Map([
   ['.html', 'text/html; charset=utf-8'],
@@ -31,6 +38,7 @@ const MIME = new Map([
   ['.svg', 'image/svg+xml; charset=utf-8'],
   ['.png', 'image/png'],
   ['.webp', 'image/webp'],
+  ['.woff2', 'font/woff2'],
 ]);
 const MAX_JSON_BYTES = 1024 * 1024;
 // Every task and project write made through the API is marked as made in the

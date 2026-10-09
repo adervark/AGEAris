@@ -1,8 +1,9 @@
 import { actionFor, actionRequest, availability, inputFor, projectKind, TASK_ACTIONS } from './actions.js';
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, projectCard, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, usualWeek, waitingChip } from './cockpit.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
+import { flowStrip } from './strip.js';
 import { buildThreads } from './threads.js';
 import { healthTone, healthWord, ownerChip, TERMS } from './words.js';
 
@@ -287,8 +288,7 @@ function navigate(view) {
   if (isProject) state.layout = 'board';
   const route = isProject ? `project/${view}` : view;
   if (location.hash === `#${route}`) { readRoute(); render(); } else location.hash = route;
-  $('#sidebar').classList.remove('is-open');
-  $('#menu-toggle').setAttribute('aria-expanded', 'false');
+  closeSlideOver();
 }
 
 const PAGE_NAMES = { home: 'Home', projects: 'Projects', work: 'All tasks', working: 'Working', activity: 'Activity', decisions: 'Decisions', agents: 'Agents' };
@@ -297,7 +297,7 @@ function render() {
   renderNavigation();
   const project = selectedProject();
   const page = project?.name || PAGE_NAMES[state.view] || (state.run?.id === state.runId ? `Run ${state.run.localId}` : 'Run');
-  document.title = `${page} · AGE Aris`;
+  document.title = `${page} | AGE Aris`;
   const parent = project ? '<a href="#projects">Projects</a> <span>/</span> ' : state.view === 'work' ? '<a href="#projects">Projects</a> <span>/</span> ' : ['decisions', 'run'].includes(state.view) ? '<a href="#home">Home</a> <span>/</span> ' : '';
   $('#breadcrumb').innerHTML = `${parent}<strong>${escape(page)}</strong>`;
   // In one of your own projects the button adds a task there; elsewhere it adds a project.
@@ -387,12 +387,13 @@ function renderTaskSearch() {
 
 function renderProjectsPage() {
   const agents = agentsByProject();
-  const cards = state.projects.map((project) => {
+  const width = mainWidth();
+  const boards = state.projects.map((project) => {
     const line = briefLine(project.id) || { projectId: project.id, name: project.name, linked: project.linked, state: 'building', sentence: 'Reading this project’s history…' };
-    return projectCard(line, { agents: agents.get(project.id) || 0, project });
+    return boardStrip(line, { agents: agents.get(project.id) || 0, project, tasks: state.tasks.filter((task) => task.projectId === project.id), width });
   }).join('');
   const open = state.tasks.filter((task) => task.status !== 'done').length;
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Projects</h1><p>Your own projects and the repositories you track. Each card says whether the work follows the method, and why not.</p></div><div class="heading-actions"><a class="button button-secondary" href="#work">${icon('tasks')}All tasks <span class="muted">${open} open</span></a><button class="button button-secondary" data-action="add-project">${icon('plus')}Add project</button></div></section><div class="project-cards">${cards}</div>`;
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>Projects</h1><p>Your own projects and the repositories you track, each with its flow and whether the work follows the method.</p></div><div class="heading-actions"><a class="button button-secondary" href="#work">${icon('tasks')}All tasks <span class="muted">${open} open</span></a><button class="button button-secondary" data-action="add-project">${icon('plus')}Add project</button></div></section><div class="home-boards">${boards}</div>`;
 }
 
 // --- A project: status, then the board; flow and method one tab away ----------
@@ -407,20 +408,42 @@ function renderProjectPage(project) {
   const filters = taskView ? `<div class="filters">${filterControls(projectTasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div>` : '';
   let body;
   if (layout === 'threads') body = `${problemsNote(project)}${renderThreads(threadsFor(project.id), { signals: signals(), expanded: cockpit.expanded, holder })}`;
-  else if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0 });
+  else if (layout === 'flow') body = renderFlow(cockpit.metrics.get(project.id), { projectId: project.id, wipLimit: Number.isInteger(project.wipLimit) ? project.wipLimit : 0, width: mainWidth() });
   else if (layout === 'method') body = renderMethod({ project, method: cockpit.method.get(project.id), data: cockpit.metrics.get(project.id), line, tasks: projectTasks, pipeline: cockpit.pipelines.get(project.id) });
   else body = `${problemsNote(project)}${layout === 'board' ? board(tasks, project) : taskList(tasks)}${!projectTasks.length && writable(project) ? '<p class="board-hint">Start with a task. Give it an owner and a clear next step.</p>' : ''}`;
   $('#main').innerHTML = `${projectHeader(project, line)}<div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Project view">${tabs}</div>${filters}</div>${body}`;
+}
+
+// The width #main lays its content out in: the Flow tab draws its charts at
+// it, so their text stays the page's size on any screen.
+function mainWidth() {
+  const main = $('#main');
+  const style = getComputedStyle(main);
+  return main.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
 }
 
 function projectHeader(project, line) {
   const where = project.linked
     ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}`
     : project.description ? `<p class="project-where">${escape(project.description)}</p>` : '';
-  const status = line?.state === 'ready'
-    ? `<p class="project-status tone-${healthTone(line.health)}">${healthDot(line.health)}${metricButton({ projectId: project.id, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' })}<span>${escape(headline(line))}</span></p>`
-    : `<p class="project-status">${healthDot(null)}<span>${escape(headline(line) || 'Reading this project’s history…')}</span></p>`;
-  return `<header class="project-header"><div class="project-title-row"><span class="project-symbol color-${projectColor(project)}">${icon('folder')}</span><h1>${escape(project.name)}</h1>${project.linked ? trackedBadge(project) : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${vitals(project, line)}</header>`;
+  const ready = line?.state === 'ready';
+  const word = ready
+    ? `<span class="project-health tone-${healthTone(line.health)}">${healthDot(line.health)}${metricButton({ projectId: project.id, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' })}</span>`
+    : `<span class="project-health">${healthDot(null)}<span class="health-word">${line?.state === 'unavailable' ? 'Unavailable' : 'Indexing'}</span></span>`;
+  const status = !ready || line.health.level !== 'green' ? `<p class="project-status">${escape(headline(line) || 'Reading this project’s history…')}</p>` : '';
+  return `<header class="project-header"><div class="project-title-row"><h1>${escape(project.name)}</h1>${word}${project.linked ? trackedBadge(project) : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${figures(project, line)}${projectStrip(project, line)}</header>`;
+}
+
+// A project's flow strip, across the page.
+function projectStrip(project, line) {
+  if (line?.state !== 'ready') return '';
+  const k = line.kpis;
+  const width = mainWidth();
+  const backlog = state.tasks.filter((task) => task.projectId === project.id && task.status === 'backlog').map((task) => ({ taskKey: taskNumber(task), title: task.title }));
+  return `<div class="project-strip">${flowStrip({
+    projectId: project.id, name: project.name, backlog, wip: line.wipAges || [], days: (line.spark || []).slice(-7),
+    serviceLevel: k.cycle85?.status === 'ok' ? k.cycle85.value : null, wipLimit: k.wipLimit > 0 ? k.wipLimit : 0,
+  }, { width, height: Math.min(190, Math.max(124, width * 0.06)) })}</div>`;
 }
 
 // A tracked repository's badge: what AGE Aris may do there.
@@ -439,21 +462,22 @@ function interruptedNote(project) {
   return `<p class="window-note problems-note" role="status">${icon('alert')}<span>A task action was interrupted: ${escape(left.message)} Once it is checked, remove <code>${escape(left.marker)}</code>; until then task actions here are refused.</span></p>`;
 }
 
-// The four numbers a project is run by, each with its plain meaning.
-function vitals(project, line) {
+// The four numbers a project is run by, in one line: each its figure, its
+// term, and the term's plain meaning.
+function figures(project, line) {
   if (line?.state !== 'ready') return '';
   const k = line.kpis;
-  const usual = usualWeek(k.done4w);
+  const usual = line.usualWeek ?? null;
   const number = (metric) => (metric ? metricButton({ projectId: project.id, metricId: metric.id, display: metric.display, title: metric.status === 'ok' ? '' : metric.reason }) : '—');
   const over = k.wipLimit && k.wip?.value > k.wipLimit;
-  const vital = (label, value, help, alert = false) => `<div class="vital"><span class="vital-label">${escape(label)}</span><span class="vital-value ${alert ? 'is-alert' : ''}">${value}</span><span class="vital-help">${escape(help)}</span></div>`;
-  return `<div class="vitals">${vital(TERMS.throughput[0], number(k.done7d), usual !== null ? `Finished in 7 days; usually ~${usual} a week` : TERMS.throughput[1])}${vital(TERMS.wip[0], number(k.wip), k.wipLimit ? `In progress or blocked; the limit is ${k.wipLimit}` : `${TERMS.wip[1].split(': ')[1]}; no limit set`, over)}${vital(TERMS.cycle[0], number(k.cycle50), TERMS.cycle[1])}${vital(TERMS.service[0], number(k.cycle85), TERMS.service[1])}</div>`;
+  const figure = (label, value, help, alert = false) => `<div class="figure"><dd class="${alert ? 'is-alert' : ''}">${value}</dd><dt>${escape(label)}<span>${escape(help)}</span></dt></div>`;
+  return `<dl class="figures">${figure(TERMS.throughput[0], number(k.done7d), usual !== null ? `Finished in 7 days; usually ${usual} a week` : TERMS.throughput[1])}${figure(TERMS.wip[0], number(k.wip), k.wipLimit ? `In progress or blocked; the limit is ${k.wipLimit}` : 'In progress or blocked; no limit set', over)}${figure(TERMS.cycle[0], number(k.cycle50), TERMS.cycle[1])}${figure(TERMS.service[0], number(k.cycle85), TERMS.service[1])}</dl>`;
 }
 
 function projectActions(project) {
   if (project.linked) {
     const on = Boolean(project.actions?.on);
-    const label = on ? `Task actions on · ${escape(project.actions.branch)}` : 'Task actions off';
+    const label = on ? `Task actions on, ${escape(project.actions.branch)}` : 'Task actions off';
     const title = on ? 'Switch task actions off: AGE Aris stops committing here' : (project.actions?.reason || 'Switch task actions on');
     const toggle = project.unavailable ? '' : `<button class="text-button project-settings" data-action="task-actions" aria-pressed="${on}" title="${escape(title)}">${icon('git')}${label}</button>`;
     return `${toggle}<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
@@ -598,6 +622,23 @@ function storage() {
   try { return window.localStorage; } catch { return null; }
 }
 
+// The menu button hides and shows the sidebar. On a phone the sidebar slides
+// over the page and closes on navigation; on a wider screen it folds away, and
+// this browser remembers the choice.
+const narrowScreen = window.matchMedia('(max-width: 860px)');
+const SIDEBAR_KEY = 'agearis.sidebar';
+
+function syncMenuButton() {
+  const shown = narrowScreen.matches ? $('#sidebar').classList.contains('is-open') : !$('.app-shell').classList.contains('sidebar-hidden');
+  $('#menu-toggle').setAttribute('aria-expanded', String(shown));
+  $('#menu-toggle').setAttribute('aria-label', shown ? 'Hide navigation' : 'Show navigation');
+}
+
+function closeSlideOver() {
+  $('#sidebar').classList.remove('is-open');
+  syncMenuButton();
+}
+
 function cockpitSignature() {
   const project = selectedProject();
   return [cockpit.brief, cockpit.briefError, state.view === 'activity' ? cockpit.changes : null, project ? [cockpit.metrics.get(project.id), cockpit.method.get(project.id), cockpit.pipelines.get(project.id)] : null];
@@ -672,7 +713,7 @@ function renderHomePage() {
   }
   if (!document.hidden && !homeShownAt) homeShownAt = Date.now();
   const tasks = new Map(state.tasks.map((task) => [task.id, task]));
-  $('#main').innerHTML = renderHome(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded, taskOf: (id) => tasks.get(id), agentsByProject: agentsByProject(), projects: state.projects });
+  $('#main').innerHTML = renderHome(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded, taskOf: (id) => tasks.get(id), agentsByProject: agentsByProject(), projects: state.projects, tasks: state.tasks, width: mainWidth() });
 }
 
 function renderActivityPage() {
@@ -1083,8 +1124,8 @@ function refusalText(error) {
 // What a committed task action says: the commit, the branch, that it was not
 // pushed, and any warning with its remedy.
 function committedText(action, task, result) {
-  const done = `${action.aa?.done || action.done} ${taskNumber(task)} · ${result.commit.slice(0, 7)} on ${result.branch} · not pushed`;
-  return [done, ...(result.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`)].join(' · ');
+  const done = `${action.aa?.done || action.done} ${taskNumber(task)}: ${result.commit.slice(0, 7)} on ${result.branch}, not pushed.`;
+  return [done, ...(result.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`)].join(' ');
 }
 
 // One confirmation for an action, listing every reason it needs one. Resolves
@@ -1148,7 +1189,7 @@ async function performAction(id, taskId, { input, confirm } = {}) {
   if (refused?.code === 'CONFIRM') {
     state.acting = false;
     setBarBusy(false);
-    const go = await confirmAction({ eyebrow: `${taskNumber(task)} · ${project?.name || ''}`, title: `${entry.label} ${taskNumber(task)}?`, reasons: refused.reasons || [], confirm: entry.label });
+    const go = await confirmAction({ eyebrow: `${taskNumber(task)} in ${project?.name || ''}`, title: `${entry.label} ${taskNumber(task)}?`, reasons: refused.reasons || [], confirm: entry.label });
     if (go) return performAction(id, taskId, { input, confirm: refused.confirmToken });
     if (drawerTaskId() === taskId) $('#task-dialog').querySelector(`[data-act="${id}"]`)?.focus();
     return;
@@ -1353,8 +1394,8 @@ function clearDrafts(runId, names) {
 
 function runRow(run) {
   const project = state.projects.find((entry) => entry.id === run.projectId);
-  const label = run.needsHuman ? decisionReason(run) : isActiveRun(run) ? `${run.currentStage?.name || 'Starting'} · ${run.paused ? 'Paused' : run.currentAgent ? agentName(run.currentAgent) : 'Running'}` : runStatuses[run.status];
-  return `<li><button class="run-row tone-${runTone(run)}" data-action="open-run" data-id="${escape(run.id)}"><span class="run-row-main"><span class="run-row-reason">${escape(label)}</span><strong>${escape(run.taskTitle)}</strong><small>${escape(project?.name || 'Project')} · Run ${escape(run.localId)} · ${escape(String(run.taskId).split(':').at(-1))} · <time datetime="${escape(run.updatedAt)}">${escape(relativeTime(run.updatedAt))}</time></small></span>${miniSteps(run)}${icon('chevron', 'run-row-chevron')}</button></li>`;
+  const label = run.needsHuman ? decisionReason(run) : isActiveRun(run) ? `${run.currentStage?.name || 'Starting'}: ${run.paused ? 'Paused' : run.currentAgent ? agentName(run.currentAgent) : 'Running'}` : runStatuses[run.status];
+  return `<li><button class="run-row tone-${runTone(run)}" data-action="open-run" data-id="${escape(run.id)}"><span class="run-row-main"><span class="run-row-reason">${escape(label)}</span><strong>${escape(run.taskTitle)}</strong><small>${escape(project?.name || 'Project')}, Run ${escape(run.localId)}, ${escape(String(run.taskId).split(':').at(-1))}, <time datetime="${escape(run.updatedAt)}">${escape(relativeTime(run.updatedAt))}</time></small></span>${miniSteps(run)}${icon('chevron', 'run-row-chevron')}</button></li>`;
 }
 
 function renderDecisions() {
@@ -1382,7 +1423,7 @@ function inboxItem(run) {
   const project = state.projects.find((entry) => entry.id === run.projectId);
   const open = inboxOpen(run.id);
   const panelId = `inbox-panel-${run.localId}-${String(run.projectId).replace(/[^A-Za-z0-9_-]/g, '')}`;
-  return `<li class="inbox-item tone-wait${open ? ' is-open' : ''}"><div class="inbox-row"><button type="button" class="inbox-toggle" data-action="inbox-toggle" data-id="${escape(run.id)}" aria-expanded="${open}" aria-controls="${escape(panelId)}">${icon('chevron', 'inbox-chevron')}<span class="run-row-main"><span class="run-row-reason">${escape(decisionReason(run))}</span><strong>${escape(run.taskTitle)}</strong><small>${escape(project?.name || 'Project')} · Run ${escape(run.localId)} · ${escape(String(run.taskId).split(':').at(-1))} · <time datetime="${escape(run.updatedAt)}">${escape(relativeTime(run.updatedAt))}</time></small></span>${miniSteps(run)}</button><a class="inbox-open" href="#run/${escape(encodeURIComponent(run.id))}" aria-label="Open run ${escape(run.localId)}: ${escape(run.taskTitle)}">Open run${icon('chevron')}</a></div>${open ? `<div class="inbox-panel" id="${escape(panelId)}" role="region" aria-label="${escape(decisionReason(run))}: ${escape(run.taskTitle)}">${inboxPanel(run)}</div>` : ''}</li>`;
+  return `<li class="inbox-item tone-wait${open ? ' is-open' : ''}"><div class="inbox-row"><button type="button" class="inbox-toggle" data-action="inbox-toggle" data-id="${escape(run.id)}" aria-expanded="${open}" aria-controls="${escape(panelId)}">${icon('chevron', 'inbox-chevron')}<span class="run-row-main"><span class="run-row-reason">${escape(decisionReason(run))}</span><strong>${escape(run.taskTitle)}</strong><small>${escape(project?.name || 'Project')}, Run ${escape(run.localId)}, ${escape(String(run.taskId).split(':').at(-1))}, <time datetime="${escape(run.updatedAt)}">${escape(relativeTime(run.updatedAt))}</time></small></span>${miniSteps(run)}</button><a class="inbox-open" href="#run/${escape(encodeURIComponent(run.id))}" aria-label="Open run ${escape(run.localId)}: ${escape(run.taskTitle)}">Open run${icon('chevron')}</a></div>${open ? `<div class="inbox-panel" id="${escape(panelId)}" role="region" aria-label="${escape(decisionReason(run))}: ${escape(run.taskTitle)}">${inboxPanel(run)}</div>` : ''}</li>`;
 }
 
 function inboxPanel(summary) {
@@ -1402,10 +1443,10 @@ function inboxApproval(run) {
   const next = run.pipeline[attempt.stageIndex + 1];
   const text = attempt.edited || attempt.output;
   const id = escape(run.id);
-  const facts = [escape(agentName(attempt.agentId)), `attempt ${escape(attempt.n)}`, Number.isFinite(attempt.durationMs) ? escape(formatDuration(attempt.durationMs)) : ''].filter(Boolean).join(' · ');
+  const facts = [escape(agentName(attempt.agentId)), `attempt ${escape(attempt.n)}`, Number.isFinite(attempt.durationMs) ? escape(formatDuration(attempt.durationMs)) : ''].filter(Boolean).join(', ');
   const verdict = attempt.verdict ? `<span class="verdict verdict-${escape(attempt.verdict.toLowerCase())}">Verdict ${escape(attempt.verdict)}</span>` : '';
   const head = `<p class="inbox-meta"><strong>${escape(stage.name)}</strong><span>${facts}</span>${verdict}</p>`;
-  const output = `<figure class="output-frame inbox-output"><figcaption>${attempt.edited ? `${icon('edit')}Edited by ${escape(attempt.editedBy || 'a person')} · the original is in the run timeline` : `${icon('agent')}Output`}</figcaption><pre class="output-text" tabindex="0" aria-label="${escape(stage.name)} output">${escape(text || '(empty output)')}</pre></figure>`;
+  const output = `<figure class="output-frame inbox-output"><figcaption>${attempt.edited ? `${icon('edit')}Edited by ${escape(attempt.editedBy || 'a person')}; the original is in the run timeline` : `${icon('agent')}Output`}</figcaption><pre class="output-text" tabindex="0" aria-label="${escape(stage.name)} output">${escape(text || '(empty output)')}</pre></figure>`;
   if (inboxMode.get(run.id) === 'reject') {
     return `${head}${output}<form class="decision-form inbox-form" data-form="inbox-reject" data-run="${id}" aria-label="Request changes to ${escape(stage.name)}"><label class="field">What should change?<textarea name="feedback" data-draft="feedback" data-draft-run="${id}" rows="4" maxlength="8000" required placeholder="Be specific. The agent sees this next to its previous answer.">${escape(draft('feedback', '', run.id))}</textarea><small>The work goes back to ${escape(stage.name)} and the router picks an agent.</small></label><p class="form-error" role="alert"></p><div class="form-actions"><button type="submit" class="button button-primary">${icon('back')}Send back to ${escape(stage.name)}</button><button type="button" class="button button-secondary" data-action="inbox-mode" data-id="${id}" data-value="">Cancel</button><a class="text-button inbox-more" href="#run/${escape(encodeURIComponent(run.id))}" data-action="more-options" data-id="${id}">More options${icon('chevron')}</a></div></form>`;
   }
@@ -1546,7 +1587,7 @@ function renderRun() {
     <nav class="run-crumbs" aria-label="Run location"><a href="#decisions">Decisions</a><span aria-hidden="true">/</span>${project ? `<a href="#project/${escape(project.id)}">${escape(project.name)}</a>` : '<span>Project</span>'}<span aria-hidden="true">/</span><span>Run ${escape(run.localId)}</span></nav>
     <header class="run-heading">
       <h1>${task ? `<button class="title-button" data-action="open-task" data-id="${escape(task.id)}" title="Open task">${escape(title)}</button>` : escape(title)}</h1>
-      <p class="run-meta">${runPill(run.status)}${run.paused ? `<span class="run-pill tone-idle">${icon('pause')}Paused</span>` : ''}<span>${escape(String(run.taskId).split(':').at(-1))}</span><span>Started by ${escape(started?.actor.id || 'unknown')} · <time datetime="${escape(run.startedAt)}">${escape(formatTime(run.startedAt))}</time></span><span>Updated <time datetime="${escape(run.updatedAt)}">${escape(relativeTime(run.updatedAt).replace(/^Just now$/, 'just now'))}</time></span></p>
+      <p class="run-meta">${runPill(run.status)}${run.paused ? `<span class="run-pill tone-idle">${icon('pause')}Paused</span>` : ''}<span>${escape(String(run.taskId).split(':').at(-1))}</span><span>Started by ${escape(started?.actor.id || 'unknown')}, <time datetime="${escape(run.startedAt)}">${escape(formatTime(run.startedAt))}</time></span><span>Updated <time datetime="${escape(run.updatedAt)}">${escape(relativeTime(run.updatedAt).replace(/^Just now$/, 'just now'))}</time></span></p>
     </header>
     ${stepper(run)}
     ${routingNote(run)}
@@ -1561,7 +1602,7 @@ function stepper(run) {
   return `<ol class="stepper" aria-label="Stages">${run.stages.map((stage, index) => {
     const current = index === run.stageIndex && run.status !== 'completed';
     const marker = stage.status === 'done' ? icon('check') : ['failed', 'cancelled'].includes(stage.status) ? icon('close') : ['awaiting_approval', 'awaiting_input'].includes(stage.status) ? icon('user') : stage.status === 'waiting' ? icon('alert') : String(index + 1);
-    return `<li class="step tone-${tone(stage.status)}${current ? ' is-current' : ''}" ${current ? 'aria-current="step"' : ''}><span class="step-marker" aria-hidden="true">${marker}</span><span class="step-text"><span class="step-name">${escape(stage.name)}${stage.gate === 'approve' ? `<span class="gate-mark" title="Waits for your approval">${icon('gate')}<span class="sr-only"> (waits for your approval)</span></span>` : ''}</span><small>${stageStatuses[stage.status] || escape(stage.status)}${stage.attempts > 1 ? ` · ${stage.attempts} attempts` : ''}</small></span></li>`;
+    return `<li class="step tone-${tone(stage.status)}${current ? ' is-current' : ''}" ${current ? 'aria-current="step"' : ''}><span class="step-marker" aria-hidden="true">${marker}</span><span class="step-text"><span class="step-name">${escape(stage.name)}${stage.gate === 'approve' ? `<span class="gate-mark" title="Waits for your approval">${icon('gate')}<span class="sr-only"> (waits for your approval)</span></span>` : ''}</span><small>${stageStatuses[stage.status] || escape(stage.status)}${stage.attempts > 1 ? `, ${stage.attempts} attempts` : ''}</small></span></li>`;
   }).join('')}</ol>`;
 }
 
@@ -1624,7 +1665,7 @@ function approvalCard(run, card) {
   const mode = state.decisionRun === run.id ? state.decisionMode : '';
   const verdict = attempt.verdict ? ` <span class="verdict verdict-${escape(attempt.verdict.toLowerCase())}">Verdict ${escape(attempt.verdict)}</span>` : '';
   const meta = `<p class="decision-copy">${escape(agentName(attempt.agentId))} produced this${Number.isFinite(attempt.durationMs) ? ` in ${escape(formatDuration(attempt.durationMs))}` : ''}.${verdict} ${next ? `Approving moves the task to ${escape(next.name)}.` : 'Approving completes the run and moves the task to Done.'}</p>`;
-  const output = `<figure class="output-frame"><figcaption>${attempt.edited ? `${icon('edit')}Edited by ${escape(attempt.editedBy || 'a person')} · the original stays in the timeline` : `${icon('agent')}Output · attempt ${escape(attempt.n)}`}</figcaption><pre class="output-text" tabindex="0">${escape(text || '(empty output)')}</pre></figure>`;
+  const output = `<figure class="output-frame"><figcaption>${attempt.edited ? `${icon('edit')}Edited by ${escape(attempt.editedBy || 'a person')}; the original stays in the timeline` : `${icon('agent')}Output of attempt ${escape(attempt.n)}`}</figcaption><pre class="output-text" tabindex="0">${escape(text || '(empty output)')}</pre></figure>`;
   let body;
   if (mode === 'edit') body = meta + editForm(text);
   else if (mode === 'reject') body = meta + output + rejectForm(run, attempt);
@@ -1671,7 +1712,7 @@ function runControls(run) {
 
 function timeline(run) {
   const attempts = [...run.attempts].reverse();
-  return `<section class="timeline" aria-labelledby="timeline-title"><div class="section-heading"><h2 id="timeline-title">Timeline</h2><span>${run.attempts.length} ${run.attempts.length === 1 ? 'attempt' : 'attempts'} · newest first</span></div>${attempts.length ? `<ol class="attempt-list">${attempts.map((attempt) => `<li>${attemptItem(run, attempt)}</li>`).join('')}</ol>` : '<p class="run-empty">The first stage is being routed to an agent.</p>'}</section>`;
+  return `<section class="timeline" aria-labelledby="timeline-title"><div class="section-heading"><h2 id="timeline-title">Timeline</h2><span>${run.attempts.length} ${run.attempts.length === 1 ? 'attempt' : 'attempts'}, newest first</span></div>${attempts.length ? `<ol class="attempt-list">${attempts.map((attempt) => `<li>${attemptItem(run, attempt)}</li>`).join('')}</ol>` : '<p class="run-empty">The first stage is being routed to an agent.</p>'}</section>`;
 }
 
 function attemptItem(run, attempt) {
@@ -1682,7 +1723,7 @@ function attemptItem(run, attempt) {
   const decision = attempt.decision ? `${attempt.status === 'rejected' ? 'Sent back' : 'Approved'} by ${attempt.decision.by}${attempt.decision.comment ? `: ${clip(attempt.decision.comment)}` : ''}` : '';
   const facts = [
     ['Stage', stage.name === roleLabel(attempt.role) ? stage.name : `${stage.name} (${roleLabel(attempt.role)} role)`],
-    ['Done by', attempt.runner === 'human' ? `Person${attempt.finishedBy ? ` (${attempt.finishedBy})` : ''}` : `${who} · ${attempt.runner} runner`],
+    ['Done by', attempt.runner === 'human' ? `Person${attempt.finishedBy ? ` (${attempt.finishedBy})` : ''}` : `${who}, ${attempt.runner} runner`],
     ['Routing', attempt.reason],
     ['Dispatched', formatTime(attempt.dispatchedAt)],
     attempt.finishedAt ? ['Finished', formatTime(attempt.finishedAt)] : null,
@@ -1698,7 +1739,7 @@ function attemptItem(run, attempt) {
       ${attempt.decision?.comment ? `<blockquote class="decision-quote"><strong>${attempt.status === 'rejected' ? 'Feedback' : 'Note'} from ${escape(attempt.decision.by)}</strong>${escape(attempt.decision.comment)}</blockquote>` : ''}
       ${scoreTable(attempt)}
       ${attempt.output ? block('Output', attempt.output) : `<div class="sub-block"><h4>Output</h4><p class="run-empty">${live ? 'No output yet.' : 'Empty output.'}</p></div>`}
-      ${attempt.edited ? block(`Edited output · by ${escape(attempt.editedBy || 'a person')}`, attempt.edited, 'is-edited') : ''}
+      ${attempt.edited ? block(`Output edited by ${escape(attempt.editedBy || 'a person')}`, attempt.edited, 'is-edited') : ''}
       ${attempt.stderr ? `<details class="sub-details" data-key="stderr-${escape(attempt.id)}"><summary>Standard error</summary><pre class="code-block" tabindex="0">${escape(attempt.stderr)}</pre></details>` : ''}
       <details class="sub-details" data-key="prompt-${escape(attempt.id)}"><summary>Prompt sent to ${escape(who)}</summary><pre class="code-block" tabindex="0">${escape(attempt.prompt || '(no prompt recorded)')}</pre></details>
     </div></details>`;
@@ -1713,7 +1754,7 @@ function scoreTable(attempt) {
 
 function commentsPanel(run) {
   const stageName = (id) => run.pipeline.find((stage) => stage.id === id)?.name || id;
-  return `<section class="side-panel" aria-labelledby="comments-title"><div class="section-heading"><h2 id="comments-title">Comments</h2><span>${run.comments.length}</span></div>${run.comments.length ? `<ol class="comment-list">${run.comments.map((comment) => `<li><p>${escape(comment.text)}</p><span>${escape(comment.by)}${comment.stageId ? ` · ${escape(stageName(comment.stageId))}` : ''} · <time datetime="${escape(comment.at)}">${escape(formatTime(comment.at))}</time></span></li>`).join('')}</ol>` : '<p class="run-empty">Notes you add are saved in the audit trail.</p>'}<form class="comment-form" data-form="comment" aria-label="Add a comment"><label class="field">Add a comment<textarea id="comment-text" name="text" data-draft="comment" rows="3" maxlength="4000" required placeholder="Context for later, or for whoever picks this up">${escape(draft('comment'))}</textarea></label><p class="form-error" role="alert"></p><button type="submit" class="button button-secondary">Add comment</button></form></section>`;
+  return `<section class="side-panel" aria-labelledby="comments-title"><div class="section-heading"><h2 id="comments-title">Comments</h2><span>${run.comments.length}</span></div>${run.comments.length ? `<ol class="comment-list">${run.comments.map((comment) => `<li><p>${escape(comment.text)}</p><span>${escape(comment.by)}${comment.stageId ? `, ${escape(stageName(comment.stageId))}` : ''}, <time datetime="${escape(comment.at)}">${escape(formatTime(comment.at))}</time></span></li>`).join('')}</ol>` : '<p class="run-empty">Notes you add are saved in the audit trail.</p>'}<form class="comment-form" data-form="comment" aria-label="Add a comment"><label class="field">Add a comment<textarea id="comment-text" name="text" data-draft="comment" rows="3" maxlength="4000" required placeholder="Context for later, or for whoever picks this up">${escape(draft('comment'))}</textarea></label><p class="form-error" role="alert"></p><button type="submit" class="button button-secondary">Add comment</button></form></section>`;
 }
 
 function eventSummary(run, event) {
@@ -1744,11 +1785,11 @@ function auditPanel(run) {
   const chain = run.audit?.chain || { ok: false, count: run.events.length };
   const artifacts = run.audit?.artifacts || { ok: true, mismatches: [] };
   return `<section class="side-panel audit-panel" aria-labelledby="audit-title"><div class="section-heading"><h2 id="audit-title">Audit trail</h2></div>
-    <p class="audit-badge ${chain.ok ? 'is-ok' : 'is-bad'}">${icon(chain.ok ? 'shield' : 'shieldAlert')}<span>${chain.ok ? `Audit chain verified · ${escape(chain.count)} events` : `Audit check failed at event ${escape(chain.brokenAt ?? '?')}${chain.reason ? `: ${escape(chain.reason)}` : ''}`}</span></p>
+    <p class="audit-badge ${chain.ok ? 'is-ok' : 'is-bad'}">${icon(chain.ok ? 'shield' : 'shieldAlert')}<span>${chain.ok ? `Audit chain verified: ${escape(chain.count)} events` : `Audit check failed at event ${escape(chain.brokenAt ?? '?')}${chain.reason ? `: ${escape(chain.reason)}` : ''}`}</span></p>
     <p class="audit-badge ${artifacts.ok ? 'is-ok' : 'is-bad'}">${icon(artifacts.ok ? 'check' : 'alert')}<span>${artifacts.ok ? 'Every prompt and output matches its recorded hash' : `${artifacts.mismatches.length} ${artifacts.mismatches.length === 1 ? 'file changed' : 'files changed'} after recording`}</span></p>
     ${artifacts.mismatches.length ? `<ul class="mismatch-list">${artifacts.mismatches.map((path) => `<li><code>${escape(path)}</code></li>`).join('')}</ul>` : ''}
     <p class="audit-path">Stored in the project repository at <code>${escape(run.path)}</code>. Each change is one git commit.</p>
-    <details class="event-log" data-key="events-${escape(run.id)}"><summary>All events (${run.events.length})</summary><ol>${run.events.map((event) => `<li><details data-key="event-${escape(run.id)}-${escape(event.seq)}"><summary><span class="event-seq">${escape(event.seq)}</span><span class="event-main"><span class="event-type">${escape(String(event.type).replace(/_/g, ' '))}</span><span class="event-summary">${escape(clip(eventSummary(run, event), 160))}</span><span class="event-meta">${escape(event.actor?.type)}: ${escape(event.actor?.id)} · <time datetime="${escape(event.at)}">${escape(formatTime(event.at))}</time></span></span></summary><pre class="code-block" tabindex="0">${escape(JSON.stringify(event, null, 2))}</pre></details></li>`).join('')}</ol></details>
+    <details class="event-log" data-key="events-${escape(run.id)}"><summary>All events (${run.events.length})</summary><ol>${run.events.map((event) => `<li><details data-key="event-${escape(run.id)}-${escape(event.seq)}"><summary><span class="event-seq">${escape(event.seq)}</span><span class="event-main"><span class="event-type">${escape(String(event.type).replace(/_/g, ' '))}</span><span class="event-summary">${escape(clip(eventSummary(run, event), 160))}</span><span class="event-meta">${escape(event.actor?.type)}: ${escape(event.actor?.id)}, <time datetime="${escape(event.at)}">${escape(formatTime(event.at))}</time></span></span></summary><pre class="code-block" tabindex="0">${escape(JSON.stringify(event, null, 2))}</pre></details></li>`).join('')}</ol></details>
   </section>`;
 }
 
@@ -1940,7 +1981,7 @@ function workingNow() {
     return { claim, tasks, quiet: quiet.length > 0, hours };
   }).sort((a, b) => Number(b.quiet) - Number(a.quiet) || b.hours - a.hours || a.claim.localeCompare(b.claim));
   const quietCount = rows.filter((row) => row.quiet).length;
-  return `<p class="flow-intro">${escape(plural(rows.length, 'session'))} holding work${quietCount ? `; ${quietCount} ${quietCount === 1 ? 'has' : 'have'} gone quiet past the stale threshold` : ', all showing life'}. A session shows life with a commit or a checkpoint.</p><ul class="session-list">${rows.map(({ claim, tasks, quiet, hours }) => `<li class="session-row"><div class="session-who">${ownerChip(claim)}<small>${escape(claim)}</small></div><div class="session-work">${tasks.map((task) => `<button type="button" class="task-link" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span>${escape(task.title)}</button>${task.claimNote ? `<p class="session-note">“${escape(task.claimNote)}”</p>` : ''}`).join('')}</div><div class="session-state">${quiet ? `<span class="chip tone-wait" title="No commit or checkpoint within the stale threshold">Stale claim · quiet ${escape(formatAge(hours))}</span>` : '<span class="chip tone-done">Active</span>'}<span>${escape([...new Set(tasks.map((task) => projectOf(task)?.name).filter(Boolean))].join(', '))}</span></div></li>`).join('')}</ul>`;
+  return `<p class="flow-intro">${escape(plural(rows.length, 'session'))} holding work${quietCount ? `; ${quietCount} ${quietCount === 1 ? 'has' : 'have'} gone quiet past the stale threshold` : ', all showing life'}. A session shows life with a commit or a checkpoint.</p><ul class="session-list">${rows.map(({ claim, tasks, quiet, hours }) => `<li class="session-row"><div class="session-who">${ownerChip(claim)}<small>${escape(claim)}</small></div><div class="session-work">${tasks.map((task) => `<button type="button" class="task-link" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span>${escape(task.title)}</button>${task.claimNote ? `<p class="session-note">“${escape(task.claimNote)}”</p>` : ''}`).join('')}</div><div class="session-state">${quiet ? `<span class="chip tone-wait" title="No commit or checkpoint within the stale threshold">Stale claim, quiet ${escape(formatAge(hours))}</span>` : '<span class="chip tone-done">Active</span>'}<span>${escape([...new Set(tasks.map((task) => projectOf(task)?.name).filter(Boolean))].join(', '))}</span></div></li>`).join('')}</ul>`;
 }
 
 function pipelineAgents() {
@@ -1963,7 +2004,7 @@ function pipelineAgents() {
     const acting = agent.runner === 'command' && (agent.actRoles || []).length && (agent.actArgs || []).length
       ? `<span class="act-line">+ <code>${escape(commandText(agent.actArgs))}</code> in ${escape(rolesText(agent.actRoles))}</span>` : '';
     return `<article class="agent-card${agent.enabled ? '' : ' is-disabled'}" aria-labelledby="agent-${escape(agent.id)}-name">
-      <header class="agent-card-head"><span class="agent-symbol">${icon('agent')}</span><div class="agent-title"><h3 id="agent-${escape(agent.id)}-name">${escape(agent.name)}</h3><small>${escape(agent.id)} · ${escape(tierLabel(agent.tier))} · ${agent.runner === 'pull' ? 'Pull runner' : 'Command runner'}</small></div>
+      <header class="agent-card-head"><span class="agent-symbol">${icon('agent')}</span><div class="agent-title"><h3 id="agent-${escape(agent.id)}-name">${escape(agent.name)}</h3><small>${escape(agent.id)}, ${escape(tierLabel(agent.tier))}, ${agent.runner === 'pull' ? 'Pull runner' : 'Command runner'}</small></div>
       <label class="switch"><input type="checkbox" id="agent-toggle-${escape(agent.id)}" data-agent-toggle="${escape(agent.id)}" ${agent.enabled ? 'checked' : ''}><span class="switch-track" aria-hidden="true"></span><span class="switch-text" aria-hidden="true">${agent.enabled ? 'On' : 'Off'}</span><span class="sr-only">${escape(agent.name)} enabled</span></label></header>
       ${agent.description ? `<p class="agent-description">${escape(agent.description)}</p>` : ''}
       ${warning ? `<p class="agent-warning">${icon('alert')}<span>${escape(warning)}</span></p>` : ''}
@@ -2253,6 +2294,12 @@ function onAction(event) {
   }
 }
 $('#main').addEventListener('click', onAction);
+// A chart's dots are SVG with the role of a button: Enter and Space press them.
+$('#main').addEventListener('keydown', (event) => {
+  if ((event.key !== 'Enter' && event.key !== ' ') || !event.target.matches?.('[role="button"][data-action]:not(button)')) return;
+  event.preventDefault();
+  event.target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+});
 $('#task-dialog').addEventListener('click', onAction);
 
 $('#main').addEventListener('change', (event) => {
@@ -2335,10 +2382,16 @@ $('#refresh').addEventListener('click', async () => {
   try { await refresh(); toast('Workspace refreshed'); } catch (error) { toast(error.message, true); } finally { $('#refresh').disabled = false; }
 });
 $('#menu-toggle').addEventListener('click', () => {
-  const open = $('#sidebar').classList.toggle('is-open');
-  $('#menu-toggle').setAttribute('aria-expanded', String(open));
-  $('#menu-toggle').setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  if (narrowScreen.matches) $('#sidebar').classList.toggle('is-open');
+  else {
+    const hidden = $('.app-shell').classList.toggle('sidebar-hidden');
+    try { storage()?.setItem(SIDEBAR_KEY, hidden ? 'hidden' : 'shown'); } catch { /* the choice lasts this page only */ }
+  }
+  syncMenuButton();
 });
+try { if (storage()?.getItem(SIDEBAR_KEY) === 'hidden') $('.app-shell').classList.add('sidebar-hidden'); } catch { /* shown, the default */ }
+narrowScreen.addEventListener('change', syncMenuButton);
+syncMenuButton();
 $('#sidebar').addEventListener('click', (event) => {
   const link = event.target.closest('a');
   if (!link) return;
@@ -2364,7 +2417,7 @@ document.addEventListener('keydown', (event) => {
   if (event.ctrlKey || event.metaKey || event.altKey || anyDialogOpen() || event.target.closest('input,textarea,select,[contenteditable]')) return;
   if (event.key === '/') { event.preventDefault(); $('#search').focus(); }
   if (event.key.toLowerCase() === 'n' && writableProjects().length) { event.preventDefault(); openTaskEditor(); }
-  if (event.key === 'Escape') { $('#sidebar').classList.remove('is-open'); $('#menu-toggle').setAttribute('aria-expanded', 'false'); }
+  if (event.key === 'Escape') closeSlideOver();
 });
 
 function monitorOffline(error) {
@@ -2396,6 +2449,20 @@ document.addEventListener('visibilitychange', () => {
   else if (state.view === 'home') homeShownAt = Date.now();
 });
 window.addEventListener('pagehide', () => leaveHome(state.view));
+// Charts and flow strips are drawn at the width they are shown at, so they redraw when #main
+// changes width: a window resize, or the sidebar folding away.
+let drawnWidth = 0;
+let resizeTimer = 0;
+new ResizeObserver(() => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const width = mainWidth();
+    if (Math.abs(width - drawnWidth) <= 8) return;
+    // Home, Projects and a project page draw flow strips; the Flow tab, charts.
+    if (drawnWidth && !state.query && (['home', 'projects'].includes(state.view) || selectedProject()) && !editingMain()) renderMain();
+    drawnWidth = width;
+  }, 150);
+}).observe($('#main'));
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !refreshing && !state.authLost && !editingMain()) refresh().catch(monitorOffline); });
 
 lastView = state.view;

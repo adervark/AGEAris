@@ -226,10 +226,10 @@ async function subDayFlow() {
   })));
 }
 
-test('a cycle-time percentile under a day reads in hours ("0.4 h"), with its formula value to 0.001 day', async () => {
+test('a cycle-time percentile under an hour reads in minutes ("24 min"), under a day in hours, with its formula value to 0.001 day (T038)', async () => {
   const { metrics } = compute((await subDayFlow()).ledger);
   const p50 = metrics.cycle_time_p50;
-  assert.deepEqual([p50.status, p50.value, p50.display], ['ok', 0.017, '0.4 h']);
+  assert.deepEqual([p50.status, p50.value, p50.display], ['ok', 0.017, '24 min']);
   assert.equal(p50.formula, 'nearest-rank P50 = sorted[ceil(0.5 × 5) − 1] = sorted[2] = 0.017');
   assert.deepEqual([metrics.cycle_time_p85.value, metrics.cycle_time_p85.display], [0.25, '6.0 h']);
   assert.equal(metrics.cycle_time_p85.formula, 'nearest-rank P85 = sorted[ceil(0.85 × 5) − 1] = sorted[4] = 0.250');
@@ -867,4 +867,37 @@ test('lib/metrics.mjs never reads the clock', async () => {
   const source = await readFile(new URL('../lib/metrics.mjs', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /Date\.now\(/);
   assert.doesNotMatch(source, /new Date\(\s*\)/);
+});
+
+test('the forecast: exact on a steady history, reproducible, ordered, and silent without history or open work (T032)', async () => {
+  const { forecast } = await import('../lib/metrics.mjs');
+  // One finish every day: 5 open tasks take exactly 5 days, at every percentile.
+  const steady = forecast({ history: Array(41).fill(1), open: 5, today: '2026-10-08' });
+  assert.deepEqual([steady.when.p50, steady.when.p85, steady.when.p95], [{ days: 5, date: '2026-10-13' }, { days: 5, date: '2026-10-13' }, { days: 5, date: '2026-10-13' }]);
+  assert.deepEqual([steady.ahead.p50, steady.ahead.p85, steady.ahead.p95, steady.ahead.date], [14, 14, 14, '2026-10-22']);
+  // A lumpy history: the same inputs give the same numbers; later percentiles are later.
+  const history = [0, 0, 3, 0, 1, 0, 0, 2, 0, 0, 0, 1, 4, 0, 0, 1, 0, 0, 2, 0, 0];
+  const one = forecast({ history, open: 12, today: '2026-10-08', seed: 'x' });
+  assert.deepEqual(forecast({ history, open: 12, today: '2026-10-08', seed: 'x' }), one);
+  assert.ok(one.when.p50.days <= one.when.p85.days && one.when.p85.days <= one.when.p95.days);
+  assert.ok(one.ahead.p95 <= one.ahead.p85 && one.ahead.p85 <= one.ahead.p50, '85% likely at least fewer than the median');
+  assert.equal(one.histogram.reduce((sum, bar) => sum + bar.n, 0) + one.when.beyondHorizon, one.basis.trials);
+  assert.equal(forecast({ history: Array(41).fill(0), open: 3, today: '2026-10-08' }).status, 'no-history');
+  assert.equal(forecast({ history, open: 0, today: '2026-10-08' }).status, 'nothing-open');
+  // Past the horizon is not a date.
+  // Five finishes in 41 days cannot clear 200 tasks within a year.
+  const slow = forecast({ history: [1, 1, 1, 1, 1, ...Array(36).fill(0)], open: 200, today: '2026-10-08' });
+  assert.equal(slow.status, 'ok');
+  assert.equal(slow.when.p95.days, null);
+});
+
+test('a board younger than the window is forecast from its own days, not from days before it existed (T035)', async () => {
+  // The first commit is day 28 (Tuesday 29 September); asOf is day 34 (Monday 5 October).
+  const tasks = ['T001', 'T002', 'T003', 'T004', 'T005', 'T006'].map((id, index) => flowTask(id, { create: 28, start: 28, finish: 28 + Math.min(index, 5) }));
+  const { ledger } = await fixture(timeline(...tasks, [[30, '10:00', 'ade: create T007 backlog "T007 open"']]));
+  const { charts: { forecast } } = compute(ledger);
+  assert.equal(forecast.status, 'ok');
+  assert.deepEqual([forecast.basis.from, forecast.basis.to, forecast.basis.days, forecast.basis.finished], ['2026-09-29', '2026-10-04', 6, 6]);
+  // Six finishes in six days clear one open task within a day or two, not weeks.
+  assert.ok(forecast.when.p95.days <= 2, `95%: ${forecast.when.p95.days} days`);
 });
