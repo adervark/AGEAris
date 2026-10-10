@@ -7,8 +7,8 @@ was reviewed by an Architect (sound, with required changes R1–R10) and by a
 Critic (revise, blocking issues B1–B9), each separately. v2 answered both
 reviews. v2.1 recorded the operator's decisions D1–D4. A second Critic round
 on v2.1 (684034c) found B4–B7 resolved, and six more blocking issues in §5.2,
-§5.3 and §9, which v2.2 answers. Nothing here is built yet. Once approved, each
-phase in §9 becomes a task on `AA/`.
+§5.3 and §9, which v2.2 answers. Nothing here is built yet. Each phase in §9 is
+now a task on `AA/`: T053–T068, with the follow-ups.
 
 ## Changes since v2.1
 
