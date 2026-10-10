@@ -262,13 +262,14 @@ export function budgeted(full, budget) {
   return settle();
 }
 
-// ---- §7, the cleaning of repository text
+// ---- §7, the cleaning of repository text. Decoding comes before it, and no
+// lone surrogate reaches it (§7), so it has no rule for one.
 
 const SPACE = /[\u0009-\u000d\u0085\u2028\u2029]/g;
 const REMOVED = /[\u0000-\u0008\u000e-\u001f\u007f-\u0084\u0086-\u009f\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/g;
 
 export function clean(text, cap) {
-  let value = String(text).replace(/[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g, '�');
+  let value = String(text);
   value = value.replace(SPACE, ' ').replace(REMOVED, '').replace(/ {2,}/g, ' ').replace(/^ | $/g, '');
   if (cap === undefined || Buffer.byteLength(value) <= cap) return value;
   let out = '';

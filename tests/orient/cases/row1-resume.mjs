@@ -57,11 +57,11 @@ export default [
   kase({
     name: 'dead-doing-clock',
     rows: [1],
-    story: 'A run with no process record, as a ckpt.sh from before T070 writes it, last heard an hour ago: the clock closes it.',
+    story: 'A run with no process record, as a ckpt.sh from before T070 writes it, last heard an hour ago: the clock closes it. Its doing names the act in what, not act. Its until of 24:00 does not read back as a time, so it does not count.',
     commits: claimed,
     tree: { trails: { T001: [
       open(at('10:30'), ME),
-      doing(at('11:00'), ME, { act: 'rebuild the index', tell: 'index/READY exists', next: 'check the index' }),
+      doing(at('11:00'), ME, { what: 'rebuild the index', tell: 'index/READY exists', until: '2026-10-10T24:00:00Z', next: 'check the index' }),
     ] } },
     call: { run: NEW },
     answer: answer({
@@ -157,6 +157,55 @@ export default [
       inFlight: [stopped(ME, 'process', at('09:20'))],
       data: data({ T001: card('T001', TITLE, { act: 'compress the archive', tell: 'archive.tar.zst exists', handoff: HANDOFF }) }),
       more: more('T001'),
+    }),
+  }),
+
+  kase({
+    name: 'two-stopped-runs',
+    rows: [1],
+    story: "Two of the operator's sessions stopped mid-act on the task. Row 1 names the one whose newest entry comes latest in the file, though the other's is later by the clock.",
+    commits: claimed,
+    tree: { trails: { T001: [
+      open(at('08:00'), ME, proc(4001, 'Sat Oct 10 07:58:00 2026')),
+      open(at('08:30'), 'bbbb2222', proc(4101, 'Sat Oct 10 08:28:00 2026')),
+      doing(at('09:10'), 'bbbb2222', { act: 'fold 5, ~1 h GPU', tell: 'outputs/fold5/last.ckpt exists', next: 'collect fold 5' }),
+      doing(at('09:00'), ME, { act: 'fold 4, ~1 h GPU', tell: 'outputs/fold4/last.ckpt exists', next: 'collect fold 4' }),
+    ] } },
+    call: { run: NEW },
+    answer: answer({
+      next: resume(ME, 'process', at('09:00')),
+      rules: rules({ used: 1 }),
+      you: mine,
+      inFlight: [stopped(ME, 'process', at('09:00')), stopped('bbbb2222', 'process', at('09:10'))],
+      data: data({ T001: card('T001', TITLE, { next: 'collect fold 4', act: 'fold 4, ~1 h GPU', tell: 'outputs/fold4/last.ckpt exists', handoff: HANDOFF }) }),
+      more: more('T001'),
+    }),
+  }),
+
+  kase({
+    name: 'resume-before-continue',
+    rows: [1],
+    story: 'The caller holds T001, in progress and quiet, and T002, whose run stopped mid-act. Rows come before tasks: row 1 for T002 wins over row 3 for T001, though T001 comes first by id.',
+    commits: [
+      { at: at('09:30', 1), ops: [task('T001', TITLE), task('T002', 'Score the folds')] },
+      { at: at('08:00'), subject: 'claim T001', ops: [task('T001', TITLE, { at: 'tasks', owner: owner(ME) })] },
+      { at: at('08:05'), subject: 'claim T002', ops: [task('T002', 'Score the folds', { at: 'tasks', owner: owner(ME) })] },
+    ],
+    tree: { trails: { T002: [
+      open(at('09:00'), ME, proc(4002, 'Sat Oct 10 08:58:00 2026')),
+      doing(at('09:30'), ME, { act: 'score folds 0 to 4, ~1 h', tell: 'outputs/scores.csv exists', next: 'check the scores' }),
+    ] } },
+    call: { run: NEW },
+    answer: answer({
+      next: { ...resume(ME, 'process', at('09:30')), task: 'T002' },
+      rules: rules({ used: 2 }),
+      you: [{ task: 'T001', column: 'in_progress' }, { task: 'T002', column: 'in_progress' }],
+      inFlight: [{ ...stopped(ME, 'process', at('09:30')), task: 'T002' }],
+      data: data({
+        T002: card('T002', 'Score the folds', { next: 'check the scores', act: 'score folds 0 to 4, ~1 h', tell: 'outputs/scores.csv exists', handoff: HANDOFF }),
+        T001: card('T001', TITLE),
+      }),
+      more: more('T002'),
     }),
   }),
 ];

@@ -123,4 +123,31 @@ export default [
       more: more('T002'),
     }),
   }),
+
+  kase({
+    name: 'bound-unknown-task',
+    rows: [0],
+    story: "A subagent is bound to T999, whose file its parent wrote and never committed. A claim is a commit, so T999 is not the caller's: stop. Its data entry has only the trail's next: with no file at HEAD, it has no title, file or author.",
+    commits: claimed,
+    tree: {
+      files: { [task('T999', 'Draft the plan', { at: 'tasks' }).path]: task('T999', 'Draft the plan', { at: 'tasks', owner: owner(ME) }).content },
+      trails: { T999: [
+        open(at('11:30'), ME, proc(4001, P)),
+        did(at('11:40'), ME, { what: 'drafted the outline', next: "draft the plan's risks" }),
+      ] },
+    },
+    view: { alive: [{ pid: 4001, lstart: P }] },
+    call: { run: SUB, task: 'T999' },
+    answer: answer({
+      next: { do: 'stop', task: 'T999', reasons: ['not-yours'], rule: [7] },
+      rules: rules({ used: 1 }),
+      you: [mine],
+      warnings: [{ code: 'uncommitted-task-change', task: 'T999' }],
+      data: data({
+        T999: { next: "draft the plan's risks" },
+        T001: card('T001', TITLE),
+      }),
+      more: more('T999', null),
+    }),
+  }),
 ];

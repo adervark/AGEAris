@@ -36,8 +36,8 @@ created: 2026-10-10
 ## Steps
 
 - [x] Write `docs/ORIENT.md`: definitions, the precedence table, provenance, serialization, budget, versioning, with every §11 fix applied.
-- [x] Write the corpus: every fixture named in §5.2, every case in §8, and the §11 fixtures, marking server-only cases. 65 cases in `tests/orient/cases/`, checked by `tests/orient.test.mjs`.
-- [ ] One independent review of the contract and the corpus (the decision rule below).
+- [x] Write the corpus: every fixture named in §5.2, every case in §8, and the §11 fixtures, marking server-only cases. 82 cases in `tests/orient/cases/`, checked by `tests/orient.test.mjs`.
+- [x] One independent review of the contract and the corpus (the decision rule below): the critic's verdict was revise, with one wrong answer (budget-cuts), eight majors, and minors and lint gaps. All are fixed: the contract pins what two doors could read apart, 17 new cases and 13 changed ones pin it, and the lint catches 14 mutations. The critic's reference implementation, brought to the pinned rules, gives all 82 answers.
 - [x] Ask the operator the §11 open question: answered 2026-10-11 (D6, wait).
 - [ ] Review the cases with the operator.
 
@@ -52,10 +52,10 @@ created: 2026-10-10
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-11, contract and corpus written; `tests/orient.test.mjs` passes, and six mutations of the corpus each fail it
+- **Last touched:** 2026-10-11, the critic's review fixed; `tests/orient.test.mjs` passes, and 14 mutations of the corpus each fail it
 - **In flight:** nothing
-- **On disk:** `docs/ORIENT.md`, `tests/orient/` (builder and 65 cases), `tests/orient.test.mjs`
-- **Resume with:** the independent review, then the operator's review of the cases
+- **On disk:** `docs/ORIENT.md`, `tests/orient/` (builder and 82 cases), `tests/orient.test.mjs`
+- **Resume with:** the operator's review of the cases, and the operator's call on the critic's one open question: §8 cuts `data.now` first, since it is data's last key
 - **Next decision:** the operator's, on the cases
 
 ## Result

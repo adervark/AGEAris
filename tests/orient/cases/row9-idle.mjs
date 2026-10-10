@@ -1,9 +1,10 @@
-import { answer, at, data, did, doing, kase, open, owner, proc, rules, task } from '../corpus.mjs';
+import { answer, at, BASE_YML, data, did, doing, kase, open, owner, proc, rules, task } from '../corpus.mjs';
 
 // Row 9: nothing else applies. Idle, saying whether the backlog is empty or
 // holds nothing ready.
 
 const BEA = owner('cccc3333', { operator: 'bea', profile: 'k' });
+const CARA = owner('eeee5555', { operator: 'cara', profile: 'm' });
 const idle = (reason) => ({ do: 'idle', reasons: [reason], rule: [] });
 
 export default [
@@ -61,6 +62,27 @@ export default [
       next: idle('empty-backlog'),
       rules: rules({ used: 1 }),
       inFlight: [{ task: 'T002', run: 'cccc3333', kind: 'doing', since: at('10:05', 8), state: 'running', by: 'process' }],
+    }),
+  }),
+
+  kase({
+    name: 'expired-boundary',
+    rows: [9],
+    story: "Neither of two claims is expired. T002's newest sign of life is exactly stale_hours old, which still counts. T003's is a commit dated an hour after asOf, as a clock running ahead writes it, which counts too.",
+    future: true,
+    yml: BASE_YML.replace('in_progress: 2', 'in_progress: 3'),
+    commits: [
+      { at: at('09:30', 1), ops: [task('T002', 'Clean the cache'), task('T003', 'Write the changelog')] },
+      { at: at('08:00', 8), by: 'bea', subject: 'claim T002', ops: [task('T002', 'Clean the cache', { at: 'tasks', owner: BEA })] },
+      { at: at('13:00'), by: 'cara', subject: 'claim T003', ops: [task('T003', 'Write the changelog', { at: 'tasks', owner: CARA })] },
+    ],
+    tree: { trails: { T002: [
+      open(at('11:00', 9), 'cccc3333', { operator: 'bea', profile: 'k' }),
+      did(at('12:00', 9), 'cccc3333', { what: 'listed the cache' }),
+    ] } },
+    answer: answer({
+      next: idle('empty-backlog'),
+      rules: rules({ used: 2, limit: 3 }),
     }),
   }),
 ];

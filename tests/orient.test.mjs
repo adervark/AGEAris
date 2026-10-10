@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdir, mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
+import { lstat, mkdir, mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { basename, join } from 'node:path';
 import { test } from 'node:test';
@@ -56,12 +56,58 @@ const ROWS = {
 };
 const FIRST_REASON = { 'stopped-mid-act': 1, blocked: 2, 'in-progress': 3, gate: 4, 'held-elsewhere': 5, expired: 6, 'wip-full': 7, ready: 8, 'empty-backlog': 9, 'none-ready': 9 };
 const CAPS = { title: 160, file: 200, author: 80, next: 240, act: 240, tell: 240, left: 240, blocked: 240, handoff: 480 };
+// The keys a case and its parts may have, so a misspelt one cannot pass as
+// a default.
+const KEYS = {
+  case: ['name', 'rows', 'story', 'serverOnly', 'future', 'repoName', 'board', 'yml', 'state', 'commits', 'tree', 'setup', 'view', 'call', 'answer', 'source'],
+  call: ['operator', 'asOf', 'budget', 'run', 'task', 'remote'],
+  view: ['boot', 'alive', 'gates'],
+  alive: ['pid', 'lstart'],
+  tree: ['remove', 'files', 'trails', 'links'],
+  commit: ['at', 'by', 'subject', 'ops'],
+};
+const AT_START = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z) /;
 
 const number = (id) => Number(id.slice(1));
 const byId = (a, b) => number(a) - number(b) || (a < b ? -1 : a > b ? 1 : 0);
 const rowOf = (next) => (next.rule.length === 1 && next.rule[0] === 7 ? 0 : FIRST_REASON[next.reasons[0]]);
 const plus = (time, minutes) => new Date(Date.parse(time) + minutes * 60000).toISOString().replace('.000Z', 'Z');
 const sorted = (list, compare) => list.every((item, index) => index === 0 || compare(list[index - 1], item) <= 0);
+const only = (value, keys, where) => {
+  for (const key of Object.keys(value)) assert.ok(keys.includes(key), `${where} has no key ${key}`);
+};
+
+// A value of data is well-formed, and one that ends in … was cut at its cap:
+// cut to at most cap - 3 bytes at a code point, less a space, and the three
+// bytes of the …, so cap - 4 to cap bytes (§7).
+function checkText(value, cap, where) {
+  assert.ok(typeof value === 'string' && value !== '', `${where} is a non-empty string`);
+  assert.ok(value.isWellFormed(), `${where} has no lone surrogate`);
+  assert.equal(clean(value, cap), value, `${where} is clean and within its cap`);
+  if (value.endsWith('…')) {
+    const size = Buffer.byteLength(value);
+    assert.ok(size >= cap - 4 && size <= cap, `${where} ends in … at ${size} bytes, so it was not cut at its cap of ${cap}`);
+  }
+}
+
+// Every time a case writes into its repository comes before asOf, unless the
+// case says it tests one after.
+function checkTimes(c) {
+  if (c.future) return;
+  const asOf = Date.parse(c.call.asOf);
+  const before = (time, where) => assert.ok(Date.parse(time) <= asOf, `${where}: ${time} is after asOf`);
+  for (const commit of c.commits || []) {
+    if (typeof commit === 'string') { const time = AT_START.exec(commit)?.[1]; if (time) before(time, 'a commit'); continue; }
+    before(commit.at, 'a commit');
+  }
+  for (const [id, entries] of Object.entries(c.tree?.trails || {})) {
+    for (const item of entries) {
+      let value = item;
+      if (typeof item === 'string') { try { value = JSON.parse(item); } catch { continue; } }
+      if (value && typeof value.ts === 'string' && TIME.test(value.ts)) before(value.ts, `${id}'s trail`);
+    }
+  }
+}
 
 // The fixtures ORIENT.md §11 names, by row.
 function listedFixtures() {
@@ -75,7 +121,13 @@ function listedFixtures() {
 
 function checkCall(c) {
   const { call, view } = c;
-  assert.equal(typeof call.operator, 'string');
+  only(c, KEYS.case, 'the case');
+  only(call, KEYS.call, 'call');
+  only(view, KEYS.view, 'view');
+  for (const process of view.alive) only(process, KEYS.alive, 'view.alive');
+  if (c.tree) only(c.tree, KEYS.tree, 'tree');
+  for (const commit of c.commits || []) if (typeof commit !== 'string') only(commit, KEYS.commit, 'a commit');
+  assert.ok(typeof call.operator === 'string' && call.operator !== '', 'operator');
   if (call.run !== undefined) assert.match(call.run, RUN);
   if (call.task !== undefined) assert.match(call.task, ID);
   assert.match(call.asOf, TIME);
@@ -132,6 +184,20 @@ function checkAnswer(c) {
     if (next.by === 'clock') assert.equal(next.until, plus(next.since, a.rules.liveMinutes));
   }
   if (next.reasons.includes('rewrite-owner')) assert.deepEqual(next.reasons, ['in-progress', 'rewrite-owner']);
+  // The run next names is in inFlight as next describes it, unless inFlight
+  // was cut; a holder is the run you names.
+  if (next.run !== undefined) {
+    const flight = a.inFlight.find((item) => item.task === next.task && item.run === next.run);
+    if (flight) {
+      assert.deepEqual([flight.state, flight.by, flight.since, flight.until], [next.do === 'resume' ? 'closed' : 'running', next.by, next.since, next.until], 'next and inFlight describe its run alike');
+    } else assert.ok(a.cut?.inFlight, `next's run ${next.run} is in inFlight`);
+    const held = a.you.find((item) => item.task === next.task);
+    if (next.do !== 'resume' && held) assert.equal(held.heldBy, next.run, 'next names the holder you names');
+  }
+  for (const item of a.you.filter((entry) => entry.heldBy)) {
+    const flight = a.inFlight.find((entry) => entry.task === item.task && entry.run === item.heldBy);
+    assert.ok(flight ? flight.state === 'running' : a.cut?.inFlight, `${item.task}'s holder is a running run in inFlight`);
+  }
 
   // rules
   const { wip } = a.rules;
@@ -197,13 +263,13 @@ function checkAnswer(c) {
 
   // data: repository text, cleaned and capped, in the order §6 gives
   const { data } = a;
-  if (data.repo) assert.equal(clean(data.repo.name, 80), data.repo.name);
+  if (data.repo) checkText(data.repo.name, 80, 'data.repo.name');
   if (data.spend) {
     assert.ok(data.spend.length >= 1 && data.spend.length <= 10, 'spend');
-    for (const word of data.spend) assert.ok(word && clean(word, 40) === word, `spend word ${word}`);
+    data.spend.forEach((word, index) => checkText(word, 40, `data.spend[${index}]`));
   }
   if (data.now) {
-    assert.ok(data.now.text && clean(data.now.text, 1024) === data.now.text, 'now.text is clean');
+    checkText(data.now.text, 1024, 'data.now.text');
     assert.equal(data.now.file, `${board}STATE.md`);
   }
   const expected = [...new Set([next.task, ...a.you.map((item) => item.task), ...a.take.map((item) => item.task)].filter(Boolean))];
@@ -211,10 +277,9 @@ function checkAnswer(c) {
   assert.deepEqual(tasks, expected.slice(0, tasks.length), 'data: next\'s task, then you\'s, then take\'s');
   for (const id of tasks) {
     const entry = data[id];
-    assert.ok(entry.title && entry.file && entry.author, `data.${id} has its title, file and author`);
-    for (const [key, value] of Object.entries(entry)) {
-      assert.ok(typeof value === 'string' && value !== '' && clean(value, CAPS[key]) === value, `data.${id}.${key} is clean and within its cap`);
-    }
+    const head = ['title', 'file', 'author'].filter((key) => key in entry);
+    assert.ok(head.length === 0 || head.length === 3, `data.${id} has its title, file and author together, or none of them`);
+    for (const [key, value] of Object.entries(entry)) checkText(value, CAPS[key], `data.${id}.${key}`);
     if (id !== next.task) assert.deepEqual(Object.keys(entry).filter((key) => !['title', 'file', 'author', 'next'].includes(key)), [], `data.${id} carries only title, file, author and next`);
     if (entry.handoff) assert.ok(a.you.some((item) => item.task === id), 'a handoff only for a task the caller holds');
     if (entry.blocked) assert.equal(next.do, 'check-unblock');
@@ -263,6 +328,7 @@ test('orient corpus: every answer is in the contract\'s form, within its caps an
   for (const c of cases) {
     try {
       checkCall(c);
+      checkTimes(c);
       checkAnswer(c);
     } catch (error) {
       error.message = `${c.name} (${c.source}): ${error.message}`;
@@ -315,13 +381,33 @@ test('orient corpus: every case builds, and data names the files and authors git
           const { dir, head } = await build(c, caseRoot);
           assert.match(head, /^[0-9a-f]{40}$/);
           const board = c.answer.repo.board;
-          const atHead = git(dir, ['ls-tree', '-r', '--name-only', 'HEAD', '--', board]).split('\n');
+          // Task files are regular files at HEAD: a committed symbolic link is not one.
+          const atHead = git(dir, ['ls-tree', '-r', '-z', 'HEAD', '--', board]).split('\0').filter(Boolean)
+            .map((record) => ({ mode: record.slice(0, record.indexOf(' ')), path: record.slice(record.indexOf('\t') + 1) }))
+            .filter((item) => item.mode === '100644' || item.mode === '100755')
+            .map((item) => item.path);
           const filesOf = (id) => atHead.filter((path) => /^[^/]+\/(?:backlog|tasks|tasks\/done)\/[^/]+$/.test(path) && path.split('/').at(-1).startsWith(`${id}-`));
           if (c.answer.data.repo) assert.equal(clean(basename(dir), 80), c.answer.data.repo.name, 'data.repo.name');
           for (const [id, entry] of Object.entries(c.answer.data).filter(([key]) => ID.test(key))) {
             const files = filesOf(id);
-            assert.deepEqual(files.map((path) => clean(path, 200)), [entry.file], `data.${id}.file is its one file at HEAD`);
+            if (files.length !== 1) {
+              assert.ok(!('title' in entry) && !('file' in entry) && !('author' in entry), `data.${id}: with ${files.length} files at HEAD, no title, file or author`);
+              continue;
+            }
+            assert.equal(clean(files[0], 200), entry.file, `data.${id}.file is its one file at HEAD`);
             assert.equal(clean(git(dir, ['log', '-1', '--format=%an', 'HEAD', '--', files[0]]), 80), entry.author, `data.${id}.author`);
+            assert.ok(entry.title, `data.${id} has a title`);
+          }
+          // A trail is over 1 MiB exactly when it is warned of as truncated.
+          if (!c.answer.cut?.warnings) {
+            const truncated = new Set(c.answer.warnings.filter((item) => item.code === 'trail-truncated').map((item) => item.task));
+            const folder = join(dir, board, 'checkpoints');
+            for (const name of await readdir(folder).catch(() => [])) {
+              const id = /^(T\d{3,6})\.jsonl$/.exec(name)?.[1];
+              const stats = id && await lstat(join(folder, name));
+              if (!stats?.isFile()) continue;
+              assert.equal(stats.size > 1048576, truncated.has(id), `${id}'s trail of ${stats.size} bytes, and its trail-truncated warning`);
+            }
           }
           for (const item of c.answer.you) assert.ok(filesOf(item.task).some((path) => path.startsWith(`${board}tasks/`) && !path.startsWith(`${board}tasks/done/`)), `you: ${item.task} is in tasks/`);
           for (const item of c.answer.take) assert.equal(filesOf(item.task).length, 1, `take: ${item.task} has one file`);

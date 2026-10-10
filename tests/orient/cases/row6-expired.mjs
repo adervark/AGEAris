@@ -83,4 +83,42 @@ export default [
       more: more('T002'),
     }),
   }),
+
+  kase({
+    name: 'expired-through-merge',
+    rows: [6],
+    story: "Another operator's claim was last worked on 51 hours ago, on a side branch that a third operator merged this morning. A merge is no sign of life: the side branch's commits count at their own times, so the claim is expired.",
+    commits: [
+      { at: at('09:30', 1), ops: [task('T002', CACHE)] },
+      { at: at('08:00', 8), by: 'bea', subject: 'claim T002', ops: [task('T002', CACHE, { at: 'tasks', owner: BEA })] },
+      'branch side',
+      { at: at('09:00', 8), by: 'cara', subject: 'T002: say what clean means', ops: [task('T002', CACHE, { at: 'tasks', owner: BEA, rules: '- Done means: no entry older than 30 days.' })] },
+      'checkout main',
+      `${at('10:00')} dan: merge side`,
+    ],
+    answer: answer({
+      next: release(at('09:00', 8)),
+      rules: rules({ used: 1 }),
+      data: data({ T002: card('T002', CACHE, { author: 'cara' }) }),
+      more: more('T002'),
+    }),
+  }),
+
+  kase({
+    name: 'two-expired-claims',
+    rows: [6],
+    story: "Two claims have expired. A migrate: sweep moved T003 into tasks/ for another operator, and nothing has happened to it since, so it has no sign of life at all: it is released first, and next has no since. T002's claim is warned about.",
+    commits: [
+      { at: at('09:30', 1), ops: [task('T002', CACHE), task('T003', NOTES)] },
+      { at: at('09:00', 7), by: 'dan', subject: 'migrate: claims from the old board', ops: [task('T003', NOTES, { at: 'tasks', owner: owner('dddd4444', { operator: 'cara', profile: 'm' }) })] },
+      { at: at('08:00', 8), by: 'bea', subject: 'claim T002', ops: [task('T002', CACHE, { at: 'tasks', owner: BEA })] },
+    ],
+    answer: answer({
+      next: { do: 'release', task: 'T003', reasons: ['expired'], rule: [4] },
+      rules: rules({ used: 2 }),
+      warnings: [{ code: 'claim-expired', task: 'T002' }],
+      data: data({ T003: card('T003', NOTES, { author: 'dan' }) }),
+      more: more('T003'),
+    }),
+  }),
 ];

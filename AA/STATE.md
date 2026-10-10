@@ -24,23 +24,23 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-10T22:38Z · 71 tasks: 22 backlog, 1 WIP (1 in progress), 48 delivered`
+`board · 2026-10-10T23:33Z · 71 tasks: 22 backlog, 1 WIP (1 in progress), 48 delivered`
 
 FLOW · **WIP 1/2** · throughput 11.2/wk (48 in 30d) · cycle time 50th 4m / 85th 33m (n=48)
-FLOW · Little's Law: 1 ÷ 11.2/wk ≈ 14h expected · flow efficiency 99% (touch 3h of 3h, n=1 trails) · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 11.2/wk ≈ 14h expected · flow efficiency 100% (touch 4h of 4h, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T055 | The orient contract and its scenario corpus | adervark | 3h | ⚠ |
+| **IN PROGRESS** 1/2 | T055 | The orient contract and its scenario corpus | adervark | 4h | ⚠ |
 | **BACKLOG** 22 | | `T003` `T004` `T024` `T025` `T047` `T051` +16 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T070 | A run names its process, so a session reads as running or closed | adervark | 3h |  |
-|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 11h |  |
+| **DONE** | T070 | A run names its process, so a session reads as running or closed | adervark | 4h |  |
+|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 12h |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 12h |  |
-|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 32h |  |
-|  | T050 | /aa on Windows without WSL | adervark | 32h |  |
-|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 37h |  |
-|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 37h |  |
-|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 40h |  |
+|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 33h |  |
+|  | T050 | /aa on Windows without WSL | adervark | 33h |  |
+|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 38h |  |
+|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 38h |  |
+|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 41h |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 2d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 2d |  |
 |  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 2d |  |
@@ -74,8 +74,8 @@ FLOW · Little's Law: 1 ÷ 11.2/wk ≈ 14h expected · flow efficiency 99% (touc
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 3d |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 3d |  |
 |  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 3d |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 3d |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 3d |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 4d |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 4d |  |
 |  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 4d |  |
 |  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 4d |  |
 |  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 4d |  |
