@@ -16,13 +16,13 @@ A **run** is one worker on one task. Its id says who it was:
 |---|---|---|
 | `open` | header, written by `ckpt.sh open` | `operator`, `profile`, `session` (full id), `agent`, `model`, `brief`, `budget`, `may_touch` |
 | `did` | after anything the next runner would otherwise pay for again | `what`, `where` |
-| `doing` | **before** anything expensive or irreversible | `act`, `tell`, `cost` |
+| `doing` | **before** anything expensive or irreversible | `act`, `tell`, `cost`; `until` when the act may run silent for long |
 | `blocked` | what stopped the run | `what`, `unblocks` |
 | `end` | whenever a run stops, for any reason | `changed`, `cost`, `left` |
 
 ```json
 {"ts":"2026-09-11T04:45:04Z","run":"e857a8c8","kind":"open","operator":"ade","profile":"k","session":"e857a8c8-03a8-491f-8bbc-d9582ffd1d82","agent":"session","model":"opus-5","brief":"train arm d fold 0","budget":"2 GPU-h","may_touch":"outputs/armd/"}
-{"ts":"2026-09-11T04:52:10Z","run":"e857a8c8","kind":"doing","act":"fold 0, ~2 h GPU","tell":"outputs/armd/last.ckpt exists","cost":"2 GPU-h","next":"bash scripts/run_folds.sh --arm d --resume"}
+{"ts":"2026-09-11T04:52:10Z","run":"e857a8c8","kind":"doing","act":"fold 0, ~2 h GPU","tell":"outputs/armd/last.ckpt exists","cost":"2 GPU-h","until":"2026-09-11T07:22:10Z","next":"bash scripts/run_folds.sh --arm d --resume"}
 {"ts":"2026-09-11T06:52:44Z","run":"e857a8c8","kind":"did","what":"fold 0 reached epoch 5 of 8","where":"outputs/armd/last.ckpt","next":"resume at epoch 5"}
 {"ts":"2026-09-11T06:53:10Z","run":"e857a8c8.a4f2","kind":"blocked","what":"card busy with T038","unblocks":"T038 finishes, ~40 min","next":"re-check nvidia-smi, then resume"}
 {"ts":"2026-09-11T07:10:00Z","run":"e857a8c8","kind":"end","changed":"fold 0 partial","cost":"1.2 GPU-h","left":"do NOT restart from epoch 0","next":"run_folds.sh --arm d --resume"}
@@ -55,6 +55,15 @@ own history stays `git log --invert-grep --grep='^ckpt: '`.
   and never drop one silently (`ckpt.sh live` reports, `ckpt.sh check` locates).
 - **A run is alive if its newest entry is recent**, whether or not anything was
   committed — entries are deliberately not all committed (rule 4).
+- **A `doing` with `until` still ahead is in flight, however quiet the run.**
+  `until` is the latest UTC time the act may still be running without another
+  line. An act that writes nothing for long (a training run, a migration, a
+  long build) sets it: `ckpt.sh log T042 doing … --for 2h`, or `--until
+  <time>`. Do not repeat the act before `until` unless its `tell` shows it has
+  stopped. If it runs over, append another `doing` with a later `until` before
+  the first lapses. A reader counts `until` at most `stale_hours` past its
+  line's `ts`, so it can never hold a task longer than rule 4 allows. Lengthen
+  `stale_hours` where single acts legitimately run for days.
 - **A `doing` with nothing after it in the same run** is work that was in flight
   when the run stopped. Group by run *within one file*: run ids are
   session-derived, so one session on two tasks has the same id in both trails.

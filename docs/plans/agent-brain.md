@@ -1,6 +1,8 @@
 # The agent's brain: orient any agent, on any repo, at team scale
 
-**Status: approved** (v2.2, 2026-10-10). The third Critic pass, on the v2.1→v2.2 diff, approved it. §11 lists what P1a must fix while it writes the contract.
+**Status: approved** (v2.2, 2026-10-10), amended as v2.3 the same day by
+T069. The third Critic pass, on the v2.1→v2.2 diff, approved v2.2. §11 lists
+what P1a must fix while it writes the contract; v2.3 settles §11's N1 and N2.
 v1 was drafted 2026-10-10 from `feature/pm-cockpit` at 3c69485, after an
 interview with the operator, and committed with the T052 claim (00a3f26). It
 was reviewed by an Architect (sound, with required changes R1–R10) and by a
@@ -9,6 +11,31 @@ reviews. v2.1 recorded the operator's decisions D1–D4. A second Critic round
 on v2.1 (684034c) found B4–B7 resolved, and six more blocking issues in §5.2,
 §5.3 and §9, which v2.2 answers. Nothing here is built yet. Each phase in §9 is
 now a task on `AA/`: T053–T068, with the follow-ups.
+
+## Changes since v2.2
+
+The third Critic pass rated one issue the most serious: a long act that writes
+nothing would read as dead after `live_minutes`, so a second session would be
+told to resume it and pay for it twice (§11 N1). The operator asked for it to
+be fixed in the design instead of being left to P1a (T069).
+
+1. **A `doing` can say until when it may run silent.**
+   - `_SCHEMA.md` (here and in the `aa-init` template) adds an optional
+     `until`.
+   - `ckpt.sh log … doing --for 2h` writes it, and `--until <UTC time>` is
+     checked. Either is refused on anything but a `doing`.
+   - A reader counts `until` at most `stale_hours` past its line, so it can
+     never hold a task longer than rule 4 allows.
+2. **There are three states, and only a dead run is resumed** (§5.2):
+   - a live run, or one running silent before its `until`, is in flight and
+     kept off;
+   - a silent `doing` with no `until`, younger than `stale_hours`, is
+     *unknown*, and gets the new `verify` (row 1a): establish from `tell`
+     whether the act is running before touching it;
+   - only a dead run gets `resume`, row 1b, which still checks `tell` first
+     and then reaps.
+3. **The family includes siblings** (§11 N2): every run that shares the root
+   id.
 
 ## Changes since v2.1
 
@@ -263,35 +290,47 @@ because it leaves nothing behind.
 - **The caller holds T** when T is in `tasks/` (not `done/`) and its owner's
   operator is the caller's `operator`. With several held tasks, the oldest
   claim comes first, as in `board.sh:298`.
-- **A run is live** when it has not ended and its newest entry is within
-  `live_minutes` of `asOf`. `live_minutes` is a new `AA.yml` key with a default
-  of 30. It answers one question only: is another worker on this task right
-  now?
-  - It is deliberately not `stale_hours`, which governs whether *other*
-    people's claims are pullable (rule 4) and is unchanged.
-  - A run that is not ended and not live is **dead**.
-  - A long act that writes nothing for `live_minutes` will read as dead. That
-    is why `resume` always says to check the `doing`'s `tell` first
-    (`_SCHEMA.md`, `doing`'s fields), before acting.
-- **The caller's family** is the caller's run, its parent (the id before the
-  `.`) and its children (`<run>.*`). A family is one worker.
-- **Held by another run:** T has a live run outside the caller's family. This
-  includes another session of the same operator (D4). Such a task is never the
-  subject of continue, resume or claim, and it appears under `inFlight`.
+- **A run that has not ended is in one of three states** (v2.3, T069). Only
+  the last may ever be resumed:
+  - **Live:** its newest entry is within `live_minutes` of `asOf`.
+    `live_minutes` is a new `AA.yml` key, default 30, clamped below
+    `stale_hours` × 60. Live answers one question: is another worker on this
+    task right now? It is deliberately not `stale_hours`, which governs whether
+    *other* people's claims are pullable (rule 4) and is unchanged.
+  - **Running silent:** not live, and its last entry is a `doing` whose
+    `until` is still ahead of `asOf`. `until` is counted at most
+    `stale_hours` past that line's `ts` (`_SCHEMA.md`, T069). The act said it
+    may run this long without a word, so it counts as in flight, exactly like
+    a live run.
+  - **Unknown:** not live, its last entry is a `doing` with no `until`, and that
+    `doing` is younger than `stale_hours`. It may be a crash or a quiet act, and
+    orient cannot tell which. So it never says `resume`. It says `verify`
+    (row 1).
+  - **Dead:** anything else that has not ended: a `doing` past its `until`, a
+    `doing` older than `stale_hours`, or a last entry that is not `doing`.
+- **The caller's family** is every run that shares the caller's root, the run
+  id before the first `.`: the session, its subagents and their siblings. A
+  family is one worker. With no `run` given, the family is empty.
+- **Held by another run:** T has a run outside the caller's family that is
+  live or running silent. This includes another session of the same operator
+  (D4). Such a task is never the subject of continue, verify, resume or claim,
+  and it appears under `inFlight`.
 - **WIP** is the number of tasks in progress plus blocked, against
   `wip.in_progress`. This is how `lib/workspace.mjs:1530` (`isWip`,
   `:318-319`), metric 11 (`lib/metrics.mjs:131`) and `board.sh:350` count it
   today. `wip.blocked` is reported, and it gates nothing in orient.
 - **Expired:** a claim of another operator with no sign of life within
   `stale_hours` from anyone but its owner, read from the trail first (rule 4,
-  board.sh's ⊘).
+  board.sh's ⊘). A `doing` whose `until` is still ahead is a sign of life.
+  §11 N3 pins the wording to rule 4's.
 
 **The first row that matches wins:**
 
 | # | Predicate | `next.do` | Rule | Fixtures |
 |---|---|---|---|---|
 | 0 | `task` given (a subagent bound to a brief) | `continue` that task, or `stop` if it is held by another run | 7 | `bound-subagent`, `bound-subagent-parent-doing`, `bound-subagent-other-session` |
-| 1 | The caller holds T. T is not held by another run. Some dead run on T has `doing` as its last entry | `resume` T with `verify: "tell"`: check the `doing`'s `tell` before acting | 3, 6, 8 | `dead-doing`, `dead-doing-30min`, `older-run-dead-doing` |
+| 1a | The caller holds T. T is not held by another run. Some run on T is **unknown**: a silent `doing` without `until`, younger than `stale_hours` | `verify` T: establish from the `doing`'s `tell` whether the act is complete, still running or stopped. Never re-run it first. If it is running, keep off. If it stopped, reap the run with `end`, then resume. If you cannot tell, stop. Reason `act-may-be-running` | 3, 6, 8 | `silent-doing-45min`, `silent-doing-spend`, `dead-doing-30min` |
+| 1b | The caller holds T. T is not held by another run. Some **dead** run on T has `doing` as its last entry | `resume` T with `verify: "tell"`. Check the `tell` first, then append the reaping `end` for the dead run (rule 2's exception), then act | 3, 6, 8 | `dead-doing`, `doing-past-until`, `older-run-dead-doing`, `after-reap-continues` |
 | 2 | The caller holds T, not held by another run, and T is blocked: in the BLOCKED column, `status: blocked`, or its newest entry is `blocked` | `check-unblock` T. The data is `blockedReason` or the entry's `unblocks` | 8 | `dead-blocked`, `blocked-no-trail` |
 | 3 | The caller holds T, in progress, not held by another run. On the server only: not waiting on a pipeline gate | `continue` T. The data is the newest trail `next`, else the Handoff. If the owner line's profile/session is not the caller's, add `rewrite-owner` (rule 3) | 3, 8 | `held-continue`, `trail-beats-handoff`, `idle-own-claim`, `parent-with-live-child` |
 | 4 | Server only: the caller holds T, and T waits on an operator decision gate | `wait` T | — | `gate-waiting` (server-only) |
@@ -621,18 +660,21 @@ The decisions as they were put:
 The pass approved v2.2, on the condition that P1a's `docs/ORIENT.md` and
 `tests/orient/` fix the following. Each is a definition, not architecture.
 
-- **N1. A long silent act reads as dead.** The schema's own example
-  (`_SCHEMA.md:25-26`) goes two hours between `doing` and `did`. With
-  `live_minutes` at 30, a second session would be told `resume`.
-  - `resume` means: do not re-run the act until you have established that it
-    is neither complete nor still running. If you cannot tell, stop.
-  - The reason code `act-may-be-running` is added while the dead `doing` is
-    younger than `stale_hours`.
-  - Fixture: a 45-minute-old `doing` with a spend `cost`.
-  - An optional expected-end field on `doing` (an additive `_SCHEMA.md`
-    change) is left as an operator decision.
-- **N2. Siblings.** A family is every run sharing the root (the id before the
-  first `.`). Also define the family when no `--run` is given.
+- **N1. A long silent act reads as dead. Settled in v2.3 by T069.** The
+  schema's own example (`_SCHEMA.md:25-26`) goes two hours between `doing` and
+  `did`. With `live_minutes` at 30, a second session would have been told
+  `resume`. Now:
+  - a `doing` can carry `until` (`ckpt.sh … --for 2h`), and until then it
+    counts as in flight, like a live run;
+  - a silent `doing` without `until`, younger than `stale_hours`, gets
+    `verify`, never `resume` (row 1a);
+  - `resume` is only for runs that are dead by §5.2's definition, and it still
+    checks `tell` first.
+
+  The `_SCHEMA.md` example now carries `until`. P1a writes the fixtures named
+  in rows 1a and 1b.
+- **N2. Siblings. Settled in v2.3:** §5.2 defines the family as every run
+  sharing the root, and an empty family when no `run` is given.
 - **N3. Expired is rule 4 verbatim.** The trail counts from anyone. Commits
   count only when made by anyone but the reader, with `migrate:` and `ckpt:`
   sweeps excluded, as `board.sh:214` codes it. P1a pins one sweep-exclusion
@@ -651,7 +693,7 @@ The pass approved v2.2, on the condition that P1a's `docs/ORIENT.md` and
 - **N6. No limit.** Row 6 applies only when `wip.in_progress` > 0 (as
   `workspace.mjs:1473` does), with a `no-wip-limit` warning.
 - **N7. Consistent keys.** `live_minutes` is clamped below `stale_hours` × 60,
-  with a fixture.
+  with a fixture. §5.2 now states the clamp.
 - **Also:**
   - Row 0 gets row 1's semantics on a dead `doing`.
   - `inFlight` includes dead `doing`s, marked `live:false`, to match

@@ -559,6 +559,15 @@ test('ckpt.sh check exits 0 when every line parses and 1 when one does not, whic
   assert.equal(stdout, 'clean: 0\nbad: 1\nbad then clean: 1\n');
 });
 
+test('ckpt.sh: a doing says how long it may run silent with --for or --until, and nothing else may (T069)', async () => {
+  const script = new URL('fixtures/board/ckpt-until.sh', import.meta.url);
+  const { stdout } = await exec('bash', [script.pathname, new URL('ckpt.sh', TEMPLATE).pathname]);
+  assert.equal(stdout, [
+    'for 2h: true', 'until: 2030-01-01T00:00:00Z', 'plain did: false',
+    'for 2: 1', 'for 1.5h: 1', 'until tomorrow: 1', 'did --for: 1', 'end --until: 1', 'lines: 4', '',
+  ].join('\n'));
+});
+
 test('board.sh compatibility: a claim is IN PROGRESS with the operator, done is DONE, unblock starts a new stint, and --check is stale until --write', async () => {
   for (const tool of ['bash', 'jq']) {
     await exec('sh', ['-c', `command -v ${tool}`]).catch(() => assert.fail(`${tool} is required for the board.sh compatibility test; install it`));

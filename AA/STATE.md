@@ -24,30 +24,31 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-10T10:34Z · 68 tasks: 22 backlog, 0 WIP (0 in progress), 46 delivered`
+`board · 2026-10-10T10:50Z · 69 tasks: 22 backlog, 0 WIP (0 in progress), 47 delivered`
 
-FLOW · **WIP 0/2** · throughput 10.5/wk (45 in 30d) · cycle time 50th 4m / 85th 33m (n=45)
-FLOW · Little's Law: 0 ÷ 10.5/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 10.7/wk (46 in 30d) · cycle time 50th 4m / 85th 34m (n=46)
+FLOW · Little's Law: 0 ÷ 10.7/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 22 | | `T003` `T004` `T024` `T025` `T047` `T051` +16 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 20h |  |
+| **DONE** | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 16m |  |
+|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 20h |  |
 |  | T050 | /aa on Windows without WSL | adervark | 20h |  |
-|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 25h |  |
-|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 25h |  |
+|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 26h |  |
+|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 26h |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 28h |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 38h |  |
-|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 38h |  |
-|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 38h |  |
+|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 39h |  |
+|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 39h |  |
 |  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 39h |  |
 |  | T040 | Aris under the logo, centred | adervark | 39h |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 39h |  |
+|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 40h |  |
 |  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 40h |  |
 |  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 40h |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 46h |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 46h |  |
-|  | T034 | Silver accents, taken from the logo | adervark | 47h |  |
+|  | T034 | Silver accents, taken from the logo | adervark | 2d |  |
 |  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 2d |  |
 |  | T032 | A forecast from throughput: when, and how many | adervark | 2d |  |
 |  | T030 | An aging WIP chart: what is not moving | adervark | 2d |  |

@@ -20,6 +20,10 @@ created: 2026-10-10
 ## Context
 
 - From T052, the agent's brain design: [`docs/plans/agent-brain.md`](../../docs/plans/agent-brain.md). §5.1–5.4 and §8 of the design, and **every item in §11**, which the third Critic pass made a condition of approval.
+- 2026-10-10, T069 settled §11 N1 and N2 in the design (v2.3): `until` on
+  `doing`, three run states, `verify` before any `resume`, and siblings in the
+  family. Write their fixtures (rows 1a and 1b) rather than re-deciding them.
+  The `until` question in the open list is answered.
 
 ## Steps
 

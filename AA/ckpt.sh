@@ -53,15 +53,33 @@ cfg_list() { # cfg_list <block> — the `  - item` lines under it, one per line
 records()  { jq -Rc 'fromjson? // empty' "$@" 2>/dev/null; }
 badlines() { jq -Rr 'select(length>0) | . as $l | (try (fromjson|empty) catch $l)' "$@" 2>/dev/null | wc -l; }
 
-argify() { # --key value ... -> jq --arg pairs; also eats --commit / --run / --force
-  JQARGS=(); COMMIT_MSG=""; RUN_OVERRIDE=""; AGENT=""
+# A doing that may run silent longer than live_minutes says until when; a
+# reader treats it as possibly running, never dead, until then (_SCHEMA.md).
+until_of() { # until_of <N>m|h|d -> the UTC time that far from now
+  local n="${1%[mhd]}" s
+  case "$n" in ''|*[!0-9]*) die "--for takes minutes, hours or days: 90m, 2h, 1d" ;; esac
+  case "${1: -1}" in m) s=$((n * 60)) ;; h) s=$((n * 3600)) ;; d) s=$((n * 86400)) ;;
+    *) die "--for takes minutes, hours or days: 90m, 2h, 1d" ;; esac
+  jq -nr --argjson s "$s" 'now + $s | floor | todate'
+}
+
+argify() { # --key value ... -> jq --arg pairs; also eats --commit / --run / --force / --for
+  JQARGS=(); COMMIT_MSG=""; RUN_OVERRIDE=""; AGENT=""; UNTIL=""
   while [ $# -gt 0 ]; do
     case "$1" in
       --commit) COMMIT_MSG="${2:-}"; shift 2 ;;
       --run)    RUN_OVERRIDE="${2:-}"; shift 2 ;;
+      --for)    [ $# -ge 2 ] || die "--for needs a value: 90m, 2h, 1d"
+                UNTIL=$(until_of "$2") || exit 1
+                JQARGS+=(--arg until "$UNTIL"); shift 2 ;;
       --force|--delete|--no-commit) FLAGS="${FLAGS:-} $1"; shift ;;
       --*) k="${1#--}"; k="${k//-/_}"; [ $# -ge 2 ] || die "--$k needs a value"
            [ "$k" = agent ] && AGENT="$2"
+           if [ "$k" = until ]; then
+             jq -en --arg u "$2" '$u | fromdateiso8601' >/dev/null 2>&1 \
+               || die "--until must be a UTC time like 2026-10-10T09:00:00Z (or use --for 2h)"
+             UNTIL="$2"
+           fi
            JQARGS+=(--arg "$k" "$2"); shift 2 ;;
       *) die "unexpected argument: $1" ;;
     esac
@@ -145,6 +163,7 @@ cmd_log() { # log <TASK> <kind> [--run ID] [--key value]... [--commit "msg"]
   local f; f=$(file "$task")
   [ -f "$f" ] || die "no trail for $task — open a run first: ckpt.sh open $task --brief '...'"
   FLAGS=""; argify "$@"
+  [ -n "$UNTIL" ] && [ "$kind" != doing ] && die "--for and --until belong on a doing: how long the act may run silent"
   local run="${RUN_OVERRIDE:-$(myrun)}"
   local owner; owner=$(records "$f" | jq -sr --arg r "$run" 'map(select(.run==$r and .kind=="open"))|last|.session // ""')
   [ -z "$owner" ] && warn "no open line for run $run on $task — logging anyway"
@@ -273,6 +292,7 @@ ckpt.sh — AA checkpoints. One JSONL file per task, one line per event.
   ckpt.sh open  <TASK> --brief "..." [--agent LABEL] [--budget "..."] [--no-commit]
         prints the RUN id. --agent opens a run for a subagent you are about to spawn.
   ckpt.sh log   <TASK> <did|doing|blocked|end> [--run ID] [--key "value"]... [--commit "one line"]
+        a doing that may run silent for long: --for 90m|2h|1d (or --until <UTC time>)
   ckpt.sh live  [TASK]              every run, its age, and what is in flight now
   ckpt.sh last  <TASK>              the resume point
   ckpt.sh check [TASK]              every line parses?
