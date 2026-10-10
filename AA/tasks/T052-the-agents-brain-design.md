@@ -31,15 +31,16 @@ comes first, at a scale of hundreds of repositories worked by a team.
   90 ms. Cold ledger builds take 53–122 ms per repository, and ledgers are
   kept in memory only. The numbers are in §2 of the design.
 - The same day, a plain AGE Aris project (an empty RSNA) could not be removed
-  through any path, so its folder was removed by hand. P4 of the design covers
-  that gap.
+  through any path, so its folder was removed by hand. v2 moves that gap to its
+  own task (§6 of the design).
 
 ## Steps
 
 - [x] Interview and draft v1 (`docs/plans/agent-brain.md`).
-- [ ] Architect review of the v1 snapshot.
-- [ ] Critic review of the same snapshot, independent of the Architect's.
-- [ ] Revise to v2 with a changelog. The operator answers D1–D3.
+- [x] Architect review of the v1 snapshot: sound, with required changes R1–R10.
+- [x] Critic review of the same snapshot, independent of the Architect's: revise, B1–B9.
+- [x] Revise to v2 with a changelog ("Changes since v1" in the design).
+- [ ] The operator answers D1–D4. If asked, a second review round (2 subagents left in the budget).
 - [ ] On approval, register P0–P5 as backlog tasks.
 
 ## Decision rules — fixed in advance
@@ -55,9 +56,18 @@ comes first, at a scale of hundreds of repositories worked by a team.
 
 ## Handoff
 
-- Now: v1 drafted, uncommitted until this claim. Next: the Architect review,
-  then the Critic review, of v1 as committed with this claim.
+- Now: v2 committed. It answers both reviews; the trail has their verdicts.
+  Next: the operator's D1–D4 and whether to run a second review round. Then
+  register P0a–P5 as backlog tasks, and the §6 follow-ups as their own tasks.
 
 ## Notes
+
+- 2026-10-10: both reviews found one root fault in v1. It modelled
+  committed state, while AA keeps live state in uncommitted trail lines.
+  v2's repo door became `board.sh --orient` (bash/jq) and its server door
+  extends `lib/brief.mjs`. Both are held to one scenario corpus.
+- The decision rules above say D1–D3. v2 added D4, the same-operator
+  live-run case the Critic raised. The rules are left as written (rule 5).
+  The operator answers D4 as well.
 
 ## Result
