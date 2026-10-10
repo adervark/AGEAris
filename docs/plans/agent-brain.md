@@ -1,6 +1,6 @@
 # The agent's brain: orient any agent, on any repo, at team scale
 
-**Status: pending approval** (v2.2)
+**Status: approved** (v2.2, 2026-10-10). The third Critic pass, on the v2.1→v2.2 diff, approved it. §11 lists what P1a must fix while it writes the contract.
 v1 was drafted 2026-10-10 from `feature/pm-cockpit` at 3c69485, after an
 interview with the operator, and committed with the T052 claim (00a3f26). It
 was reviewed by an Architect (sound, with required changes R1–R10) and by a
@@ -18,8 +18,9 @@ phase in §9 becomes a task on `AA/`.
    - Under the old definition, a crashed session's run counted as live for
      24 hours. D4 then kept a new session off its own task, and row 1 never
      fired.
-   - `resume` now always says to check the `doing`'s `tell` first, which
-     covers a real long act that wrote nothing for 30 minutes.
+   - `resume` now always says to check the `doing`'s `tell` first. That alone
+     does not cover a long act that wrote nothing for 30 minutes. §11 N1
+     says what `resume` must mean.
    - `stale_hours` still governs other people's claims (rule 4).
 2. **Run families** (blocking issue 2). The caller's run, its parent and its
    children are one worker. A subagent is no longer told to stop on its
@@ -210,7 +211,7 @@ warning `uncommitted-task-change` with the ids. A corpus case covers it.
 
 **Committed part** (cacheable). Its key is `(projectId, ledgerSha, oid of the
 board folder's tree at HEAD, paths, backlogFolder, ledger SCHEMA, orient
-version)`, following `lib/brief.mjs:404-406`. It holds nothing that depends on
+version)`, following `lib/brief.mjs:404-407`. It holds nothing that depends on
 the clock:
 
 - the tasks of backlog and WIP, as frontmatter, with `claimedAt`;
@@ -218,7 +219,7 @@ the clock:
   the read is added there and `SCHEMA` is bumped;
 - `ready`, which is `board.sh`'s Definition-of-Ready test: a
   `## Decision rules` section with content, not just the heading
-  (`board.sh:56-77`). This is stricter than rules 4–5, which need decision
+  (`board.sh:56-77`). This is stricter than rule 5, which needs decision
   rules only for a task that will spend. The repository cannot tell which
   tasks spend, so orient takes the stricter reading, as the board's ⚑ already
   does. Every backlog task on this board passes it today;
@@ -614,6 +615,60 @@ The decisions as they were put:
     second worker.
   - The alternative, "continue", would bring back the double spend rule 6
     exists to prevent.
+
+## 11. Must-fix in P1a (third Critic pass, on v2.2)
+
+The pass approved v2.2, on the condition that P1a's `docs/ORIENT.md` and
+`tests/orient/` fix the following. Each is a definition, not architecture.
+
+- **N1. A long silent act reads as dead.** The schema's own example
+  (`_SCHEMA.md:25-26`) goes two hours between `doing` and `did`. With
+  `live_minutes` at 30, a second session would be told `resume`.
+  - `resume` means: do not re-run the act until you have established that it
+    is neither complete nor still running. If you cannot tell, stop.
+  - The reason code `act-may-be-running` is added while the dead `doing` is
+    younger than `stale_hours`.
+  - Fixture: a 45-minute-old `doing` with a spend `cost`.
+  - An optional expected-end field on `doing` (an additive `_SCHEMA.md`
+    change) is left as an operator decision.
+- **N2. Siblings.** A family is every run sharing the root (the id before the
+  first `.`). Also define the family when no `--run` is given.
+- **N3. Expired is rule 4 verbatim.** The trail counts from anyone. Commits
+  count only when made by anyone but the reader, with `migrate:` and `ckpt:`
+  sweeps excluded, as `board.sh:214` codes it. P1a pins one sweep-exclusion
+  set. `workspace.mjs:1515` `_lastSignInGit` excludes by trailer instead,
+  which is existing drift to reconcile. `board.sh:345`'s legend is wrong too.
+- **N4. Resume ends with the reap.** The `resume` contract ends by appending
+  the reaping `end` (rule 2's exception, `ckpt.sh log T end --run <ID>`), so
+  row 1 stops firing. `older-run-dead-doing` adds the state after the reap,
+  where row 3 fires.
+- **N5. Budget holes.**
+  - `uncommitted-task-change` gets one warning per id, capped with a `more`
+    count.
+  - `more.task` names the task by id only, since a file slug is repository
+    text.
+  - `cut` and `remote` are placed in the budget.
+- **N6. No limit.** Row 6 applies only when `wip.in_progress` > 0 (as
+  `workspace.mjs:1473` does), with a `no-wip-limit` warning.
+- **N7. Consistent keys.** `live_minutes` is clamped below `stale_hours` × 60,
+  with a fixture.
+- **Also:**
+  - Row 0 gets row 1's semantics on a dead `doing`.
+  - `inFlight` includes dead `doing`s, marked `live:false`, to match
+    `board.sh`'s ⚙.
+  - The two meanings of "live" are named apart. `readTrail.live` is within
+    `stale_hours`; orient's is within `live_minutes`.
+  - `rewrite-owner` compares the session only.
+  - The byte-for-byte comparison excludes `repo.door` and `remote`.
+  - The sources are stated: HEAD for the task head, the overlay for the
+    Handoff.
+  - A corpus case pins the replacement of invalid UTF-8 for jq and for Node.
+  - Measure (a)'s target when the baseline is 0: it stays 0.
+  - P1b aligns `board.sh:331`'s IN PROGRESS header with `:257` and `:350`.
+  - P6 carries P1b's `global-config` decision rule.
+- **Open, for the operator:** within `live_minutes` after a crash, should a
+  restarting session get `own-task-live-elsewhere` (wait, with `since`)
+  rather than be sent to claim new work?
 
 ## ADR
 

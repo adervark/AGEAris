@@ -1,7 +1,7 @@
 ---
 id: T052
 title: "The agent's brain: a design that orients any agent, on any repo, at team scale"
-status: in_progress
+status: done
 owner: adervark @v/8cd02255 2026-10-10 — independent architect and critic review of docs/plans/agent-brain.md, then revise
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -40,8 +40,8 @@ comes first, at a scale of hundreds of repositories worked by a team.
 - [x] Architect review of the v1 snapshot: sound, with required changes R1–R10.
 - [x] Critic review of the same snapshot, independent of the Architect's: revise, B1–B9.
 - [x] Revise to v2 with a changelog ("Changes since v1" in the design).
-- [ ] The operator answers D1–D4. If asked, a second review round (2 subagents left in the budget).
-- [ ] On approval, register P0–P5 as backlog tasks.
+- [x] The operator answered D1–D4, each following the recommendation. Critic round 2 on v2.1: revise, six blocking issues, answered in v2.2. Critic round 3 on the diff: approve.
+- [x] Registered T053–T068: the phases P0a–P6, plus the hub design, claims across machines, and archiving a plain project.
 
 ## Decision rules — fixed in advance
 
@@ -56,9 +56,8 @@ comes first, at a scale of hundreds of repositories worked by a team.
 
 ## Handoff
 
-- Now: v2 committed. It answers both reviews; the trail has their verdicts.
-  Next: the operator's D1–D4 and whether to run a second review round. Then
-  register P0a–P5 as backlog tasks, and the §6 follow-ups as their own tasks.
+- Done. Nothing in flight. The next work is in the backlog: T053, T054,
+  T055 and T063 can start at once. T055 must apply the design's §11.
 
 ## Notes
 
@@ -71,3 +70,35 @@ comes first, at a scale of hundreds of repositories worked by a team.
   The operator answers D4 as well.
 
 ## Result
+
+**Approved:** `docs/plans/agent-brain.md` v2.2.
+- Agents orient through one ranked, budgeted answer, `aa.orient/1`. Each
+  field states where it came from.
+- It is served by `AA/board.sh --orient` in every AA repository, and by
+  `Cockpit.orient` in AGE Aris. One scenario corpus binds both.
+- It is built from a cached committed part and a live working-tree overlay.
+
+**Reviews:**
+- Architect: sound, with required changes R1–R10.
+- Critic on v1: revise, B1–B9. The root fault was modelling only committed
+  state, while AA keeps live state in uncommitted trail lines.
+- Critic on v2.1: revise, six blocking issues: liveness undefined, run
+  families, the WIP count, gates, the budget, and phase dependencies.
+- Critic on the v2.2 diff: approve, with N1–N7 must-fix in P1a (§11).
+
+**Decisions:** the operator decided D1–D4 on 2026-10-10, each as recommended.
+
+**Cost:** 4 review subagents of the 4 budgeted.
+
+**Registered:** T053–T068.
+
+**Open for the operator:**
+- An optional expected-end field on `doing`.
+- `own-task-live-elsewhere`.
+
+Both are carried in T055.
+
+Trail digest:
+- **8cd02255** (session @v/8cd02255): design approved (v2.2), 16 tasks
+  registered T053-T068 · cost 4 review subagents of 4 · left: nothing in
+  flight; P1a (T055) carries the §11 must-fix list
