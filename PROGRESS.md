@@ -415,3 +415,13 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` 534 of 534, `npm run check` passes. Independent review, two
   rounds: no open defect. The Windows junction is untested.
 - Evidence: the Result of T049.
+
+## 2026-10-11 — T070: a run reads as running or closed
+
+- `ckpt.sh live` decides every run by its `end`, its `until`, its process,
+  then the clock, and prints which. `tests/fixtures/board/ckpt-process.sh`
+  passes 14 reading cases and 9 writing cases on a fake `ps`. It also checks a
+  real process: alive, it reads as running; killed, it reads as closed at once.
+- On this repository the session's run reads `RUNNING  process 15508 alive`. A
+  run opened before the change reads by the clock until its next entry.
+- `npm test` passed 536 of 536, and `npm run check` passed.

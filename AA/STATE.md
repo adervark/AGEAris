@@ -24,20 +24,19 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-10T19:01Z · 70 tasks: 21 backlog, 2 WIP (2 in progress), 47 delivered`
+`board · 2026-10-10T19:13Z · 71 tasks: 22 backlog, 1 WIP (1 in progress), 48 delivered`
 
-FLOW · **WIP 2/2** · throughput 11.0/wk (47 in 30d) · cycle time 50th 4m / 85th 33m (n=47)
-FLOW · Little's Law: 2 ÷ 11.0/wk ≈ 30h expected · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 11.0/wk (47 in 30d) · cycle time 50th 4m / 85th 33m (n=47)
+FLOW · Little's Law: 1 ÷ 11.0/wk ≈ 15h expected · flow efficiency 0% (touch now of 11m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 2/2 | T055 | The orient contract and its scenario corpus | adervark | 8h | ⚠ |
-|  | T070 | A run names its process, so a session reads as running or closed | adervark | ? | ↩ |
-| **BACKLOG** 21 | | `T003` `T004` `T024` `T025` `T047` `T051` +15 more (`--all`) | | | ⚑ 0 not ready |
+| **IN PROGRESS** 1/2 | T055 | The orient contract and its scenario corpus | adervark | 11m |  |
+| **BACKLOG** 22 | | `T003` `T004` `T024` `T025` `T047` `T051` +16 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 8h |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 8h |  |
 |  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 28h |  |
-|  | T050 | /aa on Windows without WSL | adervark | 28h |  |
+|  | T050 | /aa on Windows without WSL | adervark | 29h |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 34h |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 34h |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 37h |  |
@@ -83,8 +82,10 @@ FLOW · Little's Law: 2 ÷ 11.0/wk ≈ 30h expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 3d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
-- ↩ your own idle claim — take it straight back, no staleness wait (rule 3)
+
+**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
+
+- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T070
 <!-- /AA:generated -->
 
 <!--

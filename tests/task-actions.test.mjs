@@ -568,6 +568,43 @@ test('ckpt.sh: a doing says how long it may run silent with --for or --until, an
   ].join('\n'));
 });
 
+test('ckpt.sh: every run reads as running or closed, by end, until, its process on this boot, then the clock; open names the process (T070)', async () => {
+  const script = new URL('fixtures/board/ckpt-process.sh', import.meta.url);
+  const { stdout } = await exec('bash', [script.pathname, new URL('ckpt.sh', TEMPLATE).pathname]);
+  const boot = '"boot":"11111111-2222-3333-4444-555555555555"';
+  assert.equal(stdout, [
+    'ended: closed (ended)',
+    'until-ahead: running (until <time>)',
+    'until-ahead-process-gone: running (until <time>)',
+    'process-alive: running (process 4001 alive)',
+    'process-gone: closed (process 4002 gone)',
+    'pid-reused: closed (process 4003 gone)',
+    'until-past-process-alive: running (process 4001 alive)',
+    'newest-process-counts: closed (process 4009 gone)',
+    'other-boot-recent: running (clock, heard 5m ago)',
+    'other-boot-silent: closed (clock, heard 2h ago)',
+    'clock-heard: running (clock, heard 29m ago)',
+    'clock-silent: closed (clock, heard 31m ago)',
+    'until-capped: closed (clock, heard 25h ago)',
+    'pid-not-a-number: closed (clock, heard 45m ago)',
+    'in flight: T002 T003 T007 T011 ',
+    'stopped: T005 T012 T013 ',
+    `open: {"kind":"open",${boot},"pid":4001,"pstart":"Sat Oct 3 10:00:00 2026"}`,
+    'same process: {"kind":"did","boot":null,"pid":null,"pstart":null}',
+    `new process: {"kind":"did",${boot},"pid":4005,"pstart":"Mon Oct 5 12:00:00 2026"}`,
+    'another session\'s run: {"kind":"did","boot":null,"pid":null,"pstart":null}',
+    'reaping end: {"kind":"end","boot":null,"pid":null,"pstart":null}',
+    `open after the end: {"kind":"open",${boot},"pid":4001,"pstart":"Sat Oct 3 10:00:00 2026"}`,
+    'resumed in a new process: 1 warning, 6 lines',
+    'AA_SESSION_PID first: 4003',
+    'a gone process is not named: [false,false,false]',
+    'found above the shell: [7000,"Tue Oct 6 08:00:00 2026"]',
+    'real: running (process <pid> alive)',
+    'real: closed (process <pid> gone)',
+    '',
+  ].join('\n'));
+});
+
 test('board.sh compatibility: a claim is IN PROGRESS with the operator, done is DONE, unblock starts a new stint, and --check is stale until --write', async () => {
   for (const tool of ['bash', 'jq']) {
     await exec('sh', ['-c', `command -v ${tool}`]).catch(() => assert.fail(`${tool} is required for the board.sh compatibility test; install it`));

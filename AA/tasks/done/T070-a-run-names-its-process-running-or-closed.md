@@ -1,7 +1,7 @@
 ---
 id: T070
 title: "A run names its process, so a session reads as running or closed"
-status: claimed
+status: done
 owner: adervark @b/cab833a2 2026-10-11 — the process check as the failsafe, ckpt.sh live verdicts, design v2.4
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -36,19 +36,19 @@ checked from here.
 
 ## Steps
 
-- [ ] `_SCHEMA.md` here and in the `aa-init` template: `boot`, `pid` and
+- [x] `_SCHEMA.md` here and in the `aa-init` template: `boot`, `pid` and
       `pstart` on `open`, and on a later entry when the run continues in a new
       process. The reading rule, in order: `end`, then `until`, then the
       process, then the clock.
-- [ ] `ckpt.sh` here and in the template: record the process
+- [x] `ckpt.sh` here and in the template: record the process
       (`AA_SESSION_PID`, `CLAUDE_PID`, or an agent CLI found above the shell).
       `ckpt.sh live` says running or closed for every run, with the evidence,
       and tells a `doing` in flight from one stopped mid-act.
-- [ ] `live_minutes` in `AA.yml`, here and in the template.
-- [ ] `board.sh`'s ⚙ legend says a `doing` may be running or stopped.
-- [ ] Tests on a temporary repository: a fake `ps` and boot id for each rule,
+- [x] `live_minutes` in `AA.yml`, here and in the template.
+- [x] `board.sh`'s ⚙ legend says a `doing` may be running or stopped.
+- [x] Tests on a temporary repository: a fake `ps` and boot id for each rule,
       and the real process of the test itself.
-- [ ] Design v2.4: D5 and D6, two states with their evidence, the table
+- [x] Design v2.4: D5 and D6, two states with their evidence, the table
       renumbered, and §11's open question answered.
 
 ## Decision rules — fixed in advance
@@ -70,13 +70,53 @@ checked from here.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-11, claimed
+- **Last touched:** 2026-10-11, done
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Steps above
+- **On disk:** nothing uncommitted
+- **Resume with:** nothing; T071 brings the server to the same reading, and
+  T055 writes it into the orient contract
 - **Next decision:** none
 
 ## Result
+
+**Done.** Every run that has not ended reads as running or closed, and the
+reader says which rule decided it. There is no "maybe" left.
+
+- **The format.** `_SCHEMA.md`, here and in the `aa-init` template. `open`
+  names the run's process: `boot`, `pid` and `pstart`. A later entry names it
+  again when the run goes on in a new process. A run is read in this order:
+  - `end`;
+  - a `doing` whose `until` is ahead;
+  - its process, if it ran on this boot: alive is running, gone is closed;
+  - the clock: `live_minutes`, now in `AA.yml`.
+
+  A `doing` whose run is closed stopped mid-act. Check its `tell`, reap the
+  run, then resume.
+- **The tool.** `ckpt.sh open` records the process from `AA_SESSION_PID`,
+  from `CLAUDE_PID`, or from a `claude`, `codex` or `gemini` process above
+  the shell. `log` records it again after a resume, and a reaping `end` never
+  does. `ckpt.sh live` prints RUNNING or CLOSED, with the evidence, for every
+  run, and lists what is IN FLIGHT apart from what STOPPED MID-ACT. The ⚙
+  legend in `board.sh` says it can be either.
+- **The design**, v2.4:
+  - D5: two states, with the process as the failsafe;
+  - D6: when your own task is held by a running session, wait and name the
+    holder;
+  - the table is renumbered 0–9;
+  - a running run is a sign of life.
+- **Tested.** `tests/fixtures/board/ckpt-process.sh` covers 14 reading cases
+  and 9 writing cases on a fake `ps`. It also uses a real process: alive, it
+  reads as running; once killed, it reads as closed at once. On this
+  repository, the session's own run reads `RUNNING  process 15508 alive`.
+- **Not done here:**
+  - the server still reads a run as live when it wrote within `stale_hours`.
+    T071 changes that;
+  - the installed plugin under `~/.claude` is not synced, because that is
+    `global-config`. Other AA repositories get the change through `aa-init`.
+- `npm test` (536) and `npm run check` pass.
+- Run digest: **cab833a2** (session @b/cab833a2): process fields in the trail
+  format and ckpt.sh; live says running or closed; design v2.4; T071
+  registered · cost 0 · left: the server's own reading is T071.
 
 ## Notes
 
