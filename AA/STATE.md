@@ -24,30 +24,33 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-10T10:50Z · 69 tasks: 22 backlog, 0 WIP (0 in progress), 47 delivered`
+`board · 2026-10-10T19:01Z · 70 tasks: 21 backlog, 2 WIP (2 in progress), 47 delivered`
 
-FLOW · **WIP 0/2** · throughput 10.7/wk (46 in 30d) · cycle time 50th 4m / 85th 34m (n=46)
-FLOW · Little's Law: 0 ÷ 10.7/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 2/2** · throughput 11.0/wk (47 in 30d) · cycle time 50th 4m / 85th 33m (n=47)
+FLOW · Little's Law: 2 ÷ 11.0/wk ≈ 30h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 22 | | `T003` `T004` `T024` `T025` `T047` `T051` +16 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 16m |  |
-|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 20h |  |
-|  | T050 | /aa on Windows without WSL | adervark | 20h |  |
-|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 26h |  |
-|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 26h |  |
-|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 28h |  |
-|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 38h |  |
-|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 39h |  |
-|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 39h |  |
-|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 39h |  |
-|  | T040 | Aris under the logo, centred | adervark | 39h |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 40h |  |
-|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 40h |  |
-|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 40h |  |
-|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 46h |  |
-|  | T035 | The forecast samples days from before the board existed | adervark | 46h |  |
+| **IN PROGRESS** 2/2 | T055 | The orient contract and its scenario corpus | adervark | 8h | ⚠ |
+|  | T070 | A run names its process, so a session reads as running or closed | adervark | ? | ↩ |
+| **BACKLOG** 21 | | `T003` `T004` `T024` `T025` `T047` `T051` +15 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 8h |  |
+|  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 8h |  |
+|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 28h |  |
+|  | T050 | /aa on Windows without WSL | adervark | 28h |  |
+|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 34h |  |
+|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 34h |  |
+|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 37h |  |
+|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 46h |  |
+|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 47h |  |
+|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 47h |  |
+|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 47h |  |
+|  | T040 | Aris under the logo, centred | adervark | 47h |  |
+|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 2d |  |
+|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 2d |  |
+|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 2d |  |
+|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 2d |  |
+|  | T035 | The forecast samples days from before the board existed | adervark | 2d |  |
 |  | T034 | Silver accents, taken from the logo | adervark | 2d |  |
 |  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 2d |  |
 |  | T032 | A forecast from throughput: when, and how many | adervark | 2d |  |
@@ -70,7 +73,7 @@ FLOW · Little's Law: 0 ÷ 10.7/wk ≈ now expected · lead time 85th 35h
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 2d |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 2d |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 2d |  |
-|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 2d |  |
+|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 3d |  |
 |  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 3d |  |
 |  | T020 | A cockpit test fails when run in the early hours | adervark | 3d |  |
 |  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 3d |  |
@@ -80,6 +83,8 @@ FLOW · Little's Law: 0 ÷ 10.7/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 3d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
+- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
+- ↩ your own idle claim — take it straight back, no staleness wait (rule 3)
 <!-- /AA:generated -->
 
 <!--
