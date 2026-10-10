@@ -1,6 +1,6 @@
 # The agent's brain: orient any agent, on any repo, at team scale
 
-**Status: pending approval** (v2)
+**Status: pending approval** (v2.1: the operator's decisions D1–D4 recorded)
 v1 was drafted 2026-10-10 from `feature/pm-cockpit` at 3c69485, after an
 interview with the operator, and committed with the T052 claim (00a3f26). It
 was reviewed by an Architect (sound, with required changes R1–R10) and by a
@@ -442,6 +442,15 @@ P0a, P0b, P1a and P4 can start at once. P1 delivers what was asked first,
 without waiting on scale.
 
 ## 10. Decisions for the operator
+
+**Decided 2026-10-10 by the operator. Each followed the recommendation:**
+
+- **D1:** `board.sh --orient`.
+- **D2:** register the hub design now.
+- **D3:** beside, then replace.
+- **D4:** keep off.
+
+The decisions as they were put:
 
 - **D1. The repo door is `AA/board.sh --orient`, in bash and jq, in every AA
   repository**, rather than a Node CLI in the plugin.
