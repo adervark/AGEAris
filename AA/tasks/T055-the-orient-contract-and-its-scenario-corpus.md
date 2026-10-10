@@ -35,8 +35,9 @@ created: 2026-10-10
 
 ## Steps
 
-- [ ] Write `docs/ORIENT.md`: definitions, the precedence table, provenance, serialization, budget, versioning, with every §11 fix applied.
-- [ ] Write the corpus: every fixture named in §5.2, every case in §8, and the §11 fixtures, marking server-only cases.
+- [x] Write `docs/ORIENT.md`: definitions, the precedence table, provenance, serialization, budget, versioning, with every §11 fix applied.
+- [x] Write the corpus: every fixture named in §5.2, every case in §8, and the §11 fixtures, marking server-only cases. 65 cases in `tests/orient/cases/`, checked by `tests/orient.test.mjs`.
+- [ ] One independent review of the contract and the corpus (the decision rule below).
 - [x] Ask the operator the §11 open question: answered 2026-10-11 (D6, wait).
 - [ ] Review the cases with the operator.
 
@@ -51,11 +52,11 @@ created: 2026-10-10
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-11, claimed
+- **Last touched:** 2026-10-11, contract and corpus written; `tests/orient.test.mjs` passes, and six mutations of the corpus each fail it
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** T070 first (it settles the run states), then the Steps above
-- **Next decision:** none
+- **On disk:** `docs/ORIENT.md`, `tests/orient/` (builder and 65 cases), `tests/orient.test.mjs`
+- **Resume with:** the independent review, then the operator's review of the cases
+- **Next decision:** the operator's, on the cases
 
 ## Result
 
