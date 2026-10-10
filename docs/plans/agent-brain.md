@@ -1,12 +1,60 @@
 # The agent's brain: orient any agent, on any repo, at team scale
 
-**Status: pending approval** (v2.1: the operator's decisions D1–D4 recorded)
+**Status: pending approval** (v2.2)
 v1 was drafted 2026-10-10 from `feature/pm-cockpit` at 3c69485, after an
 interview with the operator, and committed with the T052 claim (00a3f26). It
 was reviewed by an Architect (sound, with required changes R1–R10) and by a
-Critic (revise, blocking issues B1–B9), each separately. v2 answers both
-reviews. Nothing here is built yet. Once approved, each phase in §9 becomes a
-task on `AA/`.
+Critic (revise, blocking issues B1–B9), each separately. v2 answered both
+reviews. v2.1 recorded the operator's decisions D1–D4. A second Critic round
+on v2.1 (684034c) found B4–B7 resolved, and six more blocking issues in §5.2,
+§5.3 and §9, which v2.2 answers. Nothing here is built yet. Once approved, each
+phase in §9 becomes a task on `AA/`.
+
+## Changes since v2.1
+
+1. **"Live" is defined, and it is not `stale_hours`** (blocking issue 1). A
+   run is live if it has not ended and its newest entry is within
+   `live_minutes`, a new AA.yml key that defaults to 30.
+   - Under the old definition, a crashed session's run counted as live for
+     24 hours. D4 then kept a new session off its own task, and row 1 never
+     fired.
+   - `resume` now always says to check the `doing`'s `tell` first, which
+     covers a real long act that wrote nothing for 30 minutes.
+   - `stale_hours` still governs other people's claims (rule 4).
+2. **Run families** (blocking issue 2). The caller's run, its parent and its
+   children are one worker. A subagent is no longer told to stop on its
+   parent's task, and a parent is no longer pushed off by its own child.
+3. **WIP counts the way the code does** (blocking issue 3). Claims are gated
+   when in progress plus blocked reaches `wip.in_progress`. That is what
+   `lib/workspace.mjs:1530` (`isWip`, `:318-319`), metric 11
+   (`lib/metrics.mjs:131`) and `board.sh:350` already count. v2's citation
+   was wrong.
+4. **Gates belong to the server only** (blocking issue 4). Pipeline gates live
+   in the data directory (`lib/pipeline.mjs:342`), so `board.sh` never emits
+   `wait`, and gate cases are marked server-only in the corpus.
+5. **The budget adds up** (blocking issue 5). Every never-cut list is capped by
+   count, `spend` and the repo name move to `data`, and the worst case is
+   computed (about 2.7 KB). The minimum budget is 4 KB.
+6. **Phase dependencies are fixed** (blocking issue 6). The conformance test is
+   its own phase, P1e. P3 depends on P2b. P6 measures the lost-agent metric
+   after rollout and decides D3's "then replace".
+7. **Notes folded in:**
+   - `ready` is board.sh's test, with content in the section, and stricter than
+     rule 5. That is stated.
+   - Any dead `doing` counts, not just the newest run's.
+   - A held, blocked task without a trail entry goes to row 2.
+   - "Holds" and the order of held tasks are defined.
+   - An expired claim is dealt with before new work.
+   - Task-file state comes from HEAD in both doors, with a warning for
+     uncommitted changes.
+   - Flow numbers are out of the committed part.
+   - The server door takes `task=`.
+   - The lost-agent measures are defined mechanically, with numbers.
+   - The serialization rules are pinned in P1a.
+   - P1b and P1d carry a `global-config` decision rule.
+   - "No repository writes" replaces "writes nothing".
+   - A killed dependency is not met.
+   - An orient call is never a sign of life.
 
 ## Changes since v1
 
@@ -53,7 +101,7 @@ that one fault.
    model (R8, B9, D2): network exposure, TLS, per-person auth, mirrors, and the
    ref read per repository. The team works through git from P1 onward.
 9. **No writes anywhere** (R6). `behindRemote` is gone. An opt-in
-   `--remote` uses `git ls-remote`, which writes nothing. No door writes to a
+   `--remote` uses `git ls-remote`, which makes no repository writes. No door writes to a
    clone or its `.git`.
 10. **Capabilities are classified** (B6): `agent-git`, `agent-read`,
     `operator-only` or `ui-only`. The parity test checks the class, so agents
@@ -155,75 +203,123 @@ between `board.sh` and `lib/`.
 
 ### 5.1 What an answer is built from
 
+**Task-file state comes from HEAD in both doors.** A claim is a commit
+(rule 1), so an uncommitted move or edit is not yet a claim. When the working
+tree differs from HEAD under the board's task folders, the answer carries the
+warning `uncommitted-task-change` with the ids. A corpus case covers it.
+
 **Committed part** (cacheable). Its key is `(projectId, ledgerSha, oid of the
 board folder's tree at HEAD, paths, backlogFolder, ledger SCHEMA, orient
-version)`, following `lib/brief.mjs:404-407`. It holds:
+version)`, following `lib/brief.mjs:404-406`. It holds nothing that depends on
+the clock:
 
-- the tasks of backlog and WIP, as frontmatter;
-- `depends`, read from frontmatter: the ledger lacks it (`history.mjs:30`), so
+- the tasks of backlog and WIP, as frontmatter, with `claimedAt`;
+- `depends`, read from frontmatter. The ledger lacks it (`history.mjs:30`), so
   the read is added there and `SCHEMA` is bumped;
-- `ready`, meaning a `## Decision rules` section is present. That is
-  `board.sh:294`'s test, read from the task head the ledger already fetches;
-- flow numbers as `MetricValue`s;
-- delivered tasks, as counts only.
+- `ready`, which is `board.sh`'s Definition-of-Ready test: a
+  `## Decision rules` section with content, not just the heading
+  (`board.sh:56-77`). This is stricter than rules 4–5, which need decision
+  rules only for a task that will spend. The repository cannot tell which
+  tasks spend, so orient takes the stricter reading, as the board's ⚑ already
+  does. Every backlog task on this board passes it today;
+- delivered tasks, as counts only. A killed task is in `done/` but never
+  counts as a met dependency.
+
+`aa.orient/1` carries no flow numbers. Those stay with the brief and the
+project page, keyed as they are now.
 
 **Live overlay** (read on every call):
 
-- working-tree trails through `readTrail` (`lib/tracked.mjs:451`) or
-  `ckpt.sh`. These give runs, alive or dead, the newest `next`, any `doing`
-  with nothing after it, and malformed lines;
-- the `AA.yml` policy, with both WIP limits;
-- the NOW block and whether `STATE.md` is stale (`board.sh --check`);
+- working-tree trails, through `readTrail` (`lib/tracked.mjs:451`) or
+  `ckpt.sh`. They give runs, live or dead by §5.2's definition, each run's
+  newest entry and `next`, every run whose last entry is `doing`, and
+  malformed lines;
+- the `AA.yml` policy: `wip.in_progress`, `wip.blocked`, `stale_hours`,
+  `live_minutes`, `spend`;
+- the NOW block, and whether `STATE.md` is stale (`board.sh --check`);
 - the `## Handoff` section of the tasks the caller holds;
+- the pipeline gates of the project's runs, on the **server door only**
+  (`lib/pipeline.mjs:342`; they are in the data directory, not in the
+  repository);
 - `asOf`.
 
 **Not read:** task bodies beyond the head and the Handoff and Decision-rules
-headings. There is no network unless `--remote` is given, and nothing is
-written anywhere.
+sections. There is no network unless `--remote` is given. **No repository
+writes**, in the clone or its `.git`. An orient call is never a sign of life,
+because it leaves nothing behind.
 
 ### 5.2 `next`: the precedence table
 
-Input: `operator` (git user.name), `run` (the caller's run id, which carries
-its session, and `parent.xxxx` for a subagent), and an optional `task` (a
-subagent bound to its brief).
+**Inputs:**
 
-A task is **held by another run** if it has a live run that is not the
-caller's, whoever owns that run. The same operator counts too: a second
-session is not the same worker (rules 2, 6). Such a task is never the subject
-of continue, resume or claim, and it appears under `inFlight`.
+- `operator`: git user.name;
+- `run`: the caller's run id. A subagent's run id is `parent.xxxx`
+  (`_SCHEMA.md`, run ids; `ckpt.sh:117`);
+- `task`, optional: a subagent bound to its brief.
 
-The first row that matches wins:
+**Definitions:**
 
-| # | Predicate | `next.do` | Rule | Fixture |
+- **The caller holds T** when T is in `tasks/` (not `done/`) and its owner's
+  operator is the caller's `operator`. With several held tasks, the oldest
+  claim comes first, as in `board.sh:298`.
+- **A run is live** when it has not ended and its newest entry is within
+  `live_minutes` of `asOf`. `live_minutes` is a new `AA.yml` key with a default
+  of 30. It answers one question only: is another worker on this task right
+  now?
+  - It is deliberately not `stale_hours`, which governs whether *other*
+    people's claims are pullable (rule 4) and is unchanged.
+  - A run that is not ended and not live is **dead**.
+  - A long act that writes nothing for `live_minutes` will read as dead. That
+    is why `resume` always says to check the `doing`'s `tell` first
+    (`_SCHEMA.md`, `doing`'s fields), before acting.
+- **The caller's family** is the caller's run, its parent (the id before the
+  `.`) and its children (`<run>.*`). A family is one worker.
+- **Held by another run:** T has a live run outside the caller's family. This
+  includes another session of the same operator (D4). Such a task is never the
+  subject of continue, resume or claim, and it appears under `inFlight`.
+- **WIP** is the number of tasks in progress plus blocked, against
+  `wip.in_progress`. This is how `lib/workspace.mjs:1530` (`isWip`,
+  `:318-319`), metric 11 (`lib/metrics.mjs:131`) and `board.sh:350` count it
+  today. `wip.blocked` is reported, and it gates nothing in orient.
+- **Expired:** a claim of another operator with no sign of life within
+  `stale_hours` from anyone but its owner, read from the trail first (rule 4,
+  board.sh's ⊘).
+
+**The first row that matches wins:**
+
+| # | Predicate | `next.do` | Rule | Fixtures |
 |---|---|---|---|---|
-| 0 | `task` given (subagent bound to a brief) | `continue` that task, or `stop` if it is held by another run | 7 | `bound-subagent` |
-| 1 | The caller holds T. No live run on T. T's newest run ended on `doing` | `resume` T: in flight when it stopped; read the trail before acting | 3, 6, 8 | `dead-doing` |
-| 2 | The caller holds T. No live run. The newest entry is `blocked` | `check-unblock` T | 8 | `dead-blocked` |
-| 3 | The caller holds T, in progress, not held by another run, and not waiting on a pipeline gate | `continue` T. The data is the newest trail `next`, else the Handoff | 3, 8 | `held-continue`, `trail-beats-handoff`, `idle-own-claim` |
-| 4 | The caller holds T, but T waits on an operator decision gate | `wait` T | — | `gate-waiting` |
-| 5 | In-progress WIP is at or over its limit, and an expired claim exists (⊘: no sign of life from anyone but its owner within `stale_hours`; local doors only) | `release` T, after reading its trail | 4, 10 | `wip-full-expired` |
-| 6 | In-progress WIP is at or over its limit | `stop`: WIP is full | 10 | `wip-at-limit`, `wip-over` |
-| 7 | A backlog task is ready, with every `depends` done and no claim | `claim` the first by priority, then how many it unblocks, then age | 1, 5, 12 | `claim-best`, `skip-unready`, `skip-unmet-depends` |
-| 8 | Otherwise | `idle`, with reason codes (`empty-backlog`, `none-ready`, `all-blocked`) | — | `idle-*` |
+| 0 | `task` given (a subagent bound to a brief) | `continue` that task, or `stop` if it is held by another run | 7 | `bound-subagent`, `bound-subagent-parent-doing`, `bound-subagent-other-session` |
+| 1 | The caller holds T. T is not held by another run. Some dead run on T has `doing` as its last entry | `resume` T with `verify: "tell"`: check the `doing`'s `tell` before acting | 3, 6, 8 | `dead-doing`, `dead-doing-30min`, `older-run-dead-doing` |
+| 2 | The caller holds T, not held by another run, and T is blocked: in the BLOCKED column, `status: blocked`, or its newest entry is `blocked` | `check-unblock` T. The data is `blockedReason` or the entry's `unblocks` | 8 | `dead-blocked`, `blocked-no-trail` |
+| 3 | The caller holds T, in progress, not held by another run. On the server only: not waiting on a pipeline gate | `continue` T. The data is the newest trail `next`, else the Handoff. If the owner line's profile/session is not the caller's, add `rewrite-owner` (rule 3) | 3, 8 | `held-continue`, `trail-beats-handoff`, `idle-own-claim`, `parent-with-live-child` |
+| 4 | Server only: the caller holds T, and T waits on an operator decision gate | `wait` T | — | `gate-waiting` (server-only) |
+| 5 | An expired claim exists | `release` T after reading its trail, or take it over (rule 4) | 4 | `expired-under-limit`, `wip-full-expired` |
+| 6 | WIP ≥ `wip.in_progress` | `stop`: WIP is full | 10 | `wip-at-limit`, `wip-one-blocked`, `wip-over` |
+| 7 | A backlog task is ready, every `depends` is done and not killed, and it has no claim | `claim` the first by priority, then how many it unblocks, then age | 1, 5, 12 | `claim-best`, `skip-unready`, `skip-unmet-depends`, `skip-killed-depends` |
+| 8 | Otherwise | `idle`, with reason codes `empty-backlog`, `none-ready` or `all-blocked` | — | `idle-*` |
 
 How the table reads:
 
-- **Your own work comes before tidying.** Rows 1–4 come before 5, so an agent
-  with work is never sent to release someone else's claim. A release is a
-  commit, so racing releases resolve in git.
-- **Claims are gated *at* the limit** (row 6). That matches the refusal in
-  `lib/workspace.mjs:1531`.
-- **The blocked limit gates moving a task to blocked,** not claiming. It is
-  reported under `rules.wip.blocked`.
+- **Your own work first, then finishing, then starting.** Rows 1–4 come before
+  5, so an agent with work is never sent to tidy. Row 5 comes before 6–7, so an
+  expired claim is dealt with before new work starts, whether or not WIP is
+  full. That is rule 4, and Kanban's "stop starting, start finishing". A
+  release is a commit, so racing releases resolve in git.
+- **Claims are gated at the limit**, counted as the server counts them (row 6).
 - **`next` is advice; git is the lock.** A claim is still a commit, and a
   conflicting commit decides a race (rule 1).
+- **`board.sh` never emits `wait`.** It cannot see pipeline gates. Gate
+  fixtures are marked server-only in the corpus.
 
 **Warnings**, all structured:
 
 - a malformed trail line;
 - `STATE.md` is stale;
+- `uncommitted-task-change`;
 - an unpushed commit of yours touches a claim;
-- on a board under `deaddrop/` or `pm/`, an older layout is in use.
+- `depends-killed`;
+- an older board layout is in use, under `deaddrop/` or `pm/`.
 
 ### 5.3 The answer, and where each field comes from
 
@@ -231,17 +327,20 @@ How the table reads:
 {
   "schema": "aa.orient/1",
   "asOf": "2026-10-10T07:20:00Z",
-  "repo": { "name": "RSNA", "head": "a1b2c3d", "board": "AA/", "door": "board.sh" },
+  "repo": { "head": "a1b2c3d", "board": "AA/", "door": "board.sh" },
   "next": { "do": "resume", "task": "T061", "run": "e857a8c8", "since": "2026-10-10T05:02:11Z",
-            "reasons": ["dead-doing"], "rule": [3, 6, 8] },
-  "rules": { "wip": { "inProgress": [1, 2], "blocked": [0, 2] }, "staleHours": 24,
-             "spend": ["gpu-hour", "submission"], "notReady": ["T071"] },
+            "verify": "tell", "reasons": ["dead-doing"], "rule": [3, 6, 8] },
+  "rules": { "wip": { "used": 1, "limit": 2, "blocked": [0, 2] }, "staleHours": 24, "liveMinutes": 30,
+             "notReady": ["T071"], "notReadyMore": 0 },
   "you": [ { "task": "T061", "status": "in_progress", "runs": 2, "lastKind": "doing" } ],
   "inFlight": [ { "task": "T058", "run": "91c2ab07", "kind": "doing", "since": "…" } ],
   "take": [ { "task": "T070", "priority": "high", "unblocks": 1, "ageDays": 3 } ],
   "warnings": [ { "code": "trail-malformed", "task": "T055", "line": 14 } ],
   "data": {
-    "T061": { "title": "…", "trailNext": "…", "left": "…", "from": { "file": "AA/checkpoints/T061.jsonl", "author": "ana" } },
+    "repo": { "name": "RSNA" },
+    "spend": ["gpu-hour", "submission"],
+    "T061": { "title": "…", "trailNext": "…", "left": "…", "tell": "…",
+              "from": { "file": "AA/checkpoints/T061.jsonl", "author": "ana" } },
     "now": { "text": "…", "from": { "file": "AA/STATE.md" } }
   },
   "more": { "trail": "AA/ckpt.sh live T061", "task": "AA/tasks/T061-…md", "board": "AA/board.sh" },
@@ -250,26 +349,43 @@ How the table reads:
 ```
 
 - **Structured fields** are everything outside `data`: ids, enums, numbers,
-  times and rule numbers. No byte of task text appears in them, and a test
-  fuzzes this.
-- **`data`** is free text taken from files: titles, trail `next` and `left`,
-  the NOW block, and the Handoff. Each value is:
-  - stripped of control characters, newlines and bidirectional characters;
-  - capped in bytes: title 160 B, trail `next` and `left` 240 B each,
-    Handoff 480 B, NOW 1 KB;
+  times and rule numbers. No byte of repository text appears in them. That
+  includes the repo name and the `spend` words, which moved to `data` in
+  v2.2. A test fuzzes this.
+- **`data`** is free text taken from files: titles, trail `next`, `left` and
+  `tell`, the NOW block, the Handoff, the repo name and the spend words. Each
+  value is:
+  - cleaned by the rules P1a pins;
+  - capped in bytes: title 160 B, trail `next`/`left`/`tell` 240 B each,
+    Handoff 480 B, NOW 1 KB, each spend word 40 B;
   - tagged with the file it came from and, where known, the commit author.
 
   A harness or skill that shows `data` to a model says it is quoted from
   repository files.
 - **Budget:**
-  - `--budget` is in bytes. The default is 8 KB and the minimum 2 KB.
-  - `next`, `rules`, `inFlight` and `warnings` are never cut. They are
-    computed before any truncation and capped by count: 20 runs, 20 warnings,
-    each with a `more` count.
-  - `take`, `you` and `data` are cut from their ends, whole entries only. Each
-    cut is counted in `cut`.
+  - `--budget` is in bytes of the `--json` output. Text output is not
+    budgeted.
+  - The default is 8 KB and the minimum 4 KB.
+  - The never-cut set is `schema`, `asOf`, `repo`, `next`, `rules`,
+    `inFlight`, `warnings` and `more`. Each list in it is capped by count with
+    a `more` count: `inFlight` 10, `warnings` 10, `notReady` 20.
+  - Its worst case is about 2.7 KB: envelope ~250 B, `next` ~250 B,
+    `rules` ~350 B, `inFlight` 10 × ~90 B, `warnings` 10 × ~60 B, `more`
+    ~150 B. It fits under the minimum with room to spare, and P1a's tests
+    prove the bound.
+  - `next` is computed before any truncation.
+  - `data`, then `take`, then `you` are cut from their ends, whole entries
+    only. Each cut is counted in `cut`.
   - The output is never larger than the budget. A property test over random
     states proves it.
+- **Serialization is part of the contract, pinned in P1a:**
+  - invalid UTF-8 is replaced with U+FFFD before measuring;
+  - C0, C1, DEL and the bidi controls (U+202A–202E, U+2066–2069, U+200E–200F,
+    U+061C) are stripped, and newlines become spaces;
+  - truncation falls on a code-point boundary, with `…` counted in the cap;
+  - keys come in the order shown above, in compact JSON with no spaces.
+
+  "The same bytes" between doors therefore includes `data`.
 - **Versioning:**
   - Adding a field is `aa.orient/1`.
   - Removing a field, renaming one, or changing a meaning is
@@ -280,16 +396,19 @@ How the table reads:
 
 | Door | For | Needs | Scope |
 |---|---|---|---|
-| `AA/board.sh --orient [--json] [--budget N] [--run ID] [--task T] [--remote]` | any agent in a clone, any harness | bash, jq, git: what AA already needs | this repository, working tree included |
+| `AA/board.sh --orient [--json] [--budget N] [--run ID] [--task T] [--remote]` | any agent in a clone, any harness | bash, jq ≥ 1.6, git: what AA already needs | this repository |
 | `/aa orient` (the plugin skill) | Claude Code users | the plugin | runs the door above and prints it |
-| `GET /api/orient?project=&budget=&run=` | agents and scripts beside AGE Aris | the server, the API token | one tracked repository, or `all=1` |
+| `GET /api/orient?project=&budget=&run=&task=` | agents and scripts beside AGE Aris | the server, the API token | one tracked repository, or `all=1` |
 
 - `--remote` runs `git ls-remote` against the upstream and reports
-  `remote: { moved: yes|no|unknown, checkedAt }`. It writes nothing.
+  `remote: { moved: yes|no|unknown, checkedAt }`. It makes no repository
+  writes. Credential helpers and ssh may still update their own state.
 - The server reads its own tracked clone. An agent in a linked worktree on
   another branch can therefore get a different answer from the two doors, and
   `repo.head` shows why. The conformance tests pin the clock, the branch and
   the working tree.
+- The `board.sh` door costs 0.11 s on this repository today. jq 1.6 or later
+  has `utf8bytelength`, so the byte caps and the budget are done in jq.
 
 ### 5.5 Scale
 
@@ -356,7 +475,10 @@ What a team lacks until the hub design:
   board ref per repository, and batched blob prefetch.
 - Claims that count across machines before they are pushed.
 
-Both are separate designs (§10).
+Both are separate designs (§6, D2). One constraint carries into the hub
+design now. A hub sees only pushed commits, never the working-tree trails that
+rule 4 counts as signs of life. So a hub must never emit row 5's `release` for
+someone else's claim. It can only report "no pushed sign of life since X".
 
 ## 6. Out of scope here, each its own task
 
@@ -376,7 +498,7 @@ Both are separate designs (§10).
 
 | Risk | Mitigation | Test |
 |---|---|---|
-| Wrong advice, and an agent double-spends | The precedence table, a live run excluding the task, and git staying the lock | The corpus, with rows 0–8 and the B2 cases |
+| Wrong advice, and an agent double-spends | The precedence table, a live run excluding the task, and git staying the lock | The corpus: every §5.2 fixture and every §8 case |
 | The two doors disagree, and agents get lost a new way | One corpus. A conformance test runs both doors on every fixture. `board.sh`'s existing flags join the oracle. | `tests/orient/conformance.test.mjs` |
 | Task text steers an agent | Provenance, `data` only, caps, stripping | A fuzz test: planted text never reaches a structured field |
 | A stale cache | The committed part is keyed by content. The live overlay is never cached. | A test edits `AA.yml`, the NOW block and a trail without committing, and the answer changes |
@@ -386,56 +508,77 @@ Both are separate designs (§10).
 
 ## 8. How it is verified
 
-- **The gate is the scenario corpus** (`tests/orient/`). Each case is a
-  fabricated repository, a working-tree overlay (uncommitted trail lines,
-  `AA.yml` edits), a pinned `asOf`, `run` and `task`, and the expected
-  `next`. Cases:
-  - every row in §5.2;
-  - B2's cases: a live `doing` in a second session of the same operator, at
-    the WIP limit, trail against handoff, an expired claim while you hold
-    work;
+- **The gate is the scenario corpus** (`tests/orient/`). Each case is:
+  - a fabricated repository;
+  - a working-tree overlay: uncommitted trail lines, `AA.yml` edits, an
+    uncommitted task move;
+  - a pinned `asOf`, `run` and `task`;
+  - the expected answer.
+
+  Cases:
+  - every fixture named in §5.2;
+  - a live `doing` in a second session of the same operator;
+  - a crashed session's `doing` 30 minutes old;
+  - a subagent whose parent has an open `doing`;
+  - at the WIP limit, and with one task blocked;
+  - trail against handoff;
+  - an expired claim while you hold work;
   - a claim on another branch;
-  - injected text in a title and a trail;
+  - an uncommitted claim;
+  - injected text in a title, a trail and the NOW block;
+  - multi-byte text at every cap;
   - a malformed line;
-  - a subagent bound to a brief;
-  - a pipeline gate.
+  - a killed dependency;
+  - a pipeline gate (server-only).
 
-  Both doors must produce the expected answer, the same bytes once `data` is
-  removed. This tests correctness, not consistency.
+  Both doors must produce the expected answer byte for byte, except on cases
+  marked server-only. This tests correctness, not just consistency.
 - **Unit tests:**
-  - the budget property;
+  - the budget property, including the never-cut worst case;
   - provenance fuzzing;
-  - cache keys: an edit to `AA.yml`, `STATE.md` or a trail invalidates, and
-    an unrelated commit does not.
-- **The lost-agent metric**, computed from ledgers and trails (`lib/`, a
-  script). Measures:
-  - (a) `doing` acts that a later run repeated;
-  - (b) overlapping claims on one task;
-  - (c) claims made at or over the WIP limit;
-  - (d) time from claim to the first `did`.
+  - cache keys: an edit to `AA.yml`, `STATE.md` or a trail changes the
+    answer, and an unrelated commit does not touch the committed part.
+- **The lost-agent metric**, computed from ledgers and trails by a script in
+  `lib/`. Measures:
+  - **(a) repeated acts:** a `doing` whose `act` is identical, after
+    whitespace is normalised, to a `doing` in an earlier run on the same task,
+    with no `did` or `end` in between that answers it;
+  - **(b) overlapping claims:** two owner lines on one task whose claimed
+    intervals overlap with different operators, or with the same operator and
+    two live runs;
+  - **(c) over-limit claims:** a commit that moves a task into `tasks/` while
+    WIP, counted as in §5.2, is already at `wip.in_progress`;
+  - **(d) start latency:** the time from a claim commit to the first `did` on
+    that task.
 
-  P0 measures a baseline on the three repositories. The target after rollout
-  is no (b) and no (c) on new claims, and (a) down.
+  P0a measures a baseline on the three repositories. P6 measures again 28 days
+  after P1d. Targets:
+  - no (b) and no (c) among new claims;
+  - (a) at or below half its baseline rate per 100 runs;
+  - (d)'s median no worse than baseline.
 - **The LLM smoke test.** Claude Code and Codex CLI each run 3 scenarios
   (dead `doing`, WIP at limit, a ready claim) 10 times. Pass: at least 9 of 10
-  each. It is an `agent-fan-out` spend with its own decision rules in its task.
+  each. It is an `agent-fan-out` spend, with its own decision rules in its
+  task.
 - **Perf:** the §5.5 targets on the §5.5 fixture.
 
 ## 9. Phases, each one task
 
 | # | Task | depends | Done when |
 |---|---|---|---|
-| P0a | **Lost-agent metric**, plus a baseline in PROGRESS.md | — | The metric runs on the three repositories, and the numbers are recorded |
+| P0a | **Lost-agent metric**, plus a baseline in PROGRESS.md | — | Measures (a)–(d) as defined in §8 run on the three repositories, and the numbers are recorded |
 | P0b | **Scale fixture and baseline**, plus a check that the payload is history (N12) | — | `npm run perf` covers 300 repos, with today's misses measured |
-| P1a | **The contract and corpus:** `docs/ORIENT.md` and `tests/orient/` cases, with expected answers | — | The operator has reviewed the cases. Every §5.2 row and every §8 case is present. |
-| P1b | **`AA/board.sh --orient`**, here and in the `aa-init` template | P1a, T004 | It passes the corpus, and `/aa orient` prints it |
-| P1c | **`Cockpit.orient` and `GET /api/orient`**, one repository | P1a | It passes the corpus, and the conformance test against P1b passes |
-| P1d | **AGENTS.md:** `board.sh --orient` beside steps 1–4, here and in the template | P1b | The bootstrap names it, and the four reads stay |
+| P1a | **The contract and corpus:** `docs/ORIENT.md` (definitions, the table, provenance, serialization, budget, versioning) and the `tests/orient/` cases with expected answers | — | Every fixture in §5.2 and every case in §8 is present. The serialization rules are pinned. The operator has reviewed the cases. |
+| P1b | **`AA/board.sh --orient`**, here and in the `aa-init` template, plus `live_minutes` in the template's AA.yml | P1a, T004 | It passes every corpus case not marked server-only, and `/aa orient` prints it. Decision rules: syncing the installed plugin is `global-config`, so a trail entry comes first. |
+| P1c | **`Cockpit.orient` and `GET /api/orient`**, one repository, `task=` included | P1a | It passes every corpus case |
+| P1d | **AGENTS.md:** `board.sh --orient` beside steps 1–4, here and in the template | P1b | The bootstrap names it, and the four reads stay. Same decision rule as P1b. |
+| P1e | **Conformance:** both doors on every shared corpus case, compared byte for byte | P1b, P1c | The test is in `npm test` and passes |
 | P2a | **Disk cache** for the committed part and ledgers | P0b, P1c | The restart target is met, and the cache-key tests pass |
 | P2b | **Slim `/api/workspace`**, with delivered tasks paged, and the UI follows | P0b | The payload target is met, and e2e passes |
-| P3 | **Portfolio:** `all=1`, and Home's Needs-you capped with counts | P1c, P2a | The 300-repo targets are met. Home's payload is under 100 KB. |
+| P3 | **Portfolio:** `all=1`, and Home's Needs-you capped with counts | P1c, P2a, P2b | The 300-repo targets are met. Home and `/api/workspace` are each under 100 KB. |
 | P4 | **Capabilities:** the classified manifest and the parity test | — | Every `data-action` is classified, and no `operator-only` entry is offered to agents |
 | P5 | **LLM smoke test** in two harnesses | P1b, P1d | At least 9 of 10 per scenario per harness |
+| P6 | **After-measurement; decide D3's replace** | P0a, P1d, then 28 days | The §8 targets are measured. If they are met, `board.sh --orient` becomes AGENTS.md step 1, and the four reads become the fallback. |
 | — | Incremental ledgers | P0b, P2a | Registered only if the targets are missed |
 
 P0a, P0b, P1a and P4 can start at once. P1 delivers what was asked first,
