@@ -8,8 +8,8 @@ pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
-2026-10-10: `docs/plans/agent-brain.md`). T053, T054, T055 and T063 can start
-at once, and T055 (the orient contract) must apply the design's §11. Before
+2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
+82 cases, is done (2026-10-11); T053, T054 and T063 can start. Before
 that, the Flow tab's first slice of charts was done (T030–T032:
 aging WIP, cycle-time scatterplot, forecast). The rest of
 `docs/plans/visualisation.md` (CFD, burnup, where a task's time went, process
@@ -24,17 +24,18 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-11T14:33Z · 71 tasks: 22 backlog, 0 WIP (0 in progress), 49 delivered`
+`board · 2026-10-11T14:35Z · 71 tasks: 22 backlog, 0 WIP (0 in progress), 49 delivered`
 
-FLOW · **WIP 0/2** · throughput 11.2/wk (48 in 30d) · cycle time 50th 4m / 85th 33m (n=48)
-FLOW · Little's Law: 0 ÷ 11.2/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 11.4/wk (49 in 30d) · cycle time 50th 5m / 85th 34m (n=49)
+FLOW · Little's Law: 0 ÷ 11.4/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 22 | | `T003` `T004` `T024` `T025` `T047` `T051` +16 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T070 | A run names its process, so a session reads as running or closed | adervark | 19h |  |
+| **DONE** | T055 | The orient contract and its scenario corpus | adervark | now |  |
+|  | T070 | A run names its process, so a session reads as running or closed | adervark | 19h |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 27h |  |
-|  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 27h |  |
+|  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 28h |  |
 |  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 2d |  |
 |  | T050 | /aa on Windows without WSL | adervark | 2d |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 2d |  |
