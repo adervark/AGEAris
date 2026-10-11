@@ -55,7 +55,7 @@ created: 2026-10-10
 - **Last touched:** 2026-10-11, the critic's review fixed; `tests/orient.test.mjs` passes, and 14 mutations of the corpus each fail it
 - **In flight:** nothing
 - **On disk:** `docs/ORIENT.md`, `tests/orient/` (builder and 82 cases), `tests/orient.test.mjs`
-- **Resume with:** the operator's review of the cases (a review page of all 82, story beside answer, built from the corpus 2026-10-11: https://claude.ai/artifact/SR44MUvb4w2BJeHUYMSGWu), and the operator's call on the critic's one open question: §8 cuts `data.now` first, since it is data's last key
+- **Resume with:** the operator's review of the cases (a review page of all 82, story beside answer, built from the corpus 2026-10-11: https://claude.ai/artifact/SR44MUvb4w2BJeHUYMSGWu); the critic's one open question is answered (2026-10-11, the operator: keep it, §8 cuts `data.now` first, since it is data's last key and tied to no task)
 - **Next decision:** the operator's, on the cases
 
 ## Result
