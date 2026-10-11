@@ -423,8 +423,9 @@ numbers, times and fixed paths, and never a byte of repository text.
 |---|---|---|
 | `repo` | `{name}`: the name of the repository's top-level directory | 80 B |
 | `spend` | the `spend` words, at most 10. Left out when there are none | 40 B each |
-| a task id | one entry each, for `next`'s task, then `you`'s, then `take`'s, in their order, without repeats. An entry is kept even when it has no keys | below |
+| `next`'s task id | its entry, when `next` names a task. An entry is kept even when it has no keys | below |
 | `now` | `{text, file}`: the NOW block of `<board>/STATE.md`, between `<!-- <board>:now -->` and `<!-- /<board>:now -->`, and that file's path. Left out when there is no block, or it is empty | 1024 B |
+| a task id | one entry each, for `you`'s tasks, then `take`'s, in their order, leaving out any task already given. An entry is kept even when it has no keys | below |
 
 A task's entry has these keys, in this order. Keys that are empty or do not
 apply are left out:
@@ -490,7 +491,8 @@ newline, and a door prints one after it.
 - Count caps come first (§5, §6).
 - While the answer is over budget, entries are removed one at a time, and the
   answer is measured again, `cut` included, after each removal:
-  1. the last key of `data`, until `data` is empty;
+  1. the last key of `data`, until `data` is empty. So `you`'s and `take`'s
+     tasks go first, then `now`, then `next`'s task, `spend` and `repo`;
   2. then the last entry of `take`;
   3. then the last entry of `you`.
 - Nothing else is ever cut: `schema`, `asOf`, `repo`, `remote`, `next`,

@@ -199,6 +199,14 @@ function ordered(value, kind, where) {
   return result;
 }
 
+// `data`'s keys in §6's order: repo, spend, next's task, now, then the other
+// tasks as given. When next names no task, now follows spend.
+function orderData(data, task) {
+  const { repo, spend, now, ...tasks } = data;
+  const first = task && task in tasks ? { [task]: tasks[task] } : {};
+  return { ...(repo ? { repo } : {}), ...(spend ? { spend } : {}), ...first, ...(now ? { now } : {}), ...tasks, ...first };
+}
+
 // The answer in the contract's order (§6). Throws on a key the contract does
 // not have, so a slip in a case cannot pass as a different answer.
 export function canonical(answer) {
@@ -213,14 +221,13 @@ export function canonical(answer) {
   top.take = top.take.map((item, index) => ordered(item, 'take', `take[${index}]`));
   top.warnings = top.warnings.map((item, index) => ordered(item, 'warnings', `warnings[${index}]`));
   const data = {};
-  if (top.data.repo) data.repo = ordered(top.data.repo, 'dataRepo', 'data.repo');
-  if (top.data.spend) data.spend = top.data.spend;
-  for (const [key, value] of Object.entries(top.data)) {
-    if (key === 'repo' || key === 'spend' || key === 'now') continue;
-    if (!/^T\d{3,}$/.test(key)) throw new Error(`data: unknown key ${key}`);
-    data[key] = ordered(value, 'dataTask', `data.${key}`);
+  for (const [key, value] of Object.entries(orderData(top.data, top.next.task))) {
+    if (key === 'repo') data.repo = ordered(value, 'dataRepo', 'data.repo');
+    else if (key === 'spend') data.spend = value;
+    else if (key === 'now') data.now = ordered(value, 'now', 'data.now');
+    else if (/^T\d{3,}$/.test(key)) data[key] = ordered(value, 'dataTask', `data.${key}`);
+    else throw new Error(`data: unknown key ${key}`);
   }
-  if (top.data.now) data.now = ordered(top.data.now, 'now', 'data.now');
   top.data = data;
   top.more = ordered(top.more, 'more', 'more');
   if (top.cut) top.cut = ordered(top.cut, 'cut', 'cut');
@@ -291,6 +298,7 @@ export function rules({ used = 0, limit = 2, blocked = 0, blockedLimit = 2, stal
 
 // `data` with the base board's repository name, spend words and NOW block
 // around the given task entries. `spend: []` and `now: null` leave them out.
+// answer() moves now to just after next's task.
 export function data(tasks = {}, { name = 'fixture', spend = BASE_SPEND, now = BASE_NOW } = {}) {
   return { repo: { name }, ...(spend?.length ? { spend } : {}), ...tasks, ...(now ? { now } : {}) };
 }
@@ -323,7 +331,7 @@ export function answer(parts, { board = 'AA/' } = {}) {
     inFlight: parts.inFlight || [],
     take: parts.take || [],
     warnings: parts.warnings || [],
-    data: parts.data || data(),
+    data: orderData(parts.data || data(), parts.next.task),
     more: parts.more || more(),
     ...(parts.cut ? { cut: parts.cut } : {}),
   };

@@ -275,6 +275,8 @@ function checkAnswer(c) {
   const expected = [...new Set([next.task, ...a.you.map((item) => item.task), ...a.take.map((item) => item.task)].filter(Boolean))];
   const tasks = Object.keys(data).filter((key) => ID.test(key));
   assert.deepEqual(tasks, expected.slice(0, tasks.length), 'data: next\'s task, then you\'s, then take\'s');
+  const keys = ['repo', 'spend', ...tasks.slice(0, tasks[0] === next.task ? 1 : 0), 'now', ...tasks.slice(tasks[0] === next.task ? 1 : 0)];
+  assert.deepEqual(Object.keys(data), keys.filter((key) => key in data), 'data: repo, spend, next\'s task, now, then the other tasks');
   for (const id of tasks) {
     const entry = data[id];
     const head = ['title', 'file', 'author'].filter((key) => key in entry);
