@@ -24,7 +24,7 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-11T07:47Z · 71 tasks: 22 backlog, 1 WIP (1 in progress), 48 delivered`
+`board · 2026-10-11T07:48Z · 71 tasks: 22 backlog, 1 WIP (1 in progress), 48 delivered`
 
 FLOW · **WIP 1/2** · throughput 11.2/wk (48 in 30d) · cycle time 50th 4m / 85th 33m (n=48)
 FLOW · Little's Law: 1 ÷ 11.2/wk ≈ 14h expected · flow efficiency 100% (touch 12h of 12h, n=1 trails) · lead time 85th 35h

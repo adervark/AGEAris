@@ -55,7 +55,7 @@ created: 2026-10-10
 - **Last touched:** 2026-10-11, NOW moved to just after next's task (§6, §8), so the budget cuts the other tasks before it; `npm test` 542/542
 - **In flight:** nothing
 - **On disk:** `docs/ORIENT.md`, `tests/orient/` (builder and 82 cases), `tests/orient.test.mjs`
-- **Resume with:** the operator's review of the cases on a review page of all 82, story beside answer (the link is in the latest checkpoint entry). The critic's one open question is answered: 2026-10-11, the operator, asked twice, chose to put `data.now` after `next`'s task. a8d0164's "keep it" is withdrawn
+- **Resume with:** the operator's review of the cases on a review page of all 82, story beside answer, built at dcc5124 (https://claude.ai/artifact/74VP3nxRfAXYSeznshtjHL; the earlier pages belong to other accounts). The critic's one open question is answered: 2026-10-11, the operator, asked twice, chose to put `data.now` after `next`'s task. a8d0164's "keep it" is withdrawn
 - **Next decision:** the operator's, on the cases
 
 ## Result
