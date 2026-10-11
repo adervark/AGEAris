@@ -425,3 +425,15 @@ its date, the number, and where the evidence is. Newest last.
 - On this repository the session's run reads `RUNNING  process 15508 alive`. A
   run opened before the change reads by the clock until its next entry.
 - `npm test` passed 536 of 536, and `npm run check` passed.
+
+## 2026-10-11 — T055: the orient contract and its 82 cases
+
+- `docs/ORIENT.md` defines `aa.orient/1`, the answer an agent gets on what to
+  do next. `tests/orient/` holds 82 cases, each a repository and the exact
+  bytes both doors must print; every §5.2 fixture, §8 case and §11 item is in
+  one or the other.
+- One critic review: revise, 17 findings, all fixed. 14 mutations of the
+  corpus each fail its test.
+- The operator waived reviewing the cases (2026-10-11).
+- `npm test` passed 542 of 542, and `npm run check` passed.
+- Evidence: the Result of T055.

@@ -24,22 +24,21 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-11T07:48Z · 71 tasks: 22 backlog, 1 WIP (1 in progress), 48 delivered`
+`board · 2026-10-11T14:33Z · 71 tasks: 22 backlog, 0 WIP (0 in progress), 49 delivered`
 
-FLOW · **WIP 1/2** · throughput 11.2/wk (48 in 30d) · cycle time 50th 4m / 85th 33m (n=48)
-FLOW · Little's Law: 1 ÷ 11.2/wk ≈ 14h expected · flow efficiency 100% (touch 12h of 12h, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 11.2/wk (48 in 30d) · cycle time 50th 4m / 85th 33m (n=48)
+FLOW · Little's Law: 0 ÷ 11.2/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T055 | The orient contract and its scenario corpus | adervark | 12h | ⚠ |
 | **BACKLOG** 22 | | `T003` `T004` `T024` `T025` `T047` `T051` +16 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T070 | A run names its process, so a session reads as running or closed | adervark | 12h |  |
-|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 20h |  |
-|  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 21h |  |
-|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 41h |  |
-|  | T050 | /aa on Windows without WSL | adervark | 41h |  |
-|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 47h |  |
-|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 47h |  |
+| **DONE** | T070 | A run names its process, so a session reads as running or closed | adervark | 19h |  |
+|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 27h |  |
+|  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 27h |  |
+|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 2d |  |
+|  | T050 | /aa on Windows without WSL | adervark | 2d |  |
+|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 2d |  |
+|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 2d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 2d |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 2d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 2d |  |
@@ -49,26 +48,26 @@ FLOW · Little's Law: 1 ÷ 11.2/wk ≈ 14h expected · flow efficiency 100% (tou
 |  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 2d |  |
 |  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 2d |  |
 |  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 2d |  |
-|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 2d |  |
-|  | T035 | The forecast samples days from before the board existed | adervark | 2d |  |
-|  | T034 | Silver accents, taken from the logo | adervark | 2d |  |
-|  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 2d |  |
-|  | T032 | A forecast from throughput: when, and how many | adervark | 2d |  |
-|  | T030 | An aging WIP chart: what is not moving | adervark | 2d |  |
-|  | T031 | A cycle-time scatterplot with the service level | adervark | 2d |  |
-|  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 2d |  |
-|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 2d |  |
-|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 2d |  |
-|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 2d |  |
-|  | T015 | Code spans are not found as CommonMark finds them | adervark | 2d |  |
-|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 2d |  |
-|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 2d |  |
-|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 2d |  |
-|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 2d |  |
-|  | T011 | board.sh loses the history from before a board rename | adervark | 2d |  |
-|  | T013 | The Method view names a settings file the board does not have | adervark | 2d |  |
-|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 2d |  |
-|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 2d |  |
+|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 3d |  |
+|  | T035 | The forecast samples days from before the board existed | adervark | 3d |  |
+|  | T034 | Silver accents, taken from the logo | adervark | 3d |  |
+|  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 3d |  |
+|  | T032 | A forecast from throughput: when, and how many | adervark | 3d |  |
+|  | T030 | An aging WIP chart: what is not moving | adervark | 3d |  |
+|  | T031 | A cycle-time scatterplot with the service level | adervark | 3d |  |
+|  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 3d |  |
+|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 3d |  |
+|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 3d |  |
+|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 3d |  |
+|  | T015 | Code spans are not found as CommonMark finds them | adervark | 3d |  |
+|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 3d |  |
+|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 3d |  |
+|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 3d |  |
+|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 3d |  |
+|  | T011 | board.sh loses the history from before a board rename | adervark | 3d |  |
+|  | T013 | The Method view names a settings file the board does not have | adervark | 3d |  |
+|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 3d |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 3d |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 3d |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 3d |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 3d |  |
@@ -83,7 +82,6 @@ FLOW · Little's Law: 1 ÷ 11.2/wk ≈ 14h expected · flow efficiency 100% (tou
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 4d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 <!-- /AA:generated -->
 
 <!--

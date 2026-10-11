@@ -1,7 +1,7 @@
 ---
 id: T055
 title: "The orient contract and its scenario corpus"
-status: claimed
+status: done
 owner: adervark @b/cab833a2 2026-10-11 — docs/ORIENT.md and the tests/orient corpus
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -39,7 +39,7 @@ created: 2026-10-10
 - [x] Write the corpus: every fixture named in §5.2, every case in §8, and the §11 fixtures, marking server-only cases. 82 cases in `tests/orient/cases/`, checked by `tests/orient.test.mjs`.
 - [x] One independent review of the contract and the corpus (the decision rule below): the critic's verdict was revise, with one wrong answer (budget-cuts), eight majors, and minors and lint gaps. All are fixed: the contract pins what two doors could read apart, 17 new cases and 13 changed ones pin it, and the lint catches 14 mutations. The critic's reference implementation, brought to the pinned rules, gives all 82 answers.
 - [x] Ask the operator the §11 open question: answered 2026-10-11 (D6, wait).
-- [ ] Review the cases with the operator.
+- [x] Review the cases with the operator: waived by the operator, 2026-10-11 ("I dont want to do that"). The critic's review stands in for it.
 
 ## Decision rules — fixed in advance
 
@@ -52,13 +52,38 @@ created: 2026-10-10
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-11, NOW moved to just after next's task (§6, §8), so the budget cuts the other tasks before it; `npm test` 542/542
+- **Last touched:** 2026-10-11, done
 - **In flight:** nothing
 - **On disk:** `docs/ORIENT.md`, `tests/orient/` (builder and 82 cases), `tests/orient.test.mjs`
-- **Resume with:** the operator's review of the cases on a review page of all 82, story beside answer, built at dcc5124 (https://claude.ai/artifact/74VP3nxRfAXYSeznshtjHL; the earlier pages belong to other accounts). The critic's one open question is answered: 2026-10-11, the operator, asked twice, chose to put `data.now` after `next`'s task. a8d0164's "keep it" is withdrawn
-- **Next decision:** the operator's, on the cases
+- **Resume with:** nothing; the doors' runners (design P1b, P1c) are the next work
+- **Next decision:** none
 
 ## Result
+
+**Done, with the operator's review waived.** `docs/ORIENT.md` defines
+`aa.orient/1`: what a caller is told to do next, and why, from a board's
+tasks, trails, settings and git history. `tests/orient/` holds 82 cases, each
+a repository and the exact bytes both doors must print for it.
+
+- **Covered:** every §5.2 fixture, every §8 case and every §11 item. Rows 0–9
+  each have cases; runs are running or closed by `end`, `until`, process and
+  clock (D5); a session held by a running run waits and names it (D6).
+- **Pinned:** the serialization (§7: decoding, cleaning, caps), the budget
+  (§8), and every reading two doors could otherwise take apart, each with its
+  case (§12).
+- **Checked:** `tests/orient.test.mjs` builds every case in a temporary
+  repository and lints every answer. 14 mutations of the corpus each fail it.
+  One critic review (the decision rule's one spend) returned revise; all 17
+  findings were fixed. The critic's own implementation, brought to the pinned
+  rules, gave all 82 answers before the last change; it was lost with the
+  session's scratch folder and was not re-run after `data.now` moved.
+- **Operator's calls:** D5, D6, and `data.now` after `next`'s task, so the
+  budget cuts other tasks first (asked twice; a8d0164's "keep it" withdrawn).
+- **Not done:** the operator did not review the cases, by choice, 2026-10-11.
+  Done means asked for it; the operator waived it.
+- `npm test` 542 of 542, `npm run check` passes.
+- Runs: **cab833a2** (session @b/cab833a2, later on profile k), the whole
+  task, ended 2026-10-11.
 
 ## Notes
 
