@@ -16,7 +16,7 @@ import {
 // Every repository here is a temporary one; no global or system git config.
 process.env.GIT_CONFIG_GLOBAL = os.devNull;
 process.env.GIT_CONFIG_NOSYSTEM = '1';
-delete process.env.AGESIGHT_TRACKED_WRITES;
+delete process.env.AGEARIS_TRACKED_WRITES;
 
 const exec = promisify(execFile);
 const FIXTURES = new URL('./fixtures/tracked/', import.meta.url);
@@ -25,7 +25,7 @@ const T012 = 'T012-a-moved-blocked-task-loses-its-handoff-reason.md';
 const T019 = 'T019-a-working-page-for-all-work-in-progress.md';
 const T030 = 'T030-a-task-in-the-older-layout.md';
 const BRANCH = 'refs/heads/main';
-const MESSAGE = 'claim T012: test the engine\n\nMade in AGE Aris by Repo Operator.\n\nAGESight-Via: ui\n';
+const MESSAGE = 'claim T012: test the engine\n\nMade in AGE Aris by Repo Operator.\n\nAGEAris-Via: ui\n';
 const FAST = { call: 600, hold: 1500, grace: 150, reserve: 500 };
 const temporary = new Set();
 
@@ -38,7 +38,7 @@ function fixture(name) {
 }
 
 async function tempDir(kind) {
-  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), `agesight-tracked-${kind}-`)));
+  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), `agearis-tracked-${kind}-`)));
   temporary.add(directory);
   return directory;
 }
@@ -146,7 +146,7 @@ async function assertCommitted(repo, result, paths) {
   assert.equal(await g(repo.dir, 'status', '--porcelain', '--untracked-files=all', '--', 'AA'), '');
   const gitFiles = await readdir(path.join(repo.dir, '.git'));
   assert.ok(!gitFiles.includes('index.lock'), 'the lock is released');
-  assert.deepEqual(gitFiles.filter((name) => name.startsWith('agesight-')), [], 'no scratch index is left');
+  assert.deepEqual(gitFiles.filter((name) => name.startsWith('agearis-')), [], 'no scratch index is left');
   assert.deepEqual(await markers(repo), [], 'no marker is left');
 }
 
@@ -222,11 +222,11 @@ test('boardPolicy gives the blocked limit, and stale_hours defaults to 24 withou
 
 test('editFrontmatter changes only the named keys of a real task file, and keeps every other byte', async () => {
   const before = await fixture(T004);
-  const after = editFrontmatter(before, { status: 'claimed', owner: 'Repo Operator @agesight/web 2026-10-07 — on it', blockedReason: 'a "quoted" reason' });
+  const after = editFrontmatter(before, { status: 'claimed', owner: 'Repo Operator @agearis/web 2026-10-07 — on it', blockedReason: 'a "quoted" reason' });
   const [oldLines, newLines] = [before.split('\n'), after.split('\n')];
   assert.equal(newLines.length, oldLines.length);
   const changed = oldLines.map((line, index) => (line === newLines[index] ? null : newLines[index])).filter(Boolean);
-  assert.deepEqual(changed, ['status: claimed', 'owner: Repo Operator @agesight/web 2026-10-07 — on it', 'blockedReason: "a \\"quoted\\" reason"']);
+  assert.deepEqual(changed, ['status: claimed', 'owner: Repo Operator @agearis/web 2026-10-07 — on it', 'blockedReason: "a \\"quoted\\" reason"']);
   assert.ok(after.endsWith('owner\'s alone, rule 2)*\n'), 'the body and its trailing newline are kept');
   assert.equal(parseTaskMarkdown(after).fields.blockedReason, 'a "quoted" reason');
   assert.equal(editFrontmatter(before, {}), before, 'no updates, no change');
@@ -289,12 +289,12 @@ test('setResult replaces a placeholder with one line, keeps real content, and ad
 
 test('ownerLine strips #, quotes and line breaks, caps the note, and parseOwner reads it back as the operator\'s own claim through AGE Aris', () => {
   const line = ownerLine('Repo Operator', `#1 "quoted" 'single' \`tick\` “curly”\r\nnext\u2028line ${'n'.repeat(300)}`, new Date('2026-10-07T23:30:00-05:00'));
-  assert.ok(line.startsWith('Repo Operator @agesight/web 2026-10-08 — 1 quoted single tick curly next line n'));
+  assert.ok(line.startsWith('Repo Operator @agearis/web 2026-10-08 — 1 quoted single tick curly next line n'));
   assert.ok(!/[#"'`\r\n\u2028]/.test(line));
   assert.equal(line.split(' — ')[1].length, 120);
   const owner = parseOwner(line);
-  assert.deepEqual([owner.operator, owner.profile, owner.session], ['Repo Operator', 'agesight', 'web']);
-  assert.equal(ownerLine('Repo Operator', '', new Date('2026-10-07T00:00:00Z')), 'Repo Operator @agesight/web 2026-10-07');
+  assert.deepEqual([owner.operator, owner.profile, owner.session], ['Repo Operator', 'agearis', 'web']);
+  assert.equal(ownerLine('Repo Operator', '', new Date('2026-10-07T00:00:00Z')), 'Repo Operator @agearis/web 2026-10-07');
   assert.throws(() => ownerLine(' # ', 'x'), /operator/);
 });
 
@@ -420,7 +420,7 @@ test('probeRepository refuses a task folder where link() fails, leaving no probe
   const repo = await makeRepo();
   const eperm = async () => { throw Object.assign(new Error('operation not permitted'), { code: 'EPERM' }); };
   await assert.rejects(probeRepository(repo.dir, { link: eperm }), (error) => error.code === 'UNSUPPORTED_REPO' && /EPERM/.test(error.message));
-  assert.deepEqual((await readdir(path.join(repo.dir, 'AA', 'tasks'))).filter((name) => name.startsWith('.agesight')), []);
+  assert.deepEqual((await readdir(path.join(repo.dir, 'AA', 'tasks'))).filter((name) => name.startsWith('.agearis')), []);
   await writeFile(path.join(repo.dir, '.git', 'hooks', 'pre-commit'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
   const linked = path.join(await tempDir('worktree'), 'wt-p0a');
   await g(repo.dir, 'worktree', 'add', '--quiet', '-b', 'side', linked);
@@ -428,7 +428,7 @@ test('probeRepository refuses a task folder where link() fails, leaving no probe
   assert.ok(probe.hooks.includes('pre-commit'));
   assert.ok(!probe.hooks.some((name) => name.endsWith('.sample')));
   assert.deepEqual(probe.worktrees, [linked]);
-  assert.deepEqual((await readdir(path.join(repo.dir, 'AA', 'tasks'))).filter((name) => name.startsWith('.agesight')), []);
+  assert.deepEqual((await readdir(path.join(repo.dir, 'AA', 'tasks'))).filter((name) => name.startsWith('.agearis')), []);
 });
 
 // ---- commitTaskChange: the happy paths
@@ -453,7 +453,7 @@ test('a move commits the one file as a rename, with the repository\'s identity a
   assert.deepEqual(changed, ['status: open', 'owner: —']);
   assert.equal(await g(repo.dir, 'show', `${result.commit}:AA/tasks/${T012}`), after.trimEnd());
   assert.equal(await g(repo.dir, 'log', '-1', '--format=%an <%ae>|%cn <%ce>'), 'Repo Operator <repo@example.invalid>|Repo Operator <repo@example.invalid>');
-  assert.equal(await g(repo.dir, 'log', '-1', '--format=%(trailers:key=AGESight-Via,valueonly)'), 'ui');
+  assert.equal(await g(repo.dir, 'log', '-1', '--format=%(trailers:key=AGEAris-Via,valueonly)'), 'ui');
   assert.equal(await g(repo.dir, 'log', '-1', '--format=%s'), 'claim T012: test the engine');
   assert.equal(await g(repo.dir, 'rev-parse', `${result.commit}^`), await g(repo.dir, 'rev-parse', 'HEAD~1'));
   assert.deepEqual([await g(repo.dir, 'diff'), await g(repo.dir, 'diff', '--cached')], [diff, cached], 'other work is byte-identical');
@@ -470,7 +470,7 @@ test('an in-place change on the older layout commits as M, and Done moves a file
     const { body } = parseTaskMarkdown(marked);
     return marked.slice(0, marked.length - body.length) + setResult(body, 'Pass: fold 2 reached 0.91.');
   };
-  const done = await act(repo, { from: `AA/tasks/${T030}`, to: `AA/tasks/done/${T030}`, edit: finish, message: 'T030 done: Pass\n\nAGESight-Via: ui\n' });
+  const done = await act(repo, { from: `AA/tasks/${T030}`, to: `AA/tasks/done/${T030}`, edit: finish, message: 'T030 done: Pass\n\nAGEAris-Via: ui\n' });
   await assertCommitted(repo, done, [`AA/tasks/${T030}`, `AA/tasks/done/${T030}`]);
   const text = await readFile(path.join(repo.dir, 'AA', 'tasks', 'done', T030), 'utf8');
   assert.ok(text.includes('status: done\nowner: adervark @k/b6192924 2026-09-20 — fold 2 of 5\n'), 'the owner line is kept');
@@ -574,14 +574,14 @@ test('refusals leave the repository unchanged: dirty, staged, untracked target, 
   }
 });
 
-test('AGESIGHT_TRACKED_WRITES=0 refuses every write', async () => {
+for (const name of ['AGEARIS_TRACKED_WRITES', 'AGESIGHT_TRACKED_WRITES']) test(`${name}=0 refuses every write`, async () => {
   const repo = await makeRepo();
   const before = await snapshot(repo.dir);
-  process.env.AGESIGHT_TRACKED_WRITES = '0';
+  process.env[name] = '0';
   try {
     await refused(act(repo), 'ACTIONS_OFF');
   } finally {
-    delete process.env.AGESIGHT_TRACKED_WRITES;
+    delete process.env[name];
   }
   await assertUnchanged(repo, before);
 });
@@ -667,7 +667,7 @@ test('a plumbing writer in W2 loses AGE Aris the CAS, and every check runs again
     assert.equal(await g(repo.dir, 'rev-parse', BRANCH), other, `${label}: the other writer's commit stands`);
     assert.equal(await readFile(path.join(repo.dir, 'AA', 'backlog', T012), 'utf8'), original);
     assert.deepEqual(await markers(repo), []);
-    assert.ok(!(await readdir(path.join(repo.dir, '.git'))).some((name) => name === 'index.lock' || name.startsWith('agesight-')));
+    assert.ok(!(await readdir(path.join(repo.dir, '.git'))).some((name) => name === 'index.lock' || name.startsWith('agearis-')));
   }
 });
 
@@ -681,7 +681,7 @@ test('a crash in phase locked: recovery removes the lock it left, puts back a re
   await assert.rejects(act(repo, { seams: { locked: crash } }), /simulated crash/);
   const marker = JSON.parse(await readFile(MARKER(repo), 'utf8'));
   assert.equal(marker.phase, 'locked');
-  assert.match(await readFile(path.join(repo.dir, '.git', 'index.lock'), 'utf8'), /^agesight [0-9a-f]{32}\n$/);
+  assert.match(await readFile(path.join(repo.dir, '.git', 'index.lock'), 'utf8'), /^agearis [0-9a-f]{32}\n$/);
   await rename(path.join(repo.dir, 'AA', 'backlog', T012), marker.aside);
   assert.deepEqual(await recoverInflight(repo.dataDir, repo.dir), [{ marker: MARKER(repo), dir: repo.dir, outcome: 'unchanged' }]);
   await assertUnchanged(repo, before);
@@ -912,7 +912,7 @@ test('a crash after the index is installed but before the lock is released: reco
   const repo = await makeRepo();
   let commit;
   await assert.rejects(act(repo, { seams: { installed: (info) => { commit = info.C; crash(); } } }), /simulated crash/);
-  assert.match(await readFile(path.join(repo.dir, '.git', 'index.lock'), 'utf8'), /^agesight [0-9a-f]{32}\n$/, 'the lock still carries the nonce');
+  assert.match(await readFile(path.join(repo.dir, '.git', 'index.lock'), 'utf8'), /^agearis [0-9a-f]{32}\n$/, 'the lock still carries the nonce');
   const [result] = await recoverInflight(repo.dataDir, repo.dir);
   assert.equal(result.outcome, 'committed');
   await assertCommitted(repo, { commit }, [`AA/backlog/${T012}`, `AA/tasks/${T012}`]);

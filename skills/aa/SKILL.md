@@ -12,7 +12,7 @@ argument through, and show its output **exactly as printed**: no summary, no
 commentary, no next steps unless the user asks.
 
 ```sh
-bash <this skill's base directory>/aa.sh $ARGUMENTS
+bash "<this skill's base directory>/aa.sh" $ARGUMENTS
 ```
 
 - No argument: print the board, then the AGE Aris link. The link carries the
@@ -21,6 +21,9 @@ bash <this skill's base directory>/aa.sh $ARGUMENTS
 - `link`: track this repository in AGE Aris first. Do this only when the user
   asked for it. AGE Aris reads the repository; it changes the board's task
   files only through task actions the user switches on in AGE Aris.
+
+The AGE Aris link carries the sign-in token. Show it to the user, and never
+write it into a file, a commit, a task or a checkpoint trail.
 
 The script changes nothing in the repository. If it prints an error, show it
 and stop; do not try to fix the board.

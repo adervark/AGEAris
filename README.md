@@ -24,17 +24,23 @@ whether the work follows the method the board sets.
 ## Quick start
 
 ```sh
-git clone -b feature/pm-cockpit https://github.com/adervark/AGEAris.git
+git clone https://github.com/adervark/AGEAris.git
 cd AGEAris
 npm start
 ```
 
-The app is on the `feature/pm-cockpit` branch until it is merged; `main`
-holds only the `aa-init` plugin.
+It needs Node 22 or newer. To use it from Claude Code instead, install the
+[plugin](#agent-plugin) and run `/aa`.
 
 Open the sign-in link it prints, `http://127.0.0.1:4310/?token=…`, then choose
 **Explore a sample project** to get six weeks of simulated history to look
 around in. The [ten-minute tour](#a-ten-minute-tour) below walks through it.
+
+The token in that link is kept in `.api-token` in the data folder. To change
+it, stop AGE Aris, delete that file, and start AGE Aris again with `npm start`
+or `/aa`; every browser then needs the new link. When `/aa` started it, AGE
+Aris runs in the background: `kill $(lsof -ti tcp:4310 -sTCP:LISTEN)` stops
+it.
 
 > [!WARNING]
 > If the `claude` CLI is on your `PATH`, **Run with agents** uses real Claude
@@ -169,7 +175,7 @@ where the board lives:
 4. Click any number, a cycle time or a WIP count, to open **Explain**.
 5. Drag a task from In progress to Done, or open it and change its status.
    The move is a commit in the project's own repository, under
-   `.agesight-data/projects/`. (The sample sits at its WIP limit on purpose,
+   `.agearis-data/projects/`. (The sample sits at its WIP limit on purpose,
    so it refuses new work in progress until something finishes.)
 6. Try the pipeline on a project of your own. Choose **Start a new project
    here**, add a task, open it and choose **Run with agents**. With the
@@ -289,7 +295,7 @@ In the Implement stage these run with `--dangerously-skip-permissions`: they
 can run any command your account can, without asking. Every other stage is
 text-only, and Implement starts only after you approve the plan. Agents can
 also be any local command, or an external process that pulls work over the
-API using the token in `.agesight-data/.api-token`. Stages, gates,
+API using the token in `.agearis-data/.api-token`. Stages, gates,
 retry policy, routing, the audit format, and the API are described in
 [the pipeline guide](docs/PIPELINE.md).
 
@@ -330,7 +336,7 @@ shows what it means for that repository before you confirm:
   when you switched on. While another branch is checked out, actions are
   refused; switching off and on again pins the current one.
 - **Who commits.** Commits are authored as the repository's own git identity
-  (`user.name`), carry the trailer `AGESight-Via: ui`, and are never pushed.
+  (`user.name`), carry the trailer `AGEAris-Via: ui`, and are never pushed.
 - **No hooks.** The commit is made with git plumbing under git's index lock:
   the repository's hooks, filters and signing do not run, and no script of the
   repository is run.
@@ -340,7 +346,7 @@ shows what it means for that repository before you confirm:
   each commit names the board line that is now behind.
 
 The choice is kept in AGE Aris's own `project.json`, in its data folder, never
-in the repository. Starting AGE Aris with `AGESIGHT_TRACKED_WRITES=0` turns
+in the repository. Starting AGE Aris with `AGEARIS_TRACKED_WRITES=0` turns
 task actions off for every tracked repository.
 
 Each action changes one task file, its folder included, and nothing else in
@@ -385,7 +391,8 @@ command. This is a deliberate deviation from the board's Done.
 of milliseconds, at most 3 seconds) git's index lock is held, so an agent's
 `git commit` or `git add` can fail once with "index.lock exists"; `ckpt.sh`
 retries, and a bare git command should be retried. If AGE Aris dies while
-holding it, `.git/index.lock` reads `agesight <nonce>` and is safe to delete
+holding it, `.git/index.lock` reads `agearis <nonce>` (`agesight <nonce>` from
+before the rename) and is safe to delete
 when AGE Aris is not running. An action that was interrupted is named on the
 project page, and actions there are refused until you have checked it and
 removed the marker it names.
@@ -394,20 +401,27 @@ Repositories using reftable refs, a sparse checkout, a split index, or a
 detached HEAD, and task folders where hard links fail, cannot have task
 actions switched on.
 
-Scripts can do the same with the `X-AGESight-Token` header:
+Scripts can do the same with the `X-AGEAris-Token` header:
 `POST /api/projects/link` with `{"path": "/absolute/path", "name": "optional"}`
 returns the project, and `DELETE /api/projects/<id>` stops tracking it.
 
 ## Storage and behavior
 
-AGE Aris was first called AGESight. Names that are part of stored data or of
-integrations keep that name so existing workspaces and scripts keep working:
-the `AGESight-Via` commit trailer, the `X-AGESight-Token` API header, the
-`.agesight-data` folder, the `AGESIGHT_*` environment variables, and the
-`@agesight/web` claim on owner lines.
+AGE Aris was first called AGESight. It writes only its own names now, and still
+reads each old one, so existing data folders, scripts, task files and commits
+keep working: the `AGESight-Via` commit trailer, the `X-AGESight-Token` header
+and `agesight_token` cookie, the `AGESIGHT_*` environment variables (agents get
+both), the `@agesight/web` claim on owner lines, an `agesight <nonce>` index
+lock left by a crash, and the browser's `agesight.*` keys, which move to
+`agearis.*` once. A `.agesight-data` folder moves to `.agearis-data` beside it
+the first time AGE Aris starts on either name, from `AGEARIS_DATA_DIR`,
+`AGESIGHT_DATA_DIR` or the default, and the old path is left as a link to it;
+`/aa` does this for `~/.agesight-data` when it next starts AGE Aris. Stop an
+AGE Aris still running on the old folder first: once the folder has moved, it
+refuses the link until it is restarted.
 
 The first version manages local project repositories under
-`.agesight-data/projects/<project-id>/`. Each project contains:
+`.agearis-data/projects/<project-id>/`. Each project contains:
 
 ```text
 project.json                  project settings
@@ -424,13 +438,13 @@ pipeline/runs/R001/           one run: events.jsonl audit log, RUN.md, attempts/
 
 A tracked repository's folder holds only `project.json`, which records the
 repository's path, its board folder, and whether task actions are on and which
-branch they pin. `.agesight-data/tracked-inflight/` holds a marker while a task
+branch they pin. `.agearis-data/tracked-inflight/` holds a marker while a task
 action on a tracked repository is being written, so an interrupted one is
 settled, or named, when AGE Aris starts again.
 
-Agents are registered in `.agesight-data/registry/agents.json`, a separate git
-repository. Agents start in `.agesight-data/workdirs/` unless configured
-otherwise. `.agesight-data/.api-token` holds the local API token.
+Agents are registered in `.agearis-data/registry/agents.json`, a separate git
+repository. Agents start in `.agearis-data/workdirs/` unless configured
+otherwise. `.agearis-data/.api-token` holds the local API token.
 
 The task's directory determines its state. Creating, editing, or moving work
 records a commit in that project's repository; a task action on a tracked
@@ -449,7 +463,7 @@ that directory, including each project's `.git`, to retain work and history.
 Choose another data directory or port when starting:
 
 ```sh
-AGESIGHT_DATA_DIR=/path/to/workspace PORT=4400 npm start
+AGEARIS_DATA_DIR=/path/to/workspace PORT=4400 npm start
 ```
 
 The server listens on `127.0.0.1`. This release uses one local operator, with the
@@ -487,9 +501,19 @@ skills/aa-init/               existing agent task-board integration
 
 ## Agent plugin
 
-The existing `aa-init` plugin remains available for scaffolding task boards
-into other repositories. Its installation and protocol documentation are in
-[the plugin guide](docs/PLUGIN.md).
+The AGE Aris plugin, `agearis`, gives Claude Code two commands: `/aa-init`
+sets up an AA board in a repository, and `/aa` shows a repository's board and
+the link to its page in AGE Aris, starting AGE Aris when it is not running
+(`/aa open` opens the page). Install it from a terminal, in one line:
+
+```sh
+claude plugin marketplace add adervark/AGEAris && claude plugin install agearis@agearis
+```
+
+The first `/aa` checks for Node 22 or newer, git, jq and curl, and lists
+whatever is missing, with how to install it. On Windows it runs in the Git
+Bash that Claude Code uses there, with no WSL; that has not been tried on a
+Windows machine yet. More in [the plugin guide](docs/PLUGIN.md).
 
 ## License
 

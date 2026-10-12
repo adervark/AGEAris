@@ -81,7 +81,7 @@ containing `{` or `}` (the template placeholder) is untyped; other characters
 outside `[a-z0-9 _-]` are removed. Untyped items use the project reference.
 
 **Owner line.** `owner:` reads `<operator> @<profile>/<session> <date> — <note>`.
-`ade @agesight/web …` is written by the UI or by `startRun`: bookkeeping, not
+`ade @agearis/web …` is written by the UI or by `startRun`: bookkeeping, not
 ownership. Any other `@profile/session` is an agent session, identified as
 `<operator> @<profile>/<session>`.
 
@@ -91,7 +91,7 @@ ownership. Any other `@profile/session` is an agent session, identified as
    agent, "via run R001" (a human stage gives nothing here);
 3. an agent claim: the agent identity from the owner line, or
    `<operator> (trail)` when only a checkpoint trail marks it;
-4. Unassigned, including `@agesight/web` owner lines and owners with no
+4. Unassigned, including `@agearis/web` owner lines and owners with no
    session.
 
 ## Reproducibility
@@ -292,12 +292,12 @@ What moved in a window, one list each:
 
 - **Agent claim:** a WIP task where, at `asOf`, a run on it has started and is
   not finished, its checkpoint trail has any entry (committed or live), or its
-  owner line has an `@profile/session` other than `@agesight/web`. Every other
+  owner line has an `@profile/session` other than `@agearis/web`. Every other
   WIP task is a human claim and gets aging only; it is listed in `excluded`.
 - **Excluded:** a task with a run that needs a person (it is a decision).
 - **Last sign of life** is the latest of:
   - non-sweep commits touching the task file or its trail, except commits with
-    the `AGESight-Via: ui` trailer (edits made in AGE Aris, whoever made them),
+    the `AGEAris-Via: ui` trailer (edits made in AGE Aris, whoever made them),
     and except commits authored by the workspace operator when the claimant's
     operator is someone else;
   - the `ts` of committed checkpoint lines (for a `ckpt:` commit, the lines'
@@ -379,9 +379,9 @@ files. It is a precedent, not an oracle: AGE Aris differs on purpose here.
 | Aging reference | Per-type P85, else global, with no minimum (280) | Per-`typeKey` P85 when the type has ≥5 finishes, else the project P85; `insufficient` under 5 | Same idea, with a minimum sample. |
 | Type normalization | Lowercase, `{…}` → untyped, other characters removed (89–91) | The same (`typeKey`); the stored value is kept as written; untyped items use the project reference | Kept identical on purpose. |
 | Owner parsing | Reduced to the operator name (85–88) | The same operator parse, keeping `@profile/session` too | Every AGE Aris repository commits as the workspace operator, so only the profile and session tell agents apart. |
-| Who owns a task | The parsed `owner:` operator | `assignee` → the active run's agent ("via run Rxxx") → the agent-claim identity → Unassigned; `@agesight/web` owner lines never make anyone the owner | The UI writes `owner:` for whoever clicks, and so does `startRun`; treating that as ownership would put every task the manager touched under the manager. |
-| Staleness: whose commits count | Ignores the **viewer's** commits (`user.name`) unless the claim is the viewer's own (161, 282–288) | Commits with `AGESight-Via: ui` never count, whoever authored them; the workspace operator's commits do not count unless the claimant's operator is the workspace operator | In the default setup the claimant's operator is always the workspace operator, so an author rule alone would let the manager's UI edits keep dead agent claims alive. |
-| Staleness: scope | Every WIP claim | Agent claims only; human `@agesight/web` claims get aging only; tasks whose run waits on a person are excluded | Human UI claims are never written to again, so they would always look stale. |
+| Who owns a task | The parsed `owner:` operator | `assignee` → the active run's agent ("via run Rxxx") → the agent-claim identity → Unassigned; `@agearis/web` owner lines never make anyone the owner | The UI writes `owner:` for whoever clicks, and so does `startRun`; treating that as ownership would put every task the manager touched under the manager. |
+| Staleness: whose commits count | Ignores the **viewer's** commits (`user.name`) unless the claim is the viewer's own (161, 282–288) | Commits with `AGEAris-Via: ui` never count, whoever authored them; the workspace operator's commits do not count unless the claimant's operator is the workspace operator | In the default setup the claimant's operator is always the workspace operator, so an author rule alone would let the manager's UI edits keep dead agent claims alive. |
+| Staleness: scope | Every WIP claim | Agent claims only; human `@agearis/web` claims get aging only; tasks whose run waits on a person are excluded | Human UI claims are never written to again, so they would always look stale. |
 | Staleness: floor | — | A claim is never staler than its own cycle start | An old trail from an earlier cycle must not make a fresh claim stale. |
 | Trail source | The **working tree**, `$CK/*.jsonl` (102) | Committed trail lines from git; the live working-tree trail only for a value computed now, labelled not reproducible | Past values must be reproducible; today's value must not miss uncommitted entries. |
 | Windows | 30-day throughput by default | 7 days against the previous 4 weeks; percentiles over 90 days, minimum 5 | A daily view against a steadier baseline. |

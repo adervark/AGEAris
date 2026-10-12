@@ -372,3 +372,68 @@ its date, the number, and where the evidence is. Newest last.
   profile lands on the project page with every API call answering 200.
 - `npm test` 513 of 513, `npm run check` passes. Installed copy synced.
 - Evidence: the Result of T045.
+
+## 2026-10-09 — T046 and T048: a one-line install, named AGE Aris
+
+- **T046:** `/aa` names every missing prerequisite at once (git, jq, curl,
+  Node 22), with one install line for the OS, before anything runs; five tests
+  on stubbed PATHs pass under bash 5.3 and 3.2.57. The server starts through
+  Node's detached spawn, so `/aa` no longer needs Linux's `setsid`; it leads
+  its own session, outlives the command and restarts when its code changes,
+  also where `node` is a link to `node-22`. The log holding the sign-in link
+  is now 600.
+- **T048:** the plugin, marketplace and package are `agearis`. A clean-config
+  install of this checkout gives `agearis@agearis` with `aa` and `aa-init`.
+- `npm test` 518 of 518, `npm run check` passes. One independent review, two
+  rounds: nothing blocking; every finding fixed.
+- Evidence: the Results of T046 and T048.
+
+## 2026-10-09 — T050: /aa on Windows without WSL
+
+- `/aa` now runs natively in Git Bash, the shell Claude Code uses on Windows.
+  It hands Node and AGE Aris Windows paths, finds a tracked project by its
+  Windows path in any letter case, and opens the page through `cmd`. The
+  server and its git children start hidden, and missing tools get `winget`
+  lines. `.gitattributes` keeps the scripts LF in an autocrlf clone.
+- Six tests on a stubbed Git Bash; Linux unchanged apart from a UUID guard on
+  the project id. `npm test` 523 of 523, `npm run check` passes. Independent
+  review, three rounds: no open defect.
+- Not tested on a Windows machine. Known limits: ASCII-only case-folding,
+  `subst` drives; restarting an old server off Linux is T051.
+- Evidence: the Result of T050.
+
+## 2026-10-09 — T049: every name is AGE Aris's, the old ones still read
+
+- AGE Aris writes only its own names: the `AGEAris-Via` trailer, the
+  `X-AGEAris-Token` header and `agearis_token` cookie, `.agearis-data`,
+  `AGEARIS_*`, `@agearis/web`, `agearis <nonce>` locks, `agearis.*` browser
+  keys. Each old AGESight name is still read, each with a test.
+- `.agesight-data` moves to `.agearis-data` the first time AGE Aris starts on
+  it, leaving a link. The operator's two folders were moved, with copies kept
+  first. Afterwards: the same projects and token, and the old header and
+  cookie still answer 200.
+- `npm test` 534 of 534, `npm run check` passes. Independent review, two
+  rounds: no open defect. The Windows junction is untested.
+- Evidence: the Result of T049.
+
+## 2026-10-11 — T070: a run reads as running or closed
+
+- `ckpt.sh live` decides every run by its `end`, its `until`, its process,
+  then the clock, and prints which. `tests/fixtures/board/ckpt-process.sh`
+  passes 14 reading cases and 9 writing cases on a fake `ps`. It also checks a
+  real process: alive, it reads as running; killed, it reads as closed at once.
+- On this repository the session's run reads `RUNNING  process 15508 alive`. A
+  run opened before the change reads by the clock until its next entry.
+- `npm test` passed 536 of 536, and `npm run check` passed.
+
+## 2026-10-11 — T055: the orient contract and its 82 cases
+
+- `docs/ORIENT.md` defines `aa.orient/1`, the answer an agent gets on what to
+  do next. `tests/orient/` holds 82 cases, each a repository and the exact
+  bytes both doors must print; every §5.2 fixture, §8 case and §11 item is in
+  one or the other.
+- One critic review: revise, 17 findings, all fixed. 14 mutations of the
+  corpus each fail its test.
+- The operator waived reviewing the cases (2026-10-11).
+- `npm test` passed 542 of 542, and `npm run check` passed.
+- Evidence: the Result of T055.

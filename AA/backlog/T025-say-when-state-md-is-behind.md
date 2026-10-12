@@ -37,7 +37,7 @@ The project page names the tasks whose AGE Aris changes STATE.md has not caught 
   before it is spawned. A worker that fails twice stops the fan-out; the
   task goes back to its owner's session.
 - `data-migration`: tests write only to temporary repositories. Nothing here
-  touches `.agesight-data` or any tracked repository on this machine.
+  touches `.agearis-data` or any tracked repository on this machine.
 - `push`: none.
 - Done means every Acceptance line in the plan's section for T025 holds, and
   `npm test` and `npm run check` pass on the commit.

@@ -2,7 +2,7 @@
 #
 # AA/RULES.md is identical in every repo that uses this convention.
 # THIS FILE IS THE ONLY THING THAT DIFFERS. A ledger, a lab, a law firm and a
-# novel run the same rules and change the six values below.
+# novel run the same rules and change the seven values below.
 #
 # Deliberately flat: `key: value` and `- item`, nothing nested beyond one
 # level. board.sh parses it with sed. A config that needs a parser is a
@@ -34,6 +34,12 @@ wip:
 # Shorten it for fast work, lengthen it where a single item legitimately runs
 # for days without a commit.
 stale_hours: 24
+
+# A run counts as running while it was heard from within this many minutes,
+# but only when its process cannot be checked from here (another machine, or
+# none recorded). On its own machine the process decides: alive is running,
+# gone is closed (checkpoints/_SCHEMA.md). Always below stale_hours.
+live_minutes: 30
 
 # Where measured results land as they happen (rule 9).
 log: PROGRESS.md

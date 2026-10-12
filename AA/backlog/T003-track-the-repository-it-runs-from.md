@@ -20,16 +20,16 @@ without the operator first moving its data folder by hand.
 
 ## Context
 
-- `npm start` keeps its data in `<current folder>/.agesight-data`. Started from
+- `npm start` keeps its data in `<current folder>/.agearis-data`. Started from
   this repository, that folder is inside it, and `linkProject` refuses the
   link because the agents' commits could pick the data up.
-- The workaround since 2026-10-07: the data lives in `~/.agesight-data`, and
-  AGE Aris starts with `AGESIGHT_DATA_DIR=~/.agesight-data npm start`.
+- The workaround since 2026-10-07: the data lives in `~/.agearis-data`, and
+  AGE Aris starts with `AGEARIS_DATA_DIR=~/.agearis-data npm start`.
 
 ## Steps
 
 - [ ] Choose between a default outside the working tree (such as
-  `~/.agesight-data`), `npm start` setting the folder, and accepting a data
+  `~/.agearis-data`), `npm start` setting the folder, and accepting a data
   folder git ignores.
 - [ ] Implement and test it, and update README's "Run the application".
 

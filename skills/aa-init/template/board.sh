@@ -340,7 +340,7 @@ render() { # the whole board, as markdown, on stdout
       # ---- the legend, only for marks actually drawn
       print ""
       print "age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)"
-      if (n_fly)      print "- ⚙ a run is IN FLIGHT (a `doing` nothing closed) — `ckpt.sh live` before you spend anything"
+      if (n_fly)      print "- ⚙ a `doing` nothing closed: in flight, or stopped mid-act if its run is closed — `ckpt.sh live` says which, before you spend anything"
       if (n_aging)    print "- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock"
       if (n_exp)      print "- ⊘ no sign of life in " staleh "h from anyone but the owner — the claim has expired and is pullable (rule 4)"
       if (n_mine)     print "- ↩ your own idle claim — take it straight back, no staleness wait (rule 3)"

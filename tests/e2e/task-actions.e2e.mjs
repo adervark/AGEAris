@@ -1,7 +1,7 @@
 // End to end: the task drawer's action bar in headless Chrome, on an AGE Aris
 // project and on tracked AA boards in both layouts. Run with `npm run e2e`; it is outside `npm test` because it needs a
-// browser. Puppeteer is not a dependency: it is loaded from AGESIGHT_PUPPETEER
-// (a node_modules folder that holds it) and Chrome from AGESIGHT_CHROME.
+// browser. Puppeteer is not a dependency: it is loaded from AGEARIS_PUPPETEER
+// (a node_modules folder that holds it) and Chrome from AGEARIS_CHROME.
 //
 // The server is the real one, on a free port with a fresh temporary data
 // folder. Nothing outside that folder and the temporary tracked repositories
@@ -22,12 +22,12 @@ import { createServer } from '../../server.mjs';
 process.env.GIT_CONFIG_GLOBAL = os.devNull;
 process.env.GIT_CONFIG_NOSYSTEM = '1';
 
-const PUPPETEER_DIR = process.env.AGESIGHT_PUPPETEER || path.join(os.homedir(), '.npm/_npx/668c188756b835f3/node_modules/');
-const CHROME = process.env.AGESIGHT_CHROME || path.join(os.homedir(), '.cache/puppeteer/chrome/linux-152.0.7977.75/chrome-linux64/chrome');
+const PUPPETEER_DIR = process.env.AGEARIS_PUPPETEER || path.join(os.homedir(), '.npm/_npx/668c188756b835f3/node_modules/');
+const CHROME = process.env.AGEARIS_CHROME || path.join(os.homedir(), '.cache/puppeteer/chrome/linux-152.0.7977.75/chrome-linux64/chrome');
 
 function loadPuppeteer() {
   try { return createRequire(path.join(PUPPETEER_DIR, '/'))('puppeteer'); } catch (error) {
-    throw new Error(`Puppeteer was not found in ${PUPPETEER_DIR} (${error.message}). Set AGESIGHT_PUPPETEER to a node_modules folder that holds it, and AGESIGHT_CHROME to a Chrome binary.`);
+    throw new Error(`Puppeteer was not found in ${PUPPETEER_DIR} (${error.message}). Set AGEARIS_PUPPETEER to a node_modules folder that holds it, and AGEARIS_CHROME to a Chrome binary.`);
   }
 }
 
@@ -67,7 +67,7 @@ async function trackedBoard(name, files) {
 }
 
 async function api(method, url, body) {
-  const response = await fetch(`${base}/api${url}`, { method, headers: { 'x-agesight-token': server.apiToken, ...(body ? { 'content-type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  const response = await fetch(`${base}/api${url}`, { method, headers: { 'x-agearis-token': server.apiToken, ...(body ? { 'content-type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined });
   const value = await response.json();
   assert.ok(response.ok, `${method} ${url}: ${value.error}`);
   return value;
@@ -84,7 +84,7 @@ const until = async (check, message) => {
 };
 
 before(async () => {
-  root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-e2e-')));
+  root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agearis-e2e-')));
   server = await createServer({ dataDir: path.join(root, 'data'), registryOptions: { seed: () => [] }, cockpitOptions: { buildWaitMs: 60_000 } });
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
@@ -447,12 +447,12 @@ async function openTracked(board, id) {
 async function assertCommittedByUi(board) {
   assert.equal(await git(board.dir, 'status', '--porcelain'), '', 'index and working tree are clean');
   assert.equal(await git(board.dir, 'rev-parse', '--abbrev-ref', 'HEAD'), 'main');
-  assert.match(await git(board.dir, 'log', '-1', '--format=%an%n%B'), /^ade\n[\s\S]*AGESight-Via: ui/);
+  assert.match(await git(board.dir, 'log', '-1', '--format=%an%n%B'), /^ade\n[\s\S]*AGEAris-Via: ui/);
 }
 
 async function switchOnByApi(board) {
   const project = () => api('GET', '/workspace').then((workspace) => workspace.projects.find((entry) => entry.id === board.id));
-  const asked = await fetch(`${base}/api/projects/${board.id}`, { method: 'PATCH', headers: { 'x-agesight-token': server.apiToken, 'content-type': 'application/json' }, body: JSON.stringify({ version: (await project()).version, taskActions: { on: true } }) }).then((response) => response.json());
+  const asked = await fetch(`${base}/api/projects/${board.id}`, { method: 'PATCH', headers: { 'x-agearis-token': server.apiToken, 'content-type': 'application/json' }, body: JSON.stringify({ version: (await project()).version, taskActions: { on: true } }) }).then((response) => response.json());
   assert.equal(asked.code, 'CONFIRM');
   await api('PATCH', `/projects/${board.id}`, { version: (await project()).version, taskActions: { on: true }, confirm: asked.confirmToken });
 }
@@ -504,7 +504,7 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   await toastSays('^Claimed T001 · [0-9a-f]{7} on main · not pushed');
   const claimed = await trackedFile(board, 'AA/tasks/T001-read-the-archive.md');
   assert.match(claimed, /^status: claimed$/m);
-  assert.match(claimed, /^owner: ade @agesight\/web \d{4}-\d{2}-\d{2} — /m);
+  assert.match(claimed, /^owner: ade @agearis\/web \d{4}-\d{2}-\d{2} — /m);
   await assert.rejects(readFile(path.join(board.dir, 'AA/backlog/T001-read-the-archive.md')), 'the file left backlog/');
   await assertCommittedByUi(board);
 
@@ -588,7 +588,7 @@ test('a live run holds every action on its task: the bar says why, and the serve
   assert.match(await page.$eval(release, (element) => document.getElementById(element.getAttribute('aria-describedby')).textContent), /c0ffee00[\s\S]*Every action waits for it to end/);
   await page.click(release);
   const listed = (await api('GET', '/workspace')).tasks.find((entry) => entry.id === `${board.id}:T003`);
-  const refused = await fetch(`${base}/api/tasks/${encodeURIComponent(listed.id)}/actions`, { method: 'POST', headers: { 'x-agesight-token': server.apiToken, 'content-type': 'application/json' }, body: JSON.stringify({ action: 'release', version: listed.version }) });
+  const refused = await fetch(`${base}/api/tasks/${encodeURIComponent(listed.id)}/actions`, { method: 'POST', headers: { 'x-agearis-token': server.apiToken, 'content-type': 'application/json' }, body: JSON.stringify({ action: 'release', version: listed.version }) });
   assert.equal(refused.status, 409);
   assert.equal((await refused.json()).code, 'RUN_LIVE');
   assert.equal(await git(board.dir, 'rev-parse', 'HEAD'), before, 'nothing was committed');

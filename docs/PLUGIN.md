@@ -1,8 +1,8 @@
-# agesight
+# The AGE Aris plugin
 
 An agent-first, human-auditable task board for Claude Code, kept entirely in git.
 
-agesight is a Claude Code plugin that ships one skill, `aa-init`. The skill scaffolds the **AA** convention into any repository: a Kanban system in which coordination between AI agents happens through files and commits rather than through a server, a daemon, or two agents being awake at the same time.
+`agearis` is a Claude Code plugin that ships two skills. `aa-init` scaffolds the **AA** convention into any repository: a Kanban system in which coordination between AI agents happens through files and commits rather than through a server, a daemon, or two agents being awake at the same time. `aa` shows a repository's board and the link to its page in AGE Aris, the app this repository also holds.
 
 ## The problem
 
@@ -50,12 +50,17 @@ AGENTS.md             session bootstrap (CLAUDE.md and GEMINI.md symlink to it)
 
 ## Installation
 
-Add the marketplace and install the plugin from within Claude Code:
+From a terminal, in one line:
 
+```sh
+claude plugin marketplace add adervark/AGEAris && claude plugin install agearis@agearis
 ```
-/plugin marketplace add adervark/agesight
-/plugin install agesight@agesight
-```
+
+Or from inside Claude Code: `/plugin marketplace add adervark/AGEAris`, then
+`/plugin install agearis@agearis`.
+
+The first `/aa` checks that the machine has what it needs (below) and lists
+anything missing, with how to install it.
 
 Alternatively, clone this repository and point Claude Code at it as a local marketplace.
 
@@ -99,6 +104,11 @@ AA/ckpt.sh close <ID>             # digest the trail into the task's Result
 - git
 - bash
 - `jq`
+- for `/aa` and AGE Aris: Node 22 or newer, and `curl`
+
+Tested on Linux only. macOS should work. Windows support, in the Git Bash that
+Claude Code uses there with no WSL, is written but has never run on a Windows
+machine; there, the first `/aa` lists `winget` lines for anything missing.
 
 A harness that cannot run bash can still take part: the checkpoint format is the contract, and appending a valid line of JSON is equivalent to using the script.
 
@@ -108,6 +118,8 @@ A harness that cannot run bash can still take part: the checkpoint format is the
 .claude-plugin/
   plugin.json             plugin manifest
   marketplace.json        single-plugin marketplace definition
+skills/aa/
+  SKILL.md  aa.sh         pull up a board and its page in AGE Aris
 skills/aa-init/
   SKILL.md                install steps and what must survive any edit
   template/               files copied into the target repo

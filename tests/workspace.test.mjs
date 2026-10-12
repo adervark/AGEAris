@@ -10,7 +10,7 @@ import { promisify } from 'node:util';
 import test from 'node:test';
 
 import {
-  blockedReasonOf, boardPolicy, DEFAULT_NEXT_DECISION, git as workspaceGit, gitStream, statusWord, taskState, Workspace,
+  blockedReasonOf, boardPolicy, dataFolder, DEFAULT_NEXT_DECISION, git as workspaceGit, gitStream, statusWord, taskState, Workspace,
 } from '../lib/workspace.mjs';
 
 const exec = promisify(execFile);
@@ -33,7 +33,7 @@ async function git(directory, ...args) {
 }
 
 async function makeRepository() {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'agesight-workspace-'));
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'agearis-workspace-'));
   temporaryDirectories.add(directory);
   await git(directory, 'init', '--quiet');
   await git(directory, 'config', 'user.name', 'Test Operator');
@@ -170,7 +170,7 @@ test('task transitions move Markdown files, record ownership and result, and com
   stored = await taskFile(directory, task.title);
   assert.equal(path.basename(path.dirname(stored.filename)), 'tasks');
   assert.match(stored.contents, /^status: (?:claimed|in_progress)$/m);
-  assert.match(stored.contents, /^owner: "?Test Operator @agesight\/web \d{4}-\d{2}-\d{2} — working on Ship release"?$/m);
+  assert.match(stored.contents, /^owner: "?Test Operator @agearis\/web \d{4}-\d{2}-\d{2} — working on Ship release"?$/m);
   assert.equal(await commitCount(projectDir), afterCreate + 1);
 
   task = await workspace.updateTask(task.id, { version: task.version, status: 'blocked' });
@@ -665,11 +665,11 @@ test('commits carry the trailers they are given and every commit notifies the co
   const seen = [];
   const stop = workspace.onCommit((projectId) => seen.push(projectId));
   workspace.onCommit(() => { throw new Error('a broken listener'); });
-  const ui = { trailers: { 'AGESight-Via': 'ui' } };
+  const ui = { trailers: { 'AGEAris-Via': 'ui' } };
   const project = await workspace.createProject({ name: 'Trailers' }, ui);
   const projectDir = projectRepository(directory, project.id);
   const lastMessage = () => git(projectDir, 'log', '-1', '--format=%B');
-  assert.match(await lastMessage(), /^Create project: Trailers\n\nAGESight-Via: ui$/);
+  assert.match(await lastMessage(), /^Create project: Trailers\n\nAGEAris-Via: ui$/);
   const task = await workspace.createTask({ projectId: project.id, title: 'Trailer task' }, { trailers: { Run: 'R001' } });
   assert.match(await lastMessage(), /^Create T001: Trailer task\n\nRun: R001$/);
   assert.equal(await git(projectDir, 'log', '-1', '--format=%(trailers:key=Run,valueonly)'), 'R001');
@@ -914,7 +914,7 @@ function boardTask(id, title, fields = {}) {
 // A git repository outside the data folder, as an agent team keeps it: a
 // README and `files` (relative path → content), committed. Returns its real path.
 async function makeTrackedRepository(files = {}) {
-  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-tracked-')));
+  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agearis-tracked-')));
   temporaryDirectories.add(directory);
   await git(directory, 'init', '--quiet');
   await git(directory, 'config', 'user.name', 'Repository Owner');
@@ -929,7 +929,7 @@ async function makeTrackedRepository(files = {}) {
 }
 
 async function scratchFolder() {
-  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agesight-scratch-')));
+  const directory = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agearis-scratch-')));
   temporaryDirectories.add(directory);
   return directory;
 }
@@ -1285,7 +1285,7 @@ test('a tracked task carries its holder\'s latest note from the owner line, and 
     'AA/backlog/T001-idea.md': boardTask('T001', 'Idea', { status: 'open', owner: '—' }),
     'AA/tasks/T002-import.md': boardTask('T002', 'Import', { status: 'claimed', owner: AGENT_CLAIM }),
     'AA/tasks/T003-quiet.md': boardTask('T003', 'Quiet', { status: 'claimed', owner: 'ade @k/e857a8c8 2026-10-01' }),
-    'AA/tasks/T004-ui.md': boardTask('T004', 'From the UI', { status: 'claimed', owner: 'ade @agesight/web 2026-10-01 — moved on the board' }),
+    'AA/tasks/T004-ui.md': boardTask('T004', 'From the UI', { status: 'claimed', owner: 'ade @agearis/web 2026-10-01 — moved on the board' }),
   }) });
   const tasks = tasksOf(await workspace.read(), project.id);
   assert.deepEqual(['T001', 'T002', 'T003', 'T004'].map((id) => [id, tasks[id].claimNote]), [['T001', ''], ['T002', 'importer'], ['T003', ''], ['T004', '']], 'a note needs a claim, and a UI claim names nobody');
@@ -1342,4 +1342,55 @@ test('a task lists what it builds on from depends:, in order, without itself, re
   }) });
   const tasks = tasksOf(await workspace.read(), project.id);
   assert.deepEqual(['T001', 'T002', 'T003', 'T004'].map((id) => tasks[id].depends), [[], ['T001', 'T009'], ['T002'], []]);
+});
+
+test('the data folder takes over its old name once: .agesight-data moves to .agearis-data, with a link left at the old path', async () => {
+  const parent = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agearis-folder-')));
+  temporaryDirectories.add(parent);
+  const [current, old] = ['.agearis-data', '.agesight-data'].map((name) => path.join(parent, name));
+  // Nothing there yet: the new name, nothing created.
+  assert.equal(dataFolder(current), current);
+  assert.deepEqual(await readdir(parent), []);
+
+  const before = await openWorkspace(old);
+  const project = await before.createProject({ name: 'Kept' });
+  await writeFile(path.join(old, '.api-token'), 'token\n');
+
+  assert.equal(dataFolder(current), current);
+  assert.equal(await readlink(old), current, 'the old path is a link to the new folder');
+  assert.equal(await readFile(path.join(current, '.api-token'), 'utf8'), 'token\n');
+  const after = await openWorkspace(dataFolder(current));
+  assert.deepEqual((await after.read()).projects.map((entry) => [entry.id, entry.name]), [[project.id, 'Kept']]);
+  // A path given as the old link is the new folder, which storage accepts.
+  assert.equal(dataFolder(old), current);
+  await openWorkspace(dataFolder(old));
+  // Once moved, nothing moves again.
+  assert.equal(dataFolder(current), current);
+  assert.equal(await readlink(old), current);
+  // Any other folder is taken as given.
+  const other = path.join(parent, 'elsewhere');
+  assert.equal(dataFolder(other), other);
+  // A folder named by its old path moves too.
+  const second = path.join(parent, 'second');
+  await mkdir(path.join(second, '.agesight-data'), { recursive: true });
+  assert.equal(dataFolder(path.join(second, '.agesight-data')), path.join(second, '.agearis-data'));
+  assert.equal(await readlink(path.join(second, '.agesight-data')), path.join(second, '.agearis-data'));
+});
+
+test('an old data folder that cannot be moved is used where it is', async () => {
+  const parent = await realpath(await mkdtemp(path.join(os.tmpdir(), 'agearis-folder-')));
+  temporaryDirectories.add(parent);
+  const old = path.join(parent, '.agesight-data');
+  await mkdir(old);
+  await chmod(parent, 0o555);
+  try {
+    assert.equal(dataFolder(path.join(parent, '.agearis-data')), old);
+  } finally {
+    await chmod(parent, 0o755);
+  }
+  // With both folders real, each is used as named, and neither moves.
+  await mkdir(path.join(parent, '.agearis-data'));
+  assert.equal(dataFolder(path.join(parent, '.agearis-data')), path.join(parent, '.agearis-data'));
+  assert.equal(dataFolder(old), old);
+  assert.equal((await stat(old)).isDirectory(), true);
 });

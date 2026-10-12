@@ -13,12 +13,12 @@ test.after(async () => {
 });
 
 async function temporaryDirectory() {
-  const directory = await mkdtemp(path.join(os.tmpdir(), 'agesight-audit-'));
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'agearis-audit-'));
   temporaryDirectories.add(directory);
   return directory;
 }
 
-const SYSTEM = { type: 'system', id: 'agesight' };
+const SYSTEM = { type: 'system', id: 'agearis' };
 
 function chainOf(length) {
   const events = [];

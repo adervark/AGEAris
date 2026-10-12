@@ -3,8 +3,8 @@
 // every storage access is wrapped, because storage can be missing or throw
 // (private windows, blocked site data).
 
-export const CURSOR_KEY = 'agesight.lastSeen';
-export const WINDOW_KEY = 'agesight.window';
+export const CURSOR_KEY = 'agearis.lastSeen';
+export const WINDOW_KEY = 'agearis.window';
 export const CURSOR_MAX_DAYS = 14;
 export const WINDOWS = {
   'last-visit': 'Since your last visit',
@@ -15,8 +15,18 @@ export const WINDOWS = {
 const DAY_MS = 24 * 60 * 60 * 1000;
 const SHA = /^[0-9a-f]{40}$/;
 
+// A key this browser still has under its old name, agesight.*, moves to the
+// new one the first time it is read.
 function read(storage, key) {
-  try { return storage?.getItem(key) ?? null; } catch { return null; }
+  let value = null;
+  try { value = storage?.getItem(key) ?? null; } catch { return null; }
+  if (value !== null) return value;
+  const old = key.replace(/^agearis\./, 'agesight.');
+  try { value = storage?.getItem(old) ?? null; } catch { return null; }
+  if (value !== null && write(storage, key, value)) {
+    try { storage.removeItem(old); } catch { /* the copy is what is read */ }
+  }
+  return value;
 }
 
 function write(storage, key, value) {

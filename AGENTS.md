@@ -33,10 +33,13 @@ operator, so an account-plan switch mid-task is a continuation, not a new claim
 **Hard constraints, non-negotiable:**
 
 - The product is **AGE Aris** and its board convention is **AA**, in anything a
-  person reads. Older names stay only where data or integrations depend on
-  them: the `AGESight-Via` trailer, the `X-AGESight-Token` header,
-  `.agesight-data`, `AGESIGHT_*`, `@agesight/web`, the `agesight` package and
-  plugin, and the `deaddrop/` and `pm/` boards AGE Aris still reads.
+  person reads, and AGE Aris writes only its own names. The old AGESight ones
+  are still read, and only read, in code that says so: the `AGESight-Via`
+  trailer, the `X-AGESight-Token` header and `agesight_token` cookie,
+  `.agesight-data` (moved, a link left), `AGESIGHT_*`, `@agesight/web`, an
+  `agesight <nonce>` lock, and `agesight.*` browser keys (README, "Storage and
+  behavior"). The plugin and the package are `agearis`. Boards under the older
+  folder names `deaddrop/` and `pm/` keep them.
 - Use only the owner's artwork, `docs/brand/age-aris-logo.png` and the planet
   cut from it. Never design or substitute a mark.
 - No npm dependencies. The page runs under a strict CSP: no inline scripts or

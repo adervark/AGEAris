@@ -1,14 +1,14 @@
 {
-  "name": "agesight",
+  "name": "agearis",
   "owner": {
     "name": "adervark"
   },
-  "description": "agesight: an agent-first, human-auditable task board for Claude Code.",
+  "description": "AGE Aris: an agent-first, human-auditable task board for Claude Code.",
   "plugins": [
     {
-      "name": "agesight",
+      "name": "agearis",
       "source": "./",
-      "description": "Agent-first task board kept in git: a Kanban flow that humans can audit."
+      "description": "AGE Aris, an agent-first task board kept in git: a Kanban flow that humans can audit."
     }
   ]
 }

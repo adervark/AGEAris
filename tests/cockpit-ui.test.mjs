@@ -23,7 +23,7 @@ const SAMPLE_END = Date.parse('2026-10-06T15:00:00+01:00');
 
 function memoryStorage(initial = {}) {
   const values = new Map(Object.entries(initial));
-  return { getItem: (key) => (values.has(key) ? values.get(key) : null), setItem: (key, value) => values.set(key, String(value)), values };
+  return { getItem: (key) => (values.has(key) ? values.get(key) : null), setItem: (key, value) => values.set(key, String(value)), removeItem: (key) => values.delete(key), values };
 }
 
 const broken = { getItem() { throw new Error('denied'); }, setItem() { throw new Error('denied'); } };
@@ -67,6 +67,18 @@ test('the last-visit cursor survives missing or failing storage and turns into t
   assert.equal(readWindow(storage), 'last-visit');
 });
 
+test('a cursor and window kept under the old agesight.* keys move to the new ones when first read', () => {
+  const cursor = JSON.stringify({ at: new Date(NOW).toISOString(), heads: { [PROJECT]: SHA } });
+  const storage = memoryStorage({ 'agesight.lastSeen': cursor, 'agesight.window': '7d' });
+  assert.deepEqual([CURSOR_KEY, WINDOW_KEY], ['agearis.lastSeen', 'agearis.window']);
+  assert.deepEqual(readCursor(storage), { at: new Date(NOW).toISOString(), heads: { [PROJECT]: SHA } });
+  assert.equal(readWindow(storage), '7d');
+  assert.deepEqual(Object.fromEntries(storage.values), { [CURSOR_KEY]: cursor, [WINDOW_KEY]: '7d' });
+  // A browser that cannot write keeps reading the old key.
+  const readOnly = { ...memoryStorage({ 'agesight.window': '24h' }), setItem() { throw new Error('denied'); } };
+  assert.equal(readWindow(readOnly), '24h');
+});
+
 // Every interpolation is escaped and no inline style is emitted (the CSP
 // allows none); every number button names a metric the server knows.
 function checkMarkup(html, label) {
@@ -76,7 +88,7 @@ function checkMarkup(html, label) {
 }
 
 test('the cockpit views render the sample project, escape what they show, and cite metrics', async (t) => {
-  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agesight-ui-'));
+  const dataDir = await mkdtemp(path.join(os.tmpdir(), 'agearis-ui-'));
   t.after(() => rm(dataDir, { recursive: true, force: true }));
   const workspace = await new Workspace({ dataDir, operator: 'ade', email: 'ade@example.invalid' }).init();
   await writeFile(path.join(dataDir, 'settings.json'), '{"timezone": "Europe/London"}');
