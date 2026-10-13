@@ -48,7 +48,9 @@ spent, and the phases, each one task.
 - [x] v2.2: facts keyed by object, one row per key, seven checks for conflict and redundancy.
 - [x] Review, round 2: the Critic on v2.2: REVISE, report partial (parts 2–3 never delivered).
 - [x] v2.3 answers it: premises for inferences, pinned citations, searches for negatives, a separate reconciler, rulings after the run ends.
-- [ ] A third review round, which needs the operator's go (decision rules).
+- [x] Review, round 3 (approved by the operator): the Critic on v2.3: REVISE, complete.
+- [x] v2.4 answers it: untracked sources by hash, `unsourced` marks, refs required, R0b graded on every correction, S0 plants the uncatchable, costs capped.
+- [ ] The operator: a fourth review round, or accept v2.4 with its open objections listed.
 - [ ] Register the phases as tasks.
 
 ## Decision rules — fixed in advance
@@ -69,11 +71,11 @@ spent, and the phases, each one task.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @b/b8438f28: v2.3 committed, answering the Critic's partial review of v2.2
+- **Last touched:** 2026-10-13, adervark @b/b8438f28: v2.4 committed, answering the round 3 Critic
 - **In flight:** nothing
-- **On disk:** `docs/plans/research-runs.md` v2.3; reviews in `docs/plans/reviews/` (v1 architect, v1 critic, v2.2 critic, partial)
-- **Resume with:** `AA/ckpt.sh live T073`. If the operator approves a third round, run a fresh Critic on v2.3 and save it as `docs/plans/reviews/research-runs-v2.3-critic.md`. On approval, register R0b, S0 and S1a–S1d as tasks.
-- **Next decision:** the operator's: a third review round on v2.3, or accept it with the open objections listed
+- **On disk:** `docs/plans/research-runs.md` v2.4; reviews in `docs/plans/reviews/` (v1 architect, v1 critic, v2.2 critic partial, v2.3 critic)
+- **Resume with:** `AA/ckpt.sh live T073`, then the operator's answer on v2.4. On acceptance, register R0b, S0 and S1a–S1d as tasks, write T073's Result, and close it.
+- **Next decision:** the operator's: a fourth review round, or accept v2.4 with its open objections listed
 
 ## Result
 

@@ -1,6 +1,6 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: draft v2.3** (2026-10-13, T073). Nothing here is built.
+**Status: draft v2.4** (2026-10-13, T073). Nothing here is built.
 
 - v1 (f9ecde8) was written after reading how RSNA, AGEIS and this repository
   do research.
@@ -19,6 +19,85 @@
 - The Critic's second round, on v2.2: REVISE. Its report arrived partial
   (`docs/plans/reviews/research-runs-v2.2-critic.md`). v2.3 answers every
   point that reached us.
+
+- A third round, which the operator approved, reviewed v2.3: REVISE
+  (`docs/plans/reviews/research-runs-v2.3-critic.md`, complete). v2.4 answers
+  it.
+
+## Changes since v2.3
+
+The round 3 Critic found that the second proof still failed, that the spec
+pushed transcribers into citing the wrong lines, and that neither test could
+fail on anything new. Each point was checked again at RSNA before this was
+written. One of them was a false claim of mine in v2.3: the search at
+`2b3d2a6` returns 29 lines, not only the flag's definition. I had filtered out
+the Markdown hits and then described what was left as the whole search.
+Scoped to `src`, it returns 3, all in `train.py`: the definition at `:812` and
+an error message at `:273–274`.
+
+1. **Untracked sources are citable, and seen** (blocking 1).
+   - Lane 10's only source for "passed once" is `outputs/t025/run_arm.sh`.
+     `outputs/*` is gitignored (`.gitignore:29` at `e4e356c`), so no commit
+     holds it.
+   - Such a source is now cited as `path:line@worktree#<sha256 of the file>`.
+     `research.sh fact` reads it with `cat`, checks that each ref is on the
+     line, and records the hash.
+   - `out-of-sight` now fires on a fact's source, not only on a verdict's.
+   - A `cmd:` search carries its pathspec, so its scope is stated.
+   - Incident 2 now links through the ref `--layer-decay`. Round 2's search,
+     scoped to tracked `src` and `scripts`, finds no launch. Lane 10's fact,
+     grounded on line 13 of the untracked script, finds one. The pair shows
+     what happened, and `out-of-sight` fires on the source.
+   - The blind spot, said plainly: a repository search cannot see a launch
+     from a gitignored file. That blind spot is this incident.
+2. **A fact keeps its lane's mark, sourced or not** (blocking 2).
+   - A MEASURED fact with no source is written with `src: []` and the warning
+     `unsourced`. No decision may rest on it alone.
+   - Every `path:line` source carries at least one ref, found on the cited
+     line. So lane 11's citation of `tta.py:110`, a docstring's closing
+     quotes, is refused, and the writer is told where the ref really is.
+   - An INFERRED fact still needs premises. When the lane names none, the
+     transcriber may supply them, and the line records
+     `premises_by: transcriber`. The page shows those, and §5.5 counts them
+     as a gap: identity chosen by a writer.
+3. **The tests can fail on something new** (blocking 3).
+   - R0b is graded on recall over every correction the round 3 synthesis
+     records. The Critic counts twelve: §8.1's ten corrections to earlier
+     rounds, §4's arithmetic slip, and §8.3. R0b counts them itself, first.
+   - R0b backfills earlier rounds by the same fixed procedure, and is run by
+     a fresh agent that is not given §5.5's or §7's incident text.
+   - S0 plants a conflict with no shared referent, and an inference whose
+     lane named no premises. It reports how many slip through, and no longer
+     claims to catch them.
+4. **`copy-drift` fires on its incident.** It now fires when a live, undated
+   document quotes a superseded fact. A dated record that quoted the value
+   before it was superseded stays silent.
+5. **§5.5 names three more gaps:**
+   - facts never transcribed;
+   - premises chosen by the transcriber;
+   - `asked-before` on an idea with no code referent, which links only by
+     key.
+6. **Cost is measured and capped.** R0b records minutes per transcribed fact,
+   linked pairs per round, and reconciler tokens. After two failed reconcile
+   passes, the round escalates to the operator instead of rerunning.
+7. **Minor fixes:**
+   - Canaries are written into the reconciler's view of the ledger, in the
+     ledger's own id sequence. `research.sh` assigns every id, so the
+     transcriber's and the canaries' ids cannot collide.
+   - A ruling waits until no run on the task is live, the lanes' and the
+     reconciler's included (`lib/workspace.mjs:1449–1465`).
+   - AGE Aris shows the task file's rulings over a stale page.
+   - A citation into Markdown resolves to its enclosing heading.
+   - Stale text is corrected.
+8. **Citations pin to the commit the lane started from**, which the brief
+   prints and the report states. The commit that added the report section
+   would be wrong: lanes 9–12 entered RSNA's history in the synthesis's own
+   commit (`e4e356c`, 20:13), hours after they read the code. Only lane 13
+   was committed earlier (`cd160f5`).
+9. **Referents in one file.** A file referent, used only when a cited line has
+   no enclosing definition or heading, links to every referent in that file.
+   A referent that links more than 12 pairs in a round is grouped for one
+   review (§8).
 
 ## Changes since v2.2
 
@@ -150,7 +229,7 @@ them and whatever they were labelled.
    - `decision-on-conflict`: a decision rests on a fact in an open conflict;
    - `asked-before`: a new question is about a settled key, and does not say
      it reopens it (round 0921 re-asked SSL pretraining);
-   - `measured-again`: a spend re-measures a settled key without asking for a
+   - `measured-again` (cut in v2.3): a spend re-measures a settled key without asking for a
      reproduction;
    - `copy-drift`: a document quotes a fact by id with a different value (the
      eight hand writes; AGEIS's inverted verdict);
@@ -442,9 +521,11 @@ track      AA/tracks/<slug>.md      the standing question, the number to beat, i
 
 `AA/findings/T###.jsonl`, one per research task:
 
-- **one writer**: the claimant's session, the owner of the task. A
-  subagent's work reaches the ledger through the claimant, which is the only
-  way DeepSeek's lane can reach it at all;
+- **one transcriber**: the claimant's session, the owner of the task, writes
+  every line except `same`. A subagent's work reaches the ledger through the
+  claimant, which is the only way DeepSeek's lane can reach it at all. The
+  reconciler, a separate subagent, writes only `same` lines. `research.sh`
+  assigns every id;
 - one JSON object per line, append-only. A line is never edited, and the file
   is never retired;
 - `.gitattributes` gives the file `merge=union`, and never
@@ -459,7 +540,7 @@ Every line carries `ts`, `run` and `kind`:
 |---|---|---|
 | `object` | when a thing is first named | `name` (`arms`, `public-lb`, `train.py/--layer-decay`); `anchor` (`path#symbol@commit`, a submission id, or a URL); `kind` (`config`, `set`, `flag`, `artifact`, `instrument`, `other`) |
 | `question` | before the first lane opens, committed | `id` (`Q1`); `ask` (≤ 480 B); `about` (the keys it asks about, and `refs`: the definitions, files, flags or identifiers it concerns); `rule`: `answers` (what counts), `marks` (the accepted set) and optionally `instrument`, `reads` (the key it measures) and `band`; `from` (what raised it); `reopens` or `reproduces` (a settled fact or verdict, with why) |
-| `fact` | as each lane report lands | `id` (`F1`); `key` (`<object>/<attribute>`, for display); `value` (text: a number is a decimal string, a set is a sorted list); `unit`; `mark`; `where` (`path#heading`, tracked); `src` (a list of `path:line@commit`, `path#symbol@commit`, `cmd:`, a submission id or an artifact hash; required unless the mark is INFERRED); `premises` (fact ids; required when the mark is INFERRED); `refs` (identifiers it is about, each found on a cited line); `from` (the lane, its run and model); `says` (≤ 240 B) |
+| `fact` | as each lane report lands | `id` (`F1`); `key` (`<object>/<attribute>`, for display); `value` (text: a number is a decimal string, a set is a sorted list); `unit`; `mark`; `where` (`path#heading`, tracked); `src` (a list of `path:line@commit`, `path#symbol@commit`, `path:line@worktree#sha256` for an untracked file, `cmd:` with its pathspec, a submission id or an artifact hash; may be empty, which warns `unsourced`); `premises` (fact ids; required when the mark is INFERRED); `premises_by` (`lane` or `transcriber`); `refs` (identifiers it is about; at least one per `path:line` source, found on that line); `from` (the lane, its run and model); `says` (≤ 240 B) |
 | `same` | for each linked pair of facts, written by the reconciler | `facts` (ids); `via` (the shared referent); `finding` (`agree`, `conflict` or `unrelated`); `why` (≤ 240 B, quoting the two lines compared); `run` (the reconciler's, which must not be the transcriber's). `agree` with different keys joins the keys |
 | `resolve` | to close a conflict | `facts` (the ids in conflict); `stands` (the id that stands, or none); `why` (≤ 240 B). The others are superseded, never deleted |
 | `verdict` | at synthesis, one per question | `id` (`V1`); `q`; `verdict` (`answers`, `rejects`, `none-found` or `unresolved`); `mark`; `value` (text; a number is a decimal string); `where` (`path#heading`, tracked); `cites` (fact ids); `src` (a list); `basis` (the lanes, models, methods and sources it rests on); `says` (≤ 240 B) |
@@ -470,9 +551,12 @@ Every line carries `ts`, `run` and `kind`:
   ledger.
 - **Identity is computed, not chosen.** Two facts are linked when they share a
   referent:
-  - the same enclosing definition of a cited `path:line@commit`: the nearest
-    `def`, `class` or `function` line above it at a lower indentation, found
-    by a linear scan, or the file when there is none;
+  - the same enclosing definition of a cited `path:line`: the nearest `def`,
+    `class` or `function` line above it at a lower indentation, found by a
+    linear scan. In Markdown, it is the enclosing heading. With neither, it is
+    the file, which links to every referent in that file;
+  - an unpinned citation is pinned to the commit the lane started from, which
+    the brief prints and the report states;
   - an INFERRED fact's referents are its premises' referents, so an
     inference links through what it rests on;
   - a `cmd:` search's pattern;
@@ -564,18 +648,19 @@ track with `track: <slug>`.
 
 ### 5.5 The checks
 
-Ten checks in two groups. Each is held to an incident on record, where it
+Eleven checks in two groups. Each is held to an incident on record, where it
 must fire, and a counterfactual from the record, where it must stay silent.
 
 **Conflicts and redundancy**, the point of the design:
 
 | Code | Fires when | Incident: must fire | Counterfactual: must stay silent |
 |---|---|---|---|
-| `conflict` | two live facts on one key, or a pair the reconciler marked `conflict`, disagree beyond the key's band; across every ledger on the board; until a `resolve` line or a ruling | round 2's "never once passed", recast as a `cmd:` search at `2b3d2a6` (RESEARCH-0902b:60), against lane 10's "passed once" (lane 10:27), linked through the ref `--layer-decay` | the same pair once a `resolve` scopes the search to tracked files and lets lane 10's stand; two CV reads inside the key's band |
+| `conflict` | two live facts on one key, or a pair the reconciler marked `conflict`, disagree beyond the key's band; across every ledger on the board; until a `resolve` line or a ruling | round 2's "never once passed" (RESEARCH-0902b:60), recast as `cmd: git grep -n -- --layer-decay 2b3d2a6 -- src scripts` (no launch), against lane 10's "passed once" (lane 10:27), grounded on `outputs/t025/run_arm.sh:13@worktree#…`; linked through the ref `--layer-decay` | the same pair once a `resolve` lets lane 10's stand and scopes the search to tracked files; two CV reads inside the key's band |
+| `unsourced` | a fact other than INFERRED has an empty `src`; a decision whose only support is unsourced facts | lane 11 §2.6, "MEASURED from the checkpoint args", with no path (lane 11:299) | the same fact citing the checkpoint-args dump it was read from |
 | `unreconciled` | two live facts from different lanes or tasks share a referent, and no `same` line from a reconciler that did not transcribe covers the pair, once its task has a decision; also when a pass misses a canary | lane 10 §3.3, INFERRED: dropping the ten `fold?` members "unlocks three TTA views" (lane 10:350–351), whose premise §3.4 cites `src/tta.py:116`, against lane 11 §2.6: twelve members carry `0.0` (lane 11:299–300). Linked by the inherited `src/tta.py#unmatched` | the synthesis's catch (RESEARCH-0902c:502–509) written as a `same` line with `finding: conflict`, then a `resolve` with lane 11 standing |
 | `decision-on-conflict` | a decision, or a verdict, cites a fact in an open conflict | a fixture: round 3's pool decision (T051) citing lane 10's count before §8.3 | the same decision after the `resolve` |
 | `asked-before` | at registration, a question shares a key or a referent with a settled fact or verdict on the board, and declares neither `reopens` nor `reproduces` | round 0921's lane 3, on SSL pretraining, which T047's lane 12 had settled NO on price | the same question with `reopens: T047/V…` and a reason, such as new RadImageNet evidence |
-| `copy-drift` | a tracked document quotes a fact as `<value> (T047/F7)`, and the value differs from the fact's | lane 10:28: `PROGRESS.md:5857`, lane 6 §2.5 and `scripts/t042/run_recipe_fold0.sh:7` all still said "never" once the fact was "passed once"; as a fixture, each quoting the fact's id | the same quotes matching; a dated record that quoted a value before it was superseded |
+| `copy-drift` | a tracked document quotes a fact as `<value> (T047/F7)` with a different value; or a live, undated document quotes a superseded fact | lane 10:28: `scripts/t042/run_recipe_fold0.sh:7`, a live script, still said "never" once that fact was superseded; as a fixture, quoting its id | `PROGRESS.md:5857` and lane 6 §2.5, dated records that quoted "never" before it was superseded |
 | `instrument-unresolved` | a question's `band` is not wider than its instrument's `step`; and, as a note, a settled fact on its `reads` key lies inside the band | T118: ±0.001 on a leaderboard with a step of 0.001 (T118:76, 178–181); the note shows T106's 0.000 at the same weight (T118:25–26) | a structurally distinct configuration read at ±0.007 (T118:78) |
 
 `copy-drift` reads only the declared marker: the token before `(T###/F#)`,
@@ -588,7 +673,7 @@ number without its id is not checked, so the rule for writers is the one
 | Code | Fires when | Incident: must fire | Counterfactual: must stay silent |
 |---|---|---|---|
 | `uncovered` | a question has no `answers`, `rejects` or `none-found` verdict, and no `park` or `drop`, once its task has a decision or is closed; killed tasks are skipped | RSNA T047: the efficiency half, open when round 3 decided | the same question once lane 11b's `none-found` lands (`5313b79`) |
-| `where-missing`, `out-of-sight` | a verdict's `where` section is absent or empty at the verdict's commit; or its `where` or a `src` path is untracked at that commit and is neither a dated record nor regenerable by its `cmd:` | lane 12's rows 3 and 4; RSNA's round 0921, never committed | a file moved after the line was written (T093); a source in `outputs/` that carries its command |
+| `where-missing`, `out-of-sight` | a verdict's `where` section is absent or empty at the verdict's commit; or a verdict's `where`, or a verdict's or fact's `src` path, is untracked at that commit and is neither a dated record nor regenerable by its `cmd:` | lane 12's rows 3 and 4; RSNA's round 0921, never committed | a file moved after the line was written (T093); a source in `outputs/` that carries its command |
 | `registered-late` | a question's line is not in a strict ancestor of the commit of its verdict, or of the first commit of a report section the verdict cites | lane 13, which ran with no brief | lanes 9–12, briefed in T047's claim before their reports |
 | `decision-waiting` | a question has a verdict and no decision or ruling | a fixture; it is the operator's queue, not an alarm | the same question with a ruling |
 
@@ -597,12 +682,22 @@ number without its id is not checked, so the rule for writers is the one
   it is fixed.
 - **What no check can see**, said plainly:
   - **Two facts about one thing that share no referent**, even through their
-    premises. An INFERRED fact must name its premises, so this needs a fact
-    that cites nothing and rests on nothing: a lane's bare assertion. It can
-    still be written as INFERRED with the lane's own sentence as `says`, but
-    it links to nothing, and no decision may rest on it alone. The blind
-    reader (§7, r4) counts what still gets through, and S0 measures it
-    before any code.
+    premises: a lane's bare assertion, written with `src: []`. It warns
+    `unsourced`, links to nothing, and no decision may rest on it alone. The
+    blind reader (§7, r4) counts what still gets through, and S0 plants one
+    to count how often it slips.
+  - **Facts never transcribed.** Which facts are load-bearing is judged as
+    reports land, before any verdict exists. Lane 10 §3.3 was one clause in a
+    list of options (lane 10:347–351). The blind reader compares each report
+    with its ledger lines.
+  - **Premises chosen by the transcriber**, when the lane named none. That is
+    identity chosen by a writer again. Such lines carry
+    `premises_by: transcriber`, the page shows them, and S0 counts how often
+    they are wrong.
+  - **A launch from a gitignored file**, which no repository search can see.
+    Only a fact grounded on the file itself, `@worktree#sha256`, reaches it.
+  - **`asked-before` on an idea with no code referent**, such as SSL
+    pretraining. It links only by key, which is a label.
   - **A reconciler that marks a real conflict `agree`**, with a plausible
     `why`. Canaries catch a careless pass, not a wrong judgement on a hard
     pair. The blind reader's sample is the check, and the operator sees every
@@ -617,11 +712,12 @@ number without its id is not checked, so the rule for writers is the one
 
 ### 5.6 A round, step by step
 
-1. **Register.** The claimant writes the questions, their rules and the keys
+1. **Register.** The brief's commit is the round's base. The claimant writes the questions, their rules and the keys
    they are about, and commits them before any lane opens. `asked-before` and
    `instrument-unresolved` run here, before anything is spent.
 2. **Brief.** `AA/research.sh brief T072` prints:
    - the questions;
+   - the base commit, which each report states and unpinned citations pin to;
    - the track's objects and keys, with every settled fact on each;
    - the computed settled list and dead ends;
    - the facts table each report ends with;
@@ -638,10 +734,12 @@ number without its id is not checked, so the rule for writers is the one
    mid-round, not at the end.
 5. **Reconcile.** A reconciler subagent that transcribed nothing runs
    `research.sh reconcile T072`. It gets every linked pair from different
-   lanes, with canaries made from this round's facts mixed in, unmarked. It
-   writes a `same` line for each, quoting the two lines it compared. A pass
-   that misses a canary is rejected and rerun. The claimant resolves each
-   conflict, or leaves it for the operator.
+   lanes, with canaries made from this round's facts mixed in, unmarked: they
+   sit in its view of the ledger, in the ledger's own id sequence. It writes
+   a `same` line for each, quoting the two lines it compared. A pass that
+   misses a canary is rejected and rerun once. A second failure escalates to
+   the operator. The claimant resolves each conflict, or leaves it for the
+   operator.
 6. **Synthesise.** The claimant writes a verdict per question, citing the
    section that argues it and the facts it rests on, then the decisions.
    `research.sh --check` comes back clean, or the synthesis answers each
@@ -649,10 +747,12 @@ number without its id is not checked, so the rule for writers is the one
 7. **Show.** `research.sh --write` regenerates the page and its JSON, and a
    `find:` commit carries the ledger and the page together.
 8. **Rule.** The operator sees conflicts as they appear, read-only while the
-   round runs. A task action is refused while a run on the task is live
-   (AGENTS.md), so a conflict that needs the operator ends the claimant's run,
-   with `next` naming it. The operator rules in AGE Aris, and the next
-   session resumes from the ruling.
+   round runs. A task action is refused while any run on the task is live,
+   lanes and reconciler included (AGENTS.md; `lib/workspace.mjs:1449–1465`).
+   So when a conflict needs the operator, the round's runs end, the
+   claimant's last with `next` naming the conflict. The operator rules in AGE
+   Aris, which shows the task file's rulings over the page until the page is
+   regenerated. The next session resumes from the ruling.
 
 Experiments use the same lines. A spend's question carries its instrument and
 band. The result's verdict is MEASURED, with the command and its output's
@@ -713,30 +813,36 @@ or the T112/T118 replay shows it would have changed a decision:
   `lib/fabricate.mjs` from the record.
 - **Precision.** On T072, and on every later round, each warning is marked
   real or false by hand, against the 90% floor.
-- **R0b, the round 3 replay with facts.** One session, no subagents, RSNA read
-  through `git show` only, plus one reconciler subagent that transcribes
-  nothing.
-  - **Procedure, fixed before the reports are read:** load-bearing facts,
-    pinned citations, and premises for every inference. Round 2's flag fact
-    is backfilled as a `cmd:` search at `2b3d2a6`, the one settled fact from
-    outside round 3 that the pass needs.
-  - **Pass:**
-    - `unreconciled` links lane 10 §3.3 to lane 11 §2.6 through the inherited
-      `src/tta.py#unmatched`, and the reconciler marks it `conflict`;
-    - `conflict` links the flag search to lane 10's "passed once" through
-      `--layer-decay`, and `out-of-sight` fires on `outputs/t025/run_arm.sh`;
-    - the conflict checks stay above the 90% floor.
+- **R0b, the round 3 replay with facts.** A fresh agent that is not given
+  §5.5's or §7's incident text transcribes. A second subagent reconciles.
+  RSNA is read through `git show`, plus `cat` for untracked files, and
+  nothing in it is written.
+  - **Procedure, fixed before the reports are read:**
+    - load-bearing facts, pinned citations and refs on every line;
+    - premises for every inference;
+    - earlier rounds backfilled by the same procedure, as far as the
+      corrections need.
+  - **Pass:** recall over every correction the round 3 synthesis records,
+    counted from the synthesis before grading. The Critic counts twelve.
+    Each correction is caught, or it is listed as a miss with the gap in
+    §5.5 that let it through. The conflict checks stay above the 90% floor.
+  - **Recorded:** minutes per transcribed fact, linked pairs per round,
+    reconciler tokens, and `premises_by: transcriber` lines.
 - **S0, a simulation of linking.** `lib/fabricate.mjs` builds a repository
   with source files and a short round of lane reports. It plants five
   conflicts: two reachable only through an inference's premises, as lane 10
   §3.3, one through a negative search, and two described in different words.
-  It also plants three repeats of settled facts and two drifted copies. One
+  It also plants two shapes the design says it cannot catch: a conflict with
+  no shared referent, and an inference whose lane named no premises. And it
+  plants three repeats of settled facts and two drifted copies. One
   agent that has not seen the plant writes the facts as claimant; a second
   reconciles. Pass:
   - every planted conflict is linked by a shared referent, and marked
     `conflict` by the reconciler;
   - every repeat is found;
-  - at most 1 false warning per 50 facts.
+  - at most 1 false warning per 50 facts;
+  - the two uncatchable plants are reported: how many slipped, not a pass or
+    fail.
 
   The plant is committed before the agent runs, so the grading is against it.
 - **The operator's outcome:**
@@ -768,7 +874,7 @@ or the T112/T118 replay shows it would have changed a decision:
 | A ninth write | The ledger replaces hand copies: the page and STATE.md line are generated, and the log cites ids |
 | Warnings become wallpaper | The precision floor demotes a check; rulings close warnings with reasons |
 | Two facts about one thing are labelled differently | Labels do not decide identity; shared referents do (§5.2), and S0 plants differently labelled conflicts on purpose |
-| The reconciler waves linked pairs through as `unrelated` | A reconciler that did not transcribe; canaries made from the round's own facts, indistinguishable by id; every `why` quotes both lines; the blind reader samples real `agree` and `unrelated` marks |
+| The reconciler waves linked pairs through as `unrelated` | A reconciler that did not transcribe; canaries made from the round's own facts, in the ledger's id sequence within the reconciler's view; every `why` quotes both lines; the blind reader samples real `agree` and `unrelated` marks |
 | A ruling is needed while the round runs | Conflicts are visible read-only; the claimant ends its run to wait on the operator; no decision binds on an open conflict meanwhile |
 | A common referent, such as `src/train.py#main`, links everything | Facts resolve to the narrowest enclosing definition; a referent linking more than 12 pairs in a round is reported, and its pairs are grouped for one review |
 | Facts are transcribed carelessly, or only the convenient ones | A verdict must cite the facts it rests on; a lane's facts table is in its report, beside its ledger lines, for the blind reader to compare |
@@ -783,10 +889,10 @@ or the T112/T118 replay shows it would have changed a decision:
 |---|---|---|---|
 | R0 | Replay of round 3 | — | **Done: T074.** Graded by the Critic (§2) |
 | T072 | **Team-scale research, on a hand-written ledger** (D5), facts and objects included | — | its ledger and track page are written by hand in this format; (o1) and precision are measured |
-| R0b | **Round 3 replayed with facts**, by hand (§7) | — | `unreconciled` and `conflict` fire on their incidents, above the floor; or the design is revised |
+| R0b | **Round 3 replayed with facts**, by a fresh agent and a separate reconciler (§7) | — | recall over every correction the synthesis records is reported, each miss tied to a §5.5 gap, conflict checks above the floor, costs recorded; or the design is revised |
 | S0 | **The one-writer simulation** (§7) | — | its pass bar is met; or the keying rules are revised before S1b |
 | S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | R0b | the operator has reviewed the cases |
-| S1b | **`AA/research.sh` here**: `brief`, `fact`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the ten checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
+| S1b | **`AA/research.sh` here**: `brief`, `fact`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the eleven checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
 | S1c | **In sight**: AGE Aris shows track pages, the round in progress, open conflicts and `decision-waiting` in Needs you; the operator's rulings, `stands` included, as task actions | S1b | e2e passes; the operator resolves a conflict in AGE Aris |
 | S1d | **The template**: `research.sh` and the schema in `aa-init` | S1b, T004, T072's measures | a fresh repository writes an empty track page |
 | R-T118 | **Replay RSNA's T112 and T118**, the rounds that spent, after RSNA closes | S1b | each stage 2 piece is marked: would it have changed a decision? |
@@ -809,8 +915,9 @@ or the T112/T118 replay shows it would have changed a decision:
   point". So stage 1 now carries facts, conflicts and redundancy (v2.2).
 
 The review was approved to run the same day. T073's rules allow one more
-round of each reviewer when the Critic rejects. The Critic's second round
-died with no report, and reruns on v2.2.
+round of each reviewer when the Critic rejects. The Critic's second round on
+v2.1 died with no report. Its rerun on v2.2 arrived partial. The operator then
+approved a third round, on v2.3, which arrived complete.
 
 **Open:** none. R0b and S0 decide whether the linking holds before any code is
 written.
@@ -837,7 +944,7 @@ written.
     No decision may rest on an open one.
   - The operator's rulings are task actions in the task file.
   - A generated track page shows coverage first, then conflicts.
-  - Ten checks, six of them for conflict and redundancy, each with an
+  - Eleven checks, seven of them for conflict and redundancy, each with an
     incident, a counterfactual and a precision floor.
   - One door, `AA/research.sh`. AGE Aris reads the files.
   - Stage 2 is built on evidence only.

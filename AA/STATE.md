@@ -35,7 +35,7 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-13T06:47Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
+`board · 2026-10-13T06:58Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
 
 FLOW · **WIP 1/2** · throughput 11.7/wk (50 in 30d) · cycle time 50th 5m / 85th 34m (n=50)
 FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 100% (touch 1h of 1h, n=1 trails) · lead time 85th 35h
@@ -44,7 +44,7 @@ FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 100% (tou
 |---|---|---|---|---|---|
 | **IN PROGRESS** 1/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 1h | ⚠ |
 | **BACKLOG** 23 | | `T003` `T004` `T024` `T025` `T047` `T051` +17 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 77m |  |
+| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 89m |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 40h |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 2d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 2d |  |
