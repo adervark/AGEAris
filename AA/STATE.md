@@ -35,15 +35,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-13T08:42Z · 81 tasks: 30 backlog, 0 WIP (0 in progress), 51 delivered`
+`board · 2026-10-13T08:43Z · 81 tasks: 30 backlog, 0 WIP (0 in progress), 51 delivered`
 
-FLOW · **WIP 0/2** · throughput 11.7/wk (50 in 30d) · cycle time 50th 5m / 85th 34m (n=50)
-FLOW · Little's Law: 0 ÷ 11.7/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 11.9/wk (51 in 30d) · cycle time 50th 5m / 85th 45m (n=51)
+FLOW · Little's Law: 0 ÷ 11.9/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 3h |  |
+| **DONE** | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | now |  |
+|  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 3h |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 42h |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 2d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 2d |  |
@@ -95,10 +96,6 @@ FLOW · Little's Law: 0 ÷ 11.7/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 6d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-
-**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
-
-- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T073
 <!-- /AA:generated -->
 
 <!--
