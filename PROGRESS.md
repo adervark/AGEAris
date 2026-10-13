@@ -513,3 +513,30 @@ its date, the number, and where the evidence is. Newest last.
   1. One writer records a verdict per question at synthesis, and four checks
   are each held to an incident and a counterfactual. The next replay is
   RSNA's T112 and T118, the rounds that spent, after 2026-10-22.
+
+## 2026-10-13 — T073: research runs aggregated; v2.4 accepted, conflicts and repeats in stage 1
+
+- The operator accepted `docs/plans/research-runs.md` v2.4, with its open
+  objections listed in T073's Result. Nothing is built yet.
+- **The design:**
+  - load-bearing facts, each citing a pinned source, a scoped search, or its
+    premises;
+  - identity computed from shared referents, never from labels;
+  - a separate reconciler checked by canaries;
+  - eleven checks, seven of them for conflicting and repeated data;
+  - no decision on an open conflict.
+- **Reviews:** one Architect and four Critic runs (one died, one partial), in
+  `docs/plans/reviews/`. Each Critic round found a real hole, and each was
+  checked against RSNA at `e4e356c` before it was answered.
+- **Corrected along the way:**
+  - v2.2's 10-against-12 incident linked two true facts. The error was lane
+    10 §3.3's unsourced inference, lane 10:350–351.
+  - v2.3 claimed `git grep -n -- --layer-decay 2b3d2a6` finds only the
+    definition. It finds 29 lines, and 3 when scoped to `src`.
+- **Next, on evidence:**
+  - T075 (R0b) grades recall over every correction RSNA's round 3 synthesis
+    records;
+  - T076 (S0) simulates linking with planted conflicts, the uncatchable
+    shapes included;
+  - T077–T081 build and replay;
+  - T072 runs on a hand-written ledger.

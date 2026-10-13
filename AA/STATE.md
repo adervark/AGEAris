@@ -7,11 +7,11 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** T073, research runs aggregated into one line of thought
-(`docs/plans/research-runs.md`). v2.2 answers the operator's amended D6:
-facts are keyed by object, so conflicting and repeated findings are caught in
-the first build. The Critic reviews v2.2 next. T072 runs now, on a
-hand-written ledger (D5).
+**In progress:** nothing. T073 is done (2026-10-13). The operator accepted
+the research-runs design v2.4: facts linked by what they cite, so conflicting
+and repeated findings are caught. It is tested on evidence before any code:
+T075 replays RSNA's round 3, and T076 simulates linking. T072 runs on a
+hand-written ledger.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -35,24 +35,23 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-13T06:58Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
+`board · 2026-10-13T08:42Z · 81 tasks: 30 backlog, 0 WIP (0 in progress), 51 delivered`
 
-FLOW · **WIP 1/2** · throughput 11.7/wk (50 in 30d) · cycle time 50th 5m / 85th 34m (n=50)
-FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 100% (touch 1h of 1h, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 11.7/wk (50 in 30d) · cycle time 50th 5m / 85th 34m (n=50)
+FLOW · Little's Law: 0 ÷ 11.7/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 1h | ⚠ |
-| **BACKLOG** 23 | | `T003` `T004` `T024` `T025` `T047` `T051` +17 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 89m |  |
-|  | T055 | The orient contract and its scenario corpus | adervark | 40h |  |
+| **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 3h |  |
+|  | T055 | The orient contract and its scenario corpus | adervark | 42h |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 2d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 2d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 2d |  |
 |  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 3d |  |
 |  | T050 | /aa on Windows without WSL | adervark | 3d |  |
-|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 3d |  |
-|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 3d |  |
+|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 4d |  |
+|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 4d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 4d |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 4d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 4d |  |
@@ -96,7 +95,10 @@ FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 100% (tou
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 6d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
+
+**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
+
+- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T073
 <!-- /AA:generated -->
 
 <!--
