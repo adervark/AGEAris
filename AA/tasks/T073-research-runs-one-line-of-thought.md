@@ -38,7 +38,7 @@ spent, and the phases, each one task.
 
 ## Steps
 
-- [ ] Draft v1: [`docs/plans/research-runs.md`](../../docs/plans/research-runs.md).
+- [x] Draft v1: [`docs/plans/research-runs.md`](../../docs/plans/research-runs.md).
 - [ ] Review: one Architect, then one Critic, on the operator's go.
 - [ ] The operator's decisions; v2.
 - [ ] Register the phases as tasks.
@@ -61,11 +61,11 @@ spent, and the phases, each one task.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @v/b8438f28: claimed, drafting v1
-- **In flight:** drafting `docs/plans/research-runs.md`
-- **On disk:** nothing yet beyond this file
-- **Resume with:** the Steps above
-- **Next decision:** none yet
+- **Last touched:** 2026-10-13, adervark @v/b8438f28: v1 drafted and committed
+- **In flight:** nothing. No review has run; reviews wait for the operator's go.
+- **On disk:** `docs/plans/research-runs.md` v1, committed
+- **Resume with:** the operator's answers to D1–D4 (§10), then the review
+- **Next decision:** the operator's: D1–D4, and whether the review runs now
 
 ## Result
 
