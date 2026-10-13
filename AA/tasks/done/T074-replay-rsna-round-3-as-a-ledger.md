@@ -132,11 +132,10 @@ or time, so they are not exercised, and the result says so.
 
 - **Last touched:** 2026-10-13, adervark @v/b8438f28: done
 - **In flight:** nothing
-- **On disk:** the script and its ledger are in that session's scratch
-  only, as this task's rules required
+- **On disk:** `docs/plans/evidence/t074/`: the script, its ledger, its
+  warnings and its summary
 - **Resume with:** nothing; the findings are in T073's v2 input
-- **Next decision:** the operator's: whether to commit the script and ledger
-  as evidence
+- **Next decision:** none
 
 ## Result
 
@@ -213,7 +212,7 @@ Also found:
 
 To re-run:
 
-- Apply the procedure above to RSNA `e4e356c`, with `T047` read from
+- `node docs/plans/evidence/t074/replay.mjs`. By hand: apply the procedure above to RSNA `e4e356c`, with `T047` read from
   `pm/tasks/done/`.
 - The script took the briefs' questions in the order listed in this task's
   procedure.
@@ -223,3 +222,10 @@ To re-run:
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-13, the operator amended the rule that kept the script and ledger
+  in scratch. They are committed as evidence in `docs/plans/evidence/t074/`.
+  The script now reads RSNA through `git show` instead of copies, and its
+  ledger came out the same, byte for byte. The files quote RSNA's research,
+  so the branch is not pushed before RSNA closes on 2026-10-22 without the
+  operator's word (STATE.md, Watch out for).

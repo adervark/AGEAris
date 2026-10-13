@@ -1,0 +1,202 @@
+[
+ {
+  "code": "uncovered",
+  "v1": true,
+  "q": "L9.Q2",
+  "claims": 0,
+  "ask": "What do they do, and what of it is verifiable rather than asserted?"
+ },
+ {
+  "code": "uncovered",
+  "v1": true,
+  "q": "L11.Q2",
+  "claims": 0,
+  "ask": "And the efficiency prize is a separate $18,000 track where we are rank 265 and a cheap con"
+ },
+ {
+  "code": "uncovered",
+  "v1": true,
+  "q": "L13.Q1",
+  "claims": 30,
+  "ask": "the submission budget"
+ },
+ {
+  "code": "uncovered",
+  "v1": true,
+  "q": "L13.Q2",
+  "claims": 0,
+  "ask": "the final-two selection nobody has registered"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "2 | **Full-data deployment members** ([T046](../pm/tasks/T046-full-data-deployment-members.md)) | **+0.008 to ",
+  "line": 408,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "**3 NEW** | **`--encoder-lr`, ~8 lines** ([T050](../pm/tasks/T050-encoder-lr-flag.md)) | **0 by itself.** It p",
+  "line": 409,
+  "why": "lane 6 §4: no extracted claim"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "4 | **Physical-mm centre crop, `--crop-mm 140`** ([T041](../pm/tasks/T041-physical-mm-crop.md)) | +0.003 to +0",
+  "line": 410,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "8 | **fastMRI+ as the truth-anchored instrument** ([T045](../pm/tasks/T045-fastmri-plus-instrument.md)) | not ",
+  "line": 414,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "9 | **T034 — family-alone-10 with all six TTA views** ([T034](../pm/tasks/T034-family-alone-lb-ab.md)) | unkno",
+  "line": 415,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "10 | **armC-only `mirror`/`rot±` views** | small; §4.4's turned-over view curve is a poor prior | MEASURED (la",
+  "line": 416,
+  "why": "lane 11 §2.6: no extracted claim"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "11 | **Offline BatchNorm recalibration — PARKED, not dropped** | **0 to +0.003 OOF**, which after the ×0.00–0.",
+  "line": 417,
+  "why": "lane 12 §1.5: no extracted claim"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "12 | **`--seqs 2` second sequence family** ([T007](../pm/tasks/T007-sequence-diversity-clean.md)) | **unresolv",
+  "line": 418,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "14 | **DINOv3/ConvNeXt as a diversity arm** ([T025](../pm/tasks/T025-dinov3-backbone.md)) | +0.002 to +0.006 a",
+  "line": 420,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "**The BatchNorm double-update as a defect to repair** | 67 of 69 layers, buffer difference below fold-to-fold ",
+  "line": 435,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "**Per-label pooling over TTA views** | prohibited: it is rule-constant tuning | lane 11 §2.5",
+  "line": 436,
+  "why": "lane 11 §2.5: no extracted claim"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "**Test-time BN adaptation on the hidden test** | by construction not exercised by any instrument that scores o",
+  "line": 443,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "**The public/private split structure** | the host has declined to answer for 21 days (topic 734681, rank-3 tea",
+  "line": 445,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "**Kaggle's auto-selection criterion** | stated on no page any lane could read | nothing — which is why T048 is",
+  "line": 446,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "[T049](../pm/tasks/T049-inference-slice-density.md) | **Inference-time slice density**, `--slices 12 → 24`, sc",
+  "line": 629,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "[T050](../pm/tasks/T050-encoder-lr-flag.md) | **`--encoder-lr`**, ~8 lines, then the S1 screen on the axis the",
+  "line": 630,
+  "why": "cites no lane"
+ },
+ {
+  "code": "unbacked",
+  "v1": true,
+  "decision": "[T051](../pm/tasks/T051-member-pool-and-layout-decision.md) | **The member-pool / layout decision** — 22 vs 12",
+  "line": 631,
+  "why": "cites no lane"
+ },
+ {
+  "code": "contradiction-about",
+  "v1": false,
+  "about": "members",
+  "values": [
+   22,
+   10,
+   12,
+   5,
+   14,
+   16
+  ],
+  "lanes": [
+   "orch.l10",
+   "orch.l11",
+   "orch.l13"
+  ]
+ },
+ {
+  "code": "contradiction-about",
+  "v1": false,
+  "about": "views",
+  "values": [
+   3,
+   2
+  ],
+  "lanes": [
+   "orch.l11",
+   "orch.l12",
+   "orch.l13"
+  ]
+ },
+ {
+  "code": "where-missing",
+  "v1": false,
+  "claim": "l11/10",
+  "where": "lane11-inference-and-efficiency.md#§3.4",
+  "says": "**lane 7 §3.4: \"the model under-predicts by 2× in practice\"** | **This is not right as sta"
+ },
+ {
+  "code": "source-missing",
+  "v1": true,
+  "claim": "l10/8",
+  "src": "outputs/t028/run_density.sh:33",
+  "why": "no such path at the pin or on disk"
+ },
+ {
+  "code": "registered-late",
+  "v1": true,
+  "lane": 13,
+  "questionsAt": "cd160f5b880aa28d5d845c33cc2c7dea8255d88a 2026-09-02T15:57:32+05:30",
+  "reportAt": "cd160f5b880aa28d5d845c33cc2c7dea8255d88a 2026-09-02T15:57:32+05:30"
+ }
+]

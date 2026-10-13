@@ -7,9 +7,15 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
+**In progress:** T073, research runs aggregated into one line of thought
+(`docs/plans/research-runs.md`). v1 is under review, Architect and then
+Critic. R0 (T074) is done: partial, with v1's checks catching 1 of 3
+defects. v2 answers the reviews and R0.
+
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
-82 cases, is done (2026-10-11); T053, T054 and T063 can start. Before
+82 cases, is done (2026-10-11). T053, T054, T057 and T063 can start;
+T056 waits on T004. Before
 that, the Flow tab's first slice of charts was done (T030–T032:
 aging WIP, cycle-time scatterplot, forecast). The rest of
 `docs/plans/visualisation.md` (CFD, burnup, where a task's time went, process
@@ -21,19 +27,24 @@ operator's choice in its file before it can be claimed.
 and left it uncommitted there; each repository's own session commits it.
 AGE Aris must go on reading `deaddrop/` and `pm/` boards. Its data folder
 must stay outside this repository, or it refuses to track it (T003).
+**Do not push this branch before 2026-10-22 without the operator's word.**
+`docs/plans/research-runs.md` §2, PROGRESS.md (T074), T073, T074 and
+`docs/plans/evidence/t074/` quote RSNA's competition research, and RSNA
+closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-13T05:28Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
+`board · 2026-10-13T05:31Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
 
-FLOW · **WIP 1/2** · throughput 11.4/wk (49 in 30d) · cycle time 50th 5m / 85th 34m (n=49)
-FLOW · Little's Law: 1 ÷ 11.4/wk ≈ 14h expected · flow efficiency 63% (touch 11m of 18m, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 11.7/wk (50 in 30d) · cycle time 50th 5m / 85th 34m (n=50)
+FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 56% (touch 11m of 21m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 18m | ⚙ |
+| **IN PROGRESS** 1/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 21m | ⚙ |
 | **BACKLOG** 23 | | `T003` `T004` `T024` `T025` `T047` `T051` +17 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T055 | The orient contract and its scenario corpus | adervark | 38h |  |
+| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 1m |  |
+|  | T055 | The orient contract and its scenario corpus | adervark | 38h |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 2d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 2d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 2d |  |

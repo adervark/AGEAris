@@ -485,6 +485,6 @@ its date, the number, and where the evidence is. Newest last.
   - independence is not orient's run family, because all five lanes were one
     family;
   - sources get the same out-of-sight check as `where`.
-- **Evidence:** T074's Result. As T074's rules required, the script and its
-  ledger stayed in the session's scratch. Whether to commit them is the
-  operator's call.
+- **Evidence:** T074's Result. The script and its ledger are in `docs/plans/evidence/t074/`; the operator
+  chose to commit them, amending T074's rule. They quote RSNA's research:
+  not pushed before 2026-10-22.
