@@ -54,8 +54,9 @@ Measure whether stage 1's linking catches what RSNA's round 3 synthesis correcte
     an empty `src` with the lane's own mark when nothing is cited; and
     `premises` for every INFERRED fact, with `premises_by`.
   - It also writes one `question` line per T047 lane brief.
-  - Output: `docs/plans/evidence/t075/ledger.jsonl`, written through its
-    final message. The parent saves it, since the subagent writes no file.
+  - Output: it writes `docs/plans/evidence/t075/ledger.jsonl` and no other
+    file. Amended before it ran: subagent replies are truncated in transit,
+    as both Critic reports were.
 - **Linking** is computed by `docs/plans/evidence/t075/link.mjs`, written by
   the parent and standing in for `research.sh`. It applies v2.4 §5.2's
   referents exactly: indentation-aware enclosing definition, enclosing
@@ -66,7 +67,8 @@ Measure whether stage 1's linking catches what RSNA's round 3 synthesis correcte
   contradictions.
 - **The reconciler** is a second fresh Opus subagent, which did not
   transcribe. It gets the linked pairs with the canaries mixed in, unmarked,
-  and writes a `same` line per pair, quoting both lines. If it misses a
+  and writes a `same` line per pair, quoting both lines, to
+  `docs/plans/evidence/t075/same.jsonl` and no other file. If it misses a
   canary, it reruns once. A second miss is recorded and ends the run.
 - **Grading** is by the parent, against the key, exactly as written there.
   Every warning is marked real or false.
