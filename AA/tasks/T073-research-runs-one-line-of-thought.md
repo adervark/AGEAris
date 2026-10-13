@@ -102,3 +102,5 @@ owner's alone, rule 2)*
   v2.1's stage 1 would not flag conflicting findings, and amended D6: "i want
   this fixed fixing conflicted and redundant data is the point". v2.2 answers
   that.
+- 2026-10-13: the operator approved a third review round, one fresh Critic on
+  v2.3, beyond the rules' two rounds.
