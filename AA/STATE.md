@@ -34,15 +34,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-13T09:23Z · 82 tasks: 30 backlog, 0 WIP (0 in progress), 52 delivered`
+`board · 2026-10-13T09:24Z · 82 tasks: 30 backlog, 0 WIP (0 in progress), 52 delivered`
 
-FLOW · **WIP 0/2** · throughput 11.9/wk (51 in 30d) · cycle time 50th 5m / 85th 45m (n=51)
-FLOW · Little's Law: 0 ÷ 11.9/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 12.1/wk (52 in 30d) · cycle time 50th 5m / 85th 45m (n=52)
+FLOW · Little's Law: 0 ÷ 12.1/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 40m |  |
+| **DONE** | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | now |  |
+|  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 41m |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 3h |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 42h |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 2d |  |
@@ -95,10 +96,6 @@ FLOW · Little's Law: 0 ÷ 11.9/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 6d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-
-**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
-
-- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T075
 <!-- /AA:generated -->
 
 <!--
