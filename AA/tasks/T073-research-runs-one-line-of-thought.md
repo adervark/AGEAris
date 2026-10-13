@@ -78,3 +78,13 @@ owner's alone, rule 2)*
   track pages go to every AA repository through `aa-init`. R0 runs now, by one
   session with no subagents, as T074. T072 waits for R1b. The review was
   approved to run.
+- 2026-10-13, T074 (R0) done: partial, 1 of 3 defects caught by v1's checks.
+  v2 must answer it:
+  - a contradiction is keyed on a registered subject, not on a question;
+  - a verdict's `where` names its reasoning section, and that section must
+    exist and have a body;
+  - `q` and `verdict` are required on every claim;
+  - research independence is not orient's run family;
+  - sources get the out-of-sight check.
+
+  Details are in T074's Result and in PROGRESS.md.

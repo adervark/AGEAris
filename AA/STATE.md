@@ -24,15 +24,14 @@ must stay outside this repository, or it refuses to track it (T003).
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-13T05:20Z · 74 tasks: 23 backlog, 2 WIP (2 in progress), 49 delivered`
+`board · 2026-10-13T05:28Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
 
-FLOW · **WIP 2/2** · throughput 11.4/wk (49 in 30d) · cycle time 50th 5m / 85th 34m (n=49)
-FLOW · Little's Law: 2 ÷ 11.4/wk ≈ 29h expected · flow efficiency 44% (touch 4m of 10m, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 11.4/wk (49 in 30d) · cycle time 50th 5m / 85th 34m (n=49)
+FLOW · Little's Law: 1 ÷ 11.4/wk ≈ 14h expected · flow efficiency 63% (touch 11m of 18m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 2/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 10m |  |
-|  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | ? | ↩ |
+| **IN PROGRESS** 1/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 18m | ⚙ |
 | **BACKLOG** 23 | | `T003` `T004` `T024` `T025` `T047` `T051` +17 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T055 | The orient contract and its scenario corpus | adervark | 38h |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 2d |  |
@@ -85,7 +84,7 @@ FLOW · Little's Law: 2 ÷ 11.4/wk ≈ 29h expected · flow efficiency 44% (touc
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 6d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ↩ your own idle claim — take it straight back, no staleness wait (rule 3)
+- ⚙ a `doing` nothing closed: in flight, or stopped mid-act if its run is closed — `ckpt.sh live` says which, before you spend anything
 <!-- /AA:generated -->
 
 <!--

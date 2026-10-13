@@ -437,3 +437,54 @@ its date, the number, and where the evidence is. Newest last.
 - The operator waived reviewing the cases (2026-10-11).
 - `npm test` passed 542 of 542, and `npm run check` passed.
 - Evidence: the Result of T055.
+
+## 2026-10-13 — T074: RSNA's round 3 replayed as a ledger, 1 of 3 defects caught
+
+- RSNA's research round 3 (its T047: five lanes and a synthesis, at RSNA
+  `e4e356c`) was recast into a draft ledger by a script. The script applied
+  T074's procedure, which was fixed before any lane report was read: 8
+  questions, 254 claims, 34 decisions.
+- **Partial: v1's checks catch 1 of the 3 defects** that RSNA's synthesis
+  found by hand.
+  - **Caught: lane 11's efficiency half, never written** (`uncovered`). The
+    catch rests on two choices made before the reports were read. A
+    document's title is not a section, and a claim that matches no question
+    falls to the brief's first question. In a real ledger the lanes name their
+    questions themselves, which makes the catch robust.
+  - **Missed: lanes 10 and 11 disagreeing on a count, 10 against 12.** v1
+    compares claims only within one question, and the two lanes answered
+    different questions. A noun-phrase subject (`about`, under test) fired on
+    "members", but over six unrelated counts (5 to 22), so it would have fired
+    without the defect.
+  - **Missed: lane 12's two verdicts with no section behind them.** Rows 3 and
+    4 of its table point nowhere, and the report goes from §2 to §5.
+- **False positives:**
+  - 3 `uncovered`, from the replay's matching of headings to questions;
+  - 17 `unbacked`: 11 rest on evidence from rounds 1–2, 5 cite sections
+    written as prose, which the procedure does not extract, and 1 cites a
+    round 2 lane;
+  - 2 `contradiction-about`;
+  - 1 `where-missing`, from a reference to another lane's §3.4.
+- **Real, beyond the three:**
+  - lane 13 ran with no brief (`registered-late`);
+  - 1 cited file no longer exists anywhere (`outputs/t028/run_density.sh`);
+  - 3 more cited sources sit in untracked folders.
+- **The baseline:**
+  - (r1) questions asked again: 0, by exact text;
+  - (r2) and (r3): not applicable, because the round spent nothing;
+  - (r4) defects that reached the synthesis with no tool flag: 3 of 3. With
+    v1's checks, 2 of 3 would still have reached it;
+  - (r5): not measurable on one round finished in a day;
+  - (r6) cited evidence out of sight: 4 of 22 `path:line` sources (18%).
+  - Also: 67 of 254 claims carry no evidence mark in their row or section,
+    and 7 carry a verdict word.
+- **For T073's v2:**
+  - contradictions are keyed on registered subjects, not on questions;
+  - a verdict's `where` must name a section that exists and has a body;
+  - `q` and `verdict` are required on every claim;
+  - independence is not orient's run family, because all five lanes were one
+    family;
+  - sources get the same out-of-sight check as `where`.
+- **Evidence:** T074's Result. As T074's rules required, the script and its
+  ledger stayed in the session's scratch. Whether to commit them is the
+  operator's call.

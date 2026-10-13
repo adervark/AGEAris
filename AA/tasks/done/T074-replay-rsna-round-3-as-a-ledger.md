@@ -1,7 +1,7 @@
 ---
 id: T074
 title: "Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand?"
-status: claimed
+status: done
 owner: adervark @v/b8438f28 2026-10-13 — R0: RSNA round 3 recast as a draft ledger, in scratch
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
@@ -41,11 +41,11 @@ Every other warning is listed and marked real or false. The baseline measures
 ## Steps
 
 - [x] Fix the extraction procedure, below, before any lane report is read.
-- [ ] Extract the ledger from RSNA at `e4e356c` into this session's scratch.
-- [ ] Write the throwaway checker and run it.
-- [ ] Compare the warnings with the three known defects, and mark every other
+- [x] Extract the ledger from RSNA at `e4e356c` into this session's scratch.
+- [x] Write the throwaway checker and run it.
+- [x] Compare the warnings with the three known defects, and mark every other
       warning real or false.
-- [ ] Record the result and the baseline in PROGRESS.md, and give T073's v2
+- [x] Record the result and the baseline in PROGRESS.md, and give T073's v2
       what it found.
 
 ## Decision rules — fixed in advance
@@ -130,14 +130,94 @@ or time, so they are not exercised, and the result says so.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @v/b8438f28: claimed, procedure fixed
-- **In flight:** extraction, in this session's scratch
-- **On disk:** nothing yet beyond this file
-- **Resume with:** the Steps above. The scratch ledger dies with the session,
-  so a new session starts the extraction again from the procedure.
-- **Next decision:** none
+- **Last touched:** 2026-10-13, adervark @v/b8438f28: done
+- **In flight:** nothing
+- **On disk:** the script and its ledger are in that session's scratch
+  only, as this task's rules required
+- **Resume with:** nothing; the findings are in T073's v2 input
+- **Next decision:** the operator's: whether to commit the script and ledger
+  as evidence
 
 ## Result
+
+**Partial: v1's checks catch 1 of the 3 defects.** By the rules above, a
+partial goes to T073's v2 before anything is built. PROGRESS.md has the
+numbers.
+
+What ran:
+
+- A Node script applied the procedure above to RSNA at `e4e356c`, through
+  `git show`.
+- It extracted 8 questions, 254 claims (lanes 9–13: 61, 87, 24, 52 and 30)
+  and 34 decisions.
+- It then ran `uncovered`, `unbacked`, `contradiction`, `source-missing`,
+  `registered-late` and `reopened-settled`, plus the two extensions under
+  test.
+- Two choices were pinned after the headings were seen and before any content
+  was read:
+  - a document's H1 is its title, not a section;
+  - a claim whose headings match no question falls to the lane's first
+    question, in the brief's order.
+
+  If the title counted as a section, lane 11's title would have hidden
+  defect 3.
+
+The three defects:
+
+1. **Lanes 10 and 11, 10 against 12: missed.**
+   - v1 keys `contradiction` on the question, and the two lanes answered
+     different questions.
+   - The `about` extension keys on the noun after a count. It grouped six
+     unrelated counts of "members" (5, 10, 12, 14, 16, 22) from lanes 10, 11
+     and 13, so it fires with or without the defect. It does not catch it.
+   - For v2: a value needs a **subject** from a registry the brief hands to
+     every lane. New subjects are listed at synthesis, so they can be merged
+     there.
+2. **Lane 12's two verdicts with no section behind them: missed.**
+   - Its "Verdict up front" table has rows 1a to 6. Rows 3 (auxiliary heads on
+     DICOM metadata) and 4 (mirror-consistency regularisation) point to no
+     section, and the report goes from §2 to §5.
+   - For v2: a claim with a verdict needs a `where` naming the section of its
+     reasoning, not the summary that states it. `where-missing` fires when
+     that section is absent or empty.
+3. **Lane 11's efficiency half: caught by `uncovered`.**
+   - No lane-11 section matched the efficiency question, so it got 0 claims.
+   - In a real ledger, lanes name `q` themselves, and nobody wrote a claim on
+     it.
+
+Every other warning:
+
+- **Real:**
+  - `registered-late` on lane 13, which ran with no brief, as T047 records;
+  - `source-missing` on `outputs/t028/run_density.sh:33`, cited by lane 10
+    and gone from git and from disk;
+  - 3 more `path:line` sources in untracked folders, still on disk.
+- **False:**
+  - 3 `uncovered`, on L9.Q2, L13.Q1 and L13.Q2. They come from matching
+    headings to questions, and from RSNA's verdicts being written as prose:
+    7 of 254 claims carry a verdict word;
+  - 17 `unbacked`. 11 are rows of the synthesis whose evidence is in rounds
+    1–2. 5 cite sections written as prose, which the procedure does not
+    extract. 1 cites a round 2 lane;
+  - 2 `contradiction-about`, both noise;
+  - 1 `where-missing`, from a reference to another lane's §3.4.
+
+Also found:
+
+- 67 of 254 claims carry no evidence mark in their row or section. Most of
+  them are rows that cite a `file:line`, which is READ evidence left
+  unmarked.
+- Under orient's family rule all five lanes are one family, yet RSNA counts
+  "two lanes, independently" as corroboration. Research needs its own
+  definition of independence.
+
+To re-run:
+
+- Apply the procedure above to RSNA `e4e356c`, with `T047` read from
+  `pm/tasks/done/`.
+- The script took the briefs' questions in the order listed in this task's
+  procedure.
+
 
 ## Notes
 
