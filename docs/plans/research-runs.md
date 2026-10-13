@@ -1,10 +1,11 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: draft v1, for review** (2026-10-13, T073). Nothing here is built.
+**Status: draft v1, under review** (2026-10-13, T073). Nothing here is built.
 It was written on `feature/pm-cockpit` at 6856c59, after reading how three
 repositories on this machine already do research: RSNA, AGEIS and this one.
-Nothing in them was changed. The review, one Architect and then one Critic,
-waits for the operator's go (T073's decision rules).
+Nothing in them was changed. The operator decided D1–D4 the same day (§10),
+and approved the review: one Architect, then one Critic. R0, the replay, runs
+as T074.
 
 ## 1. What the operator asked for
 
@@ -479,6 +480,18 @@ R0 needs nothing built and runs first. The operator sees track pages in the
 repository after R1b, and in AGE Aris after R2.
 
 ## 10. Decisions for the operator
+
+**Decided 2026-10-13 by the operator. Each followed the recommendation:**
+
+- **D1:** a findings ledger per task, and track pages with a generated region.
+- **D2:** every AA repository, through `aa-init`.
+- **D3:** R0 runs now, by one session with no subagents (T074).
+- **D4:** T072 waits for R1b, then runs as the first dogfood.
+
+The review of v1, one Architect and then one Critic, was approved to run the
+same day.
+
+The decisions as they were put:
 
 - **D1. The shape:** a findings ledger per task (`AA/findings/T###.jsonl`,
   never retired) and track pages with a generated region (`AA/tracks/`).

@@ -61,11 +61,11 @@ spent, and the phases, each one task.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @v/b8438f28: v1 drafted and committed
-- **In flight:** nothing. No review has run; reviews wait for the operator's go.
-- **On disk:** `docs/plans/research-runs.md` v1, committed
-- **Resume with:** the operator's answers to D1–D4 (§10), then the review
-- **Next decision:** the operator's: D1–D4, and whether the review runs now
+- **Last touched:** 2026-10-13, adervark @v/b8438f28: v1 committed; D1–D4 decided; review approved
+- **In flight:** the review of v1, Architect first and then Critic, each a subagent run on this trail. The trail's newest `doing` says which.
+- **On disk:** `docs/plans/research-runs.md` v1; review reports land in `docs/plans/reviews/` as they finish
+- **Resume with:** `AA/ckpt.sh live T073`; if a review run stopped mid-act, check its report file first
+- **Next decision:** none until both reviews are in; then v2 answers them
 
 ## Result
 
@@ -73,3 +73,8 @@ spent, and the phases, each one task.
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-13: the operator decided D1–D4, each as recommended. The ledger and
+  track pages go to every AA repository through `aa-init`. R0 runs now, by one
+  session with no subagents, as T074. T072 waits for R1b. The review was
+  approved to run.

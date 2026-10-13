@@ -1,0 +1,145 @@
+---
+id: T074
+title: "Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand?"
+status: claimed
+owner: adervark @v/b8438f28 2026-10-13 — R0: RSNA round 3 recast as a draft ledger, in scratch
+# type: one word; tasks of one type are timed together; `bug` counts as defect work
+type: measure
+# blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
+blockedReason: ""
+depends: []
+created: 2026-10-13
+---
+
+# T074 — Replay RSNA's research round 3 as a ledger
+
+## Goal
+
+RSNA's research round 3 is recast as a draft findings ledger in scratch, and a
+throwaway checker is run over it. The round is its T047: lanes 9–13 and the
+synthesis, as they stood at RSNA `e4e356c`, the commit that closed it.
+
+The pass is fixed in
+[`docs/plans/research-runs.md`](../../docs/plans/research-runs.md) §5.6. The
+checks must flag the three defects that RSNA's synthesis found by hand:
+
+1. lanes 10 and 11 disagreed on a count, 10 against 12;
+2. two verdicts in lane 12's table had no section behind them;
+3. lane 11's efficiency half was never written.
+
+Every other warning is listed and marked real or false. The baseline measures
+(r1)–(r6) land in PROGRESS.md.
+
+## Context
+
+- R0 of T073's design (§5.6 L1, §7, §9). The operator's D3, 2026-10-13: now,
+  one session, no subagents.
+- RSNA is read at pinned commits through `git show`, and nothing in it is
+  changed. Lane 11b, `lane11b-efficiency-track.md`, was added at `5313b79`,
+  after the synthesis, so it is outside the replay.
+
+## Steps
+
+- [x] Fix the extraction procedure, below, before any lane report is read.
+- [ ] Extract the ledger from RSNA at `e4e356c` into this session's scratch.
+- [ ] Write the throwaway checker and run it.
+- [ ] Compare the warnings with the three known defects, and mark every other
+      warning real or false.
+- [ ] Record the result and the baseline in PROGRESS.md, and give T073's v2
+      what it found.
+
+## Decision rules — fixed in advance
+
+- **No spend:** one session, no subagents (D3). Nothing is written in RSNA.
+  The ledger and the checker stay in scratch. Only the result, the baseline
+  and the procedure land in this repository.
+- **The bias, stated before extraction.** This session read T047's Result, so
+  it knows the three defects. Extraction therefore follows the procedure
+  below, as written. A defect counts as caught only when the procedure,
+  applied as written, produces lines that make a check fire.
+- **Pass:** all three defects flagged by v1's checks as written. **Partial:**
+  some are flagged only by an extension under test (below), or not at all; the
+  result says which. **Fail:** none is flagged. A partial or a fail goes to
+  T073's v2 before anything is built.
+- Done means the result and the baseline are in PROGRESS.md, and T073's v2 has
+  the findings.
+
+## The extraction procedure — fixed before reading any lane report
+
+**Questions.** These are what the claimant would have registered before the
+lanes started:
+
+- Each lane brief in T047 (lanes 9–12) is split into its asks. An ask is
+  every sentence that asks a question, or that names a target the lane is to
+  investigate. Each ask becomes one `question` line, owned by its lane.
+- Every question carries T047's own rules: every claim needs a mark (rule 1),
+  and a lever needs an instrument (rule 2).
+- Lane 13 had no brief. Its questions are taken from its report's own
+  statement of what it asks, and they are dated at the report's commit.
+
+**Claims.** Each lane report is read in order:
+
+1. Each table row that gives a verdict, a finding or a number for a named
+   item becomes one claim.
+2. Each numbered or bulleted item under a heading that names a conclusion,
+   verdict, finding, result or summary becomes one claim.
+3. A claim's `q` is the lane's question that its section answers, matched by
+   the section heading. If none matches, it is the lane's first question.
+4. Its `mark` is the mark written in the row or its section, or empty.
+5. Its `where` is the report's path and the heading the report itself names
+   for it: the section the row points to if it points to one, else the
+   nearest heading above.
+6. Its `verdict` comes from the report's own word, through a fixed table:
+   - LEVER → answers;
+   - NULL, dead or null → null;
+   - RESOLVED NEGATIVE → rejects;
+   - PARKED, unresolved or untested → unresolved.
+7. A `path:line` the report cites becomes `src`.
+8. A stated count of a named object becomes `value`. Its `unit` is the
+   object's noun as written.
+
+**Decisions.** These come from the synthesis:
+
+- Each ranked lever, carried verdict or registered task becomes one
+  `decision` line.
+- Its `cites` are the claims whose `where` matches a lane section the
+  synthesis cites.
+- A citation that matches no extracted claim is kept as written, and is not
+  repaired.
+
+**Extensions under test.** They are not in v1, and each is reported apart
+from v1's checks:
+
+- **`about`:** a claim with a count also gets the object's noun phrase,
+  lowercased, with its digits removed. A `contradiction` is then also tested
+  across questions, for claims with the same `about`.
+- **`where-missing`:** a claim's `where` heading does not exist in its file.
+
+**What runs.** The checks that apply to a round with no spend:
+
+- `uncovered`, `unbacked`, `contradiction` (by question, and by `about`);
+- `where-missing`, `source-missing` (each `path:line` at `e4e356c`);
+- `registered-late`;
+- `reopened-settled`, against T047's table of what rounds 1–2 had answered;
+- `single-family`, reported as an observation.
+
+`instrument-unresolved`, `artifact-mismatch` and `orphan-answer` need spends
+or time, so they are not exercised, and the result says so.
+
+## Handoff — state at last stop
+
+*Kept true while claimed, not written on the way out (rule 8).*
+
+- **Last touched:** 2026-10-13, adervark @v/b8438f28: claimed, procedure fixed
+- **In flight:** extraction, in this session's scratch
+- **On disk:** nothing yet beyond this file
+- **Resume with:** the Steps above. The scratch ledger dies with the session,
+  so a new session starts the extraction again from the procedure.
+- **Next decision:** none
+
+## Result
+
+## Notes
+
+*(anyone may append here — the one part of a claimed file that is not the
+owner's alone, rule 2)*
