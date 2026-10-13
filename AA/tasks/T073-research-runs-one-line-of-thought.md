@@ -39,7 +39,7 @@ spent, and the phases, each one task.
 ## Steps
 
 - [x] Draft v1: [`docs/plans/research-runs.md`](../../docs/plans/research-runs.md).
-- [ ] Review: one Architect, then one Critic, on the operator's go.
+- [ ] Review: one Architect (done: SOUND WITH REQUIRED CHANGES), then one Critic (running).
 - [ ] The operator's decisions; v2.
 - [ ] Register the phases as tasks.
 
@@ -61,11 +61,11 @@ spent, and the phases, each one task.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @v/b8438f28: v1 committed; D1–D4 decided; review approved
-- **In flight:** the review of v1, Architect first and then Critic, each a subagent run on this trail. The trail's newest `doing` says which.
-- **On disk:** `docs/plans/research-runs.md` v1; review reports land in `docs/plans/reviews/` as they finish
-- **Resume with:** `AA/ckpt.sh live T073`; if a review run stopped mid-act, check its report file first
-- **Next decision:** none until both reviews are in; then v2 answers them
+- **Last touched:** 2026-10-13, adervark @v/b8438f28: v2 committed, answering the Architect (R1–R9, S1–S6) and R0
+- **In flight:** the Critic's review of v1 (run `b8438f28.15f2`), read at `eb7f7eb`. The trail's newest `doing` names it.
+- **On disk:** `docs/plans/research-runs.md` v2; `docs/plans/reviews/research-runs-v1-architect.md`
+- **Resume with:** `AA/ckpt.sh live T073`. When the Critic is in, save its report beside the Architect's, then write v2.1 to answer it.
+- **Next decision:** the operator's: D5 (revisit D4), once v2.1 is out
 
 ## Result
 
