@@ -1,8 +1,8 @@
 ---
 id: T082
 title: "Research-runs design v2.5: answer R0b's recall of 2 of 12"
-status: open
-owner: —
+status: claimed
+owner: adervark @b/b8438f28 2026-10-13 — v2.5: transcription no longer one agent's choice
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
