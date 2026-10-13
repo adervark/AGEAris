@@ -1,8 +1,8 @@
 ---
 id: T075
 title: "R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records"
-status: open
-owner: —
+status: claimed
+owner: adervark @b/b8438f28 2026-10-13 — R0b: round 3 replayed with facts, graded on every correction
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
