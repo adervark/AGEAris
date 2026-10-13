@@ -540,3 +540,25 @@ its date, the number, and where the evidence is. Newest last.
     shapes included;
   - T077–T081 build and replay;
   - T072 runs on a hand-written ledger.
+
+## 2026-10-13 — T075: R0b, round 3 replayed with facts: recall 2 of 12
+
+- A fresh transcriber wrote 232 facts from RSNA's round 3 lanes and the
+  record settled before it (13.4 min). `link.mjs` applied v2.4's referent rules
+  and found 234 pairs. A separate reconciler marked them (7.3 min).
+- **Recall: 2 of the 12 corrections** that the round 3 synthesis records.
+  - Caught: C1 (flags "never passed") and C2 ("encoder too hot").
+  - Missed:
+    - 6 never transcribed, 4 of them from documents the transcriber read
+      (C12, the 10-vs-12 inference, among them);
+    - 2 not linked, because runtime and leaderboard figures have no code
+      referent;
+    - 1 within one document;
+    - 1 from a later code commit.
+- **Precision: 17 of 17.** One of them is a real defect the synthesis never
+  recorded: lane 10's "~+30 min" for a third pass misreads the kernel's
+  "~67 min … x ~2".
+- The verdict, by T075's rule: below 10 of 12, so the design is revised
+  (T082) before T077.
+- Evidence: `docs/plans/evidence/t075/` (`grade.md` first). It quotes RSNA's
+  research: not pushed before 2026-10-22.

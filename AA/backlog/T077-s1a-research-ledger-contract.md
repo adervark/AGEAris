@@ -7,7 +7,7 @@ owner: —
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
 blockedReason: ""
-depends: [T075]
+depends: [T082]
 created: 2026-10-13
 ---
 

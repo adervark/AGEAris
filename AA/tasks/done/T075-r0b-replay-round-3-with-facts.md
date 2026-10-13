@@ -1,7 +1,7 @@
 ---
 id: T075
 title: "R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records"
-status: claimed
+status: done
 owner: adervark @b/b8438f28 2026-10-13 — R0b: round 3 replayed with facts, graded on every correction
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
@@ -19,17 +19,17 @@ Measure whether stage 1's linking catches what RSNA's round 3 synthesis correcte
 
 ## Context
 
-- [`docs/plans/research-runs.md`](../../docs/plans/research-runs.md) v2.4, §7 (R0b) and §5.2–§5.5: the ledger format and the checks.
+- [`docs/plans/research-runs.md`](../../../docs/plans/research-runs.md) v2.4, §7 (R0b) and §5.2–§5.5: the ledger format and the checks.
 - RSNA round 3: `docs/research/0902c/` and `docs/RESEARCH-0902c-round-3.md`, at `e4e356c`. The Critic counts twelve corrections: §8.1's ten, §4's arithmetic slip, §8.3.
 - R0 was T074. Its weakness, a script transcribing prose under rules pinned after the headings were seen, is what this replay avoids.
 - Registered by T073 when the operator accepted v2.4 (2026-10-13).
 
 ## Steps
 
-- [ ] Count the corrections in the synthesis, and commit the list before any lane report is read.
-- [ ] Fix the procedure in this file: what makes a fact load-bearing, how citations are pinned, how premises are named. Commit it.
-- [ ] One fresh agent transcribes; a separate subagent reconciles. Ledger and costs go to `docs/plans/evidence/t075/`.
-- [ ] Grade recall per correction; tie each miss to a §5.5 gap; mark each warning real or false.
+- [x] Count the corrections in the synthesis, and commit the list before any lane report is read.
+- [x] Fix the procedure in this file: what makes a fact load-bearing, how citations are pinned, how premises are named. Commit it.
+- [x] One fresh agent transcribes; a separate subagent reconciles. Ledger and costs go to `docs/plans/evidence/t075/`.
+- [x] Grade recall per correction; tie each miss to a §5.5 gap; mark each warning real or false.
 
 ## Procedure — fixed before the transcriber runs
 
@@ -86,10 +86,10 @@ Measure whether stage 1's linking catches what RSNA's round 3 synthesis correcte
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, registered
+- **Last touched:** 2026-10-13, adervark @b/b8438f28: done; graded
 - **In flight:** nothing
 - **On disk:** nothing
-- **Resume with:** the Steps above
+- **Resume with:** nothing here; T082 revises the design
 - **Next decision:** none
 
 ## Verify
@@ -97,6 +97,38 @@ Measure whether stage 1's linking catches what RSNA's round 3 synthesis correcte
 Every correction in the committed list has a row: caught, or missed with its gap.
 
 ## Result
+
+**Recall: 2 of 12.** That is below the 10 of 12 bar, so by the rule above
+T073's design goes back for revision before T077. The revision is T082. The
+full grading is in `docs/plans/evidence/t075/grade.md`.
+
+- **Caught:**
+  - C1, the flags "never passed", which round 3 found passed once;
+  - C2, the claim that S1 tests "encoder too hot".
+
+  Each linked through `ref:--layer-decay` and was marked `conflict`, along with
+  every conclusion resting on it.
+- **Missed:**
+  - 6 never transcribed. 4 of them sat in documents the transcriber read
+    (C6, C7, C8, and C12, the 10-vs-12 inference itself). 2 lived outside the
+    scope (C3, C4).
+  - 2 transcribed but never linked, because runtime and leaderboard numbers
+    have no code referent (C5, C9).
+  - 1 inside one document (C11).
+  - 1 with no lane source, a correction from a later code commit (C10).
+- **Precision:** 17 of 17 real conflicts. Among them is one real defect the
+  round 3 synthesis never recorded: lane 10's "~+30 min" for a third layout
+  pass misreads the kernel's "~67 min … x ~2".
+- **Canaries:** 6 of 6 caught, but not blind. Two had AUCs above 1.
+- **Costs:**
+  - the transcriber: 13.4 min for 232 facts, about 3.5 s a fact;
+  - the reconciler: 7.3 min for 240 pairs;
+  - one referent, `--layer-decay`, links 80 pairs;
+  - 39 `out-of-sight` warnings on `outputs/` logs.
+
+**What it means:** linking and reconciling work. What fails is upstream:
+which facts get written, and quantities that point at no code. Transcription
+is cheap enough, at about 13 minutes a round, to be much broader.
 
 ## Notes
 
