@@ -47,3 +47,7 @@ A decided design for claim races between machines: fetch and rebase, where a con
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-13, T073's D5: the claim-race simulation belongs here. It runs on
+  real clones of a repository built by `lib/fabricate.mjs`, before the design
+  is decided (`docs/plans/research-runs.md` §5.7).

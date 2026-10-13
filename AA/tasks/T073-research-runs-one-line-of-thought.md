@@ -44,8 +44,9 @@ spent, and the phases, each one task.
   Critic (revise). Both are in [`docs/plans/reviews/`](../../docs/plans/reviews/).
 - [x] v2 answers the Architect and R0. v2.1 answers the Critic: its cheaper
   design is stage 1, and stage 2 waits on evidence.
-- [ ] Review, round 2: the Critic on v2.1.
-- [ ] The operator's decisions D5 and D6.
+- [x] The operator's decisions D5 and D6; D6 amended: conflicts and redundancy in stage 1.
+- [x] v2.2: facts keyed by object, one row per key, seven checks for conflict and redundancy.
+- [ ] Review, round 2: the Critic on v2.2 (its run on v2.1 died with no report).
 - [ ] Register the phases as tasks.
 
 ## Decision rules — fixed in advance
@@ -66,11 +67,11 @@ spent, and the phases, each one task.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @v/b8438f28: v2.1 committed, answering the Critic (B1–B6, N1–N7). Its §2 was checked against RSNA and AGEIS again, and five lines were corrected.
-- **In flight:** nothing yet. The Critic's second round, on v2.1, is next; when it runs, the trail's newest `doing` names it.
-- **On disk:** `docs/plans/research-runs.md` v2.1; `docs/plans/reviews/research-runs-v1-architect.md` and `research-runs-v1-critic.md`
-- **Resume with:** `AA/ckpt.sh live T073`. When the second round is in, save it as `docs/plans/reviews/research-runs-v2.1-critic.md`. Then answer it, or put D5 and D6 to the operator.
-- **Next decision:** the operator's: D5 (run T072 now, on a hand-written ledger) and D6 (stage 1 first), once the Critic has read v2.1
+- **Last touched:** 2026-10-13, adervark @b/b8438f28: v2.2 committed, answering the operator's amended D6: conflicting and redundant data are caught in stage 1.
+- **In flight:** nothing yet. The Critic's second round, on v2.2, is next; when it runs, the trail's newest `doing` names it.
+- **On disk:** `docs/plans/research-runs.md` v2.2; `docs/plans/reviews/research-runs-v1-architect.md` and `research-runs-v1-critic.md`
+- **Resume with:** `AA/ckpt.sh live T073`. When the second round is in, save it as `docs/plans/reviews/research-runs-v2.2-critic.md`, then answer it. After approval, register R0b, S0 and S1a–S1d as tasks.
+- **Next decision:** none of the operator's open; the Critic's verdict on v2.2 decides what follows
 
 ## Result
 
@@ -93,3 +94,9 @@ owner's alone, rule 2)*
   - sources get the out-of-sight check.
 
   Details are in T074's Result and in PROGRESS.md.
+- 2026-10-13: the operator decided D5 and D6 as recommended: T072 runs now on
+  a hand-written ledger, and stage 1 is built first. The Critic's second round
+  on v2.1 died at a session limit with no report. The operator then read that
+  v2.1's stage 1 would not flag conflicting findings, and amended D6: "i want
+  this fixed fixing conflicted and redundant data is the point". v2.2 answers
+  that.

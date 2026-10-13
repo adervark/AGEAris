@@ -1,6 +1,6 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: draft v2.1** (2026-10-13, T073). Nothing here is built.
+**Status: draft v2.2** (2026-10-13, T073). Nothing here is built.
 
 - v1 (f9ecde8) was written after reading how RSNA, AGEIS and this repository
   do research.
@@ -11,7 +11,79 @@
 - v2 (7bfc107) answered the Architect and R0. v2.1 answers the Critic, and
   adopts its "cheapest version" as **stage 1**. Everything else waits as
   **stage 2**, behind evidence.
-- The Critic's second round reviews v2.1 (T073's decision rules).
+- The Critic's second round on v2.1 died at a session limit before it wrote
+  anything. It reruns on v2.2.
+- v2.2 answers the operator, who read that v2.1's first build would not flag
+  conflicting findings: "i want this fixed fixing conflicted and redundant
+  data is the point".
+
+## Changes since v2.1
+
+v2.1 put the line of thought in sight, but its four checks only kept the books.
+It caught a question left open and a verdict with no section behind it. It
+deferred the failures that cost RSNA most: two lanes disagreeing, a fact
+measured again, one fact copied by hand into eight places, an instrument too
+coarse for its band. v2.2 brings them into stage 1 on a single idea: **two
+facts are about the same thing when they point at the same thing.** Identity
+is computed from what a fact cites, the code definition, flag, file,
+submission or artifact. It is not a label a writer chose, and it is not
+guessed from prose.
+
+A first draft of v2.2 linked facts by the object a writer filed them under. That
+moved the old weakness instead of removing it: a conflict filed under two
+labels would slip through, and 10 against 12 would have been caught only if
+one person happened to label both facts alike. The operator called it out, and
+it is fixed below. Lane 10 cites `src/tta.py:116` and lane 11 cites
+`src/tta.py:110`. Both lines sit inside `def unmatched` (line 103 at
+`e4e356c`), so the two facts are linked by the code they cite, whoever wrote
+them and whatever they were labelled.
+
+1. **Facts with referents** (§5.2). The claimant writes a `fact` line for each
+   load-bearing fact as each lane report lands. Every fact that is MEASURED or
+   READ cites its source, `path:line@commit`, a submission id or an artifact
+   hash. Its `refs`, the identifiers it is about (`mirror`, `armb0`,
+   `--layer-decay`), must each appear in the cited lines, so they are grounded
+   in the source rather than chosen. `research.sh` resolves each `path:line`
+   to its enclosing definition (`src/tta.py#unmatched`) by a linear scan. The
+   key, `<object>/<attribute>`, is a display name and an exact-match shortcut.
+   It is never what decides identity. Lanes end their reports with a short
+   facts table, a table in the file they already write.
+2. **One row per key** (§5.4). The page holds each key once, with every fact
+   that supports it. A fact measured twice becomes one row with two supports,
+   so redundant data collapses by construction.
+3. **Seven new checks** (§5.5), each with its incident on record:
+   - `conflict`: two live facts on one key disagree;
+   - `unreconciled`: two facts from different lanes or tasks share a
+     referent, a definition, a flag, a file or a submission, whatever their
+     labels, and nobody has said whether they agree (lanes 10 and 11, 10
+     against 12, linked through `src/tta.py#unmatched`);
+   - `decision-on-conflict`: a decision rests on a fact in an open conflict;
+   - `asked-before`: a new question is about a settled key, and does not say
+     it reopens it (round 0921 re-asked SSL pretraining);
+   - `measured-again`: a spend re-measures a settled key without asking for a
+     reproduction;
+   - `copy-drift`: a document quotes a fact by id with a different value (the
+     eight hand writes; AGEIS's inverted verdict);
+   - `instrument-unresolved`, moved up from stage 2: a band no wider than its
+     instrument's step (T118).
+4. **Conflicts are resolved, never left.** A `resolve` line or an operator
+   ruling names the fact that stands and why. The other is superseded, and
+   the page shows both.
+5. **Canaries in every reconcile pass** (§5.6). `research.sh` plants known
+   conflicting pairs, built from the corpus, among the linked pairs it hands
+   the reconciler. A pass that does not mark every canary `conflict` is
+   rejected, so each round measures the reconciler's attention, not just the
+   tool's.
+6. **A simulation proves it before code** (§7). Round 3 is replayed with facts
+   written by hand (R0b), and a fabricated round with planted conflicts tests
+   whether referents link them. Two of the planted conflicts are labelled
+   differently on purpose.
+7. **D5 and D6 are recorded** (§10). D6 now reads as the operator amended it.
+
+What still cannot be caught is said plainly in §5.5: two facts about one thing
+that cite nothing in common, a question nobody asked, and a result nobody wrote
+down. The first is bounded: a fact with no source is INFERRED, and an INFERRED
+fact cannot carry a decision alone.
 
 ## Changes since v2
 
@@ -160,7 +232,8 @@ What the record shows:
 | Lane 10 said dropping the ten `fold?` members would unlock three TTA views. Lane 11 measured twelve members carrying `mirror=0 rotate=0`. The synthesis caught it by setting the two side by side. | synthesis §8.3, at `e4e356c` | facts nobody connected, reached by inference |
 | Rows 3 and 4 of lane 12's verdict table have no section behind them. | T047, Result §4 | a verdict with no reasoning |
 | Lane 11's efficiency half was not written by the synthesis. It came 90 minutes later, as lane 11b, a null. | T047, Result §3; `5313b79` | a question left open at the decision |
-| `--layer-decay` and `--warmup-frac` were wired, and our recipe had never passed them, until round 2 compared a public recipe with ours. Round 3 found they had run once, on a dead arm. | T043:61; T047 lane 10 | a question never asked |
+| `--layer-decay` and `--warmup-frac` were wired, and our recipe had never passed them, until round 2 compared a public recipe with ours. Round 3 found they had run once, on a dead arm. | T043:61; RESEARCH-0902b:60; lane 10:27 | a question never asked, then two facts in conflict |
+| Round 0921's lane 3 researched SSL pretraining again. Round 3's lane 12 had already rejected it on price. Lane 3 cites lane 12 and reaches the same NO. | 0921 lane 3:20,51 (never committed) | research repeated |
 | A submission was registered to read an arm at w = 0.20, though an earlier arm at that weight had moved the score 0.000. Its band, ±0.001, sat on a three-decimal leaderboard. | T118 | an instrument that could not resolve its question |
 | After a rename, a configuration key matched no arm. The obvious edit would have scored an unchanged blend, and the record would have gained "a result for a configuration that never executed". It was found by reading, while T118 was being built. As the fix, `assert_every_arm_is_reachable` now checks both directions. | T118 | nearly, a result for a configuration that did not run |
 | Two submissions were spent and their answers never collected. | `record_guard.py` | one fact, eight hand writes |
@@ -210,6 +283,14 @@ together: is every question answered, is every verdict argued somewhere, was
 it asked before it was answered, and has anyone decided? Those checks are the
 gap. And every place a result is written by hand is a place it drifts.
 
+Underneath all of these, the costliest failures are about identity: deciding
+that two statements are about the same thing. Facts nobody connected, a
+question asked again, a copy that drifted, a band set without the instrument's
+step beside it. Prose cannot settle identity: RSNA's scanners "cannot tell ...
+which of three numbers on a line belongs to which of two paths". A declared key
+settles it, which is how `claims_guard.py` reaches "no false positives by
+construction".
+
 ## 3. Principles
 
 1. **One line of thought, in sight.** Each question, its verdict and its
@@ -220,19 +301,22 @@ gap. And every place a result is written by hand is a place it drifts.
 3. **Files in git are the truth; every view is derived.**
 4. **Declared, not scanned.** Checks read lines someone wrote on purpose,
    never prose (RSNA's guards; R0).
-5. **One write per fact.** The ledger replaces hand copies; it is not a ninth
-   one. The page and the STATE.md line are generated, and PROGRESS.md cites
-   the verdict's id.
-6. **What counts is decided before the run.** The question's line is in a
+5. **One write per fact, one row per key.** The ledger replaces hand copies;
+   it is not a ninth one. The page and the STATE.md line are generated.
+   PROGRESS.md and Results quote a fact with its id, and `copy-drift` holds
+   the quote to the fact.
+6. **Conflicts are resolved, never left.** No decision rests on a fact in an
+   open conflict, and a resolution names what stands and why.
+7. **What counts is decided before the run.** The question's line is in a
    strict ancestor of every commit that answers it.
-7. **Precision first.** A check that cries wolf gets switched off (WHY.md),
+8. **Precision first.** A check that cries wolf gets switched off (WHY.md),
    so each one carries an incident it must catch, a counterfactual it must not,
    and a floor.
-8. **Build the next piece when the record shows it would have changed a
+9. **Build the next piece when the record shows it would have changed a
    decision.**
-9. **Agent-first, operator-visible.** One command and one JSON summary for
+10. **Agent-first, operator-visible.** One command and one JSON summary for
    agents; one page and one queue for the operator.
-10. **Research text is untrusted.** ORIENT.md's `data` rules apply.
+11. **Research text is untrusted.** ORIENT.md's `data` rules apply.
 
 ## 4. Options considered
 
@@ -244,17 +328,21 @@ gap. And every place a result is written by hand is a place it drifts.
 | D. Claims as trail entries | Rejected. Trails are retired at close. |
 | E. Claim-grain ledgers written by every lane (v1, v2) | **Deferred to stage 2.** Lanes skip second files (R0's 67 unmarked of 254), and DeepSeek cannot write one at all. |
 | F. Claims fenced inside the reports | Rejected. Prose is edited, and parsing Markdown fences identically in two doors is a large surface. |
-| **G. A decision-grain ledger with one writer, generated pages, and rulings as task actions** | **Chosen as stage 1.** |
+| G. A decision-grain ledger with one writer, generated pages, and rulings as task actions (v2.1) | Kept, but alone it only keeps the books: it leaves conflicts and repeats to the reader. |
+| H. Subjects inferred from noun phrases (R0's `about`) | Rejected. "Members" grouped six unrelated counts; identity guessed from prose is noise. |
+| **I. G, plus load-bearing facts declared against object keys by the same one writer, one row per key, and checks for conflict and redundancy** | **Chosen as stage 1.** |
 
 ## 5. Stage 1: the design to build now
 
 ### 5.1 The line
 
 ```
-track      AA/tracks/<slug>.md      the standing question, the number to beat, its status
- └─ question  T072/Q2               what is asked, and its rule; committed before any lane opens
-     ├─ lanes                        prose reports, tracked; their runs are on the task's trail
-     ├─ verdict   T072/V2            written at synthesis: verdict, mark, value, where, src, basis
+track      AA/tracks/<slug>.md      the standing question, the number to beat, its status, its objects
+ └─ question  T072/Q2               what is asked, its rule, the keys it is about; committed before any lane opens
+     ├─ lanes                        prose reports, tracked, each ending in a facts table
+     ├─ fact      T072/F7            one load-bearing fact, against a key: written as each report lands
+     ├─ conflict  (computed)         two live facts on one key disagree; closed by a resolve line or a ruling
+     ├─ verdict   T072/V2            written at synthesis: verdict, mark, value, where, the facts it cites, basis
      ├─ decision  T072/D1            the claimant's: adopt · reject · park · follow-up · settle · dead end · reopen
      └─ ruling    (task file)        the operator's, through a task action: park · drop · accept a warning
           └─ question  T067/Q1       the next step of the line
@@ -279,13 +367,37 @@ Every line carries `ts`, `run` and `kind`:
 
 | kind | When | Fields |
 |---|---|---|
-| `question` | before the first lane opens, committed | `id` (`Q1`); `ask` (≤ 480 B); `rule`: `answers` (what counts), `marks` (the accepted set) and optionally `instrument` and `band`; `from` (what raised it); `same-as`; `reopens` |
-| `verdict` | at synthesis, one per question | `id` (`V1`); `q`; `verdict` (`answers`, `rejects`, `none-found` or `unresolved`); `mark`; `value` (text; a number is a decimal string); `where` (`path#heading`, tracked); `src` (a list); `basis` (the lanes, models, methods and sources it rests on); `says` (≤ 240 B) |
+| `object` | when a thing is first named | `name` (`arms`, `public-lb`, `train.py/--layer-decay`); `anchor` (`path#symbol@commit`, a submission id, or a URL); `kind` (`config`, `set`, `flag`, `artifact`, `instrument`, `other`) |
+| `question` | before the first lane opens, committed | `id` (`Q1`); `ask` (≤ 480 B); `about` (the keys it asks about, and `refs`: the definitions, files, flags or identifiers it concerns); `rule`: `answers` (what counts), `marks` (the accepted set) and optionally `instrument`, `reads` (the key it measures) and `band`; `from` (what raised it); `reopens` or `reproduces` (a settled fact or verdict, with why) |
+| `fact` | as each lane report lands | `id` (`F1`); `key` (`<object>/<attribute>`, for display); `value` (text: a number is a decimal string, a set is a sorted list); `unit`; `mark`; `where` (`path#heading`, tracked); `src` (a list; required unless the mark is INFERRED); `refs` (identifiers it is about, each found in a cited line); `from` (the lane, its run and model); `says` (≤ 240 B) |
+| `same` | for each linked pair of facts | `facts` (ids); `via` (the shared referent); `finding` (`agree`, `conflict` or `unrelated`); `why` (≤ 240 B). `agree` with different keys joins the keys |
+| `resolve` | to close a conflict | `facts` (the ids in conflict); `stands` (the id that stands, or none); `why` (≤ 240 B). The others are superseded, never deleted |
+| `verdict` | at synthesis, one per question | `id` (`V1`); `q`; `verdict` (`answers`, `rejects`, `none-found` or `unresolved`); `mark`; `value` (text; a number is a decimal string); `where` (`path#heading`, tracked); `cites` (fact ids); `src` (a list); `basis` (the lanes, models, methods and sources it rests on); `says` (≤ 240 B) |
 | `decision` | when an answer is acted on | `id` (`D1`); `q`; `do` (`adopt`, `reject`, `park`, `follow-up`, `settle`, `dead-end` or `reopen`); `cites` (verdict ids); `task`; `why` (≤ 240 B); `supersedes` |
 | `retract` | whenever a line was wrong | `id` (the line it corrects); `why`; `by` (its replacement) |
 
 - **Ids** are global as `T072/Q1`, and may drop the prefix inside their own
   ledger.
+- **Identity is computed, not chosen.** Two facts are linked when they share a
+  referent:
+  - the same enclosing definition of a cited `path:line`, found by a linear
+    scan up to the nearest `def`, `class` or `function` line, or the file when
+    there is none;
+  - the same submission id, artifact hash or URL;
+  - a shared entry in `refs`, which is grounded because it must appear in a
+    cited line.
+
+  Keys and objects stay as the track's vocabulary, which the brief prints with
+  every settled fact, for display and for exact same-key comparison. A wrong
+  key costs a label, never a missed link.
+- **Which facts:** the load-bearing ones, those a verdict, a decision or a
+  spend rests on. Typically 5 to 15 a lane, not R0's 254 claims.
+- **Values compare** as decimal strings scaled to integers, sets as sorted
+  lists, and text exactly. Two numbers on one key agree within the key's
+  `band` when the track registers one, and must match exactly when it does
+  not.
+- **An instrument** is an object whose `step` (its resolution, such as the
+  public leaderboard's 0.001) and, if known, `sd` are facts like any other.
 - **Marks:** REPRODUCED, MEASURED, SIMULATED, READ, INFERRED.
 - **Verdicts:** `none-found` is RSNA's null lane. `unresolved` is honest, but
   it does not cover a question.
@@ -314,8 +426,9 @@ A ruling is one line in the task file's `## Decisions` section:
   task in `done/` can still take a ruling, which fixes B5: a closed task's
   ledger takes no more lines, but its task file does.
 - **The words** are `adopt`, `reject`, `park`, `drop`, `settle`, `dead-end`,
-  `reopen` and `accept-warning <code>`. The reason after the dash is
-  required.
+  `reopen`, `accept-warning <code>`, and `stands` for a conflict
+  (`- 2026-10-14 T047/F7 stands over T047/F3 — lane 11 measured; lane 10
+  inferred`). The reason after the dash is required.
 - **Parsed** line by line, linearly, with nothing that can backtrack. The text
   is untrusted.
 - **Precedence:** a ruling outranks a claimant's decision on the same
@@ -330,27 +443,55 @@ track with `track: <slug>`.
 - **The hand-written head**, between `<!-- AA:now -->` markers: the question,
   why it matters, the number to beat, and the status.
 - **The generated region**, rendered by `AA/research.sh --write`, top down:
-  1. **Coverage**: questions, verdicts, decisions; the task's lanes (from its
-     trail) and whether each one's report is tracked.
-  2. **Decisions waiting on you.**
-  3. **Warnings**, with accepted ones shown beside their reasons.
-  4. **Open questions**, with their rules.
-  5. **Answered**: verdict, mark, value, where it is argued, its sources, and
-     its basis. Verdicts about the same thing sit side by side, which is how
-     lane 10's error would have shown (N5).
-  6. **Settled, do not reopen**, and **Dead ends**, with why each died. This
+  1. **Coverage**: questions, verdicts, decisions, facts; the task's lanes
+     (from its trail) and whether each one's report is tracked.
+  2. **Conflicts**: each open one with its facts side by side (value, mark,
+     lane, model, where), then the linked pairs waiting to be reconciled. Resolved
+     conflicts stay listed below, with what stood and why.
+  3. **Decisions waiting on you.**
+  4. **Warnings**, with accepted ones shown beside their reasons.
+  5. **Open questions**, with their rules.
+  6. **Facts by object**, one row per key: the live value, its mark, and every
+     fact that supports it. A fact measured twice is one row with two
+     supports, which is how redundant data collapses. Superseded facts are
+     struck through, with the resolution that ended them.
+  7. **Answered**: verdict, mark, value, where it is argued, the facts it
+     cites, and its basis.
+  8. **Settled, do not reopen**, and **Dead ends**, with why each died. This
      is the computed "do not redo".
-  7. **The ledger**, task by task.
+  9. **The ledger**, task by task.
 - **A JSON summary** sits beside it (`<slug>.json`), for AGE Aris and for
   agents.
-- `--check` compares structure only: questions, verdicts, decisions, rulings
-  and the settled set. No clock, and no uncommitted lines (WHY.md: "It cried
+- `--check` compares structure only: questions, facts, conflicts, verdicts,
+  decisions, rulings and the settled set. No clock, and no uncommitted lines (WHY.md: "It cried
   wolf").
 - STATE.md gets one line per active track, rendered by `board.sh` through
   `research.sh`, outside any table.
 - Region markers are escaped wherever ledger text is rendered (N6).
 
-### 5.5 The four checks
+### 5.5 The checks
+
+Eleven checks in two groups. Each is held to an incident on record, where it
+must fire, and a counterfactual from the record, where it must stay silent.
+
+**Conflicts and redundancy**, the point of the design:
+
+| Code | Fires when | Incident: must fire | Counterfactual: must stay silent |
+|---|---|---|---|
+| `conflict` | two live facts on one key, or on keys a `same` line joined, disagree beyond the key's band; across every ledger on the board; until a `resolve` line or a ruling | round 2 measured `train.py/--layer-decay` "never once passed" (RESEARCH-0902b:60); round 3's lane 10 found it passed once (lane 10:27) | the same two facts once a `resolve` names lane 10's as standing; two CV reads inside the key's band |
+| `unreconciled` | two live facts from different lanes or tasks share a referent, and no `same` line covers the pair, once its task has a decision; also when a reconcile pass misses a canary | lane 10 §3.4: "the ten `fold?` members record `mirror=0.0 rotate=0.0`" (`src/tta.py:116`) against lane 11 §2.6: "the other 12 (`armb0`×2, `fold0-4`×2) carry `0.0`" (`src/tta.py:110`), linked by `src/tta.py#unmatched` and by `refs` `mirror` and `rotate` | the synthesis's catch written as a `same` line with `finding: conflict`, which opens a `conflict`, then a `resolve` with 12 standing |
+| `decision-on-conflict` | a decision, or a verdict, cites a fact in an open conflict | a fixture: round 3's pool decision (T051) citing lane 10's count before §8.3 | the same decision after the `resolve` |
+| `asked-before` | at registration, a question shares a key or a referent with a settled fact or verdict on the board, and declares neither `reopens` nor `reproduces` | round 0921's lane 3, on SSL pretraining, which T047's lane 12 had settled NO on price | the same question with `reopens: T047/V…` and a reason, such as new RadImageNet evidence |
+| `measured-again` | a spend's question `reads` a key, or the configuration or submission behind it, that already has a settled fact, and does not ask for a reproduction | a fixture from the record: a second leaderboard read of an unchanged configuration | the same read registered with `reproduces` |
+| `copy-drift` | a tracked document quotes a fact as `<value> (T047/F7)`, and the value differs from the fact's; or a live document quotes a superseded fact | AGEIS T106: the hand-written page inverted T080's verdict; RSNA T108's Result read "Not run" while two submissions had been spent | the quote that matches; a dated record quoting a fact that was later superseded |
+| `instrument-unresolved` | a question's `band` is not wider than its instrument's `step`; and, as a note, a settled fact on its `reads` key lies inside the band | T118: ±0.001 on a leaderboard with a step of 0.001 (T118:76, 178–181); the note shows T106's 0.000 at the same weight (T118:25–26) | a structurally distinct configuration read at ±0.007 (T118:78) |
+
+`copy-drift` reads only the declared marker: the token before `(T###/F#)`,
+found by a linear scan with nothing that can backtrack. Prose that quotes a
+number without its id is not checked, so the rule for writers is the one
+`record_guard.py` arrived at: quote a fact with its id, or link to it.
+
+**Bookkeeping**, from v2.1:
 
 | Code | Fires when | Incident: must fire | Counterfactual: must stay silent |
 |---|---|---|---|
@@ -362,32 +503,54 @@ track with `track: <slug>`.
 - **The precision floor.** On every real round, each warning is marked real
   or false by hand. A check under 90% is demoted to a note on the page until
   it is fixed.
-- **What no check can see:** a question nobody asked, like the unused flags,
-  and a result nobody wrote down. The first gets a standing question on every
-  track: "what do we already have, and what have we never examined?" The
-  second needs a reconciliation against the outside record, which stays in
-  the repository's own scripts, as RSNA's `reconcile_kaggle.py` does.
+- **What no check can see**, said plainly:
+  - **Two facts about one thing that cite nothing in common.** Linking needs a
+    shared definition, identifier or artifact. A fact with no source is
+    INFERRED, and an INFERRED fact cannot carry a decision alone
+    (`decision-on-conflict` treats an unsupported INFERRED citation as open).
+    The blind reader (§7, r4) counts what still gets through, and S0 measures
+    it before any code.
+  - **A question nobody asked**, like the unused flags. Every track carries a
+    standing question: "what do we already have, and what have we never
+    examined?" Its page lists registered objects with no fact on them, so
+    what is known to exist but has never been looked at is in sight.
+  - **A result nobody wrote down.** That needs a reconciliation against the
+    outside record, which stays in the repository's own scripts, as RSNA's
+    `reconcile_kaggle.py` does.
 
 ### 5.6 A round, step by step
 
-1. **Register.** The claimant writes the questions and their rules, and
-   commits them before any lane opens.
+1. **Register.** The claimant writes the questions, their rules and the keys
+   they are about, and commits them before any lane opens. `asked-before` and
+   `instrument-unresolved` run here, before anything is spent.
 2. **Brief.** `AA/research.sh brief T072` prints:
    - the questions;
+   - the track's objects and keys, with every settled fact on each;
    - the computed settled list and dead ends;
+   - the facts table each report ends with;
    - rule 6 verbatim;
    - where reports go.
 3. **Lanes** write prose reports into a tracked folder, in any harness and on
-   any model, as RSNA's do. The operator watches the round in AGE Aris: the
-   questions, each lane's trail state, and its report's headings as they
-   land.
-4. **Synthesise.** The claimant writes a verdict per question, citing the
-   section that argues it, then the decisions. `research.sh --check` comes
-   back clean, or the synthesis answers each warning.
-5. **Show.** `research.sh --write` regenerates the page and its JSON, and a
+   any model, as RSNA's do, ending with the facts table. The operator watches
+   the round in AGE Aris: the questions, each lane's trail state, its report's
+   headings, and the conflicts as they appear.
+4. **Collect.** As each report lands, the claimant writes its facts into the
+   ledger with `research.sh fact`, choosing keys from the vocabulary, or
+   adding an object. A lane with no table is transcribed from its prose.
+   Conflicts and repeats show up then, mid-round, not at the end.
+5. **Reconcile.** `research.sh reconcile T072` lists every linked pair of
+   facts from different lanes, with the canaries mixed in, unmarked. The
+   claimant, or a reconciler subagent, writes a `same` line for each. A pass
+   that misses a canary is rejected and rerun. Each conflict is resolved, or
+   left open for the operator.
+6. **Synthesise.** The claimant writes a verdict per question, citing the
+   section that argues it and the facts it rests on, then the decisions.
+   `research.sh --check` comes back clean, or the synthesis answers each
+   warning. No decision may cite a fact in an open conflict.
+7. **Show.** `research.sh --write` regenerates the page and its JSON, and a
    `find:` commit carries the ledger and the page together.
-6. **Rule.** The operator reads the waiting decisions, in AGE Aris or on the
-   page, and rules through a task action.
+8. **Rule.** The operator reads the open conflicts and the waiting decisions,
+   in AGE Aris or on the page, and rules through a task action.
 
 Experiments use the same lines. A spend's question carries its instrument and
 band. The result's verdict is MEASURED, with the command and its output's
@@ -400,8 +563,9 @@ the verdict's id instead of copying it.
   RSNA's split-risk simulation (round 1, lane 3) and T118's resolution
   question are the shape.
 - **The cheapest instrument goes first.** A question whose answer will be
-  bought with a spend names its instrument and band before the spend.
-  Checking that the band is resolvable is stage 2.
+  bought with a spend names its instrument, the key it reads and its band
+  before the spend. `instrument-unresolved` checks the band against the
+  instrument's step, and shows any settled fact already inside it.
 - **T067's question**, claim races between machines, is a simulation. It runs
   on real clones made from fabricated repositories (`git clone` of a
   `lib/fabricate.mjs` repository), and it belongs to T067.
@@ -414,8 +578,11 @@ the verdict's id instead of copying it.
 - **AGE Aris reads files**: the page, its JSON, the trails and the report
   headings. It never runs a repository's scripts. Its one write is the
   operator's ruling, a task action.
-- **Needs you** gains `decision-waiting`, the top 12 with a count, until T062
-  brings the general cap.
+- **Needs you** gains open conflicts first, then `decision-waiting`, the top
+  12 of each with a count, until T062 brings the general cap.
+- **Agents** get `research.sh fact`, `same`, `resolve` and `conflicts`. Each
+  validates the line before appending it, and `conflicts` prints the open
+  ones as JSON.
 - **RULES.md stays as it is.** The format lives in `AA/findings/_SCHEMA.md`.
 
 ## 6. Stage 2: built only when the record asks for it
@@ -425,10 +592,9 @@ or the T112/T118 replay shows it would have changed a decision:
 
 - claim-grain ledgers written by lanes, with REPRODUCED by re-execution. Only
   a tracked script at a pinned commit may be re-run (N6);
-- subjects, and `contradiction` on the quantities the track's head registers;
-- spend lines, and the experiment checks:
-  - `instrument-unresolved`, with an explicit `resolved_by` and the
-    instrument's step;
+- lanes writing their own fact lines, if the transcription by one writer
+  proves the bottleneck;
+- spend lines, and the remaining experiment checks:
   - `config-mismatch`;
   - `arm-equals-control`, the general form of RSNA's
     `assert_every_arm_is_reachable`, where a repository emits the hashes of
@@ -445,6 +611,24 @@ or the T112/T118 replay shows it would have changed a decision:
   `lib/fabricate.mjs` from the record.
 - **Precision.** On T072, and on every later round, each warning is marked
   real or false by hand, against the 90% floor.
+- **R0b, the round 3 replay with facts.** One session, no subagents, RSNA read
+  through `git show` only. It writes round 3's load-bearing facts by hand
+  under a procedure fixed before the reports are read: the object vocabulary
+  comes from T047's brief alone. Pass: `unreconciled` fires on `arms`
+  (10 against 12), `conflict` fires on round 2's "never passed" against lane
+  10's "passed once", and the conflict checks stay above the 90% floor.
+- **S0, a simulation of linking.** `lib/fabricate.mjs` builds a repository
+  with source files and a short round of lane reports. It plants five
+  conflicts, two of them reachable only by inference, as 10 against 12, and
+  two deliberately described in different words. It also plants three
+  repeats of settled facts and two drifted copies. An agent that has not seen
+  the plant writes the facts as claimant. Pass:
+  - every planted conflict is linked by a shared referent, and marked
+    `conflict` by the reconcile pass;
+  - every repeat is found;
+  - at most 1 false warning per 50 facts.
+
+  The plant is committed before the agent runs, so the grading is against it.
 - **The operator's outcome:**
   - **(o1)** the minutes the operator needs to answer "where are we on X?" from
     the page. The operator times a baseline on today's material, then the same
@@ -457,6 +641,10 @@ or the T112/T118 replay shows it would have changed a decision:
   output.
 - **(r6)** research documents that exist only in a working tree. Baseline:
   RSNA, 5 of 65 on 2026-10-13. Target: 0 in a repository that uses stage 1.
+- **(r7)** decisions committed while a fact they cite was in an open conflict.
+  Target: 0.
+- **(r8)** questions asked again without `reopens` or `reproduces`. Baseline:
+  RSNA's round 0921, at least 1 of 4 lanes. Target: 0.
 - **The pre-mortem's signals**, from the Critic:
   - the share of `unresolved` verdicts;
   - warnings left open on closed tasks;
@@ -469,7 +657,12 @@ or the T112/T118 replay shows it would have changed a decision:
 | The claimant writes verdicts carelessly at synthesis | `where-missing` holds each verdict to a tracked section with a body; the blind reader counts what slips through |
 | A ninth write | The ledger replaces hand copies: the page and STATE.md line are generated, and the log cites ids |
 | Warnings become wallpaper | The precision floor demotes a check; rulings close warnings with reasons |
-| Stage 2 never comes, and contradictions stay found by hand | The page sets verdicts on the same thing side by side; stage 2 is built on evidence, not by date |
+| Two facts about one thing are labelled differently | Labels do not decide identity; shared referents do (§5.2), and S0 plants differently labelled conflicts on purpose |
+| The reconciler waves linked pairs through as `unrelated` | Canaries in every pass; a missed canary rejects the pass |
+| A common referent, such as `src/train.py#main`, links everything | Facts resolve to the narrowest enclosing definition; a referent linking more than 12 pairs in a round is reported, and its pairs are grouped for one review |
+| Facts are transcribed carelessly, or only the convenient ones | A verdict must cite the facts it rests on; a lane's facts table is in its report, beside its ledger lines, for the blind reader to compare |
+| Bands make every number agree, or nothing agree | A key's band is registered on the track before its facts land, and a band no wider than the instrument's step fires `instrument-unresolved` |
+| Transcription becomes the bottleneck | Facts are load-bearing only, 5 to 15 a lane; lanes writing their own lines is stage 2, built on evidence |
 | Research text steers an agent, or breaks the page | ORIENT.md's `data` rules; escaped markers; linear parsing |
 | The ledger's quotes leak competition research | This branch is not pushed before RSNA closes on 2026-10-22 without the operator's word (STATE.md) |
 
@@ -478,10 +671,12 @@ or the T112/T118 replay shows it would have changed a decision:
 | # | Task | depends | Done when |
 |---|---|---|---|
 | R0 | Replay of round 3 | — | **Done: T074.** Graded by the Critic (§2) |
-| T072 | **Team-scale research, on a hand-written ledger** (D5) | — | its ledger and track page are written by hand in this format; (o1) and precision are measured |
-| S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | — | the operator has reviewed the cases |
-| S1b | **`AA/research.sh` here**: `brief`, `--check`, `--write`, the JSON summary, the four checks | S1a | it passes the corpus; T072's hand-written page and the generated one agree |
-| S1c | **In sight**: AGE Aris shows track pages, the round in progress, and `decision-waiting`; the operator's ruling as a task action | S1b | e2e passes; the operator rules on a question in AGE Aris |
+| T072 | **Team-scale research, on a hand-written ledger** (D5), facts and objects included | — | its ledger and track page are written by hand in this format; (o1) and precision are measured |
+| R0b | **Round 3 replayed with facts**, by hand (§7) | — | `unreconciled` and `conflict` fire on their incidents, above the floor; or the design is revised |
+| S0 | **The one-writer simulation** (§7) | — | its pass bar is met; or the keying rules are revised before S1b |
+| S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | R0b | the operator has reviewed the cases |
+| S1b | **`AA/research.sh` here**: `brief`, `fact`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the eleven checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
+| S1c | **In sight**: AGE Aris shows track pages, the round in progress, open conflicts and `decision-waiting` in Needs you; the operator's rulings, `stands` included, as task actions | S1b | e2e passes; the operator resolves a conflict in AGE Aris |
 | S1d | **The template**: `research.sh` and the schema in `aa-init` | S1b, T004, T072's measures | a fresh repository writes an empty track page |
 | R-T118 | **Replay RSNA's T112 and T118**, the rounds that spent, after RSNA closes | S1b | each stage 2 piece is marked: would it have changed a decision? |
 
@@ -494,24 +689,20 @@ or the T112/T118 replay shows it would have changed a decision:
 - **D2:** every AA repository, through `aa-init`. v2.1 keeps this as the
   destination, reached after T072's measures (N4).
 - **D3:** R0 runs now, by one session with no subagents (T074).
-- **D4:** T072 waits for R1b, then runs as the first dogfood. **D5 below
-  would replace it.**
+- **D4:** T072 waits for R1b, then runs as the first dogfood. Replaced by D5.
+- **D5:** T072 runs now, on a hand-written ledger, as stage 1's first real
+  test. The claim-race simulation moves to T067.
+- **D6:** stage 1 first, and stage 2 only on evidence. The operator then
+  amended it, after reading that v2.1's stage 1 would not flag conflicting
+  findings: "i want this fixed fixing conflicted and redundant data is the
+  point". So stage 1 now carries facts, conflicts and redundancy (v2.2).
 
 The review was approved to run the same day. T073's rules allow one more
-round of each reviewer when the Critic rejects.
+round of each reviewer when the Critic rejects. The Critic's second round
+died with no report, and reruns on v2.2.
 
-**Open:**
-
-- **D5. Run T072 now, on a hand-written ledger.**
-  - Both reviewers recommend it (S4, N2). Stage 1's format needs no tooling
-    to be written by hand. T066 and T067 stop waiting on tools, and T072
-    becomes stage 1's first real test.
-  - The claim-race simulation moves to T067.
-  - The alternative is to keep D4.
-- **D6. Build stage 1 first, and stage 2 only on evidence.**
-  - Recommended: yes. It follows the Critic's cheapest version and RSNA's own
-    lessons.
-  - The alternative is v2's full design, built in order.
+**Open:** none. R0b and S0 decide whether the keying holds before any code is
+written.
 
 ## ADR
 
@@ -520,32 +711,45 @@ round of each reviewer when the Critic rejects.
   - Questions with their rules are committed before any lane opens. Verdicts
     carry where they are argued, their sources and their basis, then come the
     decisions.
+  - Load-bearing facts are written by one writer as each report lands, each
+    citing its source. Identity is computed from shared referents (the cited
+    definition, identifiers grounded in the cited lines, submissions,
+    artifacts), never from labels. The page holds one row per key, so a
+    repeat is a second support, not a second row.
+  - Every reconcile pass carries canaries, and a pass that misses one is
+    rejected.
+  - Conflicts are computed, shown first, and resolved by a line or a ruling.
+    No decision may rest on an open one.
   - The operator's rulings are task actions in the task file.
-  - A generated track page shows coverage first, and verdicts on the same
-    thing side by side.
-  - Four checks, each with an incident, a counterfactual and a precision
-    floor.
+  - A generated track page shows coverage first, then conflicts.
+  - Eleven checks, seven of them for conflict and redundancy, each with an
+    incident, a counterfactual and a precision floor.
   - One door, `AA/research.sh`. AGE Aris reads the files.
   - Stage 2 is built on evidence only.
 - **Drivers:**
-  - the operator: one structured line of thought, in sight;
+  - the operator: one structured line of thought, in sight; and "fixing
+    conflicted and redundant data is the point";
   - RSNA's and AGEIS's records: facts unconnected, verdicts unargued,
     questions open at decision time, records drifting across eight hand
-    writes, a round never committed;
+    writes, a round never committed, a lane spent re-asking a settled
+    question;
   - agent-first.
 - **Alternatives:** prose conventions; hand-written pages; a database; trail
   entries; claim-grain ledgers by every lane (deferred); claims fenced in
-  reports. §4 gives the reasons.
+  reports; subjects guessed from noun phrases. §4 gives the reasons.
 - **Why chosen:**
   - it is the smallest structure that holds the line of thought together and
     puts it in front of the operator;
-  - it adds no write a lane can skip;
+  - it adds no write a lane can skip: a facts table sits in the report it
+    already writes, and one writer keys every fact;
+  - identity is declared once, so conflicts and repeats are computed, not
+    guessed;
   - every check is held to its incident and its counterfactual.
 - **Consequences:**
   - a new AA folder and a schema;
   - a third vendored script;
   - a `## Decisions` section the readers parse;
-  - a new task action;
+  - two new task actions, a ruling and a conflict's `stands`;
   - a `tracks:` key.
 - **Follow-ups:** the stage 2 pieces, each on evidence; a research pipeline
   for plain projects.

@@ -95,3 +95,10 @@ and T067's open questions has a starting point or "nothing fits".
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-13, T073's D5: this runs now, as the first real test of
+  `docs/plans/research-runs.md` stage 1 (v2.2 or its approved successor). Its
+  questions, objects and facts go in `AA/findings/T072.jsonl`, written by hand
+  and committed before any source is read, and its track page is written by
+  hand. Wait for T073's Critic to finish with v2.2 before claiming, so the
+  format is settled.
