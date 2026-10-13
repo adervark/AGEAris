@@ -31,6 +31,49 @@ Measure whether stage 1's linking catches what RSNA's round 3 synthesis correcte
 - [ ] One fresh agent transcribes; a separate subagent reconciles. Ledger and costs go to `docs/plans/evidence/t075/`.
 - [ ] Grade recall per correction; tie each miss to a §5.5 gap; mark each warning real or false.
 
+## Procedure — fixed before the transcriber runs
+
+- **The answer key** is `docs/plans/evidence/t075/corrections.md`: the 12
+  corrections, by the synthesis's own count (:642–643). It is committed first.
+  The two subagents are forbidden to read it, the round 3 synthesis, T047's
+  Result, or anything in AGE Aris's `docs/plans/`, `AA/tasks/`, `PROGRESS.md`
+  or reviews.
+- **The transcriber** is a fresh Opus subagent. It reads RSNA through
+  `git show`, plus `cat` for untracked files.
+  - Round 3's five lane reports at `e4e356c`.
+  - The settled record before round 3, at `d9c7c6e` (T047's claim, which is
+    the lanes' base commit):
+    - R1's synthesis, `docs/RESEARCH-0902-road-to-0960.md`;
+    - R2's synthesis, `docs/RESEARCH-0902b-round-2.md`;
+    - T047's brief, `pm/tasks/T047-research-round-3.md`.
+  - An earlier lane report only when a fact it transcribes cites one.
+  - It writes load-bearing facts, those a verdict, decision, ranking or spend
+    rests on, in v2.4's `fact` format: `src` pinned to `d9c7c6e` for round 3
+    and to the document's own commit for earlier rounds; at least one ref per
+    `path:line`, found on that line; `@worktree#sha256` for untracked files;
+    an empty `src` with the lane's own mark when nothing is cited; and
+    `premises` for every INFERRED fact, with `premises_by`.
+  - It also writes one `question` line per T047 lane brief.
+  - Output: `docs/plans/evidence/t075/ledger.jsonl`, written through its
+    final message. The parent saves it, since the subagent writes no file.
+- **Linking** is computed by `docs/plans/evidence/t075/link.mjs`, written by
+  the parent and standing in for `research.sh`. It applies v2.4 §5.2's
+  referents exactly: indentation-aware enclosing definition, enclosing
+  Markdown heading, file, worktree hash, `cmd:` pattern, refs, inherited
+  premises. A pair links when its two facts come from different lanes or
+  documents. The script also makes 6 canaries from the ledger's own facts:
+  the same referents and refs with a changed value, and two set-inclusion
+  contradictions.
+- **The reconciler** is a second fresh Opus subagent, which did not
+  transcribe. It gets the linked pairs with the canaries mixed in, unmarked,
+  and writes a `same` line per pair, quoting both lines. If it misses a
+  canary, it reruns once. A second miss is recorded and ends the run.
+- **Grading** is by the parent, against the key, exactly as written there.
+  Every warning is marked real or false.
+- **Recorded:** facts per lane, minutes per fact, linked pairs, canaries
+  caught, `premises_by: transcriber` count, and the subagents' tokens where
+  the harness reports them.
+
 ## Decision rules — fixed in advance
 
 - Spend: `agent-fan-out`, at most two Opus subagents, a transcriber and a reconciler, with one rerun of the reconciler if it misses a canary. Nothing beyond that without the operator.
