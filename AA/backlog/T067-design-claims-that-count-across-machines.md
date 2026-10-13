@@ -7,7 +7,7 @@ owner: —
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
 blockedReason: ""
-depends: []
+depends: [T072]
 created: 2026-10-10
 ---
 
@@ -20,6 +20,7 @@ A decided design for claim races between machines: fetch and rebase, where a con
 ## Context
 
 - From T052, the agent's brain design: [`docs/plans/agent-brain.md`](../../docs/plans/agent-brain.md). §6 of the brain design. v1's D1 was taken out; the reviews corrected its push semantics. Note that `push` is a spend here.
+- Start from T072's findings, `docs/plans/team-scale.md`: how other systems settle claim races between machines, and what fits AGE Aris's constraints.
 
 ## Steps
 

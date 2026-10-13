@@ -7,7 +7,7 @@ owner: —
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
 blockedReason: ""
-depends: [T062]
+depends: [T062, T072]
 created: 2026-10-10
 ---
 
@@ -20,6 +20,7 @@ An approved design for a shared AGE Aris that a team reads, covering network exp
 ## Context
 
 - From T052, the agent's brain design: [`docs/plans/agent-brain.md`](../../docs/plans/agent-brain.md). D2 (register now). §5.7 of the brain design lists what the hub needs, and its constraint: a hub never emits `release` for someone else's claim.
+- Start from T072's findings, `docs/plans/team-scale.md`: what other tools do for each point in the Goal, and what fits AGE Aris's constraints.
 
 ## Steps
 
