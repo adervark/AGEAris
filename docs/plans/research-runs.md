@@ -1,6 +1,6 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: draft v2.2** (2026-10-13, T073). Nothing here is built.
+**Status: draft v2.3** (2026-10-13, T073). Nothing here is built.
 
 - v1 (f9ecde8) was written after reading how RSNA, AGEIS and this repository
   do research.
@@ -16,6 +16,96 @@
 - v2.2 answers the operator, who read that v2.1's first build would not flag
   conflicting findings: "i want this fixed fixing conflicted and redundant
   data is the point".
+- The Critic's second round, on v2.2: REVISE. Its report arrived partial
+  (`docs/plans/reviews/research-runs-v2.2-critic.md`). v2.3 answers every
+  point that reached us.
+
+## Changes since v2.2
+
+The Critic showed that v2.2's two proofs failed on the record. Each was checked
+again here at RSNA `e4e356c` before this was written.
+
+1. **The 10-vs-12 incident was the wrong pair.**
+   - Lane 10 §3.4 ("the ten `fold?` members record `mirror=0.0 rotate=0.0`")
+     and lane 11 §2.6 ("twelve carry `0.0`") are both true: the ten are among
+     the twelve.
+   - The false statement is lane 10 §3.3: dropping the ten "unlocks three TTA
+     views" (lane 10:350–351). It is an inference that cites only "(§3.4)".
+   - The synthesis says the same (RESEARCH-0902c:502–509).
+   - So v2.2 linked a pair a correct reader marks `agree`, and could not
+     reach the inference at all.
+
+   **Fix:** an INFERRED fact must cite its premises (`premises`: fact ids). It
+   inherits their referents and links like any other fact.
+   - Lane 10 §3.3 rests on §3.4, which cites `src/tta.py:116`, so it inherits
+     `src/tta.py#unmatched`.
+   - It links to lane 11's "twelve carry `0.0`". The pair reads "drop ten
+     and the views unlock" against "twelve block them": a conflict.
+   - `research.sh fact` refuses an INFERRED fact with no premises.
+2. **Refs must be on the cited line, and lines move.**
+   - `mirror` and `rotate` are not on `src/tta.py:110` or `:116`.
+   - Lane 10's `train.py:812` was a blank line by `e4e356c`, because the flag
+     had moved to `:1020`.
+   - None of the 106 `path:line` citations in round 3's reports pins a
+     commit.
+
+   **Fix:** every source is `path:line@commit` or `path#symbol@commit`, and
+   `research.sh fact` checks it when the line is written:
+   - it refuses a blank cited line, or a ref missing from it, and says where
+     the ref is found instead;
+   - it pins an unpinned citation to the commit that added the report section
+     citing it, and shows that pin to the writer;
+   - a definition is the nearest enclosing `def`, `class` or `function` at a
+     lower indentation than the cited line, never merely the nearest one
+     above it.
+3. **Negative facts cite their search.**
+   - Round 2's "never once passed" (RESEARCH-0902b:60) cited nothing, so only
+     a label could link it.
+   - **Fix:** a "never" or "none" fact cites the search as `cmd:`, for example
+     `git grep -n -- --layer-decay <commit>` with its output's hash. The
+     search's pattern is its ref, so it links to any fact about
+     `--layer-decay`.
+   - Rerun on the record, at round 2's commit `2b3d2a6`, the search finds only
+     the flag's definition (`src/train.py:812`). Lane 10's "passed once" cites
+     `outputs/t025/run_arm.sh:13`, a file git has never tracked.
+   - So the linked pair shows the real story. "Never" was true of the
+     repository and false of the machine, and `out-of-sight` fires on the
+     source nobody could see.
+4. **A separate reconciler, with canaries it cannot spot.** Under v2.2, the
+   writer reconciled its own facts. It could tell a canary by the fact it
+   never wrote, and pass by marking only the canaries.
+   - The reconciler is now a separate subagent that did not transcribe.
+   - `research.sh` makes the canaries during the round, from the round's own
+     facts: the same referent and refs with a changed value, and set-inclusion
+     contradictions shaped like lane 10 §3.3.
+   - Canary ids continue the ledger's sequence, and canaries stay out of the
+     ledger until the pass is graded.
+   - Every `why` must quote the two lines it compared. The blind reader (§7,
+     r4) re-reads a sample of the real pairs marked `agree` or `unrelated`, so
+     marking only the canaries fails.
+5. **Rulings while a round is live.** AGENTS.md refuses a task action while a
+   checkpoint run on the task is live (`RUN_LIVE`), and v2.2 had the operator
+   ruling mid-round. That constraint stands.
+   - Conflicts show mid-round, read-only.
+   - The claimant cannot decide on an open one (`decision-on-conflict`). When
+     a conflict needs the operator, the claimant ends its run with `next`
+     naming the conflicts, and the task waits.
+   - The operator rules in AGE Aris, and the next session resumes from the
+     ruling.
+6. **Cut and narrowed**, as the Critic advised:
+   - `measured-again` is cut. Its only incident was a fixture, and
+     `asked-before` covers a question about a settled key before any spend.
+   - `copy-drift` is narrowed to what it can check: a quote marked with a
+     fact's id whose value differs. The AGEIS inverted verdict is no longer
+     its incident. Generated pages remove that class, since nothing restates
+     a verdict by hand.
+   - Its real incident is lane 10:28, which names three records that copied
+     "never": `PROGRESS.md:5857`, lane 6 §2.5 and
+     `scripts/t042/run_recipe_fold0.sh:7`.
+
+The Critic's report was cut off after point 4's first fixes, and parts 2 and 3
+never arrived. Point 5 and the cuts are recovered from the trail's one-line
+summary, and anything else that report said is unknown.
 
 ## Changes since v2.1
 
@@ -51,7 +141,7 @@ them and whatever they were labelled.
 2. **One row per key** (§5.4). The page holds each key once, with every fact
    that supports it. A fact measured twice becomes one row with two supports,
    so redundant data collapses by construction.
-3. **Seven new checks** (§5.5), each with its incident on record:
+3. **Seven new checks** (§5.5; v2.3 cuts `measured-again`, leaving six), each with its incident on record:
    - `conflict`: two live facts on one key disagree;
    - `unreconciled`: two facts from different lanes or tasks share a
      referent, a definition, a flag, a file or a submission, whatever their
@@ -369,8 +459,8 @@ Every line carries `ts`, `run` and `kind`:
 |---|---|---|
 | `object` | when a thing is first named | `name` (`arms`, `public-lb`, `train.py/--layer-decay`); `anchor` (`path#symbol@commit`, a submission id, or a URL); `kind` (`config`, `set`, `flag`, `artifact`, `instrument`, `other`) |
 | `question` | before the first lane opens, committed | `id` (`Q1`); `ask` (≤ 480 B); `about` (the keys it asks about, and `refs`: the definitions, files, flags or identifiers it concerns); `rule`: `answers` (what counts), `marks` (the accepted set) and optionally `instrument`, `reads` (the key it measures) and `band`; `from` (what raised it); `reopens` or `reproduces` (a settled fact or verdict, with why) |
-| `fact` | as each lane report lands | `id` (`F1`); `key` (`<object>/<attribute>`, for display); `value` (text: a number is a decimal string, a set is a sorted list); `unit`; `mark`; `where` (`path#heading`, tracked); `src` (a list; required unless the mark is INFERRED); `refs` (identifiers it is about, each found in a cited line); `from` (the lane, its run and model); `says` (≤ 240 B) |
-| `same` | for each linked pair of facts | `facts` (ids); `via` (the shared referent); `finding` (`agree`, `conflict` or `unrelated`); `why` (≤ 240 B). `agree` with different keys joins the keys |
+| `fact` | as each lane report lands | `id` (`F1`); `key` (`<object>/<attribute>`, for display); `value` (text: a number is a decimal string, a set is a sorted list); `unit`; `mark`; `where` (`path#heading`, tracked); `src` (a list of `path:line@commit`, `path#symbol@commit`, `cmd:`, a submission id or an artifact hash; required unless the mark is INFERRED); `premises` (fact ids; required when the mark is INFERRED); `refs` (identifiers it is about, each found on a cited line); `from` (the lane, its run and model); `says` (≤ 240 B) |
+| `same` | for each linked pair of facts, written by the reconciler | `facts` (ids); `via` (the shared referent); `finding` (`agree`, `conflict` or `unrelated`); `why` (≤ 240 B, quoting the two lines compared); `run` (the reconciler's, which must not be the transcriber's). `agree` with different keys joins the keys |
 | `resolve` | to close a conflict | `facts` (the ids in conflict); `stands` (the id that stands, or none); `why` (≤ 240 B). The others are superseded, never deleted |
 | `verdict` | at synthesis, one per question | `id` (`V1`); `q`; `verdict` (`answers`, `rejects`, `none-found` or `unresolved`); `mark`; `value` (text; a number is a decimal string); `where` (`path#heading`, tracked); `cites` (fact ids); `src` (a list); `basis` (the lanes, models, methods and sources it rests on); `says` (≤ 240 B) |
 | `decision` | when an answer is acted on | `id` (`D1`); `q`; `do` (`adopt`, `reject`, `park`, `follow-up`, `settle`, `dead-end` or `reopen`); `cites` (verdict ids); `task`; `why` (≤ 240 B); `supersedes` |
@@ -380,9 +470,12 @@ Every line carries `ts`, `run` and `kind`:
   ledger.
 - **Identity is computed, not chosen.** Two facts are linked when they share a
   referent:
-  - the same enclosing definition of a cited `path:line`, found by a linear
-    scan up to the nearest `def`, `class` or `function` line, or the file when
-    there is none;
+  - the same enclosing definition of a cited `path:line@commit`: the nearest
+    `def`, `class` or `function` line above it at a lower indentation, found
+    by a linear scan, or the file when there is none;
+  - an INFERRED fact's referents are its premises' referents, so an
+    inference links through what it rests on;
+  - a `cmd:` search's pattern;
   - the same submission id, artifact hash or URL;
   - a shared entry in `refs`, which is grounded because it must appear in a
     cited line.
@@ -471,19 +564,18 @@ track with `track: <slug>`.
 
 ### 5.5 The checks
 
-Eleven checks in two groups. Each is held to an incident on record, where it
+Ten checks in two groups. Each is held to an incident on record, where it
 must fire, and a counterfactual from the record, where it must stay silent.
 
 **Conflicts and redundancy**, the point of the design:
 
 | Code | Fires when | Incident: must fire | Counterfactual: must stay silent |
 |---|---|---|---|
-| `conflict` | two live facts on one key, or on keys a `same` line joined, disagree beyond the key's band; across every ledger on the board; until a `resolve` line or a ruling | round 2 measured `train.py/--layer-decay` "never once passed" (RESEARCH-0902b:60); round 3's lane 10 found it passed once (lane 10:27) | the same two facts once a `resolve` names lane 10's as standing; two CV reads inside the key's band |
-| `unreconciled` | two live facts from different lanes or tasks share a referent, and no `same` line covers the pair, once its task has a decision; also when a reconcile pass misses a canary | lane 10 §3.4: "the ten `fold?` members record `mirror=0.0 rotate=0.0`" (`src/tta.py:116`) against lane 11 §2.6: "the other 12 (`armb0`×2, `fold0-4`×2) carry `0.0`" (`src/tta.py:110`), linked by `src/tta.py#unmatched` and by `refs` `mirror` and `rotate` | the synthesis's catch written as a `same` line with `finding: conflict`, which opens a `conflict`, then a `resolve` with 12 standing |
+| `conflict` | two live facts on one key, or a pair the reconciler marked `conflict`, disagree beyond the key's band; across every ledger on the board; until a `resolve` line or a ruling | round 2's "never once passed", recast as a `cmd:` search at `2b3d2a6` (RESEARCH-0902b:60), against lane 10's "passed once" (lane 10:27), linked through the ref `--layer-decay` | the same pair once a `resolve` scopes the search to tracked files and lets lane 10's stand; two CV reads inside the key's band |
+| `unreconciled` | two live facts from different lanes or tasks share a referent, and no `same` line from a reconciler that did not transcribe covers the pair, once its task has a decision; also when a pass misses a canary | lane 10 §3.3, INFERRED: dropping the ten `fold?` members "unlocks three TTA views" (lane 10:350–351), whose premise §3.4 cites `src/tta.py:116`, against lane 11 §2.6: twelve members carry `0.0` (lane 11:299–300). Linked by the inherited `src/tta.py#unmatched` | the synthesis's catch (RESEARCH-0902c:502–509) written as a `same` line with `finding: conflict`, then a `resolve` with lane 11 standing |
 | `decision-on-conflict` | a decision, or a verdict, cites a fact in an open conflict | a fixture: round 3's pool decision (T051) citing lane 10's count before §8.3 | the same decision after the `resolve` |
 | `asked-before` | at registration, a question shares a key or a referent with a settled fact or verdict on the board, and declares neither `reopens` nor `reproduces` | round 0921's lane 3, on SSL pretraining, which T047's lane 12 had settled NO on price | the same question with `reopens: T047/V…` and a reason, such as new RadImageNet evidence |
-| `measured-again` | a spend's question `reads` a key, or the configuration or submission behind it, that already has a settled fact, and does not ask for a reproduction | a fixture from the record: a second leaderboard read of an unchanged configuration | the same read registered with `reproduces` |
-| `copy-drift` | a tracked document quotes a fact as `<value> (T047/F7)`, and the value differs from the fact's; or a live document quotes a superseded fact | AGEIS T106: the hand-written page inverted T080's verdict; RSNA T108's Result read "Not run" while two submissions had been spent | the quote that matches; a dated record quoting a fact that was later superseded |
+| `copy-drift` | a tracked document quotes a fact as `<value> (T047/F7)`, and the value differs from the fact's | lane 10:28: `PROGRESS.md:5857`, lane 6 §2.5 and `scripts/t042/run_recipe_fold0.sh:7` all still said "never" once the fact was "passed once"; as a fixture, each quoting the fact's id | the same quotes matching; a dated record that quoted a value before it was superseded |
 | `instrument-unresolved` | a question's `band` is not wider than its instrument's `step`; and, as a note, a settled fact on its `reads` key lies inside the band | T118: ±0.001 on a leaderboard with a step of 0.001 (T118:76, 178–181); the note shows T106's 0.000 at the same weight (T118:25–26) | a structurally distinct configuration read at ±0.007 (T118:78) |
 
 `copy-drift` reads only the declared marker: the token before `(T###/F#)`,
@@ -504,12 +596,17 @@ number without its id is not checked, so the rule for writers is the one
   or false by hand. A check under 90% is demoted to a note on the page until
   it is fixed.
 - **What no check can see**, said plainly:
-  - **Two facts about one thing that cite nothing in common.** Linking needs a
-    shared definition, identifier or artifact. A fact with no source is
-    INFERRED, and an INFERRED fact cannot carry a decision alone
-    (`decision-on-conflict` treats an unsupported INFERRED citation as open).
-    The blind reader (§7, r4) counts what still gets through, and S0 measures
-    it before any code.
+  - **Two facts about one thing that share no referent**, even through their
+    premises. An INFERRED fact must name its premises, so this needs a fact
+    that cites nothing and rests on nothing: a lane's bare assertion. It can
+    still be written as INFERRED with the lane's own sentence as `says`, but
+    it links to nothing, and no decision may rest on it alone. The blind
+    reader (§7, r4) counts what still gets through, and S0 measures it
+    before any code.
+  - **A reconciler that marks a real conflict `agree`**, with a plausible
+    `why`. Canaries catch a careless pass, not a wrong judgement on a hard
+    pair. The blind reader's sample is the check, and the operator sees every
+    `agree` on the page.
   - **A question nobody asked**, like the unused flags. Every track carries a
     standing question: "what do we already have, and what have we never
     examined?" Its page lists registered objects with no fact on them, so
@@ -535,22 +632,27 @@ number without its id is not checked, so the rule for writers is the one
    the round in AGE Aris: the questions, each lane's trail state, its report's
    headings, and the conflicts as they appear.
 4. **Collect.** As each report lands, the claimant writes its facts into the
-   ledger with `research.sh fact`, choosing keys from the vocabulary, or
-   adding an object. A lane with no table is transcribed from its prose.
-   Conflicts and repeats show up then, mid-round, not at the end.
-5. **Reconcile.** `research.sh reconcile T072` lists every linked pair of
-   facts from different lanes, with the canaries mixed in, unmarked. The
-   claimant, or a reconciler subagent, writes a `same` line for each. A pass
-   that misses a canary is rejected and rerun. Each conflict is resolved, or
-   left open for the operator.
+   ledger with `research.sh fact`, which pins and checks every citation and
+   refuses an inference without premises. A lane with no table is
+   transcribed from its prose. Linked pairs and repeats show up then,
+   mid-round, not at the end.
+5. **Reconcile.** A reconciler subagent that transcribed nothing runs
+   `research.sh reconcile T072`. It gets every linked pair from different
+   lanes, with canaries made from this round's facts mixed in, unmarked. It
+   writes a `same` line for each, quoting the two lines it compared. A pass
+   that misses a canary is rejected and rerun. The claimant resolves each
+   conflict, or leaves it for the operator.
 6. **Synthesise.** The claimant writes a verdict per question, citing the
    section that argues it and the facts it rests on, then the decisions.
    `research.sh --check` comes back clean, or the synthesis answers each
    warning. No decision may cite a fact in an open conflict.
 7. **Show.** `research.sh --write` regenerates the page and its JSON, and a
    `find:` commit carries the ledger and the page together.
-8. **Rule.** The operator reads the open conflicts and the waiting decisions,
-   in AGE Aris or on the page, and rules through a task action.
+8. **Rule.** The operator sees conflicts as they appear, read-only while the
+   round runs. A task action is refused while a run on the task is live
+   (AGENTS.md), so a conflict that needs the operator ends the claimant's run,
+   with `next` naming it. The operator rules in AGE Aris, and the next
+   session resumes from the ruling.
 
 Experiments use the same lines. A spend's question carries its instrument and
 band. The result's verdict is MEASURED, with the command and its output's
@@ -612,19 +714,27 @@ or the T112/T118 replay shows it would have changed a decision:
 - **Precision.** On T072, and on every later round, each warning is marked
   real or false by hand, against the 90% floor.
 - **R0b, the round 3 replay with facts.** One session, no subagents, RSNA read
-  through `git show` only. It writes round 3's load-bearing facts by hand
-  under a procedure fixed before the reports are read: the object vocabulary
-  comes from T047's brief alone. Pass: `unreconciled` fires on `arms`
-  (10 against 12), `conflict` fires on round 2's "never passed" against lane
-  10's "passed once", and the conflict checks stay above the 90% floor.
+  through `git show` only, plus one reconciler subagent that transcribes
+  nothing.
+  - **Procedure, fixed before the reports are read:** load-bearing facts,
+    pinned citations, and premises for every inference. Round 2's flag fact
+    is backfilled as a `cmd:` search at `2b3d2a6`, the one settled fact from
+    outside round 3 that the pass needs.
+  - **Pass:**
+    - `unreconciled` links lane 10 §3.3 to lane 11 §2.6 through the inherited
+      `src/tta.py#unmatched`, and the reconciler marks it `conflict`;
+    - `conflict` links the flag search to lane 10's "passed once" through
+      `--layer-decay`, and `out-of-sight` fires on `outputs/t025/run_arm.sh`;
+    - the conflict checks stay above the 90% floor.
 - **S0, a simulation of linking.** `lib/fabricate.mjs` builds a repository
   with source files and a short round of lane reports. It plants five
-  conflicts, two of them reachable only by inference, as 10 against 12, and
-  two deliberately described in different words. It also plants three
-  repeats of settled facts and two drifted copies. An agent that has not seen
-  the plant writes the facts as claimant. Pass:
+  conflicts: two reachable only through an inference's premises, as lane 10
+  §3.3, one through a negative search, and two described in different words.
+  It also plants three repeats of settled facts and two drifted copies. One
+  agent that has not seen the plant writes the facts as claimant; a second
+  reconciles. Pass:
   - every planted conflict is linked by a shared referent, and marked
-    `conflict` by the reconcile pass;
+    `conflict` by the reconciler;
   - every repeat is found;
   - at most 1 false warning per 50 facts.
 
@@ -658,7 +768,8 @@ or the T112/T118 replay shows it would have changed a decision:
 | A ninth write | The ledger replaces hand copies: the page and STATE.md line are generated, and the log cites ids |
 | Warnings become wallpaper | The precision floor demotes a check; rulings close warnings with reasons |
 | Two facts about one thing are labelled differently | Labels do not decide identity; shared referents do (§5.2), and S0 plants differently labelled conflicts on purpose |
-| The reconciler waves linked pairs through as `unrelated` | Canaries in every pass; a missed canary rejects the pass |
+| The reconciler waves linked pairs through as `unrelated` | A reconciler that did not transcribe; canaries made from the round's own facts, indistinguishable by id; every `why` quotes both lines; the blind reader samples real `agree` and `unrelated` marks |
+| A ruling is needed while the round runs | Conflicts are visible read-only; the claimant ends its run to wait on the operator; no decision binds on an open conflict meanwhile |
 | A common referent, such as `src/train.py#main`, links everything | Facts resolve to the narrowest enclosing definition; a referent linking more than 12 pairs in a round is reported, and its pairs are grouped for one review |
 | Facts are transcribed carelessly, or only the convenient ones | A verdict must cite the facts it rests on; a lane's facts table is in its report, beside its ledger lines, for the blind reader to compare |
 | Bands make every number agree, or nothing agree | A key's band is registered on the track before its facts land, and a band no wider than the instrument's step fires `instrument-unresolved` |
@@ -675,7 +786,7 @@ or the T112/T118 replay shows it would have changed a decision:
 | R0b | **Round 3 replayed with facts**, by hand (§7) | — | `unreconciled` and `conflict` fire on their incidents, above the floor; or the design is revised |
 | S0 | **The one-writer simulation** (§7) | — | its pass bar is met; or the keying rules are revised before S1b |
 | S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | R0b | the operator has reviewed the cases |
-| S1b | **`AA/research.sh` here**: `brief`, `fact`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the eleven checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
+| S1b | **`AA/research.sh` here**: `brief`, `fact`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the ten checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
 | S1c | **In sight**: AGE Aris shows track pages, the round in progress, open conflicts and `decision-waiting` in Needs you; the operator's rulings, `stands` included, as task actions | S1b | e2e passes; the operator resolves a conflict in AGE Aris |
 | S1d | **The template**: `research.sh` and the schema in `aa-init` | S1b, T004, T072's measures | a fresh repository writes an empty track page |
 | R-T118 | **Replay RSNA's T112 and T118**, the rounds that spent, after RSNA closes | S1b | each stage 2 piece is marked: would it have changed a decision? |
@@ -701,7 +812,7 @@ The review was approved to run the same day. T073's rules allow one more
 round of each reviewer when the Critic rejects. The Critic's second round
 died with no report, and reruns on v2.2.
 
-**Open:** none. R0b and S0 decide whether the keying holds before any code is
+**Open:** none. R0b and S0 decide whether the linking holds before any code is
 written.
 
 ## ADR
@@ -712,17 +823,21 @@ written.
     carry where they are argued, their sources and their basis, then come the
     decisions.
   - Load-bearing facts are written by one writer as each report lands, each
-    citing its source. Identity is computed from shared referents (the cited
-    definition, identifiers grounded in the cited lines, submissions,
-    artifacts), never from labels. The page holds one row per key, so a
-    repeat is a second support, not a second row.
-  - Every reconcile pass carries canaries, and a pass that misses one is
-    rejected.
+    citing a pinned source, a `cmd:` search, or, for an inference, its
+    premises. Identity is computed from shared referents (the cited
+    definition, identifiers on the cited lines, search patterns, premises,
+    submissions, artifacts), never from labels. The page holds one row per
+    key, so a repeat is a second support, not a second row.
+  - A reconciler that did not transcribe marks every linked pair. Canaries
+    made from the round's own facts are mixed in, and a pass that misses one
+    is rejected.
+  - A ruling waits until no run on the task is live (AGENTS.md); no decision
+    binds on an open conflict meanwhile.
   - Conflicts are computed, shown first, and resolved by a line or a ruling.
     No decision may rest on an open one.
   - The operator's rulings are task actions in the task file.
   - A generated track page shows coverage first, then conflicts.
-  - Eleven checks, seven of them for conflict and redundancy, each with an
+  - Ten checks, six of them for conflict and redundancy, each with an
     incident, a counterfactual and a precision floor.
   - One door, `AA/research.sh`. AGE Aris reads the files.
   - Stage 2 is built on evidence only.

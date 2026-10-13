@@ -46,7 +46,9 @@ spent, and the phases, each one task.
   design is stage 1, and stage 2 waits on evidence.
 - [x] The operator's decisions D5 and D6; D6 amended: conflicts and redundancy in stage 1.
 - [x] v2.2: facts keyed by object, one row per key, seven checks for conflict and redundancy.
-- [ ] Review, round 2: the Critic on v2.2 (its run on v2.1 died with no report).
+- [x] Review, round 2: the Critic on v2.2: REVISE, report partial (parts 2–3 never delivered).
+- [x] v2.3 answers it: premises for inferences, pinned citations, searches for negatives, a separate reconciler, rulings after the run ends.
+- [ ] A third review round, which needs the operator's go (decision rules).
 - [ ] Register the phases as tasks.
 
 ## Decision rules — fixed in advance
@@ -67,11 +69,11 @@ spent, and the phases, each one task.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @b/b8438f28: v2.2 committed, answering the operator's amended D6: conflicting and redundant data are caught in stage 1.
-- **In flight:** nothing yet. The Critic's second round, on v2.2, is next; when it runs, the trail's newest `doing` names it.
-- **On disk:** `docs/plans/research-runs.md` v2.2; `docs/plans/reviews/research-runs-v1-architect.md` and `research-runs-v1-critic.md`
-- **Resume with:** `AA/ckpt.sh live T073`. When the second round is in, save it as `docs/plans/reviews/research-runs-v2.2-critic.md`, then answer it. After approval, register R0b, S0 and S1a–S1d as tasks.
-- **Next decision:** none of the operator's open; the Critic's verdict on v2.2 decides what follows
+- **Last touched:** 2026-10-13, adervark @b/b8438f28: v2.3 committed, answering the Critic's partial review of v2.2
+- **In flight:** nothing
+- **On disk:** `docs/plans/research-runs.md` v2.3; reviews in `docs/plans/reviews/` (v1 architect, v1 critic, v2.2 critic, partial)
+- **Resume with:** `AA/ckpt.sh live T073`. If the operator approves a third round, run a fresh Critic on v2.3 and save it as `docs/plans/reviews/research-runs-v2.3-critic.md`. On approval, register R0b, S0 and S1a–S1d as tasks.
+- **Next decision:** the operator's: a third review round on v2.3, or accept it with the open objections listed
 
 ## Result
 
