@@ -1,0 +1,5520 @@
+{
+ "counts": {
+  "lines": 236,
+  "unparseable": [],
+  "facts": 232,
+  "perDoc": {
+   "T047brief": 14,
+   "R1": 40,
+   "R2": 37,
+   "lane9": 32,
+   "lane10": 30,
+   "lane11": 31,
+   "lane12": 29,
+   "lane13": 19
+  },
+  "pairs": 427,
+  "canaries": 4,
+  "keyConflicts": 8,
+  "premisePairs": 103,
+  "sameDocPairs": 193,
+  "measurandPairs": 0,
+  "outOfSight": 2,
+  "regenerable": 37,
+  "premisesByTranscriber": 43,
+  "unsourced": 41
+ },
+ "hubs": [
+  {
+   "r": "premise",
+   "n": 103
+  },
+  {
+   "r": "ref:--layer-decay",
+   "n": 89
+  },
+  {
+   "r": "ref:--warmup-frac",
+   "n": 45
+  },
+  {
+   "r": "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "n": 16
+  },
+  {
+   "r": "file:src/tta.py",
+   "n": 46
+  },
+  {
+   "r": "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "n": 13
+  },
+  {
+   "r": "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "n": 22
+  },
+  {
+   "r": "file:outputs/t039/v16_log/rsna-knee-submit.log",
+   "n": 16
+  }
+ ],
+ "keyConflicts": [
+  {
+   "a": "F5",
+   "b": "F29",
+   "key": "--layer-decay,--warmup-frac/ever_passed"
+  },
+  {
+   "a": "F5",
+   "b": "F69",
+   "key": "--layer-decay,--warmup-frac/ever_passed"
+  },
+  {
+   "a": "F5",
+   "b": "F128",
+   "key": "--layer-decay,--warmup-frac/ever_passed"
+  },
+  {
+   "a": "F7",
+   "b": "F117",
+   "key": "deployed_kernel/runtime_used"
+  },
+  {
+   "a": "F29",
+   "b": "F69",
+   "key": "--layer-decay,--warmup-frac/ever_passed"
+  },
+  {
+   "a": "F29",
+   "b": "F128",
+   "key": "--layer-decay,--warmup-frac/ever_passed"
+  },
+  {
+   "a": "F54",
+   "b": "F90",
+   "key": "expectation/realistic_public"
+  },
+  {
+   "a": "F69",
+   "b": "F128",
+   "key": "--layer-decay,--warmup-frac/ever_passed"
+  }
+ ],
+ "warnings": [
+  {
+   "fact": "F1",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F2",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F3",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F4",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F5",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F7",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F8",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F10",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F11",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F12",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F13",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F14",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F58",
+   "code": "source-missing",
+   "src": "outputs/t028/armC_fold0.log:1@missing"
+  },
+  {
+   "fact": "F91",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F92",
+   "code": "regenerable",
+   "src": "outputs/t047/lb_analysis.py:2@worktree#36a1df0b0b6f04f510bbbe710e51ef722a41d3791946d76588bac45a7a362772"
+  },
+  {
+   "fact": "F93",
+   "code": "regenerable",
+   "src": "outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv:805@worktree#fa4674363e1768eab5be7eb94cb260bff16108b316c623cfc7a99fcb7846288a"
+  },
+  {
+   "fact": "F94",
+   "code": "regenerable",
+   "src": "outputs/t047/discrim.py:8@worktree#afa595bba6d3c248da239966cacae12f8d4f3a9e2ab7e612e825f93c62b9bae7"
+  },
+  {
+   "fact": "F94",
+   "code": "regenerable",
+   "src": "outputs/t047/discrim.py:19@worktree#afa595bba6d3c248da239966cacae12f8d4f3a9e2ab7e612e825f93c62b9bae7"
+  },
+  {
+   "fact": "F95",
+   "code": "regenerable",
+   "src": "outputs/t047/discrim.py:19@worktree#afa595bba6d3c248da239966cacae12f8d4f3a9e2ab7e612e825f93c62b9bae7"
+  },
+  {
+   "fact": "F96",
+   "code": "regenerable",
+   "src": "outputs/t047/lb_analysis.py:13@worktree#36a1df0b0b6f04f510bbbe710e51ef722a41d3791946d76588bac45a7a362772"
+  },
+  {
+   "fact": "F97",
+   "code": "regenerable",
+   "src": "outputs/t047/discrim.py:49@worktree#afa595bba6d3c248da239966cacae12f8d4f3a9e2ab7e612e825f93c62b9bae7"
+  },
+  {
+   "fact": "F99",
+   "code": "regenerable",
+   "src": "outputs/t047/subs_analysis.py:21@worktree#fe53ab31e84d6a4395636d7a1ecf260fddd30923aaea10e3563715314ad81fcc"
+  },
+  {
+   "fact": "F100",
+   "code": "regenerable",
+   "src": "outputs/t047/discrim.py:28@worktree#afa595bba6d3c248da239966cacae12f8d4f3a9e2ab7e612e825f93c62b9bae7"
+  },
+  {
+   "fact": "F101",
+   "code": "regenerable",
+   "src": "outputs/t047/discrim.py:38@worktree#afa595bba6d3c248da239966cacae12f8d4f3a9e2ab7e612e825f93c62b9bae7"
+  },
+  {
+   "fact": "F103",
+   "code": "regenerable",
+   "src": "outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv:5@worktree#fa4674363e1768eab5be7eb94cb260bff16108b316c623cfc7a99fcb7846288a"
+  },
+  {
+   "fact": "F104",
+   "code": "regenerable",
+   "src": "outputs/t047/subs_analysis.py:34@worktree#fe53ab31e84d6a4395636d7a1ecf260fddd30923aaea10e3563715314ad81fcc"
+  },
+  {
+   "fact": "F105",
+   "code": "regenerable",
+   "src": "outputs/t047/xref.py:15@worktree#d8b4a2390828a3c89e03f37586c1b3a211bde53abe29b031ca22af60aaa91f55"
+  },
+  {
+   "fact": "F105",
+   "code": "regenerable",
+   "src": "outputs/t047/xref.py:26@worktree#d8b4a2390828a3c89e03f37586c1b3a211bde53abe29b031ca22af60aaa91f55"
+  },
+  {
+   "fact": "F106",
+   "code": "regenerable",
+   "src": "outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv:79@worktree#fa4674363e1768eab5be7eb94cb260bff16108b316c623cfc7a99fcb7846288a"
+  },
+  {
+   "fact": "F108",
+   "code": "regenerable",
+   "src": "outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv:310@worktree#fa4674363e1768eab5be7eb94cb260bff16108b316c623cfc7a99fcb7846288a"
+  },
+  {
+   "fact": "F128",
+   "code": "regenerable",
+   "src": "outputs/t025/run_arm.sh:13@worktree#1e8cadbc234c0cb5f79c0cbe55718deff2ce5408345e871ee0c2d0a4a6ff785f"
+  },
+  {
+   "fact": "F128",
+   "code": "regenerable",
+   "src": "outputs/t025/dinov3_fold0.log:7@worktree#7aef90116218585cc16a218034ed4d67c266d7368c00c9862d9118e08d343acb"
+  },
+  {
+   "fact": "F128",
+   "code": "regenerable",
+   "src": "outputs/t025/dinov3_fold0.log:8@worktree#7aef90116218585cc16a218034ed4d67c266d7368c00c9862d9118e08d343acb"
+  },
+  {
+   "fact": "F132",
+   "code": "regenerable",
+   "src": "outputs/t025/dinov3_fold0.log:7@worktree#7aef90116218585cc16a218034ed4d67c266d7368c00c9862d9118e08d343acb"
+  },
+  {
+   "fact": "F134",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F138",
+   "code": "regenerable",
+   "src": "outputs/t039/live_kernel/rsna-knee-submit.py:85@worktree#eddc72e067fcc261f1e6483f80c28917a7e0172220832435bca43e79360f6e24"
+  },
+  {
+   "fact": "F138",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:29@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F139",
+   "code": "regenerable",
+   "src": "outputs/t039/live_kernel/rsna-knee-submit.py:235@worktree#eddc72e067fcc261f1e6483f80c28917a7e0172220832435bca43e79360f6e24"
+  },
+  {
+   "fact": "F141",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:31@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F143",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F146",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F147",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F149",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F154",
+   "code": "regenerable",
+   "src": "outputs/t040/sub_timing.json:7@worktree#e8f6305eca700b7a6a0135ebd291dd55dc2a7f263ca2c3e44d4930e80da4fb41"
+  },
+  {
+   "fact": "F155",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F157",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:32@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F157",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:33@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F158",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:31@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F159",
+   "code": "regenerable",
+   "src": "outputs/t040/v1_log/rsna-knee-efficiency.log:10@worktree#b87ad36b619202d6a344c03204e38a59485ed1641a356a9b1e096ce4fbd438b0"
+  },
+  {
+   "fact": "F159",
+   "code": "regenerable",
+   "src": "outputs/t040/v1_log/rsna-knee-efficiency.log:11@worktree#b87ad36b619202d6a344c03204e38a59485ed1641a356a9b1e096ce4fbd438b0"
+  },
+  {
+   "fact": "F159",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:32@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F159",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:33@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F160",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F161",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F165",
+   "code": "regenerable",
+   "src": "outputs/t039/v16_log/rsna-knee-submit.log:35@worktree#c6ff8fde034a2214b421bd20b6ec62d1d4b2930e44d96b9b9fd94b47bf4f62ec"
+  },
+  {
+   "fact": "F166",
+   "code": "out-of-sight",
+   "src": ".venv/lib/python3.12/site-packages/kagglesdk/competitions/types/competition_api_service.py:4636@worktree#f7a8a6bc15f2c44e55c672df8a3ad603cd5e1a18cb3c3e2fb6f7637dbe5aec0b"
+  },
+  {
+   "fact": "F166",
+   "code": "out-of-sight",
+   "src": ".venv/lib/python3.12/site-packages/kagglesdk/kernels/types/kernels_api_service.py:960@worktree#a7dd65206e7fc27950385e7b163cda48a40766eb8ff7f89d7a334b9bfb151b5c"
+  },
+  {
+   "fact": "F169",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F170",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F175",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F176",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F179",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F181",
+   "code": "regenerable",
+   "src": "outputs/t039/live_kernel/rsna-knee-submit.py:85@worktree#eddc72e067fcc261f1e6483f80c28917a7e0172220832435bca43e79360f6e24"
+  },
+  {
+   "fact": "F185",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F188",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F189",
+   "code": "source-missing",
+   "src": "outputs/t028/armB_fold0.log:4@missing"
+  },
+  {
+   "fact": "F191",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F194",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F198",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F200",
+   "code": "source-missing",
+   "src": "outputs/t028/armB_fold0.log:4@missing"
+  },
+  {
+   "fact": "F200",
+   "code": "source-missing",
+   "src": "outputs/t028/armB_fold0.log:8@missing"
+  },
+  {
+   "fact": "F207",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F208",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F209",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F214",
+   "code": "regenerable",
+   "src": "outputs/t043/rules2.txt:84@worktree#280b77f1dae51259511a3bfdfd96f87c8020c932ab1ec36088d127244739a212"
+  },
+  {
+   "fact": "F215",
+   "code": "regenerable",
+   "src": "outputs/t043/rules2.txt:86@worktree#280b77f1dae51259511a3bfdfd96f87c8020c932ab1ec36088d127244739a212"
+  },
+  {
+   "fact": "F215",
+   "code": "regenerable",
+   "src": "outputs/t043/rules2.txt:285@worktree#280b77f1dae51259511a3bfdfd96f87c8020c932ab1ec36088d127244739a212"
+  },
+  {
+   "fact": "F217",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F218",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F220",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F221",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F225",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F228",
+   "code": "unsourced"
+  },
+  {
+   "fact": "F232",
+   "code": "unsourced"
+  }
+ ],
+ "referents": {
+  "F1": [
+   "ref:0.94"
+  ],
+  "F2": [
+   "ref:0.945"
+  ],
+  "F3": [
+   "ref:0.95"
+  ],
+  "F4": [
+   "ref:0.926"
+  ],
+  "F5": [
+   "ref:--layer-decay",
+   "ref:--warmup-frac"
+  ],
+  "F6": [
+   "ref:--layer-decay",
+   "ref:--warmup-frac"
+  ],
+  "F7": [
+   "ref:9 h"
+  ],
+  "F8": [
+   "ref:efficiency"
+  ],
+  "F9": [
+   "ref:efficiency"
+  ],
+  "F10": [
+   "ref:4,349"
+  ],
+  "F11": [
+   "ref:T007"
+  ],
+  "F12": [
+   "ref:T047"
+  ],
+  "F13": [
+   "ref:seqs2_fold0"
+  ],
+  "F14": [
+   "ref:T042"
+  ],
+  "F15": [
+   "ref:0.946",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md"
+  ],
+  "F16": [
+   "ref:776",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md"
+  ],
+  "F17": [
+   "ref:0.926",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md"
+  ],
+  "F18": [
+   "ref:664",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md"
+  ],
+  "F19": [
+   "ref:9 hours",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Code requirements (overview/code-requirements) — READ, verbatim fragments",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md"
+  ],
+  "F20": [
+   "ref:1300",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Data page — READ",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md"
+  ],
+  "F21": [
+   "ref:265",
+   "ref:rank 22",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Efficiency leaderboard (2,703 entries; only rank + public score are exposed)",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Efficiency prize evaluation (overview/evaluation, overview/prizes) — READ"
+  ],
+  "F22": [
+   "ref:split",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Rules page — READ (proxy summary, not full verbatim)",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md"
+  ],
+  "F23": [
+   "ref:0.960",
+   "ref:0.946",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md",
+   "ref:0.926",
+   "ref:664"
+  ],
+  "F24": [
+   "ref:735304",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+  ],
+  "F25": [
+   "ref:+0.0001",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F26": [
+   "ref:−0.08",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F27": [
+   "ref:90.6%",
+   "def:docs/research/0902/lane5-public-notebooks.md#1.2 The ranked transferable ideas",
+   "file:docs/research/0902/lane5-public-notebooks.md"
+  ],
+  "F28": [
+   "ref:1.39×",
+   "def:docs/research/0902/lane1-winners-and-literature.md#5. The measurement I ran: our physical scale is not normalised",
+   "file:docs/research/0902/lane1-winners-and-literature.md"
+  ],
+  "F29": [
+   "ref:--layer-decay",
+   "ref:--warmup-frac",
+   "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+  ],
+  "F30": [
+   "ref:apply_view",
+   "ref:(-1, 0, 1)",
+   "file:src/tta.py",
+   "def:src/dicom_io.py#side",
+   "file:src/dicom_io.py"
+  ],
+  "F31": [
+   "ref:apply_view",
+   "file:src/tta.py"
+  ],
+  "F32": [
+   "ref:stay identical",
+   "def:scripts/smoke_test.py#test_t003_tta_views",
+   "file:scripts/smoke_test.py"
+  ],
+  "F33": [
+   "ref:mirror_bag",
+   "ref:mirror_dim",
+   "file:src/tta.py",
+   "def:src/dataset.py#__getitem__",
+   "file:src/dataset.py"
+  ],
+  "F34": [
+   "ref:default_rng",
+   "def:src/dataset.py#__getitem__",
+   "file:src/dataset.py"
+  ],
+  "F35": [
+   "ref:0.6799",
+   "def:docs/research/0902/lane2-architecture-headroom.md#Executive summary — the ranked list",
+   "file:docs/research/0902/lane2-architecture-headroom.md"
+  ],
+  "F36": [
+   "ref:8,113",
+   "def:docs/research/0902/lane2-architecture-headroom.md#1.4 A cost trap nobody has priced: the manifest does not cover `--seqs 2`",
+   "file:docs/research/0902/lane2-architecture-headroom.md"
+  ],
+  "F37": [
+   "ref:0.9217",
+   "def:docs/research/0902/lane4-labels-and-plan.md#What I computed, and why it is admissible",
+   "file:docs/research/0902/lane4-labels-and-plan.md"
+  ],
+  "F38": [
+   "ref:+0.0233",
+   "def:docs/research/0902/lane4-labels-and-plan.md#What I computed, and why it is admissible",
+   "file:docs/research/0902/lane4-labels-and-plan.md"
+  ],
+  "F39": [
+   "ref:0.9545",
+   "def:scripts/llm_label/eval_llm.py#main",
+   "file:scripts/llm_label/eval_llm.py"
+  ],
+  "F40": [
+   "ref:±0.0019",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#3A. The instrument that was already on disk",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F41": [
+   "ref:±0.0100",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#3A. The instrument that was already on disk",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F42": [
+   "ref:−0.0053",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#2C. Greedy forward selection (Caruana), and whether it overfits",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F43": [
+   "ref:0.0028–0.0070",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F44": [
+   "ref:public",
+   "ref:0.0028–0.0070",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F45": [
+   "ref:2 h 24 m",
+   "def:docs/research/0902/lane4-labels-and-plan.md#The three budgets",
+   "file:docs/research/0902/lane4-labels-and-plan.md"
+  ],
+  "F46": [
+   "ref:TTA",
+   "ref:apply_view",
+   "ref:(-1, 0, 1)",
+   "file:src/tta.py",
+   "def:src/dicom_io.py#side",
+   "file:src/dicom_io.py"
+  ],
+  "F47": [
+   "ref:T035",
+   "ref:+0.0233",
+   "def:docs/research/0902/lane4-labels-and-plan.md#What I computed, and why it is admissible",
+   "file:docs/research/0902/lane4-labels-and-plan.md"
+  ],
+  "F48": [
+   "ref:T007",
+   "ref:90.6%",
+   "def:docs/research/0902/lane5-public-notebooks.md#1.2 The ranked transferable ideas",
+   "file:docs/research/0902/lane5-public-notebooks.md",
+   "ref:8,113",
+   "def:docs/research/0902/lane2-architecture-headroom.md#1.4 A cost trap nobody has priced: the manifest does not cover `--seqs 2`",
+   "file:docs/research/0902/lane2-architecture-headroom.md"
+  ],
+  "F49": [
+   "ref:crop",
+   "ref:1.39×",
+   "def:docs/research/0902/lane1-winners-and-literature.md#5. The measurement I ran: our physical scale is not normalised",
+   "file:docs/research/0902/lane1-winners-and-literature.md"
+  ],
+  "F50": [
+   "ref:--warmup-frac",
+   "ref:--layer-decay",
+   "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts",
+   "ref:0.6799",
+   "def:docs/research/0902/lane2-architecture-headroom.md#Executive summary — the ranked list",
+   "file:docs/research/0902/lane2-architecture-headroom.md",
+   "ref:default_rng",
+   "def:src/dataset.py#__getitem__",
+   "file:src/dataset.py"
+  ],
+  "F51": [
+   "ref:+0.030",
+   "def:docs/research/0902/lane2-architecture-headroom.md#Executive summary — the ranked list",
+   "file:docs/research/0902/lane2-architecture-headroom.md"
+  ],
+  "F52": [
+   "ref:195 h",
+   "def:docs/research/0902/lane4-labels-and-plan.md#The three budgets",
+   "file:docs/research/0902/lane4-labels-and-plan.md",
+   "ref:2 h 24 m"
+  ],
+  "F53": [
+   "ref:+0.006",
+   "def:docs/research/0902/lane4-labels-and-plan.md#Ranked recommendations",
+   "file:docs/research/0902/lane4-labels-and-plan.md"
+  ],
+  "F54": [
+   "ref:0.940",
+   "ref:T035",
+   "ref:+0.0233",
+   "def:docs/research/0902/lane4-labels-and-plan.md#What I computed, and why it is admissible",
+   "file:docs/research/0902/lane4-labels-and-plan.md",
+   "ref:T007",
+   "ref:90.6%",
+   "def:docs/research/0902/lane5-public-notebooks.md#1.2 The ranked transferable ideas",
+   "file:docs/research/0902/lane5-public-notebooks.md",
+   "ref:8,113",
+   "def:docs/research/0902/lane2-architecture-headroom.md#1.4 A cost trap nobody has priced: the manifest does not cover `--seqs 2`",
+   "file:docs/research/0902/lane2-architecture-headroom.md",
+   "ref:crop",
+   "ref:1.39×",
+   "def:docs/research/0902/lane1-winners-and-literature.md#5. The measurement I ran: our physical scale is not normalised",
+   "file:docs/research/0902/lane1-winners-and-literature.md",
+   "ref:--warmup-frac",
+   "ref:--layer-decay",
+   "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts",
+   "ref:0.6799",
+   "def:docs/research/0902/lane2-architecture-headroom.md#Executive summary — the ranked list",
+   "ref:default_rng",
+   "def:src/dataset.py#__getitem__",
+   "file:src/dataset.py"
+  ],
+  "F55": [
+   "ref:0.924",
+   "def:docs/research/0902b/lane6-single-model-gap.md#1. Which recipe, and what it actually scores",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F56": [
+   "ref:55802512",
+   "def:docs/research/0902/lane5-public-notebooks.md#1.1 The 0.936 plateau is one notebook, forked ~8 times",
+   "file:docs/research/0902/lane5-public-notebooks.md",
+   "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F57": [
+   "ref:likely overfit",
+   "def:docs/research/0902b/lane7-public-members.md#6. Judgement, stated plainly",
+   "file:docs/research/0902b/lane7-public-members.md"
+  ],
+  "F58": [
+   "ref:0.8793",
+   "file:outputs/t028/armC_fold0.log",
+   "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F59": [
+   "ref:0.9054",
+   "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F60": [
+   "ref:+0.019",
+   "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "ref:0.8793",
+   "file:outputs/t028/armC_fold0.log"
+  ],
+  "F61": [
+   "ref:0.0261",
+   "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "ref:0.8793",
+   "file:outputs/t028/armC_fold0.log",
+   "ref:0.9054"
+  ],
+  "F62": [
+   "ref:0.936",
+   "ref:55802512",
+   "def:docs/research/0902/lane5-public-notebooks.md#1.1 The 0.936 plateau is one notebook, forked ~8 times",
+   "file:docs/research/0902/lane5-public-notebooks.md",
+   "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "ref:+0.0001",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F63": [
+   "ref:data/csv/train.csv",
+   "cmd:git show d9c7c6e:data/csv/train.csv | wc -l"
+  ],
+  "F64": [
+   "ref:0.881",
+   "def:docs/research/0902b/lane6-single-model-gap.md#-> 4407 58 [58]",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F65": [
+   "ref:+0.0131",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.6 Selection, validation and ensembling",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F66": [
+   "ref:+0.008 to +0.010",
+   "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "ref:+0.0131",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.6 Selection, validation and ensembling"
+  ],
+  "F67": [
+   "ref:3e-5",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F68": [
+   "ref:13,920",
+   "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F69": [
+   "ref:--layer-decay",
+   "ref:--warmup-frac",
+   "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+  ],
+  "F70": [
+   "ref:--layer-decay 0.6",
+   "ref:--warmup-frac 0.15",
+   "ref:3e-5",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "ref:13,920",
+   "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap",
+   "ref:--layer-decay",
+   "ref:--warmup-frac",
+   "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+  ],
+  "F71": [
+   "ref:S1",
+   "ref:--layer-decay",
+   "ref:--warmup-frac",
+   "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+  ],
+  "F72": [
+   "ref:0.328–0.688",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.2 Input construction — the largest measurable block",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F73": [
+   "ref:9.5%",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.2 Input construction — the largest measurable block",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F74": [
+   "ref:--crop-mm 140",
+   "ref:0.328–0.688",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.2 Input construction — the largest measurable block",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "ref:9.5%"
+  ],
+  "F75": [
+   "ref:+0.0053",
+   "def:docs/research/0902b/lane7-public-members.md#4.2 What blending them in actually does — MEASURED",
+   "file:docs/research/0902b/lane7-public-members.md"
+  ],
+  "F76": [
+   "ref:0.9128–0.9213",
+   "def:docs/research/0902b/lane7-public-members.md#0. Verdict in six lines",
+   "file:docs/research/0902b/lane7-public-members.md"
+  ],
+  "F77": [
+   "ref:0.68–0.75",
+   "def:docs/research/0902b/lane7-public-members.md#4.4 Bounding the Raptor, which is the member we actually want",
+   "file:docs/research/0902b/lane7-public-members.md",
+   "ref:+0.0053",
+   "def:docs/research/0902b/lane7-public-members.md#4.2 What blending them in actually does — MEASURED"
+  ],
+  "F78": [
+   "ref:Raptor",
+   "ref:+0.0053",
+   "def:docs/research/0902b/lane7-public-members.md#4.2 What blending them in actually does — MEASURED",
+   "file:docs/research/0902b/lane7-public-members.md",
+   "ref:0.9128–0.9213",
+   "def:docs/research/0902b/lane7-public-members.md#0. Verdict in six lines",
+   "ref:0.68–0.75",
+   "def:docs/research/0902b/lane7-public-members.md#4.4 Bounding the Raptor, which is the member we actually want"
+  ],
+  "F79": [
+   "ref:1,172",
+   "def:docs/research/0902b/lane8-external-truth-sets.md#Executive summary",
+   "file:docs/research/0902b/lane8-external-truth-sets.md"
+  ],
+  "F80": [
+   "ref:2 of 12",
+   "def:docs/research/0902b/lane8-external-truth-sets.md#MRNet (Stanford) — the wrong instrument for the stated purpose",
+   "file:docs/research/0902b/lane8-external-truth-sets.md"
+  ],
+  "F81": [
+   "ref:+0.012",
+   "ref:0.8433",
+   "def:docs/research/0902b/lane6-single-model-gap.md#Screen S1 — discriminative encoder LR + warmup",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F82": [
+   "ref:0.9089",
+   "def:docs/research/0902b/lane6-single-model-gap.md#paired A-B  [-0.0046, 0.0158]  +/-0.0102   r = 0.9089, pairing tightens 2.3x",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F83": [
+   "ref:0.9167",
+   "def:docs/research/0902b/lane7-public-members.md#7. Pre-registered decision rule — written before any number exists",
+   "file:docs/research/0902b/lane7-public-members.md"
+  ],
+  "F84": [
+   "ref:w = 0.20",
+   "def:docs/research/0902b/lane7-public-members.md#7. Pre-registered decision rule — written before any number exists",
+   "file:docs/research/0902b/lane7-public-members.md"
+  ],
+  "F85": [
+   "ref:0.935",
+   "def:docs/research/0902/lane5-public-notebooks.md#2.5 The fusion, and where the plateau's fragility lives",
+   "file:docs/research/0902/lane5-public-notebooks.md"
+  ],
+  "F86": [
+   "ref:ROADMAP",
+   "cmd:git grep -n -i \"rank averag\" d9c7c6e -- docs/ROADMAP.md"
+  ],
+  "F87": [
+   "ref:coronal only",
+   "def:docs/research/0902b/lane8-external-truth-sets.md#Executive summary",
+   "file:docs/research/0902b/lane8-external-truth-sets.md"
+  ],
+  "F88": [
+   "ref:10,000",
+   "ref:64 GiB",
+   "def:docs/research/0902b/lane8-external-truth-sets.md#Executive summary",
+   "file:docs/research/0902b/lane8-external-truth-sets.md",
+   "def:docs/research/0902b/lane8-external-truth-sets.md#Lane 8 — external expert-labeled knee MRI sets: which one is the truth-anchored instrument at n ≫ 58"
+  ],
+  "F89": [
+   "ref:4.97",
+   "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F90": [
+   "ref:0.945",
+   "ref:+0.008 to +0.010",
+   "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "ref:+0.0131",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.6 Selection, validation and ensembling",
+   "ref:--layer-decay 0.6",
+   "ref:--warmup-frac 0.15",
+   "ref:3e-5",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "ref:13,920",
+   "ref:--layer-decay",
+   "ref:--warmup-frac",
+   "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts",
+   "ref:--crop-mm 140",
+   "ref:0.328–0.688",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.2 Input construction — the largest measurable block",
+   "ref:9.5%",
+   "ref:Raptor",
+   "ref:+0.0053",
+   "def:docs/research/0902b/lane7-public-members.md#4.2 What blending them in actually does — MEASURED",
+   "file:docs/research/0902b/lane7-public-members.md",
+   "ref:0.9128–0.9213",
+   "def:docs/research/0902b/lane7-public-members.md#0. Verdict in six lines",
+   "ref:0.68–0.75",
+   "def:docs/research/0902b/lane7-public-members.md#4.4 Bounding the Raptor, which is the member we actually want"
+  ],
+  "F91": [
+   "ref:T042"
+  ],
+  "F92": [
+   "ref:publicleaderboard-2026-09-02T10:19:50",
+   "worktree:outputs/t047/lb_analysis.py",
+   "file:outputs/t047/lb_analysis.py"
+  ],
+  "F93": [
+   "ref:BhavishNithinR",
+   "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv",
+   "file:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+  ],
+  "F94": [
+   "ref:0.936",
+   "worktree:outputs/t047/discrim.py",
+   "file:outputs/t047/discrim.py"
+  ],
+  "F95": [
+   "ref:ratio",
+   "worktree:outputs/t047/discrim.py",
+   "file:outputs/t047/discrim.py"
+  ],
+  "F96": [
+   "ref:0.95",
+   "worktree:outputs/t047/lb_analysis.py",
+   "file:outputs/t047/lb_analysis.py"
+  ],
+  "F97": [
+   "ref:nteam",
+   "worktree:outputs/t047/discrim.py",
+   "file:outputs/t047/discrim.py"
+  ],
+  "F98": [
+   "ref:+0.012",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#5B. Structurally distinct candidates — where the risk actually is",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F99": [
+   "ref:median",
+   "worktree:outputs/t047/subs_analysis.py",
+   "file:outputs/t047/subs_analysis.py"
+  ],
+  "F100": [
+   "ref:Spearman",
+   "worktree:outputs/t047/discrim.py",
+   "file:outputs/t047/discrim.py"
+  ],
+  "F101": [
+   "ref:plateau teams with >=30 submissions",
+   "worktree:outputs/t047/discrim.py",
+   "file:outputs/t047/discrim.py"
+  ],
+  "F102": [
+   "ref:0.94",
+   "ref:plateau teams with >=30 submissions",
+   "worktree:outputs/t047/discrim.py",
+   "file:outputs/t047/discrim.py",
+   "ref:Spearman"
+  ],
+  "F103": [
+   "ref:Tiago Mazzutti",
+   "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv",
+   "file:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+  ],
+  "F104": [
+   "ref:sqrt(2*np.log(N))",
+   "worktree:outputs/t047/subs_analysis.py",
+   "file:outputs/t047/subs_analysis.py",
+   "ref:Tiago Mazzutti",
+   "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv",
+   "file:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+  ],
+  "F105": [
+   "ref:authored",
+   "worktree:outputs/t047/xref.py",
+   "file:outputs/t047/xref.py"
+  ],
+  "F106": [
+   "ref:dreaddevelopment",
+   "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv",
+   "file:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+  ],
+  "F107": [
+   "ref:Pillar-0",
+   "cmd:git grep -n -i pillar d9c7c6e -- docs/research/0902/lane5-public-notebooks.md docs/research/0902b/lane6-single-model-gap.md docs/research/0902b/lane7-public-members.md"
+  ],
+  "F108": [
+   "ref:romantamrazov",
+   "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv",
+   "file:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+  ],
+  "F109": [
+   "ref:735304",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+  ],
+  "F110": [
+   "ref:735304",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+  ],
+  "F111": [
+   "ref:0.8976",
+   "def:PROGRESS.md#LLM-read labels: 0.9015 on gold — the label factory has headroom after all",
+   "file:PROGRESS.md",
+   "def:docs/research/0902/lane5-public-notebooks.md#1.3 What the corpus says about our own position",
+   "file:docs/research/0902/lane5-public-notebooks.md"
+  ],
+  "F112": [
+   "ref:734681",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/734681"
+  ],
+  "F113": [
+   "ref:733517",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/733517"
+  ],
+  "F114": [
+   "ref:737696",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696"
+  ],
+  "F115": [
+   "ref:737696",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696"
+  ],
+  "F116": [
+   "ref:737696",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696"
+  ],
+  "F117": [
+   "ref:deployed kernel",
+   "def:pm/tasks/T047-research-round-3.md#The four lane briefs",
+   "file:pm/tasks/T047-research-round-3.md"
+  ],
+  "F118": [
+   "ref:window count",
+   "ref:737696",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696",
+   "ref:deployed kernel",
+   "def:pm/tasks/T047-research-round-3.md#The four lane briefs",
+   "file:pm/tasks/T047-research-round-3.md"
+  ],
+  "F119": [
+   "ref:window count",
+   "ref:737696",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696",
+   "ref:deployed kernel",
+   "def:pm/tasks/T047-research-round-3.md#The four lane briefs",
+   "file:pm/tasks/T047-research-round-3.md"
+  ],
+  "F120": [
+   "ref:735304",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+  ],
+  "F121": [
+   "ref:735304",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+  ],
+  "F122": [
+   "ref:735154",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735154"
+  ],
+  "F123": [
+   "ref:lane9",
+   "ref:735304",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304",
+   "ref:735154",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735154",
+   "ref:733517",
+   "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/733517"
+  ],
+  "F124": [
+   "ref:build_parser",
+   "file:src/train.py"
+  ],
+  "F125": [
+   "ref:--lr",
+   "ref:--swa-epochs",
+   "ref:--shared-head-drop",
+   "ref:--seq-head",
+   "ref:--perspective",
+   "def:src/train.py#build_parser",
+   "file:src/train.py",
+   "cmd:git grep -n -e '\"--lr\"' -e --swa-epochs -e --shared-head-drop -e --seq-head -e --perspective d9c7c6e -- src scripts"
+  ],
+  "F126": [
+   "ref:--lr",
+   "def:src/train.py#build_parser",
+   "file:src/train.py"
+  ],
+  "F127": [
+   "ref:--seed",
+   "def:src/train.py#build_parser",
+   "file:src/train.py"
+  ],
+  "F128": [
+   "ref:--layer-decay",
+   "ref:layer-wise LR decay",
+   "ref:warmup steps",
+   "worktree:outputs/t025/run_arm.sh",
+   "file:outputs/t025/run_arm.sh",
+   "worktree:outputs/t025/dinov3_fold0.log",
+   "file:outputs/t025/dinov3_fold0.log"
+  ],
+  "F129": [
+   "ref:--warmup-frac",
+   "ref:--layer-decay",
+   "def:PROGRESS.md#The sequence families, verified: 90.6% of studies never show the model a non-fat-sat image (2026-09-01)",
+   "file:PROGRESS.md"
+  ],
+  "F130": [
+   "ref:--warmup-frac",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "file:docs/research/0902b/lane6-single-model-gap.md"
+  ],
+  "F131": [
+   "ref:NEITHER HAS EVER BEEN PASSED",
+   "file:scripts/t042/run_recipe_fold0.sh"
+  ],
+  "F132": [
+   "ref:layer-wise LR decay",
+   "worktree:outputs/t025/dinov3_fold0.log",
+   "file:outputs/t025/dinov3_fold0.log"
+  ],
+  "F133": [
+   "ref:double-updates BatchNorm",
+   "def:src/train.py#mk",
+   "file:src/train.py"
+  ],
+  "F134": [
+   "ref:--grad-checkpoint"
+  ],
+  "F135": [
+   "ref:--grad-checkpoint",
+   "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band",
+   "file:PROGRESS.md"
+  ],
+  "F136": [
+   "ref:--grad-checkpoint",
+   "ref:double-updates BatchNorm",
+   "def:src/train.py#mk",
+   "file:src/train.py",
+   "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band",
+   "file:PROGRESS.md"
+  ],
+  "F137": [
+   "ref:reshape(b * s * c",
+   "ref:slice_dims",
+   "def:src/tta.py#apply_view",
+   "file:src/tta.py",
+   "def:src/tta.py#mirror_bag"
+  ],
+  "F138": [
+   "ref:MAX_LAYOUTS",
+   "ref:2 bag layouts",
+   "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+   "file:outputs/t039/live_kernel/rsna-knee-submit.py",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log"
+  ],
+  "F139": [
+   "ref:MAX_LAYOUTS",
+   "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+   "def:outputs/t039/live_kernel/rsna-knee-submit.py#main",
+   "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+  ],
+  "F140": [
+   "ref:RSNA_MAX_LAYOUTS",
+   "cmd:git grep -n -e layout -e MAX_LAYOUTS -e deploy -e submit d9c7c6e -- pm/tasks/T007-sequence-diversity-clean.md",
+   "def:pm/tasks/T028-config-for-the-family.md#(c) and does blending beat the new family alone?",
+   "file:pm/tasks/T028-config-for-the-family.md"
+  ],
+  "F141": [
+   "ref:budget ~67 min",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log",
+   "ref:MAX_LAYOUTS",
+   "ref:2 bag layouts",
+   "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+   "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+  ],
+  "F142": [
+   "ref:VIEW_REQUIRES",
+   "ref:any(",
+   "file:src/tta.py",
+   "def:src/tta.py#unmatched"
+  ],
+  "F143": [
+   "ref:fold?"
+  ],
+  "F144": [
+   "ref:KneeMIL",
+   "ref:dropout=0.3",
+   "ref:weight_decay=1e-4",
+   "def:src/train.py#run",
+   "file:src/train.py",
+   "def:src/model.py#__init__",
+   "file:src/model.py",
+   "def:src/train.py#build_optimizer"
+  ],
+  "F145": [
+   "ref:3e-5",
+   "ref:0.02",
+   "ref:Dropout(0.2)",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.4 Architecture and head"
+  ],
+  "F146": [
+   "ref:--layer-decay"
+  ],
+  "F147": [
+   "ref:tf_efficientnet_b2"
+  ],
+  "F148": [
+   "ref:--layer-decay",
+   "ref:3e-5",
+   "ref:0.02",
+   "ref:Dropout(0.2)",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.4 Architecture and head",
+   "ref:KneeMIL",
+   "ref:dropout=0.3",
+   "ref:weight_decay=1e-4",
+   "def:src/train.py#run",
+   "file:src/train.py",
+   "def:src/model.py#__init__",
+   "file:src/model.py",
+   "def:src/train.py#build_optimizer"
+  ],
+  "F149": [
+   "ref:--layer-decay"
+  ],
+  "F150": [
+   "ref:enc",
+   "def:src/train.py#build_optimizer",
+   "file:src/train.py",
+   "ref:KneeMIL",
+   "ref:dropout=0.3",
+   "ref:weight_decay=1e-4",
+   "def:src/train.py#run",
+   "def:src/model.py#__init__",
+   "file:src/model.py"
+  ],
+  "F151": [
+   "ref:+0.0188",
+   "def:src/model.py#__init__",
+   "file:src/model.py"
+  ],
+  "F152": [
+   "ref:data/weak_labels.csv",
+   "def:src/train.py#build_parser",
+   "file:src/train.py"
+  ],
+  "F153": [
+   "ref:T042",
+   "ref:--layer-decay",
+   "ref:3e-5",
+   "ref:0.02",
+   "ref:Dropout(0.2)",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "file:docs/research/0902b/lane6-single-model-gap.md",
+   "def:docs/research/0902b/lane6-single-model-gap.md#2.4 Architecture and head",
+   "ref:KneeMIL",
+   "ref:dropout=0.3",
+   "ref:weight_decay=1e-4",
+   "def:src/train.py#run",
+   "file:src/train.py",
+   "def:src/model.py#__init__",
+   "file:src/model.py",
+   "def:src/train.py#build_optimizer"
+  ],
+  "F154": [
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508"
+  ],
+  "F155": [
+   "ref:T024"
+  ],
+  "F156": [
+   "ref:55954418",
+   "submission:55954418"
+  ],
+  "F157": [
+   "ref:member(s)",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log"
+  ],
+  "F158": [
+   "ref:TTA views: 3",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log"
+  ],
+  "F159": [
+   "ref:bag layout",
+   "ref:every scored study",
+   "worktree:outputs/t040/v1_log/rsna-knee-efficiency.log",
+   "file:outputs/t040/v1_log/rsna-knee-efficiency.log",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log"
+  ],
+  "F160": [
+   "ref:T4",
+   "ref:bag layout",
+   "ref:every scored study",
+   "worktree:outputs/t040/v1_log/rsna-knee-efficiency.log",
+   "file:outputs/t040/v1_log/rsna-knee-efficiency.log",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log"
+  ],
+  "F161": [
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024"
+  ],
+  "F162": [
+   "ref:deployed",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024",
+   "ref:member(s)",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log",
+   "ref:T4",
+   "ref:bag layout",
+   "ref:every scored study",
+   "worktree:outputs/t040/v1_log/rsna-knee-efficiency.log",
+   "file:outputs/t040/v1_log/rsna-knee-efficiency.log"
+  ],
+  "F163": [
+   "ref:deployed",
+   "ref:55954418",
+   "submission:55954418"
+  ],
+  "F164": [
+   "ref:budget_minutes",
+   "file:src/tta.py"
+  ],
+  "F165": [
+   "ref:~2 for the extra pass",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024"
+  ],
+  "F166": [
+   "ref:ApiSubmission",
+   "ref:ApiKernelMetadata",
+   "worktree:.venv/lib/python3.12/site-packages/kagglesdk/competitions/types/competition_api_service.py",
+   "file:.venv/lib/python3.12/site-packages/kagglesdk/competitions/types/competition_api_service.py",
+   "worktree:.venv/lib/python3.12/site-packages/kagglesdk/kernels/types/kernels_api_service.py",
+   "file:.venv/lib/python3.12/site-packages/kagglesdk/kernels/types/kernels_api_service.py"
+  ],
+  "F167": [
+   "ref:9 h",
+   "ref:deployed",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024",
+   "ref:member(s)",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log",
+   "ref:T4",
+   "ref:bag layout",
+   "ref:every scored study",
+   "worktree:outputs/t040/v1_log/rsna-knee-efficiency.log",
+   "file:outputs/t040/v1_log/rsna-knee-efficiency.log"
+  ],
+  "F168": [
+   "ref:270 min",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024"
+  ],
+  "F169": [
+   "ref:outputs/t039/dumps"
+  ],
+  "F170": [
+   "ref:bright"
+  ],
+  "F171": [
+   "ref:TTA",
+   "ref:bright"
+  ],
+  "F172": [
+   "ref:bright"
+  ],
+  "F173": [
+   "ref:data/manifest.csv",
+   "cmd:git show d9c7c6e:data/manifest.csv | wc -l"
+  ],
+  "F174": [
+   "ref:np.linspace",
+   "def:src/dicom_io.py#read_series",
+   "file:src/dicom_io.py"
+  ],
+  "F175": [
+   "ref:--slices"
+  ],
+  "F176": [
+   "ref:seq_head"
+  ],
+  "F177": [
+   "ref:linspace",
+   "ref:softmax",
+   "def:src/dataset.py#_slot_meta",
+   "file:src/dataset.py",
+   "def:src/model.py#forward",
+   "file:src/model.py"
+  ],
+  "F178": [
+   "ref:--slices",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024",
+   "ref:member(s)",
+   "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "file:outputs/t039/v16_log/rsna-knee-submit.log"
+  ],
+  "F179": [
+   "ref:--slices 24"
+  ],
+  "F180": [
+   "ref:size=320",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024"
+  ],
+  "F181": [
+   "ref:MAX_LAYOUTS",
+   "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+   "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+  ],
+  "F182": [
+   "ref:any(",
+   "def:src/tta.py#unmatched",
+   "file:src/tta.py"
+  ],
+  "F183": [
+   "ref:mirror",
+   "ref:any(",
+   "def:src/tta.py#unmatched",
+   "file:src/tta.py",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024"
+  ],
+  "F184": [
+   "ref:--slices",
+   "ref:mirror",
+   "ref:any(",
+   "def:src/tta.py#unmatched",
+   "file:src/tta.py",
+   "ref:T(u)",
+   "ref:elapsed_seconds_upper_bound",
+   "worktree:outputs/t040/sub_timing.json",
+   "file:outputs/t040/sub_timing.json",
+   "submission:55954508",
+   "ref:T024",
+   "ref:size=320",
+   "ref:TTA",
+   "ref:bright",
+   "ref:MAX_LAYOUTS",
+   "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+   "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+  ],
+  "F185": [
+   "ref:819,078"
+  ],
+  "F186": [
+   "ref:9 hours",
+   "ref:Data security",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Code requirements (overview/code-requirements) — READ, verbatim fragments",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Rules page — READ (proxy summary, not full verbatim)"
+  ],
+  "F187": [
+   "ref:Measured 2026-08-24 (T022)",
+   "ref:bn2 outside",
+   "def:src/train.py#mk",
+   "file:src/train.py",
+   "def:scripts/smoke_test.py#test_gradcam_instrument",
+   "file:scripts/smoke_test.py"
+  ],
+  "F188": [
+   "ref:armb0"
+  ],
+  "F189": [
+   "ref:train(weak)=3480",
+   "file:outputs/t028/armB_fold0.log"
+  ],
+  "F190": [
+   "ref:0.6451",
+   "ref:−0.0115",
+   "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band",
+   "file:PROGRESS.md"
+  ],
+  "F191": [
+   "ref:scripts/t040/pick_member.py"
+  ],
+  "F192": [
+   "ref:--grad-checkpoint",
+   "ref:0.6451",
+   "ref:−0.0115",
+   "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band",
+   "file:PROGRESS.md",
+   "ref:scripts/t040/pick_member.py"
+  ],
+  "F193": [
+   "ref:update_bn",
+   "def:src/train.py#accumulate",
+   "file:src/train.py",
+   "cmd:git grep -n update_bn d9c7c6e -- src scripts"
+  ],
+  "F194": [
+   "ref:SWA"
+  ],
+  "F195": [
+   "ref:momentum",
+   "ref:Measured 2026-08-24 (T022)",
+   "ref:bn2 outside",
+   "def:src/train.py#mk",
+   "file:src/train.py",
+   "def:scripts/smoke_test.py#test_gradcam_instrument",
+   "file:scripts/smoke_test.py"
+  ],
+  "F196": [
+   "ref:momentum=None",
+   "ref:SWA",
+   "ref:update_bn",
+   "def:src/train.py#accumulate",
+   "file:src/train.py",
+   "cmd:git grep -n update_bn d9c7c6e -- src scripts"
+  ],
+  "F197": [
+   "ref:27 minutes",
+   "def:PROGRESS.md#T024 submitted: LB 0.921, and the cap that kept two levers apart does not exist",
+   "file:PROGRESS.md",
+   "ref:momentum=None",
+   "ref:SWA",
+   "ref:update_bn",
+   "def:src/train.py#accumulate",
+   "file:src/train.py",
+   "cmd:git grep -n update_bn d9c7c6e -- src scripts"
+  ],
+  "F198": [
+   "ref:OOF"
+  ],
+  "F199": [
+   "ref:4,407 training studies",
+   "ref:Rule going forward",
+   "def:README.md#The constraint that determines everything",
+   "file:README.md",
+   "def:docs/ROADMAP.md#The measurement problem underneath all of this",
+   "file:docs/ROADMAP.md",
+   "ref:9 hours",
+   "ref:Data security",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Code requirements (overview/code-requirements) — READ, verbatim fragments",
+   "file:docs/research/0902/lane0-rules-and-leaderboard.md",
+   "def:docs/research/0902/lane0-rules-and-leaderboard.md#Rules page — READ (proxy summary, not full verbatim)"
+  ],
+  "F200": [
+   "ref:train(weak)=3480",
+   "ref:train 15.4 min",
+   "file:outputs/t028/armB_fold0.log"
+  ],
+  "F201": [
+   "ref:819,078",
+   "def:README.md#Quick start",
+   "file:README.md",
+   "ref:train(weak)=3480",
+   "ref:train 15.4 min",
+   "file:outputs/t028/armB_fold0.log"
+  ],
+  "F202": [
+   "ref:32–107",
+   "ref:819,078",
+   "def:README.md#Quick start",
+   "file:README.md",
+   "ref:train(weak)=3480",
+   "ref:train 15.4 min",
+   "file:outputs/t028/armB_fold0.log"
+  ],
+  "F203": [
+   "ref:one fold, then cool down",
+   "ref:1.75 h (b2)",
+   "def:AGENTS.md#RSNA Knee Abnormality Detection — session bootstrap",
+   "file:AGENTS.md"
+  ],
+  "F204": [
+   "ref:30 h/week",
+   "def:docs/ROADMAP.md#The currency changed on 2026-08-24, and most of the sequencing below assumes the old one",
+   "file:docs/ROADMAP.md"
+  ],
+  "F205": [
+   "ref:pretrained=True",
+   "ref:pretrained=pretrained",
+   "def:src/model.py#KneeMIL",
+   "file:src/model.py",
+   "def:src/model.py#__init__"
+  ],
+  "F206": [
+   "ref:14,010",
+   "ref:13,221",
+   "def:src/dataset.py#pick_series_seqs",
+   "file:src/dataset.py"
+  ],
+  "F207": [
+   "ref:--seqs 2"
+  ],
+  "F208": [
+   "ref:--seqs 1"
+  ],
+  "F209": [
+   "ref:Anatomical_Plane"
+  ],
+  "F210": [
+   "ref:5dbdd25",
+   "cmd:git log -1 --format=%B 5dbdd25"
+  ],
+  "F211": [
+   "ref:--seqs 3",
+   "ref:Anatomical_Plane",
+   "ref:--seqs 2",
+   "ref:5dbdd25",
+   "cmd:git log -1 --format=%B 5dbdd25"
+  ],
+  "F212": [
+   "ref:DICOM",
+   "ref:Anatomical_Plane"
+  ],
+  "F213": [
+   "ref:T015",
+   "cmd:git grep -n T015 d9c7c6e -- src scripts"
+  ],
+  "F214": [
+   "ref:Submissions per day",
+   "worktree:outputs/t043/rules2.txt",
+   "file:outputs/t043/rules2.txt"
+  ],
+  "F215": [
+   "ref:Final Submissions",
+   "ref:automatically selected by Kaggle",
+   "worktree:outputs/t043/rules2.txt",
+   "file:outputs/t043/rules2.txt"
+  ],
+  "F216": [
+   "ref:auto-selects",
+   "ref:Final Submissions",
+   "ref:automatically selected by Kaggle",
+   "worktree:outputs/t043/rules2.txt",
+   "file:outputs/t043/rules2.txt"
+  ],
+  "F217": [
+   "ref:rsna-knee-abnormality-detection"
+  ],
+  "F218": [
+   "ref:allowance"
+  ],
+  "F219": [
+   "ref:2026-10-22",
+   "ref:Submissions per day",
+   "worktree:outputs/t043/rules2.txt",
+   "file:outputs/t043/rules2.txt"
+  ],
+  "F220": [
+   "ref:privateScore"
+  ],
+  "F221": [
+   "ref:public"
+  ],
+  "F222": [
+   "ref:+0.0005",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#5B. Structurally distinct candidates — where the risk actually is",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F223": [
+   "ref:0.0028–0.0070",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F224": [
+   "ref:K",
+   "ref:0.0028–0.0070",
+   "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "file:docs/research/0902/lane3-measurement-and-ensemble.md"
+  ],
+  "F225": [
+   "ref:0.946"
+  ],
+  "F226": [
+   "ref:55896111",
+   "ref:55954418",
+   "submission:55896111",
+   "submission:55954418"
+  ],
+  "F227": [
+   "ref:55896111",
+   "ref:apply_view",
+   "submission:55896111",
+   "file:src/tta.py"
+  ],
+  "F228": [
+   "ref:55954418"
+  ],
+  "F229": [
+   "ref:apply_view",
+   "file:src/tta.py"
+  ],
+  "F230": [
+   "ref:55954418",
+   "submission:55954418",
+   "ref:55896111",
+   "submission:55896111"
+  ],
+  "F231": [
+   "ref:final",
+   "ref:auto-selects",
+   "ref:Final Submissions",
+   "ref:automatically selected by Kaggle",
+   "worktree:outputs/t043/rules2.txt",
+   "file:outputs/t043/rules2.txt",
+   "ref:55896111",
+   "ref:55954418",
+   "submission:55896111",
+   "submission:55954418"
+  ],
+  "F232": [
+   "ref:efficiency probe"
+  ]
+ },
+ "realPairs": [
+  {
+   "a": "F156",
+   "b": "F228",
+   "via": [
+    "ref:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F46",
+   "b": "F183",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F15",
+   "b": "F225",
+   "via": [
+    "ref:0.946"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F71",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F90",
+   "b": "F148",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F44",
+   "b": "F221",
+   "via": [
+    "ref:public"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F153",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F44",
+   "b": "F224",
+   "via": [
+    "ref:0.0028–0.0070",
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F175",
+   "b": "F184",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F129",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F95",
+   "b": "F101",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F24",
+   "b": "F109",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F25",
+   "b": "F26",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F33",
+   "b": "F142",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F22",
+   "b": "F199",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Rules page — READ (proxy summary, not full verbatim)"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F163",
+   "b": "F226",
+   "via": [
+    "ref:55954418",
+    "submission:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F62",
+   "b": "F94",
+   "via": [
+    "ref:0.936"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F109",
+   "b": "F110",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F62",
+   "b": "F224",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F66",
+   "b": "F90",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F31",
+   "b": "F183",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F83",
+   "b": "F84",
+   "via": [
+    "def:docs/research/0902b/lane7-public-members.md#7. Pre-registered decision rule — written before any number exists"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F129",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F29",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F29",
+   "b": "F70",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F151",
+   "b": "F205",
+   "via": [
+    "def:src/model.py#__init__"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F137",
+   "b": "F164",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F178",
+   "b": "F184",
+   "via": [
+    "ref:--slices"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F24",
+   "b": "F123",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F124",
+   "b": "F193",
+   "via": [
+    "file:src/train.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F31",
+   "b": "F142",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F93",
+   "b": "F103",
+   "via": [
+    "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F29",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F191",
+   "b": "F192",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F109",
+   "b": "F120",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F90",
+   "b": "F153",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F45",
+   "b": "F52",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F141",
+   "b": "F178",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F37",
+   "b": "F38",
+   "via": [
+    "def:docs/research/0902/lane4-labels-and-plan.md#What I computed, and why it is admissible"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F24",
+   "b": "F120",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F33",
+   "b": "F182",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F46",
+   "b": "F142",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F54",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F93",
+   "b": "F106",
+   "via": [
+    "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F134",
+   "b": "F135",
+   "via": [
+    "ref:--grad-checkpoint"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F30",
+   "b": "F164",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F54",
+   "b": "F70",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F226",
+   "b": "F227",
+   "via": [
+    "ref:55896111",
+    "submission:55896111"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F97",
+   "b": "F101",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F54",
+   "b": "F129",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F79",
+   "b": "F88",
+   "via": [
+    "def:docs/research/0902b/lane8-external-truth-sets.md#Executive summary"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F146",
+   "b": "F148",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F30",
+   "b": "F46",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F58",
+   "b": "F60",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F3",
+   "b": "F96",
+   "via": [
+    "ref:0.95"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F94",
+   "b": "F100",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F67",
+   "b": "F153",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F146",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F223",
+   "b": "F224",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F214",
+   "b": "F219",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F29",
+   "b": "F90",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F142",
+   "b": "F229",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F69",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F141",
+   "b": "F158",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F30",
+   "b": "F142",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F156",
+   "b": "F226",
+   "via": [
+    "ref:55954418",
+    "submission:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F71",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F54",
+   "b": "F71",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F70",
+   "b": "F153",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F14",
+   "b": "F153",
+   "via": [
+    "ref:T042"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F138",
+   "b": "F167",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F156",
+   "b": "F230",
+   "via": [
+    "ref:55954418",
+    "submission:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F159",
+   "b": "F165",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F142",
+   "b": "F184",
+   "via": [
+    "ref:any(",
+    "def:src/tta.py#unmatched"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F56",
+   "b": "F61",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F164",
+   "b": "F227",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F115",
+   "b": "F116",
+   "via": [
+    "ref:737696",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F6",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F187",
+   "b": "F195",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F129",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F29",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F157",
+   "b": "F159",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F69",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F150",
+   "b": "F205",
+   "via": [
+    "def:src/model.py#__init__"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F70",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F33",
+   "b": "F183",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F11",
+   "b": "F48",
+   "via": [
+    "ref:T007"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F90",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F103",
+   "b": "F106",
+   "via": [
+    "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F142",
+   "b": "F183",
+   "via": [
+    "ref:any(",
+    "def:src/tta.py#unmatched"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F180",
+   "b": "F184",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F24",
+   "b": "F121",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F35",
+   "b": "F50",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F36",
+   "b": "F48",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F22",
+   "b": "F186",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Rules page — READ (proxy summary, not full verbatim)"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F69",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F70",
+   "b": "F145",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F163",
+   "b": "F228",
+   "via": [
+    "ref:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F125",
+   "b": "F126",
+   "via": [
+    "ref:--lr",
+    "def:src/train.py#build_parser"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F128",
+   "b": "F132",
+   "via": [
+    "ref:layer-wise LR decay",
+    "worktree:outputs/t025/dinov3_fold0.log"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F109",
+   "b": "F121",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F126",
+   "b": "F127",
+   "via": [
+    "def:src/train.py#build_parser"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F62",
+   "b": "F223",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F141",
+   "b": "F157",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F58",
+   "b": "F59",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F90",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F183",
+   "b": "F184",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F138",
+   "b": "F178",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F185",
+   "b": "F201",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F54",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F7",
+   "b": "F167",
+   "via": [
+    "ref:9 h"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F138",
+   "b": "F159",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F30",
+   "b": "F137",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F70",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F136",
+   "b": "F192",
+   "via": [
+    "ref:--grad-checkpoint",
+    "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F153",
+   "b": "F205",
+   "via": [
+    "def:src/model.py#__init__"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F69",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F114",
+   "b": "F115",
+   "via": [
+    "ref:737696",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F95",
+   "b": "F97",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F59",
+   "b": "F61",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F214",
+   "b": "F215",
+   "via": [
+    "worktree:outputs/t043/rules2.txt"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F135",
+   "b": "F190",
+   "via": [
+    "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F209",
+   "b": "F212",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F58",
+   "b": "F61",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F141",
+   "b": "F167",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F26",
+   "b": "F62",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F161",
+   "b": "F167",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F135",
+   "b": "F192",
+   "via": [
+    "ref:--grad-checkpoint",
+    "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F11",
+   "b": "F54",
+   "via": [
+    "ref:T007"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F154",
+   "b": "F161",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F29",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F156",
+   "b": "F231",
+   "via": [
+    "ref:55954418",
+    "submission:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F70",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F18",
+   "b": "F23",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F6",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F69",
+   "b": "F70",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F71",
+   "b": "F153",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F15",
+   "b": "F17",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F124",
+   "b": "F195",
+   "via": [
+    "file:src/train.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F70",
+   "b": "F130",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F70",
+   "b": "F148",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F15",
+   "b": "F23",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F46",
+   "b": "F164",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F128",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F136",
+   "b": "F187",
+   "via": [
+    "def:src/train.py#mk"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F226",
+   "b": "F228",
+   "via": [
+    "ref:55954418"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F70",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F136",
+   "b": "F195",
+   "via": [
+    "def:src/train.py#mk"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F94",
+   "b": "F97",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F228",
+   "b": "F230",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F27",
+   "b": "F48",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F161",
+   "b": "F168",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F25",
+   "b": "F223",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F137",
+   "b": "F229",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F19",
+   "b": "F186",
+   "via": [
+    "ref:9 hours",
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Code requirements (overview/code-requirements) — READ, verbatim fragments"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F144",
+   "b": "F151",
+   "via": [
+    "def:src/model.py#__init__"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F5",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F184",
+   "b": "F229",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F72",
+   "b": "F74",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F126",
+   "b": "F152",
+   "via": [
+    "def:src/train.py#build_parser"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F56",
+   "b": "F62",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F43",
+   "b": "F223",
+   "via": [
+    "ref:0.0028–0.0070",
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F75",
+   "b": "F77",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F14",
+   "b": "F91",
+   "via": [
+    "ref:T042"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F164",
+   "b": "F229",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F50",
+   "b": "F129",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F92",
+   "b": "F96",
+   "via": [
+    "worktree:outputs/t047/lb_analysis.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F6",
+   "b": "F70",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F56",
+   "b": "F60",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F5",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F16",
+   "b": "F17",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F2",
+   "b": "F90",
+   "via": [
+    "ref:0.945"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F38",
+   "b": "F47",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F54",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F216",
+   "b": "F231",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F133",
+   "b": "F195",
+   "via": [
+    "def:src/train.py#mk"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F90",
+   "b": "F130",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F29",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F25",
+   "b": "F224",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F74",
+   "b": "F90",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F68",
+   "b": "F89",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F69",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F69",
+   "b": "F71",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F33",
+   "b": "F137",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F54",
+   "b": "F69",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F43",
+   "b": "F224",
+   "via": [
+    "ref:0.0028–0.0070",
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F138",
+   "b": "F157",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F181",
+   "b": "F184",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F209",
+   "b": "F211",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F182",
+   "b": "F227",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F161",
+   "b": "F178",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F215",
+   "b": "F216",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F70",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F130",
+   "b": "F145",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F142",
+   "b": "F164",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F29",
+   "b": "F50",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F43",
+   "b": "F62",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F30",
+   "b": "F229",
+   "via": [
+    "ref:apply_view",
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F69",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F157",
+   "b": "F162",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F5",
+   "b": "F6",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F54",
+   "b": "F153",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F40",
+   "b": "F41",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#3A. The instrument that was already on disk"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F175",
+   "b": "F178",
+   "via": [
+    "ref:--slices"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F207",
+   "b": "F211",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F71",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F79",
+   "b": "F87",
+   "via": [
+    "def:docs/research/0902b/lane8-external-truth-sets.md#Executive summary"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F65",
+   "b": "F66",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F183",
+   "b": "F227",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F67",
+   "b": "F130",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F46",
+   "b": "F182",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F90",
+   "b": "F145",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F120",
+   "b": "F121",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F115",
+   "b": "F119",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F33",
+   "b": "F227",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F158",
+   "b": "F159",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F54",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F196",
+   "b": "F197",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F99",
+   "b": "F104",
+   "via": [
+    "worktree:outputs/t047/subs_analysis.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F141",
+   "b": "F159",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F103",
+   "b": "F104",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F122",
+   "b": "F123",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F156",
+   "b": "F163",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F134",
+   "b": "F192",
+   "via": [
+    "ref:--grad-checkpoint"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F29",
+   "b": "F153",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F76",
+   "b": "F78",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F127",
+   "b": "F152",
+   "via": [
+    "def:src/train.py#build_parser"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F138",
+   "b": "F181",
+   "via": [
+    "ref:MAX_LAYOUTS",
+    "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+    "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F138",
+   "b": "F139",
+   "via": [
+    "ref:MAX_LAYOUTS",
+    "worktree:outputs/t039/live_kernel/rsna-knee-submit.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F148",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F46",
+   "b": "F184",
+   "via": [
+    "ref:TTA",
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F46",
+   "b": "F137",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F134",
+   "b": "F136",
+   "via": [
+    "ref:--grad-checkpoint"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F16",
+   "b": "F18",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F69",
+   "b": "F153",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F71",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F67",
+   "b": "F145",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F184",
+   "b": "F227",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F30",
+   "b": "F31",
+   "via": [
+    "ref:apply_view"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F193",
+   "b": "F196",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F226",
+   "b": "F230",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F71",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F182",
+   "b": "F183",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F60",
+   "b": "F61",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F31",
+   "b": "F184",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F46",
+   "b": "F171",
+   "via": [
+    "ref:TTA"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F29",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F33",
+   "b": "F164",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F133",
+   "b": "F187",
+   "via": [
+    "def:src/train.py#mk"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F186",
+   "b": "F199",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F17",
+   "b": "F18",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F25",
+   "b": "F43",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F138",
+   "b": "F165",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F91",
+   "b": "F153",
+   "via": [
+    "ref:T042"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F125",
+   "b": "F152",
+   "via": [
+    "def:src/train.py#build_parser"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F106",
+   "b": "F108",
+   "via": [
+    "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F70",
+   "b": "F90",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F100",
+   "b": "F101",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F1",
+   "b": "F102",
+   "via": [
+    "ref:0.94"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F136",
+   "b": "F190",
+   "via": [
+    "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F33",
+   "b": "F229",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F29",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F46",
+   "b": "F227",
+   "via": [
+    "ref:apply_view",
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F120",
+   "b": "F123",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F103",
+   "b": "F108",
+   "via": [
+    "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F113",
+   "b": "F123",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F4",
+   "b": "F23",
+   "via": [
+    "ref:0.926"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F24",
+   "b": "F110",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F31",
+   "b": "F229",
+   "via": [
+    "ref:apply_view",
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F114",
+   "b": "F118",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F94",
+   "b": "F101",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F141",
+   "b": "F160",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F163",
+   "b": "F231",
+   "via": [
+    "ref:55954418",
+    "submission:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F157",
+   "b": "F178",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F31",
+   "b": "F182",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F133",
+   "b": "F136",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F75",
+   "b": "F78",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F190",
+   "b": "F192",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F6",
+   "b": "F69",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F98",
+   "b": "F222",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#5B. Structurally distinct candidates — where the risk actually is"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F50",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F54",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F137",
+   "b": "F227",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F81",
+   "b": "F98",
+   "via": [
+    "ref:+0.012"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F68",
+   "b": "F70",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F93",
+   "b": "F108",
+   "via": [
+    "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F141",
+   "b": "F165",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F72",
+   "b": "F73",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.2 Input construction — the largest measurable block"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F23",
+   "b": "F225",
+   "via": [
+    "ref:0.946"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F124",
+   "b": "F197",
+   "via": [
+    "file:src/train.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F124",
+   "b": "F187",
+   "via": [
+    "file:src/train.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F117",
+   "b": "F118",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F48",
+   "b": "F54",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F54",
+   "b": "F90",
+   "via": [
+    "ref:--warmup-frac",
+    "ref:--layer-decay",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F118",
+   "b": "F119",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F138",
+   "b": "F184",
+   "via": [
+    "ref:MAX_LAYOUTS",
+    "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+    "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F161",
+   "b": "F162",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F30",
+   "b": "F227",
+   "via": [
+    "ref:apply_view",
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F29",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F4",
+   "b": "F17",
+   "via": [
+    "ref:0.926"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F189",
+   "b": "F200",
+   "via": [
+    "ref:train(weak)=3480"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F5",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F70",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F210",
+   "b": "F211",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F54",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F49",
+   "b": "F54",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F6",
+   "b": "F90",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F29",
+   "b": "F71",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F128",
+   "b": "F129",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F125",
+   "b": "F127",
+   "via": [
+    "def:src/train.py#build_parser"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F46",
+   "b": "F229",
+   "via": [
+    "ref:apply_view",
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F162",
+   "b": "F167",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F155",
+   "b": "F161",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F67",
+   "b": "F70",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F66",
+   "b": "F89",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F153",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F71",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F201",
+   "b": "F202",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F8",
+   "b": "F9",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F15",
+   "b": "F18",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F161",
+   "b": "F180",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F158",
+   "b": "F165",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F144",
+   "b": "F150",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F73",
+   "b": "F74",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F110",
+   "b": "F121",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F71",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F5",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F31",
+   "b": "F164",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F26",
+   "b": "F224",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F170",
+   "b": "F171",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F87",
+   "b": "F88",
+   "via": [
+    "def:docs/research/0902b/lane8-external-truth-sets.md#Executive summary"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F160",
+   "b": "F162",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F101",
+   "b": "F102",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F138",
+   "b": "F162",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F15",
+   "b": "F16",
+   "via": [
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F138",
+   "b": "F158",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F138",
+   "b": "F160",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F227",
+   "b": "F229",
+   "via": [
+    "ref:apply_view"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F31",
+   "b": "F137",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F171",
+   "b": "F184",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F141",
+   "b": "F181",
+   "via": [
+    "ref:MAX_LAYOUTS",
+    "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+    "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F114",
+   "b": "F116",
+   "via": [
+    "ref:737696",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F5",
+   "b": "F54",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F30",
+   "b": "F184",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F90",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F17",
+   "b": "F23",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F34",
+   "b": "F50",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F142",
+   "b": "F182",
+   "via": [
+    "ref:any(",
+    "def:src/tta.py#unmatched"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F153",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F69",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F144",
+   "b": "F148",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F54",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F194",
+   "b": "F196",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F56",
+   "b": "F58",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F163",
+   "b": "F230",
+   "via": [
+    "ref:55954418",
+    "submission:55954418"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F33",
+   "b": "F184",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F59",
+   "b": "F60",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F94",
+   "b": "F95",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F200",
+   "b": "F201",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F141",
+   "b": "F162",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+    "file:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F97",
+   "b": "F100",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F138",
+   "b": "F141",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F50",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F26",
+   "b": "F43",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F71",
+   "b": "F146",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F183",
+   "b": "F229",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F47",
+   "b": "F54",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F5",
+   "b": "F90",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F121",
+   "b": "F123",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F159",
+   "b": "F160",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F142",
+   "b": "F227",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F26",
+   "b": "F223",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F110",
+   "b": "F120",
+   "via": [
+    "ref:735304",
+    "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F148",
+   "b": "F205",
+   "via": [
+    "def:src/model.py#__init__"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F44",
+   "b": "F223",
+   "via": [
+    "ref:0.0028–0.0070",
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F90",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F162",
+   "b": "F163",
+   "via": [
+    "ref:deployed"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F144",
+   "b": "F205",
+   "via": [
+    "def:src/model.py#__init__"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F141",
+   "b": "F184",
+   "via": [
+    "ref:MAX_LAYOUTS",
+    "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+    "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F66",
+   "b": "F68",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F90",
+   "b": "F128",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F139",
+   "b": "F184",
+   "via": [
+    "ref:MAX_LAYOUTS",
+    "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+    "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F30",
+   "b": "F182",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F95",
+   "b": "F100",
+   "via": [
+    "worktree:outputs/t047/discrim.py"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F161",
+   "b": "F165",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F182",
+   "b": "F229",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F157",
+   "b": "F165",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F145",
+   "b": "F148",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F78",
+   "b": "F90",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F6",
+   "b": "F50",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F135",
+   "b": "F136",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F31",
+   "b": "F227",
+   "via": [
+    "ref:apply_view",
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F29",
+   "b": "F69",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac",
+    "cmd:git grep -n -e --layer-decay -e --warmup-frac d9c7c6e -- src scripts"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F67",
+   "b": "F148",
+   "via": [
+    "ref:3e-5",
+    "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F128",
+   "b": "F149",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F43",
+   "b": "F44",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F128",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F33",
+   "b": "F34",
+   "via": [
+    "def:src/dataset.py#__getitem__"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F170",
+   "b": "F172",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F69",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F100",
+   "b": "F102",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F226",
+   "b": "F231",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F56",
+   "b": "F59",
+   "via": [
+    "def:docs/research/0902b/lane6-single-model-gap.md#1.1 The gold-side anchor, and why the \"0.04 gap\" is smaller than advertised"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F44",
+   "b": "F62",
+   "via": [
+    "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F30",
+   "b": "F183",
+   "via": [
+    "file:src/tta.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F6",
+   "b": "F71",
+   "via": [
+    "ref:--layer-decay",
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F35",
+   "b": "F51",
+   "via": [
+    "def:docs/research/0902/lane2-architecture-headroom.md#Executive summary — the ranked list"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F157",
+   "b": "F158",
+   "via": [
+    "worktree:outputs/t039/v16_log/rsna-knee-submit.log"
+   ],
+   "sameDoc": true
+  },
+  {
+   "a": "F161",
+   "b": "F183",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F28",
+   "b": "F49",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F124",
+   "b": "F196",
+   "via": [
+    "file:src/train.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F19",
+   "b": "F199",
+   "via": [
+    "ref:9 hours",
+    "def:docs/research/0902/lane0-rules-and-leaderboard.md#Code requirements (overview/code-requirements) — READ, verbatim fragments"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F50",
+   "b": "F148",
+   "via": [
+    "ref:--layer-decay"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F148",
+   "b": "F153",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F77",
+   "b": "F78",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": true
+  },
+  {
+   "a": "F25",
+   "b": "F62",
+   "via": [
+    "premise"
+   ],
+   "kind": "premise",
+   "sameDoc": false
+  },
+  {
+   "a": "F139",
+   "b": "F181",
+   "via": [
+    "ref:MAX_LAYOUTS",
+    "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+    "file:outputs/t039/live_kernel/rsna-knee-submit.py"
+   ],
+   "sameDoc": false
+  },
+  {
+   "a": "F129",
+   "b": "F130",
+   "via": [
+    "ref:--warmup-frac"
+   ],
+   "sameDoc": true
+  }
+ ]
+}

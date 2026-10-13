@@ -67,3 +67,13 @@ The design fails upstream of linking:
 - what gets transcribed (6 of 12);
 - quantities with no code referent (2 of 12);
 - two classes it cannot reach by construction (2 of 12).
+
+## Correction (T082, 2026-10-13)
+
+C6 is misfiled above. Its earlier claim, "2 TTA views", is in no commit: the
+T047 brief has no "view" in its lane 11 section at `d9c7c6e`, `f896e38` or
+`e4e356c`. Lane 11:37 corrects "the brief", meaning the prompt it was
+given, which was never committed. So 3 of the 6 never-transcribed claims sat
+in documents the transcriber read (C7, C8, C12). C6 sat in no document, and
+C3 and C4 sat outside the scope (`docs/plans/evidence/t082/measurements.md`
+§2).

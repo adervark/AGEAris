@@ -48,9 +48,15 @@ be checked against T075's misses before the design is accepted again.
 
 ## Steps
 
-- [ ] Write v2.5.
-- [ ] Re-grade T075's twelve on a ledger written under v2.5's rules. A fresh
-      transcriber is a spend; re-linking the existing ledger is not.
+- [x] Write v2.5. It answers the operator's note too: "Choosing which
+      findings to write down is still done by one agent alone." Every clause
+      is now a fact or a written skip, and a blind auditor reads every skip.
+- [x] Measure what can be measured for free on T075's material
+      (`docs/plans/evidence/t082/measurements.md`): the clause sieve, the
+      re-link, the search flip, C6's source.
+- [ ] R0c: re-grade T075's twelve on a ledger written under v2.5's rules
+      (design §7). It needs subagents beyond this task's spend rule, so it
+      waits for the operator.
 - [ ] The operator accepts it, or sends it for review.
 
 ## Decision rules — fixed in advance
@@ -64,11 +70,14 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, registered by T075
+- **Last touched:** 2026-10-13, adervark @b/b8438f28: v2.5 written; free
+  measurements committed
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Goal's seven points
-- **Next decision:** none
+- **On disk:** nothing uncommitted
+- **Resume with:** R0c, once the operator approves its spend
+- **Next decision:** the operator's: R0c's spend. v2.5's transcription
+  needs one transcriber per document, an auditor and a reconciler. That is
+  more than "one transcriber and one reconciler".
 
 ## Verify
 
