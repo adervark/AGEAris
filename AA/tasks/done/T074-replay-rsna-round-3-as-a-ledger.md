@@ -229,3 +229,7 @@ owner's alone, rule 2)*
   ledger came out the same, byte for byte. The files quote RSNA's research,
   so the branch is not pushed before RSNA closes on 2026-10-22 without the
   operator's word (STATE.md, Watch out for).
+- 2026-10-13, re-graded by T073's Critic: the one catch cannot be told from
+  noise (`uncovered` was right on 1 of 4 questions), and whether lanes keep a
+  ledger as they go was never tested. PROGRESS.md, "T074 re-graded", has the
+  detail.

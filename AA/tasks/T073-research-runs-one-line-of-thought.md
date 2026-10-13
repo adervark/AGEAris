@@ -39,8 +39,13 @@ spent, and the phases, each one task.
 ## Steps
 
 - [x] Draft v1: [`docs/plans/research-runs.md`](../../docs/plans/research-runs.md).
-- [ ] Review: one Architect (done: SOUND WITH REQUIRED CHANGES), then one Critic (running).
-- [ ] The operator's decisions; v2.
+- [x] The operator's decisions D1–D4; R0 run as T074.
+- [x] Review, round 1: the Architect (sound, with required changes), then the
+  Critic (revise). Both are in [`docs/plans/reviews/`](../../docs/plans/reviews/).
+- [x] v2 answers the Architect and R0. v2.1 answers the Critic: its cheaper
+  design is stage 1, and stage 2 waits on evidence.
+- [ ] Review, round 2: the Critic on v2.1.
+- [ ] The operator's decisions D5 and D6.
 - [ ] Register the phases as tasks.
 
 ## Decision rules — fixed in advance
@@ -61,11 +66,11 @@ spent, and the phases, each one task.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @v/b8438f28: v2 committed, answering the Architect (R1–R9, S1–S6) and R0
-- **In flight:** the Critic's review of v1 (run `b8438f28.15f2`), read at `eb7f7eb`. The trail's newest `doing` names it.
-- **On disk:** `docs/plans/research-runs.md` v2; `docs/plans/reviews/research-runs-v1-architect.md`
-- **Resume with:** `AA/ckpt.sh live T073`. When the Critic is in, save its report beside the Architect's, then write v2.1 to answer it.
-- **Next decision:** the operator's: D5 (revisit D4), once v2.1 is out
+- **Last touched:** 2026-10-13, adervark @v/b8438f28: v2.1 committed, answering the Critic (B1–B6, N1–N7). Its §2 was checked against RSNA and AGEIS again, and five lines were corrected.
+- **In flight:** nothing yet. The Critic's second round, on v2.1, is next; when it runs, the trail's newest `doing` names it.
+- **On disk:** `docs/plans/research-runs.md` v2.1; `docs/plans/reviews/research-runs-v1-architect.md` and `research-runs-v1-critic.md`
+- **Resume with:** `AA/ckpt.sh live T073`. When the second round is in, save it as `docs/plans/reviews/research-runs-v2.1-critic.md`. Then answer it, or put D5 and D6 to the operator.
+- **Next decision:** the operator's: D5 (run T072 now, on a hand-written ledger) and D6 (stage 1 first), once the Critic has read v2.1
 
 ## Result
 

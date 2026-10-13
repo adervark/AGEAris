@@ -488,3 +488,28 @@ its date, the number, and where the evidence is. Newest last.
 - **Evidence:** T074's Result. The script and its ledger are in `docs/plans/evidence/t074/`; the operator
   chose to commit them, amending T074's rule. They quote RSNA's research:
   not pushed before 2026-10-22.
+
+## 2026-10-13 — T074 re-graded: its one catch cannot be told from noise
+
+- T073's Critic (run `b8438f28.15f2`) graded R0 while it reviewed v1:
+  `docs/plans/reviews/research-runs-v1-critic.md`.
+- **The catch does not discriminate.** `uncovered` fired on 4 questions and
+  was right on 1. Under the fallback rule, every lane's second question (L9.Q2,
+  L11.Q2, L13.Q2) got 0 claims, and all three fired.
+- **The deciding choice was not blind.** "A document's H1 is its title" was
+  pinned after the headings were seen, by a session that knew the target.
+  T074's Result says so; the entry above shortened it to "before the reports
+  were read". The entry above also says a real ledger "makes the catch
+  robust". Nothing tested that, so it is withdrawn.
+- **Not tested:** whether lanes keep a ledger as they go, v1's riskiest
+  assumption. A script transcribed finished prose, and the round spent
+  nothing.
+- **Stands:**
+  - both misses;
+  - lane 13's `registered-late`;
+  - the script lane 10 cites in `outputs/`, never tracked and now gone;
+  - 23 of the 26 warnings false.
+- **What it changed:** T073's v2.1 takes the Critic's cheaper design as stage
+  1. One writer records a verdict per question at synthesis, and four checks
+  are each held to an incident and a counterfactual. The next replay is
+  RSNA's T112 and T118, the rounds that spent, after 2026-10-22.

@@ -1,82 +1,97 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: draft v2** (2026-10-13, T073). Nothing here is built.
+**Status: draft v2.1** (2026-10-13, T073). Nothing here is built.
 
-- v1 (f9ecde8) was written after reading how three repositories on this
-  machine do research: RSNA, AGEIS and this one. Nothing in them was changed.
-- The operator decided D1–D4 the same day (§10).
-- R0, a replay of RSNA's round 3, ran as T074. It came back partial: v1's
-  checks caught 1 of 3 defects.
-- An Architect reviewed v1: sound, with required changes R1–R9
-  (`docs/plans/reviews/research-runs-v1-architect.md`).
-- v2 answers both. A Critic's review of v1 is running, and v2.1 will answer
-  it.
+- v1 (f9ecde8) was written after reading how RSNA, AGEIS and this repository
+  do research.
+- R0, a replay of RSNA's round 3, ran as T074. It came back partial.
+- An Architect reviewed v1: sound, with required changes R1–R9.
+- A Critic reviewed v1 independently: revise, with blocking issues B1–B6
+  (`docs/plans/reviews/`).
+- v2 (7bfc107) answered the Architect and R0. v2.1 answers the Critic, and
+  adopts its "cheapest version" as **stage 1**. Everything else waits as
+  **stage 2**, behind evidence.
+- The Critic's second round reviews v2.1 (T073's decision rules).
 
-## Changes since v1
+## Changes since v2
 
-v1 reused machinery built for work in flight to hold evidence, which must be
-permanent and exact. Run families stood in for identity, the trail fed the
-checks, and numbers were serialized as whole numbers only (Architect, root
-cause). Most of what follows comes from that, or from R0.
+The Critic's central point: v1 and v2 load the structure onto the lanes, claim
+by claim, in a second file beside their reports, and RSNA's record suggests
+lanes skip exactly that. RSNA's own tools say the same. `record_guard.py` was
+written after two submissions of a capped allowance were spent and their
+answers never collected. One result had to be written by hand in eight
+places, and "every hand-written record had drifted". Prose scanning "produced
+garbage" twice there, so its guards read declared markers. R0 scanned prose,
+and 23 of its 26 warnings were false.
 
-1. **Independence means re-execution** (R1; R0). A REPRODUCED claim names the
-   claim it reproduces, comes from a different run, and carries its own
-   source and artifact. `unreproduced` replaces `single-family`, and claims
-   record their model. In R0 all five lanes of a round were one family.
-2. **Ids are global** (R2). They are `T###/Q1`, `T###/<run>/<n>` and
-   `T###/<subject>`. Decisions on one question combine through `supersedes`,
-   and `decision-conflict` catches the rest. Ledgers merge as a union of
-   lines, and stay visible in diffs (S6).
-3. **A ledger stands alone** (R3). Each costed `doing` also writes a `spend`
-   line to the ledger. The checks read ledgers only, so retiring a trail
-   cannot change a page.
-4. **Each check is credited honestly** (R4; R0):
-   - `contradiction` is keyed on registered **subjects** as well as
-     questions;
-   - `where-missing` is new, for lane 12's case;
-   - `config` is split from `artifact`, and `arm-equals-control` is new, for
-     T118;
-   - `orphan-answer` is gone: it had no failure on record, and a warning
-     driven by the clock cries wolf;
-   - a contradiction reached by inference, like lane 10's, is not mechanical.
-     The page shows every claim on a subject side by side, so the reader sees
-     it.
-5. **Every check is decidable** (R5):
-   - accepted marks are a set;
-   - the verdicts are words, never JSON null;
-   - lateness is decided by commit ancestry;
-   - reopening a question needs an explicit `same-as`;
-   - `uncovered` fires at the first decision;
-   - out-of-sight is judged at the commit that added the line.
-6. **Numbers are decimal strings**, compared exactly (R6). jq 1.8.1 and Node
-   print `1.0`, `0.10` and `1e-7` differently. In both, 0.941 − 0.940 is
-   0.0010000000000000009, which would reverse T118's registered reading.
-7. **The page avoids the gate's two traps** (R7; WHY.md):
-   - `--check` compares structure only;
-   - `find:` commits skip hooks;
-   - `board.sh` renders the track lines itself, outside any table.
-8. **Targets cannot be met by leaving fields out** (R8):
-   - there are coverage targets;
-   - (r1) is checked by hand on a sample;
-   - L2 is graded against its planted truth;
-   - false-positive ceilings are fixed now.
+1. **Stage 1: one writer, at the grain of decisions** (B1, B2, B3, B6; the
+   Critic's cheapest version).
+   - The claimant registers the questions before any lane opens. At
+     synthesis, the claimant writes one verdict line per question, and the
+     decisions.
+   - Lanes keep writing their prose reports, tracked, as RSNA's do. They have
+     nothing new to skip.
+   - Ids are sequential within a ledger and carry the task prefix
+     (`T072/Q1`, `T072/V1`, `T072/D1`). With one writer they cannot collide.
+   - Independence is declared on the verdict (`basis`: the lanes, models,
+     methods and sources) and justified in the synthesis.
+2. **The operator rules through a task action** (B5). A ruling is a line in
+   the task file's `## Decisions` section, written by an AGE Aris task action.
+   That is one task file in one commit, which AGENTS.md already allows. A
+   ruling can park or drop a question, or accept a warning, and it always
+   carries its reason, as RSNA's `claims-guard-ok` does.
+3. **Four checks.** Each is tested on the real incident it answers, where it
+   must fire, and on a counterfactual from the record, where it must stay
+   silent (B1, B6):
+   - `uncovered`;
+   - `where-missing` and `out-of-sight`;
+   - `registered-late`;
+   - `decision-waiting`.
 
-   The evidence gate moves from replaying prose (R0) to agents writing
-   ledgers with planted defects (L2).
-9. **Phases** (R9; S1):
-   - `research.sh` ships here first, and only its template copy waits for
-     T004;
-   - the page's Needs-you items bring their own cap;
-   - a round in another repository waits for L2;
-   - the checks that need experiments come after L2.
-10. **Verdicts are derived** where a rule has thresholds (S2). **The track
-    folder is configurable** (S3). **Orient's key** is placed as S5 says.
-11. **Silence is not health.** A lane that skips the ledger must not leave a
-    page that looks clean (the Architect, item 1). The page shows coverage
-    before warnings.
-12. **§2's facts are corrected** against the Architect's citation check, and
-    one finding is added: RSNA's newest round was never committed.
-13. **D4 is put back to the operator** as D5 (S4).
+   Each must keep at least 90% precision on a real round, or it is demoted to
+   a note on the page.
+4. **One door first** (N3). `AA/research.sh` writes the track page and a JSON
+   summary beside it. AGE Aris shows them by reading files, since it never
+   runs a repository's scripts. The second door and orient's key wait for
+   stage 2.
+5. **Lessons taken from RSNA's own guards** (N1):
+   - declared markers, never prose scanning;
+   - precision first;
+   - every suppression carries its reason;
+   - dated records are records, not errors. A generated tree is excused only
+     for what can be regenerated: a source in `outputs/` counts when its line
+     carries the `cmd:` that rebuilds it. R0's `outputs/t028/run_density.sh`
+     carried none. Lane 10 cites it as evidence, it was never tracked, and it
+     is gone. So it stays a real defect: code kept in a generated tree, which
+     is what RSNA's T093 describes.
+6. **The operator's outcome is measured** (B6):
+   - the minutes it takes to answer "where are we on X?" from the page;
+   - decisions that bound before the operator saw them;
+   - defects a named blind reader finds that the checks missed;
+   - (r1) and (r5) are dropped until there is a baseline.
+7. **Stage 2 waits on evidence.** Claim-grain ledgers, subjects,
+   `contradiction`, reproduction by re-execution, the experiment checks, the
+   second door and orient's key are built only when T072, or the replay of
+   RSNA's T112 and T118 after 2026-10-22, shows one of them would have
+   changed a decision.
+8. **Safety** (N6):
+   - a reproduction runs only a tracked script at a pinned commit;
+   - region markers inside rendered text are escaped;
+   - `path:line@commit` is parsed without backtracking.
+9. **Integration and inventory** (N5). A standing question on every track
+   asks what we already have, and the page puts every verdict about the same
+   thing side by side.
+10. **R0 is re-graded** against the Critic. `uncovered` flagged 4 questions
+    and was right once. The choice that decided the catch was pinned after
+    the headings were seen. And the round R0 replayed spent nothing.
+11. **D5 and D6** go to the operator: run T072 now on a hand-written ledger,
+    and build stage 1 first.
+12. **T118's catch, corrected.** v2 said an assertion caught the rename, and
+    the Critic's B1 took that from it. T118 records otherwise: the defect was
+    found by reading, while the task was being built, and the assertion was
+    strengthened as its fix. A person caught it, not a check.
+
+Earlier changes are in the history of this file: v2 at 7bfc107, v1 at f9ecde8.
 
 ## 1. What the operator asked for
 
@@ -91,630 +106,446 @@ Read together:
 - Agents do the research, the simulations and the experiments. Each of them is
   a *run*.
 - The runs of one inquiry aggregate into **one line of thought**: question →
-  runs → claims with evidence → verdict → decision → the next question.
-- The operator sees that line whole, in one place, while it grows.
-- An agent reads and writes the same line through files and commands, with no
-  interface in between.
+  runs → verdict with evidence → decision → the next question.
+- The operator sees that line whole, in one place, while it grows, and rules
+  on it from there.
+- An agent reads and writes the same line through files and one command.
 
 ## 2. Where it stands, measured
 
 Read on 2026-10-13. Three repositories have arrived at the same need on their
 own.
 
-### RSNA: rounds of agent lanes, checked by hand
+### RSNA: rounds of agent lanes
 
 A Kaggle competition that closes on 2026-10-22. Research runs as **rounds**,
 each made of parallel agent **lanes** and one **synthesis**:
 
 - 9 dated research folders under `docs/research/`, holding 65 Markdown files.
-  60 of them are tracked. **The newest round, 0921, with four lanes and its
-  synthesis, has never been committed**; it exists in one working tree only;
-- round 1 (its T038) had six lane reports: lane 0 by the orchestrator, five by
-  Opus lanes. Round 2 (T043) had three lanes; round 3 (T047) four briefed lanes
-  and one unbriefed. Each round had a synthesis;
-- a second model researches too: DeepSeek, through `scripts/ds_research.sh`.
-  It still writes to the untracked `.omc/research/<slug>.md` (T088;
-  `ds_research.sh:85`).
+  60 are tracked. **The newest round, 0921, with four lanes and its
+  synthesis, has never been committed.**
+- Round 1 (its T038) had six lane reports, lane 0 written by the orchestrator.
+  Round 2 (T043) had three. Round 3 (T047) had four briefed lanes and one
+  unbriefed. Each round had a synthesis.
+- DeepSeek researches too, through `scripts/ds_research.sh`. It has no Bash,
+  may edit only the untracked `.omc/research/`, and that boundary "must not
+  widen" (its T088).
 
-Its method is good, and every part of it is done by hand:
+The method is good. Most of it is done by hand:
 
-- evidence marks: READ, MEASURED and INFERRED (T038, T043), with REPRODUCED
-  added in round 3 (T047 rule 1);
-- a lever is ranked only with the instrument that would resolve it, and one
-  without an instrument is ranked last, never dropped (T047 rule 2);
-- a lane that finds nothing reports a null, and the null is a result (T047
-  rule 4);
-- lanes write as they go (T047);
-- the orchestrator, the lanes' parent session, re-checks the claims a decision
-  hinges on (T038);
-- round 3's brief carries a hand-written table of what is "already answered,
-  do not redo" (T047).
+- evidence marks: READ, MEASURED and INFERRED, with REPRODUCED added in round 3
+  (T047 rule 1);
+- a lever is ranked only with an instrument; without one it is ranked last,
+  never dropped (rule 2);
+- a null lane is a result (rule 4);
+- the orchestrator re-checks the claims a decision hinges on (T038);
+- round 3's brief carries a hand-written "already answered, do not redo"
+  table.
 
-What that has cost, from its own records:
+Some of it is mechanised:
+
+- `scripts/claims_guard.py` fails when a live document cites a path that does
+  not exist. It excludes dated records and generated trees, and any
+  suppression must state its reason;
+- `scripts/record_guard.py` checks that the results records agree with one
+  another. Two submissions had been spent with their answers never collected,
+  because one fact had to be written by hand into eight places;
+- `scripts/reconcile_kaggle.py` notices "a submission nobody wrote down",
+  which no offline check can.
+
+What the record shows:
 
 | What happened | Where | The failure |
 |---|---|---|
-| Lane 10 said dropping the ten `fold?` members would unlock three TTA views. Lane 11 measured twelve members carrying `mirror=0 rotate=0`, so two blockers would remain. The synthesis caught it by setting the two side by side. | RSNA synthesis §8.3, at `e4e356c` | a contradiction reached by inference: lane 10 never stated a count |
-| Rows 3 and 4 of lane 12's verdict table have no section behind them; the report goes from §2 to §5. | T047, Result §4 | a verdict with no reasoning |
-| Lane 11's efficiency half was never written. | T047, Result §3 | a question nobody answered |
-| `--layer-decay` and `--warmup-frac` were wired and unused until round 2 found them by diffing a foreign recipe. It registered T042 the same day. Round 3 then showed the claim "never passed" was itself false. | T043:61; T047 lane 10 §2.1 | a capability nobody examined: **a question never asked** |
-| A submission was registered to read an arm at w = 0.20, though an earlier arm at that weight had moved the score 0.000. Its band, ±0.001, sat on a leaderboard that prints three decimals. | T118 | an instrument that could not resolve its question |
-| After a rename, a configuration key matched no arm. The obvious edit would have recorded a result for a configuration that never executed. An assertion caught it while T118 was being built. | T118 | a result for a configuration that did not run |
-| Run logs lay in five places (T093's map; its title says five for every kind). Review notes in `.omc/research/` were "invisible to every other profile and session". | T093 | out of sight |
+| Lane 10 said dropping the ten `fold?` members would unlock three TTA views. Lane 11 measured twelve members carrying `mirror=0 rotate=0`. The synthesis caught it by setting the two side by side. | synthesis §8.3, at `e4e356c` | facts nobody connected, reached by inference |
+| Rows 3 and 4 of lane 12's verdict table have no section behind them. | T047, Result §4 | a verdict with no reasoning |
+| Lane 11's efficiency half was not written by the synthesis. It came 90 minutes later, as lane 11b, a null. | T047, Result §3; `5313b79` | a question left open at the decision |
+| `--layer-decay` and `--warmup-frac` were wired, and our recipe had never passed them, until round 2 compared a public recipe with ours. Round 3 found they had run once, on a dead arm. | T043:61; T047 lane 10 | a question never asked |
+| A submission was registered to read an arm at w = 0.20, though an earlier arm at that weight had moved the score 0.000. Its band, ±0.001, sat on a three-decimal leaderboard. | T118 | an instrument that could not resolve its question |
+| After a rename, a configuration key matched no arm. The obvious edit would have scored an unchanged blend, and the record would have gained "a result for a configuration that never executed". It was found by reading, while T118 was being built. As the fix, `assert_every_arm_is_reachable` now checks both directions. | T118 | nearly, a result for a configuration that did not run |
+| Two submissions were spent and their answers never collected. | `record_guard.py` | one fact, eight hand writes |
+| Review notes sat in `.omc/research/`, "invisible to every other profile and session". A whole round, 0921, was never committed. | T093; the working tree | out of sight |
 
 ### AGEIS: research tracks, written by hand
 
-Its T106 groups research into **tracks**. Each track has one page with:
+Its T106 gives each **track** one page: the question and the track's status;
+the number to beat; a ledger of verdicts, negative ones included; what is
+settled; the dead ends; the open questions; and the decisions waiting on the
+operator.
 
-- the question and the track's status;
-- the number to beat;
-- a ledger of verdicts, negative ones included;
-- what is settled, and the dead ends;
-- the open questions, ranked;
-- the decisions waiting on the operator.
-
-The pages are written by hand, with numbers copied from PROGRESS.md and task
-Results. Its verifier checked about 150 numbers, dates, intervals and verdicts.
-It found 14 framing errors, among them an inverted verdict (T080) and a gain
-that "did not clear 0" (T084). It also found runs committed but logged nowhere
-(T105). This is the hand-maintained board the convention already learned not
-to keep (RULES.md rule 11; WHY.md, "the board that ate itself").
+The pages are written by hand from PROGRESS.md and task Results. Its verifier
+checked about 150 numbers, dates, intervals and verdicts. It found no wrong
+numbers and 14 framing errors, among them an inverted verdict (T080) and a
+gain that "did not clear 0" (T084). It also found runs committed but in
+neither of the project's logs (T105).
 
 ### AGE Aris
 
-- It reads tasks, transitions and trails. A research task's questions, claims,
-  verdicts and decisions are invisible to it.
-- Its own research line is one task, T072.
-- It has the parts this design reuses:
-  - the contract-and-corpus method (`docs/ORIENT.md`, `tests/orient/`);
-  - the fabricator and the sample project (`lib/fabricate.mjs`,
-    `lib/sample.mjs`);
-  - Home's Needs-you ranking (`lib/brief.mjs`).
+It reads tasks, transitions and trails. It sees none of a research task's
+questions, verdicts or decisions. Its own research line is T072.
 
-### The replay (R0, T074)
+### The replay (R0, T074), as the Critic graded it
 
-RSNA's round 3 was recast as a ledger by a script. The script applied a
-procedure fixed before any lane report was read, and its evidence is in
-`docs/plans/evidence/t074/`. **v1's checks caught 1 of the 3 defects** that
-round 3's synthesis found by hand: the unwritten efficiency half.
+RSNA's round 3 was recast from prose into a ledger by a script, under a
+procedure fixed before any lane report was read. Its evidence is in
+`docs/plans/evidence/t074/`.
 
-It missed the other two:
-
-- lanes 10 and 11 answered different questions, and v1 compared claims only
-  within one question. Lane 10's error was an inference, not a stated count;
-- lane 12's rows 3 and 4 pointed nowhere, and nothing in v1 needed them to.
-
-It also measured a baseline:
-
-- 4 of the 22 `path:line` sources the lanes cite are out of sight, and one of
-  them is now gone from disk;
-- 67 of 254 claims carry no evidence mark.
+- **Two misses, which stand.**
+  - Lane 10's contradiction was an inference across two questions.
+  - Lane 12's rows pointed nowhere.
+- **One catch that does not discriminate.**
+  - `uncovered` fired on 4 questions and was right once.
+  - The choice that decided it, that a document's title is not a section,
+    was pinned after the headings were seen.
+- **23 of 26 warnings were false.** That is what scanning prose gives, as
+  RSNA's own guards had found.
+- **It did not test the riskiest assumption**, that lanes keep a ledger as
+  they go. The round it replayed spent nothing.
 
 ### The diagnosis
 
-The method exists, but it lives in people's heads and in prose. Every check is
-done by a reader. Every view is kept by hand, and the record is spread over
-many places, some of them never committed. The line of thought is real, but it
-has no structure. Neither an agent nor the operator can see it whole, and what
-falls between two documents is lost.
+The method exists. RSNA mechanised it where a fact must agree with itself
+(paths, records), and left it to readers where a line of thought must hold
+together: is every question answered, is every verdict argued somewhere, was
+it asked before it was answered, and has anyone decided? Those checks are the
+gap. And every place a result is written by hand is a place it drifts.
 
 ## 3. Principles
 
-1. **One line of thought, in sight.** Every run answers named questions. Every
-   finding lands in a tracked ledger, and every view is generated from the
-   ledgers. Nothing a decision rests on lives only in scratch, in a transcript
-   or in a narrative document.
-2. **Silence is not health.** The page shows coverage before warnings. An
-   empty ledger reads as missing evidence, never as a clean bill.
-3. **Files in git are the truth; every view is derived.** There is no research
-   database. The same commits and the same working tree give the same page.
-4. **Claims aggregate; documents explain.** A claim is small, structured,
-   sourced and marked. Reports stay prose, written for people, and each claim
-   names the section that argues it.
-5. **What counts is decided before the run.** A question carries its rule, and
-   the rule's commit is an ancestor of every claim and spend on it. This is
-   rule 5, applied to research.
-6. **Simulate before you spend.** The cheapest instrument that can resolve a
-   question runs first. A spend on an instrument that cannot resolve its band
-   is flagged before it happens.
-7. **Nulls, corrections and dead ends are results.** They are kept beside what
-   they correct, and nothing settled is reopened silently.
-8. **Evidence is not work in flight.** Its ids, its idea of independence and
-   its numbers are exact and permanent. None of them borrows from the trail.
-9. **Agent-first and operator-visible, through one contract.** Agents write
-   and read the line through a command and an API. The operator sees the same
-   line as one page, and the decisions waiting on them in Needs you.
-10. **Research text is untrusted.** It reaches other agents as quoted data
-    with provenance, under ORIENT.md's rules.
+1. **One line of thought, in sight.** Each question, its verdict and its
+   decision sit in one ledger that git tracks. The views are generated from
+   it, and the operator rules on it where they see it.
+2. **Silence is not health.** The page shows coverage before warnings, so a
+   missing verdict shows as a gap.
+3. **Files in git are the truth; every view is derived.**
+4. **Declared, not scanned.** Checks read lines someone wrote on purpose,
+   never prose (RSNA's guards; R0).
+5. **One write per fact.** The ledger replaces hand copies; it is not a ninth
+   one. The page and the STATE.md line are generated, and PROGRESS.md cites
+   the verdict's id.
+6. **What counts is decided before the run.** The question's line is in a
+   strict ancestor of every commit that answers it.
+7. **Precision first.** A check that cries wolf gets switched off (WHY.md),
+   so each one carries an incident it must catch, a counterfactual it must not,
+   and a floor.
+8. **Build the next piece when the record shows it would have changed a
+   decision.**
+9. **Agent-first, operator-visible.** One command and one JSON summary for
+   agents; one page and one queue for the operator.
+10. **Research text is untrusted.** ORIENT.md's `data` rules apply.
 
 ## 4. Options considered
 
-| Option | What it is | Verdict |
-|---|---|---|
-| A. Better prose conventions | RSNA's and AGEIS's practice, written down and followed more carefully | Rejected. This is today, and AGEIS's verifier still found 14 framing errors. |
-| B. Hand-written track pages everywhere | AGEIS's T106 | Rejected as the store, because copies drift. Its page is kept as the shape of the generated view. |
-| C. A research database in AGE Aris | claims stored by the server | Rejected. It is a second truth outside git; AGE Aris may not write to tracked repositories, and an agent without the server would lose it. |
-| D. Claims as trail entries | `claim` lines in `AA/checkpoints/` | Rejected. A trail is retired at close, and knowledge must outlive its task. |
-| F. Claims inside the reports | a fenced claim block closing the section that argues it (the Architect's antithesis) | Rejected. Prose is edited, so claims could change silently. Order would need `git blame` on prose. Parsing fences out of untrusted Markdown identically in jq and Node is a larger surface. **E takes two things from it:** a mandatory, checked `where`, and a brief that prints a ready claim command for each question. |
-| E. A ledger per task, and generated track pages | `AA/findings/T###.jsonl` and `AA/tracks/<slug>.md`, checked by two doors held to one corpus | **Chosen.** |
+| Option | Verdict |
+|---|---|
+| A. Better prose conventions | Rejected. That is today: AGEIS's verifier found 14 errors, and RSNA left a round uncommitted. |
+| B. Hand-written track pages | Rejected as the store, because copies drift. Kept as the shape of the generated page. |
+| C. A research database in AGE Aris | Rejected. It is a second truth outside git. |
+| D. Claims as trail entries | Rejected. Trails are retired at close. |
+| E. Claim-grain ledgers written by every lane (v1, v2) | **Deferred to stage 2.** Lanes skip second files (R0's 67 unmarked of 254), and DeepSeek cannot write one at all. |
+| F. Claims fenced inside the reports | Rejected. Prose is edited, and parsing Markdown fences identically in two doors is a large surface. |
+| **G. A decision-grain ledger with one writer, generated pages, and rulings as task actions** | **Chosen as stage 1.** |
 
-## 5. The design
+## 5. Stage 1: the design to build now
 
-### 5.1 The line, as objects
+### 5.1 The line
 
 ```
-track       AA/tracks/<slug>.md          the standing question, the number to beat, its status
- ├─ subject     T047/fold-blockers       a quantity or a set that claims state values about
- └─ question    T072/Q2                  what is asked, and what will count as its answer
-     ├─ spend      (ledger line)         a costed act on the question, written with its `doing`
-     ├─ claim      T072/b8438f28.c1d2/1  one finding: mark, verdict, source, where, value ± band
-     │   └─ claim  (REPRODUCED)          the same measurement, run again by another run
-     ├─ retract                          a correction, kept beside the claim it corrects
-     └─ decision                         adopt · reject · park · follow-up · settle · dead end · reopen
-          └─ question  T067/Q1           the next step of the line
+track      AA/tracks/<slug>.md      the standing question, the number to beat, its status
+ └─ question  T072/Q2               what is asked, and its rule; committed before any lane opens
+     ├─ lanes                        prose reports, tracked; their runs are on the task's trail
+     ├─ verdict   T072/V2            written at synthesis: verdict, mark, value, where, src, basis
+     ├─ decision  T072/D1            the claimant's: adopt · reject · park · follow-up · settle · dead end · reopen
+     └─ ruling    (task file)        the operator's, through a task action: park · drop · accept a warning
+          └─ question  T067/Q1       the next step of the line
 ```
 
-| Object | Lives in | Written by | When |
-|---|---|---|---|
-| Track | `AA/tracks/<slug>.md`: a hand-written head, a generated region | the operator or a claimant (head); `research.sh --write` (region) | when the inquiry starts |
-| Subject | a `subject` line in the ledger of the task that first needs it | that task's runs | before a claim states a value about it |
-| Question | a `question` line in its task's ledger | the task's claimant | before any run answers it, committed |
-| Spend | a `spend` line, written by `ckpt.sh log … doing --q` | the run that spends | before the act |
-| Claim, retract | lines in the task's ledger | any run of the task | as soon as it is found |
-| Decision | a `decision` line in the task's ledger | the task's claimant | when an answer is acted on |
-
-- A research task names its track with `track: <slug>`, AGEIS's own key.
-- **Ids are global.** A question is `T072/Q2`, a claim `T072/<run>/<n>`, a
-  subject `T047/<name>`. Run ids repeat across tasks, because one session
-  working on two tasks has one run id. So the task prefix is part of the id.
-  Inside its own ledger, an id may drop the prefix.
-
-### 5.2 The findings ledger
+### 5.2 The ledger
 
 `AA/findings/T###.jsonl`, one per research task:
 
+- **one writer**: the claimant's session, the owner of the task. A
+  subagent's work reaches the ledger through the claimant, which is the only
+  way DeepSeek's lane can reach it at all;
 - one JSON object per line, append-only. A line is never edited, and the file
   is never retired;
-- written only by the task's own runs (rule 2). Each line is one `write()`
-  under 4 KB;
-- `.gitattributes` gives it `merge=union`, as the trails have, and never
-  `linguist-generated`, so its diffs stay in sight. A union merge is safe
-  because ids cannot collide;
-- commits that touch only ledgers start `find: ` and skip hooks, as `ckpt:`
-  commits do (WHY.md);
-- read like trails: an unparseable line is skipped and reported, and never
-  fails the file.
+- `.gitattributes` gives the file `merge=union`, and never
+  `linguist-generated`, so its diffs stay in sight;
+- commits that touch only ledgers start `find: ` and skip hooks (WHY.md: "It
+  blocked the trail");
+- an unparseable line is skipped and reported.
 
-Every line carries `ts`, `run` and `kind`. The kinds:
+Every line carries `ts`, `run` and `kind`:
 
-| kind | Written | Fields |
+| kind | When | Fields |
 |---|---|---|
-| `subject` | before a claim states a value about it | `id`; `what` (≤ 160 B); `unit`; `same-as` (when two names turn out to be one subject) |
-| `question` | by the claimant, before any run answers it | `id`; `ask`; `rule`, below; `from` (what raised it); `same-as` (an explicit repeat) and `reopens` |
-| `spend` | by `ckpt.sh log … doing --q`, with the `doing` | `q`; `cost`; `model`; `config` |
-| `claim` | by any run of the task, as it goes | `id`; `q`; `mark`; `verdict`; `src`; `says`; `where`; `subject`, `value`, `band`, `unit`; `config`, `artifact`; `reproduces`; `model` |
-| `retract` | by any run of the task | `id` (the claim it corrects); `why`; `by` (the replacing claim, if any) |
-| `decision` | by the claimant | `q`; `do` (`adopt`, `reject`, `park`, `follow-up`, `settle`, `dead-end` or `reopen`); `cites` (claim ids); `task`; `why`; `supersedes` |
+| `question` | before the first lane opens, committed | `id` (`Q1`); `ask` (≤ 480 B); `rule`: `answers` (what counts), `marks` (the accepted set) and optionally `instrument` and `band`; `from` (what raised it); `same-as`; `reopens` |
+| `verdict` | at synthesis, one per question | `id` (`V1`); `q`; `verdict` (`answers`, `rejects`, `none-found` or `unresolved`); `mark`; `value` (text; a number is a decimal string); `where` (`path#heading`, tracked); `src` (a list); `basis` (the lanes, models, methods and sources it rests on); `says` (≤ 240 B) |
+| `decision` | when an answer is acted on | `id` (`D1`); `q`; `do` (`adopt`, `reject`, `park`, `follow-up`, `settle`, `dead-end` or `reopen`); `cites` (verdict ids); `task`; `why` (≤ 240 B); `supersedes` |
+| `retract` | whenever a line was wrong | `id` (the line it corrects); `why`; `by` (its replacement) |
 
-**A question's rule:**
+- **Ids** are global as `T072/Q1`, and may drop the prefix inside their own
+  ledger.
+- **Marks:** REPRODUCED, MEASURED, SIMULATED, READ, INFERRED.
+- **Verdicts:** `none-found` is RSNA's null lane. `unresolved` is honest, but
+  it does not cover a question.
+- **Sources** are one of:
+  - a URL, unverified;
+  - `path:line@commit`, checked offline;
+  - `cmd:` with the command and the hash of its output;
+  - `claim:` with another line's id.
+- **A number** is a decimal string, `-?[0-9]+(\.[0-9]+)?`. jq and Node print
+  floating-point numbers differently, and both compute 0.941 − 0.940 as
+  0.0010000000000000009 (Architect R6).
 
-- `answers`: what counts;
-- `marks`: the set of accepted marks;
-- `subject` and `unit`, when the answer is a value;
-- `instrument`, `step` (the smallest difference it can show) and `band`;
-- `resolved_by`: the claim showing the instrument resolves the band;
-- `reads`: thresholds that decide the verdict from the value, such as
-  `[{"at_least": "0.948", "verdict": "answers"}, {"at_most": "0.934", "verdict": "rejects"}]`;
-- `config`: the hash of the resolved configuration a result must carry;
-- `reproduce`: whether a decision on it needs a REPRODUCED claim.
+### 5.3 The operator's rulings
 
-**Marks** describe where a claim's evidence comes from:
+A ruling is one line in the task file's `## Decisions` section:
 
-- REPRODUCED: another run re-ran the recorded command, with its own source
-  and artifact, and got the same within the band;
-- MEASURED: observed on the real system or data;
-- SIMULATED: measured on a model of the system, such as synthetic data, a
-  fabricated repository or a power calculation;
-- READ: a source says so;
-- INFERRED: reasoned, not observed.
+```
+## Decisions
 
-**Verdicts** are what a claim concludes:
-
-- `answers`, `rejects` or `unresolved`;
-- `none-found`: looked, found nothing. This is RSNA's null lane, named so it
-  can never read as JSON null;
-- `finding`: reports without deciding.
-
-A claim with `answers`, `rejects` or `unresolved` must have a `where`.
-
-**Sources** (`src`) are one of:
-
-- a URL, which is unverified, because there is no network;
-- `path:line@commit`, which is checked offline;
-- `cmd:` with the command, plus the `artifact`, the sha256 of its output;
-- `claim:` with another claim's id.
-
-**Numbers** (`value`, `band`, `step` and thresholds) are decimal strings,
-matching `-?[0-9]+(\.[0-9]+)?`. They are compared exactly, as integers scaled
-to the longer fraction, and printed as written. Both doors therefore give the
-same bytes and the same verdicts (R6).
-
-An illustration only; its findings are placeholders, and its script does not
-exist:
-
-```json
-{"ts":"2026-10-14T09:00:00Z","run":"b8438f28","kind":"question","id":"Q2","ask":"When two machines claim one task, does the loser's fetch-and-rebase stop on the task file?","rule":{"answers":"yes or no, for each race shape","marks":["SIMULATED","MEASURED"],"reproduce":true}}
-{"ts":"2026-10-14T10:20:00Z","run":"b8438f28.c1d2","kind":"claim","id":"b8438f28.c1d2/1","q":"Q2","mark":"SIMULATED","verdict":"answers","src":"cmd:node sim/claim-race.mjs --seeds 200","artifact":"sha256:…","says":"…","where":"docs/plans/team-scale.md#claim-races","model":"opus"}
-{"ts":"2026-10-14T10:50:00Z","run":"b8438f28.e9f0","kind":"claim","id":"b8438f28.e9f0/1","q":"Q2","mark":"REPRODUCED","verdict":"answers","reproduces":"b8438f28.c1d2/1","src":"cmd:node sim/claim-race.mjs --seeds 200","artifact":"sha256:…","says":"…","where":"docs/plans/team-scale.md#claim-races","model":"sonnet"}
-{"ts":"2026-10-14T11:00:00Z","run":"b8438f28","kind":"decision","q":"Q2","do":"follow-up","task":"T067","cites":["b8438f28.c1d2/1","b8438f28.e9f0/1"],"why":"…"}
+- 2026-10-14 T072/Q3 park — not answerable before the hub design
+- 2026-10-14 T072/Q2 accept-warning registered-late — asked aloud before the lanes, written after
 ```
 
-### 5.3 Tracks: the page the operator reads
+- **Written** by an AGE Aris task action, or by hand. It is the operator's
+  action on one task file, in one commit, under AGENTS.md's write rules. A
+  task in `done/` can still take a ruling, which fixes B5: a closed task's
+  ledger takes no more lines, but its task file does.
+- **The words** are `adopt`, `reject`, `park`, `drop`, `settle`, `dead-end`,
+  `reopen` and `accept-warning <code>`. The reason after the dash is
+  required.
+- **Parsed** line by line, linearly, with nothing that can backtrack. The text
+  is untrusted.
+- **Precedence:** a ruling outranks a claimant's decision on the same
+  question, and the page shows both.
 
-`AA/tracks/<slug>.md`, one per standing line of inquiry. The folder is the
-`tracks:` key in `AA.yml` (default `AA/tracks`), because AGEIS keeps its pages
-in `docs/research/tracks/` and links them from many places (S3). The page is
-built like STATE.md:
+### 5.4 The page
 
-- **A hand-written head**, between `<!-- AA:now -->` markers: the track's
-  question, why it matters, the number to beat and its status (`active`,
-  `dormant` or `settled`).
-- **A generated region**, rendered by `AA/research.sh --write`. It reads top
-  down as the line of thought:
-  1. **Coverage**: how many questions are open; how many claims, how many of
-     them reproduced; how many lanes, and which wrote no ledger line. An empty
-     ledger shows as a gap.
-  2. **Decisions waiting on you**: answered questions with no decision, and
-     for how long.
-  3. **Warnings** (§5.4).
-  4. **Facts, side by side**: for each subject, every claim's value with its
-     lane, mark and section. This is how a contradiction reached by
-     inference, like lane 10's, becomes visible.
-  5. **Open questions, ranked**, each with its instrument and the cheapest
-     run that could answer it.
-  6. **Answered**: the verdict, the best claim, and whether it was
-     reproduced.
-  7. **Settled, do not reopen**, and **Dead ends**, each with why it died.
-  8. **The ledger**: each task, what it asked, its verdicts, its evidence and
-     its cost.
-- **The gate does not cry wolf** (R7, WHY.md). `--check` compares structure
-  only: questions, subjects, decisions and the settled set. Claims, warnings
-  and ages change all through a round, and they are rendered but not checked.
-- **It is live.** The doors read the working tree, so a lane's claims show up
-  as it writes them, marked uncommitted until they land.
-- **STATE.md gains one line per active track.** It shows open questions,
-  decisions waiting and warnings. `board.sh` renders the line itself, by
-  sourcing `research.sh` as it sources `ckpt.sh`, outside any table.
-  `board.sh --write` owns the whole region, and orient reads table rows
-  (R7).
+`AA/tracks/<slug>.md`, in the folder named by `tracks:` in `AA.yml` (default
+`AA/tracks`), since AGEIS keeps its pages elsewhere. A research task names its
+track with `track: <slug>`.
 
-### 5.4 The checks
+- **The hand-written head**, between `<!-- AA:now -->` markers: the question,
+  why it matters, the number to beat, and the status.
+- **The generated region**, rendered by `AA/research.sh --write`, top down:
+  1. **Coverage**: questions, verdicts, decisions; the task's lanes (from its
+     trail) and whether each one's report is tracked.
+  2. **Decisions waiting on you.**
+  3. **Warnings**, with accepted ones shown beside their reasons.
+  4. **Open questions**, with their rules.
+  5. **Answered**: verdict, mark, value, where it is argued, its sources, and
+     its basis. Verdicts about the same thing sit side by side, which is how
+     lane 10's error would have shown (N5).
+  6. **Settled, do not reopen**, and **Dead ends**, with why each died. This
+     is the computed "do not redo".
+  7. **The ledger**, task by task.
+- **A JSON summary** sits beside it (`<slug>.json`), for AGE Aris and for
+  agents.
+- `--check` compares structure only: questions, verdicts, decisions, rulings
+  and the settled set. No clock, and no uncommitted lines (WHY.md: "It cried
+  wolf").
+- STATE.md gets one line per active track, rendered by `board.sh` through
+  `research.sh`, outside any table.
+- Region markers are escaped wherever ledger text is rendered (N6).
 
-Every check is mechanical: no model reads anything. Each has a code, and each
-either names the failure on record it answers or is marked preventive. A check
-is advice, never a block.
+### 5.5 The four checks
 
-**The core**, built first. These need no experiment data:
+| Code | Fires when | Incident: must fire | Counterfactual: must stay silent |
+|---|---|---|---|
+| `uncovered` | a question has no `answers`, `rejects` or `none-found` verdict, and no `park` or `drop`, once its task has a decision or is closed; killed tasks are skipped | RSNA T047: the efficiency half, open when round 3 decided | the same question once lane 11b's `none-found` lands (`5313b79`) |
+| `where-missing`, `out-of-sight` | a verdict's `where` section is absent or empty at the verdict's commit; or its `where` or a `src` path is untracked at that commit and is neither a dated record nor regenerable by its `cmd:` | lane 12's rows 3 and 4; RSNA's round 0921, never committed | a file moved after the line was written (T093); a source in `outputs/` that carries its command |
+| `registered-late` | a question's line is not in a strict ancestor of the commit of its verdict, or of the first commit of a report section the verdict cites | lane 13, which ran with no brief | lanes 9–12, briefed in T047's claim before their reports |
+| `decision-waiting` | a question has a verdict and no decision or ruling | a fixture; it is the operator's queue, not an alarm | the same question with a ruling |
 
-| Code | Fires when | On record |
-|---|---|---|
-| `uncovered` | a question has no claim beyond `finding`s and no `none-found`, once its task has a decision or is closed. Killed tasks are skipped. | RSNA T047: lane 11's efficiency half. R0 caught it. |
-| `where-missing` | a claim with `answers`, `rejects` or `unresolved` has no `where`, or its section is absent or empty at the claim's commit | RSNA T047: lane 12's rows 3 and 4. R0 missed it under v1. |
-| `contradiction` | on one question, a live `answers` and a live `rejects`; or on one subject, two live values further apart than the band. Never against `none-found`. | preventive. Lane 10's case was an inference, and it shows under "Facts, side by side". |
-| `unbacked` | a decision cites nothing, a claim that does not exist, or a retracted one | preventive |
-| `registered-late` | a question's line is not in a strict ancestor of the commit of a claim or spend on it. A shared commit, an uncommitted question and incomparable branches all count. | RSNA T047: lane 13 ran with no brief. R0 caught it. |
-| `out-of-sight` | a claim's `where`, or a `src` path, is untracked at the commit that added the line | RSNA: 4 of 22 sources (R0); round 0921 never committed |
-| `source-missing` | a `path:line@commit` names a file absent at that commit, or a line out of range | RSNA: `outputs/t028/run_density.sh` (R0) |
+- **The precision floor.** On every real round, each warning is marked real
+  or false by hand. A check under 90% is demoted to a note on the page until
+  it is fixed.
+- **What no check can see:** a question nobody asked, like the unused flags,
+  and a result nobody wrote down. The first gets a standing question on every
+  track: "what do we already have, and what have we never examined?" The
+  second needs a reconciliation against the outside record, which stays in
+  the repository's own scripts, as RSNA's `reconcile_kaggle.py` does.
 
-**Experiments**, built after L2. These need spend lines, configurations and
-thresholds:
+### 5.6 A round, step by step
 
-| Code | Fires when | On record |
-|---|---|---|
-| `instrument-unresolved` | a spend names a question whose band ≤ its step, or whose `resolved_by` claim is missing, or is neither MEASURED nor SIMULATED | RSNA T118: ±0.001 on a three-decimal leaderboard |
-| `config-mismatch` | a result's `config` differs from the one its question registered | RSNA T118's class |
-| `arm-equals-control` | two arms of one experiment carry the same `config` | RSNA T118: an edit that matched no key left the arm identical to the control |
-| `verdict-mismatch` | a question has `reads`, and a claim's verdict differs from the one its value derives | AGEIS T106: T080's inverted verdict |
-| `unreproduced` | a decision cites a claim whose rule asks for reproduction, and no REPRODUCED claim from another run names it | RSNA T038's re-checks, made explicit |
-
-**Across ledgers:**
-
-| Code | Fires when | On record |
-|---|---|---|
-| `decision-conflict` | two live decisions on one question differ, and neither supersedes the other | preventive (R2) |
-| `reopened-settled` | a question is `same-as` a settled one, or repeats it after normalisation, without `reopens` | preventive; round 3's hand-written table |
-
-`subject-new` is not a warning. It lists the subjects first registered in a
-round, so the synthesis can merge two names for one thing with `same-as`.
-
-- **Normalising text**, for `reopened-settled`, folds case, whitespace and
-  punctuation in one linear pass. Research text is untrusted, so no regex
-  that can backtrack runs on it (AGENTS.md).
-- **What no check can see.** A question never asked, like the training flags
-  nobody examined for weeks, leaves no line to check. A track can carry a
-  standing audit question (§5.5), but only a person or an agent can decide to
-  ask.
-
-### 5.5 Runs: how agents do research
-
-Each step is a command, and each output is a file in sight:
-
-1. **Register.** The claimant writes the task's questions and the subjects
-   they touch, with their rules, and commits them before any lane starts.
-   Commit ancestry now proves the rule came first.
-2. **Brief.** `AA/research.sh brief T072 --lane races --q Q2,Q3` prints a
-   lane's brief:
-   - its questions, rules and subjects;
-   - the track's settled list and dead ends;
+1. **Register.** The claimant writes the questions and their rules, and
+   commits them before any lane opens.
+2. **Brief.** `AA/research.sh brief T072` prints:
+   - the questions;
+   - the computed settled list and dead ends;
    - rule 6 verbatim;
-   - the format;
-   - for each question, a ready `research.sh claim` command with `--q`
-     filled. That cuts the double entry (from F).
-3. **Run the lanes.** Each lane is a run of the task, in any harness and on
-   any model. It writes a claim line as soon as it finds something. Each
-   claim's `where` names the section that argues it, in a report tracked in
-   the repository.
-4. **Reproduce.** Where a rule asks for it, a different run re-executes the
-   recorded command and writes a REPRODUCED claim with `reproduces`, and with
-   its own source and artifact. Who runs it is not what makes it
-   independent; the re-execution is.
-5. **Synthesise.** One agent writes the synthesis and appends `decision` lines
-   that cite claims. `research.sh --check` comes back clean, or the synthesis
-   answers each warning.
-6. **Show.** `research.sh --write` regenerates the page, and a `find:` commit
-   carries it.
+   - where reports go.
+3. **Lanes** write prose reports into a tracked folder, in any harness and on
+   any model, as RSNA's do. The operator watches the round in AGE Aris: the
+   questions, each lane's trail state, and its report's headings as they
+   land.
+4. **Synthesise.** The claimant writes a verdict per question, citing the
+   section that argues it, then the decisions. `research.sh --check` comes
+   back clean, or the synthesis answers each warning.
+5. **Show.** `research.sh --write` regenerates the page and its JSON, and a
+   `find:` commit carries the ledger and the page together.
+6. **Rule.** The operator reads the waiting decisions, in AGE Aris or on the
+   page, and rules through a task action.
 
-**Experiments are runs of the same kind.**
+Experiments use the same lines. A spend's question carries its instrument and
+band. The result's verdict is MEASURED, with the command and its output's
+hash. The narrative still goes to the log (rule 9), and the log entry cites
+the verdict's id instead of copying it.
 
-- Their question carries the instrument, step, band, `resolved_by`, `config`
-  and `reads`.
-- `ckpt.sh log … doing --q Q2` writes the trail's `doing` and the ledger's
-  `spend` line together.
-- A dry run produces the `config` hash: the hash of the resolved
-  configuration, never of the output.
-- The result carries both `config` and `artifact`.
-- The narrative goes to the log (rule 9), in the same commit as the claim.
+### 5.7 Simulation, in stage 1
 
-**Lanes differ on purpose**, by angle and, where a decision hinges on it, by
-model.
+- **A simulation is a lane.** Its report argues; its verdict is SIMULATED.
+  RSNA's split-risk simulation (round 1, lane 3) and T118's resolution
+  question are the shape.
+- **The cheapest instrument goes first.** A question whose answer will be
+  bought with a spend names its instrument and band before the spend.
+  Checking that the band is resolvable is stage 2.
+- **T067's question**, claim races between machines, is a simulation. It runs
+  on real clones made from fabricated repositories (`git clone` of a
+  `lib/fabricate.mjs` repository), and it belongs to T067.
 
-**A standing audit question** can be registered on any track: "what in our own
-system has never been examined?" RSNA's lane 10 asked it once and found the
-correction about the flags.
+### 5.8 Doors and constraints
 
-**A round stops by its rules.** The decision rules fix the lanes and model
-tiers in advance. The synthesis reports how many lanes came back
-`none-found`, because a round in which every lane found a lever is suspect
-(RSNA T047 rule 4).
-
-### 5.6 Simulation
-
-**A. Inside a line, as an instrument.** A `simulate` run measures a model of
-the system. Its claims are SIMULATED.
-
-- **Can the instrument answer?**
-  - A band no larger than the instrument's step is unresolvable by
-    construction. T118's ±0.001 on a leaderboard that prints three decimals
-    was one.
-  - Otherwise a SIMULATED or MEASURED claim, named by `resolved_by`, shows the
-    band can be resolved. Without it, `instrument-unresolved` fires before the
-    spend.
-- **Does the configuration run as registered?** A dry run hashes the resolved
-  configuration. `config-mismatch` and `arm-equals-control` then catch T118's
-  case before a slot is spent.
-- **AGE Aris checks presence, order and linkage only.** The arithmetic stays
-  in the repository's own scripts.
-- **T067's question** (claim races between machines) is answered best by
-  simulation, with fabricated clones from `lib/fabricate.mjs`. That
-  simulation belongs to T067 (S4).
-
-**B. Rehearsing the research process itself.** Each rung is cheaper than the
-next:
-
-| Rung | What | Spend | It proves |
-|---|---|---|---|
-| L0 corpus | fabricated repositories with written ledgers: every check, firing and not; the budget; decimals; serialization | none; part of `npm test` | the checks are right, in both doors, byte for byte |
-| L1 replay | **done (T074).** RSNA's round 3, recast from prose | done | v1 caught 1 of 3, and five changes followed. A replay of prose cannot test fields that lanes must write, so it is not repeated. |
-| L2 planted truth, **the gate** | agents write ledgers for fabricated research rounds in two harnesses. Planted in them: an unwritten half, a verdict whose section is missing, two values on one subject outside the band, a band no larger than its step, and an arm equal to its control. | `agent-fan-out`, capped as T064 caps it | agents keep the contract, and the checks catch what is planted |
-| L3 dogfood | a round here, then one round in another repository, through its own session | each repository's own | the measures in §7 move |
-
-**L2's pass, fixed now:**
-
-- every planted defect is flagged;
-- at most 1 false warning per 50 claims;
-- evidence marks are right on at least 9 claims in 10;
-- no invented `path:line` source.
-
-It is graded against the planted truth, never by the checks themselves (R8).
-
-### 5.7 The doors
-
-| Door | For | Needs | Scope |
-|---|---|---|---|
-| `AA/research.sh`: `subject`, `q`, `claim`, `retract`, `decide`, `brief`, `--check`, `--write`, `--json` | any agent in a clone, in any harness | bash, jq, git | this repository |
-| `GET /api/research?project=&track=&q=` and `all=1`, answering `aa.research/1` | agents and scripts beside AGE Aris | the server and its token | one repository, or all |
-| AGE Aris: a Research tab per project, a view across projects, and Needs-you items | the operator | a browser | every tracked repository |
-| `aa.orient/1`, an added key, `research` | every agent, at start | either orient door | this repository |
-
-- **`research.sh`** is a third vendored script beside `board.sh` and
-  `ckpt.sh`. It ships here first (R1b). Only its copy in the `aa-init`
-  template waits for T004.
-- **`aa.research/1`** reuses ORIENT.md's serialization, provenance and budget
-  rules, and adds decimal strings. Text goes under `data`, cleaned, capped and
-  tagged with its file and author.
-- **Orient's `research` key** (S5):
-  - it is present only when not empty, placed after `warnings`, and cut
-    before `take`;
-  - the findings files join ORIENT §2's reads and its p95 budget;
-  - adding a key keeps the schema at version 1.
-- **AGE Aris only reads.** It never writes a ledger or a page in a tracked
-  repository (AGENTS.md).
-- **Needs you** gains `decision-waiting` and `research-warning`, with their
-  own cap of the top 12 per reason and a count, until T062 lands (R9).
-- **The sample project** gains a research track with simulated history.
-
-### 5.8 What does not change
-
+- `AA/research.sh` (bash and jq) is the only implementation in stage 1. It
+  ships here first; its copy in the `aa-init` template waits for T004. Other
+  repositories adopt it only after T072's measures (N4).
+- **AGE Aris reads files**: the page, its JSON, the trails and the report
+  headings. It never runs a repository's scripts. Its one write is the
+  operator's ruling, a task action.
+- **Needs you** gains `decision-waiting`, the top 12 with a count, until T062
+  brings the general cap.
 - **RULES.md stays as it is.** The format lives in `AA/findings/_SCHEMA.md`.
-  A rule is proposed only if L3's measures call for one.
-- **Rule 9 stands.** A result goes to the log, and its claim lands in the same
-  commit.
-- **Trails keep their job.** The only change is the optional `q` on a
-  `doing`, which also writes the `spend` line.
 
-## 6. Out of scope here, each its own task if wanted
+## 6. Stage 2: built only when the record asks for it
 
-- **Recognising that two questions mean the same thing.** That is an agent's
-  job at brief time. The check catches only explicit and exact repeats.
-- **Computing bands and steps.** A repository's scripts do it. AGE Aris
-  checks they were registered first.
-- **A research pipeline for plain projects**: fan-out lanes, a synthesis
-  stage and a reproduce stage (docs/PIPELINE.md). It comes after L3.
-- **Fetching web sources.** There is no network.
-- **Rewriting past research in RSNA or AGEIS.** Their own sessions decide. For
-  AGEIS, D2 first means moving it to the current template, which brings
-  `board.sh`, `AA.yml` and `RULES.md` (S3).
+Each piece below is designed in v2 (7bfc107, §5). Each is built only when T072
+or the T112/T118 replay shows it would have changed a decision:
+
+- claim-grain ledgers written by lanes, with REPRODUCED by re-execution. Only
+  a tracked script at a pinned commit may be re-run (N6);
+- subjects, and `contradiction` on the quantities the track's head registers;
+- spend lines, and the experiment checks:
+  - `instrument-unresolved`, with an explicit `resolved_by` and the
+    instrument's step;
+  - `config-mismatch`;
+  - `arm-equals-control`, the general form of RSNA's
+    `assert_every_arm_is_reachable`, where a repository emits the hashes of
+    its resolved configurations;
+  - `verdict-mismatch`, against `reads` thresholds;
+- the second door (`lib/research.mjs`, `GET /api/research`) with byte
+  conformance, and orient's `research` key;
+- L2: agents writing ledgers for planted rounds, in two harnesses.
 
 ## 7. How it is verified
 
-- **L0, the corpus.** Every check fires and does not fire, decimals included,
-  and both doors give the same bytes.
-- **L2, the gate**, with its pass fixed in §5.6.
-- **Coverage, so that leaving fields out cannot meet a target** (R8):
-  - at least 95% of costed `doing`s carry `q`;
-  - every question with a spend carries a band and a step;
-  - every claim with `answers`, `rejects` or `unresolved` carries a `where`.
-    `where-missing` enforces it.
-- **The lost-alpha measures**, with R0 as the baseline where it applies:
-  - (r1) questions asked again: by hand, on a sample of 20 questions per
-    round, by a reviewer outside the round;
-  - (r2) spends flagged `instrument-unresolved`;
-  - (r3) results flagged `config-mismatch` or `arm-equals-control`;
-  - (r4) defects that reach a synthesis unflagged. Baseline: 3 of 3;
-  - (r5) the median age of decisions waiting, shown on the page;
-  - (r6) out-of-sight evidence. Baseline: 4 of 22 sources.
-- **Targets:** (r2), (r3), (r4) and (r6) at 0 on new rounds, with the coverage
-  targets met; (r5) lower than at the first measurement.
+- **The corpus.** Every check fires on its incident fixture and stays silent
+  on its counterfactual (§5.5). The fixtures are rebuilt with
+  `lib/fabricate.mjs` from the record.
+- **Precision.** On T072, and on every later round, each warning is marked
+  real or false by hand, against the 90% floor.
+- **The operator's outcome:**
+  - **(o1)** the minutes the operator needs to answer "where are we on X?" from
+    the page. The operator times a baseline on today's material, then the same
+    question on T072's page. Target: under 2 minutes, and below the baseline;
+  - **(o2)** decisions that bound before the operator saw them: an `adopt` or
+    `reject` committed before any page showed its verdict waiting. Target: 0
+    on questions whose rule names the operator as the one who decides.
+- **(r4)** defects that reach a synthesis unflagged, counted by a named blind
+  reader: a Critic subagent that reads the synthesis without the checks'
+  output.
+- **(r6)** research documents that exist only in a working tree. Baseline:
+  RSNA, 5 of 65 on 2026-10-13. Target: 0 in a repository that uses stage 1.
+- **The pre-mortem's signals**, from the Critic:
+  - the share of `unresolved` verdicts;
+  - warnings left open on closed tasks;
+  - whether stage 1 is in use two weeks after its contract lands.
 
 ## 8. Risks
 
 | Risk | Mitigation |
 |---|---|
-| A lane skips the ledger, and a clean page reads as health | Coverage comes first on the page; `uncovered` fires at the first decision; lanes with no line are named |
-| The log and the ledger drift apart | They land in the same commit, and the checks read only the ledger |
-| Warnings flood a round | `--check` is structural; claims and ages are rendered, never gated |
-| Agents mark or cite wrongly | `source-missing` and `out-of-sight` are checked offline, reproduction is by re-execution, and L2 measures the rates first |
-| Numbers differ between doors | Decimal strings, compared as scaled integers |
-| Ids collide | Ids carry the task prefix, and a union merge is safe |
-| Research text steers an agent | ORIENT.md's `data` discipline |
-| "Track" is read as "tracked repository" | The interface says "research track", and the module is `lib/research.mjs` |
-| Agent usage competes with RSNA's final week | L2 runs after RSNA closes on 2026-10-22, unless the operator says otherwise |
+| The claimant writes verdicts carelessly at synthesis | `where-missing` holds each verdict to a tracked section with a body; the blind reader counts what slips through |
+| A ninth write | The ledger replaces hand copies: the page and STATE.md line are generated, and the log cites ids |
+| Warnings become wallpaper | The precision floor demotes a check; rulings close warnings with reasons |
+| Stage 2 never comes, and contradictions stay found by hand | The page sets verdicts on the same thing side by side; stage 2 is built on evidence, not by date |
+| Research text steers an agent, or breaks the page | ORIENT.md's `data` rules; escaped markers; linear parsing |
+| The ledger's quotes leak competition research | This branch is not pushed before RSNA closes on 2026-10-22 without the operator's word (STATE.md) |
 
 ## 9. Phases, each one task
 
 | # | Task | depends | Done when |
 |---|---|---|---|
-| R0 | Replay (L1) | — | **Done: T074.** Partial; its evidence is in `docs/plans/evidence/t074/` |
-| R1a | **The contract and corpus**: `docs/RESEARCH.md` (ledger, `aa.research/1`, core checks, decimals) and `tests/research/` | — | every core check has fixtures; the operator has reviewed the cases |
-| R1b | **`AA/research.sh` here**, core checks, `--write` and `brief` | R1a | it passes the corpus, and this repository's track pages generate |
-| R1c | **`lib/research.mjs` and `GET /api/research`** | R1a | it passes the corpus |
-| R1d | **Conformance:** both doors, byte for byte | R1b, R1c | the test is in `npm test` and passes |
-| R1e | **The template:** `research.sh`, `_SCHEMA.md` and `tracks:` in `aa-init` | R1b, T004 | a fresh `aa-init` repository generates an empty track page |
-| R2 | **In sight:** the Research tab, the view across projects, Needs-you with its own cap, STATE.md's track lines, the sample track | R1c | e2e passes; each track reads as one line of thought |
-| R3 | **Orient's `research` key** | R1d, T059 | corpus cases added; both doors pass |
-| R4 | **L2, planted truth: the gate** | R1b | §5.6's pass is met |
-| R5 | **Dogfood (L3)** here, then one round in another repository | R4 | the measures are taken against R0's baseline |
-| R6 | **The experiment checks**: spend lines, `config`, `reads`, `step`, reproduction | R1d, R4 | their corpus cases pass in both doors |
-
-R1a needs nothing, and can start as soon as the operator approves. The
-operator sees generated track pages in this repository after R1b, and in AGE
-Aris after R2.
+| R0 | Replay of round 3 | — | **Done: T074.** Graded by the Critic (§2) |
+| T072 | **Team-scale research, on a hand-written ledger** (D5) | — | its ledger and track page are written by hand in this format; (o1) and precision are measured |
+| S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | — | the operator has reviewed the cases |
+| S1b | **`AA/research.sh` here**: `brief`, `--check`, `--write`, the JSON summary, the four checks | S1a | it passes the corpus; T072's hand-written page and the generated one agree |
+| S1c | **In sight**: AGE Aris shows track pages, the round in progress, and `decision-waiting`; the operator's ruling as a task action | S1b | e2e passes; the operator rules on a question in AGE Aris |
+| S1d | **The template**: `research.sh` and the schema in `aa-init` | S1b, T004, T072's measures | a fresh repository writes an empty track page |
+| R-T118 | **Replay RSNA's T112 and T118**, the rounds that spent, after RSNA closes | S1b | each stage 2 piece is marked: would it have changed a decision? |
 
 ## 10. Decisions for the operator
 
-**Decided 2026-10-13 by the operator. Each followed the recommendation:**
+**Decided 2026-10-13. Each followed the recommendation:**
 
-- **D1:** a findings ledger per task, and track pages with a generated region.
-- **D2:** every AA repository, through `aa-init`.
+- **D1:** a findings ledger per task, and generated track pages. v2.1 keeps
+  this. What changes is the grain: one writer, deciding per question.
+- **D2:** every AA repository, through `aa-init`. v2.1 keeps this as the
+  destination, reached after T072's measures (N4).
 - **D3:** R0 runs now, by one session with no subagents (T074).
-- **D4:** T072 waits for R1b, then runs as the first dogfood.
+- **D4:** T072 waits for R1b, then runs as the first dogfood. **D5 below
+  would replace it.**
 
-The review of v1, one Architect and then one Critic, was approved to run the
-same day.
+The review was approved to run the same day. T073's rules allow one more
+round of each reviewer when the Critic rejects.
 
 **Open:**
 
-- **D5. Revisit D4?** The Architect's S4 says D4 buys little evidence. T072 is
-  web reading only, with no spend and no subagents, so it exercises no
-  instrument, configuration or band check. Meanwhile it holds up T066 and
-  T067, which wait for it.
-  - Recommended: T072 runs as written, with no wait for R1b. The claim-race
-    simulation moves into T067. The first dogfood is R5, a round in this
-    repository.
+- **D5. Run T072 now, on a hand-written ledger.**
+  - Both reviewers recommend it (S4, N2). Stage 1's format needs no tooling
+    to be written by hand. T066 and T067 stop waiting on tools, and T072
+    becomes stage 1's first real test.
+  - The claim-race simulation moves to T067.
   - The alternative is to keep D4.
-
-The decisions as they were put:
-
-- **D1. The shape:** a findings ledger per task (`AA/findings/T###.jsonl`,
-  never retired) and track pages with a generated region (`AA/tracks/`).
-  - Recommended: yes. The alternatives are §4's B (hand-written pages) and A
-    (prose only).
-- **D2. Scope:** every AA repository through `aa-init`, or this repository
-  alone first.
-  - Recommended: every repository. Three of them already reached the same need
-    on their own, and each adopts it in its own session.
-- **D3. When R0, the RSNA replay, runs.**
-  - Recommended: now, by one session with no subagents.
-  - The alternatives were now with up to 6 lanes, or after RSNA closes on
-    2026-10-22.
-- **D4. T072.**
-  - Recommended: it waits for R1b, then runs as the first dogfood.
-  - The alternative was to run it now as written.
+- **D6. Build stage 1 first, and stage 2 only on evidence.**
+  - Recommended: yes. It follows the Critic's cheapest version and RSNA's own
+    lessons.
+  - The alternative is v2's full design, built in order.
 
 ## ADR
 
 - **Decision:**
-  - Research, simulation and experiment runs write an append-only ledger per
-    task (`AA/findings/T###.jsonl`). It holds subjects, questions whose rules
-    are committed first, spends, marked and sourced claims, retractions, and
+  - A decision-grain ledger per research task, with one writer.
+  - Questions with their rules are committed before any lane opens. Verdicts
+    carry where they are argued, their sources and their basis, then come the
     decisions.
-  - Ids are global, numbers are decimal strings, and independence means
-    re-execution.
-  - Track pages (`AA/tracks/`) and `aa.research/1` are generated from the
-    ledgers. They show coverage first and facts side by side.
-  - Fourteen mechanical checks run on the ledgers: seven core, five for
-    experiments, two across ledgers. Each names its failure on record or is
-    marked preventive.
-  - Two doors serve all this, `AA/research.sh` and AGE Aris, held to one
-    corpus.
-  - Agents writing ledgers for planted rounds (L2) gate the rollout.
+  - The operator's rulings are task actions in the task file.
+  - A generated track page shows coverage first, and verdicts on the same
+    thing side by side.
+  - Four checks, each with an incident, a counterfactual and a precision
+    floor.
+  - One door, `AA/research.sh`. AGE Aris reads the files.
+  - Stage 2 is built on evidence only.
 - **Drivers:**
   - the operator: one structured line of thought, in sight;
-  - lost alpha, on RSNA's and AGEIS's own records (§2);
-  - hand-kept views drift;
+  - RSNA's and AGEIS's records: facts unconnected, verdicts unargued,
+    questions open at decision time, records drifting across eight hand
+    writes, a round never committed;
   - agent-first.
-- **Alternatives:**
-  - prose conventions;
-  - hand-written pages;
-  - a database in AGE Aris;
-  - claims in trails;
-  - claims inside reports.
-
-  §4 gives the reasons.
+- **Alternatives:** prose conventions; hand-written pages; a database; trail
+  entries; claim-grain ledgers by every lane (deferred); claims fenced in
+  reports. §4 gives the reasons.
 - **Why chosen:**
-  - it turns a method three repositories already run by hand into files and
-    checks;
-  - it keeps git as the truth;
-  - it reuses orient's contract, corpus and serialization;
-  - the replay showed both what it catches and what it cannot.
+  - it is the smallest structure that holds the line of thought together and
+    puts it in front of the operator;
+  - it adds no write a lane can skip;
+  - every check is held to its incident and its counterfactual.
 - **Consequences:**
+  - a new AA folder and a schema;
   - a third vendored script;
-  - a new AA folder and a schema to version;
-  - a `tracks:` key;
-  - one optional trail field that also writes a ledger line;
-  - a Research tab;
-  - a research track in the sample project.
-- **Follow-ups:**
-  - a research pipeline for plain projects;
-  - recognising when two questions mean the same thing;
-  - a rule in RULES.md if L3 calls for one.
+  - a `## Decisions` section the readers parse;
+  - a new task action;
+  - a `tracks:` key.
+- **Follow-ups:** the stage 2 pieces, each on evidence; a research pipeline
+  for plain projects.

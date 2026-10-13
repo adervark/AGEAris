@@ -8,9 +8,10 @@ pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
 **In progress:** T073, research runs aggregated into one line of thought
-(`docs/plans/research-runs.md`). v1 is under review, Architect and then
-Critic. R0 (T074) is done: partial, with v1's checks catching 1 of 3
-defects. v2 answers the reviews and R0.
+(`docs/plans/research-runs.md`). The Critic sent v1 back for revision. v2.1
+makes its cheaper design stage 1, and stage 2 waits on evidence. The Critic
+reviews v2.1 next, and then the operator decides D5 and D6. R0 (T074) caught
+1 of 3 defects, and that catch cannot be told from noise.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -34,17 +35,17 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-13T05:31Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
+`board · 2026-10-13T06:16Z · 74 tasks: 23 backlog, 1 WIP (1 in progress), 50 delivered`
 
 FLOW · **WIP 1/2** · throughput 11.7/wk (50 in 30d) · cycle time 50th 5m / 85th 34m (n=50)
-FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 56% (touch 11m of 21m, n=1 trails) · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 86% (touch 57m of 66m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 21m | ⚙ |
+| **IN PROGRESS** 1/2 | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 66m | ⚠ |
 | **BACKLOG** 23 | | `T003` `T004` `T024` `T025` `T047` `T051` +17 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 1m |  |
-|  | T055 | The orient contract and its scenario corpus | adervark | 38h |  |
+| **DONE** | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 46m |  |
+|  | T055 | The orient contract and its scenario corpus | adervark | 39h |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 2d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 2d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 2d |  |
@@ -52,7 +53,7 @@ FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 56% (touc
 |  | T050 | /aa on Windows without WSL | adervark | 3d |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 3d |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 3d |  |
-|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 3d |  |
+|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 4d |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 4d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 4d |  |
 |  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 4d |  |
@@ -81,7 +82,7 @@ FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 56% (touc
 |  | T013 | The Method view names a settings file the board does not have | adervark | 4d |  |
 |  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 4d |  |
 |  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 4d |  |
-|  | T028 | A README that explains the workflow, for a first-time tester | adervark | 4d |  |
+|  | T028 | A README that explains the workflow, for a first-time tester | adervark | 5d |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 5d |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 5d |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 5d |  |
@@ -95,7 +96,7 @@ FLOW · Little's Law: 1 ÷ 11.7/wk ≈ 14h expected · flow efficiency 56% (touc
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 6d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚙ a `doing` nothing closed: in flight, or stopped mid-act if its run is closed — `ckpt.sh live` says which, before you spend anything
+- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 <!-- /AA:generated -->
 
 <!--
