@@ -95,7 +95,7 @@ Every number below was measured on T075's material before this was written
      `prompt`, committed, and `registered-late` fires on a lane whose prompt
      is not in an ancestor of its report.
 5. **Quantities with no code referent are registered measurands** (C5, C9).
-   - An `object` of kind `measurand` (the deployed rerun's runtime, our public
+   - An `object` of type `measurand` (the deployed rerun's runtime, our public
      rank, the team count), registered on the track before transcription. A
      fact about one cites `m:<name>`, which is a referent.
    - That is a writer's choice of identity, so it is made twice. The auditor,
@@ -662,7 +662,7 @@ Every line carries `ts`, `run` and `kind`:
 
 | kind | When | Fields |
 |---|---|---|
-| `object` | when a thing is first named; a measurand before transcription | `name` (`arms`, `public-lb`, `train.py/--layer-decay`, `rerun-runtime`); `anchor` (`path#symbol@commit`, a submission id, or a URL); `kind` (`config`, `set`, `flag`, `artifact`, `instrument`, `measurand`, `other`); for a measurand, `means` (≤ 240 B: what is measured, on what, by which instrument) |
+| `object` | when a thing is first named; a measurand before transcription | `name` (`arms`, `public-lb`, `train.py/--layer-decay`, `rerun-runtime`); `anchor` (`path#symbol@commit`, a submission id, or a URL); `type` (`config`, `set`, `flag`, `artifact`, `instrument`, `measurand`, `other`; v2.4 called it `kind`, which every line already uses for the line's own kind); for a measurand, `means` (≤ 240 B: what is measured, on what, by which instrument) |
 | `question` | before the first lane opens, committed | `id` (`Q1`); `ask` (≤ 480 B); `prompt` (the lane's prompt, verbatim, when a lane is briefed from it); `about` (the keys it asks about, and `refs`: the definitions, files, flags or identifiers it concerns); `rule`: `answers` (what counts), `marks` (the accepted set) and optionally `instrument`, `reads` (the key it measures) and `band`; `from` (what raised it); `reopens` or `reproduces` (a settled fact or verdict, with why) |
 | `fact` | as each lane report lands | `id` (`F1`); `key` (`<object>/<attribute>`, for display); `value` (text: a number is a decimal string, a set is a sorted list); `unit`; `mark`; `where` (`path#heading`, tracked); `at` (the clause it was transcribed from, `<doc>#<n>@commit`); `src` (a list of `path:line@commit`, `path#symbol@commit`, `path:line@worktree#sha256` for an untracked file, `cmd:` with its pathspec, `m:<measurand>`, a submission id or an artifact hash; may be empty, which warns `unsourced`); `premises` (fact ids; required when the mark is INFERRED); `premises_by` (`lane` or `transcriber`); `refs` (identifiers it is about; at least one per `path:line` source, found on that line); `from` (the lane, its run and model); `says` (≤ 240 B, verbatim from the clause at `at`, which `research.sh fact` checks, with `value` found in it) |
 | `skip` | as each report lands | `clauses` (clause ids or a range); `why`: `no-claim`, `repeat` (with the fact it repeats, which gains a support), or `quote` (with the clause or fact it quotes) |
@@ -995,7 +995,7 @@ or the T112/T118 replay shows it would have changed a decision:
   - **Procedure, fixed before any subagent runs:**
     - `sieve.mjs` cuts the eight documents R0b read, at R0b's commits, into
       clauses, and the cut is committed first;
-    - fresh transcribers, at most 600 clauses each, dispose of every clause,
+    - fresh transcribers, at most 700 clauses each, dispose of every clause,
       as a fact quoting it or as a skip; citations close the scope, and the
       cited sections and definitions are cut and disposed of in a second
       pass;
@@ -1066,7 +1066,7 @@ or the T112/T118 replay shows it would have changed a decision:
 | Facts are transcribed carelessly, or only the convenient ones | Every clause is a fact or a written skip (`untranscribed`); an auditor that wrote none of them reads every skip, and canaries drawn from real facts measure it |
 | The auditor waves skips through | Its canaries are real claims presented as skips, so they read like any other; a missed canary reruns the pass, and the page shows every `ok` |
 | Bands make every number agree, or nothing agree | A key's band is registered on the track before its facts land, and a band no wider than the instrument's step fires `instrument-unresolved` |
-| Transcription becomes the bottleneck | One transcriber per document, at most 600 clauses each: about 27 minutes of wall-clock time for round 3's eight documents, set by lane 9, and measured in R0c; skips are written as ranges; lanes writing their own lines is stage 2, built on evidence |
+| Transcription becomes the bottleneck | One transcriber per document, at most 700 clauses each: about 27 minutes of wall-clock time for round 3's eight documents, set by lane 9, and measured in R0c; skips are written as ranges; lanes writing their own lines is stage 2, built on evidence |
 | Research text steers an agent, or breaks the page | ORIENT.md's `data` rules; escaped markers; linear parsing |
 | The ledger's quotes leak competition research | This branch is not pushed before RSNA closes on 2026-10-22 without the operator's word (STATE.md) |
 
