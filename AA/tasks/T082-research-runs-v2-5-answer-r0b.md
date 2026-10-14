@@ -63,8 +63,51 @@ be checked against T075's misses before the design is accepted again.
 
 - Spend: at most one fresh transcriber and one reconciler, on the operator's
   go.
+  - **Amended 2026-10-14 by the operator's go for R0c** ("Run R0c now"), after
+    v2.5 made transcription exhaustive: `agent-fan-out`, at most 8 Opus
+    subagents. They are a registrar, 4 transcribers, 1 for cited sections,
+    1 auditor and 1 reconciler. Each may be rerun once if it misses a canary
+    or dies; nothing beyond that without the operator.
 - Accepted only when the re-grade reaches at least 10 of 12, or the operator
   accepts a lower figure with the misses listed.
+
+## R0c procedure — fixed before any subagent runs
+
+- **Key:** T075's `corrections.md`, unchanged. No subagent may read it, the
+  round 3 synthesis, T047's Result, T075's or T082's evidence, AGE Aris's
+  `docs/plans/`, `AA/tasks/`, `PROGRESS.md`, or the reviews.
+- **RSNA** is read only: `git show`, `git grep` and `git log` with
+  `GIT_OPTIONAL_LOCKS=0`, plus `cat` for untracked files.
+- **The cut:** `sieve.mjs` at R0b's commits, over R0b's eight documents,
+  committed before the transcribers run, in four groups of at most 700
+  clauses:
+  - G1: R1, R2 and lane 13 (622);
+  - G2: lane 9 and the T047 brief (656);
+  - G3: lane 10 (639);
+  - G4: lanes 11 and 12 (598).
+- **Registrar** (subagent 1): reads only the T047 brief, R1 and R2 at
+  `d9c7c6e`, and registers the track's measurands. It is told what a
+  measurand is, not which ones to find. Its file is committed before the
+  transcribers run.
+- **Transcribers** (2–5), one per group, in parallel. Each disposes of every
+  clause in its group, as a fact quoting it or as a skip. `check.mjs` must
+  come back clean on its output, and it runs that check itself.
+- **Cited sections** (6): `closure.mjs` cuts every Markdown section and code
+  definition cited by a fact that lies outside the eight documents. This is
+  one level deep. Code enters as its docstrings and comments only. One
+  transcriber disposes of that cut.
+- **Auditor** (7): reads every skip, with canaries among them: at least 3,
+  or 2% of facts, made from real facts' clauses presented as `no-claim`
+  skips. It assigns measurands blind. One rerun if it misses a canary.
+- **Reconciler** (8): gets the linked facts grouped by shared referent, and
+  every premise pair, with in-domain canaries. It writes a `same` line for
+  each conflicting pair, and an `ok` line for each group it found clean. One
+  rerun if it misses a canary.
+- **`search-flipped`:** every `cmd:` source is re-run at `e4e356c`.
+- **Grade:** by the parent, against the key, as T075 graded, plus each
+  check's precision and the costs: clauses, facts and skips per group,
+  minutes per subagent, `missed` skips, measurand disputes, and pairs by
+  kind.
 
 ## Handoff — state at last stop
 
