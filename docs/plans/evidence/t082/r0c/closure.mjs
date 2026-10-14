@@ -108,13 +108,18 @@ function proseOf(body) {
 // The paragraph, list item or table row holding a cited line, with the
 // heading above it for context: v2.5's closure grain for a `path:line`.
 function blockAt(src, line) {
-  const lines = src.split('\n');
+  // A blockquote's "> " is a prefix, not content: a quoted table or list is
+  // cut by row and by item like any other (R0c's first closure ran a quoted
+  // table in pm/STATE.md together into one 154-clause block).
+  const lines = src.split('\n').map((l) => { let t = l.trimStart(); while (t.startsWith('>')) t = t.slice(1).trimStart(); return t; });
+  const blank = (t) => !t.trim();
+  const starts = (t) => t.startsWith('#') || t.startsWith('|') || t.startsWith('- ') || t.startsWith('* ') ||
+    (t[0] >= '0' && t[0] <= '9' && t.indexOf('. ') > 0 && t.indexOf('. ') < 4);
   let a = line - 1, b = line - 1;
-  if (!lines[a] || !lines[a].trim()) return null;
-  const row = lines[a].trimStart().startsWith('|');
-  if (!row) {
-    while (a > 0 && lines[a - 1].trim() && !lines[a - 1].trimStart().startsWith('#') && !lines[a].trimStart().startsWith('- ')) a--;
-    while (b + 1 < lines.length && lines[b + 1].trim() && !lines[b + 1].trimStart().startsWith('#') && !lines[b + 1].trimStart().startsWith('- ')) b++;
+  if (!lines[a] || blank(lines[a])) return null;
+  if (!lines[a].startsWith('|')) {
+    while (a > 0 && !starts(lines[a]) && !blank(lines[a - 1]) && !lines[a - 1].startsWith('#') && !lines[a - 1].startsWith('|')) a--;
+    while (b + 1 < lines.length && !blank(lines[b + 1]) && !starts(lines[b + 1])) b++;
   }
   return { anchor: String(a + 1), body: lines.slice(a, b + 1).join('\n') };
 }
