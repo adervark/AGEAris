@@ -1,0 +1,664 @@
+{"clause":"R1#1","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":1,"text":"# RESEARCH-0902 — the road from public LB 0.926 to 0.960","why":"no-claim"}
+{"clause":"R1#5","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":3,"text":"read it after this one.","why":"no-claim"}
+{"clause":"R1#9","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":8,"text":"This document ranks what they found, resolves where they disagree, and names the tasks that follow.","why":"no-claim"}
+{"clause":"R1#11","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":12,"text":"Evidence marks. READ = quoted from a primary page/thread/notebook;","why":"no-claim"}
+{"clause":"R1#12","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":12,"text":"MEASURED = computed from files on disk with the command in the lane report;","why":"no-claim"}
+{"clause":"R1#13","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":13,"text":"REPRODUCED = re-run by the orchestrator;","why":"no-claim"}
+{"clause":"R1#14","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":14,"text":"INFERRED = an estimate, model stated.","why":"no-claim"}
+{"clause":"R1#16","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":19,"text":"Where we actually stand (lane 0, READ)","why":"no-claim"}
+{"clause":"R1#18","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":23,"text":"fact","why":"no-claim"}
+{"clause":"R1#19","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":23,"text":"board said","why":"no-claim"}
+{"clause":"R1#20","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":23,"text":"today","why":"no-claim"}
+{"clause":"R1#21","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":25,"text":"top 20","why":"no-claim"}
+{"clause":"R1#26","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":27,"text":"our rank","why":"no-claim"}
+{"clause":"R1#28","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":28,"text":"a public-notebook plateau","why":"no-claim"}
+{"clause":"R1#31","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":29,"text":"runtime cap","why":"no-claim"}
+{"clause":"R1#34","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":30,"text":"external data / pretrained","why":"no-claim"}
+{"clause":"R1#38","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":31,"text":"test set","why":"no-claim"}
+{"clause":"R1#41","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":32,"text":"efficiency prize","why":"no-claim"}
+{"clause":"R1#45","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":33,"text":"public/private split","why":"no-claim"}
+{"clause":"R1#51","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":41,"text":"to the current top 20, +0.020;","why":"no-claim"}
+{"clause":"R1#55","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":49,"text":"also #1 on the efficiency board, \"as small a model as possible\"), 0.934 → 0.942 (5-fold, 224 px).","why":"no-claim"}
+{"clause":"R1#61","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":64,"text":"the frontier","why":"no-claim"}
+{"clause":"R1#62","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":64,"text":"gap class","why":"no-claim"}
+{"clause":"R1#92","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":75,"text":"Defects in what is deployed right now (lane 2, REPRODUCED by reading the code)","why":"no-claim"}
+{"clause":"R1#107","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":102,"text":"The target side (lane 4, REPRODUCED)","why":"no-claim"}
+{"clause":"R1#115","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":124,"text":"The measurement problem, restated with numbers (lane 3, MEASURED)","why":"no-claim"}
+{"clause":"R1#130","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":151,"text":"The ranked levers","why":"no-claim"}
+{"clause":"R1#131","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":153,"text":"Expected LB magnitude is INFERRED unless marked;","why":"no-claim"}
+{"clause":"R1#133","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"text":"lever","why":"no-claim"}
+{"clause":"R1#134","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"text":"expected","why":"no-claim"}
+{"clause":"R1#135","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"text":"evidence","why":"no-claim"}
+{"clause":"R1#136","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"text":"cost","why":"no-claim"}
+{"clause":"R1#137","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"text":"prohibition touched","why":"no-claim"}
+{"clause":"R1#142","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":158,"text":"1 submission, 0 training","why":"no-claim"}
+{"clause":"R1#160","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"text":"FOV spread measured 1.39×","why":"repeat","of":"G1-F90"}
+{"clause":"R1#179","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"text":"+0.002 to +0.006 as an ensemble arm","why":"no-claim"}
+{"clause":"R1#182","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"text":"T025, 3–4 h/fold","why":"no-claim"}
+{"clause":"R1#195","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"text":"a 0.926 team is rank 22","why":"repeat","of":"G1-F46"}
+{"clause":"R1#200","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":167,"text":"+0.030 coverage for 2.6× wall clock","why":"no-claim"}
+{"clause":"R1#205","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"text":"384/448 px before the mm crop;","why":"no-claim"}
+{"clause":"R1#211","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"text":"lanes 1, 3, 4, 5","why":"no-claim"}
+{"clause":"R1#212","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":170,"text":"Where the lanes disagreed, and the resolution.","why":"no-claim"}
+{"clause":"R1#232","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":191,"text":"The plan (lane 4's calendar, amended by §6)","why":"no-claim"}
+{"clause":"R1#236","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":200,"text":"week","why":"no-claim"}
+{"clause":"R1#237","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":200,"text":"Kaggle (30 h)","why":"no-claim"}
+{"clause":"R1#239","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":200,"text":"submissions","why":"no-claim"}
+{"clause":"R1#269","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":215,"text":"Honest expectation","why":"no-claim"}
+{"clause":"R1#273","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":227,"text":"Follow-up tasks","why":"no-claim"}
+{"clause":"R1#274","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":229,"text":"- T039 — fix src/tta.py (both bugs), guard in smoke_test.py, re-score the deployed 22 locally, submit once.","why":"no-claim"}
+{"clause":"R2#6","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":11,"text":"Evidence marks as there: READ = quoted from a primary page/thread/notebook/CSV;","why":"no-claim"}
+{"clause":"R2#7","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":12,"text":"MEASURED = computed from files on disk with the command in the lane report;","why":"no-claim"}
+{"clause":"R2#8","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":13,"text":"REPRODUCED = re-run by the orchestrator;","why":"no-claim"}
+{"clause":"R2#9","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":14,"text":"INFERRED = an estimate, model stated.","why":"no-claim"}
+{"clause":"R2#10","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":18,"text":"The premise correction","why":"no-claim"}
+{"clause":"R2#26","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":52,"text":"Delta against RESEARCH-0902 §6","why":"no-claim"}
+{"clause":"R2#29","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"text":"lever","why":"no-claim"}
+{"clause":"R2#30","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"text":"expected","why":"no-claim"}
+{"clause":"R2#31","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"text":"evidence","why":"no-claim"}
+{"clause":"R2#32","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"text":"cost","why":"no-claim"}
+{"clause":"R2#33","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"text":"prohibition","why":"no-claim"}
+{"clause":"R2#44","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"text":"READ: their encoder runs at 3e-5 under a 1e-3 head with 15 % warmup.","why":"no-claim"}
+{"clause":"R2#51","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"text":"MEASURED over 200 series: effective scale 0.328–0.688 mm/px, a 2.1× spread the model must absorb;","why":"no-claim"}
+{"clause":"R2#90","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":82,"text":"Neither starts while T007 holds the card;","why":"no-claim"}
+{"clause":"R2#92","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":85,"text":"The Raptor arm, and what is refused","why":"no-claim"}
+{"clause":"R2#111","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":127,"text":"fastMRI+ beats MRNet because it is image-derived and covers 7 columns against 2.","why":"no-claim"}
+{"clause":"R2#129","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":150,"text":"- 16-epoch schedule (rank 6): arm C's corpus rho was still rising at epoch 8;","why":"no-claim"}
+{"clause":"R2#131","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":151,"text":"Stochastic slice windows (rank 7): their 12 random window centres per epoch are a free augmentation we lack, and a dataset change;","why":"no-claim"}
+{"clause":"R2#134","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":157,"text":"Honest expectation, restated","why":"no-claim"}
+{"clause":"R2#135","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"text":"lever","why":"no-claim"}
+{"clause":"R2#136","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"text":"band","why":"no-claim"}
+{"clause":"R2#137","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"text":"lever","why":"no-claim"}
+{"clause":"R2#138","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"text":"band","why":"no-claim"}
+{"clause":"R2#139","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":160,"text":"full-data members","why":"no-claim"}
+{"clause":"R2#141","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":160,"text":"T007 second sequence family","why":"no-claim"}
+{"clause":"R2#143","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":161,"text":"recipe (S1)","why":"no-claim"}
+{"clause":"R2#145","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":161,"text":"Raptor arm","why":"no-claim"}
+{"clause":"R2#147","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":162,"text":"mm crop (S2)","why":"no-claim"}
+{"clause":"R2#149","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":162,"text":"T035 self-distillation","why":"no-claim"}
+{"clause":"R2#155","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":171,"text":"The card queue, and the operator-only steps","why":"no-claim"}
+{"clause":"R2#157","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":177,"text":"T046 starts only after S1 and S2 return verdicts, and carries whichever recipe won.","why":"no-claim"}
+{"clause":"R2#167","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":192,"text":"Follow-up tasks","why":"no-claim"}
+{"clause":"R2#168","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":193,"text":"what","why":"no-claim"}
+{"clause":"R2#169","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":193,"text":"gate","why":"no-claim"}
+{"clause":"R2#170","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":195,"text":"[T041](../pm/tasks/T041-physical-mm-crop.md)","why":"no-claim"}
+{"clause":"R2#173","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":196,"text":"[T042](../pm/tasks/T042-recipe-arm-lr-warmup.md)","why":"no-claim"}
+{"clause":"R2#176","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":197,"text":"[T044](../pm/tasks/T044-public-coatnet-member.md)","why":"no-claim"}
+{"clause":"R2#179","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":198,"text":"[T045](../pm/tasks/T045-fastmri-plus-instrument.md)","why":"no-claim"}
+{"clause":"R2#183","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":199,"text":"[T046](../pm/tasks/T046-full-data-deployment-members.md)","why":"no-claim"}
+{"clause":"lane13#4","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":6,"text":"Evidence marks. READ = quoted from a primary page or the rules text.","why":"no-claim"}
+{"clause":"lane13#5","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":6,"text":"MEASURED = computed here, command given.","why":"no-claim"}
+{"clause":"lane13#6","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":7,"text":"INFERRED = an estimate, model stated.","why":"no-claim"}
+{"clause":"lane13#7","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":11,"text":"Verdict in five lines","why":"no-claim"}
+{"clause":"lane13#10","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":17,"text":"MEASURED.","why":"no-claim"}
+{"clause":"lane13#15","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":30,"text":"The rules, READ verbatim","why":"no-claim"}
+{"clause":"lane13#17","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":34,"text":"SUBMISSION LIMITS","why":"no-claim"}
+{"clause":"lane13#30","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":62,"text":"What we have actually spent — MEASURED","why":"no-claim"}
+{"clause":"lane13#32","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":71,"text":"active days","why":"no-claim"}
+{"clause":"lane13#34","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":73,"text":"fraction of the allowance used","why":"no-claim"}
+{"clause":"lane13#35","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":73,"text":"20.0 %","why":"repeat","of":"G1-F699"}
+{"clause":"lane13#36","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":74,"text":"our rate","why":"no-claim"}
+{"clause":"lane13#39","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":76,"text":"submissions still available","why":"no-claim"}
+{"clause":"lane13#41","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":77,"text":"submissions carrying a privateScore","why":"no-claim"}
+{"clause":"lane13#42","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":77,"text":"0 of 16","why":"repeat","of":"G1-F701"}
+{"clause":"lane13#46","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":89,"text":"The public-score ladder, and what is nested in it","why":"no-claim"}
+{"clause":"lane13#47","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":91,"text":"MEASURED, from the same listing:","why":"no-claim"}
+{"clause":"lane13#48","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":93,"text":"date","why":"no-claim"}
+{"clause":"lane13#49","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":93,"text":"public","why":"no-claim"}
+{"clause":"lane13#50","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":93,"text":"what changed","why":"no-claim"}
+{"clause":"lane13#51","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":95,"text":"08-18","why":"no-claim"}
+{"clause":"lane13#90","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":114,"text":"The exposure arithmetic, for the field rather than for us","why":"no-claim"}
+{"clause":"lane13#92","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":120,"text":"K distinct candidates","why":"no-claim"}
+{"clause":"lane13#93","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":120,"text":"inflation at sd 0.0028","why":"no-claim"}
+{"clause":"lane13#94","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":120,"text":"at sd 0.0070","why":"no-claim"}
+{"clause":"lane13#99","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":124,"text":"100","why":"no-claim"}
+{"clause":"lane13#102","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":125,"text":"250","why":"no-claim"}
+{"clause":"lane13#109","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":138,"text":"The decision that is live right now","why":"repeat","of":"G1-F703"}
+{"clause":"lane13#110","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":140,"text":"Two submissions are tied at public 0.926:","why":"repeat","of":"G1-F704"}
+{"clause":"lane13#111","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":142,"text":"ref","why":"no-claim"}
+{"clause":"lane13#112","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":142,"text":"date","why":"no-claim"}
+{"clause":"lane13#113","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":142,"text":"what it is","why":"no-claim"}
+{"clause":"lane13#114","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":144,"text":"55896111","why":"no-claim"}
+{"clause":"lane13#117","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":145,"text":"55954418","why":"no-claim"}
+{"clause":"lane13#129","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":170,"text":"Recommendation — a pre-registered final-selection rule","why":"no-claim"}
+{"clause":"lane13#142","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":202,"text":"## Appendix A — every command","why":"no-claim"}
+{"clause":"lane13#143","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":211,"text":"## Appendix B — what this lane does not establish","why":"no-claim"}
+{"clause":"lane9#1","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":1,"text":"# Lane 9 — above the plateau: what the ≥0.94 band is doing","why":"no-claim"}
+{"clause":"lane9#9","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":9,"text":"What is that band doing that the plateau is not, and is any of it verifiable?","why":"no-claim"}
+{"clause":"lane9#14","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":18,"text":"Details in §2.","why":"no-claim"}
+{"clause":"lane9#15","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":20,"text":"Evidence marks. READ = quoted from a primary page, thread or file.","why":"no-claim"}
+{"clause":"lane9#16","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":20,"text":"MEASURED = computed by me, command given.","why":"no-claim"}
+{"clause":"lane9#17","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":21,"text":"INFERRED = an estimate with the model stated.","why":"no-claim"}
+{"clause":"lane9#19","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":26,"text":"Method and sources","why":"no-claim"}
+{"clause":"lane9#27","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":40,"text":"Full command list in appendix A.","why":"no-claim"}
+{"clause":"lane9#28","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":42,"text":"Our own row (MEASURED) — grep -i bhavish on the CSV:","why":"no-claim"}
+{"clause":"lane9#32","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":53,"text":"The leaderboard, characterised","why":"no-claim"}
+{"clause":"lane9#35","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":57,"text":"This was the brief's first question and it has a clean answer.","why":"no-claim"}
+{"clause":"lane9#36","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":57,"text":"Histogram at 0.001 resolution (MEASURED, outputs/t047/lb_analysis.py):","why":"no-claim"}
+{"clause":"lane9#37","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":60,"text":"score","why":"no-claim"}
+{"clause":"lane9#38","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":60,"text":"teams","why":"no-claim"}
+{"clause":"lane9#39","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":60,"text":"score","why":"no-claim"}
+{"clause":"lane9#40","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":60,"text":"teams","why":"no-claim"}
+{"clause":"lane9#41","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":62,"text":"0.952","why":"no-claim"}
+{"clause":"lane9#47","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":65,"text":"0.949","why":"no-claim"}
+{"clause":"lane9#52","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":67,"text":"0.936","why":"no-claim"}
+{"clause":"lane9#72","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":91,"text":"Lane 0's 2026-09-01T18:44Z counts against mine at 2026-09-02T10:19Z (MEASURED against READ):","why":"no-claim"}
+{"clause":"lane9#73","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":94,"text":"threshold","why":"no-claim"}
+{"clause":"lane9#74","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":94,"text":"09-01 18:44Z","why":"no-claim"}
+{"clause":"lane9#75","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":94,"text":"09-02 10:19Z","why":"no-claim"}
+{"clause":"lane9#79","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":99,"text":"≥0.935","why":"no-claim"}
+{"clause":"lane9#83","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":100,"text":"teams","why":"no-claim"}
+{"clause":"lane9#90","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":106,"text":"That is worth holding onto for §2.","why":"no-claim"}
+{"clause":"lane9#103","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":129,"text":"MEASURED, outputs/t047/subs_analysis.py:","why":"no-claim"}
+{"clause":"lane9#104","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":131,"text":"band","why":"no-claim"}
+{"clause":"lane9#105","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":131,"text":"teams","why":"no-claim"}
+{"clause":"lane9#106","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":131,"text":"median subs","why":"no-claim"}
+{"clause":"lane9#107","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":131,"text":"mean","why":"no-claim"}
+{"clause":"lane9#108","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":131,"text":"p90","why":"no-claim"}
+{"clause":"lane9#109","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":131,"text":"max","why":"no-claim"}
+{"clause":"lane9#110","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":131,"text":"min","why":"no-claim"}
+{"clause":"lane9#119","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":136,"text":"0.940–0.942","why":"no-claim"}
+{"clause":"lane9#140","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":151,"text":"quartile by submissions","why":"no-claim"}
+{"clause":"lane9#141","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":151,"text":"teams","why":"no-claim"}
+{"clause":"lane9#142","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":151,"text":"median subs","why":"no-claim"}
+{"clause":"lane9#143","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":151,"text":"median score","why":"no-claim"}
+{"clause":"lane9#144","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":151,"text":"max score","why":"no-claim"}
+{"clause":"lane9#164","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":173,"text":"Read that against §2.1.","why":"no-claim"}
+{"clause":"lane9#168","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":176,"text":"Same budget, opposite outcome. Submission count is therefore not sufficient to reach the band, and the fitting story — which needs budget to be the active ingredient — cannot explain the 88 teams above 0.94.","why":"no-claim"}
+{"clause":"lane9#175","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":192,"text":"rank","why":"no-claim"}
+{"clause":"lane9#176","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":192,"text":"score","why":"no-claim"}
+{"clause":"lane9#177","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":192,"text":"subs","why":"no-claim"}
+{"clause":"lane9#178","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":192,"text":"team","why":"no-claim"}
+{"clause":"lane9#179","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":192,"text":"last submission","why":"no-claim"}
+{"clause":"lane9#200","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":208,"text":"### 2.5 Verdict on the two worlds","why":"no-claim"}
+{"clause":"lane9#212","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":242,"text":"population","why":"no-claim"}
+{"clause":"lane9#213","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":242,"text":"teams","why":"no-claim"}
+{"clause":"lane9#214","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":242,"text":"authored any listed public kernel","why":"no-claim"}
+{"clause":"lane9#229","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":260,"text":"See §4.3.","why":"no-claim"}
+{"clause":"lane9#232","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":266,"text":"public-notebook author","why":"no-claim"}
+{"clause":"lane9#233","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":266,"text":"their notebook (votes)","why":"no-claim"}
+{"clause":"lane9#234","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":266,"text":"their own rank","why":"no-claim"}
+{"clause":"lane9#235","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":266,"text":"score","why":"no-claim"}
+{"clause":"lane9#236","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":266,"text":"subs","why":"no-claim"}
+{"clause":"lane9#260","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":274,"text":"666","why":"no-claim"}
+{"clause":"lane9#265","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":283,"text":"What the ≥0.94 band actually says it does","why":"no-claim"}
+{"clause":"lane9#271","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":294,"text":"I mark these LB-corroborated: the identity is verified and the claim is not inflated relative to a number Kaggle publishes.","why":"no-claim"}
+{"clause":"lane9#274","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":300,"text":"READ, topic 735304 \"Best single-model score\" (roy214, 37 comments, 21 votes) — the single most valuable thread on the forum:","why":"no-claim"}
+{"clause":"lane9#281","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":310,"text":"> I'm also pretty new to all of this…\"","why":"quote","of":"https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304"}
+{"clause":"lane9#284","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":314,"text":"Scott Willis is rank 7 on the main LB at 0.948 and rank 1 on the efficiency LB (MEASURED;","why":"no-claim"}
+{"clause":"lane9#285","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":315,"text":"efficiency rank from lane 0).","why":"no-claim"}
+{"clause":"lane9#287","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":317,"text":"> Yann Majewski (2026-09-01): \"0.936lb, single fold, small resnet model, 224x224\"","why":"no-claim"}
+{"clause":"lane9#300","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":332,"text":"A 5-fold of one model at 224 px reaches 0.942, i.e. rank ~50.","why":"no-claim"}
+{"clause":"lane9#308","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":346,"text":"READ, topic 735304, Tucker Arrants (rank 15) on validation, 2026-08-31:","why":"no-claim"}
+{"clause":"lane9#310","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":349,"text":"> labels.","why":"no-claim"}
+{"clause":"lane9#313","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":352,"text":"and on his own teacher quality:","why":"no-claim"}
+{"clause":"lane9#317","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":358,"text":"and his conclusion:","why":"no-claim"}
+{"clause":"lane9#322","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":364,"text":"We are not behind on labels, and the highest-placed team who has discussed it says labels are not the lever. This independently corroborates our ±0.036 gold-58 posture and argues against spending round-3 effort on the target side.","why":"no-claim"}
+{"clause":"lane9#326","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":377,"text":"Absent from lanes 5, 6 and 7.","why":"repeat","of":"G2-F397"}
+{"clause":"lane9#337","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":391,"text":"A yes/no on the category is all I'm","why":"quote","of":"https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/734681"}
+{"clause":"lane9#338","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":392,"text":"> after.\"","why":"no-claim"}
+{"clause":"lane9#355","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":422,"text":"On what their score actually is, 2026-08-26:","why":"no-claim"}
+{"clause":"lane9#358","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":427,"text":"Asked whether that is a 5-fold, 2026-08-27:","why":"no-claim"}
+{"clause":"lane9#363","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":434,"text":"And then the number that matters, asked about runtime, 2026-08-29:","why":"no-claim"}
+{"clause":"lane9#367","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":437,"text":"We score 94 windows per study, so our","why":"no-claim"}
+{"clause":"lane9#369","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":439,"text":"> it with.","why":"no-claim"}
+{"clause":"lane9#372","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":443,"text":"### 5.1 The window-count curve","why":"no-claim"}
+{"clause":"lane9#373","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":445,"text":"windows/study","why":"no-claim"}
+{"clause":"lane9#374","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":445,"text":"public LB","why":"no-claim"}
+{"clause":"lane9#375","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":445,"text":"evidence class","why":"no-claim"}
+{"clause":"lane9#383","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":455,"text":"### 5.2 Why this is the finding that matters for us","why":"no-claim"}
+{"clause":"lane9#394","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":481,"text":"### 5.3 The counter-evidence, stated fairly","why":"no-claim"}
+{"clause":"lane9#396","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":484,"text":"Lane 0 READ the cap as \"GPU Notebook ≤ 9 hours run-time\".","why":"no-claim"}
+{"clause":"lane9#400","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":492,"text":"What else the band says, including what does not separate it","why":"no-claim"}
+{"clause":"lane9#404","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":499,"text":"poster","why":"no-claim"}
+{"clause":"lane9#405","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":499,"text":"rank","why":"no-claim"}
+{"clause":"lane9#406","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":499,"text":"score","why":"no-claim"}
+{"clause":"lane9#407","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":499,"text":"their stated geometry","why":"no-claim"}
+{"clause":"lane9#410","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":501,"text":"\"Single model 0.934 @ 224px.","why":"repeat","of":"G2-F446"}
+{"clause":"lane9#411","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":501,"text":"Update: 0.942 with some tweaks, still @ 224px\" (5-fold)","why":"repeat","of":"G2-F447"}
+{"clause":"lane9#417","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":503,"text":"\"as small of a model as possible\";","why":"repeat","of":"G2-F454"}
+{"clause":"lane9#426","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":521,"text":"- Dread Development, rank 78: \"no fold ensembling in it\" (§5).","why":"repeat","of":"G2-F569"}
+{"clause":"lane9#438","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":541,"text":"He adds:","why":"no-claim"}
+{"clause":"lane9#440","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":544,"text":"> the LB.","why":"no-claim"}
+{"clause":"lane9#451","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":556,"text":"Our teacher reads gold at 0.8976;","why":"repeat","of":"G2-F504"}
+{"clause":"lane9#471","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":592,"text":"### 6.6 The dissenting voice, recorded","why":"no-claim"}
+{"clause":"lane9#475","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":599,"text":"And Scott Willis (rank 7, 0.948) on his own score:","why":"no-claim"}
+{"clause":"lane9#477","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":602,"text":"> Should be interesting to see.\"","why":"no-claim"}
+{"clause":"lane9#480","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":612,"text":"Ranked table: what this lane hands to the synthesis","why":"no-claim"}
+{"clause":"lane9#481","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":614,"text":"Per T047 rule 2, every entry names the instrument that would resolve it and its band.","why":"no-claim"}
+{"clause":"lane9#483","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":617,"text":"Lever","why":"no-claim"}
+{"clause":"lane9#484","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":617,"text":"Evidence","why":"no-claim"}
+{"clause":"lane9#485","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":617,"text":"Expected size","why":"no-claim"}
+{"clause":"lane9#486","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":617,"text":"Instrument + band","why":"no-claim"}
+{"clause":"lane9#487","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":617,"text":"Pre-registered rule","why":"no-claim"}
+{"clause":"lane9#490","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":619,"text":"Their 94-window point is LB-corroborated","why":"repeat","of":"G2-F587"}
+{"clause":"lane9#495","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":619,"text":"Adopt only if OOF-AUC gain > +0.0019.","why":"repeat","of":"G2-F618"}
+{"clause":"lane9#539","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":633,"text":"### 7.1 The one strategic conclusion","why":"no-claim"}
+{"clause":"lane9#540","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":635,"text":"The brief asked whether the ≥0.94 band is worth chasing.","why":"no-claim"}
+{"clause":"lane9#545","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":645,"text":"## Appendix A — every command run","why":"no-claim"}
+{"clause":"lane9#552","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":696,"text":"## Appendix B — what this lane does not establish","why":"no-claim"}
+{"clause":"lane9#559","doc":"lane9","path":"docs/research/0902c/lane9-above-the-plateau.md","commit":"e4e356c","line":707,"text":"No forum claim is ID-anchored. Not one poster named a submission ID.","why":"repeat","of":"G2-F437"}
+{"clause":"T047brief#2","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":10,"text":"# T047 — round 3, aimed only at what rounds 1 and 2 did not answer","why":"no-claim"}
+{"clause":"T047brief#3","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":12,"text":"## Why this exists","why":"no-claim"}
+{"clause":"T047brief#7","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":20,"text":"already answered","why":"no-claim"}
+{"clause":"T047brief#8","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":20,"text":"where","why":"no-claim"}
+{"clause":"T047brief#9","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":20,"text":"do not redo","why":"no-claim"}
+{"clause":"T047brief#37","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":32,"text":"## Goal","why":"no-claim"}
+{"clause":"T047brief#39","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":37,"text":"## The four lane briefs","why":"no-claim"}
+{"clause":"T047brief#42","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":41,"text":"What do they do, and what of it is verifiable rather than asserted?","why":"no-claim"}
+{"clause":"T047brief#47","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":49,"text":"What can be bought with the remainder at zero training GPU?","why":"no-claim"}
+{"clause":"T047brief#50","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":56,"text":"## Decision rules — fixed in advance","why":"no-claim"}
+{"clause":"T047brief#60","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":73,"text":"## Steps","why":"no-claim"}
+{"clause":"T047brief#71","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":82,"text":"## Handoff — state at last stop","why":"no-claim"}
+{"clause":"T047brief#76","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":89,"text":"- Resume with: read this file's four briefs, then whichever docs/research/0902c/lane.md is missing or truncated.","why":"no-claim"}
+{"clause":"T047brief#78","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":91,"text":"nothing is adopted here.","why":"repeat","of":"G2-F92"}
+{"clause":"T047brief#80","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":95,"text":"## Result","why":"no-claim"}
+{"clause":"T047brief#81","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":96,"text":"(fill on completion)","why":"no-claim"}
+{"clause":"T047brief#82","doc":"T047brief","path":"pm/tasks/T047-research-round-3.md","commit":"d9c7c6e","line":98,"text":"## Notes","why":"no-claim"}
+{"clause":"lane10#1","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":1,"text":"# Lane 10 — capability audit: our own code, exhaustively","why":"no-claim"}
+{"clause":"lane10#5","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":5,"text":"Evidence marks: READ = quoted from a file, with file:line;","why":"no-claim"}
+{"clause":"lane10#6","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":6,"text":"MEASURED = computed here, command given;","why":"no-claim"}
+{"clause":"lane10#7","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":7,"text":"INFERRED = an estimate, model stated.","why":"no-claim"}
+{"clause":"lane10#8","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":9,"text":"Written incrementally — sections appear as they are established.","why":"no-claim"}
+{"clause":"lane10#9","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":13,"text":"Verdict","why":"no-claim"}
+{"clause":"lane10#13","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":25,"text":"What the audit found instead:","why":"no-claim"}
+{"clause":"lane10#14","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":27,"text":"--layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13, and the log proves they bound.","why":"no-claim"}
+{"clause":"lane10#27","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":48,"text":"Every src/train.py flag, and whether any run ever passed it","why":"no-claim"}
+{"clause":"lane10#29","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":50,"text":"The \"ever passed\" column is not read from memory.","why":"no-claim"}
+{"clause":"lane10#33","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":57,"text":"the four Kaggle logs in outputs/t028/kaggle/ therefore record what actually ran on the T4.","why":"no-claim"}
+{"clause":"lane10#38","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"text":"flag","why":"no-claim"}
+{"clause":"lane10#39","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"text":"file:line","why":"no-claim"}
+{"clause":"lane10#40","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"text":"default","why":"no-claim"}
+{"clause":"lane10#41","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"text":"what it does","why":"no-claim"}
+{"clause":"lane10#42","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"text":"ever passed a non-default?","why":"no-claim"}
+{"clause":"lane10#43","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":68,"text":"--root","why":"no-claim"}
+{"clause":"lane10#48","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"text":"--labels","why":"no-claim"}
+{"clause":"lane10#49","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"text":":712","why":"no-claim"}
+{"clause":"lane10#55","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":70,"text":"--series","why":"no-claim"}
+{"clause":"lane10#60","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":71,"text":"--manifest","why":"no-claim"}
+{"clause":"lane10#65","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"text":"--backbone","why":"no-claim"}
+{"clause":"lane10#72","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":73,"text":"--epochs","why":"no-claim"}
+{"clause":"lane10#81","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":75,"text":"--slices","why":"no-claim"}
+{"clause":"lane10#86","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":76,"text":"--seqs","why":"no-claim"}
+{"clause":"lane10#91","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":77,"text":"--corpus-val","why":"no-claim"}
+{"clause":"lane10#97","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":78,"text":"--folds","why":"no-claim"}
+{"clause":"lane10#101","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":79,"text":"--fold","why":"no-claim"}
+{"clause":"lane10#105","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":80,"text":"--size","why":"no-claim"}
+{"clause":"lane10#115","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":82,"text":"--workers","why":"no-claim"}
+{"clause":"lane10#119","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":83,"text":"--limit","why":"no-claim"}
+{"clause":"lane10#123","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":84,"text":"--seed","why":"no-claim"}
+{"clause":"lane10#127","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":85,"text":"--split-seed","why":"no-claim"}
+{"clause":"lane10#132","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":86,"text":"--swa-epochs","why":"no-claim"}
+{"clause":"lane10#136","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":87,"text":"--augment","why":"no-claim"}
+{"clause":"lane10#141","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":88,"text":"--oof-targets","why":"no-claim"}
+{"clause":"lane10#146","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":89,"text":"--mirror","why":"no-claim"}
+{"clause":"lane10#149","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":89,"text":"yes, 0.5 from arm C on","why":"no-claim"}
+{"clause":"lane10#150","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":90,"text":"--shared-head-drop","why":"no-claim"}
+{"clause":"lane10#155","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":91,"text":"--per-label-attn","why":"no-claim"}
+{"clause":"lane10#160","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":92,"text":"--seq-head","why":"no-claim"}
+{"clause":"lane10#165","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":93,"text":"--adjacent","why":"no-claim"}
+{"clause":"lane10#171","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":94,"text":"--rotate","why":"no-claim"}
+{"clause":"lane10#175","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":95,"text":"--perspective","why":"no-claim"}
+{"clause":"lane10#179","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":96,"text":"--warmup-frac","why":"no-claim"}
+{"clause":"lane10#184","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":97,"text":"--layer-decay","why":"no-claim"}
+{"clause":"lane10#189","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":98,"text":"--mask-at-base","why":"no-claim"}
+{"clause":"lane10#194","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":99,"text":"--accum","why":"no-claim"}
+{"clause":"lane10#198","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":100,"text":"--grad-checkpoint","why":"no-claim"}
+{"clause":"lane10#204","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":101,"text":"--out","why":"no-claim"}
+{"clause":"lane10#209","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":103,"text":"### 1.1 The never-passed set","why":"no-claim"}
+{"clause":"lane10#210","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":105,"text":"Five flags have never once been given a non-default value by any run in this repo, local or Kaggle, in any task:","why":"repeat","of":"G3-F14"}
+{"clause":"lane10#213","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":116,"text":"MEASURED — the command behind that claim is in appendix A;","why":"no-claim"}
+{"clause":"lane10#215","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":119,"text":"### 1.2 Other CLIs","why":"no-claim"}
+{"clause":"lane10#234","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":136,"text":"### 1.3 The Kaggle kernel's environment variables","why":"no-claim"}
+{"clause":"lane10#236","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"text":"var","why":"no-claim"}
+{"clause":"lane10#237","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"text":"line","why":"no-claim"}
+{"clause":"lane10#238","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"text":"default","why":"no-claim"}
+{"clause":"lane10#239","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"text":"note","why":"no-claim"}
+{"clause":"lane10#240","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":143,"text":"RSNA_COMP","why":"no-claim"}
+{"clause":"lane10#244","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":144,"text":"RSNA_SRC","why":"no-claim"}
+{"clause":"lane10#248","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":145,"text":"RSNA_CKPT_DIR","why":"no-claim"}
+{"clause":"lane10#249","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":145,"text":":55","why":"no-claim"}
+{"clause":"lane10#252","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":146,"text":"RSNA_CKPT","why":"no-claim"}
+{"clause":"lane10#256","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":147,"text":"RSNA_TEST_ROOT","why":"no-claim"}
+{"clause":"lane10#259","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":148,"text":"RSNA_OUT","why":"no-claim"}
+{"clause":"lane10#262","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":149,"text":"RSNA_CKPTS","why":"no-claim"}
+{"clause":"lane10#263","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":149,"text":":72","why":"no-claim"}
+{"clause":"lane10#266","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":150,"text":"RSNA_TTA","why":"no-claim"}
+{"clause":"lane10#270","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":151,"text":"RSNA_TTA_UNMATCHED","why":"no-claim"}
+{"clause":"lane10#273","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":152,"text":"RSNA_MAX_LAYOUTS","why":"no-claim"}
+{"clause":"lane10#275","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":152,"text":"see §3.4","why":"no-claim"}
+{"clause":"lane10#277","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":160,"text":"Live-but-unused versus dead","why":"no-claim"}
+{"clause":"lane10#279","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":162,"text":"Each was traced to the line that consumes it.","why":"no-claim"}
+{"clause":"lane10#280","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":165,"text":"flag","why":"no-claim"}
+{"clause":"lane10#281","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":165,"text":"reachable?","why":"no-claim"}
+{"clause":"lane10#282","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":165,"text":"the line that consumes it","why":"no-claim"}
+{"clause":"lane10#285","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":168,"text":"--swa-epochs","why":"no-claim"}
+{"clause":"lane10#289","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":169,"text":"--shared-head-drop","why":"no-claim"}
+{"clause":"lane10#293","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":170,"text":"--seq-head","why":"no-claim"}
+{"clause":"lane10#297","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":171,"text":"--perspective","why":"no-claim"}
+{"clause":"lane10#300","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":172,"text":"--warmup-frac","why":"no-claim"}
+{"clause":"lane10#303","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":173,"text":"--layer-decay","why":"no-claim"}
+{"clause":"lane10#306","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":175,"text":"### 2.1 CORRECTION — --layer-decay and --warmup-frac were passed, once","why":"repeat","of":"G3-F20"}
+{"clause":"lane10#322","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":227,"text":"Defects, and the ones that turned out not to be","why":"no-claim"}
+{"clause":"lane10#323","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":229,"text":"### 3.1 The BatchNorm double-update: measured, bounded, and NOT a lever","why":"repeat","of":"G3-F36"}
+{"clause":"lane10#329","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":237,"text":"Three measurements settle what that costs.","why":"no-claim"}
+{"clause":"lane10#330","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":239,"text":"(a) The double-update is 67 of 69 BN layers, not all of them. MEASURED — reading num_batches_tracked out of the state dicts:","why":"repeat","of":"G3-F35"}
+{"clause":"lane10#342","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":267,"text":"(c) And the measured buffer difference is smaller than the fold-to-fold difference. MEASURED, across the 69 BN layers of each member:","why":"repeat","of":"G3-F37"}
+{"clause":"lane10#343","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"text":"member","why":"no-claim"}
+{"clause":"lane10#344","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"text":"--grad-checkpoint","why":"no-claim"}
+{"clause":"lane10#345","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"text":"median running_var","why":"no-claim"}
+{"clause":"lane10#346","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"text":"median abs running_mean","why":"no-claim"}
+{"clause":"lane10#366","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":294,"text":"Recorded so nobody re-derives it.","why":"no-claim"}
+{"clause":"lane10#367","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":297,"text":"### 3.2 What I checked and found clean","why":"no-claim"}
+{"clause":"lane10#368","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":299,"text":"Recording nulls, because a null that is written down is not re-checked:","why":"no-claim"}
+{"clause":"lane10#370","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":303,"text":"The mirror/rotate stream at dataset.py:342 is genuinely re-drawn each epoch.","why":"no-claim"}
+{"clause":"lane10#380","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":314,"text":"the kernel's member mean (rsna-knee-submit.py:281-288) accumulates psum/pcount so the result is a flat mean over all members regardless of layout grouping, which the comment proves is identical to blending first because the view weights do not depend on the predicted values.","why":"no-claim"}
+{"clause":"lane10#385","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":324,"text":"### 3.3 The deployed ensemble is at the layout cap, and that blocks T007","why":"repeat","of":"G3-F32"}
+{"clause":"lane10#386","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":326,"text":"MEASURED — outputs/t039/v16_log/rsna-knee-submit.log:","why":"no-claim"}
+{"clause":"lane10#390","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":345,"text":"So this is unregistered.","why":"repeat","of":"G3-F34"}
+{"clause":"lane10#395","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":355,"text":"### 3.4 The three refused TTA views — ALREADY REGISTERED, mechanism confirmed","why":"repeat","of":"G3-F422"}
+{"clause":"lane10#403","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":370,"text":"### 3.5 Three hyperparameters with no CLI at all — the one real new lever","why":"repeat","of":"G3-F31"}
+{"clause":"lane10#409","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"text":"knob","why":"no-claim"}
+{"clause":"lane10#410","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"text":"our value","why":"no-claim"}
+{"clause":"lane10#411","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"text":"where it is fixed","why":"no-claim"}
+{"clause":"lane10#412","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"text":"the public recipe's value","why":"no-claim"}
+{"clause":"lane10#413","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"text":"flag?","why":"no-claim"}
+{"clause":"lane10#414","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":392,"text":"encoder LR","why":"no-claim"}
+{"clause":"lane10#418","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":392,"text":"none","why":"repeat","of":"G3-F28"}
+{"clause":"lane10#419","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":393,"text":"head LR","why":"no-claim"}
+{"clause":"lane10#424","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"text":"weight decay","why":"no-claim"}
+{"clause":"lane10#425","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"text":"1e-4","why":"repeat","of":"G3-F440"}
+{"clause":"lane10#426","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"text":"train.py:268/276/284/289","why":"repeat","of":"G3-F441"}
+{"clause":"lane10#428","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"text":"none","why":"repeat","of":"G3-F29"}
+{"clause":"lane10#429","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":395,"text":"head dropout","why":"no-claim"}
+{"clause":"lane10#430","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":395,"text":"model.py:169, never passed","why":"repeat","of":"G3-F438"}
+{"clause":"lane10#431","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":395,"text":"none","why":"repeat","of":"G3-F30"}
+{"clause":"lane10#434","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"text":"--layer-decay","why":"no-claim"}
+{"clause":"lane10#435","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"text":"min lr_scale","why":"no-claim"}
+{"clause":"lane10#436","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"text":"median","why":"no-claim"}
+{"clause":"lane10#437","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"text":"min LR","why":"no-claim"}
+{"clause":"lane10#438","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"text":"median LR","why":"no-claim"}
+{"clause":"lane10#439","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"text":"groups under 1e-6 LR","why":"no-claim"}
+{"clause":"lane10#443","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":407,"text":"0.95","why":"no-claim"}
+{"clause":"lane10#448","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":408,"text":"0.90","why":"no-claim"}
+{"clause":"lane10#453","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":409,"text":"0.85","why":"no-claim"}
+{"clause":"lane10#458","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"text":"0.80","why":"no-claim"}
+{"clause":"lane10#460","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"text":"0.0773","why":"no-claim"}
+{"clause":"lane10#462","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"text":"2.3e-05","why":"no-claim"}
+{"clause":"lane10#468","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":412,"text":"0.70","why":"no-claim"}
+{"clause":"lane10#471","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":412,"text":"8.2e-08","why":"no-claim"}
+{"clause":"lane10#478","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":413,"text":"24 of 48","why":"repeat","of":"G3-F26"}
+{"clause":"lane10#479","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":414,"text":"0.50","why":"no-claim"}
+{"clause":"lane10#487","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":422,"text":"Partly already registered. pm/STATE.md's NOW block (2026-09-02 10:25Z) records a pre-launch CPU check of the same object — \"timm finds 23 layer levels in tf_efficientnet_b2 → 48 groups, lr_scale 1e-5…1.0 … the param-weighted mean encoder LR is 1.35e-4, only 2.2× below the head … the stem is frozen in effect\".","why":"no-claim"}
+{"clause":"lane10#494","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":441,"text":"### 3.6 Smaller things, none of them levers","why":"no-claim"}
+{"clause":"lane10#496","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":446,"text":"T033 later excluded decorrelation as the mechanism (pm/STATE.md), so --per-label-attn's +0.0188 is still unexplained and its own control still exists, unused. One fold;","why":"no-claim"}
+{"clause":"lane10#498","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":450,"text":"- --seq-head has never been run (§1).","why":"repeat","of":"G3-F165"}
+{"clause":"lane10#503","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":455,"text":"- --seed is 0 in all 30 checkpoints (§1.1).","why":"repeat","of":"G3-F207"}
+{"clause":"lane10#514","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":469,"text":"recorded so it is not re-found.","why":"no-claim"}
+{"clause":"lane10#519","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":479,"text":"Already registered — not this lane's value","why":"no-claim"}
+{"clause":"lane10#520","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":481,"text":"Marked here so the shortlist in §5 can be read as new.","why":"no-claim"}
+{"clause":"lane10#522","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":484,"text":"item","why":"no-claim"}
+{"clause":"lane10#523","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":484,"text":"registered as","why":"no-claim"}
+{"clause":"lane10#524","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":484,"text":"this lane's only addition","why":"no-claim"}
+{"clause":"lane10#525","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":486,"text":"--layer-decay + --warmup-frac","why":"no-claim"}
+{"clause":"lane10#528","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":487,"text":"physical-mm crop","why":"no-claim"}
+{"clause":"lane10#531","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":488,"text":"--seqs 2","why":"no-claim"}
+{"clause":"lane10#534","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":489,"text":"pos_weight","why":"no-claim"}
+{"clause":"lane10#537","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":490,"text":"16-epoch schedule","why":"no-claim"}
+{"clause":"lane10#538","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":490,"text":"lane 6 §3 row 6","why":"no-claim"}
+{"clause":"lane10#540","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":491,"text":"stochastic slice windows / epoch-frozen crop+jitter","why":"no-claim"}
+{"clause":"lane10#543","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":492,"text":"frozen-encoder feature cache","why":"no-claim"}
+{"clause":"lane10#546","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":493,"text":"α=0.5 self-distillation","why":"no-claim"}
+{"clause":"lane10#549","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":494,"text":"full-data (no held-out fold) training","why":"no-claim"}
+{"clause":"lane10#552","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":495,"text":"the three refused TTA views","why":"no-claim"}
+{"clause":"lane10#553","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":495,"text":"T028 / T034 / PLAN-0831","why":"repeat","of":"G3-F422"}
+{"clause":"lane10#554","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":495,"text":"§3.4 — the same ten members are also the layout blocker","why":"repeat","of":"G3-F433"}
+{"clause":"lane10#555","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":496,"text":"stale outputs/kernels/armc/rsna-knee-armc1/","why":"no-claim"}
+{"clause":"lane10#556","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":496,"text":"pm/STATE.md","why":"repeat","of":"G3-F558"}
+{"clause":"lane10#557","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":496,"text":"confirmed from the checkpoint and the Kaggle log","why":"repeat","of":"G3-F556"}
+{"clause":"lane10#558","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":500,"text":"The new finds, ranked","why":"no-claim"}
+{"clause":"lane10#561","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":503,"text":"This lane did not find a second --layer-decay — there is no wired, correct, unpassed flag sitting on a plausible +0.005.","why":"repeat","of":"G3-F13"}
+{"clause":"lane10#562","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":505,"text":"What it found instead is that the flag that was found is being tested through an instrument that cannot express the hypothesis.","why":"repeat","of":"G3-F25"}
+{"clause":"lane10#563","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"text":"find","why":"no-claim"}
+{"clause":"lane10#564","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"text":"expected effect","why":"no-claim"}
+{"clause":"lane10#565","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"text":"GPU cost","why":"no-claim"}
+{"clause":"lane10#566","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"text":"lines","why":"no-claim"}
+{"clause":"lane10#567","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"text":"instrument, and its band","why":"no-claim"}
+{"clause":"lane10#568","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"text":"prohibition touched","why":"no-claim"}
+{"clause":"lane10#569","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"text":"--encoder-lr does not exist, and --layer-decay cannot substitute (§3.5).","why":"repeat","of":"G3-F28"}
+{"clause":"lane10#570","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"text":"At --layer-decay 0.6, 24 of 48 groups sit below 1e-6;","why":"repeat","of":"G3-F26"}
+{"clause":"lane10#571","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"text":"no value gives the recipe's flat 10× cut","why":"repeat","of":"G3-F27"}
+{"clause":"lane10#579","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":511,"text":"The deployed ensemble is at MAX_LAYOUTS = 2, so no --seqs 2 member can join it (§3.3)","why":"repeat","of":"G3-F32"}
+{"clause":"lane10#585","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"text":"CORRECTION: --layer-decay/--warmup-frac were passed once, at outputs/t025/run_arm.sh:13 (§2.1).","why":"repeat","of":"G3-F20"}
+{"clause":"lane10#586","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"text":"PROGRESS.md:5857 and lane 6 §2.5 both say \"never\"","why":"repeat","of":"G3-F22"}
+{"clause":"lane10#588","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"text":"Retires the \"does the flag bind\" risk for ConvNeXt;","why":"repeat","of":"G3-F322"}
+{"clause":"lane10#592","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"text":"The BatchNorm double-update is 67 of 69 layers, and is NULL as a lever (§3.1)","why":"repeat","of":"G3-F35"}
+{"clause":"lane10#593","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"text":"0.000.","why":"no-claim"}
+{"clause":"lane10#594","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"text":"Buffer difference is below fold-to-fold noise;","why":"repeat","of":"G3-F37"}
+{"clause":"lane10#595","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"text":"Gate D's −0.0115 is 1.03× band and in the harmless direction","why":"repeat","of":"G3-F370"}
+{"clause":"lane10#596","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"text":"~4 if ever wanted","why":"repeat","of":"G3-F377"}
+{"clause":"lane10#597","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"text":"already answered by Gate D","why":"repeat","of":"G3-F365"}
+{"clause":"lane10#599","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"text":"All 30 checkpoints carry seed=0;","why":"repeat","of":"G3-F207"}
+{"clause":"lane10#600","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"text":"the ensemble has no initialisation diversity (§1.1)","why":"repeat","of":"G3-F536"}
+{"clause":"lane10#602","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"text":"A candidate explanation for lane 3's flat return past k≈12 that nobody has named","why":"repeat","of":"G3-F537"}
+{"clause":"lane10#608","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":518,"text":"and --seq-head/--perspective have never been run, of which the first is already T014 and the second nothing recommends.","why":"repeat","of":"G3-F532"}
+{"clause":"lane10#609","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":522,"text":"### What to do with #1, concretely","why":"no-claim"}
+{"clause":"lane10#615","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":545,"text":"## Appendix A — every command run","why":"no-claim"}
+{"clause":"lane10#616","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":547,"text":"All under CUDA_VISIBLE_DEVICES=\"\" and nice -n 10, from /home/ade/Code/RSNA.","why":"repeat","of":"G3-F7"}
+{"clause":"lane10#617","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":547,"text":"No GPU job, no submission, no training run.","why":"repeat","of":"G3-F3"}
+{"clause":"lane10#621","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":614,"text":"## Appendix B — what this lane does not establish","why":"no-claim"}
+{"clause":"lane10#627","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":622,"text":"The BatchNorm comparison in §3.1(c) is not controlled. armc0 differs from armc1/armc3 in fold and venue as well as in regime.","why":"repeat","of":"G3-F363"}
+{"clause":"lane11#1","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":1,"text":"# Lane 11 — the unused hours, and the efficiency prize as a separate track","why":"no-claim"}
+{"clause":"lane11#5","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":5,"text":"Written incrementally: sections appear in the order they were established.","why":"no-claim"}
+{"clause":"lane11#6","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":8,"text":"Every claim is marked READ (quoted from a primary page or file), MEASURED (computed here, command given in Appendix A), or INFERRED (an estimate with its model stated).","why":"no-claim"}
+{"clause":"lane11#8","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":14,"text":"(sections appended below as they are established)","why":"no-claim"}
+{"clause":"lane11#9","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":16,"text":"What can honestly be said about our rerun runtime","why":"no-claim"}
+{"clause":"lane11#10","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":18,"text":"### 1.1 The three real datapoints, and what instrument each came from","why":"no-claim"}
+{"clause":"lane11#13","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":23,"text":"config (members × views × layouts)","why":"no-claim"}
+{"clause":"lane11#14","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":23,"text":"forward units per study","why":"no-claim"}
+{"clause":"lane11#15","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":23,"text":"what was recorded","why":"no-claim"}
+{"clause":"lane11#16","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":23,"text":"instrument","why":"no-claim"}
+{"clause":"lane11#36","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":48,"text":"pass","why":"no-claim"}
+{"clause":"lane11#37","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":48,"text":"studies","why":"no-claim"}
+{"clause":"lane11#38","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":48,"text":"units/study","why":"no-claim"}
+{"clause":"lane11#39","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":48,"text":"seconds","why":"no-claim"}
+{"clause":"lane11#40","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":48,"text":"state","why":"no-claim"}
+{"clause":"lane11#47","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":52,"text":"t039 v16, layout B (10 members × 3 views)","why":"no-claim"}
+{"clause":"lane11#61","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":78,"text":"The 0.0653-vs-0.0613 agreement is the real check.)","why":"no-claim"}
+{"clause":"lane11#63","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":81,"text":"No — but it is now bounded far better than 90.5–264.7","why":"no-claim"}
+{"clause":"lane11#64","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":83,"text":"The fitted model predicts the deployed config at","why":"no-claim"}
+{"clause":"lane11#72","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":98,"text":"Checked against everything above:","why":"no-claim"}
+{"clause":"lane11#73","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":100,"text":"claim","why":"no-claim"}
+{"clause":"lane11#74","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":100,"text":"verdict","why":"no-claim"}
+{"clause":"lane11#80","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":103,"text":"How much of that 25 min is queue and scoring rather than notebook time is not established (see §1.6).","why":"no-claim"}
+{"clause":"lane11#88","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":105,"text":"Lane 7's conclusion (the Raptor arm fits inside 9 h) survives;","why":"no-claim"}
+{"clause":"lane11#107","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":140,"text":"### 1.7 What the unused hours actually amount to","why":"no-claim"}
+{"clause":"lane11#111","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":148,"text":"> 1.329 min buys one forward unit per study.","why":"repeat","of":"G4-F60"}
+{"clause":"lane11#117","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":157,"text":"The inference-only levers, ranked","why":"no-claim"}
+{"clause":"lane11#118","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":159,"text":"Costs are in forward units per study (one member scoring one view of one bag) and converted at the §1.3 rate of 1.329 min per unit.","why":"repeat","of":"G4-F60"}
+{"clause":"lane11#119","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":160,"text":"The deployed config is 66 units ⇒ ~113 min;","why":"repeat","of":"G4-F72"}
+{"clause":"lane11#120","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":161,"text":"the working ceiling is ~185 units at half the 9 h cap.","why":"repeat","of":"G4-F134"}
+{"clause":"lane11#125","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":170,"text":"views","why":"no-claim"}
+{"clause":"lane11#126","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":170,"text":"gold-58 AUC (12 adj. members)","why":"no-claim"}
+{"clause":"lane11#127","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":170,"text":"Δ, paired 95 %","why":"no-claim"}
+{"clause":"lane11#128","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":170,"text":"OOF rho, 4,349 studies","why":"no-claim"}
+{"clause":"lane11#129","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":170,"text":"Δ, paired 95 %","why":"no-claim"}
+{"clause":"lane11#132","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":173,"text":"id,crop","why":"no-claim"}
+{"clause":"lane11#137","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":174,"text":"id,crop,bright (deployed)","why":"repeat","of":"G4-F35"}
+{"clause":"lane11#142","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":176,"text":"MEASURED.","why":"no-claim"}
+{"clause":"lane11#143","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":176,"text":"The view curve has already turned over. The second view resolves positive on the 4,349-study instrument;","why":"no-claim"}
+{"clause":"lane11#157","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":201,"text":"--slices","why":"no-claim"}
+{"clause":"lane11#158","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":201,"text":"mean slices used","why":"no-claim"}
+{"clause":"lane11#159","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":201,"text":"share of all slices seen","why":"no-claim"}
+{"clause":"lane11#160","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":201,"text":"series fully consumed","why":"no-claim"}
+{"clause":"lane11#161","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":203,"text":"12 (deployed)","why":"repeat","of":"G4-F177"}
+{"clause":"lane11#164","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":203,"text":"0.1 %","why":"no-claim"}
+{"clause":"lane11#171","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":206,"text":"28.31","why":"no-claim"}
+{"clause":"lane11#188","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":234,"text":"T028's --slices 36 OOM is not a constraint here: it was measured with a backward pass on the local 8 GiB card, and inference on a 16 GiB T4 carries no gradients.","why":"no-claim"}
+{"clause":"lane11#196","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":250,"text":"### 2.2 Higher resolution at inference","why":"no-claim"}
+{"clause":"lane11#200","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":255,"text":"The encoder is tf_efficientnet_b2, whose native train size is 260;","why":"no-claim"}
+{"clause":"lane11#204","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":263,"text":"### 2.3 A third bag layout","why":"no-claim"}
+{"clause":"lane11#210","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":277,"text":"### 2.4 Overlapping windows, in the manner of the 42-window public recipe","why":"repeat","of":"G4-F252"}
+{"clause":"lane11#215","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":287,"text":"### 2.5 Per-label pooling over views","why":"no-claim"}
+{"clause":"lane11#230","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":319,"text":"### 2.7 The ranking","why":"no-claim"}
+{"clause":"lane11#231","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":321,"text":"lever","why":"no-claim"}
+{"clause":"lane11#232","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":321,"text":"Δ units","why":"no-claim"}
+{"clause":"lane11#233","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":321,"text":"Δ minutes","why":"no-claim"}
+{"clause":"lane11#234","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":321,"text":"free screen available?","why":"no-claim"}
+{"clause":"lane11#235","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":321,"text":"prior","why":"no-claim"}
+{"clause":"lane11#236","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":323,"text":"slice density 12 → 24 at inference","why":"no-claim"}
+{"clause":"lane11#250","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":325,"text":"no new information;","why":"repeat","of":"G4-F238"}
+{"clause":"lane11#256","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":326,"text":"dead","why":"repeat","of":"G4-F158"}
+{"clause":"lane11#258","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":327,"text":"n/a","why":"no-claim"}
+{"clause":"lane11#259","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":327,"text":"n/a","why":"no-claim"}
+{"clause":"lane11#260","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":327,"text":"n/a","why":"no-claim"}
+{"clause":"lane11#261","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":327,"text":"not an inference lever;","why":"repeat","of":"G4-F248"}
+{"clause":"lane11#262","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":327,"text":"needs training","why":"repeat","of":"G4-F248"}
+{"clause":"lane11#264","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":328,"text":"n/a","why":"no-claim"}
+{"clause":"lane11#265","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":328,"text":"n/a","why":"no-claim"}
+{"clause":"lane11#266","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":328,"text":"n/a","why":"no-claim"}
+{"clause":"lane11#267","doc":"lane11","path":"docs/research/0902c/lane11-inference-and-efficiency.md","commit":"e4e356c","line":328,"text":"prohibited (rule-constant tuning)","why":"repeat","of":"G4-F260"}
+{"clause":"lane12#1","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":1,"text":"# Lane 12 — semi-supervised and target-side levers","why":"no-claim"}
+{"clause":"lane12#2","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":3,"text":"Research round 3 (T047), lane 12.","why":"no-claim"}
+{"clause":"lane12#6","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":11,"text":"Evidence marks: READ (quoted from a primary source, file:line), MEASURED (computed here, command given in Appendix A), INFERRED (estimate with the model stated).","why":"no-claim"}
+{"clause":"lane12#7","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":13,"text":"An unmarked number is a defect.","why":"no-claim"}
+{"clause":"lane12#8","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":17,"text":"(sections appended incrementally as they are established)","why":"no-claim"}
+{"clause":"lane12#9","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":19,"text":"## Verdict up front","why":"no-claim"}
+{"clause":"lane12#11","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":25,"text":"proposal","why":"no-claim"}
+{"clause":"lane12#12","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":25,"text":"verdict","why":"no-claim"}
+{"clause":"lane12#29","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":37,"text":"Test-time adaptation inside the kernel","why":"no-claim"}
+{"clause":"lane12#50","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":74,"text":"> passes.","why":"no-claim"}
+{"clause":"lane12#55","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":82,"text":"--grad-checkpoint","why":"no-claim"}
+{"clause":"lane12#58","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":84,"text":"off","why":"no-claim"}
+{"clause":"lane12#63","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":98,"text":"members","why":"no-claim"}
+{"clause":"lane12#64","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":98,"text":"count","why":"no-claim"}
+{"clause":"lane12#65","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":98,"text":"--grad-checkpoint","why":"no-claim"}
+{"clause":"lane12#66","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":98,"text":"device recorded","why":"no-claim"}
+{"clause":"lane12#67","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":98,"text":"blocks-BN vs stem-BN counter ratio","why":"no-claim"}
+{"clause":"lane12#88","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":117,"text":"It produced a model","why":"no-claim"}
+{"clause":"lane12#108","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":155,"text":"They are","why":"no-claim"}
+{"clause":"lane12#116","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":168,"text":"fold / arm","why":"no-claim"}
+{"clause":"lane12#117","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":168,"text":"argmax","why":"no-claim"}
+{"clause":"lane12#118","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":168,"text":"SWA","why":"no-claim"}
+{"clause":"lane12#119","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":170,"text":"base0","why":"no-claim"}
+{"clause":"lane12#123","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":171,"text":"base1","why":"no-claim"}
+{"clause":"lane12#127","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":172,"text":"base2","why":"no-claim"}
+{"clause":"lane12#131","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":173,"text":"base3","why":"no-claim"}
+{"clause":"lane12#135","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":174,"text":"base4","why":"no-claim"}
+{"clause":"lane12#139","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":175,"text":"armB0","why":"no-claim"}
+{"clause":"lane12#143","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":176,"text":"armC0","why":"no-claim"}
+{"clause":"lane12#144","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":176,"text":"0.8828","why":"no-claim"}
+{"clause":"lane12#145","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":176,"text":"0.8840","why":"no-claim"}
+{"clause":"lane12#147","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":177,"text":"armC1","why":"no-claim"}
+{"clause":"lane12#151","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":178,"text":"armC2","why":"no-claim"}
+{"clause":"lane12#155","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":179,"text":"armC3","why":"no-claim"}
+{"clause":"lane12#159","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":180,"text":"armC4","why":"no-claim"}
+{"clause":"lane12#167","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":188,"text":"### 1.5 The two proposals, separated","why":"no-claim"}
+{"clause":"lane12#169","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":190,"text":"SURVIVES.","why":"repeat","of":"G4-F317"}
+{"clause":"lane12#192","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":229,"text":"REJECTED.","why":"repeat","of":"G4-F322"}
+{"clause":"lane12#206","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":257,"text":"Self-supervised / in-domain pretraining on our own unlabelled slices","why":"no-claim"}
+{"clause":"lane12#211","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":266,"text":"MEASURED.","why":"no-claim"}
+{"clause":"lane12#216","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":278,"text":"objective","why":"no-claim"}
+{"clause":"lane12#217","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":278,"text":"passes per image-epoch","why":"no-claim"}
+{"clause":"lane12#218","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":278,"text":"epochs a published recipe uses","why":"no-claim"}
+{"clause":"lane12#219","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":278,"text":"total slice-passes","why":"no-claim"}
+{"clause":"lane12#220","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":278,"text":"hours at 400/s","why":"no-claim"}
+{"clause":"lane12#224","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":280,"text":"164–328 M","why":"no-claim"}
+{"clause":"lane12#236","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":288,"text":"### 2.3 Against the budget","why":"no-claim"}
+{"clause":"lane12#243","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":299,"text":"It does not fit, and Kaggle kills the output of a kernel that exhausts quota (PROGRESS.md:4988).","why":"no-claim"}
+{"clause":"lane12#251","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":318,"text":"Proposing in-domain SSL would put an unevidenced 11 h run ahead of a registered, surveyed alternative.","why":"no-claim"}
+{"clause":"lane12#258","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":336,"text":"Appendix A, unopened.py.","why":"no-claim"}
+{"clause":"lane12#262","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":347,"text":"claim","why":"no-claim"}
+{"clause":"lane12#263","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":347,"text":"docstring","why":"no-claim"}
+{"clause":"lane12#264","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":347,"text":"recomputed","why":"no-claim"}
+{"clause":"lane12#265","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":349,"text":"fluid-sensitive & fat-suppressed","why":"no-claim"}
+{"clause":"lane12#266","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":349,"text":"14,010","why":"repeat","of":"G4-F626"}
+{"clause":"lane12#268","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":350,"text":"neither","why":"no-claim"}
+{"clause":"lane12#269","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":350,"text":"10,361","why":"repeat","of":"G4-F627"}
+{"clause":"lane12#271","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":351,"text":"mixed","why":"no-claim"}
+{"clause":"lane12#273","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":352,"text":"series opened at --seqs 1","why":"no-claim"}
+{"clause":"lane12#274","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":352,"text":"13,221","why":"repeat","of":"G4-F629"}
+{"clause":"lane12#276","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":353,"text":"studies ever shown a non-fat-suppressed image","why":"no-claim"}
+{"clause":"lane12#277","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":353,"text":"9.4%","why":"repeat","of":"G4-F630"}
+{"clause":"lane12#280","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":357,"text":"series","why":"no-claim"}
+{"clause":"lane12#281","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":357,"text":"studies touched","why":"no-claim"}
+{"clause":"lane12#282","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":359,"text":"corpus","why":"no-claim"}
+{"clause":"lane12#291","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":362,"text":"newly opened by T007","why":"no-claim"}
+{"clause":"lane12#293","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":363,"text":"left over after T007","why":"no-claim"}
+{"clause":"lane12#296","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":365,"text":"Leftovers by cell:","why":"no-claim"}
+{"clause":"lane12#297","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":367,"text":"plane","why":"no-claim"}
+{"clause":"lane12#298","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":367,"text":"fluid-sensitive","why":"no-claim"}
+{"clause":"lane12#299","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":367,"text":"left over","why":"no-claim"}
+{"clause":"lane12#300","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":369,"text":"Sagittal","why":"no-claim"}
+{"clause":"lane12#302","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":370,"text":"Sagittal","why":"no-claim"}
+{"clause":"lane12#303","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":370,"text":"yes","why":"no-claim"}
+{"clause":"lane12#305","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":371,"text":"Coronal","why":"no-claim"}
+{"clause":"lane12#307","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":372,"text":"Coronal","why":"no-claim"}
+{"clause":"lane12#308","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":372,"text":"yes","why":"no-claim"}
+{"clause":"lane12#310","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":373,"text":"Axial","why":"no-claim"}
+{"clause":"lane12#312","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":374,"text":"Axial","why":"no-claim"}
+{"clause":"lane12#313","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":374,"text":"yes","why":"no-claim"}
+{"clause":"lane12#315","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":376,"text":"### 5.3 The finding: the leftovers are within-cell duplicates, not missing views","why":"no-claim"}
+{"clause":"lane12#318","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":383,"text":"series in the cell","why":"no-claim"}
+{"clause":"lane12#319","doc":"lane12","path":"docs/research/0902c/lane12-semisupervised.md","commit":"e4e356c","line":383,"text":"cells","why":"no-claim"}
+{"clause":"smoke_test.py§test_t003_tta_views#1","doc":"smoke_test.py§test_t003_tta_views","path":"scripts/smoke_test.py","commit":"6d10943","line":null,"text":"Test-time augmentation: what each view may do, and what it must not.","why":"no-claim"}
+{"clause":"smoke_test.py§test_t003_tta_views#14","doc":"smoke_test.py§test_t003_tta_views","path":"scripts/smoke_test.py","commit":"6d10943","line":null,"text":"--- every constant sits inside the range its flag samples -------------- Stated literally from _augment and --rotate, not read back out of the code under test: a check that asks the implementation what to expect agrees with it by construction, including when it is wrong (T015 found two of those in its own tests).","why":"no-claim"}
+{"clause":"smoke_test.py§test_t003_tta_views#15","doc":"smoke_test.py§test_t003_tta_views","path":"scripts/smoke_test.py","commit":"6d10943","line":null,"text":"--- the side-neutral views ---------------------------------------------","why":"no-claim"}
+{"clause":"smoke_test.py§test_t003_tta_views#18","doc":"smoke_test.py§test_t003_tta_views","path":"scripts/smoke_test.py","commit":"6d10943","line":null,"text":"--- when the mirror is defined at all ----------------------------------","why":"no-claim"}
+{"clause":"smoke_test.py§test_t003_tta_views#20","doc":"smoke_test.py§test_t003_tta_views","path":"scripts/smoke_test.py","commit":"6d10943","line":null,"text":"--- the relabeling, on predictions -------------------------------------","why":"no-claim"}
+{"clause":"smoke_test.py§test_t003_tta_views#21","doc":"smoke_test.py§test_t003_tta_views","path":"scripts/smoke_test.py","commit":"6d10943","line":null,"text":"--- the blend -----------------------------------------------------------","why":"no-claim"}
+{"clause":"ROADMAP.md§383#1","doc":"ROADMAP.md§383","path":"docs/ROADMAP.md","commit":"2b3d2a6","line":null,"text":"# Explicitly not worth doing","why":"no-claim"}
+{"clause":"lane0-rules-and-leaderboard.md§1#1","doc":"lane0-rules-and-leaderboard.md§1","path":"docs/research/0902/lane0-rules-and-leaderboard.md","commit":"d9c7c6e","line":null,"text":"# Lane 0 — the rules, the prizes, and the leaderboard as of 2026-09-02","why":"no-claim"}
+{"clause":"lane1-winners-and-literature.md§1#1","doc":"lane1-winners-and-literature.md§1","path":"docs/research/0902/lane1-winners-and-literature.md","commit":"d9c7c6e","line":null,"text":"# Lane 1 — winners and literature: what gets 0.926 to 0.96","why":"no-claim"}
+{"clause":"lane2-architecture-headroom.md§1#1","doc":"lane2-architecture-headroom.md§1","path":"docs/research/0902/lane2-architecture-headroom.md","commit":"d9c7c6e","line":null,"text":"# Lane 2 — architecture headroom audit","why":"no-claim"}
+{"clause":"lane3-measurement-and-ensemble.md§1#1","doc":"lane3-measurement-and-ensemble.md§1","path":"docs/research/0902/lane3-measurement-and-ensemble.md","commit":"d9c7c6e","line":null,"text":"# Lane 3 — the measurement problem and the ensemble (2026-09-02)","why":"no-claim"}
+{"clause":"lane4-labels-and-plan.md§1#1","doc":"lane4-labels-and-plan.md§1","path":"docs/research/0902/lane4-labels-and-plan.md","commit":"d9c7c6e","line":null,"text":"# Lane 4 — the label ceiling, the training signal, and the operating plan to 2026-10-15","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§1#1","doc":"lane6-single-model-gap.md§1","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"# Lane 6 — single-model gap forensics: one public recipe diffed against arm C","why":"no-claim"}
+{"clause":"lane7-public-members.md§1#1","doc":"lane7-public-members.md§1","path":"docs/research/0902b/lane7-public-members.md","commit":"d9c7c6e","line":null,"text":"# Lane 7 — public checkpoints as ensemble arms","why":"no-claim"}
+{"clause":"lane8-external-truth-sets.md§1#1","doc":"lane8-external-truth-sets.md§1","path":"docs/research/0902b/lane8-external-truth-sets.md","commit":"d9c7c6e","line":null,"text":"# Lane 8 — external expert-labeled knee MRI sets: which one is the truth-anchored instrument at n ≫ 58","why":"no-claim"}
+{"clause":"lane7-public-members.md§20#3","doc":"lane7-public-members.md§20","path":"docs/research/0902b/lane7-public-members.md","commit":"d9c7c6e","line":null,"text":"(READ, §2)","why":"no-claim"}
+{"clause":"lane0-rules-and-leaderboard.md§72#1","doc":"lane0-rules-and-leaderboard.md§72","path":"docs/research/0902/lane0-rules-and-leaderboard.md","commit":"d9c7c6e","line":null,"text":"rank","why":"no-claim"}
+{"clause":"lane0-rules-and-leaderboard.md§72#2","doc":"lane0-rules-and-leaderboard.md§72","path":"docs/research/0902/lane0-rules-and-leaderboard.md","commit":"d9c7c6e","line":null,"text":"score","why":"no-claim"}
+{"clause":"lane5-public-notebooks.md§360#1","doc":"lane5-public-notebooks.md§360","path":"docs/research/0902/lane5-public-notebooks.md","commit":"d9c7c6e","line":null,"text":"### C1 · dreaddevelopment/knee-mri-twelve-findings-from-a-single-model (script)","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§67#1","doc":"lane6-single-model-gap.md§67","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"claim","why":"no-claim"}
+{"clause":"lane5-public-notebooks.md§744#1","doc":"lane5-public-notebooks.md§744","path":"docs/research/0902/lane5-public-notebooks.md","commit":"d9c7c6e","line":null,"text":"input res","why":"no-claim"}
+{"clause":"lane5-public-notebooks.md§744#5","doc":"lane5-public-notebooks.md§744","path":"docs/research/0902/lane5-public-notebooks.md","commit":"d9c7c6e","line":null,"text":"336","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§255#1","doc":"lane6-single-model-gap.md§255","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"# paired A-B [-0.0046, 0.0158] +/-0.0102 r = 0.9089, pairing tightens 2.3x","why":"no-claim"}
+{"clause":"lane7-public-members.md§122#1","doc":"lane7-public-members.md§122","path":"docs/research/0902b/lane7-public-members.md","commit":"d9c7c6e","line":null,"text":"### 1.4 Winner's obligations — the real cost of using someone else's weights","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§185#1","doc":"lane6-single-model-gap.md§185","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"schedule","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§185#6","doc":"lane6-single-model-gap.md§185","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"READ / READ","why":"no-claim"}
+{"clause":"push_family.py§main#13","doc":"push_family.py§main","path":"scripts/push_family.py","commit":"d9c7c6e","line":null,"text":"Inside the loop that is one torch import PER FLAG -- ~8 s each, for an answer that cannot change between iterations.","why":"no-claim"}
+{"clause":"add_ensemble_member.py§main#3","doc":"add_ensemble_member.py§main","path":"scripts/add_ensemble_member.py","commit":"d9c7c6e","line":null,"text":"--- step 2: what is actually changing on the live kernel","why":"no-claim"}
+{"clause":"gradcam.py§main#18","doc":"gradcam.py§main","path":"scripts/gradcam.py","commit":"d9c7c6e","line":null,"text":"Diffuseness, both senses.","why":"no-claim"}
+{"clause":"train.py§run#2","doc":"train.py§run","path":"src/train.py","commit":"d9c7c6e","line":null,"text":"The 58 gold studies carry a +/-0.036 band, which is wider than most changes worth making -- T001 ended with a result gold provably could not adjudicate.","why":"no-claim"}
+{"clause":"train.py§run#25","doc":"train.py§run","path":"src/train.py","commit":"d9c7c6e","line":null,"text":"train rather than augment: mirroring is not jitter, and both must be off for every validation split whatever the flags say.","why":"repeat","of":"GC-F237"}
+{"clause":"train.py§run#26","doc":"train.py§run","path":"src/train.py","commit":"d9c7c6e","line":null,"text":"Training only.","why":"repeat","of":"GC-F239"}
+{"clause":"train.py§run#27","doc":"train.py§run","path":"src/train.py","commit":"d9c7c6e","line":null,"text":"Masking a validation cell would change what the run is scored on, not what it learns from, and the corpus rho would stop being comparable with every previous run's -- the primary judge, quietly re-based.","why":"repeat","of":"GC-F240"}
+{"clause":"train.py§run#28","doc":"train.py§run","path":"src/train.py","commit":"d9c7c6e","line":null,"text":"Packing is a property of the input, not of training, so it applies to validation too.","why":"repeat","of":"GC-F242"}
+{"clause":"model.py§__init__#6","doc":"model.py§__init__","path":"src/model.py","commit":"d9c7c6e","line":null,"text":"T004.","why":"no-claim"}
+{"clause":"dataset.py§_warp#4","doc":"dataset.py§_warp","path":"src/dataset.py","commit":"d9c7c6e","line":null,"text":"One 3x3 matrix does both, and it lives in warp_volume above so that test-time augmentation asks the same function for a stated angle that training asks for a drawn one.","why":"no-claim"}
+{"clause":"dicom_io.py§read_series#19","doc":"dicom_io.py§read_series","path":"src/dicom_io.py","commit":"d9c7c6e","line":null,"text":"The slice at order-index j, or the centre it belongs to.","why":"repeat","of":"GC-F24"}
+{"clause":"dicom_io.py§read_series#20","doc":"dicom_io.py§read_series","path":"src/dicom_io.py","commit":"d9c7c6e","line":null,"text":"A neighbour that will not decode, or that decodes to a different shape, falls back to its own centre -- which reproduces the 2D duplicate for that one channel rather than dropping the slice.","why":"repeat","of":"GC-F25"}
+{"clause":"STATE.md§20#1","doc":"STATE.md§20","path":"pm/STATE.md","commit":"d9c7c6e","line":null,"text":"Rider/blend trap","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§182#1","doc":"lane6-single-model-gap.md§182","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"encoder LR","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§182#5","doc":"lane6-single-model-gap.md§182","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"READ / READ","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§183#1","doc":"lane6-single-model-gap.md§183","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"head LR","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§183#5","doc":"lane6-single-model-gap.md§183","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"READ / READ","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§184#1","doc":"lane6-single-model-gap.md§184","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"weight decay","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§184#5","doc":"lane6-single-model-gap.md§184","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"READ / READ","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§174#1","doc":"lane6-single-model-gap.md§174","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"head","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§174#3","doc":"lane6-single-model-gap.md§174","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"PerLabelAttentionPool: gated attention (Tanh × Sigmoid) → Linear(hidden,12), softmax over slices per label, per-label head weights (model.py:34)","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§174#5","doc":"lane6-single-model-gap.md§174","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"READ / READ","why":"no-claim"}
+{"clause":"STATE.md§351#3","doc":"STATE.md§351","path":"pm/STATE.md","commit":"d9c7c6e","line":null,"text":"registered AND killed 2026-08-28, 0 GPU. Rule 0 (cross-fitted, parameter-free) came back resolved NEGATIVE: removing the shared component costs −0.2229 (residualization) and −0.1028 (1st PC) of mean column AUC.","why":"no-claim"}
+{"clause":"model.py§SliceSequenceHead#3","doc":"model.py§SliceSequenceHead","path":"src/model.py","commit":"d9c7c6e","line":null,"text":"P0 added a zero-init linear map of a scalar position, which is the weakest available form of order-awareness.","why":"no-claim"}
+{"clause":"model.py§SliceSequenceHead#15","doc":"model.py§SliceSequenceHead","path":"src/model.py","commit":"d9c7c6e","line":null,"text":"An all-padding chunk was run at length 1;","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§222#4","doc":"lane6-single-model-gap.md§222","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"one fold, ~5 lines;","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§223#1","doc":"lane6-single-model-gap.md§223","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"8 epochs vs 16, on a run still improving at epoch 8","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§162#1","doc":"lane6-single-model-gap.md§162","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"epoch-to-epoch input variation","why":"no-claim"}
+{"clause":"lane6-single-model-gap.md§162#6","doc":"lane6-single-model-gap.md§162","path":"docs/research/0902b/lane6-single-model-gap.md","commit":"d9c7c6e","line":null,"text":"READ","why":"no-claim"}
+{"clause":"dataset.py§_slot_meta#12","doc":"dataset.py§_slot_meta","path":"src/dataset.py","commit":"d9c7c6e","line":null,"text":"axis_code adds an optional fifth column (mirror.mirror_axis_code): which way this series mirrors, or 0.0 for a geometry that could not be read.","why":"no-claim"}
+{"clause":"kaggle_inference.py§main#36","doc":"kaggle_inference.py§main","path":"notebooks/kaggle_inference.py","commit":"d9c7c6e","line":null,"text":"The rerun budget is arithmetic on one measured number (T009's ~6 min at five members), and T003 spends it on views.","why":"no-claim"}
+{"clause":"ROADMAP.md§485#4","doc":"ROADMAP.md§485","path":"docs/ROADMAP.md","commit":"d9c7c6e","line":null,"text":"Baker's (0.984, unaffected posterior label) is the tripwire.","why":"no-claim"}
+{"clause":"smoke_test.py§test_gradcam_instrument#12","doc":"smoke_test.py§test_gradcam_instrument","path":"scripts/smoke_test.py","commit":"d9c7c6e","line":null,"text":"-- the CAM itself, end to end on a padded bag.","why":"no-claim"}
+{"clause":"PROGRESS.md§3383#1","doc":"PROGRESS.md§3383","path":"PROGRESS.md","commit":"d9c7c6e","line":null,"text":"bs=2 removed about 93% of the discrepancy and flipped its sign. Local fold 0 now scores corpus rho 0.6451 against the archived Kaggle fold 0's 0.6336.","why":"no-claim"}
+{"clause":"ROADMAP.md§517#1","doc":"ROADMAP.md§517","path":"docs/ROADMAP.md","commit":"d9c7c6e","line":null,"text":"Row 12's third gate is void. External pretraining (MRNet / OAI) was gated on \"(iii) it must be uploaded as a Kaggle dataset, since training happens there.\" Pretraining can happen locally and only the resulting checkpoint need ever reach Kaggle.","why":"no-claim"}

@@ -1,0 +1,1644 @@
+{
+ "canaries": [
+  "R2#111",
+  "lane9#287",
+  "R1#200",
+  "lane11#80",
+  "lane12#251",
+  "lane12#144",
+  "lane10#462",
+  "lane10#487",
+  "lane1-winners-and-literature.md§1#1",
+  "lane9#300",
+  "lane13#51",
+  "lane6-single-model-gap.md§223#1",
+  "R2#51",
+  "lane10#263",
+  "R2#44",
+  "R1#274",
+  "R1#211",
+  "lane10#249",
+  "lane10#149",
+  "kaggle_inference.py§main#36",
+  "smoke_test.py§test_t003_tta_views#14",
+  "lane12#315",
+  "STATE.md§351#3",
+  "lane10#538",
+  "lane10#471",
+  "lane10#33",
+  "lane6-single-model-gap.md§222#4",
+  "PROGRESS.md§3383#1",
+  "lane9#260",
+  "lane12#243",
+  "ROADMAP.md§517#1",
+  "R1#179",
+  "lane11#88",
+  "lane12#145",
+  "lane9#481",
+  "dataset.py§_slot_meta#12",
+  "lane9#119",
+  "R1#182",
+  "lane10#14",
+  "model.py§SliceSequenceHead#15",
+  "lane9#47",
+  "lane10#380",
+  "lane11#143",
+  "lane11#236",
+  "R2#131",
+  "R1#142",
+  "R1#51",
+  "lane9#367",
+  "lane6-single-model-gap.md§174#3",
+  "lane9#168",
+  "lane11#63",
+  "R2#157",
+  "R1#237",
+  "lane10#460",
+  "lane10#370",
+  "lane11#164",
+  "lane9#396",
+  "lane11#171",
+  "lane6-single-model-gap.md§255#1",
+  "dataset.py§_warp#4",
+  "lane11#61",
+  "train.py§run#2",
+  "lane11#200",
+  "lane11#188",
+  "lane9#274",
+  "lane11#47",
+  "push_family.py§main#13",
+  "lane9#41",
+  "lane10#49",
+  "model.py§SliceSequenceHead#3",
+  "R1#205",
+  "lane10#593",
+  "lane9#284",
+  "R1#55",
+  "lane9#322",
+  "lane12#224",
+  "R2#90",
+  "ROADMAP.md§485#4",
+  "lane10#496",
+  "R2#129",
+  "lane5-public-notebooks.md§744#5"
+ ],
+ "items": [
+  {
+   "item": 1,
+   "fact": "G1-F2",
+   "transcriber": [
+    "raptor-single-model-public-lb"
+   ]
+  },
+  {
+   "item": 2,
+   "fact": "G1-F4",
+   "transcriber": []
+  },
+  {
+   "item": 3,
+   "fact": "G1-F8",
+   "transcriber": []
+  },
+  {
+   "item": 4,
+   "fact": "G1-F10",
+   "transcriber": []
+  },
+  {
+   "item": 5,
+   "fact": "G1-F11",
+   "transcriber": []
+  },
+  {
+   "item": 6,
+   "fact": "G1-F17",
+   "transcriber": [
+    "public-lb-top20-cutoff"
+   ]
+  },
+  {
+   "item": 7,
+   "fact": "G1-F18",
+   "transcriber": [
+    "public-lb-top20-cutoff"
+   ]
+  },
+  {
+   "item": 8,
+   "fact": "G1-F19",
+   "transcriber": [
+    "public-lb-team-count"
+   ]
+  },
+  {
+   "item": 9,
+   "fact": "G1-F20",
+   "transcriber": [
+    "public-lb-first-place-score"
+   ]
+  },
+  {
+   "item": 10,
+   "fact": "G1-F21",
+   "transcriber": [
+    "public-lb-first-place-score"
+   ]
+  },
+  {
+   "item": 11,
+   "fact": "G1-F22",
+   "transcriber": [
+    "our-public-lb-rank"
+   ]
+  },
+  {
+   "item": 12,
+   "fact": "G1-F23",
+   "transcriber": [
+    "our-public-lb-score"
+   ]
+  },
+  {
+   "item": 13,
+   "fact": "G1-F25",
+   "transcriber": [
+    "public-notebook-plateau-score"
+   ]
+  },
+  {
+   "item": 14,
+   "fact": "G1-F26",
+   "transcriber": [
+    "public-notebook-plateau-score"
+   ]
+  },
+  {
+   "item": 15,
+   "fact": "G1-F27",
+   "transcriber": [
+    "public-lb-teams-ge-0935"
+   ]
+  },
+  {
+   "item": 16,
+   "fact": "G1-F30",
+   "transcriber": [
+    "kernel-runtime-cap"
+   ]
+  },
+  {
+   "item": 17,
+   "fact": "G1-F38",
+   "transcriber": [
+    "test-set-size"
+   ]
+  },
+  {
+   "item": 18,
+   "fact": "G1-F42",
+   "transcriber": [
+    "efficiency-prize-purse"
+   ]
+  },
+  {
+   "item": 19,
+   "fact": "G1-F44",
+   "transcriber": [
+    "efficiency-lb-team-count"
+   ]
+  },
+  {
+   "item": 20,
+   "fact": "G1-F45",
+   "transcriber": [
+    "our-efficiency-lb-rank"
+   ]
+  },
+  {
+   "item": 21,
+   "fact": "G1-F46",
+   "transcriber": [
+    "efficiency-rank-of-0926-entry"
+   ]
+  },
+  {
+   "item": 22,
+   "fact": "G1-F55",
+   "transcriber": [
+    "our-public-lb-score"
+   ]
+  },
+  {
+   "item": 23,
+   "fact": "G1-F56",
+   "transcriber": [
+    "public-lb-top20-cutoff",
+    "our-public-lb-score"
+   ]
+  },
+  {
+   "item": 24,
+   "fact": "G1-F57",
+   "transcriber": [
+    "public-notebook-plateau-score",
+    "our-public-lb-score"
+   ]
+  },
+  {
+   "item": 25,
+   "fact": "G1-F62",
+   "transcriber": [
+    "forum-claimed-single-model-lb"
+   ]
+  },
+  {
+   "item": 26,
+   "fact": "G1-F63",
+   "transcriber": [
+    "forum-claimed-single-model-lb"
+   ]
+  },
+  {
+   "item": 27,
+   "fact": "G1-F65",
+   "transcriber": [
+    "forum-claimed-single-model-lb"
+   ]
+  },
+  {
+   "item": 28,
+   "fact": "G1-F66",
+   "transcriber": [
+    "our-public-lb-score"
+   ]
+  },
+  {
+   "item": 29,
+   "fact": "G1-F67",
+   "transcriber": []
+  },
+  {
+   "item": 30,
+   "fact": "G1-F69",
+   "transcriber": [
+    "ensemble-return-plateau-k"
+   ]
+  },
+  {
+   "item": 31,
+   "fact": "G1-F70",
+   "transcriber": [
+    "same-recipe-member-marginal-gain"
+   ]
+  },
+  {
+   "item": 32,
+   "fact": "G1-F73",
+   "transcriber": [
+    "near-duplicate-member-rho"
+   ]
+  },
+  {
+   "item": 33,
+   "fact": "G1-F77",
+   "transcriber": []
+  },
+  {
+   "item": 34,
+   "fact": "G1-F78",
+   "transcriber": []
+  },
+  {
+   "item": 35,
+   "fact": "G1-F79",
+   "transcriber": []
+  },
+  {
+   "item": 36,
+   "fact": "G1-F80",
+   "transcriber": [
+    "frontier-slices-per-study"
+   ]
+  },
+  {
+   "item": 37,
+   "fact": "G1-F81",
+   "transcriber": []
+  },
+  {
+   "item": 38,
+   "fact": "G1-F82",
+   "transcriber": [
+    "frontier-slices-per-study"
+   ]
+  },
+  {
+   "item": 39,
+   "fact": "G1-F83",
+   "transcriber": [
+    "non-fat-sat-unseen-study-fraction"
+   ]
+  },
+  {
+   "item": 40,
+   "fact": "G1-F85",
+   "transcriber": []
+  },
+  {
+   "item": 41,
+   "fact": "G1-F88",
+   "transcriber": [
+    "series-fov-range"
+   ]
+  },
+  {
+   "item": 42,
+   "fact": "G1-F89",
+   "transcriber": [
+    "series-fov-range"
+   ]
+  },
+  {
+   "item": 43,
+   "fact": "G1-F90",
+   "transcriber": [
+    "effective-scale-spread"
+   ]
+  },
+  {
+   "item": 44,
+   "fact": "G1-F91",
+   "transcriber": []
+  },
+  {
+   "item": 45,
+   "fact": "G1-F93",
+   "transcriber": []
+  },
+  {
+   "item": 46,
+   "fact": "G1-F97",
+   "transcriber": [
+    "per-label-attn-gain"
+   ]
+  },
+  {
+   "item": 47,
+   "fact": "G1-F111",
+   "transcriber": [
+    "plateau-fusion-checkpoint-count"
+   ]
+  },
+  {
+   "item": 48,
+   "fact": "G1-F115",
+   "transcriber": [
+    "local-fold-wallclock"
+   ]
+  },
+  {
+   "item": 49,
+   "fact": "G1-F117",
+   "transcriber": []
+  },
+  {
+   "item": 50,
+   "fact": "G1-F120",
+   "transcriber": []
+  },
+  {
+   "item": 51,
+   "fact": "G1-F126",
+   "transcriber": []
+  },
+  {
+   "item": 52,
+   "fact": "G1-F128",
+   "transcriber": []
+  },
+  {
+   "item": 53,
+   "fact": "G1-F139",
+   "transcriber": [
+    "armc-corpus-rho-trajectory"
+   ]
+  },
+  {
+   "item": 54,
+   "fact": "G1-F142",
+   "transcriber": [
+    "unmanifested-seqs2-series"
+   ]
+  },
+  {
+   "item": 55,
+   "fact": "G1-F143",
+   "transcriber": [
+    "unmanifested-seqs2-series"
+   ]
+  },
+  {
+   "item": 56,
+   "fact": "G1-F147",
+   "transcriber": [
+    "resize-downsample-factor"
+   ]
+  },
+  {
+   "item": 57,
+   "fact": "G1-F148",
+   "transcriber": [
+    "resize-downsample-factor"
+   ]
+  },
+  {
+   "item": 58,
+   "fact": "G1-F154",
+   "transcriber": [
+    "gold-set-size"
+   ]
+  },
+  {
+   "item": 59,
+   "fact": "G1-F155",
+   "transcriber": [
+    "self-distill-target-gold-auc"
+   ]
+  },
+  {
+   "item": 60,
+   "fact": "G1-F156",
+   "transcriber": [
+    "teacher-gold-macro-auc"
+   ]
+  },
+  {
+   "item": 61,
+   "fact": "G1-F157",
+   "transcriber": [
+    "deployed22-gold-macro-auc"
+   ]
+  },
+  {
+   "item": 62,
+   "fact": "G1-F158",
+   "transcriber": [
+    "self-distill-target-gold-auc"
+   ]
+  },
+  {
+   "item": 63,
+   "fact": "G1-F159",
+   "transcriber": [
+    "self-distill-target-gold-auc"
+   ]
+  },
+  {
+   "item": 64,
+   "fact": "G1-F173",
+   "transcriber": []
+  },
+  {
+   "item": 65,
+   "fact": "G1-F174",
+   "transcriber": [
+    "effusion-gold-auc-deployed-vs-teacher"
+   ]
+  },
+  {
+   "item": 66,
+   "fact": "G1-F179",
+   "transcriber": [
+    "gold-finetune-auc"
+   ]
+  },
+  {
+   "item": 67,
+   "fact": "G1-F180",
+   "transcriber": []
+  },
+  {
+   "item": 68,
+   "fact": "G1-F183",
+   "transcriber": [
+    "rho-to-auc-delta-ratio"
+   ]
+  },
+  {
+   "item": 69,
+   "fact": "G1-F185",
+   "transcriber": [
+    "oof-effective-members-per-study"
+   ]
+  },
+  {
+   "item": 70,
+   "fact": "G1-F187",
+   "transcriber": [
+    "oof-gold-transfer-ratio"
+   ]
+  },
+  {
+   "item": 71,
+   "fact": "G1-F188",
+   "transcriber": [
+    "sonnet-scored-gain-survival"
+   ]
+  },
+  {
+   "item": 72,
+   "fact": "G1-F189",
+   "transcriber": [
+    "sonnet-labelled-study-count"
+   ]
+  },
+  {
+   "item": 73,
+   "fact": "G1-F191",
+   "transcriber": [
+    "sonnet-scored-gain-survival"
+   ]
+  },
+  {
+   "item": 74,
+   "fact": "G1-F193",
+   "transcriber": [
+    "oof-auc-sonnet-paired-halfwidth"
+   ]
+  },
+  {
+   "item": 75,
+   "fact": "G1-F195",
+   "transcriber": [
+    "gold-paired-band"
+   ]
+  },
+  {
+   "item": 76,
+   "fact": "G1-F197",
+   "transcriber": []
+  },
+  {
+   "item": 77,
+   "fact": "G1-F200",
+   "transcriber": [
+    "greedy-gold-selection-oos-loss"
+   ]
+  },
+  {
+   "item": 78,
+   "fact": "G1-F202",
+   "transcriber": [
+    "public-noise-one-member-swap-sd"
+   ]
+  },
+  {
+   "item": 79,
+   "fact": "G1-F204",
+   "transcriber": [
+    "public-noise-nested-step-band"
+   ]
+  },
+  {
+   "item": 80,
+   "fact": "G1-F205",
+   "transcriber": [
+    "public-noise-distinct-config-sd"
+   ]
+  },
+  {
+   "item": 81,
+   "fact": "G1-F206",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 82,
+   "fact": "G1-F209",
+   "transcriber": [
+    "rank-scheme-gold-delta"
+   ]
+  },
+  {
+   "item": 83,
+   "fact": "G1-F215",
+   "transcriber": [
+    "local-fold-wallclock"
+   ]
+  },
+  {
+   "item": 84,
+   "fact": "G1-F216",
+   "transcriber": [
+    "seqs2-fold-wallclock"
+   ]
+  },
+  {
+   "item": 85,
+   "fact": "G1-F217",
+   "transcriber": [
+    "kaggle-fold-wallclock"
+   ]
+  },
+  {
+   "item": 86,
+   "fact": "G1-F218",
+   "transcriber": [
+    "kernel-runtime-cap"
+   ]
+  },
+  {
+   "item": 87,
+   "fact": "G1-F220",
+   "transcriber": [
+    "tta-fix-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 88,
+   "fact": "G1-F226",
+   "transcriber": [
+    "self-distillation-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 89,
+   "fact": "G1-F227",
+   "transcriber": [
+    "self-distill-target-gold-auc"
+   ]
+  },
+  {
+   "item": 90,
+   "fact": "G1-F229",
+   "transcriber": [
+    "kaggle-fold-wallclock"
+   ]
+  },
+  {
+   "item": 91,
+   "fact": "G1-F235",
+   "transcriber": [
+    "seqs2-family-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 92,
+   "fact": "G1-F237",
+   "transcriber": [
+    "unmanifested-seqs2-series"
+   ]
+  },
+  {
+   "item": 93,
+   "fact": "G1-F238",
+   "transcriber": [
+    "seqs2-fold-wallclock"
+   ]
+  },
+  {
+   "item": 94,
+   "fact": "G1-F242",
+   "transcriber": [
+    "mm-crop-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 95,
+   "fact": "G1-F252",
+   "transcriber": [
+    "recipe-s1-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 96,
+   "fact": "G1-F261",
+   "transcriber": []
+  },
+  {
+   "item": 97,
+   "fact": "G1-F266",
+   "transcriber": [
+    "second-architecture-family-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 98,
+   "fact": "G1-F267",
+   "transcriber": []
+  },
+  {
+   "item": 99,
+   "fact": "G1-F269",
+   "transcriber": []
+  },
+  {
+   "item": 100,
+   "fact": "G1-F270",
+   "transcriber": []
+  },
+  {
+   "item": 101,
+   "fact": "G1-F275",
+   "transcriber": [
+    "external-pretraining-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 102,
+   "fact": "G1-F285",
+   "transcriber": [
+    "efficiency-prize-purse"
+   ]
+  },
+  {
+   "item": 103,
+   "fact": "G1-F287",
+   "transcriber": []
+  },
+  {
+   "item": 104,
+   "fact": "G1-F288",
+   "transcriber": [
+    "efficiency-single-model-runtime"
+   ]
+  },
+  {
+   "item": 105,
+   "fact": "G1-F292",
+   "transcriber": [
+    "slice-density-coverage"
+   ]
+  },
+  {
+   "item": 106,
+   "fact": "G1-F294",
+   "transcriber": [
+    "slice-density-coverage"
+   ]
+  },
+  {
+   "item": 107,
+   "fact": "G1-F311",
+   "transcriber": [
+    "resize-downsample-factor"
+   ]
+  },
+  {
+   "item": 108,
+   "fact": "G1-F319",
+   "transcriber": []
+  },
+  {
+   "item": 109,
+   "fact": "G1-F321",
+   "transcriber": [
+    "series-fov-below-crop-fraction"
+   ]
+  },
+  {
+   "item": 110,
+   "fact": "G1-F322",
+   "transcriber": [
+    "off-joint-pixel-fraction"
+   ]
+  },
+  {
+   "item": 111,
+   "fact": "G1-F329",
+   "transcriber": [
+    "entry-deadline"
+   ]
+  },
+  {
+   "item": 112,
+   "fact": "G1-F330",
+   "transcriber": [
+    "kaggle-gpu-hours-budget"
+   ]
+  },
+  {
+   "item": 113,
+   "fact": "G1-F331",
+   "transcriber": [
+    "local-fold-slot-budget"
+   ]
+  },
+  {
+   "item": 114,
+   "fact": "G1-F332",
+   "transcriber": [
+    "submissions-budget"
+   ]
+  },
+  {
+   "item": 115,
+   "fact": "G1-F333",
+   "transcriber": [
+    "submissions-budget"
+   ]
+  },
+  {
+   "item": 116,
+   "fact": "G1-F342",
+   "transcriber": [
+    "kaggle-gpu-hours-budget"
+   ]
+  },
+  {
+   "item": 117,
+   "fact": "G1-F369",
+   "transcriber": []
+  },
+  {
+   "item": 118,
+   "fact": "G1-F370",
+   "transcriber": []
+  },
+  {
+   "item": 119,
+   "fact": "G1-F381",
+   "transcriber": [
+    "realistic-public-lb-expectation"
+   ]
+  },
+  {
+   "item": 120,
+   "fact": "G1-F384",
+   "transcriber": [
+    "public-lb-team-count"
+   ]
+  },
+  {
+   "item": 121,
+   "fact": "G1-F407",
+   "transcriber": []
+  },
+  {
+   "item": 122,
+   "fact": "G1-F410",
+   "transcriber": []
+  },
+  {
+   "item": 123,
+   "fact": "G1-F411",
+   "transcriber": []
+  },
+  {
+   "item": 124,
+   "fact": "G1-F412",
+   "transcriber": []
+  },
+  {
+   "item": 125,
+   "fact": "G1-F423",
+   "transcriber": [
+    "raptor-single-model-public-lb"
+   ]
+  },
+  {
+   "item": 126,
+   "fact": "G1-F431",
+   "transcriber": [
+    "our-fold-inferred-lb"
+   ]
+  },
+  {
+   "item": 127,
+   "fact": "G1-F432",
+   "transcriber": [
+    "armc-fold0-gold-macro-auc"
+   ]
+  },
+  {
+   "item": 128,
+   "fact": "G1-F433",
+   "transcriber": [
+    "raptor-gold58-macro-auc"
+   ]
+  },
+  {
+   "item": 129,
+   "fact": "G1-F434",
+   "transcriber": [
+    "raptor-gold-to-lb-offset"
+   ]
+  },
+  {
+   "item": 130,
+   "fact": "G1-F435",
+   "transcriber": [
+    "our-fold-inferred-lb"
+   ]
+  },
+  {
+   "item": 131,
+   "fact": "G1-F436",
+   "transcriber": [
+    "armc-fold0-gold-macro-auc",
+    "raptor-gold58-macro-auc"
+   ]
+  },
+  {
+   "item": 132,
+   "fact": "G1-F441",
+   "transcriber": []
+  },
+  {
+   "item": 133,
+   "fact": "G1-F444",
+   "transcriber": [
+    "train-csv-row-count"
+   ]
+  },
+  {
+   "item": 134,
+   "fact": "G1-F445",
+   "transcriber": [
+    "train-csv-row-count"
+   ]
+  },
+  {
+   "item": 135,
+   "fact": "G1-F448",
+   "transcriber": [
+    "teacher-gold-macro-auc"
+   ]
+  },
+  {
+   "item": 136,
+   "fact": "G1-F449",
+   "transcriber": [
+    "best-published-llm-reader-gold-auc"
+   ]
+  },
+  {
+   "item": 137,
+   "fact": "G1-F460",
+   "transcriber": [
+    "non-gold-corpus-size"
+   ]
+  },
+  {
+   "item": 138,
+   "fact": "G1-F462",
+   "transcriber": [
+    "full-data-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 139,
+   "fact": "G1-F463",
+   "transcriber": [
+    "public-full-data-controlled-gain"
+   ]
+  },
+  {
+   "item": 140,
+   "fact": "G1-F464",
+   "transcriber": [
+    "public-full-data-controlled-gain"
+   ]
+  },
+  {
+   "item": 141,
+   "fact": "G1-F465",
+   "transcriber": [
+    "public-full-data-controlled-gain"
+   ]
+  },
+  {
+   "item": 142,
+   "fact": "G1-F467",
+   "transcriber": [
+    "non-gold-corpus-size"
+   ]
+  },
+  {
+   "item": 143,
+   "fact": "G1-F472",
+   "transcriber": [
+    "recipe-s1-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 144,
+   "fact": "G1-F481",
+   "transcriber": [
+    "local-fold-wallclock"
+   ]
+  },
+  {
+   "item": 145,
+   "fact": "G1-F484",
+   "transcriber": []
+  },
+  {
+   "item": 146,
+   "fact": "G1-F485",
+   "transcriber": [
+    "mm-crop-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 147,
+   "fact": "G1-F486",
+   "transcriber": []
+  },
+  {
+   "item": 148,
+   "fact": "G1-F487",
+   "transcriber": [
+    "effective-scale-spread"
+   ]
+  },
+  {
+   "item": 149,
+   "fact": "G1-F488",
+   "transcriber": [
+    "effective-scale-spread"
+   ]
+  },
+  {
+   "item": 150,
+   "fact": "G1-F489",
+   "transcriber": [
+    "series-fov-range"
+   ]
+  },
+  {
+   "item": 151,
+   "fact": "G1-F490",
+   "transcriber": [
+    "series-fov-below-crop-fraction"
+   ]
+  },
+  {
+   "item": 152,
+   "fact": "G1-F491",
+   "transcriber": [
+    "off-joint-pixel-fraction"
+   ]
+  },
+  {
+   "item": 153,
+   "fact": "G1-F499",
+   "transcriber": [
+    "raptor-arm-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 154,
+   "fact": "G1-F500",
+   "transcriber": [
+    "raptor-arm-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 155,
+   "fact": "G1-F502",
+   "transcriber": [
+    "cross-recipe-branch-gain"
+   ]
+  },
+  {
+   "item": 156,
+   "fact": "G1-F503",
+   "transcriber": [
+    "same-recipe-member-marginal-gain"
+   ]
+  },
+  {
+   "item": 157,
+   "fact": "G1-F504",
+   "transcriber": [
+    "raptor-gold58-macro-auc"
+   ]
+  },
+  {
+   "item": 158,
+   "fact": "G1-F519",
+   "transcriber": [
+    "fastmri-plus-study-count"
+   ]
+  },
+  {
+   "item": 159,
+   "fact": "G1-F521",
+   "transcriber": [
+    "fastmri-plus-column-coverage"
+   ]
+  },
+  {
+   "item": 160,
+   "fact": "G1-F522",
+   "transcriber": [
+    "fastmri-plus-paired-band"
+   ]
+  },
+  {
+   "item": 161,
+   "fact": "G1-F523",
+   "transcriber": [
+    "gold-paired-band"
+   ]
+  },
+  {
+   "item": 162,
+   "fact": "G1-F531",
+   "transcriber": [
+    "mrnet-column-coverage"
+   ]
+  },
+  {
+   "item": 163,
+   "fact": "G1-F541",
+   "transcriber": []
+  },
+  {
+   "item": 164,
+   "fact": "G1-F542",
+   "transcriber": []
+  },
+  {
+   "item": 165,
+   "fact": "G1-F546",
+   "transcriber": [
+    "armc-fold0-gold-macro-auc"
+   ]
+  },
+  {
+   "item": 166,
+   "fact": "G1-F547",
+   "transcriber": [
+    "fold0-paired-rho-band"
+   ]
+  },
+  {
+   "item": 167,
+   "fact": "G1-F569",
+   "transcriber": []
+  },
+  {
+   "item": 168,
+   "fact": "G1-F576",
+   "transcriber": []
+  },
+  {
+   "item": 169,
+   "fact": "G1-F593",
+   "transcriber": [
+    "fastmri-plus-column-coverage",
+    "mrnet-column-coverage"
+   ]
+  },
+  {
+   "item": 170,
+   "fact": "G1-F599",
+   "transcriber": []
+  },
+  {
+   "item": 171,
+   "fact": "G1-F600",
+   "transcriber": [
+    "oof-auc-sonnet-paired-halfwidth"
+   ]
+  },
+  {
+   "item": 172,
+   "fact": "G1-F614",
+   "transcriber": [
+    "fastmri-dicom-study-count"
+   ]
+  },
+  {
+   "item": 173,
+   "fact": "G1-F617",
+   "transcriber": [
+    "fastmri-dicom-study-count",
+    "non-gold-corpus-size"
+   ]
+  },
+  {
+   "item": 174,
+   "fact": "G1-F622",
+   "transcriber": [
+    "free-disk"
+   ]
+  },
+  {
+   "item": 175,
+   "fact": "G1-F624",
+   "transcriber": [
+    "pos-weight-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 176,
+   "fact": "G1-F633",
+   "transcriber": [
+    "local-fold-wallclock"
+   ]
+  },
+  {
+   "item": 177,
+   "fact": "G1-F642",
+   "transcriber": [
+    "full-data-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 178,
+   "fact": "G1-F643",
+   "transcriber": [
+    "seqs2-family-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 179,
+   "fact": "G1-F644",
+   "transcriber": [
+    "recipe-s1-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 180,
+   "fact": "G1-F645",
+   "transcriber": [
+    "raptor-arm-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 181,
+   "fact": "G1-F646",
+   "transcriber": [
+    "mm-crop-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 182,
+   "fact": "G1-F647",
+   "transcriber": [
+    "self-distillation-expected-lb-gain"
+   ]
+  },
+  {
+   "item": 183,
+   "fact": "G1-F648",
+   "transcriber": []
+  },
+  {
+   "item": 184,
+   "fact": "G1-F649",
+   "transcriber": [
+    "realistic-public-lb-expectation"
+   ]
+  },
+  {
+   "item": 185,
+   "fact": "G1-F664",
+   "transcriber": []
+  },
+  {
+   "item": 186,
+   "fact": "G1-F698",
+   "transcriber": [
+    "submissions-budget"
+   ]
+  },
+  {
+   "item": 187,
+   "fact": "G1-F699",
+   "transcriber": [
+    "submissions-budget"
+   ]
+  },
+  {
+   "item": 188,
+   "fact": "G1-F700",
+   "transcriber": [
+    "submissions-budget"
+   ]
+  },
+  {
+   "item": 189,
+   "fact": "G1-F736",
+   "transcriber": []
+  },
+  {
+   "item": 190,
+   "fact": "G1-F737",
+   "transcriber": [
+    "entry-deadline"
+   ]
+  },
+  {
+   "item": 191,
+   "fact": "G1-F738",
+   "transcriber": [
+    "submissions-budget"
+   ]
+  },
+  {
+   "item": 192,
+   "fact": "G1-F743",
+   "transcriber": []
+  },
+  {
+   "item": 193,
+   "fact": "G1-F748",
+   "transcriber": []
+  },
+  {
+   "item": 194,
+   "fact": "G1-F751",
+   "transcriber": []
+  },
+  {
+   "item": 195,
+   "fact": "G1-F754",
+   "transcriber": []
+  },
+  {
+   "item": 196,
+   "fact": "G1-F759",
+   "transcriber": []
+  },
+  {
+   "item": 197,
+   "fact": "G1-F763",
+   "transcriber": []
+  },
+  {
+   "item": 198,
+   "fact": "G1-F766",
+   "transcriber": []
+  },
+  {
+   "item": 199,
+   "fact": "G1-F769",
+   "transcriber": []
+  },
+  {
+   "item": 200,
+   "fact": "G1-F772",
+   "transcriber": []
+  },
+  {
+   "item": 201,
+   "fact": "G1-F775",
+   "transcriber": [
+    "our-public-lb-score"
+   ]
+  },
+  {
+   "item": 202,
+   "fact": "G1-F778",
+   "transcriber": [
+    "our-public-lb-score"
+   ]
+  },
+  {
+   "item": 203,
+   "fact": "G1-F781",
+   "transcriber": []
+  },
+  {
+   "item": 204,
+   "fact": "G1-F785",
+   "transcriber": []
+  },
+  {
+   "item": 205,
+   "fact": "G1-F789",
+   "transcriber": [
+    "public-noise-distinct-config-sd"
+   ]
+  },
+  {
+   "item": 206,
+   "fact": "G1-F791",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 207,
+   "fact": "G1-F792",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 208,
+   "fact": "G1-F793",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 209,
+   "fact": "G1-F794",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 210,
+   "fact": "G1-F795",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 211,
+   "fact": "G1-F796",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 212,
+   "fact": "G1-F797",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 213,
+   "fact": "G1-F798",
+   "transcriber": [
+    "winners-curse-inflation"
+   ]
+  },
+  {
+   "item": 214,
+   "fact": "G1-F804",
+   "transcriber": [
+    "public-notebook-plateau-score",
+    "public-lb-top20-cutoff"
+   ]
+  },
+  {
+   "item": 215,
+   "fact": "G1-F816",
+   "transcriber": []
+  },
+  {
+   "item": 216,
+   "fact": "G1-F818",
+   "transcriber": []
+  },
+  {
+   "item": 217,
+   "fact": "G1-F820",
+   "transcriber": []
+  },
+  {
+   "item": 218,
+   "fact": "G1-F824",
+   "transcriber": []
+  },
+  {
+   "item": 219,
+   "fact": "G1-F827",
+   "transcriber": []
+  },
+  {
+   "item": 220,
+   "fact": "G1-F858",
+   "transcriber": [
+    "entry-deadline"
+   ]
+  },
+  {
+   "item": 221,
+   "fact": "G3-F3",
+   "transcriber": []
+  },
+  {
+   "item": 222,
+   "fact": "G3-F4",
+   "transcriber": []
+  },
+  {
+   "item": 223,
+   "fact": "G3-F5",
+   "transcriber": []
+  },
+  {
+   "item": 224,
+   "fact": "G3-F12",
+   "transcriber": []
+  },
+  {
+   "item": 225,
+   "fact": "G3-F26",
+   "transcriber": []
+  },
+  {
+   "item": 226,
+   "fact": "G3-F35",
+   "transcriber": []
+  },
+  {
+   "item": 227,
+   "fact": "G3-F41",
+   "transcriber": []
+  },
+  {
+   "item": 228,
+   "fact": "G3-F42",
+   "transcriber": []
+  },
+  {
+   "item": 229,
+   "fact": "G3-F50",
+   "transcriber": []
+  },
+  {
+   "item": 230,
+   "fact": "G3-F65",
+   "transcriber": []
+  },
+  {
+   "item": 231,
+   "fact": "G3-F86",
+   "transcriber": []
+  },
+  {
+   "item": 232,
+   "fact": "G3-F332",
+   "transcriber": []
+  },
+  {
+   "item": 233,
+   "fact": "G3-F334",
+   "transcriber": []
+  },
+  {
+   "item": 234,
+   "fact": "G3-F346",
+   "transcriber": []
+  },
+  {
+   "item": 235,
+   "fact": "G3-F347",
+   "transcriber": []
+  },
+  {
+   "item": 236,
+   "fact": "G3-F377",
+   "transcriber": []
+  },
+  {
+   "item": 237,
+   "fact": "G3-F415",
+   "transcriber": []
+  },
+  {
+   "item": 238,
+   "fact": "G3-F516",
+   "transcriber": []
+  },
+  {
+   "item": 239,
+   "fact": "G3-F587",
+   "transcriber": []
+  },
+  {
+   "item": 240,
+   "fact": "G3-F588",
+   "transcriber": []
+  },
+  {
+   "item": 241,
+   "fact": "G3-F595",
+   "transcriber": []
+  },
+  {
+   "item": 242,
+   "fact": "G3-F597",
+   "transcriber": [
+    "public-noise-distinct-config-sd"
+   ]
+  },
+  {
+   "item": 243,
+   "fact": "G3-F604",
+   "transcriber": []
+  },
+  {
+   "item": 244,
+   "fact": "G3-F607",
+   "transcriber": []
+  },
+  {
+   "item": 245,
+   "fact": "G3-F629",
+   "transcriber": []
+  }
+ ]
+}

@@ -68,6 +68,11 @@ be checked against T075's misses before the design is accepted again.
     subagents. They are a registrar, 4 transcribers, 1 for cited sections,
     1 auditor and 1 reconciler. Each may be rerun once if it misses a canary
     or dies; nothing beyond that without the operator.
+  - **Amended 2026-10-14 by the operator** ("3 reconcilers (+2)"): review
+    of 3,081+ facts is ~10,000 fact lines grouped by referent. So there are
+    3 reconcilers, 10 subagents in all: one for the 110 cross-document
+    groups, two splitting the 995 premise checks. Same-document groups are
+    recorded as unreviewed.
 - Accepted only when the re-grade reaches at least 10 of 12, or the operator
   accepts a lower figure with the misses listed.
 
@@ -113,16 +118,21 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-14, adervark @b/b8438f28: R0c running
-- **In flight:** 4 transcriber subagents (runs `b8438f28.d623`, `.8b7d`,
-  `.5240`, `.7b2f`), writing `docs/plans/evidence/t082/r0c/ledger-G1..G4.jsonl`.
-  The registrar is done: 94 measurands, committed (e9866d5).
-- **On disk:** the transcribers' ledgers as they grow, uncommitted
-- **Resume with:** `node r0c/check.mjs` on each ledger; when all four are
-  clean, `closure.mjs`, then the closure transcriber, the auditor
-  (`audit-view.mjs`) and the reconciler (`merge.mjs`, `../link.mjs`)
-- **Next decision:** none until the grade; if a transcriber dies, its rerun
-  is the one rerun the spend rule allows
+- **Last touched:** 2026-10-14, adervark @b/b8438f28: stopped at a usage
+  limit, between steps
+- **In flight:** nothing. Registrar, G1–G4 and GC are done and committed, all
+  clean: 4,033 facts, 391 skips.
+- **On disk:** `r0c/audit/` (skips.jsonl: 664 lines, 81 canaries;
+  assign.jsonl: 245 items) and `r0c/audit-key.json`, committed. The auditor
+  brief is in the session scratchpad (`brief-auditor.md`; fill in {RUN},
+  {NSKIPS}=664, {NITEMS}=245).
+- **Resume with:** open an auditor run and start it; then `merge.mjs` with
+  audit.jsonl, `../link.mjs`, grouped review by 3 reconcilers (format still
+  to write: groups, not pairs), re-run `cmd:` sources at e4e356c, and grade.
+- **Next decision:** none; the operator approved 3 reconcilers.
+- **Known gaps:** the committed cut dropped table cells of ≤2 characters.
+  Pairwise linking gave 36,545 pairs on 3,081 facts, so review must be by
+  group.
 
 ## Verify
 
