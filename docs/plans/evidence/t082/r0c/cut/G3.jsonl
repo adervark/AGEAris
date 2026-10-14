@@ -1,0 +1,639 @@
+{"id":"lane10#1","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":1,"kind":"head","text":"# Lane 10 — capability audit: our own code, exhaustively"}
+{"id":"lane10#2","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":3,"kind":"para","text":"T047 lane 10, 2026-09-02."}
+{"id":"lane10#3","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":3,"kind":"para","text":"Read-only on the repo except this file. 0 GPU-hours, 0 submissions, 0 training runs;"}
+{"id":"lane10#4","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":4,"kind":"para","text":"every command run with CUDA_VISIBLE_DEVICES=\"\" under nice -n 10 while the T007 fold held the card."}
+{"id":"lane10#5","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":5,"kind":"para","text":"Evidence marks: READ = quoted from a file, with file:line;"}
+{"id":"lane10#6","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":6,"kind":"para","text":"MEASURED = computed here, command given;"}
+{"id":"lane10#7","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":7,"kind":"para","text":"INFERRED = an estimate, model stated."}
+{"id":"lane10#8","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":9,"kind":"para","text":"Written incrementally — sections appear as they are established."}
+{"id":"lane10#9","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":13,"kind":"head","text":"Verdict"}
+{"id":"lane10#10","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":15,"kind":"para","text":"The lane comes back mixed: no second --layer-decay, but one correction that matters and one capability gap that is worth ~8 lines."}
+{"id":"lane10#11","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":18,"kind":"para","text":"There is no wired-and-correct-but-never-passed flag sitting on a plausible +0.005."}
+{"id":"lane10#12","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":19,"kind":"para","text":"Five flags have never been passed by any run (--lr, --swa-epochs, --shared-head-drop, --seq-head, --perspective) and none of them is a lever: two are already registered as tasks, two explain a past result rather than buying a new one, and one is --lr, whose default is the thing under test."}
+{"id":"lane10#13","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":25,"kind":"para","text":"What the audit found instead:"}
+{"id":"lane10#14","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":27,"kind":"para","text":"--layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13, and the log proves they bound."}
+{"id":"lane10#15","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":28,"kind":"para","text":"PROGRESS.md:5857, lane 6 §2.5 and scripts/t042/run_recipe_fold0.sh:7 all say \"never\". §2.1."}
+{"id":"lane10#16","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":30,"kind":"para","text":"--layer-decay cannot express the hypothesis T042 is spending a fold on. At 0.6, 24 of 48 encoder groups fall below 1e-6 LR;"}
+{"id":"lane10#17","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":31,"kind":"para","text":"no value of it produces the public recipe's flat 10× encoder cut, and there is no --encoder-lr, --weight-decay or --dropout flag at all. §3.5."}
+{"id":"lane10#18","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":33,"kind":"para","text":"This is the lane's one real find."}
+{"id":"lane10#19","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":35,"kind":"para","text":"The deployed ensemble is at the MAX_LAYOUTS = 2 cap, so a --seqs 2 member from T007 cannot join it."}
+{"id":"lane10#20","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":36,"kind":"para","text":"Unregistered. §3.3."}
+{"id":"lane10#21","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":37,"kind":"para","text":"The BatchNorm double-update is 67 of 69 layers and is NULL as a lever — the buffer difference is smaller than the fold-to-fold difference. §3.1."}
+{"id":"lane10#22","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":40,"kind":"para","text":"Nothing here is adopted;"}
+{"id":"lane10#23","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":40,"kind":"para","text":"per T047 rule 3 this lane produces findings, not configuration changes."}
+{"id":"lane10#24","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":43,"kind":"para","text":"Card state while this ran, for the record: nvidia-smi at 10:33Z shows no compute apps, 59 °C, 13 MiB."}
+{"id":"lane10#25","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":44,"kind":"para","text":"T042's queue runner (pid 100909) is alive and holding — it deferred at 10:25:36Z and waits for ≤55 °C plus 20 min idle."}
+{"id":"lane10#26","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":45,"kind":"para","text":"This lane launched nothing and slowed nothing."}
+{"id":"lane10#27","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":48,"kind":"head","text":"Every src/train.py flag, and whether any run ever passed it"}
+{"id":"lane10#28","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":50,"kind":"para","text":"The trainer's CLI is build_parser() at src/train.py:706-831 — 34 flags."}
+{"id":"lane10#29","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":50,"kind":"para","text":"The \"ever passed\" column is not read from memory."}
+{"id":"lane10#30","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":51,"kind":"para","text":"It is the union of three independent evidence sources, all MEASURED:"}
+{"id":"lane10#31","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":54,"kind":"para","text":"- A — run scripts. Every src/train.py invocation in the repo, extracted with the awk command in appendix A. 14 invocations across 13 shell scripts."}
+{"id":"lane10#32","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":56,"kind":"para","text":"- B — Kaggle launched commands. outputs/kernels/armc//rsna-knee-armc.py:248 prints === launching === followed by the full argv;"}
+{"id":"lane10#33","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":57,"kind":"para","text":"the four Kaggle logs in outputs/t028/kaggle/ therefore record what actually ran on the T4."}
+{"id":"lane10#34","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":59,"kind":"para","text":"- C — the checkpoints themselves. src/train.py:604 and :639 save \"args\": vars(args) into every .pt."}
+{"id":"lane10#35","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":60,"kind":"para","text":"This is the strongest source: it is what the process parsed, not what a script was meant to pass."}
+{"id":"lane10#36","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":61,"kind":"para","text":"Dumped for all 22 deployed members plus 8 experimental ones."}
+{"id":"lane10#37","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":64,"kind":"para","text":"Where A and C disagree, C wins (see §2.4, the stale armc1 snapshot)."}
+{"id":"lane10#38","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"kind":"row","text":"flag"}
+{"id":"lane10#39","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"kind":"row","text":"file:line"}
+{"id":"lane10#40","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"kind":"row","text":"default"}
+{"id":"lane10#41","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"kind":"row","text":"what it does"}
+{"id":"lane10#42","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":66,"kind":"row","text":"ever passed a non-default?"}
+{"id":"lane10#43","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":68,"kind":"row","text":"--root"}
+{"id":"lane10#44","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":68,"kind":"row","text":"train.py:711"}
+{"id":"lane10#45","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":68,"kind":"row","text":"data/train_series"}
+{"id":"lane10#46","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":68,"kind":"row","text":"DICOM tree root"}
+{"id":"lane10#47","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":68,"kind":"row","text":"yes, always (/home/ade/rsna-data/train_series)"}
+{"id":"lane10#48","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"kind":"row","text":"--labels"}
+{"id":"lane10#49","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"kind":"row","text":":712"}
+{"id":"lane10#50","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"kind":"row","text":"data/weak_labels.csv"}
+{"id":"lane10#51","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"kind":"row","text":"target CSV"}
+{"id":"lane10#52","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"kind":"row","text":"yes, always data/llm_labels.csv;"}
+{"id":"lane10#53","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"kind":"row","text":"llm_labels_recal.csv once (T031)."}
+{"id":"lane10#54","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":69,"kind":"row","text":"The default points at the dead rule-labeler (gold 0.7990 vs 0.8976)"}
+{"id":"lane10#55","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":70,"kind":"row","text":"--series"}
+{"id":"lane10#56","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":70,"kind":"row","text":":713"}
+{"id":"lane10#57","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":70,"kind":"row","text":"data/csv/train_series.csv"}
+{"id":"lane10#58","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":70,"kind":"row","text":"series-level metadata"}
+{"id":"lane10#59","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":70,"kind":"row","text":"passed, equal to default"}
+{"id":"lane10#60","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":71,"kind":"row","text":"--manifest"}
+{"id":"lane10#61","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":71,"kind":"row","text":":714"}
+{"id":"lane10#62","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":71,"kind":"row","text":"precomputed header scan"}
+{"id":"lane10#63","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":71,"kind":"row","text":"yes, data/manifest.csv;"}
+{"id":"lane10#64","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":71,"kind":"row","text":"data/manifest_all.csv in T007"}
+{"id":"lane10#65","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"kind":"row","text":"--backbone"}
+{"id":"lane10#66","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"kind":"row","text":":717"}
+{"id":"lane10#67","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"kind":"row","text":"tf_efficientnet_b0"}
+{"id":"lane10#68","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"kind":"row","text":"timm encoder"}
+{"id":"lane10#69","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"kind":"row","text":"yes — tf_efficientnet_b2 in every run that produced a deployed member;"}
+{"id":"lane10#70","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"kind":"row","text":"convnext_tiny.dinov3_lvd1689m once (T025)."}
+{"id":"lane10#71","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":72,"kind":"row","text":"The b0 default has never been trained"}
+{"id":"lane10#72","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":73,"kind":"row","text":"--epochs"}
+{"id":"lane10#73","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":73,"kind":"row","text":":718"}
+{"id":"lane10#74","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":73,"kind":"row","text":"epochs"}
+{"id":"lane10#75","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":73,"kind":"row","text":"yes, 8 everywhere (1 in probes)."}
+{"id":"lane10#76","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":73,"kind":"row","text":"Never >8"}
+{"id":"lane10#77","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":74,"kind":"row","text":":719"}
+{"id":"lane10#78","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":74,"kind":"row","text":"studies per micro-batch"}
+{"id":"lane10#79","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":74,"kind":"row","text":"2 in every deployed member;"}
+{"id":"lane10#80","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":74,"kind":"row","text":"1 in scripts/run_local_folds.sh:76 and outputs/t022/local_fold0"}
+{"id":"lane10#81","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":75,"kind":"row","text":"--slices"}
+{"id":"lane10#82","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":75,"kind":"row","text":":720"}
+{"id":"lane10#83","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":75,"kind":"row","text":"slices per series"}
+{"id":"lane10#84","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":75,"kind":"row","text":"yes, 12 everywhere;"}
+{"id":"lane10#85","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":75,"kind":"row","text":"24 once (outputs/t028/run_density.sh:33)"}
+{"id":"lane10#86","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":76,"kind":"row","text":"--seqs"}
+{"id":"lane10#87","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":76,"kind":"row","text":":721"}
+{"id":"lane10#88","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":76,"kind":"row","text":"sequence families per plane"}
+{"id":"lane10#89","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":76,"kind":"row","text":"yes, 2 once — T007, in flight."}
+{"id":"lane10#90","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":76,"kind":"row","text":"ALREADY REGISTERED"}
+{"id":"lane10#91","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":77,"kind":"row","text":"--corpus-val"}
+{"id":"lane10#92","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":77,"kind":"row","text":":725"}
+{"id":"lane10#93","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":77,"kind":"row","text":"held-out weak fraction"}
+{"id":"lane10#94","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":77,"kind":"row","text":"yes, 0.1 on all ten Kaggle-trained members;"}
+{"id":"lane10#95","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":77,"kind":"row","text":"never passed by any local script."}
+{"id":"lane10#96","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":77,"kind":"row","text":"Inert whenever --folds>0 (:729-732)"}
+{"id":"lane10#97","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":78,"kind":"row","text":"--folds"}
+{"id":"lane10#98","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":78,"kind":"row","text":":729"}
+{"id":"lane10#99","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":78,"kind":"row","text":"K-fold over the weak corpus"}
+{"id":"lane10#100","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":78,"kind":"row","text":"yes, 5 in every run"}
+{"id":"lane10#101","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":79,"kind":"row","text":"--fold"}
+{"id":"lane10#102","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":79,"kind":"row","text":":733"}
+{"id":"lane10#103","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":79,"kind":"row","text":"which fold is held out"}
+{"id":"lane10#104","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":79,"kind":"row","text":"yes, 0–4"}
+{"id":"lane10#105","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":80,"kind":"row","text":"--size"}
+{"id":"lane10#106","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":80,"kind":"row","text":":735"}
+{"id":"lane10#107","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":80,"kind":"row","text":"256"}
+{"id":"lane10#108","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":80,"kind":"row","text":"model input px"}
+{"id":"lane10#109","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":80,"kind":"row","text":"yes, 320 in every run. 256 never trained, 384 never tried"}
+{"id":"lane10#110","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":81,"kind":"row","text":":736"}
+{"id":"lane10#111","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":81,"kind":"row","text":"3e-4"}
+{"id":"lane10#112","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":81,"kind":"row","text":"AdamW LR"}
+{"id":"lane10#113","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":81,"kind":"row","text":"NEVER PASSED."}
+{"id":"lane10#114","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":81,"kind":"row","text":"Not once, in any run, local or Kaggle. All 22 deployed checkpoints record lr=0.0003"}
+{"id":"lane10#115","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":82,"kind":"row","text":"--workers"}
+{"id":"lane10#116","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":82,"kind":"row","text":":737"}
+{"id":"lane10#117","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":82,"kind":"row","text":"dataloader workers"}
+{"id":"lane10#118","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":82,"kind":"row","text":"yes, 8 (4 in T007)"}
+{"id":"lane10#119","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":83,"kind":"row","text":"--limit"}
+{"id":"lane10#120","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":83,"kind":"row","text":":738"}
+{"id":"lane10#121","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":83,"kind":"row","text":"study cap"}
+{"id":"lane10#122","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":83,"kind":"row","text":"yes, probes only (limit 20/60/80)"}
+{"id":"lane10#123","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":84,"kind":"row","text":"--seed"}
+{"id":"lane10#124","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":84,"kind":"row","text":":739"}
+{"id":"lane10#125","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":84,"kind":"row","text":"run seed"}
+{"id":"lane10#126","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":84,"kind":"row","text":"passed, but never varied. Every checkpoint in the repo records seed=0"}
+{"id":"lane10#127","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":85,"kind":"row","text":"--split-seed"}
+{"id":"lane10#128","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":85,"kind":"row","text":":740"}
+{"id":"lane10#129","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":85,"kind":"row","text":"None→--seed"}
+{"id":"lane10#130","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":85,"kind":"row","text":"fold-permutation seed"}
+{"id":"lane10#131","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":85,"kind":"row","text":"yes, pinned to 0 everywhere"}
+{"id":"lane10#132","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":86,"kind":"row","text":"--swa-epochs"}
+{"id":"lane10#133","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":86,"kind":"row","text":":745"}
+{"id":"lane10#134","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":86,"kind":"row","text":"epochs averaged for SWA"}
+{"id":"lane10#135","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":86,"kind":"row","text":"NEVER PASSED. Every checkpoint records swa_epochs=3"}
+{"id":"lane10#136","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":87,"kind":"row","text":"--augment"}
+{"id":"lane10#137","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":87,"kind":"row","text":":748"}
+{"id":"lane10#138","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":87,"kind":"row","text":"off"}
+{"id":"lane10#139","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":87,"kind":"row","text":"intensity jitter + random crop"}
+{"id":"lane10#140","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":87,"kind":"row","text":"yes, every run"}
+{"id":"lane10#141","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":88,"kind":"row","text":"--oof-targets"}
+{"id":"lane10#142","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":88,"kind":"row","text":":755"}
+{"id":"lane10#143","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":88,"kind":"row","text":"α=0.5 self-distillation"}
+{"id":"lane10#144","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":88,"kind":"row","text":"yes, once (T030)."}
+{"id":"lane10#145","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":88,"kind":"row","text":"ALREADY REGISTERED (T035)"}
+{"id":"lane10#146","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":89,"kind":"row","text":"--mirror"}
+{"id":"lane10#147","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":89,"kind":"row","text":":762"}
+{"id":"lane10#148","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":89,"kind":"row","text":"label-swapping mirror"}
+{"id":"lane10#149","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":89,"kind":"row","text":"yes, 0.5 from arm C on"}
+{"id":"lane10#150","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":90,"kind":"row","text":"--shared-head-drop"}
+{"id":"lane10#151","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":90,"kind":"row","text":":769"}
+{"id":"lane10#152","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":90,"kind":"row","text":"off"}
+{"id":"lane10#153","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":90,"kind":"row","text":"T004's own single-variable control"}
+{"id":"lane10#154","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":90,"kind":"row","text":"NEVER PASSED. T004's +0.0188 for per-label attention has therefore never been separated from head-dropout regularisation — by the flag its own help text says exists for that purpose"}
+{"id":"lane10#155","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":91,"kind":"row","text":"--per-label-attn"}
+{"id":"lane10#156","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":91,"kind":"row","text":":778"}
+{"id":"lane10#157","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":91,"kind":"row","text":"off"}
+{"id":"lane10#158","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":91,"kind":"row","text":"one attention map per label"}
+{"id":"lane10#159","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":91,"kind":"row","text":"yes, from T004 on"}
+{"id":"lane10#160","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":92,"kind":"row","text":"--seq-head"}
+{"id":"lane10#161","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":92,"kind":"row","text":":789"}
+{"id":"lane10#162","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":92,"kind":"row","text":"off"}
+{"id":"lane10#163","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":92,"kind":"row","text":"bi-GRU over slice order (T014)"}
+{"id":"lane10#164","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":92,"kind":"row","text":"NEVER PASSED, EVER. No checkpoint in the repo has seq_head=True"}
+{"id":"lane10#165","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":93,"kind":"row","text":"--adjacent"}
+{"id":"lane10#166","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":93,"kind":"row","text":":796"}
+{"id":"lane10#167","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":93,"kind":"row","text":"off"}
+{"id":"lane10#168","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":93,"kind":"row","text":"2.5D ±1-slice RGB packing"}
+{"id":"lane10#169","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":93,"kind":"row","text":"yes, from arm A on."}
+{"id":"lane10#170","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":93,"kind":"row","text":"Absent from the ten fold? members"}
+{"id":"lane10#171","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":94,"kind":"row","text":"--rotate"}
+{"id":"lane10#172","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":94,"kind":"row","text":":803"}
+{"id":"lane10#173","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":94,"kind":"row","text":"±deg random rotation"}
+{"id":"lane10#174","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":94,"kind":"row","text":"yes, 25 from arm C on"}
+{"id":"lane10#175","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":95,"kind":"row","text":"--perspective"}
+{"id":"lane10#176","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":95,"kind":"row","text":":806"}
+{"id":"lane10#177","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":95,"kind":"row","text":"random perspective"}
+{"id":"lane10#178","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":95,"kind":"row","text":"NEVER PASSED, EVER. Range-checked at :300 and plumbed to dataset.py, but no run has used it"}
+{"id":"lane10#179","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":96,"kind":"row","text":"--warmup-frac"}
+{"id":"lane10#180","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":96,"kind":"row","text":":808"}
+{"id":"lane10#181","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":96,"kind":"row","text":"linear LR warmup fraction"}
+{"id":"lane10#182","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":96,"kind":"row","text":"passed exactly once — outputs/t025/run_arm.sh:13, 0.1."}
+{"id":"lane10#183","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":96,"kind":"row","text":"See §2.1: PROGRESS.md's claim that no run ever passed it is false"}
+{"id":"lane10#184","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":97,"kind":"row","text":"--layer-decay"}
+{"id":"lane10#185","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":97,"kind":"row","text":":812"}
+{"id":"lane10#186","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":97,"kind":"row","text":"layer-wise encoder LR decay"}
+{"id":"lane10#187","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":97,"kind":"row","text":"passed exactly once — same line, 0.75."}
+{"id":"lane10#188","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":97,"kind":"row","text":"Same correction"}
+{"id":"lane10#189","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":98,"kind":"row","text":"--mask-at-base"}
+{"id":"lane10#190","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":98,"kind":"row","text":":815"}
+{"id":"lane10#191","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":98,"kind":"row","text":"off"}
+{"id":"lane10#192","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":98,"kind":"row","text":"drop at-base cells from the loss"}
+{"id":"lane10#193","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":98,"kind":"row","text":"yes, once (T020)"}
+{"id":"lane10#194","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":99,"kind":"row","text":"--accum"}
+{"id":"lane10#195","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":99,"kind":"row","text":":821"}
+{"id":"lane10#196","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":99,"kind":"row","text":"micro-batches per step"}
+{"id":"lane10#197","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":99,"kind":"row","text":"yes, 2 in run_local_folds.sh:76 and outputs/t022/local_fold0"}
+{"id":"lane10#198","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":100,"kind":"row","text":"--grad-checkpoint"}
+{"id":"lane10#199","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":100,"kind":"row","text":":827"}
+{"id":"lane10#200","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":100,"kind":"row","text":"off"}
+{"id":"lane10#201","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":100,"kind":"row","text":"recompute encoder activations"}
+{"id":"lane10#202","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":100,"kind":"row","text":"yes locally;"}
+{"id":"lane10#203","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":100,"kind":"row","text":"off in all ten Kaggle-trained members. See §3.1"}
+{"id":"lane10#204","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":101,"kind":"row","text":"--out"}
+{"id":"lane10#205","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":101,"kind":"row","text":":830"}
+{"id":"lane10#206","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":101,"kind":"row","text":"outputs/best.pt"}
+{"id":"lane10#207","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":101,"kind":"row","text":"checkpoint path"}
+{"id":"lane10#208","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":101,"kind":"row","text":"yes, always"}
+{"id":"lane10#209","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":103,"kind":"head","text":"### 1.1 The never-passed set"}
+{"id":"lane10#210","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":105,"kind":"para","text":"Five flags have never once been given a non-default value by any run in this repo, local or Kaggle, in any task:"}
+{"id":"lane10#211","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":112,"kind":"para","text":"and one more is passed but frozen: --seed is 0 in all 22 deployed members and all 8 experimental ones. Ensemble diversity comes from fold, arm and argmax-vs-SWA only;"}
+{"id":"lane10#212","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":114,"kind":"para","text":"not one member differs from another by initialisation."}
+{"id":"lane10#213","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":116,"kind":"para","text":"MEASURED — the command behind that claim is in appendix A;"}
+{"id":"lane10#214","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":116,"kind":"para","text":"the raw dump of all 30 checkpoints' args is reproducible with the same script."}
+{"id":"lane10#215","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":119,"kind":"head","text":"### 1.2 Other CLIs"}
+{"id":"lane10#216","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":121,"kind":"para","text":"The remaining add_argument sites are analysis tools, not training."}
+{"id":"lane10#217","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":121,"kind":"para","text":"Enumerated for completeness (file:line, default): scripts/compare_ckpts.py:320-338 (--boot 2000, --alpha 0.05, --seed 0, --per-label-band, --labels data/weak_labels.csv — the default again points at the dead rule labeler, and every caller in outputs/t028/_arm_lib.sh:38 overrides it);"}
+{"id":"lane10#218","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":125,"kind":"para","text":"scripts/push_family.py:70-99;"}
+{"id":"lane10#219","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":126,"kind":"para","text":"scripts/add_ensemble_member.py:50-66 (--max-layouts 2, --tta crop,bright);"}
+{"id":"lane10#220","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":127,"kind":"para","text":"scripts/build_manifest.py:56-63;"}
+{"id":"lane10#221","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":127,"kind":"para","text":"scripts/gradcam.py:317-350;"}
+{"id":"lane10#222","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":128,"kind":"para","text":"scripts/distil_weak.py:62-67;"}
+{"id":"lane10#223","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":128,"kind":"para","text":"scripts/train_text_labeler.py:126-138;"}
+{"id":"lane10#224","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":129,"kind":"para","text":"scripts/cam_sheet.py:330-336;"}
+{"id":"lane10#225","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":129,"kind":"para","text":"scripts/cam_diffuseness.py:135-137;"}
+{"id":"lane10#226","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":130,"kind":"para","text":"scripts/rank_blend.py:89-90;"}
+{"id":"lane10#227","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":130,"kind":"para","text":"scripts/rho_excluding_base.py:92-94;"}
+{"id":"lane10#228","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":131,"kind":"para","text":"scripts/label_gaps.py:124;"}
+{"id":"lane10#229","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":131,"kind":"para","text":"scripts/make_weak_labels.py:38-40;"}
+{"id":"lane10#230","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":132,"kind":"para","text":"src/eval_weak.py:50-51;"}
+{"id":"lane10#231","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":132,"kind":"para","text":"scripts/attn_divergence.py:71;"}
+{"id":"lane10#232","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":133,"kind":"para","text":"scripts/compare_runs.py:91."}
+{"id":"lane10#233","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":133,"kind":"para","text":"src/tta.py has no CLI — it is imported by the kernel."}
+{"id":"lane10#234","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":136,"kind":"head","text":"### 1.3 The Kaggle kernel's environment variables"}
+{"id":"lane10#235","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":138,"kind":"para","text":"READ — outputs/t039/live_kernel/rsna-knee-submit.py, all with baked defaults so an unset variable still runs:"}
+{"id":"lane10#236","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"kind":"row","text":"var"}
+{"id":"lane10#237","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"kind":"row","text":"line"}
+{"id":"lane10#238","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"kind":"row","text":"default"}
+{"id":"lane10#239","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":141,"kind":"row","text":"note"}
+{"id":"lane10#240","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":143,"kind":"row","text":"RSNA_COMP"}
+{"id":"lane10#241","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":143,"kind":"row","text":":46"}
+{"id":"lane10#242","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":143,"kind":"row","text":"first existing of a candidate list"}
+{"id":"lane10#243","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":143,"kind":"row","text":"competition mount"}
+{"id":"lane10#244","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":144,"kind":"row","text":"RSNA_SRC"}
+{"id":"lane10#245","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":144,"kind":"row","text":":50"}
+{"id":"lane10#246","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":144,"kind":"row","text":"candidate list"}
+{"id":"lane10#247","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":144,"kind":"row","text":"code dataset"}
+{"id":"lane10#248","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":145,"kind":"row","text":"RSNA_CKPT_DIR"}
+{"id":"lane10#249","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":145,"kind":"row","text":":55"}
+{"id":"lane10#250","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":145,"kind":"row","text":"candidate list"}
+{"id":"lane10#251","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":145,"kind":"row","text":"weights dataset"}
+{"id":"lane10#252","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":146,"kind":"row","text":"RSNA_CKPT"}
+{"id":"lane10#253","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":146,"kind":"row","text":":59"}
+{"id":"lane10#254","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":146,"kind":"row","text":"<CKPT_DIR>/best.pt"}
+{"id":"lane10#255","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":146,"kind":"row","text":"single-checkpoint fallback"}
+{"id":"lane10#256","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":147,"kind":"row","text":"RSNA_TEST_ROOT"}
+{"id":"lane10#257","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":147,"kind":"row","text":":60"}
+{"id":"lane10#258","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":147,"kind":"row","text":"<COMP>/test_series"}
+{"id":"lane10#259","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":148,"kind":"row","text":"RSNA_OUT"}
+{"id":"lane10#260","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":148,"kind":"row","text":":61"}
+{"id":"lane10#261","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":148,"kind":"row","text":"submission.csv"}
+{"id":"lane10#262","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":149,"kind":"row","text":"RSNA_CKPTS"}
+{"id":"lane10#263","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":149,"kind":"row","text":":72"}
+{"id":"lane10#264","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":149,"kind":"row","text":"fold?.pt,fold?.swa.pt,armb0.pt,armb0.swa.pt,armc?.pt,armc?.swa.pt"}
+{"id":"lane10#265","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":149,"kind":"row","text":"the 22 members"}
+{"id":"lane10#266","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":150,"kind":"row","text":"RSNA_TTA"}
+{"id":"lane10#267","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":150,"kind":"row","text":":73"}
+{"id":"lane10#268","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":150,"kind":"row","text":"crop,bright"}
+{"id":"lane10#269","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":150,"kind":"row","text":"2 of 6 defined views"}
+{"id":"lane10#270","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":151,"kind":"row","text":"RSNA_TTA_UNMATCHED"}
+{"id":"lane10#271","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":151,"kind":"row","text":":76"}
+{"id":"lane10#272","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":151,"kind":"row","text":"policy for views a checkpoint was not trained for"}
+{"id":"lane10#273","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":152,"kind":"row","text":"RSNA_MAX_LAYOUTS"}
+{"id":"lane10#274","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":152,"kind":"row","text":":85"}
+{"id":"lane10#275","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":152,"kind":"row","text":"see §3.4"}
+{"id":"lane10#276","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":154,"kind":"para","text":"scripts/add_ensemble_member.py:138 deliberately strips every RSNA_ from the environment before staging, so a stale shell variable cannot silently change what is baked — a good pattern, noted rather than faulted."}
+{"id":"lane10#277","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":160,"kind":"head","text":"Live-but-unused versus dead"}
+{"id":"lane10#278","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":162,"kind":"para","text":"Nothing in the never-passed set is dead code."}
+{"id":"lane10#279","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":162,"kind":"para","text":"Each was traced to the line that consumes it."}
+{"id":"lane10#280","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":165,"kind":"row","text":"flag"}
+{"id":"lane10#281","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":165,"kind":"row","text":"reachable?"}
+{"id":"lane10#282","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":165,"kind":"row","text":"the line that consumes it"}
+{"id":"lane10#283","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":167,"kind":"row","text":"live"}
+{"id":"lane10#284","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":167,"kind":"row","text":"train.py:267 and :279/:284/:289 — sets every param group's LR"}
+{"id":"lane10#285","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":168,"kind":"row","text":"--swa-epochs"}
+{"id":"lane10#286","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":168,"kind":"row","text":"live"}
+{"id":"lane10#287","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":168,"kind":"row","text":"train.py:645 prints SWA over the last {n_avg} epochs;"}
+{"id":"lane10#288","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":168,"kind":"row","text":"guarded >0"}
+{"id":"lane10#289","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":169,"kind":"row","text":"--shared-head-drop"}
+{"id":"lane10#290","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":169,"kind":"row","text":"live"}
+{"id":"lane10#291","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":169,"kind":"row","text":"passed into the model;"}
+{"id":"lane10#292","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":169,"kind":"row","text":"consumed in src/model.py (see §3.3)"}
+{"id":"lane10#293","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":170,"kind":"row","text":"--seq-head"}
+{"id":"lane10#294","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":170,"kind":"row","text":"live"}
+{"id":"lane10#295","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":170,"kind":"row","text":"src/model.py:196 builds the GRU;"}
+{"id":"lane10#296","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":170,"kind":"row","text":":230 runs it"}
+{"id":"lane10#297","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":171,"kind":"row","text":"--perspective"}
+{"id":"lane10#298","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":171,"kind":"row","text":"live"}
+{"id":"lane10#299","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":171,"kind":"row","text":"range-checked train.py:300, consumed in src/dataset.py"}
+{"id":"lane10#300","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":172,"kind":"row","text":"--warmup-frac"}
+{"id":"lane10#301","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":172,"kind":"row","text":"live"}
+{"id":"lane10#302","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":172,"kind":"row","text":"train.py:229-246 lr_scale, printed at :516"}
+{"id":"lane10#303","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":173,"kind":"row","text":"--layer-decay"}
+{"id":"lane10#304","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":173,"kind":"row","text":"live"}
+{"id":"lane10#305","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":173,"kind":"row","text":"train.py:266-289 build_optimizer, printed at :287"}
+{"id":"lane10#306","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":175,"kind":"head","text":"### 2.1 CORRECTION — --layer-decay and --warmup-frac were passed, once"}
+{"id":"lane10#307","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":177,"kind":"para","text":"This lane's brief and two documents on disk state that these flags have never been passed."}
+{"id":"lane10#308","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":178,"kind":"para","text":"That is false, and the correction matters because it changes what a screen would learn."}
+{"id":"lane10#309","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":181,"kind":"para","text":"READ — outputs/t025/run_arm.sh:12-13:"}
+{"id":"lane10#310","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":188,"kind":"para","text":"READ — outputs/t025/dinov3_fold0.log:7-8, which is the proof they bound:"}
+{"id":"lane10#311","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":195,"kind":"para","text":"MEASURED — outputs/t025/dinov3_fold0.pt records warmup_frac=0.1 layer_decay=0.75 backbone=convnext_tiny.dinov3_lvd1689m."}
+{"id":"lane10#312","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":198,"kind":"para","text":"The three documents to correct are:"}
+{"id":"lane10#313","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":200,"kind":"para","text":"- PROGRESS.md:5857-5859 — \"--warmup-frac and --layer-decay exist at train.py:808-812 and no run has ever passed them.\""}
+{"id":"lane10#314","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":202,"kind":"para","text":"- docs/research/0902b/lane6-single-model-gap.md:185 and :219 — \"the flag is wired and never used\" / \"were never once passed\"."}
+{"id":"lane10#315","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":204,"kind":"para","text":"- scripts/t042/run_recipe_fold0.sh:7-8 — \"NEITHER HAS EVER BEEN PASSED by any run in this repo\"."}
+{"id":"lane10#316","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":205,"kind":"para","text":"This is the header of the screen that is queued to run right now, so the error is live rather than archival."}
+{"id":"lane10#317","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":208,"kind":"para","text":"What survives the correction, and it is most of the substance: the one run that used them was on a different encoder (DINOv3 ConvNeXt-Tiny, not tf_efficientnet_b2), had per_label_attn=False, adjacent=False, mirror=0.0, rotate=0.0, and stopped after epoch 1 of 8 (the log is 1,313 bytes and its last line is epoch 1/8)."}
+{"id":"lane10#318","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":212,"kind":"para","text":"So the flags have never been measured on our recipe, and lane 6's screen S1 is still unrun."}
+{"id":"lane10#319","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":213,"kind":"para","text":"But it is not a zero-prior screen: the single epoch that exists scored gold AUC 0.7118 / corpus rho 0.4898, against arm C's epoch-1 numbers — a comparison §5 does not make, because the backbone differs and a one-epoch comparison across encoders resolves nothing."}
+{"id":"lane10#320","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":218,"kind":"para","text":"The practical consequence for S1 is small but real: the run is not novel plumbing. build_optimizer has executed the layer_decay < 1.0 branch on real hardware and produced 40 groups without error, so the \"does the flag bind\" risk lane 6 wrote its void-clause against is already retired for ConvNeXt, and only the timm group_matcher for tf_efficientnet_b2 is untested."}
+{"id":"lane10#321","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":222,"kind":"para","text":"That is worth one CPU-only assertion before spending the fold, not a GPU hour."}
+{"id":"lane10#322","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":227,"kind":"head","text":"Defects, and the ones that turned out not to be"}
+{"id":"lane10#323","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":229,"kind":"head","text":"### 3.1 The BatchNorm double-update: measured, bounded, and NOT a lever"}
+{"id":"lane10#324","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":231,"kind":"para","text":"src/train.py:496-499 warns that gradient checkpointing double-updates BatchNorm running statistics, and that \"Training is unaffected;"}
+{"id":"lane10#325","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":232,"kind":"para","text":"eval-time buffers are not\"."}
+{"id":"lane10#326","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":233,"kind":"para","text":"Every local fold runs --grad-checkpoint;"}
+{"id":"lane10#327","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":233,"kind":"para","text":"no Kaggle fold does (MEASURED, §1: armc1–armc4 and fold0–fold4 all record grad_checkpoint=False/absent)."}
+{"id":"lane10#328","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":235,"kind":"para","text":"So the deployed 22 mixes two regimes: 4 members checkpointed (armb0, armb0.swa, armc0, armc0.swa) and 18 not."}
+{"id":"lane10#329","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":237,"kind":"para","text":"Three measurements settle what that costs."}
+{"id":"lane10#330","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":239,"kind":"para","text":"(a) The double-update is 67 of 69 BN layers, not all of them. MEASURED — reading num_batches_tracked out of the state dicts:"}
+{"id":"lane10#331","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":250,"kind":"para","text":"The two stem/head BatchNorms sit outside the checkpointed blocks and are updated once;"}
+{"id":"lane10#332","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":251,"kind":"para","text":"every BN inside encoder.blocks is updated twice."}
+{"id":"lane10#333","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":251,"kind":"para","text":"A non-checkpointed member shows a single value (armc1, armc3: {10434})."}
+{"id":"lane10#334","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":252,"kind":"para","text":"This refines T022: the effect is per-layer, not global, and the un-doubled pair is exactly the two layers timm leaves outside set_grad_checkpointing."}
+{"id":"lane10#335","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":256,"kind":"para","text":"(b) Analytically the expectation is unchanged;"}
+{"id":"lane10#336","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":256,"kind":"para","text":"only the estimator window moves. INFERRED, model stated: PyTorch's BN update is running ← (1−m)·running + m·batch with m = 0.1 (timm leaves the default)."}
+{"id":"lane10#337","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":258,"kind":"para","text":"Applying it twice per optimizer step gives an effective m' = 1 − (1−0.1)² = 0.19."}
+{"id":"lane10#338","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":260,"kind":"para","text":"Both are exponential moving averages of the same batch-statistic distribution, so they share an expectation;"}
+{"id":"lane10#339","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":261,"kind":"para","text":"what differs is the effective window, 1/m = 10 batches against 1/m' = 5.3 batches."}
+{"id":"lane10#340","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":262,"kind":"para","text":"At the 10,434–20,880 steps these checkpoints record, both are converged many hundreds of time constants past initialisation."}
+{"id":"lane10#341","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":264,"kind":"para","text":"The difference is therefore a variance difference in the final buffer, not a bias."}
+{"id":"lane10#342","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":267,"kind":"para","text":"(c) And the measured buffer difference is smaller than the fold-to-fold difference. MEASURED, across the 69 BN layers of each member:"}
+{"id":"lane10#343","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"kind":"row","text":"member"}
+{"id":"lane10#344","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"kind":"row","text":"--grad-checkpoint"}
+{"id":"lane10#345","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"kind":"row","text":"median running_var"}
+{"id":"lane10#346","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":270,"kind":"row","text":"median abs running_mean"}
+{"id":"lane10#347","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":272,"kind":"row","text":"armc0 (local, fold 0)"}
+{"id":"lane10#348","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":272,"kind":"row","text":"5.4617"}
+{"id":"lane10#349","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":272,"kind":"row","text":"0.2299"}
+{"id":"lane10#350","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":273,"kind":"row","text":"armc1 (T4, fold 1)"}
+{"id":"lane10#351","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":273,"kind":"row","text":"off"}
+{"id":"lane10#352","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":273,"kind":"row","text":"5.4378"}
+{"id":"lane10#353","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":273,"kind":"row","text":"0.2356"}
+{"id":"lane10#354","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":274,"kind":"row","text":"armc3 (T4, fold 3)"}
+{"id":"lane10#355","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":274,"kind":"row","text":"off"}
+{"id":"lane10#356","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":274,"kind":"row","text":"5.3229"}
+{"id":"lane10#357","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":274,"kind":"row","text":"0.2279"}
+{"id":"lane10#358","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":276,"kind":"para","text":"The checkpointed member sits inside the spread of the two non-checkpointed ones on both statistics."}
+{"id":"lane10#359","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":277,"kind":"para","text":"This is not a controlled comparison — fold and venue move with the regime — but it is the comparison that would show an outlier if the regime dominated, and it does not."}
+{"id":"lane10#360","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":281,"kind":"para","text":"(d) The controlled answer already exists and agrees. READ — PROGRESS.md:3372-3399, T022 Gate D at --bs 2 --grad-checkpoint: Δrho −0.0115 (local better) against the pair's own band ±0.0112, r = 0.8308."}
+{"id":"lane10#361","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":283,"kind":"para","text":"Verdict recorded there: \"NOT EQUIVALENT at bs=2 either — but marginally, and in the harmless direction.\""}
+{"id":"lane10#362","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":287,"kind":"para","text":"Verdict: NULL as a lever. The regimes are distinguishable at 1.03× the band, in the direction that favours the members we already trust, and the buffer difference is below fold noise."}
+{"id":"lane10#363","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":289,"kind":"para","text":"Mixing them in the blend is diversity, not error."}
+{"id":"lane10#364","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":290,"kind":"para","text":"The one arithmetically clean fix — set momentum = 1 − sqrt(1−0.1) = 0.0513 on the 67 doubled layers, which restores an effective 0.1 exactly and invents no new constant, since it is derived from the existing one — is ~4 lines and is bounded above by Gate D's 0.0115 rho, almost all of which is attributable to fold and venue rather than to BN."}
+{"id":"lane10#365","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":294,"kind":"para","text":"Not worth a fold."}
+{"id":"lane10#366","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":294,"kind":"para","text":"Recorded so nobody re-derives it."}
+{"id":"lane10#367","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":297,"kind":"head","text":"### 3.2 What I checked and found clean"}
+{"id":"lane10#368","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":299,"kind":"para","text":"Recording nulls, because a null that is written down is not re-checked:"}
+{"id":"lane10#369","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":301,"kind":"para","text":"- Epoch propagation to the workers. train.py:531 sets train_ds.epoch = ep before the iterator is built, and no DataLoader in the file sets persistent_workers (:445-452), so the fork carries the new epoch."}
+{"id":"lane10#370","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":303,"kind":"para","text":"The mirror/rotate stream at dataset.py:342 is genuinely re-drawn each epoch."}
+{"id":"lane10#371","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":304,"kind":"para","text":"dataset.py:209 even carries the warning."}
+{"id":"lane10#372","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":305,"kind":"para","text":"Clean."}
+{"id":"lane10#373","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":306,"kind":"para","text":"- The intensity window under --adjacent. dicom_io.py:513 computes np.percentile(vol, [1.0, 99.0]) at line 513, and the packing that adds neighbour channels happens at :517-545, after."}
+{"id":"lane10#374","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":308,"kind":"para","text":"The docstring's claim that the window comes from the centre slices alone is exact."}
+{"id":"lane10#375","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":309,"kind":"para","text":"Clean."}
+{"id":"lane10#376","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":310,"kind":"para","text":"- tta.py's two round-1 bugs. Both fixed under T039;"}
+{"id":"lane10#377","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":310,"kind":"para","text":"the current apply_view (:265-277) transforms all three channels via reshape(bsc,...) and mirror_bag (:223) flips dims=[0,1] on the slice axis."}
+{"id":"lane10#378","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":312,"kind":"para","text":"Clean."}
+{"id":"lane10#379","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":313,"kind":"para","text":"- The blend arithmetic. tta.blend:311-321 divides by the weight that actually landed, per study and per label;"}
+{"id":"lane10#380","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":314,"kind":"para","text":"the kernel's member mean (rsna-knee-submit.py:281-288) accumulates psum/pcount so the result is a flat mean over all members regardless of layout grouping, which the comment proves is identical to blending first because the view weights do not depend on the predicted values."}
+{"id":"lane10#381","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":318,"kind":"para","text":"Clean, and the linearity argument holds."}
+{"id":"lane10#382","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":319,"kind":"para","text":"- select_ckpts (:107-…) fails loudly on a pattern that matches nothing."}
+{"id":"lane10#383","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":319,"kind":"para","text":"Clean."}
+{"id":"lane10#384","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":321,"kind":"para","text":"- The PRIORS fallback (:96, used at :163/:373) never fired: MEASURED, the v16 run log says every scored study used all 22 members."}
+{"id":"lane10#385","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":324,"kind":"head","text":"### 3.3 The deployed ensemble is at the layout cap, and that blocks T007"}
+{"id":"lane10#386","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":326,"kind":"para","text":"MEASURED — outputs/t039/v16_log/rsna-knee-submit.log:"}
+{"id":"lane10#387","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":336,"kind":"para","text":"The layout key is (slices, size, seqs, adjacent) (rsna-knee-submit.py:209, :273-275) and MAX_LAYOUTS is 2 (:85)."}
+{"id":"lane10#388","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":337,"kind":"para","text":"The deployed ensemble already occupies both slots. A --seqs 2 member from T007 has layout (12, 320, 2, True) — a third layout — so rsna-knee-submit.py:235 would SystemExit on it."}
+{"id":"lane10#389","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":342,"kind":"para","text":"pm/tasks/T007-sequence-diversity-clean.md contains no occurrence of \"layout\", \"MAX_LAYOUTS\", \"deploy\" or \"submit\" (MEASURED, grep in appendix A), and pm/tasks/T028-config-for-the-family.md:444-445 says only that the cap \"does not need raising\" for T028's case."}
+{"id":"lane10#390","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":345,"kind":"para","text":"So this is unregistered."}
+{"id":"lane10#391","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":347,"kind":"para","text":"Three ways out, none free, and the choice is a submission-side decision: raise RSNA_MAX_LAYOUTS to 3 and pay a third full pass over the test data (the kernel prints ~67 min for two passes at 22×3, so INFERRED ~+30 min);"}
+{"id":"lane10#392","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":349,"kind":"para","text":"or drop the ten fold? members, which frees the slot and unlocks three TTA views (§3.4) but costs ten of twenty-two members;"}
+{"id":"lane10#393","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":351,"kind":"para","text":"or ship the --seqs 2 family alone."}
+{"id":"lane10#394","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":351,"kind":"para","text":"This should be recorded on T007 before its fold is judged, because \"the screen adopted\" and \"the member is deployable\" are not the same question here."}
+{"id":"lane10#395","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":355,"kind":"head","text":"### 3.4 The three refused TTA views — ALREADY REGISTERED, mechanism confirmed"}
+{"id":"lane10#396","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":357,"kind":"para","text":"tta.VIEW_REQUIRES (src/tta.py:66-73) defines six views;"}
+{"id":"lane10#397","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":357,"kind":"para","text":"the deployed kernel runs three."}
+{"id":"lane10#398","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":358,"kind":"para","text":"MEASURED, the cause is the any() in tta.unmatched (src/tta.py:116): one member lacking a flag kills the view for the whole ensemble, and the ten fold? members record mirror=0.0 rotate=0.0."}
+{"id":"lane10#399","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":360,"kind":"para","text":"Those ten are also the ten weakest by gold (0.8477–0.8779 against the arm-C members' 0.8781–0.8915)."}
+{"id":"lane10#400","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":364,"kind":"para","text":"ALREADY REGISTERED — pm/tasks/T028-config-for-the-family.md:122, pm/tasks/T034-family-alone-lb-ab.md:49, pm/STATE.md:36 (\"Rider/blend trap\"), docs/PLAN-0831…:127."}
+{"id":"lane10#401","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":366,"kind":"para","text":"T034 is the registered instrument and is unclaimed."}
+{"id":"lane10#402","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":366,"kind":"para","text":"This lane adds only the observation in §3.3 that the same ten members are the layout blocker, so one decision resolves both — which T034's framing does not say."}
+{"id":"lane10#403","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":370,"kind":"head","text":"### 3.5 Three hyperparameters with no CLI at all — the one real new lever"}
+{"id":"lane10#404","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":372,"kind":"para","text":"This is the strongest new find in the lane, and it is the direct descendant of the --layer-decay discovery rather than a repeat of it."}
+{"id":"lane10#405","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":375,"kind":"para","text":"READ — src/train.py:458-462 constructs the model with five arguments:"}
+{"id":"lane10#406","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":385,"kind":"para","text":"dropout is not among them, so it takes KneeMIL's default 0.3 (src/model.py:169)."}
+{"id":"lane10#407","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":386,"kind":"para","text":"Weight decay is the literal 1e-4, written four times (train.py:268, :276, :284, :289) and reachable by no flag."}
+{"id":"lane10#408","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":387,"kind":"para","text":"And there is no way to set the encoder's learning rate independently of the head's."}
+{"id":"lane10#409","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"kind":"row","text":"knob"}
+{"id":"lane10#410","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"kind":"row","text":"our value"}
+{"id":"lane10#411","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"kind":"row","text":"where it is fixed"}
+{"id":"lane10#412","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"kind":"row","text":"the public recipe's value"}
+{"id":"lane10#413","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":390,"kind":"row","text":"flag?"}
+{"id":"lane10#414","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":392,"kind":"row","text":"encoder LR"}
+{"id":"lane10#415","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":392,"kind":"row","text":"3e-4 (same group as the head)"}
+{"id":"lane10#416","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":392,"kind":"row","text":"train.py:267"}
+{"id":"lane10#417","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":392,"kind":"row","text":"3e-5"}
+{"id":"lane10#418","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":392,"kind":"row","text":"none"}
+{"id":"lane10#419","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":393,"kind":"row","text":"head LR"}
+{"id":"lane10#420","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":393,"kind":"row","text":"3e-4"}
+{"id":"lane10#421","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":393,"kind":"row","text":"train.py:267"}
+{"id":"lane10#422","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":393,"kind":"row","text":"1e-3"}
+{"id":"lane10#423","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":393,"kind":"row","text":"--lr, global only"}
+{"id":"lane10#424","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"kind":"row","text":"weight decay"}
+{"id":"lane10#425","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"kind":"row","text":"1e-4"}
+{"id":"lane10#426","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"kind":"row","text":"train.py:268/276/284/289"}
+{"id":"lane10#427","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"kind":"row","text":"0.02"}
+{"id":"lane10#428","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":394,"kind":"row","text":"none"}
+{"id":"lane10#429","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":395,"kind":"row","text":"head dropout"}
+{"id":"lane10#430","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":395,"kind":"row","text":"model.py:169, never passed"}
+{"id":"lane10#431","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":395,"kind":"row","text":"none"}
+{"id":"lane10#432","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":397,"kind":"para","text":"(the recipe column is READ from docs/research/0902b/lane6-single-model-gap.md — the head's Dropout(0.2) at :174, the LR/weight-decay rows at :182-184.)"}
+{"id":"lane10#433","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":400,"kind":"para","text":"Why --layer-decay does not substitute for --encoder-lr. MEASURED — timm assigns 24 distinct layer levels to tf_efficientnet_b2, split into 48 parameter groups covering 299/299 encoder tensors:"}
+{"id":"lane10#434","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"kind":"row","text":"--layer-decay"}
+{"id":"lane10#435","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"kind":"row","text":"min lr_scale"}
+{"id":"lane10#436","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"kind":"row","text":"median"}
+{"id":"lane10#437","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"kind":"row","text":"min LR"}
+{"id":"lane10#438","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"kind":"row","text":"median LR"}
+{"id":"lane10#439","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":404,"kind":"row","text":"groups under 1e-6 LR"}
+{"id":"lane10#440","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":406,"kind":"row","text":"1.0 (today)"}
+{"id":"lane10#441","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":406,"kind":"row","text":"3.0e-04"}
+{"id":"lane10#442","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":406,"kind":"row","text":"3.0e-04"}
+{"id":"lane10#443","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":407,"kind":"row","text":"0.95"}
+{"id":"lane10#444","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":407,"kind":"row","text":"3.07e-01"}
+{"id":"lane10#445","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":407,"kind":"row","text":"0.5546"}
+{"id":"lane10#446","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":407,"kind":"row","text":"9.2e-05"}
+{"id":"lane10#447","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":407,"kind":"row","text":"1.7e-04"}
+{"id":"lane10#448","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":408,"kind":"row","text":"0.90"}
+{"id":"lane10#449","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":408,"kind":"row","text":"8.86e-02"}
+{"id":"lane10#450","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":408,"kind":"row","text":"0.2981"}
+{"id":"lane10#451","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":408,"kind":"row","text":"2.7e-05"}
+{"id":"lane10#452","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":408,"kind":"row","text":"8.9e-05"}
+{"id":"lane10#453","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":409,"kind":"row","text":"0.85"}
+{"id":"lane10#454","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":409,"kind":"row","text":"2.38e-02"}
+{"id":"lane10#455","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":409,"kind":"row","text":"0.1548"}
+{"id":"lane10#456","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":409,"kind":"row","text":"7.1e-06"}
+{"id":"lane10#457","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":409,"kind":"row","text":"4.6e-05"}
+{"id":"lane10#458","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"kind":"row","text":"0.80"}
+{"id":"lane10#459","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"kind":"row","text":"5.90e-03"}
+{"id":"lane10#460","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"kind":"row","text":"0.0773"}
+{"id":"lane10#461","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"kind":"row","text":"1.8e-06"}
+{"id":"lane10#462","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":410,"kind":"row","text":"2.3e-05"}
+{"id":"lane10#463","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":411,"kind":"row","text":"0.75 (help text's \"typical\")"}
+{"id":"lane10#464","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":411,"kind":"row","text":"1.34e-03"}
+{"id":"lane10#465","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":411,"kind":"row","text":"0.0370"}
+{"id":"lane10#466","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":411,"kind":"row","text":"4.0e-07"}
+{"id":"lane10#467","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":411,"kind":"row","text":"1.1e-05"}
+{"id":"lane10#468","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":412,"kind":"row","text":"0.70"}
+{"id":"lane10#469","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":412,"kind":"row","text":"2.74e-04"}
+{"id":"lane10#470","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":412,"kind":"row","text":"0.0168"}
+{"id":"lane10#471","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":412,"kind":"row","text":"8.2e-08"}
+{"id":"lane10#472","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":412,"kind":"row","text":"5.0e-06"}
+{"id":"lane10#473","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":413,"kind":"row","text":"0.60 (T042, in flight)"}
+{"id":"lane10#474","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":413,"kind":"row","text":"7.90e-06"}
+{"id":"lane10#475","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":413,"kind":"row","text":"0.0029"}
+{"id":"lane10#476","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":413,"kind":"row","text":"2.4e-09"}
+{"id":"lane10#477","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":413,"kind":"row","text":"8.7e-07"}
+{"id":"lane10#478","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":413,"kind":"row","text":"24 of 48"}
+{"id":"lane10#479","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":414,"kind":"row","text":"0.50"}
+{"id":"lane10#480","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":414,"kind":"row","text":"1.19e-07"}
+{"id":"lane10#481","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":414,"kind":"row","text":"0.00037"}
+{"id":"lane10#482","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":414,"kind":"row","text":"3.6e-11"}
+{"id":"lane10#483","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":414,"kind":"row","text":"1.1e-07"}
+{"id":"lane10#484","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":416,"kind":"para","text":"A geometric ramp cannot produce a flat encoder LR at 0.1× the head."}
+{"id":"lane10#485","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":416,"kind":"para","text":"The value whose median encoder scale lands nearest the recipe's 0.1 is ≈0.82, and even there the spread across groups is 0.006 to 1.0 — a 170× range where the recipe has a 1× range."}
+{"id":"lane10#486","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":419,"kind":"para","text":"The shape the public recipe uses is not expressible in our CLI."}
+{"id":"lane10#487","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":422,"kind":"para","text":"Partly already registered. pm/STATE.md's NOW block (2026-09-02 10:25Z) records a pre-launch CPU check of the same object — \"timm finds 23 layer levels in tf_efficientnet_b2 → 48 groups, lr_scale 1e-5…1.0 … the param-weighted mean encoder LR is 1.35e-4, only 2.2× below the head … the stem is frozen in effect\"."}
+{"id":"lane10#488","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":425,"kind":"para","text":"That is the same measurement weighted by parameter count rather than by group, and the two agree."}
+{"id":"lane10#489","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":427,"kind":"para","text":"What is new here is the consequence: not \"0.6 is a graded cut\" (registered) but \"no value of --layer-decay reproduces the recipe, so T042 cannot answer the question it was written to answer, whatever its verdict\", plus the table that says which value to pick if a graded cut is what is wanted (0.85–0.90, where nothing freezes)."}
+{"id":"lane10#490","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":433,"kind":"para","text":"The fix is small. An --encoder-lr flag is one add_argument plus one branch in build_optimizer that puts model.encoder.parameters() in a group at args.encoder_lr and everything else at args.lr — the enc/rest split at train.py:282-285 already exists and is reused verbatim."}
+{"id":"lane10#491","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":436,"kind":"para","text":"~8 lines. --weight-decay is one flag replacing four literals;"}
+{"id":"lane10#492","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":437,"kind":"para","text":"--dropout is one flag threaded to KneeMIL."}
+{"id":"lane10#493","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":438,"kind":"para","text":"All three default to today's values, so every measured number keeps its meaning — the house rule at train.py:751-754."}
+{"id":"lane10#494","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":441,"kind":"head","text":"### 3.6 Smaller things, none of them levers"}
+{"id":"lane10#495","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":443,"kind":"para","text":"- --shared-head-drop has never been run (§1), and src/model.py:198-209 states in its own comment that without it --per-label-attn \"changes two things at once and some share of T004's +0.0188 may be head regularisation rather than per-label attention\"."}
+{"id":"lane10#496","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":446,"kind":"para","text":"T033 later excluded decorrelation as the mechanism (pm/STATE.md), so --per-label-attn's +0.0188 is still unexplained and its own control still exists, unused. One fold;"}
+{"id":"lane10#497","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":448,"kind":"para","text":"explains a past result rather than buying a new one."}
+{"id":"lane10#498","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":450,"kind":"para","text":"- --seq-head has never been run (§1)."}
+{"id":"lane10#499","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":450,"kind":"para","text":"SliceSequenceHead (model.py:83-143) is complete, zero-init, and handles the padding correctly via pack_padded_sequence with clamp(min=1)."}
+{"id":"lane10#500","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":452,"kind":"para","text":"It is registered as T014."}
+{"id":"lane10#501","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":453,"kind":"para","text":"- --perspective has never been run and is range-guarded to [0, 0.4] (train.py:300)."}
+{"id":"lane10#502","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":454,"kind":"para","text":"Nothing recommends it over --rotate, which is already on."}
+{"id":"lane10#503","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":455,"kind":"para","text":"- --seed is 0 in all 30 checkpoints (§1.1)."}
+{"id":"lane10#504","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":455,"kind":"para","text":"Not a defect — but it means the \"22 members\" carry no initialisation diversity at all, which is a candidate explanation for lane 3's flat return curve past k≈12 that has not been named anywhere."}
+{"id":"lane10#505","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":458,"kind":"para","text":"Testing it costs a fold and is not obviously worth one."}
+{"id":"lane10#506","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":459,"kind":"para","text":"- Two defaults point at dead artifacts. --labels defaults to data/weak_labels.csv (train.py:712) and compare_ckpts.py:324 does the same;"}
+{"id":"lane10#507","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":461,"kind":"para","text":"that file is the rule labeler at gold 0.7990, superseded on 2026-08-17."}
+{"id":"lane10#508","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":461,"kind":"para","text":"Every caller overrides it."}
+{"id":"lane10#509","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":462,"kind":"para","text":"A wrong default that is always overridden is a trap, not a bug — but outputs/t028/_arm_lib.sh:38 overrides it by hand in three places and one omission would silently grade against the wrong targets."}
+{"id":"lane10#510","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":465,"kind":"para","text":"- sched.step() precedes the first optimizer.step() under AMP (train.py:223-225), which PyTorch warns about in outputs/t025/dinov3_fold0.log:9."}
+{"id":"lane10#511","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":467,"kind":"para","text":"The schedule advances on a step the GradScaler skipped."}
+{"id":"lane10#512","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":468,"kind":"para","text":"Over 13,920 steps this is a handful of steps of drift."}
+{"id":"lane10#513","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":468,"kind":"para","text":"Cosmetic;"}
+{"id":"lane10#514","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":469,"kind":"para","text":"recorded so it is not re-found."}
+{"id":"lane10#515","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":470,"kind":"para","text":"- outputs/kernels/armc/rsna-knee-armc1/ is a stale staging snapshot — its cmd list (:225-247) lacks --per-label-attn, --mirror and --rotate, which would make armc1 look like an arm-A member."}
+{"id":"lane10#516","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":472,"kind":"para","text":"It is not: the checkpoint records per_label_attn=True mirror=0.5 rotate=25.0, and the Kaggle log's own === launching === line shows all three."}
+{"id":"lane10#517","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":474,"kind":"para","text":"pm/STATE.md already flags this dir as a trap."}
+{"id":"lane10#518","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":475,"kind":"para","text":"Confirmed, not new."}
+{"id":"lane10#519","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":479,"kind":"head","text":"Already registered — not this lane's value"}
+{"id":"lane10#520","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":481,"kind":"para","text":"Marked here so the shortlist in §5 can be read as new."}
+{"id":"lane10#521","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":481,"kind":"para","text":"Each was confirmed to be on the board, with the reference."}
+{"id":"lane10#522","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":484,"kind":"row","text":"item"}
+{"id":"lane10#523","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":484,"kind":"row","text":"registered as"}
+{"id":"lane10#524","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":484,"kind":"row","text":"this lane's only addition"}
+{"id":"lane10#525","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":486,"kind":"row","text":"--layer-decay + --warmup-frac"}
+{"id":"lane10#526","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":486,"kind":"row","text":"T042, in flight now (pm/STATE.md NOW block)"}
+{"id":"lane10#527","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":486,"kind":"row","text":"the correction in §2.1 and the degeneracy table in §3.5"}
+{"id":"lane10#528","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":487,"kind":"row","text":"physical-mm crop"}
+{"id":"lane10#529","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":487,"kind":"row","text":"T041"}
+{"id":"lane10#530","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":487,"kind":"row","text":"PixelSpacing is confirmed never read anywhere in src/dicom_io.py"}
+{"id":"lane10#531","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":488,"kind":"row","text":"--seqs 2"}
+{"id":"lane10#532","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":488,"kind":"row","text":"T007, fold ran epochs 1–5 then hung"}
+{"id":"lane10#533","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":488,"kind":"row","text":"§3.3, the layout cap"}
+{"id":"lane10#534","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":489,"kind":"row","text":"pos_weight"}
+{"id":"lane10#535","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":489,"kind":"row","text":"lane 6 §3 row 5"}
+{"id":"lane10#536","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":489,"kind":"row","text":"none"}
+{"id":"lane10#537","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":490,"kind":"row","text":"16-epoch schedule"}
+{"id":"lane10#538","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":490,"kind":"row","text":"lane 6 §3 row 6"}
+{"id":"lane10#539","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":490,"kind":"row","text":"none"}
+{"id":"lane10#540","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":491,"kind":"row","text":"stochastic slice windows / epoch-frozen crop+jitter"}
+{"id":"lane10#541","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":491,"kind":"row","text":"lane 6 §2.3, §3 row 7"}
+{"id":"lane10#542","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":491,"kind":"row","text":"confirmed at dataset.py:333 — the --augment stream is keyed (seed, i), no epoch"}
+{"id":"lane10#543","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":492,"kind":"row","text":"frozen-encoder feature cache"}
+{"id":"lane10#544","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":492,"kind":"row","text":"round-2 synthesis"}
+{"id":"lane10#545","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":492,"kind":"row","text":"none"}
+{"id":"lane10#546","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":493,"kind":"row","text":"α=0.5 self-distillation"}
+{"id":"lane10#547","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":493,"kind":"row","text":"T035"}
+{"id":"lane10#548","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":493,"kind":"row","text":"none"}
+{"id":"lane10#549","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":494,"kind":"row","text":"full-data (no held-out fold) training"}
+{"id":"lane10#550","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":494,"kind":"row","text":"T046"}
+{"id":"lane10#551","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":494,"kind":"row","text":"none"}
+{"id":"lane10#552","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":495,"kind":"row","text":"the three refused TTA views"}
+{"id":"lane10#553","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":495,"kind":"row","text":"T028 / T034 / PLAN-0831"}
+{"id":"lane10#554","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":495,"kind":"row","text":"§3.4 — the same ten members are also the layout blocker"}
+{"id":"lane10#555","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":496,"kind":"row","text":"stale outputs/kernels/armc/rsna-knee-armc1/"}
+{"id":"lane10#556","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":496,"kind":"row","text":"pm/STATE.md"}
+{"id":"lane10#557","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":496,"kind":"row","text":"confirmed from the checkpoint and the Kaggle log"}
+{"id":"lane10#558","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":500,"kind":"head","text":"The new finds, ranked"}
+{"id":"lane10#559","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":502,"kind":"para","text":"Five things this lane establishes that were not on the board."}
+{"id":"lane10#560","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":502,"kind":"para","text":"Two are actionable, one is a correction, two are nulls."}
+{"id":"lane10#561","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":503,"kind":"para","text":"This lane did not find a second --layer-decay — there is no wired, correct, unpassed flag sitting on a plausible +0.005."}
+{"id":"lane10#562","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":505,"kind":"para","text":"What it found instead is that the flag that was found is being tested through an instrument that cannot express the hypothesis."}
+{"id":"lane10#563","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"kind":"row","text":"find"}
+{"id":"lane10#564","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"kind":"row","text":"expected effect"}
+{"id":"lane10#565","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"kind":"row","text":"GPU cost"}
+{"id":"lane10#566","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"kind":"row","text":"lines"}
+{"id":"lane10#567","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"kind":"row","text":"instrument, and its band"}
+{"id":"lane10#568","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":508,"kind":"row","text":"prohibition touched"}
+{"id":"lane10#569","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"--encoder-lr does not exist, and --layer-decay cannot substitute (§3.5)."}
+{"id":"lane10#570","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"At --layer-decay 0.6, 24 of 48 groups sit below 1e-6;"}
+{"id":"lane10#571","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"no value gives the recipe's flat 10× cut"}
+{"id":"lane10#572","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"protects a +0.005 to +0.010 lever (lane 6's own estimate) from being killed by a mis-specified test."}
+{"id":"lane10#573","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"Adds no score by itself"}
+{"id":"lane10#574","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"0 to establish;"}
+{"id":"lane10#575","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"1 fold to use"}
+{"id":"lane10#576","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"869-study corpus rho, paired ±0.0102 on a fold-0 pair;"}
+{"id":"lane10#577","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"gold-58 as a ±0.036 veto"}
+{"id":"lane10#578","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":510,"kind":"row","text":"none"}
+{"id":"lane10#579","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":511,"kind":"row","text":"The deployed ensemble is at MAX_LAYOUTS = 2, so no --seqs 2 member can join it (§3.3)"}
+{"id":"lane10#580","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":511,"kind":"row","text":"prevents a SystemExit at submission time and forces a choice that costs either ~30 min of rerun or ten members"}
+{"id":"lane10#581","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":511,"kind":"row","text":"0 (a decision, not a change)"}
+{"id":"lane10#582","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":511,"kind":"row","text":"none needed to establish;"}
+{"id":"lane10#583","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":511,"kind":"row","text":"the choice needs the LB (sd 0.0028–0.0070 between structurally distinct configs) or T034's result"}
+{"id":"lane10#584","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":511,"kind":"row","text":"none"}
+{"id":"lane10#585","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"kind":"row","text":"CORRECTION: --layer-decay/--warmup-frac were passed once, at outputs/t025/run_arm.sh:13 (§2.1)."}
+{"id":"lane10#586","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"kind":"row","text":"PROGRESS.md:5857 and lane 6 §2.5 both say \"never\""}
+{"id":"lane10#587","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"kind":"row","text":"none on score."}
+{"id":"lane10#588","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"kind":"row","text":"Retires the \"does the flag bind\" risk for ConvNeXt;"}
+{"id":"lane10#589","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"kind":"row","text":"the b2 group_matcher is now verified too (MEASURED, §3.5)"}
+{"id":"lane10#590","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"kind":"row","text":"n/a — a documentation fix"}
+{"id":"lane10#591","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":512,"kind":"row","text":"none"}
+{"id":"lane10#592","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"kind":"row","text":"The BatchNorm double-update is 67 of 69 layers, and is NULL as a lever (§3.1)"}
+{"id":"lane10#593","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"kind":"row","text":"0.000."}
+{"id":"lane10#594","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"kind":"row","text":"Buffer difference is below fold-to-fold noise;"}
+{"id":"lane10#595","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"kind":"row","text":"Gate D's −0.0115 is 1.03× band and in the harmless direction"}
+{"id":"lane10#596","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"kind":"row","text":"~4 if ever wanted"}
+{"id":"lane10#597","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"kind":"row","text":"already answered by Gate D"}
+{"id":"lane10#598","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":513,"kind":"row","text":"none"}
+{"id":"lane10#599","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"All 30 checkpoints carry seed=0;"}
+{"id":"lane10#600","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"the ensemble has no initialisation diversity (§1.1)"}
+{"id":"lane10#601","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"unquantified."}
+{"id":"lane10#602","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"A candidate explanation for lane 3's flat return past k≈12 that nobody has named"}
+{"id":"lane10#603","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"1 fold to test"}
+{"id":"lane10#604","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"869-study corpus rho on a paired fold-0 run;"}
+{"id":"lane10#605","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"±0.0102"}
+{"id":"lane10#606","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":514,"kind":"row","text":"none"}
+{"id":"lane10#607","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":516,"kind":"para","text":"Two further items are real but are explanations rather than levers, and are ranked last per T047 rule 2: --shared-head-drop has never been run, so T004's +0.0188 is still unattributed (one fold, explains a past result);"}
+{"id":"lane10#608","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":518,"kind":"para","text":"and --seq-head/--perspective have never been run, of which the first is already T014 and the second nothing recommends."}
+{"id":"lane10#609","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":522,"kind":"head","text":"### What to do with #1, concretely"}
+{"id":"lane10#610","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":524,"kind":"para","text":"The pre-registered shape, if the orchestrator wants it, is the same one lane 6 wrote for S1 with the axis corrected:"}
+{"id":"lane10#611","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":531,"kind":"para","text":"against outputs/t028/armC_fold0.oof.csv, same fold, seed and split-seed."}
+{"id":"lane10#612","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":531,"kind":"para","text":"That is the public recipe's actual shape — a flat low encoder LR under a full-LR head, warmed up — where --layer-decay 0.6 is a geometric ramp that freezes the stem and leaves the late encoder, which holds most of the parameters, at full LR."}
+{"id":"lane10#613","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":534,"kind":"para","text":"The two are close to opposites, so a null from T042 does not close the lever, and this lane's recommendation is that T042's verdict be recorded as answering \"graded encoder LR decay\", not \"encoder LR too high\", whichever way it lands."}
+{"id":"lane10#614","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":539,"kind":"para","text":"If a graded cut is wanted anyway, §3.5's table says 0.85 to 0.90 is the band where nothing freezes: median encoder scale 0.155 to 0.298, minimum 0.024 to 0.089, zero groups below 1e-6."}
+{"id":"lane10#615","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":545,"kind":"head","text":"## Appendix A — every command run"}
+{"id":"lane10#616","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":547,"kind":"para","text":"All under CUDA_VISIBLE_DEVICES=\"\" and nice -n 10, from /home/ade/Code/RSNA."}
+{"id":"lane10#617","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":547,"kind":"para","text":"No GPU job, no submission, no training run."}
+{"id":"lane10#618","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":606,"kind":"para","text":"The three scratchpad scripts are at /tmp/claude-1000/-home-ade-Code-RSNA/66b2319e-9c74-4add-9552-d3fe4d99f73d/scratchpad/ (dump_args.py, bn_probe.py, bn_buckets.py, ld_spectrum.py)."}
+{"id":"lane10#619","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":608,"kind":"para","text":"They are session-scoped;"}
+{"id":"lane10#620","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":609,"kind":"para","text":"each is under 25 lines and reproducible from the description above."}
+{"id":"lane10#621","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":614,"kind":"head","text":"## Appendix B — what this lane does not establish"}
+{"id":"lane10#622","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":616,"kind":"para","text":"It does not measure any lever. Zero GPU was spent by design."}
+{"id":"lane10#623","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":616,"kind":"para","text":"Every magnitude in §5 is INFERRED or borrowed from lane 6;"}
+{"id":"lane10#624","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":617,"kind":"para","text":"the only MEASURED numbers here are code facts, checkpoint contents and the timm layer-decay spectrum."}
+{"id":"lane10#625","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":619,"kind":"para","text":"It does not establish that --encoder-lr 3e-5 helps. It establishes that the recipe's shape is not expressible today and that --layer-decay 0.6 is a different intervention."}
+{"id":"lane10#626","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":621,"kind":"para","text":"Whether either helps is unmeasured on our recipe."}
+{"id":"lane10#627","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":622,"kind":"para","text":"The BatchNorm comparison in §3.1(c) is not controlled. armc0 differs from armc1/armc3 in fold and venue as well as in regime."}
+{"id":"lane10#628","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":623,"kind":"para","text":"The controlled answer is Gate D's, and it is quoted rather than reproduced."}
+{"id":"lane10#629","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":625,"kind":"para","text":"It does not price the third layout. The ~30 min figure in §3.3 is INFERRED by scaling the kernel's own two-pass estimate;"}
+{"id":"lane10#630","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":626,"kind":"para","text":"no third-layout run exists and the rerun ceiling above 48 M·V is still unmeasured from above."}
+{"id":"lane10#631","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":628,"kind":"para","text":"It does not audit src/weak_labels.py, src/manifest.py, src/targets.py, src/mirror.py, src/metric.py or scripts/smoke_test.py line by line. The audit followed the flags and the deployed path;"}
+{"id":"lane10#632","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":630,"kind":"para","text":"a defect confined to the labeling or manifest side would not have been reached."}
+{"id":"lane10#633","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":631,"kind":"para","text":"In particular scripts/smoke_test.py (3,634 lines) was not run — the lane brief forbids it, since it touches CUDA and would defer the queued fold — so nothing here is backed by the test suite."}
+{"id":"lane10#634","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":635,"kind":"para","text":"It does not check whether the fold? members' absent adjacent is correct. Those ten predate the flag;"}
+{"id":"lane10#635","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":636,"kind":"para","text":"whether they should be retired is T034's question, not this lane's."}
+{"id":"lane10#636","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":638,"kind":"para","text":"--seed diversity is a hypothesis, not a finding. That all 30 checkpoints share seed=0 is MEASURED;"}
+{"id":"lane10#637","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":639,"kind":"para","text":"that this explains the flat return curve past k≈12 is not tested and would cost a fold."}
+{"id":"lane10#638","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":641,"kind":"para","text":"The add_argument enumeration covers src/.py and scripts/.py only. scripts/llm_label/ and notebooks/ were not enumerated;"}
+{"id":"lane10#639","doc":"lane10","path":"docs/research/0902c/lane10-capability-audit.md","commit":"e4e356c","line":642,"kind":"para","text":"the labeling harness is out of scope per the standing prohibition on new labeling passes."}

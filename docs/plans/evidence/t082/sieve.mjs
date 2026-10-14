@@ -17,9 +17,9 @@
 // RSNA is read with `git show` under GIT_OPTIONAL_LOCKS=0, and nothing in it
 // is written. No dependencies.
 
-import { execFileSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { show, normalise, blocks, clauses, isClaim, lineOf } from './clauses.mjs';
 
 const [repo, outDir, ledgerPath] = process.argv.slice(2);
 if (!repo || !outDir) {
@@ -48,132 +48,17 @@ export const EARLIER = [
   .concat(['lane6-single-model-gap', 'lane7-public-members', 'lane8-external-truth-sets']
     .map((n) => [`docs/research/0902b/${n}.md`, BASE, n.split('-')[0] + '/R2']));
 
-// Lower-cased, matched as whole words. Quantity, state, negation, comparison,
-// and inference: the shapes of the twelve corrections and of T075's facts.
-const CLAIM_WORDS = new Set((
-  'never always only every all none no not cannot cant doesnt isnt wasnt ' +
-  'arent dont didnt wont nothing nobody without ' +
-  'pass passes passed fail fails failed broken wrong false true correct ' +
-  'unused unregistered registered blocks block unlocks frees costs cost ' +
-  'beats beat loses lose null dead killed falsified confirmed survives ' +
-  'refuses refused exists missing bound upper lower faster slower more less ' +
-  'fewer larger smaller higher better worse twice half double ' +
-  'so therefore thus because hence means implies so-called since ' +
-  'measured inferred read reproduced'
-).split(' '));
-const ARROWS = ['→', '⇒', '=>', '->', '×', '%', '≥', '≤', '>', '<', '~'];
-
-function show(path, commit) {
-  return execFileSync('git', ['-C', repo, 'show', `${commit}:${path}`], {
-    env: { ...process.env, GIT_OPTIONAL_LOCKS: '0' },
-    encoding: 'utf8',
-    maxBuffer: 64 << 20,
-  });
-}
-
-// Markdown emphasis and code ticks, dropped so that a quote written without
-// them still matches; whitespace collapsed. Returns the normalised text and,
-// for each of its characters, the source offset it came from.
-function normalise(src) {
-  let out = '', map = [], space = false;
-  for (let i = 0; i < src.length; i++) {
-    const c = src[i];
-    if (c === '*' || c === '`' || c === '_' && (src[i + 1] === '_' || src[i - 1] === '_')) continue;
-    if (c === ' ' || c === '\n' || c === '\t' || c === '\r') {
-      if (!space && out.length) { out += ' '; map.push(i); }
-      space = true;
-      continue;
-    }
-    space = false;
-    out += c;
-    map.push(i);
-  }
-  return { text: out, map };
-}
-
-// Blocks: paragraphs, list items, table rows, headings. Fenced code is
-// dropped. Each block keeps its first line number and its source offset.
-function blocks(src) {
-  const lines = src.split('\n');
-  const out = [];
-  let cur = null, fence = false, off = 0;
-  const flush = () => { if (cur) out.push(cur); cur = null; };
-  for (let n = 0; n < lines.length; n++) {
-    const line = lines[n], start = off;
-    off += line.length + 1;
-    const t = line.trimStart();
-    if (t.startsWith('```')) { flush(); fence = !fence; continue; }
-    if (fence) continue;
-    if (!t) { flush(); continue; }
-    const head = t.startsWith('#'), row = t.startsWith('|');
-    const item = t.startsWith('- ') || t.startsWith('* ') || t.startsWith('> ') ||
-      (t.length > 2 && t[0] >= '0' && t[0] <= '9' && (t.indexOf('. ') > 0 && t.indexOf('. ') < 4));
-    if (row && t.replaceAll('|', '').replaceAll('-', '').replaceAll(':', '').trim() === '') { flush(); continue; }
-    if (head || row || item || !cur || cur.kind !== 'para') {
-      flush();
-      cur = { kind: head ? 'head' : row ? 'row' : 'para', line: n + 1, start, end: off - 1 };
-      if (head || row) { flush(); }
-      continue;
-    }
-    cur.end = off - 1;
-  }
-  flush();
-  return out;
-}
-
-// Clauses: a block cut at sentence ends and at semicolons; a table row cut at
-// its cells. The cut is by scanning, not by a regular expression.
-function clauses(src, block) {
-  const text = src.slice(block.start, block.end);
-  const cuts = [];
-  let from = 0;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i], next = text[i + 1];
-    let cut = false;
-    if (block.kind === 'row' && c === '|') cut = true;
-    else if (c === ';') cut = true;
-    else if ((c === '.' || c === '?' || c === '!') && (next === ' ' || next === '\n')) {
-      const after = text.slice(i + 1).trimStart()[0] || '';
-      const before = text.slice(Math.max(0, i - 4), i);
-      const abbrev = before.endsWith('e.g') || before.endsWith('i.e') || before.endsWith('vs') ||
-        before.endsWith('cf') || before.endsWith('etc') || before.endsWith('al');
-      if (!abbrev && (after === '' || (after >= 'A' && after <= 'Z') || '*`("“[|-'.includes(after))) cut = true;
-    }
-    if (cut) {
-      cuts.push([from, block.kind === 'row' && c === '|' ? i : i + 1]);
-      from = i + 1;
-    }
-  }
-  cuts.push([from, text.length]);
-  return cuts
-    .map(([a, b]) => ({ start: block.start + a, end: block.start + b }))
-    .filter((c) => src.slice(c.start, c.end).replace(/[\s|*`#>.-]/g, '').length > 2);
-}
-
-function isClaim(text) {
-  if (/[0-9]/.test(text)) return 'digit';
-  for (const a of ARROWS) if (text.includes(a)) return 'sign';
-  const words = text.toLowerCase().replaceAll('’', '').replaceAll("'", '').split(/[^a-z-]+/);
-  for (const w of words) if (CLAIM_WORDS.has(w)) return w;
-  return '';
-}
-
 const facts = ledgerPath
   ? readFileSync(ledgerPath, 'utf8').trim().split('\n').map((l) => JSON.parse(l)).filter((f) => f.kind === 'fact')
   : [];
 
-function lineOf(src, off) {
-  let n = 1;
-  for (let i = 0; i < off && i < src.length; i++) if (src[i] === '\n') n++;
-  return n;
-}
 
 mkdirSync(outDir, { recursive: true });
 const rows = [];
 const report = { docs: {}, unanchored: [] };
 const anchoredFacts = new Set();
 for (const [path, commit, doc] of READ.concat(EARLIER)) {
-  const src = show(path, commit);
+  const src = show(repo, path, commit);
   const norm = normalise(src);
   // Each fact's quote, found in this document: its source span.
   const spans = [];
