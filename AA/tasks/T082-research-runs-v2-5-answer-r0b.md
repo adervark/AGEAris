@@ -113,14 +113,16 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-13, adervark @b/b8438f28: v2.5 written; free
-  measurements committed
-- **In flight:** nothing
-- **On disk:** nothing uncommitted
-- **Resume with:** R0c, once the operator approves its spend
-- **Next decision:** the operator's: R0c's spend. v2.5's transcription
-  needs one transcriber per document, an auditor and a reconciler. That is
-  more than "one transcriber and one reconciler".
+- **Last touched:** 2026-10-14, adervark @b/b8438f28: R0c running
+- **In flight:** 4 transcriber subagents (runs `b8438f28.d623`, `.8b7d`,
+  `.5240`, `.7b2f`), writing `docs/plans/evidence/t082/r0c/ledger-G1..G4.jsonl`.
+  The registrar is done: 94 measurands, committed (e9866d5).
+- **On disk:** the transcribers' ledgers as they grow, uncommitted
+- **Resume with:** `node r0c/check.mjs` on each ledger; when all four are
+  clean, `closure.mjs`, then the closure transcriber, the auditor
+  (`audit-view.mjs`) and the reconciler (`merge.mjs`, `../link.mjs`)
+- **Next decision:** none until the grade; if a transcriber dies, its rerun
+  is the one rerun the spend rule allows
 
 ## Verify
 
