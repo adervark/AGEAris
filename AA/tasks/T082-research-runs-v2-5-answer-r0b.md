@@ -119,14 +119,12 @@ be checked against T075's misses before the design is accepted again.
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-10-17, adervark @v/1cd08a13: reclaimed; the
-  auditor brief was lost with the old scratchpad and is being rewritten
-- **In flight:** nothing. Registrar, G1–G4 and GC are done and committed, all
-  clean: 4,033 facts, 391 skips.
-- **On disk:** `r0c/audit/` (skips.jsonl: 664 lines, 81 canaries;
-  assign.jsonl: 245 items) and `r0c/audit-key.json`, committed. The auditor
-  brief is in the session scratchpad (`brief-auditor.md`; fill in {RUN},
-  {NSKIPS}=664, {NITEMS}=245).
-- **Resume with:** open an auditor run and start it; then `merge.mjs` with
+  auditor brief, lost with the old scratchpad, is rewritten and committed
+  (`r0c/brief-auditor.md`, checker `r0c/check-audit.mjs`).
+- **In flight:** the auditor, run `1cd08a13.32d2`, writing
+  `r0c/audit/audit.jsonl`. If its run is closed and the file is incomplete,
+  it died: rerun it once (spend rule), resuming from the lines on disk.
+- **Resume with:** `check-audit.mjs` clean; then `merge.mjs` with
   audit.jsonl, `../link.mjs`, grouped review by 3 reconcilers (format still
   to write: groups, not pairs), re-run `cmd:` sources at e4e356c, and grade.
 - **Next decision:** none; the operator approved 3 reconcilers.
