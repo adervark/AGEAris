@@ -45,7 +45,7 @@
 {"kind":"ok","group":108,"why":"13 facts from R1 and lane13 on the channel-0 repeat bug: 24 of 66 forwards in both, consistent","run":"1cd08a13.36b6"}
 {"kind":"same","group":111,"facts":["V3310","V1503"],"finding":"conflict","why":"lane3 table V3310: OOF AUC vs Sonnet has n = 3,749; lane9 V1503: the OOF-AUC-vs-Sonnet instrument is on 4,349 studies (4,349 is lane3's n for the Opus rows)","run":"1cd08a13.36b6"}
 {"kind":"same","group":114,"facts":["V3822","V2512"],"finding":"conflict","why":"lane7 V3822: the 22-member rerun was measured at ~134 min; lane11 V2512: ~134 is 67 x 2 layout passes, the kernel's printed prediction, not a measurement. Correction","run":"1cd08a13.36b6"}
-{"kind":"same","group":114,"facts":["V3823","V2513"],"finding":"conflict","why":"lane7 V3823: the budget model under-predicts by 2x in practice; lane11 V2513: the 2x is the layout multiplier the kernel already applies, not a modelling error. Correction","run":"1cd08a13.36b6"}
+{"kind":"same","group":114,"facts":["V3823","V2511"],"finding":"conflict","why":"lane7 V3823: the budget model under-predicts by 2x in practice; lane11 V2511: that claim is not right as stated (the 2x is the kernel's layout multiplier). Correction","run":"1cd08a13.36b6"}
 {"kind":"same","group":117,"facts":["V382","V652"],"finding":"conflict","why":"R1 V382: realistic public read 0.940-0.948; R2 V652: 0.945-0.955 for the same expectation, the later round revising it upward (a correction)","run":"1cd08a13.36b6"}
 {"kind":"ok","group":119,"why":"12 facts: Sonnet labels cover 3,749 studies in R1 and lane3's table; the rest are judgements on other subjects","run":"1cd08a13.36b6"}
 {"kind":"ok","group":122,"why":"12 facts: 23 timm layer levels -> 48 groups in lane10 and STATE; layer-decay vs encoder-lr judgements agree","run":"1cd08a13.36b6"}
@@ -486,3 +486,27 @@
 {"kind":"same","check":1141,"finding":"does-not-follow","why":"queued 10:23:36Z; ~10:43Z needs a ~20 min idle-gate premise that is not among them (card at 52 C says nothing of a delay)","run":"1cd08a13.36b6"}
 {"kind":"same","check":1145,"finding":"follows","why":"mean encoder LR 1.35e-4 is only 2.2x below the head and the top 31% sit at full LR: not 10x","run":"1cd08a13.36b6"}
 {"kind":"same","check":1147,"finding":"follows","why":"removing the shared component costs -0.2229 / -0.1028 AUC, so it carries signal","run":"1cd08a13.36b6"}
+{"kind":"same","check":1148,"finding":"follows","why":"the quote gives its reason: a zero-init linear map of a single scalar position is minimal order-awareness","run":"1cd08a13.36b6"}
+{"kind":"same","check":1151,"finding":"follows","why":"the first n of k slots are real, so a forward pass meets padding only after the real slices","run":"1cd08a13.36b6"}
+{"kind":"same","check":1156,"finding":"does-not-follow","why":"the premise only names the gap ('no prevalence pos_weight'); 'one fold, ~5 lines' needs a premise that is not there","run":"1cd08a13.36b6"}
+{"kind":"same","check":1159,"finding":"follows","why":"rotate and mirror vary per epoch, only jitter and crop are frozen: a partial difference, low-medium","run":"1cd08a13.36b6"}
+{"kind":"same","check":1160,"finding":"does-not-follow","why":"'a free augmentation we do not have' gives no magnitude; +0.001 to +0.004 rests on nothing in the premises","run":"1cd08a13.36b6"}
+{"kind":"same","check":1164,"finding":"follows","why":"1 + 22 x 3 = 67 min","run":"1cd08a13.36b6"}
+{"kind":"same","check":1168,"finding":"follows","why":"a 4.2 h, two-family kernel cannot be the one-checkpoint, one-view efficiency entry","run":"1cd08a13.36b6"}
+{"kind":"same","check":1170,"finding":"follows","why":"read_series samples evenly over the whole series, so 4 or 12 picks span the same anatomy","run":"1cd08a13.36b6"}
+{"kind":"same","check":1175,"finding":"follows","why":"seq_head and slices come from the checkpoint's args, so a GRU/plain mismatch fails at load_state_dict","run":"1cd08a13.36b6"}
+{"kind":"same","check":1177,"finding":"follows","why":"packed and unpacked bags are both 3-channel tensors, so averaging them hides the mismatch in every shape","run":"1cd08a13.36b6"}
+{"kind":"same","check":1178,"finding":"follows","why":"different layouts feed some member an untrained tensor (bug); different backbones on one bag is diversity (not a bug)","run":"1cd08a13.36b6"}
+{"kind":"same","check":1182,"finding":"follows","why":"the five checkpoints carry --augment only, so the augment-backed views pass and mirror/rot are refused","run":"1cd08a13.36b6"}
+{"kind":"same","check":1185,"finding":"follows","why":"weights never depend on predictions, so the blend is linear","run":"1cd08a13.36b6"}
+{"kind":"same","check":1188,"finding":"follows","why":"rows averaged over 2 members beside rows over 12 are differently calibrated scores, which can cost a rank metric","run":"1cd08a13.36b6"}
+{"kind":"same","check":1191,"finding":"follows","why":"a fold's members share held-out studies and layout, so one read serves both","run":"1cd08a13.36b6"}
+{"kind":"same","check":1193,"finding":"follows","why":"14,010 + 10,361 = 24,371 with nothing in between: a binary","run":"1cd08a13.36b6"}
+{"kind":"same","check":1198,"finding":"follows","why":"0.8740 - 0.8662 = 0.0078","run":"1cd08a13.36b6"}
+{"kind":"same","check":1203,"finding":"follows","why":"the averaged BN stats are a cheap stand-in for update_bn, so an SWA loss points there first","run":"1cd08a13.36b6"}
+{"kind":"same","check":1204,"finding":"follows","why":"the host said it was fine, so not a live exposure","run":"1cd08a13.36b6"}
+{"kind":"same","check":1209,"finding":"follows","why":"agreement rose 0.3876 -> 0.8308 once the batch stopped being one study, as the BN mechanism predicts","run":"1cd08a13.36b6"}
+{"kind":"same","check":1212,"finding":"follows","why":"--bs 1 --accum 2 keeps the effective batch, so bs shrinks memory without changing the inputs","run":"1cd08a13.36b6"}
+{"kind":"same","check":1214,"finding":"follows","why":"a concurrent kernel would have died at quota exhaustion and Kaggle discards killed output","run":"1cd08a13.36b6"}
+{"kind":"same","check":1217,"finding":"follows","why":"gate (iii) assumes training on Kaggle, but pretraining can run locally: the gate is void","run":"1cd08a13.36b6"}
+{"kind":"same","check":1219,"finding":"does-not-follow","why":"the premise lists MRNet's properties but compares it with no other source, so 'second-best' is unsupported","run":"1cd08a13.36b6"}
