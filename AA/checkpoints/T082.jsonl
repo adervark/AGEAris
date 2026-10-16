@@ -29,3 +29,6 @@
 {"ts":"2026-10-14T02:10:48Z","run":"b8438f28.015f","kind":"end","left":"nothing","next":"parent links"}
 {"ts":"2026-10-14T02:25:47Z","run":"b8438f28","kind":"did","what":"GC clean: 952 facts, 37 skips, 16 min; audit view built: 664 skips incl. 81 canaries, 245 assign items","next":"start the auditor"}
 {"ts":"2026-10-14T02:25:47Z","run":"b8438f28","kind":"end","left":"auditor, merge+link, 3 reconcilers, grade","next":"start the auditor (brief in scratchpad)"}
+{"ts":"2026-10-16T18:44:11Z","run":"1cd08a13.32d2","kind":"open","operator":"adervark","profile":"v","session":"1cd08a13-caae-42b7-9532-52b9428962a2","boot":"59a9dd22-69e9-4dd1-980f-06d9c7ed0a4f","pid":174006,"pstart":"Fri Oct 16 18:42:36 2026","agent":"auditor","brief":"R0c auditor: 664 skips (81 canaries) and 245 measurand assignments, blind"}
+{"ts":"2026-10-16T18:44:15Z","run":"1cd08a13","kind":"open","operator":"adervark","profile":"v","session":"1cd08a13-caae-42b7-9532-52b9428962a2","boot":"59a9dd22-69e9-4dd1-980f-06d9c7ed0a4f","pid":174006,"pstart":"Fri Oct 16 18:42:36 2026","brief":"R0c resumes: auditor, merge, link, 3 reconcilers, grade"}
+{"ts":"2026-10-16T18:44:48Z","run":"1cd08a13","kind":"doing","what":"auditor 1cd08a13.32d2 starts on 664 skips and 245 items (brief rewritten: r0c/brief-auditor.md)","next":"merge with audit.jsonl","until":"2026-10-16T20:14:48Z"}
