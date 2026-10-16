@@ -440,3 +440,49 @@
 {"kind":"same","check":1000,"finding":"follows","why":"constants stated literally rather than read from the code under test; reading them back would agree by construction","run":"1cd08a13.36b6"}
 {"kind":"same","check":1002,"finding":"follows","why":"~2 min at one member and ~6 at five give the 1 + 1/member model the budget points use","run":"1cd08a13.36b6"}
 {"kind":"same","check":1004,"finding":"follows","why":"positions are assigned after the mirror in training, so they still ascend across real slices","run":"1cd08a13.36b6"}
+{"kind":"same","check":1007,"finding":"follows","why":"side is a study-level fact, so one tagged series settles the flip for all planes","run":"1cd08a13.36b6"}
+{"kind":"same","check":1010,"finding":"follows","why":"the premise itself says reversing a padded sagittal stack moves the padding to the front","run":"1cd08a13.36b6"}
+{"kind":"same","check":1013,"finding":"follows","why":"mirror_weights replaces rather than combines, so without the multiply the at-BASE mask is lost","run":"1cd08a13.36b6"}
+{"kind":"same","check":1018,"finding":"does-not-follow","why":"at sd 0.0001-0.0003 a +0.001 step is 0.001/0.0003 = 3.3 to 10 sd, not 5-10","run":"1cd08a13.36b6"}
+{"kind":"same","check":1023,"finding":"does-not-follow","why":"premises describe only our side (22 of one recipe, 3 slots, 320 px); nothing about the 0.936 notebook to locate the gap in","run":"1cd08a13.36b6"}
+{"kind":"same","check":1025,"finding":"follows","why":"ahead of the one public number, so competitive","run":"1cd08a13.36b6"}
+{"kind":"same","check":1032,"finding":"does-not-follow","why":"the 3.4 GiB figure rests only on itself and the 2.3 GiB vit_small estimate; no measured basis is given","run":"1cd08a13.36b6"}
+{"kind":"same","check":1037,"finding":"follows","why":"AnyMC3D says adaptation not scale is the effect and our incumbent is already fully fine-tuned: +0.00 to +0.01","run":"1cd08a13.36b6"}
+{"kind":"same","check":1038,"finding":"follows","why":"no run passed --warmup-frac/--layer-decay, so ConvNeXt ran without the warmup it lacked: its null is uninterpretable","run":"1cd08a13.36b6"}
+{"kind":"same","check":1039,"finding":"follows","why":"the flags were never passed, so repeating the same fold repeats the same uninterpretable null","run":"1cd08a13.36b6"}
+{"kind":"same","check":1045,"finding":"follows","why":"a bound of 0.4 keeps 1 +- 0.4 = [0.6, 1.4]","run":"1cd08a13.36b6"}
+{"kind":"same","check":1048,"finding":"follows","why":"epoch is set before each iterator is built, so persistent workers would keep a stale epoch","run":"1cd08a13.36b6"}
+{"kind":"same","check":1049,"finding":"follows","why":"argparse dies on '--adjacent' at kernel start, i.e. as the quota window opens","run":"1cd08a13.36b6"}
+{"kind":"same","check":1055,"finding":"follows","why":"datasets version replaces the directory, so every existing member must be uploaded again","run":"1cd08a13.36b6"}
+{"kind":"same","check":1057,"finding":"follows","why":"the kernel reads os.environ first, so a stale inherited RSNA_CKPTS would beat the pushed spec","run":"1cd08a13.36b6"}
+{"kind":"same","check":1059,"finding":"follows","why":"entropy is weighted by the model's own attention, so an ignored slice carries ~0 weight","run":"1cd08a13.36b6"}
+{"kind":"same","check":1062,"finding":"follows","why":"vectorizers fit on the weak split only, which excludes the gold studies","run":"1cd08a13.36b6"}
+{"kind":"same","check":1065,"finding":"does-not-follow","why":"the premise says intent is readable off the study sets; nothing gives the size of the error from misreading it","run":"1cd08a13.36b6"}
+{"kind":"same","check":1068,"finding":"follows","why":"within-block ranking normalizes fold calibration that one test-wide ranking cannot, flattering the OOF gain","run":"1cd08a13.36b6"}
+{"kind":"same","check":1069,"finding":"follows","why":"an upper bound is evidence to isolate, not to adopt","run":"1cd08a13.36b6"}
+{"kind":"same","check":1072,"finding":"follows","why":"+-0.036 exceeds the +0.003 to +0.010 changes discussed throughout","run":"1cd08a13.36b6"}
+{"kind":"same","check":1077,"finding":"follows","why":"--seed drives the fold permutation too, so varying it redraws the folds","run":"1cd08a13.36b6"}
+{"kind":"same","check":1078,"finding":"follows","why":"rows sorted by a hash-like UID happen to be uncorrelated with site, so a prefix is unbiased by accident","run":"1cd08a13.36b6"}
+{"kind":"same","check":1084,"finding":"follows","why":"the quote gives its reason: the file is chosen at the CLI, so a comment at the definition cannot catch it","run":"1cd08a13.36b6"}
+{"kind":"same","check":1087,"finding":"follows","why":"only running stats are double-updated; gradients and the training forward use batch statistics","run":"1cd08a13.36b6"}
+{"kind":"same","check":1090,"finding":"follows","why":"Gate D is the empirical settlement, so a miss there points first at this BN difference","run":"1cd08a13.36b6"}
+{"kind":"same","check":1093,"finding":"follows","why":"the gradient is linear in the loss, so scaling the unnormalized numerator's gradient by 1/acc_den afterwards is exact","run":"1cd08a13.36b6"}
+{"kind":"same","check":1096,"finding":"follows","why":"the 2 s sampler reported 6857 MiB for a step that allocated 7.30 GiB (~7475 MiB): it missed the peak","run":"1cd08a13.36b6"}
+{"kind":"same","check":1100,"finding":"follows","why":"the gold band is +-0.036, wider than the changes at stake, so a sub-0.036 gap is not a result","run":"1cd08a13.36b6"}
+{"kind":"same","check":1104,"finding":"follows","why":"predictions come from each reloaded .pt, so they describe the shipped file","run":"1cd08a13.36b6"}
+{"kind":"same","check":1107,"finding":"follows","why":"the default is the run-1 rule labeler that nothing trains on","run":"1cd08a13.36b6"}
+{"kind":"same","check":1108,"finding":"follows","why":"zero-init terms contribute nothing at init, so a fresh model equals run 2's","run":"1cd08a13.36b6"}
+{"kind":"same","check":1111,"finding":"follows","why":"pooled vectors identical at init and a separate dropout mask per label: head noise separates labels first","run":"1cd08a13.36b6"}
+{"kind":"same","check":1112,"finding":"follows","why":"if head noise drives the gain, divergence need not correlate with gain, matching the failed test (-0.224)","run":"1cd08a13.36b6"}
+{"kind":"same","check":1114,"finding":"does-not-follow","why":"premises cover only the warmup half (OneCycle 15% vs cosine at 0.0); none gives the encoder LRs (3e-4 vs 3e-5) behind '10x too high'","run":"1cd08a13.36b6"}
+{"kind":"same","check":1116,"finding":"follows","why":"the flags are wired and never passed, so closing the gap is a zero-code one-fold screen S1","run":"1cd08a13.36b6"}
+{"kind":"same","check":1118,"finding":"follows","why":"interval [-0.0232, -0.0008]: its upper end is 0.0008 from zero","run":"1cd08a13.36b6"}
+{"kind":"same","check":1123,"finding":"follows","why":"a plan mismatch falls back to a slower live scan rather than reading wrong slices","run":"1cd08a13.36b6"}
+{"kind":"same","check":1125,"finding":"follows","why":"centre channel bit-identical to 2D and its window from the centre alone: only the neighbours differ","run":"1cd08a13.36b6"}
+{"kind":"same","check":1130,"finding":"follows","why":"unmatched refuses a view unless every member carries the flag; the incumbent lacks it","run":"1cd08a13.36b6"}
+{"kind":"same","check":1133,"finding":"follows","why":"any blend includes flagless incumbent members, so unmatched always refuses mirror/rot","run":"1cd08a13.36b6"}
+{"kind":"same","check":1134,"finding":"follows","why":"10 x 6 = 60 <= 66","run":"1cd08a13.36b6"}
+{"kind":"same","check":1140,"finding":"does-not-follow","why":"8 x 15-25 min = 2.0-3.3 h, but no premise gives the start time, so ~12:45-14:15Z cannot be derived","run":"1cd08a13.36b6"}
+{"kind":"same","check":1141,"finding":"does-not-follow","why":"queued 10:23:36Z; ~10:43Z needs a ~20 min idle-gate premise that is not among them (card at 52 C says nothing of a delay)","run":"1cd08a13.36b6"}
+{"kind":"same","check":1145,"finding":"follows","why":"mean encoder LR 1.35e-4 is only 2.2x below the head and the top 31% sit at full LR: not 10x","run":"1cd08a13.36b6"}
+{"kind":"same","check":1147,"finding":"follows","why":"removing the shared component costs -0.2229 / -0.1028 AUC, so it carries signal","run":"1cd08a13.36b6"}

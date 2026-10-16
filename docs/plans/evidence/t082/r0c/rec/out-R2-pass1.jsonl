@@ -470,3 +470,46 @@
 {"kind":"same","check":1083,"finding":"follows","why":"recalibration moves silent blocks off BASE before the mask compares to BASE: the blend failure, from upstream","run":"1cd08a13.e29f"}
 {"kind":"same","check":1086,"finding":"follows","why":"num_batches_tracked = 6 after 3 steps: two BN updates per optimizer step","run":"1cd08a13.e29f"}
 {"kind":"same","check":1089,"finding":"follows","why":"Gate D compares the local OOF against the archived fold; inside the band means the bookkeeping made no difference","run":"1cd08a13.e29f"}
+{"kind":"same","check":1092,"finding":"follows","why":"the epoch keys the mirror draw; without it each study's draw repeats, so the same half is mirrored every epoch","run":"1cd08a13.e29f"}
+{"kind":"same","check":1095,"finding":"follows","why":"a trailing partial window holds real gradients; dropping it loses up to accum - 1 studies per epoch","run":"1cd08a13.e29f"}
+{"kind":"same","check":1097,"finding":"follows","why":"a 2 s sampler read 6,857 MiB for a step that allocated 7.30 GiB (7,475 MiB): it misses peaks, the OOM case","run":"1cd08a13.e29f"}
+{"kind":"same","check":1099,"finding":"follows","why":"a +/-0.036 gold band is wider than most changes worth making, so a per-label move is rarely outside it","run":"1cd08a13.e29f"}
+{"kind":"same","check":1102,"finding":"follows","why":"the +/-0.036 band is about absolute gold AUC; checkpoints off one trajectory share errors that cancel in a comparison","run":"1cd08a13.e29f"}
+{"kind":"same","check":1103,"finding":"follows","why":"argmax 0.907 vs SWA 0.899 from the same weights, and 'prefer SWA' picked the worse: compare, do not defer","run":"1cd08a13.e29f"}
+{"kind":"same","check":1106,"finding":"follows","why":"the conclusion is its own premise; scoring both on the same studies is a paired comparison","run":"1cd08a13.e29f"}
+{"kind":"same","check":1113,"finding":"follows","why":"rotation +/-25 degrees with perspective transforms is a stronger geometric augmentation than a small crop","run":"1cd08a13.e29f"}
+{"kind":"same","check":1117,"finding":"follows","why":"|-0.0115| > 0.0112 by 0.0003: outside the band, marginally, local better","run":"1cd08a13.e29f"}
+{"kind":"same","check":1120,"finding":"follows","why":"if the local checkpoint is slightly better, mixing it with Kaggle ones dilutes a gain, not a defect","run":"1cd08a13.e29f"}
+{"kind":"same","check":1122,"finding":"follows","why":"at bs=2 the difference is small and favourable, unlike bs=1: a different situation","run":"1cd08a13.e29f"}
+{"kind":"same","check":1126,"finding":"follows","why":"arm C moves two flags at once and is judged as a bundle, so a loss cannot be attributed","run":"1cd08a13.e29f"}
+{"kind":"same","check":1129,"finding":"follows","why":"mirror, rot+, rot- are legal only for flag-trained checkpoints; the old kernel runs 3 of 6, a flagged family runs all 6","run":"1cd08a13.e29f"}
+{"kind":"same","check":1131,"finding":"follows","why":"blending with the incumbent bars the mirror/rot views, so whatever the riders pay comes from training","run":"1cd08a13.e29f"}
+{"kind":"same","check":1135,"finding":"follows","why":"unmatched returns all offenders at once; finding a second only after a re-queue costs another Kaggle queue","run":"1cd08a13.e29f"}
+{"kind":"same","check":1136,"finding":"follows","why":"3e-4 / 3e-5 = 10x encoder LR on a pretrained encoder","run":"1cd08a13.e29f"}
+{"kind":"same","check":1138,"finding":"follows","why":"0.02 vs 1e-4 is a stated difference whose weight is a judgement; nothing given contradicts 'low'","run":"1cd08a13.e29f"}
+{"kind":"same","check":1143,"finding":"follows","why":"15-25 min/epoch x 8 = 120-200 min = 2.0-3.3 h, inside the stated 2.0-3.5 h","run":"1cd08a13.e29f"}
+{"kind":"same","check":1150,"finding":"follows","why":"proj zero-initialised makes the GRU residual contribute nothing at init: bit-identical to run 2","run":"1cd08a13.e29f"}
+{"kind":"same","check":1154,"finding":"follows","why":"the staging dir is a stale pre-fix snapshot, so diffing new folds against it shows false divergence","run":"1cd08a13.e29f"}
+{"kind":"same","check":1155,"finding":"follows","why":"pos_weight up-weights MCL 4.97, Fracture 3.93, Lateral Meniscus 3.13 - three of four gap columns; a small share is plausible","run":"1cd08a13.e29f"}
+{"kind":"same","check":1158,"finding":"follows","why":"16 epochs vs 8 doubles a ~2.5 h fold to ~5 h","run":"1cd08a13.e29f"}
+{"kind":"same","check":1162,"finding":"follows","why":"~6 min at 5 members and ~2 min at 1: slope (6 - 2)/4 = 1 min/member, intercept ~1 min","run":"1cd08a13.e29f"}
+{"kind":"same","check":1165,"finding":"follows","why":"1 + 22 x 3 = 67 min predicted vs ~134 min quoted: 134/67 = 2x (as arithmetic on the premises)","run":"1cd08a13.e29f"}
+{"kind":"same","check":1166,"finding":"follows","why":"134 + ~120 = 254 min = 4.2 h of the 9 h cap","run":"1cd08a13.e29f"}
+{"kind":"same","check":1169,"finding":"follows","why":"a Raptor arm would break T040's one-checkpoint one-view thesis, so the two submissions stay separate","run":"1cd08a13.e29f"}
+{"kind":"same","check":1172,"finding":"follows","why":"the two families show different anatomy (fluid vs meniscal detail); unlabelled mixing leaves the model to infer which from pixels","run":"1cd08a13.e29f"}
+{"kind":"same","check":1174,"finding":"follows","why":"side_known is a column of the 4-wide meta every number was measured with; removing it changes that width","run":"1cd08a13.e29f"}
+{"kind":"same","check":1180,"finding":"follows","why":"+0.0306 on Lateral Meniscus (band +/-0.0201, resolved) beats the +0.0171 ten-member doubling: the largest on that column","run":"1cd08a13.e29f"}
+{"kind":"same","check":1181,"finding":"follows","why":"views are refused unless every member trained on that distribution; a member is invariant only to what it saw","run":"1cd08a13.e29f"}
+{"kind":"same","check":1184,"finding":"follows","why":"a flat mean over all members weighs a 10-member group against a 2-member group 10 to 2","run":"1cd08a13.e29f"}
+{"kind":"same","check":1187,"finding":"follows","why":"~63 % of a series read is network wait, so reading once and running N forwards beats N reads","run":"1cd08a13.e29f"}
+{"kind":"same","check":1190,"finding":"follows","why":"the kernel prints the real runtime each time so the next budget uses a measurement; the ratio claim is the stated basis","run":"1cd08a13.e29f"}
+{"kind":"same","check":1196,"finding":"follows","why":"80-87 C at 79 W, 2190 of 3105 MHz, SW power cap, thermal slowdown Not Active even at 87 C: wear and noise, not danger","run":"1cd08a13.e29f"}
+{"kind":"same","check":1197,"finding":"follows","why":"~44 C within 6 minutes and ~40 C by 15: 20 minutes is comfortably enough","run":"1cd08a13.e29f"}
+{"kind":"same","check":1201,"finding":"follows","why":"tail epochs statistically indistinguishable, so picking the argmax selects on noise; averaging is standard when the tail is equivalent","run":"1cd08a13.e29f"}
+{"kind":"same","check":1202,"finding":"follows","why":"BN stats averaged with the weights rather than recomputed over data is the cheap stand-in for update_bn","run":"1cd08a13.e29f"}
+{"kind":"same","check":1207,"finding":"follows","why":"the grad-checkpointed model is better than the reference, so the double update broke nothing","run":"1cd08a13.e29f"}
+{"kind":"same","check":1208,"finding":"follows","why":"a better model and nothing broken: the BN caution can be retired","run":"1cd08a13.e29f"}
+{"kind":"same","check":1210,"finding":"follows","why":"zero GPU hours, existing T018 checkpoints and T003 dumps, 27 min of inference: the gain came from combining measured levers","run":"1cd08a13.e29f"}
+{"kind":"same","check":1213,"finding":"follows","why":"local folds at ~1.75 h beat the T4's ~2.7 h, so Kaggle quota no longer binds training","run":"1cd08a13.e29f"}
+{"kind":"same","check":1215,"finding":"follows","why":"9 h - 4.9 h = 4.1 h, as stated","run":"1cd08a13.e29f"}
+{"kind":"same","check":1218,"finding":"follows","why":"MRNet labels were extracted from clinical reports, a better version of report-agreement, so not the truth instrument","run":"1cd08a13.e29f"}

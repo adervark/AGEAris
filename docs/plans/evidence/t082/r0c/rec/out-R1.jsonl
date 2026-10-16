@@ -1,0 +1,3 @@
+{"kind":"same","group":1,"facts":["V3634","V1937"],"finding":"conflict","why":"V3634 (lane6) says --layer-decay/--warmup-frac were never once passed; V1937 (lane10) says the claim no run passed --warmup-frac is false (a correction)","run":"1cd08a13.4c6e"}
+{"kind":"same","group":1,"facts":["V3349","V1937"],"finding":"conflict","why":"V3349 (lane6) says --warmup-frac is wired and never used; V1937 (lane10) says the never-passed claim is false (correction)","run":"1cd08a13.4c6e"}
+{"kind":"same","group":1,"facts":["V2746","V2997"],"finding":"conflict","why":"V2746 prices SSL proposal 2 at 32–107 GPU-h; V2997/V3001 bill it at 114–228 (SimCLR) and 228–455 h (MAE) at 400 slices/s, same lane12 doc","run":"1cd08a13.4c6e"}

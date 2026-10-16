@@ -35,3 +35,11 @@ one round to recover about 30.
   settle before the pass, not a property of the auditor.
 - A canary rate is a recall measure only while the brief does not change in
   response to which canaries were missed.
+
+## Read-rule breaches reported by subagents
+
+- Reconciler 2, pass 1 (`1cd08a13.e29f`): one `git grep` for "5× too
+  narrow" was not limited to lane files and printed one line of RSNA's
+  `docs/RESEARCH-0902c-round-3.md` (the T034 row on ±0.002 bands). It says
+  it used nothing from it. The line bears on none of the twelve
+  corrections. Its pass was rerun anyway, for a missed canary.
