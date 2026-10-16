@@ -75,3 +75,6 @@
 {"ts":"2026-10-16T20:06:00Z","run":"1cd08a13.36b6","kind":"did","what":"reconciler 3: checker exit 0 — 96/96 groups (79 ok, 27 conflict lines), 406/406 checks (344 follows, 62 does-not-follow), 0 problems; ~15 min","next":"parent grades rec/out-R3.jsonl"}
 {"ts":"2026-10-16T20:06:00Z","run":"1cd08a13.36b6","kind":"end","left":"nothing","next":"parent grades"}
 {"ts":"2026-10-16T20:06:17Z","run":"1cd08a13","kind":"did","what":"reconciler 3: 96 groups, 406 checks, 15 min; 27 conflicts, 62 does-not-follow; caught 11 of 11 canaries","next":"reconcilers 1 and 2 reruns, then grade"}
+{"ts":"2026-10-16T23:41:22Z","run":"1cd08a13.4c6e","kind":"end","left":"died at the account's usage limit (2026-10-16T20:08Z); its lines on disk are kept","next":"operator: resume from the lines on disk, or not"}
+{"ts":"2026-10-16T23:41:22Z","run":"1cd08a13.93e7","kind":"end","left":"died at the account's usage limit (2026-10-16T20:08Z); its lines on disk are kept","next":"operator: resume from the lines on disk, or not"}
+{"ts":"2026-10-16T23:41:22Z","run":"1cd08a13","kind":"did","what":"reconciler reruns 1 (38 lines) and 2 (23 lines) died at the usage limit; reaped","next":"operator decides whether to resume them: spend rule allows one rerun each"}
