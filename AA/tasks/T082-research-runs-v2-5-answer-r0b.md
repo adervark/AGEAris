@@ -2,7 +2,7 @@
 id: T082
 title: "Research-runs design v2.5: answer R0b's recall of 2 of 12"
 status: claimed
-owner: adervark @b/b8438f28 2026-10-13 — v2.5: transcription no longer one agent's choice
+owner: adervark @v/1cd08a13 2026-10-17 — R0c: the auditor, then merge, link, 3 reconcilers and the grade (reclaimed, rule 3; was adervark @b/b8438f28 2026-10-13 — v2.5: transcription no longer one agent's choice)
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -118,8 +118,8 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-14, adervark @b/b8438f28: stopped at a usage
-  limit, between steps
+- **Last touched:** 2026-10-17, adervark @v/1cd08a13: reclaimed; the
+  auditor brief was lost with the old scratchpad and is being rewritten
 - **In flight:** nothing. Registrar, G1–G4 and GC are done and committed, all
   clean: 4,033 facts, 391 skips.
 - **On disk:** `r0c/audit/` (skips.jsonl: 664 lines, 81 canaries;
