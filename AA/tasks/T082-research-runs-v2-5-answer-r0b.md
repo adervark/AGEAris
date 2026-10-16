@@ -124,15 +124,17 @@ be checked against T075's misses before the design is accepted again.
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-10-17, adervark @v/1cd08a13.
-- **In flight:** the auditor's rerun, run `1cd08a13.7ee3`, writing
-  `r0c/audit/audit.jsonl`. Pass 1 (`audit/audit-1.jsonl`, 9 min) caught 74
-  of 81 canaries; six of the seven it passed were table cells, so the brief
-  now says a value-holding cell is part of its row's claim. If the rerun
-  misses a canary, that goes to the operator (spend rule).
-- **Resume with:** grade the rerun's canaries; `merge.mjs` with
-  audit.jsonl, `../link.mjs`, `groups.mjs … 3` into `r0c/rec/`, the 3
-  reconcilers on `brief-reconciler.md` (fill {K}, {RUN}, {NUNITS},
-  {NGROUPS}, {NCHECKS}), re-run `cmd:` sources at e4e356c, and grade.
+- **Done:** the auditor's rerun caught 81 of 81 canaries and flagged 170
+  of 583 real skips `missed` (pass 1: 74 of 81, 19). Merged
+  (`r0c/merged/`), linked (`r0c/link/link-counts.json`; the pairs are
+  regenerable, not committed), grouped (`r0c/rec/`, key `rec-key.json`),
+  searches re-run (`r0c/searchflip.json`).
+- **In flight:** 3 reconcilers, runs `1cd08a13.67a5`, `.e29f`, `.36b6`,
+  writing `r0c/rec/out-R{1,2,3}.jsonl`. A dead one is rerun once on its
+  filled brief (`brief-reconciler.md`), keeping the lines on disk.
+- **Resume with:** grade each reconciler's canaries (`rec-key.json`), then
+  the twelve against `key-lines.md` and T075's `corrections.md`, plus
+  precision, costs, and a sample of the audit's `missed` flags.
 - **Next decision:** none; the operator approved 3 reconcilers, balanced.
 - **Known gaps:** the committed cut dropped table cells of ≤2 characters.
   Pairwise linking gave 36,545 pairs on 3,081 facts, so review must be by
