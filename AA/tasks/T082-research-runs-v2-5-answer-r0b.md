@@ -123,16 +123,17 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-17, adervark @v/1cd08a13: reclaimed; the
-  auditor brief, lost with the old scratchpad, is rewritten and committed
-  (`r0c/brief-auditor.md`, checker `r0c/check-audit.mjs`).
-- **In flight:** the auditor, run `1cd08a13.32d2`, writing
-  `r0c/audit/audit.jsonl`. If its run is closed and the file is incomplete,
-  it died: rerun it once (spend rule), resuming from the lines on disk.
-- **Resume with:** `check-audit.mjs` clean; then `merge.mjs` with
-  audit.jsonl, `../link.mjs`, grouped review by 3 reconcilers (format still
-  to write: groups, not pairs), re-run `cmd:` sources at e4e356c, and grade.
-- **Next decision:** none; the operator approved 3 reconcilers.
+- **Last touched:** 2026-10-17, adervark @v/1cd08a13.
+- **In flight:** the auditor's rerun, run `1cd08a13.7ee3`, writing
+  `r0c/audit/audit.jsonl`. Pass 1 (`audit/audit-1.jsonl`, 9 min) caught 74
+  of 81 canaries; six of the seven it passed were table cells, so the brief
+  now says a value-holding cell is part of its row's claim. If the rerun
+  misses a canary, that goes to the operator (spend rule).
+- **Resume with:** grade the rerun's canaries; `merge.mjs` with
+  audit.jsonl, `../link.mjs`, `groups.mjs … 3` into `r0c/rec/`, the 3
+  reconcilers on `brief-reconciler.md` (fill {K}, {RUN}, {NUNITS},
+  {NGROUPS}, {NCHECKS}), re-run `cmd:` sources at e4e356c, and grade.
+- **Next decision:** none; the operator approved 3 reconcilers, balanced.
 - **Known gaps:** the committed cut dropped table cells of ≤2 characters.
   Pairwise linking gave 36,545 pairs on 3,081 facts, so review must be by
   group.
