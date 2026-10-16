@@ -73,6 +73,11 @@ be checked against T075's misses before the design is accepted again.
     3 reconcilers, 10 subagents in all: one for the 110 cross-document
     groups, two splitting the 995 premise checks. Same-document groups are
     recorded as unreviewed.
+  - **Amended 2026-10-17 by the operator** ("Balanced mix"): with the
+    closure ledger merged there are 286 groups (4,848 fact lines) and 1,220
+    premise checks (4,681 lines), not 110 and 995. The 3 reconcilers each
+    take a third of both, about 3,190 lines each (`r0c/groups.mjs`). The
+    spend is unchanged.
 - Accepted only when the re-grade reaches at least 10 of 12, or the operator
   accepts a lower figure with the misses listed.
 

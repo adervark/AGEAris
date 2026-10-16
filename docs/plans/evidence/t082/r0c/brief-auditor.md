@@ -7,7 +7,7 @@ as a *skip* (written off, with a reason). You transcribed nothing and you will
 reconcile nothing. Your job is to read every skip and say whether writing it
 off was right, and to assign quantities to measurands, blind.
 
-Your run id is **1cd08a13.32d2**. Work in `/home/ade/Code/AGEAris` (call it
+Your run id is **{RUN}**. Work in `/home/ade/Code/AGEAris` (call it
 `$AA`); `$R0C` is `$AA/docs/plans/evidence/t082/r0c`.
 
 ## Checkpoint rule (binding, verbatim from the project's rules)
@@ -20,9 +20,9 @@ Your run id is **1cd08a13.32d2**. Work in `/home/ade/Code/AGEAris` (call it
 
 Your run is already open. Log with, from `$AA`:
 
-    AA/ckpt.sh log T082 doing --run 1cd08a13.32d2 --what "..." --next "..."
-    AA/ckpt.sh log T082 did   --run 1cd08a13.32d2 --what "..." --next "..."
-    AA/ckpt.sh log T082 end   --run 1cd08a13.32d2 --left "..." --next "..."
+    AA/ckpt.sh log T082 doing --run {RUN} --what "..." --next "..."
+    AA/ckpt.sh log T082 did   --run {RUN} --what "..." --next "..."
+    AA/ckpt.sh log T082 end   --run {RUN} --left "..." --next "..."
 
 Write a `doing` before you start, a `did` after roughly every 150 skips
 ("audited N of 664") and after the assignments, and an `end` when you stop for
@@ -46,7 +46,7 @@ the deliverable, so append to it as you go, never only at the end.
 
 You may **not** read: any other file under `$AA/docs/` (including the rest
 of `$R0C`, `audit-key.json`, any `ledger-*.jsonl`, `corrections.md`,
-`grade.md`, `docs/plans/`), `$AA/AA/tasks/`, `$AA/PROGRESS.md`, any review,
+`grade.md`, `docs/plans/`, and any earlier audit pass such as `audit/audit-1.jsonl`), `$AA/AA/tasks/`, `$AA/PROGRESS.md`, any review,
 or the round 3 synthesis in RSNA. The ledgers and the key would tell you the
 answers, and then your judgement measures nothing.
 
@@ -81,6 +81,16 @@ Judge each skip by its reason:
   present ("no `--resume` flag", "nothing reads X") is `missed` when skipped:
   it has to be written as a fact with the search that shows it.
 
+- **Table cells.** Tables are cut cell by cell, so a cell is a clause. A
+  cell that holds a value — a number, a date, a score band, a count, a
+  label that names a change ("slice density 12 → 24") — is part of its
+  row's claim, even when it is the row's first cell and the rest of the
+  claim sits in the next cells: `missed` if skipped as `no-claim`. Only a
+  header cell or a cell that holds no value is `ok`.
+- **Read in context.** Open each document and read the skipped lines where
+  they sit. Judging a clause from its text alone is not enough, and a pass
+  that does not read the documents is not an audit.
+
 When in doubt, write `missed`. A wrong `missed` costs one fact; a wrong `ok`
 loses a claim from the record for good.
 
@@ -90,7 +100,7 @@ with the same care.
 
 Line format, appended to **`$R0C/audit/audit.jsonl`** (create it):
 
-    {"kind":"audit","clause":"lane9#123","finding":"missed","why":"asserts the band is public overfit: a state claim about the LB","run":"1cd08a13.32d2"}
+    {"kind":"audit","clause":"lane9#123","finding":"missed","why":"asserts the band is public overfit: a state claim about the LB","run":"{RUN}"}
 
 `why` is at most 240 bytes: for `missed`, name the claim; for `ok`, say why
 there is none (or where the repeat is).
@@ -105,8 +115,8 @@ thing by the same instrument, as the measurand's `means` defines it — or
 quantity is `none`, not the nearest name. You decide alone; nothing tells
 you what anyone else chose.
 
-    {"kind":"assign","item":17,"measurand":"deployed-kernel-runtime","run":"1cd08a13.32d2"}
-    {"kind":"assign","item":18,"measurand":"none","run":"1cd08a13.32d2"}
+    {"kind":"assign","item":17,"measurand":"deployed-kernel-runtime","run":"{RUN}"}
+    {"kind":"assign","item":18,"measurand":"none","run":"{RUN}"}
 
 Write the bare name (no `m:` prefix).
 
