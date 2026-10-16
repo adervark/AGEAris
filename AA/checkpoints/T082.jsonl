@@ -54,3 +54,15 @@
 {"ts":"2026-10-16T19:50:09Z","run":"1cd08a13.67a5","kind":"doing","what":"reconcile R1: 94 groups + 407 checks into rec/out-R1.jsonl","next":"scan groups then checks, append as I go"}
 {"ts":"2026-10-16T19:50:12Z","run":"1cd08a13.e29f","kind":"doing","what":"reconciler 2: reading R2.jsonl (96 groups, 407 checks), appending to out-R2.jsonl","next":"work units in order, did every ~100"}
 {"ts":"2026-10-16T19:50:15Z","run":"1cd08a13.36b6","kind":"doing","what":"reconciler 3: judging 96 groups and 406 checks in rec/R3.jsonl","next":"append findings to rec/out-R3.jsonl as I go"}
+{"ts":"2026-10-16T19:54:52Z","run":"1cd08a13.e29f","kind":"did","what":"reconciler 2: groups 1-46 of 503 lines written","next":"groups 47-96, then 407 checks"}
+{"ts":"2026-10-16T19:55:45Z","run":"1cd08a13.36b6","kind":"did","what":"reconciler 3: done 96 of 502 (all groups)","next":"checks, from line 97"}
+{"ts":"2026-10-16T19:56:56Z","run":"1cd08a13.67a5","kind":"did","what":"done 165 of 501 (94 groups, 71 checks)","next":"checks from line 166"}
+{"ts":"2026-10-16T19:59:32Z","run":"1cd08a13.e29f","kind":"did","what":"reconciler 2: all 96 groups and checks through C353 written (~215 of 503)","next":"remaining checks C354 onward"}
+{"ts":"2026-10-16T19:59:37Z","run":"1cd08a13.36b6","kind":"did","what":"reconciler 3: done 230 of 502","next":"checks from line 231"}
+{"ts":"2026-10-16T20:00:44Z","run":"1cd08a13.67a5","kind":"did","what":"done 340 of 501","next":"checks from line 341"}
+{"ts":"2026-10-16T20:03:12Z","run":"1cd08a13.e29f","kind":"did","what":"reconciler 2: 410 of 503 units written","next":"last 93 checks"}
+{"ts":"2026-10-16T20:03:23Z","run":"1cd08a13.36b6","kind":"did","what":"reconciler 3: done 392 of 502","next":"checks from line 393"}
+{"ts":"2026-10-16T20:03:46Z","run":"1cd08a13.67a5","kind":"did","what":"R1 reconciled: checker exit 0; 94/94 groups (ok 78, conflict 24), 407/407 checks (follows 359, does-not-follow 48), problems 0; 13 min","next":"end"}
+{"ts":"2026-10-16T20:03:46Z","run":"1cd08a13.67a5","kind":"end","left":"nothing","next":"parent grades"}
+{"ts":"2026-10-16T20:04:21Z","run":"1cd08a13.4c6e","kind":"open","operator":"adervark","profile":"v","session":"1cd08a13-caae-42b7-9532-52b9428962a2","boot":"59a9dd22-69e9-4dd1-980f-06d9c7ed0a4f","pid":174006,"pstart":"Fri Oct 16 18:42:36 2026","agent":"reconciler-1b","brief":"R0c reconciler 1 rerun (pass 1 caught 10 of 11 canaries): 94 groups and 407 checks, rec/R1.jsonl"}
+{"ts":"2026-10-16T20:04:26Z","run":"1cd08a13","kind":"did","what":"reconciler 1 pass 1: 94 groups, 407 checks, 13 min; 24 conflicts, 48 does-not-follow; caught 10 of 11 canaries (passed group 112's twin ~250 vs ~215), so it reruns once","next":"reconciler 1 rerun 1cd08a13.4c6e"}

@@ -44,7 +44,7 @@ from the first unit without a line.
   write, check out, fetch or run anything there. Most units need no lookup.
 
 You may **not** read anything else under `$AA` — the ledgers, the keys, the
-audit, the other reconcilers' files, `docs/plans/`, `AA/tasks/`,
+audit, the other reconcilers' files, any earlier pass such as `rec/out-R1-pass1.jsonl`, `docs/plans/`, `AA/tasks/`,
 `PROGRESS.md` — nor the round 3 synthesis in RSNA. They would tell you the
 answers, and then your judgement measures nothing.
 
