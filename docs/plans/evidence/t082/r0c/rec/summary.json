@@ -1,0 +1,31 @@
+{
+ "groups": 286,
+ "groupLines": 4848,
+ "checks": 1220,
+ "checkLines": 4681,
+ "sameDocPairsUnreviewed": 20329,
+ "canaries": 33,
+ "reconcilers": [
+  {
+   "file": "R1.jsonl",
+   "groups": 94,
+   "checks": 407,
+   "lines": 3188,
+   "canaries": 11
+  },
+  {
+   "file": "R2.jsonl",
+   "groups": 96,
+   "checks": 407,
+   "lines": 3188,
+   "canaries": 11
+  },
+  {
+   "file": "R3.jsonl",
+   "groups": 96,
+   "checks": 406,
+   "lines": 3186,
+   "canaries": 11
+  }
+ ]
+}

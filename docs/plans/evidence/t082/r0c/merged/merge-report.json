@@ -1,0 +1,393 @@
+{
+ "premiseUnwritten": [
+  {
+   "fact": "G1-F242",
+   "premise": "R1#160"
+  },
+  {
+   "fact": "G1-F284",
+   "premise": "R1#195"
+  },
+  {
+   "fact": "G1-F344",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F345",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F346",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F347",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F348",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F349",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F350",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F351",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F352",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F353",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F354",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F355",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F356",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F357",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F358",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F359",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F360",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F361",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F362",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F363",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F364",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F365",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F366",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F367",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G1-F368",
+   "premise": "R1#232"
+  },
+  {
+   "fact": "G2-F441",
+   "premise": "lane9#271"
+  },
+  {
+   "fact": "G2-F641",
+   "premise": "lane9#410"
+  },
+  {
+   "fact": "G2-F651",
+   "premise": "lane9#426"
+  },
+  {
+   "fact": "G2-F662",
+   "premise": "lane9#426"
+  },
+  {
+   "fact": "G3-F512",
+   "premise": "lane10#453"
+  },
+  {
+   "fact": "G3-F512",
+   "premise": "lane10#448"
+  },
+  {
+   "fact": "G3-F535",
+   "premise": "lane10#503"
+  },
+  {
+   "fact": "G3-F580",
+   "premise": "lane10#569"
+  },
+  {
+   "fact": "G3-F580",
+   "premise": "lane10#579"
+  },
+  {
+   "fact": "G3-F580",
+   "premise": "lane10#585"
+  },
+  {
+   "fact": "G3-F580",
+   "premise": "lane10#592"
+  },
+  {
+   "fact": "G3-F580",
+   "premise": "lane10#599"
+  },
+  {
+   "fact": "G3-F581",
+   "premise": "lane10#569"
+  },
+  {
+   "fact": "G3-F581",
+   "premise": "lane10#579"
+  },
+  {
+   "fact": "G3-F582",
+   "premise": "lane10#585"
+  },
+  {
+   "fact": "G3-F583",
+   "premise": "lane10#592"
+  },
+  {
+   "fact": "G3-F583",
+   "premise": "lane10#599"
+  },
+  {
+   "fact": "G3-F621",
+   "premise": "lane10#453"
+  },
+  {
+   "fact": "G3-F621",
+   "premise": "lane10#448"
+  },
+  {
+   "fact": "G4-F288",
+   "premise": "lane11#250"
+  },
+  {
+   "fact": "G4-F292",
+   "premise": "lane11#256"
+  },
+  {
+   "fact": "G4-F317",
+   "premise": "lane12#169"
+  },
+  {
+   "fact": "G4-F322",
+   "premise": "lane12#192"
+  }
+ ],
+ "measurandDisputed": [
+  {
+   "fact": "G1-F55",
+   "transcriber": [
+    "our-public-lb-score"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F56",
+   "transcriber": [
+    "public-lb-top20-cutoff",
+    "our-public-lb-score"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F57",
+   "transcriber": [
+    "public-notebook-plateau-score",
+    "our-public-lb-score"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F73",
+   "transcriber": [
+    "near-duplicate-member-rho"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F82",
+   "transcriber": [
+    "frontier-slices-per-study"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F229",
+   "transcriber": [
+    "kaggle-fold-wallclock"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F237",
+   "transcriber": [
+    "unmanifested-seqs2-series"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F436",
+   "transcriber": [
+    "armc-fold0-gold-macro-auc",
+    "raptor-gold58-macro-auc"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F463",
+   "transcriber": [
+    "public-full-data-controlled-gain"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F467",
+   "transcriber": [
+    "non-gold-corpus-size"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F546",
+   "transcriber": [
+    "armc-fold0-gold-macro-auc"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F633",
+   "transcriber": [
+    "local-fold-wallclock"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F699",
+   "transcriber": [
+    "submissions-budget"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F700",
+   "transcriber": [
+    "submissions-budget"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F737",
+   "transcriber": [
+    "entry-deadline"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F738",
+   "transcriber": [
+    "submissions-budget"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F791",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F792",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F793",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F794",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F795",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F796",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F797",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F798",
+   "transcriber": [
+    "winners-curse-inflation"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F804",
+   "transcriber": [
+    "public-notebook-plateau-score",
+    "public-lb-top20-cutoff"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F858",
+   "transcriber": [
+    "entry-deadline"
+   ],
+   "auditor": "none"
+  }
+ ],
+ "measurandAgreed": 219
+}

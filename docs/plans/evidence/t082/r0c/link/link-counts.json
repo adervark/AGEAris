@@ -1,0 +1,1093 @@
+{
+ "counts": {
+  "lines": 4033,
+  "unparseable": [],
+  "facts": 4033,
+  "perDoc": {
+   "R1": 402,
+   "R2": 288,
+   "lane13": 189,
+   "T047brief": 126,
+   "lane9": 735,
+   "lane10": 657,
+   "lane11": 300,
+   "lane12": 384,
+   "train.py§build_parser": 5,
+   "train.py§lr_scale": 5,
+   "train.py§build_optimizer": 8,
+   "tta.py§apply_view": 5,
+   "dicom_io.py§side": 3,
+   "smoke_test.py§test_t003_tta_views": 26,
+   "tta.py§mirror_bag": 12,
+   "dataset.py§__getitem__": 36,
+   "dataset.py§_resize": 4,
+   "lane0-rules-and-leaderboard.md§11": 2,
+   "lane0-rules-and-leaderboard.md§13": 1,
+   "lane0-rules-and-leaderboard.md§49": 1,
+   "lane0-rules-and-leaderboard.md§70": 1,
+   "lane1-winners-and-literature.md§1": 1,
+   "lane5-public-notebooks.md§1": 1,
+   "lane7-public-members.md§20": 6,
+   "lane0-rules-and-leaderboard.md§84": 10,
+   "lane0-rules-and-leaderboard.md§81": 2,
+   "lane0-rules-and-leaderboard.md§74": 1,
+   "lane3-measurement-and-ensemble.md§801": 4,
+   "lane0-rules-and-leaderboard.md§77": 1,
+   "lane0-rules-and-leaderboard.md§80": 2,
+   "lane3-measurement-and-ensemble.md§90": 6,
+   "lane7-public-members.md§207": 7,
+   "lane6-single-model-gap.md§67": 1,
+   "lane5-public-notebooks.md§21": 3,
+   "lane0-rules-and-leaderboard.md§108": 4,
+   "lane7-public-members.md§158": 1,
+   "lane0-rules-and-leaderboard.md§93": 2,
+   "lane5-public-notebooks.md§88": 8,
+   "PROGRESS.md§352": 8,
+   "lane5-public-notebooks.md§84": 5,
+   "lane5-public-notebooks.md§744": 6,
+   "lane0-rules-and-leaderboard.md§36": 2,
+   "PLAN-0901-recalibrate-then-spend.md§470": 4,
+   "lane6-single-model-gap.md§255": 4,
+   "lane3-measurement-and-ensemble.md§453": 7,
+   "lane3-measurement-and-ensemble.md§781": 2,
+   "lane4-labels-and-plan.md§99": 9,
+   "lane2-architecture-headroom.md§200": 11,
+   "lane7-public-members.md§615": 1,
+   "PROGRESS.md§5857": 5,
+   "lane6-single-model-gap.md§185": 6,
+   "train.py§mk": 6,
+   "train.py§check_args": 5,
+   "dataset.py§__init__": 19,
+   "push_family.py§main": 30,
+   "add_ensemble_member.py§main": 8,
+   "gradcam.py§main": 29,
+   "distil_weak.py§main": 7,
+   "train_text_labeler.py§main": 1,
+   "cam_sheet.py§main": 4,
+   "rank_blend.py§rank_blend": 13,
+   "label_gaps.py§main": 3,
+   "attn_divergence.py§main": 4,
+   "compare_runs.py§main": 1,
+   "train.py§run": 108,
+   "model.py§forward": 10,
+   "model.py§__init__": 20,
+   "dataset.py§_warp": 8,
+   "lane6-single-model-gap.md§219": 8,
+   "PROGRESS.md§3381": 5,
+   "PROGRESS.md§3399": 7,
+   "dicom_io.py§read_series": 25,
+   "tta.py§blend": 5,
+   "T028-config-for-the-family.md§441": 2,
+   "T028-config-for-the-family.md§116": 9,
+   "T034-family-alone-lb-ab.md§48": 6,
+   "STATE.md§20": 3,
+   "PLAN-0831-after-the-transfer-collapse.md§125": 5,
+   "tta.py§unmatched": 4,
+   "T034-family-alone-lb-ab.md§1": 3,
+   "lane6-single-model-gap.md§182": 5,
+   "lane6-single-model-gap.md§183": 3,
+   "lane6-single-model-gap.md§184": 3,
+   "lane6-single-model-gap.md§174": 4,
+   "STATE.md§9": 28,
+   "STATE.md§351": 8,
+   "model.py§SliceSequenceHead": 22,
+   "train.py§step_window": 5,
+   "STATE.md§23": 6,
+   "lane6-single-model-gap.md§222": 6,
+   "lane6-single-model-gap.md§223": 5,
+   "lane6-single-model-gap.md§162": 4,
+   "lane6-single-model-gap.md§224": 5,
+   "tta.py§budget_minutes": 6,
+   "lane7-public-members.md§330": 4,
+   "lane7-public-members.md§342": 4,
+   "PROGRESS.md§2921": 5,
+   "dataset.py§_slot_meta": 24,
+   "kaggle_inference.py§main": 55,
+   "dump_views.py§main": 5,
+   "lane7-public-members.md§228": 12,
+   "AGENTS.md§78": 6,
+   "ROADMAP.md§485": 7,
+   "PROGRESS.md§3328": 5,
+   "README.md§22": 4,
+   "dataset.py§pick_series_seqs": 11,
+   "README.md§138": 6,
+   "AGENTS.md§45": 16,
+   "train.py§accumulate": 11,
+   "lane0-rules-and-leaderboard.md§12": 1,
+   "lane0-rules-and-leaderboard.md§14": 1,
+   "lane0-rules-and-leaderboard.md§26": 5,
+   "smoke_test.py§test_gradcam_instrument": 26,
+   "PROGRESS.md§3407": 5,
+   "PROGRESS.md§3383": 5,
+   "PROGRESS.md§3426": 5,
+   "ROADMAP.md§480": 1,
+   "ROADMAP.md§583": 2,
+   "ROADMAP.md§498": 6,
+   "PROGRESS.md§4986": 5,
+   "ROADMAP.md§517": 5,
+   "lane8-external-truth-sets.md§366": 3
+  },
+  "pairs": 59480,
+  "canaries": 6,
+  "keyConflicts": 31,
+  "premisePairs": 3243,
+  "sameDocPairs": 23516,
+  "measurandPairs": 11605,
+  "outOfSight": 6,
+  "regenerable": 389,
+  "premisesByTranscriber": 1003,
+  "unsourced": 989
+ },
+ "hubs": [
+  {
+   "r": "m:forum-claimed-single-model-lb",
+   "n": 340
+  },
+  {
+   "r": "m:raptor-single-model-public-lb",
+   "n": 93
+  },
+  {
+   "r": "premise",
+   "n": 3243
+  },
+  {
+   "r": "m:public-notebook-plateau-score",
+   "n": 556
+  },
+  {
+   "r": "m:plateau-fusion-checkpoint-count",
+   "n": 184
+  },
+  {
+   "r": "m:public-lb-top20-cutoff",
+   "n": 161
+  },
+  {
+   "r": "m:public-lb-team-count",
+   "n": 83
+  },
+  {
+   "r": "m:public-lb-first-place-score",
+   "n": 13
+  },
+  {
+   "r": "m:our-public-lb-rank",
+   "n": 302
+  },
+  {
+   "r": "m:our-public-lb-score",
+   "n": 1318
+  },
+  {
+   "r": "m:public-lb-teams-ge-0935",
+   "n": 33
+  },
+  {
+   "r": "m:kernel-runtime-cap",
+   "n": 1436
+  },
+  {
+   "r": "m:test-set-size",
+   "n": 179
+  },
+  {
+   "r": "m:ensemble-return-plateau-k",
+   "n": 95
+  },
+  {
+   "r": "m:same-recipe-member-marginal-gain",
+   "n": 374
+  },
+  {
+   "r": "m:non-fat-sat-unseen-study-fraction",
+   "n": 15
+  },
+  {
+   "r": "m:series-fov-range",
+   "n": 103
+  },
+  {
+   "r": "m:effective-scale-spread",
+   "n": 110
+  },
+  {
+   "r": "def:src/train.py#build_parser",
+   "n": 8916
+  },
+  {
+   "r": "file:src/train.py",
+   "n": 650
+  },
+  {
+   "r": "m:per-label-attn-gain",
+   "n": 46
+  },
+  {
+   "r": "ref:--warmup-frac",
+   "n": 556
+  },
+  {
+   "r": "ref:--layer-decay",
+   "n": 386
+  },
+  {
+   "r": "def:src/train.py#build_optimizer",
+   "n": 1290
+  },
+  {
+   "r": "def:src/train.py#lr_scale",
+   "n": 28
+  },
+  {
+   "r": "m:local-fold-wallclock",
+   "n": 367
+  },
+  {
+   "r": "ref:x[:, :, 0]",
+   "n": 236
+  },
+  {
+   "r": "def:src/tta.py#apply_view",
+   "n": 457
+  },
+  {
+   "r": "file:src/tta.py",
+   "n": 1762
+  },
+  {
+   "r": "ref:\"crop\"",
+   "n": 28
+  },
+  {
+   "r": "ref:\"bright\"",
+   "n": 28
+  },
+  {
+   "r": "ref:\"rot+\"",
+   "n": 28
+  },
+  {
+   "r": "ref:.repeat(1, 1, c, 1, 1)",
+   "n": 28
+  },
+  {
+   "r": "ref:(-1, 0, 1)",
+   "n": 24
+  },
+  {
+   "r": "def:src/dicom_io.py#side",
+   "n": 94
+  },
+  {
+   "r": "def:scripts/smoke_test.py#test_t003_tta_views",
+   "n": 241
+  },
+  {
+   "r": "def:src/tta.py#mirror_bag",
+   "n": 123
+  },
+  {
+   "r": "def:src/dataset.py#__getitem__",
+   "n": 1245
+  },
+  {
+   "r": "file:src/dataset.py",
+   "n": 290
+  },
+  {
+   "r": "ref:default_rng((self.seed, i))",
+   "n": 20
+  },
+  {
+   "r": "m:armc-corpus-rho-trajectory",
+   "n": 30
+  },
+  {
+   "r": "m:unmanifested-seqs2-series",
+   "n": 125
+  },
+  {
+   "r": "m:teacher-gold-macro-auc",
+   "n": 182
+  },
+  {
+   "r": "m:self-distill-target-gold-auc",
+   "n": 88
+  },
+  {
+   "r": "m:gold-set-size",
+   "n": 34
+  },
+  {
+   "r": "m:sonnet-scored-gain-survival",
+   "n": 20
+  },
+  {
+   "r": "m:sonnet-labelled-study-count",
+   "n": 28
+  },
+  {
+   "r": "m:gold-paired-band",
+   "n": 438
+  },
+  {
+   "r": "m:oof-auc-sonnet-paired-halfwidth",
+   "n": 414
+  },
+  {
+   "r": "m:public-noise-one-member-swap-sd",
+   "n": 116
+  },
+  {
+   "r": "m:public-noise-nested-step-band",
+   "n": 26
+  },
+  {
+   "r": "m:public-noise-distinct-config-sd",
+   "n": 645
+  },
+  {
+   "r": "m:winners-curse-inflation",
+   "n": 505
+  },
+  {
+   "r": "m:seqs2-fold-wallclock",
+   "n": 68
+  },
+  {
+   "r": "m:kaggle-fold-wallclock",
+   "n": 60
+  },
+  {
+   "r": "m:self-distillation-expected-lb-gain",
+   "n": 40
+  },
+  {
+   "r": "m:seqs2-family-expected-lb-gain",
+   "n": 31
+  },
+  {
+   "r": "m:mm-crop-expected-lb-gain",
+   "n": 51
+  },
+  {
+   "r": "m:off-joint-pixel-fraction",
+   "n": 74
+  },
+  {
+   "r": "m:recipe-s1-expected-lb-gain",
+   "n": 120
+  },
+  {
+   "r": "m:second-architecture-family-expected-lb-gain",
+   "n": 18
+  },
+  {
+   "r": "m:efficiency-single-model-runtime",
+   "n": 90
+  },
+  {
+   "r": "m:entry-deadline",
+   "n": 39
+  },
+  {
+   "r": "m:kaggle-gpu-hours-budget",
+   "n": 139
+  },
+  {
+   "r": "m:submissions-budget",
+   "n": 587
+  },
+  {
+   "r": "m:deployed-kernel-runtime",
+   "n": 2134
+  },
+  {
+   "r": "ref:AdamW",
+   "n": 44
+  },
+  {
+   "r": "ref:--lr",
+   "n": 61
+  },
+  {
+   "r": "ref:3e-4",
+   "n": 96
+  },
+  {
+   "r": "cmd:git grep -n -e layer-decay -e warmup-frac 2b3d2a6 -- notebooks scripts/*.sh",
+   "n": 13
+  },
+  {
+   "r": "m:raptor-gold58-macro-auc",
+   "n": 94
+  },
+  {
+   "r": "m:non-gold-corpus-size",
+   "n": 126
+  },
+  {
+   "r": "m:raptor-arm-expected-lb-gain",
+   "n": 35
+  },
+  {
+   "r": "def:docs/ROADMAP.md#Explicitly not worth doing",
+   "n": 141
+  },
+  {
+   "r": "m:fold0-paired-rho-band",
+   "n": 559
+  },
+  {
+   "r": "m:pos-weight-values",
+   "n": 13
+  },
+  {
+   "r": "ref:channel 0 repeated",
+   "n": 15
+  },
+  {
+   "r": "worktree:outputs/t043/rules2.txt",
+   "n": 28
+  },
+  {
+   "r": "def:docs/research/0902/lane0-rules-and-leaderboard.md#Code requirements (overview/code-requirements) — READ, verbatim fragments",
+   "n": 549
+  },
+  {
+   "r": "def:docs/research/0902/lane0-rules-and-leaderboard.md#Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)",
+   "n": 1242
+  },
+  {
+   "r": "ref:Lane 6",
+   "n": 21
+  },
+  {
+   "r": "def:docs/research/0902b/lane6-single-model-gap.md#Lane 6 — single-model gap forensics: one public recipe diffed against arm C",
+   "n": 21
+  },
+  {
+   "r": "m:public-lb-teams-ge-094",
+   "n": 32
+  },
+  {
+   "r": "ref:0.926",
+   "n": 29
+  },
+  {
+   "r": "worktree:outputs/t047/discrim.py",
+   "n": 1081
+  },
+  {
+   "r": "worktree:outputs/t047/rsna-knee-abnormality-detection-publicleaderboard-2026-09-02T10:19:50.csv",
+   "n": 4558
+  },
+  {
+   "r": "worktree:outputs/t047/lb_analysis.py",
+   "n": 561
+  },
+  {
+   "r": "worktree:outputs/t047/subs_analysis.py",
+   "n": 525
+  },
+  {
+   "r": "ref:776",
+   "n": 27
+  },
+  {
+   "r": "ref:histogram",
+   "n": 253
+  },
+  {
+   "r": "ref:0.936",
+   "n": 23
+  },
+  {
+   "r": "def:docs/research/0902/lane3-measurement-and-ensemble.md#5B. Structurally distinct candidates — where the risk actually is",
+   "n": 76
+  },
+  {
+   "r": "ref:0.946",
+   "n": 19
+  },
+  {
+   "r": "ref:bands",
+   "n": 300
+  },
+  {
+   "r": "ref:qcut",
+   "n": 55
+  },
+  {
+   "r": "def:docs/research/0902/lane3-measurement-and-ensemble.md#Executive summary",
+   "n": 128
+  },
+  {
+   "r": "def:docs/research/0902/lane5-public-notebooks.md#1.1 The 0.936 plateau is one notebook, forked ~8 times",
+   "n": 16
+  },
+  {
+   "r": "worktree:outputs/t047/xref.py",
+   "n": 45
+  },
+  {
+   "r": "worktree:outputs/t047/kernels_votes.csv",
+   "n": 21
+  },
+  {
+   "r": "def:docs/research/0902b/lane7-public-members.md#2.1 The weight datasets the ≥0.930 notebooks attach",
+   "n": 77
+  },
+  {
+   "r": "ref:romantamrazov",
+   "n": 21
+  },
+  {
+   "r": "worktree:outputs/t047/forum_xref.py",
+   "n": 15
+  },
+  {
+   "r": "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735304",
+   "n": 2278
+  },
+  {
+   "r": "ref:Scott Willis",
+   "n": 40
+  },
+  {
+   "r": "def:docs/research/0902/lane0-rules-and-leaderboard.md#Efficiency leaderboard (2,703 entries; only rank + public score are exposed)",
+   "n": 30
+  },
+  {
+   "r": "def:docs/research/0902/lane5-public-notebooks.md#1.3 What the corpus says about our own position",
+   "n": 854
+  },
+  {
+   "r": "ref:0.8976",
+   "n": 20
+  },
+  {
+   "r": "def:PROGRESS.md#LLM-read labels: 0.9015 on gold — the label factory has headroom after all",
+   "n": 57
+  },
+  {
+   "r": "ref:320 px",
+   "n": 16
+  },
+  {
+   "r": "def:docs/research/0902/lane5-public-notebooks.md#4. Comparison table — top public recipes vs ours",
+   "n": 111
+  },
+  {
+   "r": "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/734681",
+   "n": 55
+  },
+  {
+   "r": "def:docs/research/0902/lane0-rules-and-leaderboard.md#Rules page — READ (proxy summary, not full verbatim)",
+   "n": 187
+  },
+  {
+   "r": "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/733517",
+   "n": 36
+  },
+  {
+   "r": "def:docs/PLAN-0901-recalibrate-then-spend.md#The two changes that follow from §1",
+   "n": 38
+  },
+  {
+   "r": "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/737696",
+   "n": 561
+  },
+  {
+   "r": "ref:+/-0.0102",
+   "n": 30
+  },
+  {
+   "r": "def:docs/research/0902b/lane6-single-model-gap.md#paired A-B  [-0.0046, 0.0158]  +/-0.0102   r = 0.9089, pairing tightens 2.3x",
+   "n": 66
+  },
+  {
+   "r": "def:docs/research/0902/lane3-measurement-and-ensemble.md#3A. The instrument that was already on disk",
+   "n": 69
+  },
+  {
+   "r": "url:https://www.kaggle.com/competitions/rsna-knee-abnormality-detection/discussion/735154",
+   "n": 136
+  },
+  {
+   "r": "def:docs/research/0902/lane2-architecture-headroom.md#2.2 The ceiling of this design, and the alternatives",
+   "n": 67
+  },
+  {
+   "r": "def:src/model.py#__init__",
+   "n": 702
+  },
+  {
+   "r": "def:src/train.py#mk",
+   "n": 2953
+  },
+  {
+   "r": "def:docs/research/0902b/lane6-single-model-gap.md#2.5 Optimisation — the cheapest unexplored difference",
+   "n": 460
+  },
+  {
+   "r": "def:src/train.py#run",
+   "n": 509
+  },
+  {
+   "r": "ref:3e-5",
+   "n": 96
+  },
+  {
+   "r": "def:pm/STATE.md#Board",
+   "n": 105
+  },
+  {
+   "r": "worktree:outputs/t025/run_arm.sh",
+   "n": 190
+  },
+  {
+   "r": "worktree:outputs/t025/dinov3_fold0.log",
+   "n": 66
+  },
+  {
+   "r": "worktree:outputs/t039/v16_log/rsna-knee-submit.log",
+   "n": 2899
+  },
+  {
+   "r": "worktree:outputs/t039/live_kernel/rsna-knee-submit.py",
+   "n": 559
+  },
+  {
+   "r": "ref:MAX_LAYOUTS",
+   "n": 43
+  },
+  {
+   "r": "file:outputs/t039/v16_log/rsna-knee-submit.log",
+   "n": 2463
+  },
+  {
+   "r": "ref:SystemExit",
+   "n": 40
+  },
+  {
+   "r": "ref:adjacent",
+   "n": 39
+  },
+  {
+   "r": "def:PROGRESS.md#T022 Gate D at bs=2: bs=2 fixes 93% of it, and the registered band was the wrong band",
+   "n": 978
+  },
+  {
+   "r": "ref:−0.0115",
+   "n": 95
+  },
+  {
+   "r": "ref:±0.0112",
+   "n": 49
+  },
+  {
+   "r": "ref:add_argument",
+   "n": 136
+  },
+  {
+   "r": "def:pm/STATE.md#State — RSNA Knee Abnormality Detection",
+   "n": 1595
+  },
+  {
+   "r": "def:scripts/compare_ckpts.py#main",
+   "n": 101
+  },
+  {
+   "r": "ref:args.lr",
+   "n": 36
+  },
+  {
+   "r": "ref:store_true",
+   "n": 28
+  },
+  {
+   "r": "def:src/train.py#check_args",
+   "n": 20
+  },
+  {
+   "r": "def:src/dataset.py#__init__",
+   "n": 109
+  },
+  {
+   "r": "def:scripts/push_family.py#main",
+   "n": 194
+  },
+  {
+   "r": "def:scripts/add_ensemble_member.py#main",
+   "n": 68
+  },
+  {
+   "r": "def:scripts/gradcam.py#main",
+   "n": 180
+  },
+  {
+   "r": "def:scripts/distil_weak.py#main",
+   "n": 17
+  },
+  {
+   "r": "def:scripts/rank_blend.py#rank_blend",
+   "n": 40
+  },
+  {
+   "r": "ref:VIEW_REQUIRES",
+   "n": 15
+  },
+  {
+   "r": "def:src/model.py#forward",
+   "n": 655
+  },
+  {
+   "r": "def:docs/research/0902b/lane6-single-model-gap.md#3. Ranking the differences by plausible share of the ~0.024 single-model gap",
+   "n": 418
+  },
+  {
+   "r": "ref:self.epoch",
+   "n": 49
+  },
+  {
+   "r": "def:src/dicom_io.py#read_series",
+   "n": 219
+  },
+  {
+   "r": "ref:if adjacent",
+   "n": 15
+  },
+  {
+   "r": "def:src/tta.py#blend",
+   "n": 41
+  },
+  {
+   "r": "def:src/tta.py#unmatched",
+   "n": 114
+  },
+  {
+   "r": "def:pm/tasks/T034-family-alone-lb-ab.md#Decision rules — fixed in advance",
+   "n": 34
+  },
+  {
+   "r": "def:pm/tasks/T028-config-for-the-family.md#Decision rules — fixed in advance",
+   "n": 25
+  },
+  {
+   "r": "file:pm/tasks/T034-family-alone-lb-ab.md",
+   "n": 36
+  },
+  {
+   "r": "ref:TTA views: 3",
+   "n": 30
+  },
+  {
+   "r": "ref:23 layer levels",
+   "n": 33
+  },
+  {
+   "r": "ref:1e-5…1.0",
+   "n": 28
+  },
+  {
+   "r": "ref:1.35e-4",
+   "n": 28
+  },
+  {
+   "r": "file:src/model.py",
+   "n": 102
+  },
+  {
+   "r": "def:src/train.py#step_window",
+   "n": 22
+  },
+  {
+   "r": "worktree:outputs/t040/sub_timing.json",
+   "n": 15
+  },
+  {
+   "r": "worktree:outputs/t040/v1_log/rsna-knee-efficiency.log",
+   "n": 20
+  },
+  {
+   "r": "def:docs/research/0902b/lane7-public-members.md#3.4 Runtime against the 9 h cap",
+   "n": 58
+  },
+  {
+   "r": "ref:~134 min",
+   "n": 18
+  },
+  {
+   "r": "def:notebooks/kaggle_inference.py#layout_of",
+   "n": 105
+  },
+  {
+   "r": "def:src/tta.py#budget_minutes",
+   "n": 188
+  },
+  {
+   "r": "ref:GPU Notebook <= 9 hours run-time",
+   "n": 88
+  },
+  {
+   "r": "def:PROGRESS.md#T003: TTA screened and adopted, on a GPU nobody had noticed we owned",
+   "n": 41
+  },
+  {
+   "r": "ref:n_files",
+   "n": 171
+  },
+  {
+   "r": "def:src/dataset.py#_slot_meta",
+   "n": 36
+  },
+  {
+   "r": "def:notebooks/kaggle_inference.py#main",
+   "n": 304
+  },
+  {
+   "r": "def:scripts/t039/dump_views.py#main",
+   "n": 14
+  },
+  {
+   "r": "file:notebooks/kaggle_inference.py",
+   "n": 70
+  },
+  {
+   "r": "def:docs/research/0902b/lane7-public-members.md#2.2 The candidates as recipes",
+   "n": 139
+  },
+  {
+   "r": "def:AGENTS.md#RSNA Knee Abnormality Detection — session bootstrap",
+   "n": 657
+  },
+  {
+   "r": "ref:def unmatched",
+   "n": 69
+  },
+  {
+   "r": "def:PROGRESS.md#T024: TTA and the doubling are additive, and the cap was never sourced",
+   "n": 17
+  },
+  {
+   "r": "def:README.md#The constraint that determines everything",
+   "n": 35
+  },
+  {
+   "r": "def:src/dataset.py#pick_series_seqs",
+   "n": 53
+  },
+  {
+   "r": "def:README.md#Quick start",
+   "n": 165
+  },
+  {
+   "r": "ref:819,078 slices",
+   "n": 23
+  },
+  {
+   "r": "ref:30 h/week",
+   "n": 27
+  },
+  {
+   "r": "def:docs/ROADMAP.md#The currency changed on 2026-08-24, and most of the sequencing below assumes the old one",
+   "n": 180
+  },
+  {
+   "r": "def:src/train.py#accumulate",
+   "n": 108
+  },
+  {
+   "r": "def:scripts/smoke_test.py#test_gradcam_instrument",
+   "n": 213
+  },
+  {
+   "r": "def:PROGRESS.md#T024 submitted: LB 0.921, and the cap that kept two levers apart does not exist",
+   "n": 32
+  },
+  {
+   "r": "def:PROGRESS.md#The cost measurement, which was 22% off the estimate",
+   "n": 16
+  },
+  {
+   "r": "def:docs/research/0902b/lane8-external-truth-sets.md#MRNet (Stanford) — the wrong instrument for the stated purpose",
+   "n": 18
+  },
+  {
+   "r": "def:docs/research/0902b/lane7-public-members.md#2. Inventory — READ",
+   "n": 15
+  },
+  {
+   "r": "ref:def budget_minutes",
+   "n": 18
+  }
+ ],
+ "keyConflicts": [
+  {
+   "a": "F2",
+   "b": "F423",
+   "key": "public single model/verifiable public LB"
+  },
+  {
+   "a": "F30",
+   "b": "F1473",
+   "key": "kernel/runtime cap"
+  },
+  {
+   "a": "F38",
+   "b": "F3287",
+   "key": "test set/size"
+  },
+  {
+   "a": "F42",
+   "b": "F957",
+   "key": "efficiency prize/purse"
+  },
+  {
+   "a": "F88",
+   "b": "F489",
+   "key": "our series/FOV range"
+  },
+  {
+   "a": "F103",
+   "b": "F478",
+   "key": "--layer-decay, --warmup-frac/wiring"
+  },
+  {
+   "a": "F104",
+   "b": "F479",
+   "key": "--layer-decay, --warmup-frac/use in runs"
+  },
+  {
+   "a": "F156",
+   "b": "F448",
+   "key": "teacher/gold macro AUC"
+  },
+  {
+   "a": "F195",
+   "b": "F523",
+   "key": "gold/paired band"
+  },
+  {
+   "a": "F205",
+   "b": "F789",
+   "key": "public noise/structurally distinct configs sd"
+  },
+  {
+   "a": "F218",
+   "b": "F955",
+   "key": "kernel/runtime cap"
+  },
+  {
+   "a": "F218",
+   "b": "F1473",
+   "key": "kernel/runtime cap"
+  },
+  {
+   "a": "F381",
+   "b": "F649",
+   "key": "realistic public LB expectation"
+  },
+  {
+   "a": "F394",
+   "b": "F680",
+   "key": "T041/scope"
+  },
+  {
+   "a": "F396",
+   "b": "F682",
+   "key": "T042/scope"
+  },
+  {
+   "a": "F629",
+   "b": "F3763",
+   "key": "pos_weight/cost"
+  },
+  {
+   "a": "F630",
+   "b": "F3764",
+   "key": "pos_weight/queue"
+  },
+  {
+   "a": "F920",
+   "b": "F3189",
+   "key": "lane5/notebooks dissected"
+  },
+  {
+   "a": "F946",
+   "b": "F1047",
+   "key": "us/public LB score"
+  },
+  {
+   "a": "F946",
+   "b": "F3207",
+   "key": "us/public LB score"
+  },
+  {
+   "a": "F947",
+   "b": "F3206",
+   "key": "us/public LB rank"
+  },
+  {
+   "a": "F955",
+   "b": "F1473",
+   "key": "kernel/runtime cap"
+  },
+  {
+   "a": "F1047",
+   "b": "F3207",
+   "key": "us/public LB score"
+  },
+  {
+   "a": "F1874",
+   "b": "F3466",
+   "key": "--split-seed/default"
+  },
+  {
+   "a": "F2403",
+   "b": "F2699",
+   "key": "local GPU/held by"
+  },
+  {
+   "a": "F2812",
+   "b": "F3995",
+   "key": "BN double update/broke anything"
+  },
+  {
+   "a": "F2922",
+   "b": "F3449",
+   "key": "gold-58/band"
+  },
+  {
+   "a": "F2988",
+   "b": "F3938",
+   "key": "train.py/--resume"
+  },
+  {
+   "a": "F3116",
+   "b": "F3671",
+   "key": "absent flag/reads as"
+  },
+  {
+   "a": "F3126",
+   "b": "F3137",
+   "key": "reversing padded chunk/effect"
+  },
+  {
+   "a": "F3898",
+   "b": "F3901",
+   "key": "label-swapping mirror/permitted"
+  }
+ ],
+ "warningsByCode": {
+  "unsourced": 989,
+  "inferred-without-premises": 33,
+  "blank line": 6,
+  "regenerable": 389,
+  "ref-not-on-line": 73,
+  "no-refs": 41,
+  "out-of-sight": 6
+ }
+}
