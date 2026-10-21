@@ -53,7 +53,7 @@ material where it can be, before any new replay.
 
 ## Steps
 
-- [ ] Measure for free on R0c's material:
+- [x] Measure for free on R0c's material (`docs/plans/evidence/t084/measurements.md`):
   - **refs from quotes:** re-link and re-group. Do C2's sides share a unit,
     and what does the review load become?
   - **supersession:** a mechanical candidate rule over each measurand's
@@ -89,11 +89,20 @@ material where it can be, before any new replay.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: claimed
-- **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Steps above
-- **Next decision:** none
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: measured; writing
+  v2.6
+- **Done:** the free measurements (`docs/plans/evidence/t084/`):
+  - quote refs are kept: C2's sides meet, and the load grows 17.1%;
+  - supersession has 2,933 candidates, over the 300 allowed, so it is a
+    reconciler mark only;
+  - 70 of 1,220 checks can carry a fair canary;
+  - code was cut at two commits, and no fact carries its commit.
+- **In flight:** nothing. v2.6 is not yet written into
+  `docs/plans/research-runs.md`.
+- **Resume with:** the second Step, writing v2.6 from `measurements.md` and
+  T082's `grade.md`.
+- **Next decision:** none until v2.6 is written; then the operator accepts
+  it or sends it for review.
 
 ## Verify
 

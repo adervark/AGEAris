@@ -140,3 +140,14 @@ Candidate changes for a v2.6, none of them tested:
 - Facts from code carry their commit.
 - The grade key pins every clause that carries a correction, as
   `key-lines.md` set out to.
+
+## Correction (T084, 2026-10-21)
+
+C2's row says no unit holds both sides. By the key's clauses, R1 group 23
+did: it held lane 6's "Encoder LR 10× too high" (`lane6…§219#1`) beside
+lane 10's correction. Lane 10 does not dispute that figure. What it corrects
+is the claim that S1 tests it, which is R2's S1 ("Screen S1, --layer-decay
+0.6 --warmup-frac 0.15", `R2#174`). R2's S1 facts and lane 10's
+"--layer-decay cannot express the hypothesis" were never in one unit. With
+refs taken from the quotes, they share `ref:--layer-decay`
+(`docs/plans/evidence/t084/`). The count is unchanged: C2 is a miss by hand.
