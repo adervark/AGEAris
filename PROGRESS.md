@@ -562,3 +562,46 @@ its date, the number, and where the evidence is. Newest last.
   (T082) before T077.
 - Evidence: `docs/plans/evidence/t075/` (`grade.md` first). It quotes RSNA's
   research: not pushed before 2026-10-22.
+
+## 2026-10-21 — T082: R0c, round 3 replayed under v2.5: recall 7 of 12
+
+- Under v2.5 every clause was disposed of: 4,033 facts and 391 skips from
+  3,231 clauses, by a registrar, five transcribers and an auditor (81 of 81
+  canaries on its rerun). Three reconcilers marked 286 groups and 1,220
+  premise checks, 13 subagent runs in all.
+- Reconcilers 1 and 2 are graded at pass 1 (10 of 11 canaries each). Their
+  reruns died at the usage limit. Finishing them cannot change the recall:
+  the units that hold the misses were re-marked the same way, or have no
+  pair to mark.
+- **Recall: 7 of 12**, by the rule fixed in `grade.mjs` and by hand. The
+  two readings agree on the count but differ on one member each:
+  - by the rule, C1, C2, C3, C4, C7, C10 and C12;
+  - by hand, C2 is out: its only credit is "a premise is missing". C11 is
+    in: all three reconcilers found "~175 min drops the 25.2 min intercept:
+    200.6", on facts the key did not name.
+- **Reach:** 11 by the design (C6 was never committed). By hand it is 10:
+  C8's earlier claim is, in the synthesis's words, R1's framing "applied to
+  the field", never written down.
+- **The misses within reach:**
+  - C5 and C9 were linked and judged consistent, as the brief says they
+    are. 113 min lies inside 1.5–4.4 h, and 776 and 804 are dated readings.
+    Supersession has no place in v2.5.
+  - C2's two sides name `--layer-decay` in their quotes but were given no
+    refs, so they never met.
+- **The measurement had two flaws:**
+  - a check canary replaces the real check it copies, so 27 real checks
+    were never shown. C11's own check was one of them;
+  - the key pinned one correcting clause per correction.
+- **Precision:**
+  - conflicts: 44 of 49 unique pairs real, 4 ambiguous, 1 false; that is
+    89.8% to 98.0% against the 90% floor;
+  - does-not-follow: 20 of a sample of 20 apply the rule, but only 5 name
+    a defect in the research. 14 name a premise the ledger lacks.
+- **A defect the synthesis carried:** its instrument table gives OOF-AUC
+  vs Sonnet 4,349 studies; lane 3 measured 3,749 (RESEARCH-0902c:381
+  against lane 3:453).
+- The verdict, by T082's rule: below 10 of 12. The operator accepts 7 with
+  the misses listed, or v2.5 goes back for revision. The candidate changes
+  are in the grade.
+- Evidence: `docs/plans/evidence/t082/r0c/` (`grade.md` first). It quotes
+  RSNA's research: not pushed before 2026-10-22.

@@ -1,0 +1,295 @@
+{
+ "canaries": {
+  "caught": 31,
+  "of": 33,
+  "byReconciler": [
+   "10/11",
+   "10/11",
+   "11/11"
+  ],
+  "missed": [
+   {
+    "reconciler": 1,
+    "type": "group",
+    "unit": 112,
+    "real": "F332",
+    "twin": "F4035",
+    "realView": "V332",
+    "twinView": "V3216",
+    "caught": false,
+    "why": "R1's 2026-10-15 is the entry deadline, lane13's 2026-10-22 the close; ~215 (to 10-15) vs ~250 (to close) differ by 35 = 7 days × 5"
+   },
+   {
+    "reconciler": 2,
+    "type": "check",
+    "unit": 158,
+    "real": "F493",
+    "twin": "F4052",
+    "realView": "V496",
+    "twinView": "V480",
+    "caught": false,
+    "why": "a --crop-mm 140 flag plus crop code is a small change trained for one fold; ~25 lines contradicts nothing given"
+   }
+  ]
+ },
+ "recall": {
+  "caught": 7,
+  "of": 12
+ },
+ "twelve": {
+  "C1": {
+   "earlier": [
+    "F102",
+    "F103",
+    "F104",
+    "F476",
+    "F477",
+    "F478",
+    "F479",
+    "F948",
+    "F949",
+    "F950",
+    "F951",
+    "F952",
+    "F3307",
+    "F3308"
+   ],
+   "correction": [
+    "F1760",
+    "F1761",
+    "F1923",
+    "F1924"
+   ],
+   "step": "caught",
+   "caughtBy": [
+    "R3 group 27 conflict F1760/F3308: lane10 V1772: --layer-decay and --warmup-frac were passed once (outputs/t025/run_arm.sh:13); PROGRESS.md V3341: no run has ever passed them. lane10 calls it a correction",
+    "search-flipped on F104",
+    "search-flipped on F479",
+    "search-flipped on F949",
+    "search-flipped on F3308"
+   ]
+  },
+  "C2": {
+   "earlier": [
+    "F470",
+    "F473",
+    "F474",
+    "F475",
+    "F682",
+    "F3593",
+    "F3708",
+    "F3709",
+    "F3710",
+    "F3711",
+    "F3712",
+    "F3713",
+    "F3714"
+   ],
+   "correction": [
+    "F1765",
+    "F1766"
+   ],
+   "step": "caught",
+   "caughtBy": [
+    "R3 check 1114 does-not-follow: premises cover only the warmup half (OneCycle 15% vs cosine at 0.0); none gives the encoder LRs (3e-4 vs 3e-5) behind '10x too high'"
+   ]
+  },
+  "C3": {
+   "earlier": [
+    "F3783",
+    "F3784",
+    "F3785",
+    "F3786",
+    "F2477",
+    "F2478",
+    "F2479"
+   ],
+   "correction": [
+    "F2481",
+    "F2482",
+    "F2483"
+   ],
+   "step": "caught",
+   "caughtBy": [
+    "R3 group 3 conflict F3785/F2481: V3820: budget_minutes is 'an explicit upper bound'; V2500: the model is 24% optimistic on the slope, not conservative (docstring wrong in sign)"
+   ]
+  },
+  "C4": {
+   "earlier": [
+    "F3787",
+    "F3788",
+    "F2491"
+   ],
+   "correction": [
+    "F2492",
+    "F2493",
+    "F2494"
+   ],
+   "step": "caught",
+   "caughtBy": [
+    "R2 group 158 conflict F2493/F3787: V3822 (lane7) calls ~134 min the measured 22-member rerun; V2512 (lane11) says it is 67 x 2 layout passes, the kernel's printed prediction, not a measurement (a correction)",
+    "R3 group 114 conflict F3787/F2493: lane7 V3822: the 22-member rerun was measured at ~134 min; lane11 V2512: ~134 is 67 x 2 layout passes, the kernel's printed prediction, not a measurement. Correction",
+    "R3 group 114 conflict F3788/F2492: lane7 V3823: the budget model under-predicts by 2x in practice; lane11 V2511: that claim is not right as stated (the 2x is the kernel's layout multiplier). Correction"
+   ]
+  },
+  "C5": {
+   "earlier": [
+    "F955",
+    "F956",
+    "F1472",
+    "F1473",
+    "F1474"
+   ],
+   "correction": [
+    "F2469",
+    "F2471",
+    "F2472",
+    "F2475"
+   ],
+   "step": "in one unit, not marked: R2 group 7: conflict",
+   "caughtBy": []
+  },
+  "C6": {
+   "earlier": [],
+   "correction": [
+    "F2432",
+    "F2433"
+   ],
+   "step": "earlier claim in no commit: out of reach",
+   "caughtBy": []
+  },
+  "C7": {
+   "earlier": [
+    "F3240",
+    "F3241",
+    "F3242",
+    "F3243",
+    "F3244"
+   ],
+   "correction": [
+    "F1520",
+    "F1521",
+    "F1522"
+   ],
+   "step": "caught",
+   "caughtBy": [
+    "R3 check 1023 does-not-follow: premises describe only our side (22 of one recipe, 3 slots, 320 px); nothing about the 0.936 notebook to locate the gap in"
+   ]
+  },
+  "C8": {
+   "earlier": [
+    "F206",
+    "F1019",
+    "F1020",
+    "F1021",
+    "F1022",
+    "F1125"
+   ],
+   "correction": [
+    "F1177",
+    "F1230",
+    "F1231",
+    "F1239",
+    "F1240",
+    "F1241"
+   ],
+   "step": "in one unit, not marked: R1 group 94: ok",
+   "caughtBy": []
+  },
+  "C9": {
+   "earlier": [
+    "F22",
+    "F23",
+    "F942",
+    "F943",
+    "F944",
+    "F945",
+    "F946",
+    "F947",
+    "F3206"
+   ],
+   "correction": [
+    "F1045",
+    "F1046",
+    "F1047",
+    "F1048",
+    "F1100",
+    "F1258",
+    "F1259"
+   ],
+   "step": "in one unit, not marked: R1 group 29: conflict; R2 group 10: conflict; R3 group 8: ok; R3 group 46: ok",
+   "caughtBy": []
+  },
+  "C10": {
+   "earlier": [
+    "F2986",
+    "F2987",
+    "F2988",
+    "F2989",
+    "F2990",
+    "F3937",
+    "F3938",
+    "F335",
+    "F336",
+    "F337",
+    "F338",
+    "F339",
+    "F340",
+    "F341"
+   ],
+   "correction": [],
+   "step": "caught",
+   "caughtBy": [
+    "R3 check 110 does-not-follow: premises are the deadline and budget counts (195 h, 43 slots, 215 submissions); none mentions --resume or its half-day cost",
+    "search-flipped on F2988",
+    "search-flipped on F3938",
+    "search-flipped on F336"
+   ]
+  },
+  "C11": {
+   "earlier": [
+    "F2609",
+    "F2610"
+   ],
+   "correction": [
+    "F2456",
+    "F2457"
+   ],
+   "step": "in one unit, not marked: R2 group 7: conflict; R2 group 18: conflict",
+   "caughtBy": []
+  },
+  "C12": {
+   "earlier": [
+    "F2156",
+    "F2157",
+    "F2158"
+   ],
+   "correction": [
+    "F2665",
+    "F2666",
+    "F3668"
+   ],
+   "step": "caught",
+   "caughtBy": [
+    "R1 check 606 does-not-follow: the premise says only that all 22 deployed members were dumped; that ten of them are fold? members is not in it",
+    "R3 check 605 does-not-follow: premises show only that the ten fold? members lack mirror/rotate; unlocking three views also needs the other 12 to carry them (lane11 finds armb0 x2 at 0.0 too)"
+   ]
+  }
+ },
+ "findings": {
+  "conflict": 74,
+  "doesNotFollow": 105,
+  "ok": 237,
+  "follows": 1089
+ },
+ "searchFlipped": {
+  "head": "e4e356c",
+  "commands": 46,
+  "sources": 58,
+  "same": 30,
+  "flipped": 15,
+  "drifted": 5,
+  "notRerun": 8,
+  "error": 0
+ }
+}

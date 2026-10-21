@@ -1,0 +1,302 @@
+conflict pairs: 49 (74 lines)
+P1 V1937/V3634 (R1g1 R2g2)
+  V1937 lane10#183 [INFERRED] PROGRESS.md/claim '--warmup-frac never passed' = false | "PROGRESS.md's claim that no run ever passed it is false"
+  V3634 lane6-single-model-gap.md§219#5 [READ] --layer-decay/--warmup-frac/ever passed = never once passed | "--layer-decay/--warmup-frac are wired here and were never once passed"
+  why: lane6 V3634: --layer-decay/--warmup-frac 'were never once passed'; lane10 V1937: PROGRESS's claim that no run ever passed --warmup-frac is false (T025 passed them). Correction
+P2 V1937/V3349 (R1g1)
+  V1937 lane10#183 [INFERRED] PROGRESS.md/claim '--warmup-frac never passed' = false | "PROGRESS.md's claim that no run ever passed it is false"
+  V3349 lane6-single-model-gap.md§185#4 [READ] --warmup-frac/use = wired and never used | "the flag is wired and never used"
+  why: lane6 V3349: --warmup-frac 'wired and never used'; lane10 V1937: the claim that no run ever passed it is false. Later correction
+P3 V2746/V2997 (R1g1 R1g41 R2g58 R3g6)
+  V2746 lane12#18 [INFERRED] proposal 2/cost = 32–107 GPU-h | "REJECTED on price — 32–107 GPU-h against a one-fold-then-cooldown rule"
+  V2997 lane12#225 [INFERRED] SimCLR / MoCo/hours at 400/s = 114–228 | "114–228"
+  why: lane12 summary V2746 prices proposal 2 (in-domain SSL) at 32–107 GPU-h; the same doc's bill V2997 gives 114–228 h for SimCLR/MoCo even at the optimistic 400 slices/s
+P4 V1378/V3273 (R1g9)
+  V1378 lane9#304 [INFERRED] lane 5 §1.3 breadth half = does not survive the forum evidence | "the breadth half of that does not survive the forum evidence"
+  V3273 lane5-public-notebooks.md§88#1 [INFERRED] gap to 0.936/located in = ensemble breadth and the input representation | "It is in the ensemble breadth and the input representation"
+  why: lane5 V3273: the gap to 0.936 is in ensemble breadth and input representation; lane9 V1378: the breadth half does not survive the forum evidence. Correction of lane 5 by lane 9
+P5 V1410/V1541 (R1g9)
+  V1410 lane9#328 [READ] lane 5/recommended resolution = 336–384 px | "lane 5 recommended 336–384 px"
+  V1541 lane9#423 [INFERRED] resolution/recommendation = Do not spend on it. | "Do not spend on it."
+  why: lane5 (via V1410) recommends 336–384 px; lane9 V1541/V1539: resolution is a null lever at our 320 px, do not spend. Correction of lane 5 by lane 9
+P6 V333/V701 (R1g16)
+  V333 R1#233 [READ] submissions/ever spent = 11 ever spent submissions | "~215 submissions against 11 ever spent"
+  V701 lane13#8 [MEASURED] our submissions/count and active days = 16 submissions in 16 active days submissions | "16 submissions in 16 active days"
+  why: R1 V333: 11 submissions ever spent; lane13 V701 (and lane9 V1056): 16 submissions to date; no date difference stated for the same count
+P7 V1765/V2053 (R1g23)
+  V1765 lane10#11 [INFERRED] train.py flags/unpassed lever at +0.005 = no wired-and-correct-but-never-passed flag | "There is no wired-and-correct-but-never-passed flag sitting on a plausible +0.005."
+  V2053 lane10#314 [READ] lane 6:185/claim = the flag is wired and never used | "docs/research/0902b/lane6-single-model-gap.md:185 and :219 — "the flag is wired and never used""
+  why: lane6:185 (V2053) says --warmup-frac is 'wired and never used'; lane10 V1765 finds no wired-and-correct-but-never-passed flag (it was passed). Correction of lane 6 by lane 10
+P8 V2545/V2631 (R1g26)
+  V2545 lane11#113 [INFERRED] forward work/affordable units per study = ≈ 380 | "affordable — the deployed 66 could become ≈ 380, a 5.8× increase in forward"
+  V2631 lane11#187 [INFERRED] slice doubling/runtime = ~175 min | "66 → 132 units ⇒ ~175 min, comfortably inside 9 h."
+  why: lane11 V2545: 66 units take 113 min and ≈380 fit in 540, so ≈1.36 min/unit; then 132 units ≈ 113+66×1.36 ≈ 203 min, not the ~175 min V2631 states
+P9 V1765/V3349 (R1g33)
+  V1765 lane10#11 [INFERRED] train.py flags/unpassed lever at +0.005 = no wired-and-correct-but-never-passed flag | "There is no wired-and-correct-but-never-passed flag sitting on a plausible +0.005."
+  V3349 lane6-single-model-gap.md§185#4 [READ] --warmup-frac/use = wired and never used | "the flag is wired and never used"
+  why: lane6 V3349: --warmup-frac 'wired and never used'; lane10 V1765: no wired-and-correct flag sits never passed (lane10 finds T025 passed it). Correction of lane 6 by lane 10
+P10 V2488/V2631 (R1g44 R3g4)
+  V2488 lane11#65 [INFERRED] deployed 22-member rerun/fitted submit→terminal runtime = 113 min | "INFERRED: 25.2 + 1.329 × 66 = 113 min submit→terminal"
+  V2631 lane11#187 [INFERRED] slice doubling/runtime = ~175 min | "66 → 132 units ⇒ ~175 min, comfortably inside 9 h."
+  why: lane11's own fit V2488 is 25.2 + 1.329 × units; at 132 units that is 200.6 min, not the ~175 min V2631 gives (175 drops the 25.2 min intercept)
+P11 V2488/V2651 (R1g44)
+  V2488 lane11#65 [INFERRED] deployed 22-member rerun/fitted submit→terminal runtime = 113 min | "INFERRED: 25.2 + 1.329 × 66 = 113 min submit→terminal"
+  V2651 lane11#199 [INFERRED] resolution 384/units and runtime = 66 → 95 units ⇒ ~126 min | "384 is 1.44× (66 → 95 units ⇒ ~126 min)"
+  why: fit V2488 25.2 + 1.329 × 95 units = 151.5 min, not the ~126 min V2651 gives for 384 px (1.329×95 without the intercept)
+P12 V2488/V2652 (R1g44)
+  V2488 lane11#65 [INFERRED] deployed 22-member rerun/fitted submit→terminal runtime = 113 min | "INFERRED: 25.2 + 1.329 × 66 = 113 min submit→terminal"
+  V2652 lane11#199 [INFERRED] resolution 448/cost multiple and runtime = 1.96× (~221 min) | "448 is 1.96× (~221 min)."
+  why: 448 px is 1.96× of 66 = 129 units; fit V2488 gives 25.2 + 1.329×129 ≈ 197 min, not ~221 (V2652 scales the whole 113 min, intercept included)
+P13 V3019/V4050 (R1g52)
+  V3019 lane12#242 [INFERRED] five follow-up folds on Kaggle/hours = ~20 h at T4 rates | "the five folds that must follow it to be worth anything are another ~20 h at T4 rates."
+  V4050 ROADMAP.md§498#1 [MEASURED] T4/per fold = ~2.7 h/fold | "faster than the T4's ~2.7 h/fold"
+  why: lane12 V3019: five follow-up folds are ~20 h at T4 rates; ROADMAP V4050 gives the T4 at ~2.7 h/fold, so five folds ≈ 13.5 h; no different config stated
+P14 V2514/V3823 (R1g57 R3g3)
+  V2514 lane11#87 [INFERRED] budget model/real error = 1.33× slope error | "The real error is the 1.33× slope error in §1.5 row 1."
+  V3823 lane7-public-members.md§330#2 [INFERRED] budget model/under-prediction = under-predicts by 2× in practice | "the brief's measured figure is ~134 min, i.e. the model under-predicts by 2× in practice."
+  why: lane7 V3823: budget_minutes under-predicts by 2× (~134 vs 67 min); lane11 V2514: the real error is a 1.33× slope error (fitted 113 min). Later correction by lane 11
+P15 V88/V492 (R1g66)
+  V88 R1#69 [MEASURED] our series/FOV range = FOV 130–320 mm mm | "FOV 130–320 mm (median 160, spread 1.39×)"
+  V492 R2#52 [MEASURED] our series/FOV range = FOV 105–220 mm mm | "FOV 105–220 mm"
+  why: R1 V88 measures our series FOV at 130–320 mm; R2 V492 measures the same FOV range at 105–220 mm
+P16 V89/V322 (R1g66)
+  V89 R1#69 [MEASURED] our series/FOV median = median 160 mm | "FOV 130–320 mm (median 160, spread 1.39×)"
+  V322 R1#226 [INFERRED] 130 mm crop at 160 mm median FOV/trim per side = ~19 % per side % | "A 130 mm crop at a 160 mm median FOV trims ~19 % per side of the field"
+  why: 130 mm crop of the 160 mm median FOV (V89) trims 30 mm, 15 mm ≈ 9% per side; V322 says ~19% per side (19% is the total)
+P17 V243/V377 (R1g66 R1g84 R2g67)
+  V243 R1#158 [INFERRED] lever 4 mm crop/memory and time = free memory/time | "+0.003 to +0.008, free memory/time"
+  V377 R1#270 [INFERRED] optimistic end/mm crop = mm crop +0.005 | "mm crop +0.005"
+  why: R1 V243 gives the mm-crop lever +0.003 to +0.008; R1 V377 lists its optimistic end as +0.005, not +0.008
+P18 V56/V3242 (R1g69)
+  V56 R1#51 [INFERRED] gap/to current top 20 = +0.020 AUC | "to the current top 20, +0.020"
+  V3242 lane3-measurement-and-ensemble.md§801#1 [INFERRED] winner's curse gain/vs gap to top 20 = larger than the entire remaining gap to the top 20 | "Spending ~200 submissions on structurally distinct candidates and keeping the best public score manufactures about +0.012 of public gain that is worth exactly zero privately — larger than the entire remaining gap to the "
+  why: lane3 V3242: +0.012 of curse gain is 'larger than the entire remaining gap to the top 20'; R1 V56 puts that gap at +0.020 (0.926→0.946). lane3 used the stale ≥0.937 board
+P19 V217/V4050 (R1g99)
+  V217 R1#132 [READ] Kaggle fold/wall clock = Kaggle 4.9 h/fold h | "Kaggle 4.9 h/fold"
+  V4050 ROADMAP.md§498#1 [MEASURED] T4/per fold = ~2.7 h/fold | "faster than the T4's ~2.7 h/fold"
+  why: R1 V217: a Kaggle fold takes 4.9 h; ROADMAP V4050: the T4 takes ~2.7 h/fold; no config difference stated
+P20 V217/V3019 (R1g99)
+  V217 R1#132 [READ] Kaggle fold/wall clock = Kaggle 4.9 h/fold h | "Kaggle 4.9 h/fold"
+  V3019 lane12#242 [INFERRED] five follow-up folds on Kaggle/hours = ~20 h at T4 rates | "the five folds that must follow it to be worth anything are another ~20 h at T4 rates."
+  why: lane12 V3019: five Kaggle folds ~20 h at T4 rates; R1 V217 4.9 h/fold gives 24.5 h (V229), ROADMAP's 2.7 h gives 13.5 h; ~20 h matches neither
+P21 V266/V379 (R1g150)
+  V266 R1#179 [INFERRED] lever 7 second architecture/expected LB gain = +0.002 to +0.006 as an ensemble arm AUC | "+0.002 to +0.006 as an ensemble arm"
+  V379 R1#270 [INFERRED] optimistic end/diversity arm = a diversity arm +0.005 | "a diversity arm +0.005"
+  why: R1 V266 gives the second-family arm +0.002 to +0.006; R1 V379 lists its optimistic end as +0.005, not +0.006
+P22 V2492/V3822 (R2g7)
+  V2492 lane11#68 [INFERRED] deployed rerun runtime/measured = still not measured | "The deployed rerun's runtime is still not measured."
+  V3822 lane7-public-members.md§330#2 [READ] 22-member rerun/measured = ~134 min | "the brief's measured figure is ~134 min"
+  why: V3822 (lane7) says the 22-member rerun's measured figure is ~134 min; V2492 (lane11) says the deployed rerun's runtime is still not measured, only fitted at 113 min (V2488)
+P23 V2631/V2700 (R2g7 R2g18)
+  V2631 lane11#187 [INFERRED] slice doubling/runtime = ~175 min | "66 → 132 units ⇒ ~175 min, comfortably inside 9 h."
+  V2700 lane11#238 [INFERRED] slice density 12 → 24 at inference/Δ minutes = +88 | "+88"
+  why: V2631: 66->132 units => ~175 min; V2700 puts the same 12->24 slice lever at +88 min on 113 = ~201, and the fit gives 25.2 + 1.329 x 132 = 200.6 min
+P24 V2651/V2708 (R2g7 R2g18)
+  V2651 lane11#199 [INFERRED] resolution 384/units and runtime = 66 → 95 units ⇒ ~126 min | "384 is 1.44× (66 → 95 units ⇒ ~126 min)"
+  V2708 lane11#248 [INFERRED] inference resolution 320 → 384/Δ minutes = +39 | "+39"
+  why: V2651: 384 px, 66->95 units => ~126 min; V2708 says +39 min over the deployed 113 = ~152, and 25.2 + 1.329 x 95 = 151.5 min
+P25 V2476/V2652 (R2g7 R2g18)
+  V2476 lane11#55 [MEASURED] runtime fit T(u)/slope = 1.329 min per forward unit | "MEASURED: T(u) ≈ 25.2 min + 1.329 min per forward unit"
+  V2652 lane11#199 [INFERRED] resolution 448/cost multiple and runtime = 1.96× (~221 min) | "448 is 1.96× (~221 min)."
+  why: V2652: 448 px 1.96x => ~221 min (1.96 x 113, intercept scaled too); with V2475/V2476's fit 25.2 + 1.329 x (66 x 1.96 = 129) = 197 min
+P26 V59/V430 (R2g10 R2g22)
+  V59 R1#54 [INFERRED] our models/per-model quality vs field = two to four points behind the field | "Our per-model quality is two to four points behind the field"
+  V430 R2#16 [INFERRED] our 22 at 0.926/vs public models = level with one public model | "Our 22 at 0.926 is level with one public model — not two to four points behind a field of them."
+  why: V59 (R1): our per-model quality is 'two to four points behind the field'; V430 (R2): our 22 at 0.926 is 'level with one public model - not two to four points behind' (a correction)
+P27 V422/V1347 (R2g22)
+  V422 R2#12 [READ] forum 735304 single-model figures/status = unverified author claims | "are unverified author claims"
+  V1347 lane9#286 [INFERRED] Scott Willis claims/class = LB-corroborated. | "LB-corroborated."
+  why: V422 (R2): the forum 735304 single-model figures 'are unverified author claims'; V1340/V1347/V1361 (lane9) class the same claims 'LB-corroborated'
+P28 V1772/V1774 (R2g35)
+  V1772 lane10#14 [READ] --layer-decay,--warmup-frac/times passed = were passed once | "--layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13"
+  V1774 lane10#15 [READ] PROGRESS.md:5857/claim about --layer-decay = never | "PROGRESS.md:5857, lane 6 §2.5 and scripts/t042/run_recipe_fold0.sh:7 all say "never""
+  why: V1772: --layer-decay/--warmup-frac 'were passed once' (outputs/t025/run_arm.sh:13); V1774: PROGRESS.md:5857, lane 6 s2.5 and run_recipe_fold0.sh say 'never' (lane10 corrects them, V1937/V1942)
+P29 V1205/V1231 (R2g50 R3g49)
+  V1205 lane9#170 [READ] nested configs/public LB sd = LB sd ≈ 0.0003 | "nested configs, LB sd ≈ 0.0003 per our instrument table"
+  V1231 lane9#196 [READ] nested-config public sd = 0.0028 | "the nested-config sd of 0.0028"
+  why: V1205 (lane9): nested configs, LB sd ~0.0003 per the instrument table; V1231 (lane9): 'the nested-config sd of 0.0028' - 0.0028 is the low end of the structurally-distinct band elsewhere (V2353)
+P30 V434/V3926 (R2g54)
+  V434 R2#18 [READ] Raptor/gold-58 macro AUC = 0.9054 AUC | "the Raptor's 0.9054 on the same 58 (READ)"
+  V3926 lane7-public-members.md§228#7 [READ] Raptor/own gold-58 claim = gold-58 0.9167 | "gold-58 0.9167"
+  why: V434 (R2) quotes the Raptor's gold-58 macro AUC as 0.9054 (READ); lane7 has its own claim 0.9167 (V3926) and reproductions 0.9128/0.9213; R2 itself calls the four figures irreconcilable (V561)
+P31 V92/V491 (R2g67)
+  V92 R1#69 [INFERRED] our model/magnification variation = magnification varies 1.39× | "so magnification varies 1.39×"
+  V491 R2#51 [MEASURED] our series/effective scale spread = a 2.1× spread x | "a 2.1× spread the model must absorb"
+  why: V92 (R1): magnification varies 1.39x (from FOV); V491 (R2, MEASURED): effective scale 0.328-0.688 mm/px, a 2.1x spread the model must absorb - same measurand, R2 corrects R1
+P32 V382/V652 (R2g67 R2g73 R2g74 R2g101 R2g123 R3g55 R3g117 R3g193)
+  V382 R1#271 [INFERRED] realistic public LB expectation = 0.940–0.948 AUC | "The realistic read is 0.940–0.948 on the public board"
+  V652 R2#152 [INFERRED] realistic public LB expectation = 0.945–0.955 AUC | "The realistic public read is 0.945–0.955"
+  why: Realistic public LB expectation: V382 (R1) 0.940-0.948; V652 (R2) 0.945-0.955 - the later round revises the earlier
+P33 V252/V378 (R2g74)
+  V252 R1#166 [INFERRED] lever 5 training recipe/expected LB gain = +0.003 to +0.010 combined AUC | "+0.003 to +0.010 combined;"
+  V378 R1#270 [INFERRED] optimistic end/recipe = recipe +0.005 | "recipe +0.005"
+  why: V378 (R1) sums the recipe at its 'optimistic end' as +0.005; V252 (R1) gives the recipe lever +0.003 to +0.010 combined, whose optimistic end is +0.010
+P34 V242/V377 (R2g101)
+  V242 R1#158 [INFERRED] lever 4 mm crop/expected LB gain = +0.003 to +0.008 AUC | "+0.003 to +0.008, free memory/time"
+  V377 R1#270 [INFERRED] optimistic end/mm crop = mm crop +0.005 | "mm crop +0.005"
+  why: V377 (R1) sums the mm crop at its 'optimistic end' as +0.005; V242 (R1) and V488/V649 (R2) give the lever +0.003 to +0.008, whose optimistic end is +0.008
+P35 V235/V376 (R2g123)
+  V235 R1#152 [INFERRED] lever 3 second sequence family/expected LB gain = +0.005 to +0.015 AUC | "+0.005 to +0.015"
+  V376 R1#270 [INFERRED] optimistic end/second sequence family = second sequence family +0.010 | "second sequence family +0.010"
+  why: V376 (R1) sums the second sequence family at its 'optimistic end' as +0.010; V235 (R1) and V646 (R2) give the lever +0.005 to +0.015, whose optimistic end is +0.015
+P36 V2512/V3822 (R2g158 R3g114)
+  V2512 lane11#86 [INFERRED] lane 7 "measured ~134 min"/what it is = 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement | "Its "measured ~134 min" is 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement"
+  V3822 lane7-public-members.md§330#2 [READ] 22-member rerun/measured = ~134 min | "the brief's measured figure is ~134 min"
+  why: V3822 (lane7) calls ~134 min the measured 22-member rerun; V2512 (lane11) says it is 67 x 2 layout passes, the kernel's printed prediction, not a measurement (a correction)
+P37 V2500/V3820 (R3g3)
+  V2500 lane11#76 [INFERRED] budget_minutes/slope error = 24 % optimistic on the slope | "The model is 24 % optimistic on the slope, not conservative."
+  V3820 lane7-public-members.md§330#1 [READ] budget_minutes/formula = 1 + members × views (src/tta.py:324) | "Our model is budget_minutes = 1 + members × views (src/tta.py:324), an explicit upper bound. 22 members × 3 views predicts 67 min;"
+  why: V3820: budget_minutes is 'an explicit upper bound'; V2500: the model is 24% optimistic on the slope, not conservative (docstring wrong in sign)
+P38 V122/V3130 (R3g3 R3g30 R3g42)
+  V122 R1#93 [REPRODUCED] src/tta.py:242/2.5D packing = collapses the 2.5D packing | "src/tta.py:242 collapses the 2.5D packing."
+  V3130 tta.py§apply_view#4 [READ] apply_view/transform runs once = runs once instead of three times | "The three channels are the same grayscale slice repeated for an ImageNet-shaped encoder, so the transform runs once instead of three times on the largest tensor in the kernel."
+  why: tta.py comment V3130: the three channels are the same grayscale slice repeated, so transform once; R1 V122 reproduced: channels are 2.5D-packed and that shortcut collapses the packing
+P39 V2168/V2512 (R3g4)
+  V2168 lane10#391 [READ] deployed kernel/predicted rerun = ~67 min for two passes at 22×3 min | "the kernel prints ~67 min for two passes at 22×3"
+  V2512 lane11#86 [INFERRED] lane 7 "measured ~134 min"/what it is = 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement | "Its "measured ~134 min" is 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement"
+  why: lane10 V2168: the kernel prints ~67 min for two passes at 22x3 (so a third adds ~30); lane11 V2512: the kernel's printed prediction is 67 x 2 layout passes = 134 min
+P40 V1624/V2543 (R3g11)
+  V1624 lane9#488 [INFERRED] lever 1/hours spent = the unused ~5 h of the 9 h cap | "Inference-time window count per study, spending the unused ~5 h of the 9 h cap"
+  V2543 lane11#110 [INFERRED] notebook budget/unused = 427 min | "INFERRED: at least 540 − 113 = 427 min of unused notebook budget"
+  why: lane9 V1624: the deployed kernel leaves an unused ~5 h of the 9 h cap; lane11 V2543: at least 540 - 113 = 427 min (~7.1 h) unused
+P41 V2545/V2958 (R3g11 R3g75)
+  V2545 lane11#113 [INFERRED] forward work/affordable units per study = ≈ 380 | "affordable — the deployed 66 could become ≈ 380, a 5.8× increase in forward"
+  V2958 lane12#193 [INFERRED] proposal 1b/extra passes = +22 passes on a kernel already doing ~132 | "one extra identity-view forward pass per member is +22 passes on a kernel already doing ~132"
+  why: lane12 V2958: the deployed kernel already does ~132 passes (+22 = +17%); lane11 V2545: the deployed config is 66 forward units per study (layouts partition members)
+P42 V1228/V1229 (R3g19)
+  V1228 lane9#196 [INFERRED] expected-max model = E[max of N draws] ≈ sd·√(2·ln N) | "Under the expected-maximum model E[max of N draws] ≈ sd·√(2·ln N) (INFERRED, model stated)"
+  V1229 lane9#196 [INFERRED] 7 submissions/expected max gain at sd 0.0028 = +0.0057 | "7 submissions buys +0.0057 at the nested-config sd of 0.0028"
+  why: V1228 model sd*sqrt(2 ln N) at N=7 gives 0.0028*1.973 = 0.0055 (and 0.0070 -> 0.0138); V1229/V1230 state +0.0057 and +0.0143 (that is N=8)
+P43 V1772/V3341 (R3g27)
+  V1772 lane10#14 [READ] --layer-decay,--warmup-frac/times passed = were passed once | "--layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13"
+  V3341 PROGRESS.md§5857#1 [READ] --warmup-frac and --layer-decay/ever passed = no run has ever passed them | "Also recorded, for T025: --warmup-frac and --layer-decay exist at train.py:808-812 and no run has ever passed them."
+  why: lane10 V1772: --layer-decay and --warmup-frac were passed once (outputs/t025/run_arm.sh:13); PROGRESS.md V3341: no run has ever passed them. lane10 calls it a correction
+P44 V1772/V3634 (R3g27)
+  V1772 lane10#14 [READ] --layer-decay,--warmup-frac/times passed = were passed once | "--layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13"
+  V3634 lane6-single-model-gap.md§219#5 [READ] --layer-decay/--warmup-frac/ever passed = never once passed | "--layer-decay/--warmup-frac are wired here and were never once passed"
+  why: lane10 V1772: the two flags were passed once (t025/run_arm.sh:13); lane6 V3634: they were never once passed. Correction by lane10
+P45 V2145/V3130 (R3g3 R3g30)
+  V2145 lane10#377 [READ] tta.apply_view/channels transformed = all three channels | "the current apply_view (:265-277) transforms all three channels"
+  V3130 tta.py§apply_view#4 [READ] apply_view/transform runs once = runs once instead of three times | "The three channels are the same grayscale slice repeated for an ImageNet-shaped encoder, so the transform runs once instead of three times on the largest tensor in the kernel."
+  why: tta.py apply_view V3130: the transform runs once instead of three times (one channel, repeated); lane10 V2145: the current apply_view (:265-277) transforms all three channels
+P46 V1231/V3249 (R3g49)
+  V1231 lane9#196 [READ] nested-config public sd = 0.0028 | "the nested-config sd of 0.0028"
+  V3249 lane3-measurement-and-ensemble.md§90#1 [SIMULATED] nested ensembles/public delta sampling sd = 0.0001–0.0003 | "Simulated on 4,349 studies, the sampling sd of a public delta between two nested ensembles (sharing almost all members) is 0.0001–0.0003"
+  why: lane9 V1231: the nested-config public sd is 0.0028; lane3 V3249: nested ensembles' public-delta sd is 0.0001-0.0003 (0.0028 is lane3's low end for structurally distinct configs, V3251)
+P47 V3249/V3250 (R3g49)
+  V3249 lane3-measurement-and-ensemble.md§90#1 [SIMULATED] nested ensembles/public delta sampling sd = 0.0001–0.0003 | "Simulated on 4,349 studies, the sampling sd of a public delta between two nested ensembles (sharing almost all members) is 0.0001–0.0003"
+  V3250 lane3-measurement-and-ensemble.md§90#1 [INFERRED] +0.001 displayed step/in sd = 5–10 sd | "a displayed +0.001 step is 5–10 sd"
+  why: V3249: nested sd 0.0001-0.0003, so +0.001 is 3.3-10 sd; V3250 says a displayed +0.001 step is 5-10 sd
+P48 V1503/V3310 (R3g111)
+  V1503 lane9#391 [READ] OOF-AUC-vs-Sonnet instrument/studies = 4,349 studies | "The OOF-AUC-vs-Sonnet instrument on 4,349 studies (±0.0019) is the tightest available and is the right gate."
+  V3310 lane3-measurement-and-ensemble.md§453#2 [READ] OOF AUC vs Sonnet/n = 3,749 | "3,749"
+  why: lane3 table V3310: OOF AUC vs Sonnet has n = 3,749; lane9 V1503: the OOF-AUC-vs-Sonnet instrument is on 4,349 studies (4,349 is lane3's n for the Opus rows)
+P49 V2511/V3823 (R3g114)
+  V2511 lane11#86 [INFERRED] lane 7 §3.4 claim/verdict = not right as stated | "This is not right as stated."
+  V3823 lane7-public-members.md§330#2 [INFERRED] budget model/under-prediction = under-predicts by 2× in practice | "the brief's measured figure is ~134 min, i.e. the model under-predicts by 2× in practice."
+  why: lane7 V3823: the budget model under-predicts by 2x in practice; lane11 V2511: that claim is not right as stated (the 2x is the kernel's layout multiplier). Correction
+
+does-not-follow: 105, sample 20
+D1 R3 check 1156
+  C: V3798 [INFERRED] pos_weight/cost = one fold, ~5 lines | "one fold, ~5 lines;"
+  P: V3794 [READ] single-model gap difference #5 = No prevalence pos_weight | "No prevalence pos_weight"
+  why: the premise only names the gap ('no prevalence pos_weight'); 'one fold, ~5 lines' needs a premise that is not there
+D2 R3 check 1023
+  C: V3273 [INFERRED] gap to 0.936/located in = ensemble breadth and the input representation | "It is in the ensemble breadth and the input representation"
+  P: V3277 [READ] ours/members = 22 members of one recipe | "We run 22 members of one recipe, 3 slots, all fluid-sensitive, 320 px."
+  P: V3278 [READ] ours/slots = 3 slots, all fluid-sensitive | "We run 22 members of one recipe, 3 slots, all fluid-sensitive, 320 px."
+  P: V3279 [READ] ours/resolution = 320 px | "We run 22 members of one recipe, 3 slots, all fluid-sensitive, 320 px."
+  why: premises describe only our side (22 of one recipe, 3 slots, 320 px); nothing about the 0.936 notebook to locate the gap in
+D3 R1 check 88
+  C: V288 [INFERRED] efficiency single model/T4 runtime = 2 min of T4 | "1–2 submissions, 2 min of T4"
+  P: V281 [INFERRED] R1 levers/rank 9 = Efficiency-track submission | "Efficiency-track submission: one model, identity view, runtime recorded"
+  P: V282 [READ] lever 9 efficiency submission/design = one model, identity view, runtime recorded | "one model, identity view, runtime recorded"
+  why: 2 min of T4 needs a runtime premise; premises give only one model, identity view
+D4 R2 check 127
+  C: V383 [INFERRED] realistic public LB expectation/rank band = the current top 20 to top 50 | "i.e. the current top 20 to top 50"
+  P: V382 [INFERRED] realistic public LB expectation = 0.940–0.948 | "The realistic read is 0.940–0.948 on the public board"
+  P: V383 [INFERRED] realistic public LB expectation/rank band = the current top 20 to top 50 | "i.e. the current top 20 to top 50"
+  P: V384 [INFERRED] efficiency prize/chance = a genuine shot at the efficiency prize | "plus a genuine shot at the efficiency prize"
+  P: V18 [READ] public LB/top-20 cutoff (today) = ≥ 0.946 | "≥ 0.946"
+  P: V19 [READ] public LB/team count = 2,844 teams | "(2,844 teams)"
+  why: premises give only the top-20 cutoff 0.946; nothing places 0.940 at top 50 (the same 09-01 board had 84 teams >= 0.94, so 0.940 is ~rank 85)
+D5 R1 check 91
+  C: V296 [INFERRED] lever 10 slice density/screen = at inference first (~20 min) | "screen it at inference first (~20 min)"
+  P: V291 [INFERRED] lever 10 slice density/expected = small | "small: --adjacent already puts 95 % of a series' slices in the tensor;"
+  P: V292 [MEASURED] --adjacent/share of a series' slices in the tensor = 95 % | "--adjacent already puts 95 % of a series' slices in the tensor"
+  P: V293 [MEASURED] slice density 24/coverage gain = +0.030 coverage | "+0.030 coverage for 2.6× wall clock"
+  P: V294 [MEASURED] slice density 24/wall-clock cost = 2.6× wall clock | "+0.030 coverage for 2.6× wall clock"
+  why: the ~20 min screen cost is in no premise (they give 95% coverage, +0.030 for 2.6× wall clock)
+D6 R2 check 286
+  C: V858 [INFERRED] efficiency track selection/consumes main-track two = does not consume these two | "The efficiency track is selected separately and does not consume these two"
+  P: V722 [READ] rules §2.b/final submissions = two (2) Final Submissions | ""You may select up to two (2) Final Submissions for judging.""
+  why: the only premise is 'You may select up to two (2) Final Submissions'; nothing given says the efficiency track is selected separately or outside those two
+D7 R3 check 391
+  C: V1379 [INFERRED] lane 5 §1.3 input-representation half = The input representation half survives | "The input representation half survives;"
+  P: V1377 [READ] lane 5 §1.3/reading = "the gap to 0.936 is in the ensemble breadth and the input representation" | "lane 5 §1.3's reading that "the gap to 0.936 is in the ensemble breadth and the input representation""
+  P: V1378 [INFERRED] lane 5 §1.3 breadth half = does not survive the forum evidence | "the breadth half of that does not survive the forum evidence"
+  why: premises only say the breadth half fails the forum evidence; none supports the input-representation half surviving
+D8 R1 check 923
+  C: V2960 [INFERRED] deployed kernel/share of 9 h cap used = a fraction of | "against a 9 h cap the deployed kernel uses a fraction of."
+  P: V2770 [READ] Kaggle rules/GPU notebook run-time cap = GPU Notebook <= 9 hours run-time | ""GPU Notebook <= 9 hours run-time""
+  why: the only premise is the 9 h cap; the kernel's own runtime, needed to call its share 'a fraction', is not among the premises
+D9 R3 check 70
+  C: V252 [INFERRED] lever 5 training recipe/expected LB gain = +0.003 to +0.010 combined | "+0.003 to +0.010 combined;"
+  P: V254 [READ] lever 5 training recipe/evidence = frontier code + arm C's rising rho | "frontier code + arm C's rising rho"
+  why: 'frontier code + arm C's rising rho' gives no LB magnitude; +0.003 to +0.010 combined is not derivable from it
+D10 R1 check 84
+  C: V278 [INFERRED] lever 8 external data/engineering cost = ~1 day engineering | "~1 day engineering, human licence step"
+  P: V272 [INFERRED] R1 levers/rank 8 = External expert-labeled data (MRNet, click-through) | "External expert-labeled data (MRNet, click-through) — first as a validation instrument, then pretraining"
+  P: V273 [INFERRED] lever 8 external data/order of use = first as a validation instrument, then pretraining | "first as a validation instrument, then pretraining"
+  why: ~1 day of engineering is not in the premises, which give only the lever's rank and order of use
+D11 R3 check 597
+  C: V2159 [INFERRED] T007 --seqs 2 member/layout = (12, 320, 2, True) | "A --seqs 2 member from T007 has layout (12, 320, 2, True)"
+  P: V2156 [READ] kernel layout key/fields = (slices, size, seqs, adjacent) | "The layout key is (slices, size, seqs, adjacent) (rsna-knee-submit.py:209, :273-275)"
+  P: V2157 [READ] kernel MAX_LAYOUTS/default = MAX_LAYOUTS is 2 | "MAX_LAYOUTS is 2 (:85)."
+  why: premises give the key's fields and MAX_LAYOUTS 2 but not T007's slices, size or adjacent, so (12, 320, 2, True) needs premises that are not there
+D12 R3 check 83
+  C: V275 [INFERRED] lever 8 external pretraining/expected LB gain = +0.000 to +0.010 | "pretraining: +0.000 to +0.010"
+  P: V276 [READ] lever 8 external data/evidence = host ruling | "host ruling;"
+  why: 'host ruling' is about permission, not size; the +0.000 to +0.010 pretraining gain has no premise
+D13 R3 check 1018
+  C: V3250 [INFERRED] +0.001 displayed step/in sd = 5–10 sd | "a displayed +0.001 step is 5–10 sd"
+  P: V3248 [INFERRED] "±0.001 inside subset noise"/verdict = is wrong for the comparisons this project has been making | ""±0.001 is inside plausible subset noise" is wrong for the comparisons this project has been making"
+  P: V3249 [SIMULATED] nested ensembles/public delta sampling sd = 0.0001–0.0003 | "Simulated on 4,349 studies, the sampling sd of a public delta between two nested ensembles (sharing almost all members) is 0.0001–0.0003"
+  why: at sd 0.0001-0.0003 a +0.001 step is 0.001/0.0003 = 3.3 to 10 sd, not 5-10
+D14 R1 check 77
+  C: V264 [INFERRED] R1 levers/rank 7 = A second architecture family | "A second architecture family (DINOv3 ViT-S/ConvNeXt-T with LoRA-style adaptation), as diversity, not capacity"
+  P: V266 [INFERRED] lever 7 second architecture/expected LB gain = +0.002 to +0.006 as an ensemble arm | "+0.002 to +0.006 as an ensemble arm"
+  why: rank 7 needs the other levers; the only premise is this arm's +0.002 to +0.006
+D15 R1 check 777
+  C: V2652 [INFERRED] resolution 448/cost multiple and runtime = 1.96× (~221 min) | "448 is 1.96× (~221 min)."
+  P: V2445 [INFERRED] deployed config/forward units per study = 66 | "so 12·3 + 10·3 = 66, not 22·3 = 66 by coincidence of the same arithmetic"
+  P: V2476 [MEASURED] runtime fit T(u)/slope = 1.329 min per forward unit | "MEASURED: T(u) ≈ 25.2 min + 1.329 min per forward unit"
+  P: V2648 [MEASURED] 22 members/training size = size=320 | "Members are trained at size=320 (MEASURED, all 22)."
+  why: (448/320)² = 1.96 ✓, but 66×1.96 = 129 units gives 25.2 + 1.329×129 ≈ 197 min, not ~221
+D16 R1 check 79
+  C: V266 [INFERRED] lever 7 second architecture/expected LB gain = +0.002 to +0.006 as an ensemble arm | "+0.002 to +0.006 as an ensemble arm"
+  P: V267 [READ] AnyMC3D/adaptation gain = adaptation +0.11 | "AnyMC3D: adaptation +0.11"
+  P: V268 [READ] AnyMC3D/backbone size gain = backbone size ~0 | "backbone size ~0;"
+  P: V269 [READ] in-competition/ViT-S→B gain = +0.0011 null | "in-competition ViT-S→B +0.0011 null"
+  why: premises give adaptation +0.11 (AnyMC3D), size ~0 and ViT-S→B +0.0011; none yields a +0.002 to +0.006 ensemble-arm gain
+D17 R1 check 71
+  C: V253 [INFERRED] lever 5 training recipe/measurement = two at a time at most | "measure two at a time at most"
+  P: V252 [INFERRED] lever 5 training recipe/expected LB gain = +0.003 to +0.010 combined | "+0.003 to +0.010 combined;"
+  why: 'measure two at a time at most' needs a noise or interaction premise; the only premise is the +0.003–0.010 combined gain
+D18 R3 check 605
+  C: V2171 [INFERRED] drop fold? members/TTA views unlocked = unlocks three TTA views | "unlocks three TTA views (§3.4)"
+  P: V2179 [MEASURED] refused TTA views/cause = the any() in tta.unmatched | "MEASURED, the cause is the any() in tta.unmatched (src/tta.py:116)"
+  P: V2180 [READ] tta.unmatched/effect = one member lacking a flag kills the view for the whole ensemble | "one member lacking a flag kills the view for the whole ensemble"
+  P: V2181 [MEASURED] ten fold? members/mirror,rotate = mirror=0.0 rotate=0.0 | "the ten fold? members record mirror=0.0 rotate=0.0."
+  why: premises show only that the ten fold? members lack mirror/rotate; unlocking three views also needs the other 12 to carry them (lane11 finds armb0 x2 at 0.0 too)
+D19 R2 check 1016
+  C: V3242 [INFERRED] winner's curse gain/vs gap to top 20 = larger than the entire remaining gap to the top 20 | "Spending ~200 submissions on structurally distinct candidates and keeping the best public score manufactures about +0.012 of public gain that is worth exactly zero privately — larger than the entire r"
+  P: V3241 [SIMULATED] ~200 distinct-candidate submissions/winner's curse gain = about +0.012 | "Spending ~200 submissions on structurally distinct candidates and keeping the best public score manufactures about +0.012 of public gain that is worth exactly zero privately"
+  P: V3245 [READ] public LB rank 20/score = 0.946 | "0.946"
+  why: premises give only rank 20 at 0.946 and +0.012; the gap's start is missing - from our 0.926 it is +0.020 > 0.012, only from the 0.936 plateau (+0.010) is it smaller
+D20 R3 check 28
+  C: V141 [INFERRED] arm C riders/overfit point = past an 8-epoch schedule set without them | "the riders moved the overfit point past an 8-epoch schedule set without them"
+  P: V138 [INFERRED] arm C/training state = undertrained | "Arm C is undertrained"
+  P: V139 [MEASURED] arm C/corpus rho at final epoch = 0.6770 → 0.6799 | "corpus rho still rising at the final epoch (0.6770 → 0.6799)"
+  P: V140 [MEASURED] arm C/train loss = train loss falling | "with train loss falling"
+  why: rho still rising 0.6770 -> 0.6799 and loss falling show undertraining, but no premise compares a run without the riders, so 'the riders moved the overfit point' is unsupported

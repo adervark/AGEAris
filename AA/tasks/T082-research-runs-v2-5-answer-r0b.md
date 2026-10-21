@@ -54,9 +54,9 @@ be checked against T075's misses before the design is accepted again.
 - [x] Measure what can be measured for free on T075's material
       (`docs/plans/evidence/t082/measurements.md`): the clause sieve, the
       re-link, the search flip, C6's source.
-- [ ] R0c: re-grade T075's twelve on a ledger written under v2.5's rules
-      (design §7). It needs subagents beyond this task's spend rule, so it
-      waits for the operator.
+- [x] R0c: re-grade T075's twelve on a ledger written under v2.5's rules
+      (design §7), on the operator's go. **7 of 12**, by the rule and by
+      hand (`docs/plans/evidence/t082/r0c/grade.md`).
 - [ ] The operator accepts it, or sends it for review.
 
 ## Decision rules — fixed in advance
@@ -123,25 +123,27 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: reclaimed to grade.
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: R0c graded.
 - **Done:** the auditor's rerun caught 81 of 81 canaries and flagged 170
   of 583 real skips `missed` (pass 1: 74 of 81, 19). Merged
   (`r0c/merged/`), linked (`r0c/link/link-counts.json`; the pairs are
   regenerable, not committed), grouped (`r0c/rec/`, key `rec-key.json`),
-  searches re-run (`r0c/searchflip.json`).
-- **In flight:** nothing. Reconciler 3 is done, 11 of 11 canaries.
-  Reconcilers 1 and 2 finished pass 1 at 10 of 11 each
-  (`rec/out-R{1,2}-pass1.jsonl`); their reruns died at the usage limit on
-  2026-10-16 with 38 and 23 lines (`rec/out-R{1,2}.jsonl`), reaped.
-  Resuming them is a spend beyond the rule's one rerun each: the operator's.
-- **Resume with:** the grade (`grade.mjs`), on pass 1 of reconcilers 1
-  and 2 with reconciler 3: the canaries, the twelve against `key-lines.md`
-  and T075's `corrections.md`, precision and costs. Say whether finishing
-  the reruns could change it. The audit's `missed` flags are already
-  sampled (`audit-sample.md`).
-- **Next decision:** the operator's, after the grade: resume the two dead
-  reruns or not, and, below 10 of 12, accept the figure with the misses
-  listed or send v2.5 back for revision.
+  searches re-run (`r0c/searchflip.json`). Graded (`r0c/grade.md`,
+  `grade.json`, `precision.md`): recall 7 of 12, by the rule and by hand;
+  canaries 31 of 33; conflict precision 44 of 49 strictly, 48 with the
+  ambiguous; a defect the synthesis carried (4,349 against 3,749). Logged in
+  PROGRESS.md.
+- **In flight:** nothing. Reconcilers 1 and 2 are graded at pass 1 (10 of
+  11 canaries each). Their reruns died at the usage limit on 2026-10-16
+  and stay dead: finishing them cannot change the recall (`grade.md`).
+- **Resume with:** the operator's decision below. On a v2.6, revise
+  `docs/plans/research-runs.md` from `grade.md`'s candidates. On
+  acceptance, write the Result and close.
+- **Next decision:** the operator's. 7 of 12 is below the rule's 10, so
+  either the operator accepts 7 with the misses listed, or v2.5 goes back
+  for a v2.6. `grade.md` names the candidates: supersession, refs from
+  quotes, canaries beside real units, premise checks that say which kind,
+  commits on code facts, and a full key.
 - **Known gaps:** the committed cut dropped table cells of ≤2 characters.
   Pairwise linking gave 36,545 pairs on 3,081 facts, so review must be by
   group.

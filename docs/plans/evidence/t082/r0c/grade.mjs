@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 // T082 R0c: the parent's grade. Run from this folder, after the reconcilers:
 //
-//   node grade.mjs > grade.json
+//   node grade.mjs [out-R1 out-R2 out-R3] > grade.json
+//
+// The three output files default to rec/out-R{1,2,3}.jsonl. Reconcilers 1
+// and 2's reruns died part-way, so the committed grade names their pass 1:
+//
+//   node grade.mjs rec/out-R1-pass1.jsonl rec/out-R2-pass1.jsonl rec/out-R3.jsonl
 //
 // - Canaries: per reconciler, a group canary is caught by a `conflict` line
 //   naming its twin; a check canary by `does-not-follow` on its check.
@@ -26,7 +31,7 @@ const flipped = new Set(flip.results.filter((r) => r.status === 'flipped').map((
 const units = [], outs = [];
 for (const k of [1, 2, 3]) {
   for (const u of rd(`rec/R${k}.jsonl`)) units.push({ k, type: u.group ? 'group' : 'check', n: u.group || u.check, ids: u.group ? u.facts.map((f) => v2f[f.id]) : [v2f[u.conclusion.id], ...u.premises.map((p) => v2f[p.id])], conclusion: u.check ? v2f[u.conclusion.id] : null });
-  for (const o of rd(`rec/out-R${k}.jsonl`)) outs.push({ k, ...o, ids: (o.facts || []).map((v) => v2f[v]) });
+  for (const o of rd(process.argv[1 + k] || `rec/out-R${k}.jsonl`)) outs.push({ k, ...o, ids: (o.facts || []).map((v) => v2f[v]) });
 }
 const unitOf = (k, type, n) => units.find((u) => u.k === k && u.type === type && u.n === n);
 
