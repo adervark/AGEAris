@@ -1,0 +1,599 @@
+## conflict: 43 unique, 43 to mark
+
+### C1 (R1 group 1, R1 group 14, R2 group 2)
+  F3599 [lane6-single-model-gap.md§219 lane6-single-model-gap.md§219#5] --layer-decay/--warmup-frac/ever passed = never once passed :: --layer-decay/--warmup-frac are wired here and were never once passed
+  F1925 [lane10 lane10#183] PROGRESS.md/claim '--warmup-frac never passed' = false :: PROGRESS.md's claim that no run ever passed it is false
+  why (R1): Correction. V3636 (lane6 §219): --layer-decay/--warmup-frac 'never once passed'; V1942 (lane10): --warmup-frac was passed once (outputs/t025/run_arm.sh:13, 0.1), so the never-passed claim is false
+  why (R1): Correction. V3636: never once passed; V1942 (lane10): the never-passed claim about --warmup-frac is false (passed once, 0.1, T025)
+  why (R2): Correction: V3636 (lane6) says --layer-decay/--warmup-frac were never once passed; V1942 (lane10) shows that claim false: T025's run_arm.sh passed both (0.1/0.75) on 08-29, before lane6 wrote
+
+### C2 (R1 group 1)
+  F3316 [lane6-single-model-gap.md§185 lane6-single-model-gap.md§185#4] --warmup-frac/use = wired and never used :: the flag is wired and never used
+  F1925 [lane10 lane10#183] PROGRESS.md/claim '--warmup-frac never passed' = false :: PROGRESS.md's claim that no run ever passed it is false
+  why (R1): Correction. V3352 (lane6 §185): --warmup-frac 'wired and never used'; V1942 (lane10): it was passed once, 0.1 in the T025 run script, and the log shows it bound
+
+### C3 (R1 group 1, R1 group 14)
+  F3599 [lane6-single-model-gap.md§219 lane6-single-model-gap.md§219#5] --layer-decay/--warmup-frac/ever passed = never once passed :: --layer-decay/--warmup-frac are wired here and were never once passed
+  F1930 [lane10 lane10#188] PROGRESS.md/claim '--layer-decay never passed' = Same correction :: Same correction
+  why (R1): Correction. V3636: --layer-decay never once passed; V1947 (lane10): the same correction applies to --layer-decay, passed once (0.75, T025 DINOv3 arm)
+  why (R1): Correction. V3636: --layer-decay never once passed; V1947 (lane10): the same correction applies to --layer-decay (passed once, 0.75, T025)
+
+### C4 (R1 group 1, R1 group 9, R1 group 67, R3 group 6, R3 group 11, R3 group 34, R3 group 44)
+  F2725 [lane12 lane12#18] proposal 2/cost = 32–107 GPU-h :: REJECTED on price — 32–107 GPU-h against a one-fold-then-cooldown rule
+  F2972 [lane12 lane12#225] SimCLR / MoCo/hours at 400/s = 114–228 :: 114–228
+  why (R1): V2750: in-domain SSL (proposal 2) costs 32–107 GPU-h; V3004: the same lane's bill gives 114–228 h for SimCLR/MoCo at 400/s (MAE 228–455, truncated 11.4); no line of the bill gives 32–107
+  why (R1): V2750: proposal 2 (in-domain SSL) costs 32–107 GPU-h; V3004: the same lane's bill puts SimCLR/MoCo at 114–228 h at 400/s (MAE 228–455, truncated run 11.4); no bill line gives 32–107
+  why (R1): V2750: proposal 2 (SSL on the 819k slices) costs 32–107 GPU-h; V3004: the bill over the same 819,078 slices gives 114–228 h for SimCLR/MoCo at 400/s (MAE 228–455, truncated 11.4); no line gives 32–107
+  why (R3): V2750: in-domain SSL (proposal 2) costs 32-107 GPU-h; lane12's own bill at the optimistic 400/s gives 114-228 h (V3004, SimCLR/MoCo) and 228-455 h for MAE, so 32-107 matches no row
+  why (R3): V2750: in-domain SSL costs 32-107 GPU-h; the same lane's bill at the optimistic 400/s gives 114-228 h for SimCLR/MoCo (V3004) and 228-455 h for MAE (V3008); 32-107 fits no row
+  why (R3): V2750: in-domain SSL costs 32-107 GPU-h; the lane's own bill at the optimistic 400/s gives 114-228 h for SimCLR/MoCo (V3004) and 228-455 h for MAE (V3008); 32-107 fits no row
+  why (R3): V2750: in-domain SSL costs 32-107 GPU-h; the lane's own bill at the optimistic 400/s gives 114-228 h for SimCLR/MoCo (V3004) and 228-455 h for MAE (V3008); 32-107 fits no row
+
+### C5 (R1 group 9, R1 group 14, R2 group 20)
+  F3308 [PROGRESS.md§5857 PROGRESS.md§5857#1] --warmup-frac and --layer-decay/ever passed = no run has ever passed them :: Also recorded, for T025: --warmup-frac and --layer-decay exist at train.py:808-812 and no run has ever passed them.
+  F1925 [lane10 lane10#183] PROGRESS.md/claim '--warmup-frac never passed' = false :: PROGRESS.md's claim that no run ever passed it is false
+  why (R1): Correction. V3344 (PROGRESS.md:5857): no run has ever passed --warmup-frac/--layer-decay; V1942 (lane10): that claim is false, --warmup-frac 0.1 was passed once in outputs/t025/run_arm.sh
+  why (R1): Correction. V3344 (PROGRESS.md:5857): no run has ever passed them; V1942 (lane10): that claim is false for --warmup-frac (passed once, 0.1, T025)
+  why (R2): Correction: V3344 (PROGRESS.md:5857) says no run has ever passed --warmup-frac/--layer-decay; V1942 (lane10): that claim is false, T025's run_arm.sh passed 0.1/0.75 on 08-29
+
+### C6 (R1 group 9, R1 group 14)
+  F3308 [PROGRESS.md§5857 PROGRESS.md§5857#1] --warmup-frac and --layer-decay/ever passed = no run has ever passed them :: Also recorded, for T025: --warmup-frac and --layer-decay exist at train.py:808-812 and no run has ever passed them.
+  F1930 [lane10 lane10#188] PROGRESS.md/claim '--layer-decay never passed' = Same correction :: Same correction
+  why (R1): Correction. V3344: no run has ever passed --layer-decay; V1947 (lane10): same correction, --layer-decay 0.75 was passed once (T025 DINOv3 arm) and bound
+  why (R1): Correction. V3344: no run has ever passed --layer-decay; V1947 (lane10): same correction, it was passed once (0.75, T025)
+
+### C7 (R1 group 12, R3 group 27)
+  F59 [R1 R1#54] our models/per-model quality vs field = two to four points behind the field :: Our per-model quality is two to four points behind the field
+  F429 [R2 R2#16] our 22 at 0.926/vs public models = level with one public model :: Our 22 at 0.926 is level with one public model — not two to four points behind a field of them.
+  why (R1): Correction. V60 (R1): our per-model quality is two to four points behind a field of single models (0.936–0.942); V437 (R2): our 22 at 0.926 is level with the one verifiable public model (0.924), not 2–4 points behind a field
+  why (R3): Correction: V60 (R1) says our per-model quality is two to four points behind the field; V437 (R2) says our 22 at 0.926 is level with one public model, not two to four points behind a field
+
+### C8 (R1 group 14, R2 group 20)
+  F3599 [lane6-single-model-gap.md§219 lane6-single-model-gap.md§219#5] --layer-decay/--warmup-frac/ever passed = never once passed :: --layer-decay/--warmup-frac are wired here and were never once passed
+  F1760 [lane10 lane10#14] --layer-decay,--warmup-frac/times passed = were passed once :: --layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13
+  why (R1): Correction. V3636 (lane6 §219): --layer-decay/--warmup-frac 'were never once passed'; V1777 (lane10, READ): they were passed once, outputs/t025/run_arm.sh:13 (0.75 / 0.1), and the log shows they bound
+  why (R2): Correction: V3636 (lane6) says the flags were never once passed; V1777 (lane10) reads them passed once at outputs/t025/run_arm.sh:13, and the T025 log shows they bound
+
+### C9 (R1 group 14)
+  F3308 [PROGRESS.md§5857 PROGRESS.md§5857#1] --warmup-frac and --layer-decay/ever passed = no run has ever passed them :: Also recorded, for T025: --warmup-frac and --layer-decay exist at train.py:808-812 and no run has ever passed them.
+  F1760 [lane10 lane10#14] --layer-decay,--warmup-frac/times passed = were passed once :: --layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13
+  why (R1): Correction. V3344 (PROGRESS.md:5857): no run has ever passed --warmup-frac/--layer-decay; V1777 (lane10, READ): both were passed once, outputs/t025/run_arm.sh:13
+
+### C10 (R1 group 14, R2 group 20)
+  F952 [T047brief T047brief#43] round 2/largest find = Round 2's largest find :: Round 2's largest find was that --layer-decay and --warmup-frac are wired, correct, and were never passed
+  F1760 [lane10 lane10#14] --layer-decay,--warmup-frac/times passed = were passed once :: --layer-decay and --warmup-frac were passed once — outputs/t025/run_arm.sh:13
+  why (R1): Correction. V968 (T047 brief): round 2's largest find was that the two flags 'were never passed'; V1777 (lane10, READ): they were passed once, in the T025 run script
+  why (R2): Correction: V968 (T047 brief) says round 2 found the flags were never passed; V1777 (lane10): they were passed once, in T025's run_arm.sh, before round 2
+
+### C11 (R1 group 52)
+  F3217 [lane3-measurement-and-ensemble.md§90 lane3-measurement-and-ensemble.md§90#1] nested ensembles/public delta sampling sd = 0.0001–0.0003 :: Simulated on 4,349 studies, the sampling sd of a public delta between two nested ensembles (sharing almost all members) is 0.0001–0.0003
+  F1222 [lane9 lane9#196] nested-config public sd = 0.0028 :: the nested-config sd of 0.0028
+  why (R1): V3253 (lane3, simulated): public-delta sd between nested ensembles is 0.0001–0.0003; V1238 (lane9): 'the nested-config sd of 0.0028', which is the low end of lane3's structurally-distinct 0.0028–0.0070
+
+### C12 (R1 group 52, R1 group 56)
+  F1197 [lane9 lane9#170] nested configs/public LB sd = LB sd ≈ 0.0003 :: nested configs, LB sd ≈ 0.0003 per our instrument table
+  F1222 [lane9 lane9#196] nested-config public sd = 0.0028 :: the nested-config sd of 0.0028
+  why (R1): Lane9 against itself: V1213 nested configs have LB sd ≈ 0.0003 per the instrument table; V1238 uses 'the nested-config sd of 0.0028' for the same nested configs, ~9× larger
+  why (R1): Lane9 against itself: V1213 nested configs have LB sd ≈ 0.0003; V1238 'the nested-config sd of 0.0028' for the expected-max arithmetic
+
+### C13 (R1 group 56)
+  F202 [R1 R1#122] public noise/one-member swap sd = sd 0.0001–0.0003 :: one-member swaps have sd 0.0001–0.0003
+  F1222 [lane9 lane9#196] nested-config public sd = 0.0028 :: the nested-config sd of 0.0028
+  why (R1): V206 (R1, measured): public sd between nested ensembles that differ by a member swap is 0.0001–0.0003; V1238 (lane9): 'the nested-config sd of 0.0028', ~10× larger, which is lane3's distinct-config figure
+
+### C14 (R1 group 60)
+  F4012 [ROADMAP.md§498 ROADMAP.md§498#1] T4/per fold = ~2.7 h/fold :: faster than the T4's ~2.7 h/fold
+  F2994 [lane12 lane12#242] five follow-up folds on Kaggle/hours = ~20 h at T4 rates :: the five folds that must follow it to be worth anything are another ~20 h at T4 rates.
+  why (R1): V4050 (ROADMAP:498, measured): a T4 fold takes ~2.7 h, so five folds are ~13.5 h; V3026 (lane12): the five follow-up folds are 'another ~20 h at T4 rates', i.e. ~4 h/fold, with no different recipe stated
+
+### C15 (R1 group 80, R1 group 88, R3 group 3, R3 group 18)
+  F2157 [lane10 lane10#392] drop fold? members/TTA views unlocked = unlocks three TTA views :: unlocks three TTA views (§3.4)
+  F2666 [lane11 lane11#223] mirror, rot+, rot- in 22-member ensemble/availability = unavailable :: so mirror, rot+ and rot- are unavailable to the 22-member ensemble solely because 12 members drag them down, not because they are invalid.
+  why (R1): V2176 (lane10): dropping the ten fold? members unlocks the three refused TTA views; V2690 (lane11): 12 members lack mirror/rotate (armb0 ×2 as well as fold0-4 ×2), so with armb0 kept the any() still refuses them
+  why (R1): V2176 (lane10): dropping the ten fold? members unlocks three refused TTA views; V2690 (lane11): 12 members lack mirror/rotate (armb0 ×2 plus fold0-4 ×2), so dropping ten leaves armb0 still vetoing them
+  why (R3): V2176: dropping the ten fold? members unlocks mirror/rot+/rot-; V2690: 12 members (armb0 x2 + fold x10) carry mirror=rotate=0, so the views stay refused after dropping ten
+  why (R3): V2176: dropping the ten fold? members unlocks mirror/rot+/rot-; V2690: 12 members (armb0 x2 + fold x10) carry mirror=rotate=0, so dropping ten leaves the views refused
+
+### C16 (R1 group 96, R1 group 116)
+  F376 [R1 R1#270] optimistic end/mm crop = mm crop +0.005 :: mm crop +0.005
+  F485 [R2 R2#50] S2/expected LB gain = +0.003 to +0.008 :: +0.003 to +0.008
+  why (R1): V382 (R1 §8): the mm crop's optimistic end is +0.005; V494 (R2): S2 mm crop expects +0.003 to +0.008, optimistic end +0.008 (R1's own §6 row also says +0.003 to +0.008)
+  why (R1): V382 (R1 §8): mm crop optimistic end +0.005; V494 (R2): S2 mm crop +0.003 to +0.008, optimistic end +0.008
+
+### C17 (R1 group 96, R1 group 116, R3 group 76)
+  F376 [R1 R1#270] optimistic end/mm crop = mm crop +0.005 :: mm crop +0.005
+  F646 [R2 R2#148] R2 §6 band/mm crop (S2) = +0.003 to +0.008 :: +0.003 to +0.008
+  why (R1): V382 (R1 §8): mm crop optimistic end +0.005; V661 (R2 §6): the mm-crop band is +0.003 to +0.008, whose optimistic end is +0.008
+  why (R1): V382 (R1 §8): mm crop optimistic end +0.005; V661 (R2 §6 band): mm crop +0.003 to +0.008, optimistic end +0.008
+  why (R3): V382: R1 sums the mm crop at an optimistic end of +0.005; V661 (and R1's own lever 4) bands it +0.003 to +0.008, whose optimistic end is +0.008
+
+### C18 (R1 group 116)
+  F376 [R1 R1#270] optimistic end/mm crop = mm crop +0.005 :: mm crop +0.005
+  F242 [R1 R1#158] lever 4 mm crop/expected LB gain = +0.003 to +0.008 :: +0.003 to +0.008, free memory/time
+  why (R1): R1 against itself: V247 (§6 lever 4) puts the mm crop at +0.003 to +0.008, optimistic end +0.008; V382 (§8) sums the mm crop's 'optimistic end' as +0.005
+
+### C19 (R1 group 177)
+  F378 [R1 R1#270] optimistic end/diversity arm = a diversity arm +0.005 :: a diversity arm +0.005
+  F266 [R1 R1#179] lever 7 second architecture/expected LB gain = +0.002 to +0.006 as an ensemble arm :: +0.002 to +0.006 as an ensemble arm
+  why (R1): R1 against itself: V271 (§6 lever 7) gives the second-architecture arm +0.002 to +0.006, optimistic end +0.006; V384 (§8) sums the diversity arm's 'optimistic end' as +0.005
+
+### C20 (R1 group 33)
+  F2933 [lane12 lane12#193] proposal 1b/extra passes = +22 passes on a kernel already doing ~132 :: one extra identity-view forward pass per member is +22 passes on a kernel already doing ~132
+  F2526 [lane11 lane11#113] forward work/affordable units per study = ≈ 380 :: affordable — the deployed 66 could become ≈ 380, a 5.8× increase in forward
+  why (R1): V2963 (lane12): the deployed kernel 'already does ~132' passes per study (22 × 3 × 2 layouts); V2549 (lane11): the deployed config is 66 units (12·3 + 10·3, layouts partition members, not duplicate)
+
+### C21 (R2 group 7)
+  F3787 [lane7-public-members.md§330 lane7-public-members.md§330#2] 22-member rerun/measured = ~134 min :: the brief's measured figure is ~134 min
+  F2473 [lane11 lane11#68] deployed rerun runtime/measured = still not measured :: The deployed rerun's runtime is still not measured.
+  why (R2): Correction: V3824 (lane7) calls ~134 min the measured 22-member rerun; V2495 (lane11): the deployed rerun is still not measured; 134 is 67×2, the kernel's own printed prediction
+
+### C22 (R2 group 7, R2 group 62, R2 group 128, R3 group 3, R3 group 18)
+  F3788 [lane7-public-members.md§330 lane7-public-members.md§330#2] budget model/under-prediction = under-predicts by 2× in practice :: the brief's measured figure is ~134 min, i.e. the model under-predicts by 2× in practice.
+  F2495 [lane11 lane11#87] budget model/real error = 1.33× slope error :: The real error is the 1.33× slope error in §1.5 row 1.
+  why (R2): Correction: V3825 says the budget model under-predicts by 2× in practice; V2517 says the real error is the 1.33× slope error (the 2× is the layout multiplier the kernel already applies)
+  why (R2): Correction: V3825 (lane7) says budget_minutes under-predicts by 2× in practice; V2517 (lane11): the 2× is the layout multiplier, the real error is the 1.33× slope error
+  why (R2): Correction: V3825 (lane7) says budget_minutes under-predicts by 2× in practice; V2517 (lane11): the 2× is the layout multiplier, the real error is the 1.33× slope error
+  why (R3): Correction: V3825 (lane7) says budget_minutes under-predicts by 2x (134 vs 67 min); V2517 (lane11) says 134 is 67 x 2 layout passes, the kernel's own prediction, and the real error is a 1.33x slope
+  why (R3): Correction: V3825 (lane7) says budget_minutes under-predicts by 2x (134 vs 67 min); V2517 (lane11): 134 is 67 x 2 layout passes, the kernel's own prediction; the real error is the 1.33x slope
+
+### C23 (R2 group 10)
+  F3241 [lane5-public-notebooks.md§88 lane5-public-notebooks.md§88#1] gap to 0.936/located in = ensemble breadth and the input representation :: It is in the ensemble breadth and the input representation
+  F1369 [lane9 lane9#304] lane 5 §1.3 breadth half = does not survive the forum evidence :: the breadth half of that does not survive the forum evidence
+  why (R2): Correction: V3277 (lane5 §1.3) puts the gap to 0.936 in ensemble breadth and input representation; V1386 (lane9): the breadth half does not survive the forum evidence (heaviest ensemblers are the stuck ones)
+
+### C24 (R2 group 10)
+  F3244 [lane5-public-notebooks.md§88 lane5-public-notebooks.md§88#1] 0.936 fusion/crop and res = physical-mm crops, and 336–384 px :: - The gap to 0.936 is not in the labels. It is in the ensemble breadth and the input representation: 35 checkpoints across 4 architecture families, 4–6 series slots including structural sequences, phy
+  F1522 [lane9 lane9#420] lane 5 resolution attribution = does not survive :: that does not survive.
+  why (R2): Correction: V3280 (lane5) attributes the gap partly to 336–384 px input; V1539 (lane9): that does not survive, since 224 px and 392 px both reach ≥0.945 and our 320 px is inside that range
+
+### C25 (R2 group 13)
+  F28 [R1 R1#32] board/runtime cap (board said) = "~20 min" :: "~20 min", refuted at 48
+  F30 [R1 R1#33] kernel/runtime cap = 9 h :: 9 h, CPU or GPU
+  why (R2): Correction: V28 is the board's runtime cap of "~20 min" (refuted at 48); V30 and every later fact give the cap as 9 h, CPU or GPU
+
+### C26 (R2 group 48)
+  F439 [R2 R2#21] last ~0.010 to plateau/source = arm diversity, not member count :: The last ~0.010 to the plateau is arm diversity, not member count.
+  F1369 [lane9 lane9#304] lane 5 §1.3 breadth half = does not survive the forum evidence :: the breadth half of that does not survive the forum evidence
+  why (R2): Correction: V447 (R2) says the last ~0.010 to the 0.936 plateau is arm diversity, i.e. ensemble breadth; V1386 (lane9) says the breadth reading of the gap to 0.936 does not survive the forum evidence
+
+### C27 (R2 group 62)
+  F3781 [tta.py§budget_minutes tta.py§budget_minutes#2] rerun model/form = ~1 min fixed plus ~1 min per member :: T009 measured the hidden-test rerun at ~6 min for 5 members and ~2 min for 1, which is ~1 min fixed plus ~1 min per member.
+  F2501 [lane11 lane11#92] T009 intercept (~1 min)/why wrong = T009 was reading notebook time and not submit→terminal time :: the intercept it inferred (~1 min) is the part that was wrong, because T009 was reading notebook time and not submit→terminal time.
+  why (R2): Correction: V3818 (tta.py) models the rerun as ~1 min fixed + ~1 min per member from T009; V2523 says that ~1 min intercept is wrong (notebook time, not submit→terminal; measured ~25 min)
+
+### C28 (R2 group 75)
+  F88 [R1 R1#69] our series/FOV range = FOV 130–320 mm :: FOV 130–320 mm (median 160, spread 1.39×)
+  F489 [R2 R2#52] our series/FOV range = FOV 105–220 mm :: FOV 105–220 mm
+  why (R2): Both MEASURED for our series' FOV: V89 (R1) 130–320 mm, spread 1.39×; V498 (R2, lane6 over 200 series) 105–220 mm, min 105, max 220. Only the 160 mm median agrees
+
+### C29 (R3 group 4)
+  F2154 [lane10 lane10#391] deployed kernel/predicted rerun = ~67 min for two passes at 22×3 :: the kernel prints ~67 min for two passes at 22×3
+  F2493 [lane11 lane11#86] lane 7 "measured ~134 min"/what it is = 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement :: Its "measured ~134 min" is 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement
+  why (R3): V2173: the kernel prints ~67 min for two passes at 22x3; V2515 (with V2510): it prints ~67 min x ~2 for the extra pass, i.e. 134 min for the two layout passes
+
+### C30 (R3 group 8)
+  F3210 [lane3-measurement-and-ensemble.md§801 lane3-measurement-and-ensemble.md§801#1] winner's curse gain/vs gap to top 20 = larger than the entire remaining gap to the top 20 :: Spending ~200 submissions on structurally distinct candidates and keeping the best public score manufactures about +0.012 of public gain that is worth exactly zero privately — larger than the entire r
+  F3213 [lane0-rules-and-leaderboard.md§77 lane0-rules-and-leaderboard.md§77#1] public LB rank 20/score = 0.946 :: 0.946
+  why (R3): V3246: the +0.012 winner's-curse gain is larger than the whole gap to the top 20; V3249: rank 20 is 0.946 on the same snapshot, 0.020 above our 0.926 (V3243), so 0.012 < gap
+
+### C31 (R3 group 15)
+  F2357 [lane10 lane10#612] --layer-decay 0.6/late encoder LR = leaves the late encoder, which holds most of the parameters, at full LR :: leaves the late encoder, which holds most of the parameters, at full LR.
+  F3712 [STATE.md§9 STATE.md§9#11] S1/encoder params at full LR = the top 31 % of encoder parameters sit at the full 3e-4 :: the top 31 % of encoder parameters sit at the full 3e-4
+  why (R3): V2376: --layer-decay 0.6 leaves the late encoder, holding most of the parameters, at full LR; V3749: only the top 31 % of encoder parameters sit at the full 3e-4 (mean encoder LR 1.35e-4, V3748)
+
+### C32 (R3 group 21)
+  F333 [R1 R1#233] submissions/ever spent = 11 ever spent :: ~215 submissions against 11 ever spent
+  F698 [lane13 lane13#8] our submissions/count and active days = 16 submissions in 16 active days :: 16 submissions in 16 active days
+  why (R3): V339 (R1, written 09-01): 11 submissions ever spent; V713: 16 measured 08-18 to 09-02, and lane13's dated ladder already holds 14 by 08-30, so 11 was stale when written
+
+### C33 (R3 group 24)
+  F1198 [lane9 lane9#170] plateau teams/sampling distinct candidates = not sampling structurally distinct candidates :: Those teams are re-running the same inference graph (nested configs, LB sd ≈ 0.0003 per our instrument table), not sampling structurally distinct candidates.
+  F1220 [lane9 lane9#196] 7 submissions/expected max gain at sd 0.0028 = +0.0057 :: 7 submissions buys +0.0057 at the nested-config sd of 0.0028
+  why (R3): Same lane: V1214 puts the nested-config LB sd at ~0.0003; V1236 computes +0.0057 'at the nested-config sd of 0.0028', which is the low end of the structurally-distinct range 0.0028-0.0070
+
+### C34 (R3 group 24)
+  F3201 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#6] 0.936 plateau/rank span = ranks ~100–500 :: The 0.936 plateau spanning ranks ~100–500
+  F3214 [lane0-rules-and-leaderboard.md§80 lane0-rules-and-leaderboard.md§80#1] 0.936 plateau/ranks = 200–500 :: 200–500
+  why (R3): V3237: the 0.936 plateau spans ranks ~100-500; V3250: the same snapshot table puts 0.936 at ranks 200-500, and its rank 100 scores 0.938, so the plateau cannot start near 100
+
+### C35 (R3 group 63, R3 group 158)
+  F235 [R1 R1#152] lever 3 second sequence family/expected LB gain = +0.005 to +0.015 :: +0.005 to +0.015
+  F375 [R1 R1#270] optimistic end/second sequence family = second sequence family +0.010 :: second sequence family +0.010
+  why (R3): R1 ranks the second sequence family at +0.005 to +0.015 (V240), but its optimistic-ends sum takes that lever's optimistic end as +0.010 (V381), not +0.015
+  why (R3): R1 ranks the second sequence family at +0.005 to +0.015 (V240, and R2's V658), but its optimistic-ends sum takes that lever at +0.010 (V381), not +0.015
+
+### C36 (R3 group 66)
+  F3709 [STATE.md§9 STATE.md§9#11] tf_efficientnet_b2/timm layer levels = 23 layer levels in tf_efficientnet_b2 → 48 groups :: 23 layer levels in tf_efficientnet_b2 → 48 groups
+  F2195 [lane10 lane10#433] timm tf_efficientnet_b2/layer levels = 24 distinct layer levels :: timm assigns 24 distinct layer levels to tf_efficientnet_b2
+  why (R3): V3746 (STATE CPU check): timm finds 23 layer levels in tf_efficientnet_b2 -> 48 groups; V2214 (lane10, MEASURED): 24 distinct layer levels; lane10 still says the two agree
+
+### C37 (R3 group 85)
+  F252 [R1 R1#166] lever 5 training recipe/expected LB gain = +0.003 to +0.010 combined :: +0.003 to +0.010 combined;
+  F377 [R1 R1#270] optimistic end/recipe = recipe +0.005 :: recipe +0.005
+  why (R3): R1 bands the training recipe at +0.003 to +0.010 combined (V257) but sums it at an optimistic end of +0.005 (V383); the band's optimistic end is +0.010
+
+### C38 (R3 group 113)
+  F229 [R1 R1#148] lever 2 self-distillation/Kaggle cost = 5 folds Kaggle (24.5 h) :: 5 folds Kaggle (24.5 h)
+  F2994 [lane12 lane12#242] five follow-up folds on Kaggle/hours = ~20 h at T4 rates :: the five folds that must follow it to be worth anything are another ~20 h at T4 rates.
+  why (R3): V234: 5 Kaggle folds cost 24.5 h at 4.9 h/fold (V221); V3026: five follow-up folds are ~20 h at T4 rates, i.e. ~4 h/fold
+
+### C39 (R3 group 126, R3 group 186)
+  F3787 [lane7-public-members.md§330 lane7-public-members.md§330#2] 22-member rerun/measured = ~134 min :: the brief's measured figure is ~134 min
+  F2493 [lane11 lane11#86] lane 7 "measured ~134 min"/what it is = 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement :: Its "measured ~134 min" is 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement
+  why (R3): Correction: V3824 (lane7) calls ~134 min the measured 22-member rerun; V2515 (lane11): 134 is 67 x 2 layout passes, the kernel's own printed prediction, not a measurement
+  why (R3): Correction: V3824 (lane7) calls ~134 min the brief's measured rerun; V2515 (lane11): 134 is 67 x 2 layout passes, the kernel's printed prediction, not a measurement
+
+### C40 (R3 group 126)
+  F3788 [lane7-public-members.md§330 lane7-public-members.md§330#2] budget model/under-prediction = under-predicts by 2× in practice :: the brief's measured figure is ~134 min, i.e. the model under-predicts by 2× in practice.
+  F2492 [lane11 lane11#86] lane 7 §3.4 claim/verdict = not right as stated :: This is not right as stated.
+  why (R3): Correction: V3825 (lane7): the budget model under-predicts by 2x in practice; V2514 (lane11): not right as stated, the 2x is the layout multiplier the kernel already applies
+
+### C41 (R3 group 129)
+  F3278 [lane3-measurement-and-ensemble.md§453 lane3-measurement-and-ensemble.md§453#2] OOF AUC vs Sonnet/n = 3,749 :: 3,749
+  F1491 [lane9 lane9#391] OOF-AUC-vs-Sonnet instrument/studies = 4,349 studies :: The OOF-AUC-vs-Sonnet instrument on 4,349 studies (±0.0019) is the tightest available and is the right gate.
+  why (R3): V3314 (lane3): the OOF-AUC-vs-Sonnet instrument has n = 3,749, the studies the Sonnet labeler read; V1508 (lane9): 4,349 studies, which is the OOF rho corpus vs Opus, not Sonnet's
+
+### C42 (R3 group 186)
+  F3788 [lane7-public-members.md§330 lane7-public-members.md§330#2] budget model/under-prediction = under-predicts by 2× in practice :: the brief's measured figure is ~134 min, i.e. the model under-predicts by 2× in practice.
+  F2493 [lane11 lane11#86] lane 7 "measured ~134 min"/what it is = 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement :: Its "measured ~134 min" is 67 × 2 layout passes, which is the kernel's own printed prediction, not a measurement
+  why (R3): Correction: V3825 (lane7): budget_minutes under-predicts by 2x against a measured 134 min; V2515 (lane11): the 134 is the kernel's own x2 prediction, so the 2x is not a modelling error
+
+### C43 (R3 group 311)
+  F3316 [lane6-single-model-gap.md§185 lane6-single-model-gap.md§185#4] --warmup-frac/use = wired and never used :: the flag is wired and never used
+  F2034 [lane10 lane10#311] dinov3_fold0.pt/warmup_frac = warmup_frac=0.1 :: outputs/t025/dinov3_fold0.pt records warmup_frac=0.1
+  why (R3): Correction: V3352 (lane6) says --warmup-frac is wired and never used; V2051 (lane10, MEASURED) finds outputs/t025/dinov3_fold0.pt recorded warmup_frac=0.1, so it was passed once
+
+## superseded: 31 unique, 31 to mark
+
+### S1 (R1 group 96, R1 group 116, R1 group 142, R1 group 237, R2 group 75, R2 group 89, R3 group 63, R3 group 76, R3 group 85, R3 group 158)
+  F381 [R1 R1#271] realistic public LB expectation = 0.940–0.948 :: The realistic read is 0.940–0.948 on the public board
+  F649 [R2 R2#152] realistic public LB expectation = 0.945–0.955 :: The realistic public read is 0.945–0.955
+  why (R1): V387 (R1): realistic public read 0.940–0.948; V664 (R2, which amends R1 and adds three cheaper levers): 0.945–0.955, the current expectation
+  why (R1): V387 (R1): realistic public read 0.940–0.948; V664 (R2, amending R1 with three cheaper levers): 0.945–0.955 replaces it
+  why (R1): V387 (R1): realistic public read 0.940–0.948; V664 (R2, the amendment with three added levers): 0.945–0.955 replaces it
+  why (R1): V387 (R1 §8): realistic public read 0.940–0.948; V664 (R2): 0.945–0.955, and V667 shows R2 explicitly raising R1's §8 figure
+  why (R2): V387: R1's realistic public read 0.940–0.948; V664: round 2, after re-pricing the levers, puts it at 0.945–0.955, a later estimate that replaces it
+  why (R2): V387: R1's realistic public read 0.940–0.948; V664: round 2, after re-pricing the levers, puts it at 0.945–0.955, a later estimate that replaces it
+  why (R3): V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 because full-data training is new evidence, replacing the earlier expectation
+  why (R3): V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 on the new full-data evidence, replacing the earlier expectation
+  why (R3): V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 on the new full-data evidence, replacing the earlier expectation
+  why (R3): V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 on the new full-data evidence, replacing the earlier expectation
+
+### S2 (R1 group 108)
+  F3198 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#3] public LB/teams ≥0.94 = 84 :: ≥0.94: 84;
+  F1194 [lane9 lane9#168] LB 09-02/teams above 0.94 = 88 teams above 0.94 :: Same budget, opposite outcome. Submission count is therefore not sufficient to reach the band, and the fitting story — which needs budget to be the active ingredient — cannot explain the 88 teams abov
+  why (R1): V3234 (lane0 snapshot, 09-01): 84 teams at ≥0.94; V1210 (lane9, measured 09-02): 88 teams above 0.94, a later count of a moving quantity (+4 in 16 h)
+
+### S3 (R1 group 108)
+  F943 [T047brief T047brief#41] LB 09-01/teams >=0.94 = 84 teams at ≥0.94 :: Nobody has looked at the ≥0.94 band: 84 teams at ≥0.94, 28 at ≥0.945, 3 at ≥0.95, against our 0.926 at rank 776.
+  F1194 [lane9 lane9#168] LB 09-02/teams above 0.94 = 88 teams above 0.94 :: Same budget, opposite outcome. Submission count is therefore not sufficient to reach the band, and the fitting story — which needs budget to be the active ingredient — cannot explain the 88 teams abov
+  why (R1): V959 (T047 brief, from the 09-01 snapshot): 84 teams at ≥0.94; V1210 (lane9, 09-02): 88, a later count of the same moving quantity
+
+### S4 (R1 group 108)
+  F1014 [lane9 lane9#8] LB 09-01 snapshot/teams >=0.94 = 84 teams sat at ≥0.94 :: As of lane 0's 2026-09-01 snapshot, 84 teams sat at ≥0.94 and 3 at ≥0.95 while we sat at 0.926.
+  F1194 [lane9 lane9#168] LB 09-02/teams above 0.94 = 88 teams above 0.94 :: Same budget, opposite outcome. Submission count is therefore not sufficient to reach the band, and the fitting story — which needs budget to be the active ingredient — cannot explain the 88 teams abov
+  why (R1): V1030: 84 teams at ≥0.94 as of the 09-01 snapshot; V1210: 88 measured on 09-02, the later reading replaces it (lane9 records the +4)
+
+### S5 (R1 group 278, R3 group 8)
+  F3197 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#2] public LB/teams ≥0.945 = 28 :: ≥0.945: 28;
+  F1094 [lane9 lane9#77] LB teams >=0.945/09-01 28 -> 09-02 29 (+1) = ≥0.945 :: ≥0.945
+  why (R1): V3233 (lane0 snapshot, 09-01): 28 teams at ≥0.945; V1110 (lane9, measured): 28 on 09-01 → 29 on 09-02, a later count of a moving quantity
+  why (R3): V3233: 28 teams at >=0.945 on 09-01; V1110: 29 on 09-02, a later count
+
+### S6 (R1 group 278)
+  F944 [T047brief T047brief#41] LB 09-01/teams >=0.945 = 28 at ≥0.945 :: Nobody has looked at the ≥0.94 band: 84 teams at ≥0.94, 28 at ≥0.945, 3 at ≥0.95, against our 0.926 at rank 776.
+  F1094 [lane9 lane9#77] LB teams >=0.945/09-01 28 -> 09-02 29 (+1) = ≥0.945 :: ≥0.945
+  why (R1): V960 (T047 brief, 09-01 snapshot): 28 at ≥0.945; V1110 (lane9): 29 on 09-02, the later reading replaces it
+
+### S7 (R2 group 7)
+  F956 [T047brief T047brief#46] deployed kernel/runtime = 1.5–4.4 h :: the deployed kernel uses a bracketed 1.5–4.4 h
+  F2469 [lane11 lane11#65] deployed 22-member rerun/fitted submit→terminal runtime = 113 min :: INFERRED: 25.2 + 1.329 × 66 = 113 min submit→terminal
+  why (R2): V972 bracketed the deployed kernel at 1.5–4.4 h; V2491 fits it at 113 min (25.2 + 1.329×66), inside the bracket, and lane11 says that replaces the bracket as the honest statement
+
+### S8 (R2 group 7)
+  F1472 [lane9 lane9#384] deployed kernel/runtime = 1.5–4.4 h :: Our deployed kernel uses a bracketed 1.5–4.4 h of the 9 h cap
+  F2469 [lane11 lane11#65] deployed 22-member rerun/fitted submit→terminal runtime = 113 min :: INFERRED: 25.2 + 1.329 × 66 = 113 min submit→terminal
+  why (R2): V1489 (lane9) repeats the 1.5–4.4 h bracket for the deployed kernel; V2491's fitted 113 min lands inside it and replaces it
+
+### S9 (R2 group 7, R2 group 13)
+  F1482 [lane9 lane9#387] kernel/unused hours = the unused ~5 h :: moving from our current window budget into the unused ~5 h
+  F2524 [lane11 lane11#110] notebook budget/unused = 427 min :: INFERRED: at least 540 − 113 = 427 min of unused notebook budget
+  why (R2): V1499's 'unused ~5 h' of the 9 h cap rests on the 4.4 h top of the bracket; V2547 puts it at ≥ 540 − 113 = 427 min (~7.1 h) from the fitted runtime
+  why (R2): V1499's 'unused ~5 h' of the 9 h cap rests on the 4.4 h top of the bracket; V2547 puts it at ≥ 540 − 113 = 427 min (~7.1 h) from the fitted runtime
+
+### S10 (R2 group 20)
+  F396 [R1 R1#282] T042/scope = warmup + layer-decay + 14 epochs + augmentation RNG fix, one fold :: T042 (to register before W2) — training-recipe arm: warmup + layer-decay + 14 epochs + augmentation RNG fix, one fold.
+  F682 [R2 R2#174] T042/scope = Screen S1, --layer-decay 0.6 --warmup-frac 0.15, zero code :: Screen S1, --layer-decay 0.6 --warmup-frac 0.15, zero code
+  why (R2): V402 (R1) planned T042 as warmup + layer-decay + 14 epochs + augmentation RNG fix; V697 (R2) registers T042 as screen S1 only, --layer-decay 0.6 --warmup-frac 0.15, zero code
+
+### S11 (R2 group 32)
+  F22 [R1 R1#27] our team/public LB rank = 776 :: 776, at 0.926
+  F1045 [lane9 lane9#29] us/public LB rank 09-02 = Rank 804 :: Rank 804 (was 776), score 0.926, 16 submissions to date.
+  why (R2): V22: our public rank 776 at 0.926 (09-01 reading); V1061: rank 804 on 09-02 at the same 0.926, a later reading of a moving rank (28 teams passed us)
+
+### S12 (R2 group 32)
+  F947 [T047brief T047brief#41] us/public LB rank = rank 776 :: Nobody has looked at the ≥0.94 band: 84 teams at ≥0.94, 28 at ≥0.945, 3 at ≥0.95, against our 0.926 at rank 776.
+  F1045 [lane9 lane9#29] us/public LB rank 09-02 = Rank 804 :: Rank 804 (was 776), score 0.926, 16 submissions to date.
+  why (R2): V963 (T047 brief): rank 776; V1061 (lane9, later commit): rank 804, score unchanged, a later reading of a moving rank
+
+### S13 (R2 group 32)
+  F3206 [lane0-rules-and-leaderboard.md§81 lane0-rules-and-leaderboard.md§81#1] us/public LB rank = 776 :: 776 (us)
+  F1045 [lane9 lane9#29] us/public LB rank 09-02 = Rank 804 :: Rank 804 (was 776), score 0.926, 16 submissions to date.
+  why (R2): V3242 (lane0): 776 (us); V1061: rank 804 on 09-02, 776 + 28 teams that passed us, a later reading of a moving rank
+
+### S14 (R2 group 35)
+  F3103 [tta.py§apply_view tta.py§apply_view#4] apply_view/transform runs once = runs once instead of three times :: The three channels are the same grayscale slice repeated for an ImageNet-shaped encoder, so the transform runs once instead of three times on the largest tensor in the kernel.
+  F2132 [lane10 lane10#377] tta.apply_view/channels transformed = all three channels :: the current apply_view (:265-277) transforms all three channels
+  why (R2): V3136 (tta.py at 6d10943): apply_view transforms channel 0 once and repeats it; V2151 (lane10 at e4e356c): the current apply_view transforms all three channels; the code was fixed in between
+
+### S15 (R2 group 35)
+  F123 [R1 R1#93] tta crop, bright, rot± views/bag source = channel 0 only :: crop, bright and rot± rebuild the bag from channel 0 only
+  F2132 [lane10 lane10#377] tta.apply_view/channels transformed = all three channels :: the current apply_view (:265-277) transforms all three channels
+  why (R2): V126 (R1): crop, bright and rot± rebuild the bag from channel 0 only, true of the deployed code; V2151: current apply_view (:265-277) transforms all three channels, the fix (already in tta.py at d9c7c6e)
+
+### S16 (R2 group 78)
+  F17 [R1 R1#22] board/top-20 cutoff (board said) = ≥ 0.937 :: ≥ 0.937
+  F18 [R1 R1#23] public LB/top-20 cutoff (today) = ≥ 0.946 :: ≥ 0.946
+  why (R2): V17: the board's top-20 cutoff ≥ 0.937, a week-old reading; V18: ≥ 0.946 today, a later reading of a moving cutoff (lane0: stale by +0.009)
+
+### S17 (R2 group 78)
+  F17 [R1 R1#22] board/top-20 cutoff (board said) = ≥ 0.937 :: ≥ 0.937
+  F3213 [lane0-rules-and-leaderboard.md§77 lane0-rules-and-leaderboard.md§77#1] public LB rank 20/score = 0.946 :: 0.946
+  why (R2): V17: board's top-20 cutoff ≥ 0.937; V3249 (lane0): rank 20 now scores 0.946, the current value of the moving cutoff
+
+### S18 (R2 group 112)
+  F216 [R1 R1#132] bag-72 fold/wall clock = bag-72 4–6 h :: bag-72 4–6 h
+  F995 [T047brief T047brief#73] T007/epoch time = ~30.5 min/epoch :: - In flight: T007 holds the GPU — seqs2_fold0, epoch 5 of 8 at the time of claiming, ~30.5 min/epoch, so free around 17:15Z.
+  why (R2): V220 (R1) bracketed a bag-72 fold at 4–6 h; V1011 measures T007's seqs2 (bag 72) fold at ~30.5 min/epoch × 8 epochs ≈ 4.1 h, inside the bracket, which replaces it
+
+### S19 (R2 group 112)
+  F238 [R1 R1#155] lever 3 second sequence family/local fold cost = 1 local fold 4–6 h :: 1 local fold 4–6 h, then a family
+  F995 [T047brief T047brief#73] T007/epoch time = ~30.5 min/epoch :: - In flight: T007 holds the GPU — seqs2_fold0, epoch 5 of 8 at the time of claiming, ~30.5 min/epoch, so free around 17:15Z.
+  why (R2): V243 (R1): one local second-family fold 4–6 h; V1011: T007's seqs2_fold0 runs ~30.5 min/epoch, ≈ 4.1 h for 8 epochs, a measurement inside that bracket
+
+### S20 (R2 group 169)
+  F27 [R1 R1#30] public LB/teams ≥ 0.935 = 664 teams :: (664 teams ≥ 0.935)
+  F1097 [lane9 lane9#81] LB 09-02/teams >=0.935 = 694 :: 694
+  why (R2): V27 (R1): 664 teams ≥ 0.935 (09-01 reading); V1113 (lane9): 694 on 09-02, +30 in 16 h, a later count of a moving quantity
+
+### S21 (R2 group 169)
+  F3199 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#4] public LB/teams ≥0.935 = 664 :: ≥0.935: 664;
+  F1097 [lane9 lane9#81] LB 09-02/teams >=0.935 = 694 :: 694
+  why (R2): V3235 (lane0): 664 teams ≥ 0.935; V1113: 694 on 09-02, a later count of the same moving quantity (lane9 reads 664 as the 09-01 value)
+
+### S22 (R2 group 238)
+  F2063 [lane10 lane10#320] timm group_matcher tf_efficientnet_b2/tested = only the timm group_matcher for tf_efficientnet_b2 is untested :: only the timm group_matcher for tf_efficientnet_b2 is untested.
+  F2341 [lane10 lane10#589] timm group_matcher tf_efficientnet_b2/verified = now verified too :: the b2 group_matcher is now verified too (MEASURED, §3.5)
+  why (R2): V2080 (lane10 §2.1): the timm group_matcher for tf_efficientnet_b2 is untested; V2360 (lane10 §3.5): it is now verified, MEASURED; a later state replaces the earlier one
+
+### S23 (R3 group 3)
+  F220 [R1 R1#139] lever 1 TTA fix/expected LB gain = +0.000 to +0.003 :: +0.000 to +0.003;
+  F708 [lane13 lane13#11] public score/separates the tied pair = cannot tell them apart :: which cannot tell them apart
+  why (R3): V224 bracketed the TTA fix's LB gain at +0.000 to +0.003; V723: the bug and fixed submissions tie at public 0.926, a measured +0.000 inside the bracket
+
+### S24 (R3 group 8, R3 group 227)
+  F3196 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#1] public LB/teams ≥0.95 = 3 teams :: Counts: ≥0.95: 3 teams;
+  F1093 [lane9 lane9#76] LB teams >=0.95/09-01 3 -> 09-02 4 (+1) = ≥0.95 :: ≥0.95
+  why (R3): V3232: 3 teams at >=0.95 in the 09-01 snapshot; V1109: 4 on 09-02, a later count of a moving quantity
+  why (R3): V3232: 3 teams at >=0.95 in the 09-01 snapshot; V1109: 4 on 09-02, a later count of a moving quantity
+
+### S25 (R3 group 8)
+  F3198 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#3] public LB/teams ≥0.94 = 84 :: ≥0.94: 84;
+  F1095 [lane9 lane9#78] LB teams >=0.94/09-01 84 -> 09-02 88 (+4) = ≥0.94 :: ≥0.94
+  why (R3): V3234: 84 teams at >=0.94 on 09-01; V1111: 88 on 09-02, a later count
+
+### S26 (R3 group 8)
+  F3199 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#4] public LB/teams ≥0.935 = 664 :: ≥0.935: 664;
+  F1098 [lane9 lane9#82] LB 16h/delta teams >=0.935 = +30 :: +30
+  why (R3): V3235: 664 teams at >=0.935 on 09-01; V1114: +30 in the 16 h to 09-02 (694), a later reading
+
+### S27 (R3 group 8)
+  F3187 [lane0-rules-and-leaderboard.md§70 lane0-rules-and-leaderboard.md§70#1] public LB snapshot 2026-09-01/team count = 2,844 teams :: ## Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)
+  F1101 [lane9 lane9#86] LB 16h/delta teams = +45 :: +45
+  why (R3): V3223: 2,844 teams in the 09-01 snapshot; V1117: +45 teams by 09-02, a later reading of the field size
+
+### S28 (R3 group 110)
+  F3187 [lane0-rules-and-leaderboard.md§70 lane0-rules-and-leaderboard.md§70#1] public LB snapshot 2026-09-01/team count = 2,844 teams :: ## Public leaderboard, 2026-09-01T18:44Z snapshot (2,844 teams)
+  F1100 [lane9 lane9#85] LB 09-02/teams = 2,889 :: 2,889
+  why (R3): V3223: 2,844 teams in the 09-01T18:44Z snapshot; V1116: 2,889 teams on 09-02 (+45), a later count of the field
+
+### S29 (R3 group 110)
+  F19 [R1 R1#23] public LB/team count = 2,844 teams :: (2,844 teams)
+  F1100 [lane9 lane9#85] LB 09-02/teams = 2,889 :: 2,889
+  why (R3): V19 (R1): 2,844 teams, the 09-01 snapshot; V1116: 2,889 on 09-02, a later count
+
+### S30 (R3 group 113)
+  F4012 [ROADMAP.md§498 ROADMAP.md§498#1] T4/per fold = ~2.7 h/fold :: faster than the T4's ~2.7 h/fold
+  F217 [R1 R1#132] Kaggle fold/wall clock = Kaggle 4.9 h/fold :: Kaggle 4.9 h/fold
+  why (R3): V4050: ROADMAP's T4 ~2.7 h/fold from T022 (08-24); V221: Kaggle 4.9 h/fold, the later measured rate for the current recipe (lane2: 4.9 vs 2.05 local)
+
+### S31 (R3 group 227)
+  F945 [T047brief T047brief#41] LB 09-01/teams >=0.95 = 3 at ≥0.95 :: Nobody has looked at the ≥0.94 band: 84 teams at ≥0.94, 28 at ≥0.945, 3 at ≥0.95, against our 0.926 at rank 776.
+  F1093 [lane9 lane9#76] LB teams >=0.95/09-01 3 -> 09-02 4 (+1) = ≥0.95 :: ≥0.95
+  why (R3): V961 (brief): 3 teams at >=0.95 as of 09-01; V1109: 4 on 09-02, a later count
+
+## contradicted: 25 unique, 25 to mark
+
+### C1 (R1 check 145)
+conclusion: F2102 [lane10 lane10#358] armc0 BN buffers/vs non-checkpointed spread = inside the spread of the two non-checkpointed ones on both statistics :: The checkpointed member sits inside the spread of the two non-checkpointed ones on both statistics.
+  premise: F2092 [lane10 lane10#348] armc0/median running_var = 5.4617 :: 5.4617
+  premise: F2093 [lane10 lane10#349] armc0/median abs running_mean = 0.2299 :: 0.2299
+  premise: F2096 [lane10 lane10#352] armc1/median running_var = 5.4378 :: 5.4378
+  premise: F2097 [lane10 lane10#353] armc1/median abs running_mean = 0.2356 :: 0.2356
+  premise: F2100 [lane10 lane10#356] armc3/median running_var = 5.3229 :: 5.3229
+  premise: F2101 [lane10 lane10#357] armc3/median abs running_mean = 0.2279 :: 0.2279
+  why (R1): Median running_var: armc0 (checkpointed) 5.4617 is above both non-checkpointed members, armc1 5.4378 and armc3 5.3229, so outside their spread; only |mean| 0.2299 lies inside [0.2279, 0.2356]
+
+### C2 (R1 check 171)
+conclusion: F3202 [lane0-rules-and-leaderboard.md§84 lane0-rules-and-leaderboard.md§84#6] 0.936 plateau/cause = the signature of a shared public notebook :: The 0.936 plateau spanning ranks ~100–500 is the signature of a shared public notebook.
+  premise: F3214 [lane0-rules-and-leaderboard.md§80 lane0-rules-and-leaderboard.md§80#1] 0.936 plateau/ranks = 200–500 :: 200–500
+  premise: F3215 [lane0-rules-and-leaderboard.md§80 lane0-rules-and-leaderboard.md§80#2] ranks 200–500/score = 0.936 :: 0.936
+  why (R1): V3250/V3251 put the 0.936 plateau at ranks 200–500 (the same snapshot has rank 100 at 0.938); the conclusion stretches it to ranks ~100–500
+
+### C3 (R1 check 363)
+conclusion: F2725 [lane12 lane12#18] proposal 2/cost = 32–107 GPU-h :: REJECTED on price — 32–107 GPU-h against a one-fold-then-cooldown rule
+  premise: F2972 [lane12 lane12#225] SimCLR / MoCo/hours at 400/s = 114–228 :: 114–228
+  premise: F2979 [lane12 lane12#232] truncated SSL run/hours at 400/s = 11.4 :: 11.4
+  why (R1): The premises price SSL at 11.4 h (truncated run) and 114–228 h (SimCLR/MoCo) at 400/s; neither gives the 32–107 GPU-h the conclusion states
+
+### C4 (R1 check 382)
+conclusion: F2630 [lane11 lane11#199] resolution 384/units and runtime = 66 → 95 units ⇒ ~126 min :: 384 is 1.44× (66 → 95 units ⇒ ~126 min)
+  premise: F2427 [lane11 lane11#27] deployed config/forward units per study = 66 :: so 12·3 + 10·3 = 66, not 22·3 = 66 by coincidence of the same arithmetic
+  premise: F2457 [lane11 lane11#55] runtime fit T(u)/slope = 1.329 min per forward unit :: MEASURED: T(u) ≈ 25.2 min + 1.329 min per forward unit
+  why (R1): (384/320)² = 1.44 and 66 → 95 units hold, but the fit T(u) = 25.2 + 1.329u gives 151.5 min for 95 units; ~126 is the slope term alone (the lane counts 66 ⇒ 113 with the intercept)
+
+### C5 (R1 check 621)
+conclusion: F2989 [lane12 lane12#238] truncated 11.4 h SSL run/atomic sessions = at least seven atomic sessions with cooldowns between them :: Even the truncated 11.4 h run is at least seven atomic sessions with cooldowns between them
+  premise: F2979 [lane12 lane12#232] truncated SSL run/hours at 400/s = 11.4 :: 11.4
+  premise: F2986 [lane12 lane12#238] local GPU rule/chaining = never chain training jobs back-to-back :: never chain training jobs back-to-back"
+  premise: F2987 [lane12 lane12#238] local fold/atomic duration = 1.75 h (b2) to 3.5 h (DINOv3) :: "A fold is atomic at 1.75 h (b2) to 3.5 h (DINOv3) because train.py has no --resume."
+  premise: F2988 [lane12 lane12#238] train.py/--resume = no --resume :: because train.py has no --resume.
+  premise: F2989 [lane12 lane12#238] truncated 11.4 h SSL run/atomic sessions = at least seven atomic sessions with cooldowns between them :: Even the truncated 11.4 h run is at least seven atomic sessions with cooldowns between them
+  premise: F2990 [lane12 lane12#238] SSL run/resume machinery = no resume machinery to make it atomic-safe :: there is no resume machinery to make it atomic-safe.
+  why (R1): atomic folds run 1.75-3.5 h: 11.4/3.5 = 3.3, so at least 4 sessions; seven (11.4/1.75 = 6.5) holds only at b2's length
+
+### C6 (R1 check 666)
+conclusion: F2238 [lane10 lane10#485] --layer-decay ≈0.82/scale spread across groups = 0.006 to 1.0 :: even there the spread across groups is 0.006 to 1.0
+  premise: F2214 [lane10 lane10#459] --layer-decay 0.80 spectrum/min lr_scale = 5.90e-03 :: 5.90e-03
+  premise: F2210 [lane10 lane10#454] --layer-decay 0.85 spectrum/min lr_scale = 2.38e-02 :: 2.38e-02
+  why (R1): min lr_scale is 5.90e-03 at 0.80 and 2.38e-02 at 0.85 (23 levels); at 0.82, 0.82^23 = 0.010, so the spread is ~0.010 to 1.0, not 0.006 (0.006 is 0.80's)
+
+### C7 (R1 check 721)
+conclusion: F2738 [lane12 lane12#26] unopened series/left after T007 = ~1.4k series :: ~1.4k series left after it, mostly in studies that already have coverage
+  premise: F3044 [lane12 lane12#294] left over after T007/series = 3,037 :: 3,037
+  why (R1): V3076 measures 3,037 series left over after T007; the conclusion says ~1.4k
+
+### C8 (R1 check 732)
+conclusion: F377 [R1 R1#270] optimistic end/recipe = recipe +0.005 :: recipe +0.005
+  premise: F252 [R1 R1#166] lever 5 training recipe/expected LB gain = +0.003 to +0.010 combined :: +0.003 to +0.010 combined;
+  why (R1): lever 5 (training recipe) is +0.003 to +0.010, so its optimistic end is +0.010; the sum uses recipe +0.005
+
+### C9 (R1 check 1190)
+conclusion: F322 [R1 R1#226] 130 mm crop at 160 mm median FOV/trim per side = ~19 % per side :: A 130 mm crop at a 160 mm median FOV trims ~19 % per side of the field
+  premise: F88 [R1 R1#69] our series/FOV range = FOV 130–320 mm :: FOV 130–320 mm (median 160, spread 1.39×)
+  premise: F89 [R1 R1#69] our series/FOV median = median 160 :: FOV 130–320 mm (median 160, spread 1.39×)
+  premise: F90 [R1 R1#69] our series/FOV spread = spread 1.39× :: FOV 130–320 mm (median 160, spread 1.39×)
+  premise: F91 [R1 R1#69] our model/resize = a fixed 320 px :: resized to a fixed 320 px
+  premise: F92 [R1 R1#69] our model/magnification variation = magnification varies 1.39× :: so magnification varies 1.39×
+  premise: F93 [R1 R1#69] our augmentation/scale = ±15 % :: augmentation adds ±15 % on top
+  why (R1): a 130 mm crop of a 160 mm field trims 30 mm: 18.75% in total, 15 mm = ~9.4% per side, not ~19% per side
+
+### C10 (R2 check 471)
+conclusion: F1583 [lane9 lane9#463] Berat Kirbiyik team/vs our score = A team at exactly our score :: ### 6.5 A team at exactly our score, describing exactly our problem
+  premise: F1585 [lane9 lane9#465] Berat Kirbiyik/score = stuck at 0.924 :: > "we're stuck at 0.924 and every architectural lever we've tried has come back
+  premise: F1586 [lane9 lane9#465] Berat Kirbiyik/architectural levers = every architectural lever we've tried has come back :: > "we're stuck at 0.924 and every architectural lever we've tried has come back
+  premise: F1045 [lane9 lane9#29] us/public LB rank 09-02 = Rank 804 :: Rank 804 (was 776), score 0.926, 16 submissions to date.
+  premise: F1046 [lane9 lane9#29] us/public LB rank 09-01 = was 776 :: Rank 804 (was 776), score 0.926, 16 submissions to date.
+  premise: F1047 [lane9 lane9#29] us/public LB score = score 0.926 :: Rank 804 (was 776), score 0.926, 16 submissions to date.
+  premise: F1048 [lane9 lane9#29] us/submissions to date = 16 submissions to date :: Rank 804 (was 776), score 0.926, 16 submissions to date.
+  why (R2): V1602: the team is stuck at 0.924; V1063: our score is 0.926; not "exactly our score"
+
+### C11 (R2 check 682)
+conclusion: F2631 [lane11 lane11#199] resolution 448/cost multiple and runtime = 1.96× (~221 min) :: 448 is 1.96× (~221 min).
+  premise: F2427 [lane11 lane11#27] deployed config/forward units per study = 66 :: so 12·3 + 10·3 = 66, not 22·3 = 66 by coincidence of the same arithmetic
+  premise: F2457 [lane11 lane11#55] runtime fit T(u)/slope = 1.329 min per forward unit :: MEASURED: T(u) ≈ 25.2 min + 1.329 min per forward unit
+  premise: F2627 [lane11 lane11#198] 22 members/training size = size=320 :: Members are trained at size=320 (MEASURED, all 22).
+  why (R2): (448/320)² = 1.96 → 129 units; V2479's fit gives 25.2 + 1.329 × 129.4 = 197 min, not ~221 (1.96 × 113 wrongly scales the fixed 25.2 min)
+
+### C12 (R2 check 747)
+conclusion: F378 [R1 R1#270] optimistic end/diversity arm = a diversity arm +0.005 :: a diversity arm +0.005
+  premise: F266 [R1 R1#179] lever 7 second architecture/expected LB gain = +0.002 to +0.006 as an ensemble arm :: +0.002 to +0.006 as an ensemble arm
+  why (R2): V271 puts the second-architecture diversity arm at +0.002 to +0.006, so its optimistic end is +0.006, not the +0.005 V384 sums
+
+### C13 (R2 check 878)
+conclusion: F1220 [lane9 lane9#196] 7 submissions/expected max gain at sd 0.0028 = +0.0057 :: 7 submissions buys +0.0057 at the nested-config sd of 0.0028
+  premise: F1219 [lane9 lane9#196] expected-max model = E[max of N draws] ≈ sd·√(2·ln N) :: Under the expected-maximum model E[max of N draws] ≈ sd·√(2·ln N) (INFERRED, model stated)
+  premise: F1220 [lane9 lane9#196] 7 submissions/expected max gain at sd 0.0028 = +0.0057 :: 7 submissions buys +0.0057 at the nested-config sd of 0.0028
+  premise: F1221 [lane9 lane9#196] 7 submissions/expected max gain at sd 0.0070 = +0.0143 :: +0.0143 at the structurally-distinct sd of 0.0070
+  premise: F1222 [lane9 lane9#196] nested-config public sd = 0.0028 :: the nested-config sd of 0.0028
+  premise: F1223 [lane9 lane9#196] structurally-distinct public sd = 0.0070 :: the structurally-distinct sd of 0.0070
+  why (R2): 0.0028 × √(2 ln 7) = 0.0028 × 1.973 = 0.0055, not 0.0057; 0.0070 × 1.973 = 0.0138, not 0.0143; the stated pair fits N = 8
+
+### C14 (R2 check 1117)
+conclusion: F2249 [lane10 lane10#488] lane10 spectrum vs STATE NOW check/agreement = the two agree :: That is the same measurement weighted by parameter count rather than by group, and the two agree.
+  premise: F2195 [lane10 lane10#433] timm tf_efficientnet_b2/layer levels = 24 distinct layer levels :: timm assigns 24 distinct layer levels to tf_efficientnet_b2
+  premise: F2196 [lane10 lane10#433] timm tf_efficientnet_b2/parameter groups = 48 parameter groups :: split into 48 parameter groups
+  premise: F2197 [lane10 lane10#433] timm tf_efficientnet_b2 groups/tensor coverage = 299/299 encoder tensors :: covering 299/299 encoder tensors
+  premise: F2198 [lane10 lane10#433] --layer-decay/substitutes for --encoder-lr = does not substitute for --encoder-lr :: Why --layer-decay does not substitute for --encoder-lr.
+  premise: F2242 [lane10 lane10#487] layer-decay degeneracy/registered = Partly already registered :: Partly already registered.
+  premise: F2243 [lane10 lane10#487] STATE NOW CPU check/timm layer levels = 23 layer levels :: timm finds 23 layer levels in tf_efficientnet_b2 → 48 groups
+  premise: F2244 [lane10 lane10#487] STATE NOW CPU check/groups = 48 groups :: timm finds 23 layer levels in tf_efficientnet_b2 → 48 groups
+  premise: F2245 [lane10 lane10#487] STATE NOW CPU check/lr_scale range = lr_scale 1e-5…1.0 :: lr_scale 1e-5…1.0
+  premise: F2246 [lane10 lane10#487] STATE NOW CPU check/param-weighted mean encoder LR = 1.35e-4 :: the param-weighted mean encoder LR is 1.35e-4
+  premise: F2247 [lane10 lane10#487] STATE NOW CPU check/encoder LR vs head = 2.2× below the head :: only 2.2× below the head
+  premise: F2248 [lane10 lane10#487] STATE NOW CPU check/stem = the stem is frozen in effect :: the stem is frozen in effect
+  why (R2): "The two agree", but V2214 has timm giving tf_efficientnet_b2 24 layer levels where the STATE check V2262 has 23; only the 48 groups match
+
+### C15 (R3 check 223)
+conclusion: F2654 [lane11 lane11#214] band above us/slot count relative to ours = ~3.5× our slot count :: that ~3.5× our slot count is what the band above us runs at.
+  premise: F2649 [lane11 lane11#211] Raptor CoAtNet (lane 7)/slots, slices and windows = 5 slots (Sag-FS 18, Sag-noFS 14, Cor-FS 12, Cor-noFS 8, Ax 12) = 64 slices, 42 windows :: Lane 7 records the Raptor CoAtNet at "5 slots (Sag-FS 18, Sag-noFS 14, Cor-FS 12, Cor-noFS 8, Ax 12) = 64 slices, 42 windows".
+  premise: F2574 [lane11 lane11#156] deployed config/--slices = --slices 12 :: So at the deployed --slices 12:
+  why (R3): V2673: 42 windows over 64 slices in 5 slots per study; our --slices 12 (V2597) is per plane, 36 per study, so ~1.2x (64/36 ~1.8x); 3.5 = 42/12 mixes the two
+
+### C16 (R3 check 346)
+conclusion: F1221 [lane9 lane9#196] 7 submissions/expected max gain at sd 0.0070 = +0.0143 :: +0.0143 at the structurally-distinct sd of 0.0070
+  premise: F1219 [lane9 lane9#196] expected-max model = E[max of N draws] ≈ sd·√(2·ln N) :: Under the expected-maximum model E[max of N draws] ≈ sd·√(2·ln N) (INFERRED, model stated)
+  premise: F1220 [lane9 lane9#196] 7 submissions/expected max gain at sd 0.0028 = +0.0057 :: 7 submissions buys +0.0057 at the nested-config sd of 0.0028
+  premise: F1221 [lane9 lane9#196] 7 submissions/expected max gain at sd 0.0070 = +0.0143 :: +0.0143 at the structurally-distinct sd of 0.0070
+  premise: F1222 [lane9 lane9#196] nested-config public sd = 0.0028 :: the nested-config sd of 0.0028
+  premise: F1223 [lane9 lane9#196] structurally-distinct public sd = 0.0070 :: the structurally-distinct sd of 0.0070
+  why (R3): V1235 with N=7: √(2·ln 7)=1.973; 0.0070×1.973=+0.0138 (not +0.0143) and 0.0028×1.973=+0.0055 (not V1236's +0.0057); the stated figures match N≈8
+
+### C17 (R3 check 571)
+conclusion: F2239 [lane10 lane10#485] --layer-decay ≈0.82/scale range = a 170× range :: a 170× range
+  premise: F2214 [lane10 lane10#459] --layer-decay 0.80 spectrum/min lr_scale = 5.90e-03 :: 5.90e-03
+  why (R3): V2233's min lr_scale 5.90e-03 is at --layer-decay 0.80 (1/0.0059 ≈ 170×); at ≈0.82 over the same 23 steps the min is 0.82²³ ≈ 0.0104, a ~96× range, not 170×
+
+### C18 (R3 check 592)
+conclusion: F376 [R1 R1#270] optimistic end/mm crop = mm crop +0.005 :: mm crop +0.005
+  premise: F242 [R1 R1#158] lever 4 mm crop/expected LB gain = +0.003 to +0.008 :: +0.003 to +0.008, free memory/time
+  premise: F243 [R1 R1#158] lever 4 mm crop/memory and time = free memory/time :: +0.003 to +0.008, free memory/time
+  why (R3): V247 gives mm crop +0.003 to +0.008; its optimistic end is +0.008, not the +0.005 that V382 sums as the "optimistic end"
+
+### C19 (R3 check 823)
+conclusion: F3218 [lane3-measurement-and-ensemble.md§90 lane3-measurement-and-ensemble.md§90#1] +0.001 displayed step/in sd = 5–10 sd :: a displayed +0.001 step is 5–10 sd
+  premise: F3216 [lane3-measurement-and-ensemble.md§90 lane3-measurement-and-ensemble.md§90#1] "±0.001 inside subset noise"/verdict = is wrong for the comparisons this project has been making :: "±0.001 is inside plausible subset noise" is wrong for the comparisons this project has been making
+  premise: F3217 [lane3-measurement-and-ensemble.md§90 lane3-measurement-and-ensemble.md§90#1] nested ensembles/public delta sampling sd = 0.0001–0.0003 :: Simulated on 4,349 studies, the sampling sd of a public delta between two nested ensembles (sharing almost all members) is 0.0001–0.0003
+  why (R3): V3253 sd 0.0001–0.0003: 0.001/0.0003 = 3.3 sd and 0.001/0.0001 = 10 sd, so the step is 3.3–10 sd, not 5–10
+
+### C20 (R3 check 950)
+conclusion: F375 [R1 R1#270] optimistic end/second sequence family = second sequence family +0.010 :: second sequence family +0.010
+  premise: F235 [R1 R1#152] lever 3 second sequence family/expected LB gain = +0.005 to +0.015 :: +0.005 to +0.015
+  why (R3): V240 gives the second sequence family +0.005 to +0.015; its optimistic end is +0.015, not the +0.010 that V381 sums as the optimistic end
+
+### C21 (R3 check 970)
+conclusion: F2610 [lane11 lane11#187] slice doubling/runtime = ~175 min :: 66 → 132 units ⇒ ~175 min, comfortably inside 9 h.
+  premise: F2457 [lane11 lane11#55] runtime fit T(u)/slope = 1.329 min per forward unit :: MEASURED: T(u) ≈ 25.2 min + 1.329 min per forward unit
+  premise: F2427 [lane11 lane11#27] deployed config/forward units per study = 66 :: so 12·3 + 10·3 = 66, not 22·3 = 66 by coincidence of the same arithmetic
+  premise: F2521 [lane11 lane11#108] Kaggle notebook/run-time cap = 9 h = 540 min :: The cap is 9 h = 540 min of notebook run time (READ, lane 0: "GPU Notebook <= 9 hours run-time").
+  why (R3): T(u) = 25.2 + 1.329 u (V2479); at 132 units that is 25.2 + 175.4 = 200.6 min, not ~175 min (the intercept is dropped); still inside 540 min
+
+### C22 (R3 check 1019)
+conclusion: F2357 [lane10 lane10#612] --layer-decay 0.6/late encoder LR = leaves the late encoder, which holds most of the parameters, at full LR :: leaves the late encoder, which holds most of the parameters, at full LR.
+  premise: F2242 [lane10 lane10#487] layer-decay degeneracy/registered = Partly already registered :: Partly already registered.
+  premise: F2243 [lane10 lane10#487] STATE NOW CPU check/timm layer levels = 23 layer levels :: timm finds 23 layer levels in tf_efficientnet_b2 → 48 groups
+  premise: F2244 [lane10 lane10#487] STATE NOW CPU check/groups = 48 groups :: timm finds 23 layer levels in tf_efficientnet_b2 → 48 groups
+  premise: F2245 [lane10 lane10#487] STATE NOW CPU check/lr_scale range = lr_scale 1e-5…1.0 :: lr_scale 1e-5…1.0
+  premise: F2246 [lane10 lane10#487] STATE NOW CPU check/param-weighted mean encoder LR = 1.35e-4 :: the param-weighted mean encoder LR is 1.35e-4
+  premise: F2247 [lane10 lane10#487] STATE NOW CPU check/encoder LR vs head = 2.2× below the head :: only 2.2× below the head
+  premise: F2248 [lane10 lane10#487] STATE NOW CPU check/stem = the stem is frozen in effect :: the stem is frozen in effect
+  why (R3): V2265 param-weighted mean encoder LR 1.35e-4 = 0.45 × 3e-4, so at most 45 % of encoder params can sit at full LR; "most of the parameters at full LR" cannot hold (STATE says 31 %)
+
+### C23 (R3 check 1046)
+conclusion: F557 [R2 R2#95] T044 rule 2/fidelity gate = within ±0.010 of 0.9167 :: Fidelity gate before anything is scored: the reload must reproduce gold-58 macro AUC within ±0.010 of 0.9167 on our decode.
+  premise: F558 [R2 R2#96] Raptor/public gold-58 figures = (0.9054 / 0.9128 / 0.9167 / 0.9213) :: Four irreconcilable public figures exist (0.9054 / 0.9128 / 0.9167 / 0.9213)
+  premise: F559 [R2 R2#96] Raptor public gold-58 figures/reconcilable = irreconcilable :: Four irreconcilable public figures exist
+  premise: F560 [R2 R2#96] Raptor gold target/quotable = none may be quoted as the target :: so none may be quoted as the target — hence the band.
+  why (R3): V572: none of the four figures may be quoted as the target, yet the gate centres on 0.9167, one of them, and 0.9167 ± 0.010 = 0.9067–0.9267 excludes V570's 0.9054
+
+### C24 (R3 check 1078)
+conclusion: F256 [R1 R1#170] lever 5 training recipe/bundling = bundle warmup+layer-decay+schedule as one arm :: bundle warmup+layer-decay+schedule as one arm
+  premise: F253 [R1 R1#167] lever 5 training recipe/measurement = two at a time at most :: measure two at a time at most
+  why (R3): V258 says measure two at a time at most; bundling warmup, layer-decay and schedule into one arm changes three at once
+
+### C25 (R3 check 1136)
+conclusion: F3065 [lane12 lane12#324] --seqs 3/increase in distinct series = 12.5% :: for a 12.5% increase in distinct series that carry no new plane and no new sequence family
+  premise: F3044 [lane12 lane12#294] left over after T007/series = 3,037 :: 3,037
+  premise: F3041 [lane12 lane12#289] opened at --seqs 2 (T007)/series = 21,334 :: 21,334
+  why (R3): V3076 3,037 over V3073 21,334 opened is a 14.2 % increase; 12.5 % is 3,037 / 24,371, the share of all series, not the increase
+

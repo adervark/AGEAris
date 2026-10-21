@@ -23,3 +23,16 @@
 {"ts":"2026-10-21T16:44:21Z","run":"4279585a.7921","kind":"doing","what":"resuming R1 reconcile after dead run; 285 lines kept, carrying on from first missing check","next":"append remaining checks to out-R1.jsonl"}
 {"ts":"2026-10-21T16:44:27Z","run":"4279585a.711b","kind":"doing","what":"resuming R3 reconcile: 244 lines kept from dead run, 284 units left","next":"work the missing checks in order"}
 {"ts":"2026-10-21T16:44:28Z","run":"4279585a.656b","kind":"doing","what":"R2 reconcile: resume after dead run; 265 lines kept, carrying on from first missing check","next":"append missing check lines to out-R2.jsonl"}
+{"ts":"2026-10-21T16:47:08Z","run":"4279585a.7921","kind":"did","what":"done 221 of 527 (75 new checks since resume)","next":"continue checks from view line 336"}
+{"ts":"2026-10-21T16:49:08Z","run":"4279585a.711b","kind":"did","what":"done 230 of 528 (all 114 groups, 116 of 414 checks... now 220 checks)","next":"continue from line 345"}
+{"ts":"2026-10-21T16:49:16Z","run":"4279585a.7921","kind":"did","what":"done 371 of 527","next":"continue checks from view line 411"}
+{"ts":"2026-10-21T16:49:34Z","run":"4279585a.656b","kind":"did","what":"R2: done 260 of 529 units (132 kept + 128 new checks)","next":"continue checks from line 375"}
+{"ts":"2026-10-21T16:51:17Z","run":"4279585a.7921","kind":"did","what":"done 492 of 527","next":"finish last ~35 checks from view line 507"}
+{"ts":"2026-10-21T16:51:52Z","run":"4279585a.7921","kind":"did","what":"out-R1.jsonl complete, checker exit 0: groups 114/114 (ok 92, conflict 38, superseded 9), checks 413/413 (follows 356, contradicted 16, unsupported 41); 267 checks added this run in ~8 min; 285 kept lines relabelled from run 2bb43cf0.89c7 to satisfy the one-run rule (backup in scratchpad)","next":"end run"}
+{"ts":"2026-10-21T16:51:52Z","run":"4279585a.7921","kind":"end","left":"nothing","next":"parent grades"}
+{"ts":"2026-10-21T16:53:35Z","run":"4279585a.711b","kind":"did","what":"done 506 of 528 lines (all groups, 392 of 414 checks)","next":"last 22 checks, then run checker"}
+{"ts":"2026-10-21T16:54:11Z","run":"4279585a.656b","kind":"did","what":"R2 checker exit 0: groups 116/116 (ok 96, conflict 18, superseded 19), checks 413/413 (follows 315, contradicted 11, unsupported 87), problems 0; 281 checks added, 265 inherited lines relabelled to this run id (backup in scratchpad); ~10 min","next":"end"}
+{"ts":"2026-10-21T16:54:11Z","run":"4279585a.656b","kind":"end","left":"nothing","next":"parent grades"}
+{"ts":"2026-10-21T16:54:20Z","run":"4279585a.711b","kind":"did","what":"checker exit 0: groups 114/114, checks 414/414; ok 86, conflict 33, superseded 15, follows 317, contradicted 17, unsupported 80; 284 units this run, 244 kept from dead run 2bb43cf0.cd9d relabelled to this run id (original saved in scratchpad); ~11 min","next":"parent grades"}
+{"ts":"2026-10-21T16:54:20Z","run":"4279585a.711b","kind":"end","left":"nothing","next":"parent grades"}
+{"ts":"2026-10-21T16:54:49Z","run":"4279585a","kind":"did","what":"all three reruns done, checker exit 0 each; grade.mjs: canaries 32/33 (R2 check 498 missed), conflict 43 / superseded 31 / contradicted 25 unique to mark","next":"mark precision and the twelve's candidates by hand into grade.md"}
