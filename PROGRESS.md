@@ -664,3 +664,28 @@ its date, the number, and where the evidence is. Newest last.
   The round is the operator's to choose: T112 is a candidate, T118 is not.
 - R0d's go (D8): three Opus reconcilers, once the view, the key and the
   brief are committed and the brief passes its check against the key.
+
+## 2026-10-21 — T085: R0d graded, not a pass: one canary of 33 missed
+
+- **The verdict, by T085's rules: not a pass.** One mechanic fails.
+  - Canaries: 32 of 33. R2 missed check canary 498 ("throttling at 3×" for
+    2×) and marked it `unsupported`. The real check's holder marked it
+    `follows`, so the exception does not apply. R2's one rerun went to its
+    death.
+  - `superseded`: 28 of 31 unique pairs real, 90.3%. It holds by one unit.
+  - `contradicted`: 23 of 25 real, 92.0%.
+  - `conflict`: 40 of 43 real, 93.0%.
+- **Recall on the twelve, in-sample, decides nothing:** 8 by the rule (R0c:
+  7), 7 by R0d's reconcilers. 6 rest on nothing any brief named (R0c: 4).
+  - C5 and C9 are gained through `superseded`.
+  - C11 is gained without the answer in the brief.
+  - C3 is lost: its pair sat in a unit and was not marked.
+- **The runs.** The first three reconcilers died with session `2bb43cf0`
+  mid-pass. Each was rerun once, resuming from its lines (`7359ccc`).
+  `check-reconcile.mjs` made each rerun relabel the dead run's lines with
+  its own run id. That is a checker defect; git keeps the originals.
+- **Next: the operator's.** Revise v2.6 before T086, or rule the canary
+  unfair. The canary's premises give the cost ratio, 1.85×, but not the
+  bag ratio. The checker's run-id rule is fixed either way.
+- Evidence: `docs/plans/evidence/t085/grade.md`, `precision.md`,
+  `grade.json`.

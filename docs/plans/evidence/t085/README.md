@@ -27,3 +27,6 @@ ledger. `scanned.jsonl` is an intermediate file and can be deleted.
 | `key.json` | The twelve corrections. For each: every clause that carries the earlier claim or the correction (from `key-search.mjs`'s hits, read by hand), and what a `why` must state. Then the terms and figures no brief may hold |
 | `brief-check.mjs` | Checks any file against the key. It flags 27 hits in R0c's three briefs and none in R0d's |
 | `grade.mjs` | The mechanical grade by T085's rules, and the units to mark by hand |
+| `rec/out-R1–R3.jsonl` | The reconcilers' outputs. Each first pass died mid-way (`7359ccc` keeps its lines and run ids); each rerun resumed from them |
+| `grade.json`, `precision-units.txt` | `grade.mjs`'s output |
+| `grade.md`, `precision.md` | The grade: the verdict, recall on the twelve, and every precision unit marked by hand |

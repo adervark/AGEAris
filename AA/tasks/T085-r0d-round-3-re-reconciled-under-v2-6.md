@@ -56,8 +56,11 @@ v2.6 is accepted or not on a held-out round (T086).
   - one sentence on what a `why` must state to count as catching it.
 - [x] Write the reconciler's brief under v2.6, and its checker. Its examples
       are not drawn from round 3. Commit both.
-- [ ] Run three fresh reconcilers in parallel, on the operator's go (D8).
-- [ ] Grade as R0c was graded, with the precision marked by hand.
+- [x] Run three fresh reconcilers in parallel, on the operator's go (D8).
+      All three died mid-pass with their session; each was rerun once,
+      resuming.
+- [x] Grade as R0c was graded, with the precision marked by hand:
+      `docs/plans/evidence/t085/grade.md`.
 
 ## Decision rules — fixed in advance
 
@@ -110,23 +113,19 @@ nothing (design §7, §10).*
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: R0d's inputs are
-  built and committed in `docs/plans/evidence/t085/` (README first): the
-  view, the key, the brief, the checker and the grade.
-  - `brief-check.mjs` finds no answer in the brief or the checker. Run on
-    R0c's briefs, it flags 27 hits.
-  - Every check canary was read by hand for fairness before the run. 19
-    were excluded, and no canary touches a key fact.
-- **In flight:** the reruns, each reconciler's one (T085's rule). The
-  first three died with session 2bb43cf0 mid-pass, after all groups and
-  146, 132 and 110 checks; their lines are committed (7359ccc). The reruns
-  resume from them: R1 `4279585a.7921`, R2 `.656b`, R3 `.711b`, opened
-  2026-10-21 ~16:45Z.
-- **On disk:** `docs/plans/evidence/t085/`, outputs in `rec/out-R*.jsonl`
-- **Resume with:** `AA/ckpt.sh live T085`. If a rerun died too, the rule
-  allows no third pass without the operator: report how far each got.
-  When all three pass `check-reconcile.mjs`, run `node grade.mjs`.
-- **Next decision:** none until the grade
+- **Last touched:** 2026-10-21, adervark @default/4279585a: R0d is run
+  and graded, `docs/plans/evidence/t085/grade.md` (precision by unit in
+  `precision.md`). Logged in PROGRESS.md.
+- **Verdict:** not a pass. Canaries 32 of 33: R2 missed check 498, and its
+  one rerun is spent. `superseded` 90.3%, by one unit; `contradicted` 92.0%;
+  `conflict` 93.0%. Recall 8 of 12 by the rule, in-sample.
+- **In flight:** nothing.
+- **On disk:** `docs/plans/evidence/t085/`, all committed.
+- **Next decision, the operator's:** revise v2.6 before T086, or rule
+  canary 498 unfair (its premises give the cost ratio, not the bag ratio).
+  Either way, `check-reconcile.mjs` must accept a dead run's ids before
+  T086.
+- **Resume with:** the operator's ruling, then close T085.
 
 ## Verify
 
