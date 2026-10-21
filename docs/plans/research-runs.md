@@ -45,7 +45,9 @@ R0c replayed round 3 under v2.5:
 - an auditor read every skip;
 - three reconcilers marked 286 groups and 1,220 premise checks.
 
-Recall rose from 2 to 7 of 12, by the grade's rule and by hand. Transcription
+Recall rose from 2 to 7 of 12 by the grade's rule. But R0c's own briefs
+primed three of those catches, with examples drawn from round 3 (item 7).
+The catches no brief prompted are 4 of 12: C1, C3, C4 and C7. Transcription
 no longer loses corrections: every earlier claim that was committed reached
 the ledger. What lost the rest lies downstream, and in the measurement
 itself. Each change below was measured for free on R0c's material where it
@@ -88,7 +90,7 @@ could be.
    - v2.5 made a check canary by replacing a real check's conclusion with a
      twin, so the real check was never shown: 27 of them in R0c, C11's own
      among them. Its reconciler wrote, of the twin, the arithmetic that
-     catches C11.
+     catches C11, which the brief's own example had supplied (item 7).
    - A check canary is now a copy, shown to a different reconciler from the
      one that gets the real check. A check is eligible only when its
      premises hold a number in the conclusion's domain, so that they can
@@ -122,8 +124,9 @@ could be.
      earlier thing; otherwise the earlier reading is superseded.
 6. **The grade's key pins every clause** (the measurement).
    - R0c's key named one correcting clause per correction. All three
-     reconcilers caught C11 on the lane's own applications of the fit,
-     which the key left out.
+     reconcilers paired C11's ~175 min with the lane's own applications of
+     the fit, which the key left out. The brief had supplied their
+     arithmetic, though (item 7).
    - R0d's key pins every clause that carries an earlier claim or its
      correction. They are found by searching the cut for each correction's
      numbers and terms, and committed before any subagent runs.
@@ -131,6 +134,28 @@ could be.
      missing" never does, and that is what R0c's rule credited to C2.
    - *Measured:* nothing to measure before R0d. Its key is committed before
      any reconciler runs.
+
+7. **Briefs carry no answers, and acceptance needs a round the design was
+   not built from** (the measurement).
+   - R0c's briefs took their examples from round 3, the round being graded:
+     - the reconciler brief's example of a failed check is C11's correction,
+       verbatim;
+     - the transcriber brief's worked fact is C12's earlier claim;
+     - that brief and the auditor's both name C10's "no --resume".
+
+     Three of R0c's seven catches were primed.
+   - The design's own incidents are round 3's too (§5.5: C1, C5, C10, C12).
+     Any replay of round 3, R0d included, grades the design on the material
+     it was built from.
+   - Every brief's examples now come from outside the graded round. Before
+     any subagent runs, the parent checks every brief against the key: no
+     correction's figures, quotes or clause ids may appear in it.
+   - A design is accepted only on a round that no incident and no example
+     came from. T118 does not qualify, since it supplies
+     `instrument-unresolved`'s incident.
+   - *Measured:* R0c's briefs, checked against its key, carry three
+     corrections' figures or clauses
+     (`docs/plans/evidence/t082/r0c/grade.md`, the T085 correction).
 
 **What stays.** Exhaustive transcription, the blind auditor, citation closure,
 measurands and re-run searches stay as v2.5 has them. R0c showed them working.
@@ -1115,7 +1140,9 @@ or the T112/T118 replay shows it would have changed a decision:
   document, and one came from a code commit. 13.4 minutes for 232 facts and
   7.3 for 240 pairs (`docs/plans/evidence/t075/grade.md`).
 - **R0c, the same replay under v2.5: done (T082).**
-  - Recall 7 of 12, by the rule and by hand, with 10 within reach.
+  - Recall 7 of 12 by the rule. Three of those catches (C10, C11, C12)
+    were primed by its own briefs; the 4 no brief prompted are C1, C3, C4
+    and C7.
   - Conflicts: 44 of 49 real, or 48 counting the ambiguous.
   - Supersession lost C5 and C9, and a missing ref lost C2. Its canaries
     took 27 real checks out of review
@@ -1273,6 +1300,13 @@ approved a third round, on v2.3, which arrived complete.
 
 **Open:**
 
+- **D9: what R0d is for.** R0d is set before R0c's priming was found. A
+  replay of round 3 is in-sample: the design's incidents and R0c's briefs
+  came from it (item 7). R0d can still check the mechanics (`superseded`
+  and the three-way checks) cheaply. But a pass on round 3 cannot show that
+  v2.6 generalises. The operator chooses: R0d as the acceptance test, R0d as
+  a mechanics check with acceptance on a held-out round, or a held-out
+  round alone.
 - **D8: R0d's go.** Three Opus reconcilers, about 15 minutes each on R0c's
   units, is `agent-fan-out`. R0d runs in its own task (T085), with its rule
   written before the spend.

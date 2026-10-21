@@ -633,3 +633,21 @@ its date, the number, and where the evidence is. Newest last.
   with three fresh reconcilers.
 - The operator ruled C8 out of reach, so 10 of 12 are within reach and
   R0d's bar is 9 of 12 (design §10, D7). R0d's go (D8) is still open.
+
+## 2026-10-21 — R0c re-read (T085): its own briefs primed three catches
+
+- R0c's briefs took their examples from round 3, the round being graded:
+  - the reconciler brief's example of a failed premise check is C11's
+    correction, verbatim (`25.2 + 1.329 × 132 = 200.6 min, not ~175`);
+  - the transcriber brief's worked fact is C12's earlier claim
+    (`lane10#392`). That brief was never committed; it was recovered from
+    session `b8438f28`'s transcript;
+  - that brief and the auditor's both name C10's "no --resume".
+- The catches no brief prompted are **4 of 12: C1, C3, C4 and C7**. The
+  mechanical count stays 7.
+- The design's §5.5 incidents are round 3's too. So a replay of round 3,
+  R0d included, is in-sample. v2.6 now requires that briefs carry no
+  answers, and that acceptance come from a round no incident or example
+  came from. What R0d is for is the operator's (§10, D9).
+- Evidence: the correction in `docs/plans/evidence/t082/r0c/grade.md`, and
+  `brief-transcriber-recovered.md` beside it.

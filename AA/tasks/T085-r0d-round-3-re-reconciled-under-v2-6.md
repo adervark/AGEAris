@@ -86,11 +86,16 @@ twelve corrections, with a key pinned in full before any reconciler runs.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: claimed
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: the view, key and
+  brief were not started. Checking R0c's briefs first found them carrying
+  answers from round 3 (C10, C11, C12). The design's incidents are round
+  3's too, so R0d would be in-sample.
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Steps above
-- **Next decision:** D8, R0d's go, before the fourth Step
+- **On disk:** nothing for R0d yet
+- **Resume with:** the operator's D9 (design §10), which decides what R0d
+  is for. Then the Steps. The brief is checked against the key before any
+  subagent runs (v2.6 item 7).
+- **Next decision:** D9, what R0d is for, then D8, its go
 
 ## Verify
 

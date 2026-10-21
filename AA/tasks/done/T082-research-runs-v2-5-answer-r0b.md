@@ -198,3 +198,14 @@ removing the units it tests.
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-21, adervark @v/2bb43cf0 (T085): **the Result's hand reading
+  overstates R0c.** Its own briefs primed three of its catches, with
+  examples drawn from round 3:
+  - C11's correction is the reconciler brief's example;
+  - C12's earlier claim is the transcriber brief's worked example;
+  - C10's negative claim is named in the transcriber and auditor briefs.
+
+  The catches no brief prompted are 4 of 12: C1, C3, C4 and C7. The
+  mechanical count stays 7. See the correction in
+  `docs/plans/evidence/t082/r0c/grade.md`.

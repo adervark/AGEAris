@@ -151,3 +151,37 @@ is the claim that S1 tests it, which is R2's S1 ("Screen S1, --layer-decay
 "--layer-decay cannot express the hypothesis" were never in one unit. With
 refs taken from the quotes, they share `ref:--layer-decay`
 (`docs/plans/evidence/t084/`). The count is unchanged: C2 is a miss by hand.
+
+## Correction (T085, 2026-10-21): the briefs carried answers
+
+Three of R0c's seven catches were primed by examples in its own briefs. The
+examples were drawn from round 3, the round being graded.
+
+- **C11.** The reconciler brief's example of a premise check that does not
+  follow is `"25.2 + 1.329 × 132 = 200.6 min, not ~175"`
+  (`brief-reconciler.md:91`). That is C11's correction, verbatim. Every
+  reconciler's C11 line repeats it, and so does R2's line on the canary
+  that replaced check 767. C11 does not count by hand.
+- **C12.** The transcriber brief was never committed. Its template is
+  recovered from session `b8438f28`'s transcript
+  (`brief-transcriber-recovered.md`). Its worked example of a fact is
+  `lane10#392`, "unlocks three TTA views (§3.4)", with its premise
+  `lane10#410`: C12's earlier claim, transcribed for the transcriber. R0b
+  never transcribed it.
+- **C10.** The same brief names "has no --resume" as a negative claim to
+  write with a search, and the auditor brief names "no `--resume` flag". C10
+  was caught only by `search-flipped`, on searches the briefs asked for.
+- **C1** is caught by a conflict the briefs did not prompt (R3 group 27).
+  The phrase "never passed" is in the transcriber brief.
+- **C3, C4 and C7:** no figure or term of theirs is in any brief.
+
+So the mechanical count stays 7, since the rule cannot see priming. The
+catches no brief prompted are **4 of 12: C1, C3, C4 and C7**.
+
+The design shares the fault. Its §5.5 incidents are round 3's:
+- C1 for `conflict`;
+- C12 for `untranscribed` and `unreconciled`;
+- C10 for `search-flipped`;
+- C5 for `measurand-disputed`.
+
+A replay of round 3 grades the design on the material it was built from.
