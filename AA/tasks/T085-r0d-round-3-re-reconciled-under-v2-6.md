@@ -1,8 +1,8 @@
 ---
 id: T085
 title: "R0d: round 3 re-reconciled under v2.6, graded on the same twelve"
-status: open
-owner: —
+status: claimed
+owner: adervark @v/2bb43cf0 2026-10-21 — R0d: the view, the key and the brief, free; the reconcilers on the operator's go
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -86,7 +86,7 @@ twelve corrections, with a key pinned in full before any reconciler runs.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, registered
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: claimed
 - **In flight:** nothing
 - **On disk:** nothing
 - **Resume with:** the Steps above

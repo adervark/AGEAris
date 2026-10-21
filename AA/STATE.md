@@ -7,8 +7,8 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** nothing. T084 is done: v2.6 of the research-runs design is
-accepted, to be tested on R0d (T085, registered) against a bar of 9 of 12.
+**In progress:** T085, R0d. v2.6 of the research-runs design is accepted,
+to be tested on R0d against a bar of 9 of 12 (T084).
 R0d's view, key and brief are free to build. Its three reconcilers wait for
 the operator's go (D8). T077 waits on T085.
 
@@ -34,15 +34,17 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-21T12:29Z · 85 tasks: 31 backlog, 0 WIP (0 in progress), 54 delivered`
+`board · 2026-10-21T12:29Z · 85 tasks: 30 backlog, 1 WIP (1 in progress), 54 delivered`
 
-FLOW · **WIP 0/2** · throughput 12.4/wk (53 in 30d) · cycle time 50th 5m / 85th 46m (n=53)
-FLOW · Little's Law: 0 ÷ 12.4/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 12.6/wk (54 in 30d) · cycle time 50th 5m / 85th 46m (n=54)
+FLOW · Little's Law: 1 ÷ 12.6/wk ≈ 13h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 81m |  |
+| **IN PROGRESS** 1/2 | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | now |  |
+| **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | now |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 82m |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 8d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 8d |  |
@@ -97,10 +99,6 @@ FLOW · Little's Law: 0 ÷ 12.4/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 14d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-
-**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
-
-- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T084
 <!-- /AA:generated -->
 
 <!--
