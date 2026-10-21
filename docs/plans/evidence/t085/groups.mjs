@@ -1,0 +1,255 @@
+#!/usr/bin/env node
+// T085 R0d: what the reconcilers see, under v2.6. R0c's groups.mjs
+// (t082/r0c/groups.mjs) with three changes:
+//
+//   - every fact shows its commit and the commit's time (v2.6 item 5), from
+//     `at` (`<clause>@<commit>`), so a reconciler can tell which of two
+//     readings is later;
+//   - a check canary is a copy of an eligible check, shown beside the real
+//     one to a different reconciler (v2.6 item 3). Eligible: the conclusion
+//     holds one number in a unit domain, and some premise holds a number in
+//     the same domain, so the premises bear on the value. Where it can, the
+//     copy goes to a reconciler none of whose units shows the real
+//     conclusion. Copies are numbered among the real checks, so a number
+//     says nothing;
+//   - a group canary's twin is attributed to one of the round's documents
+//     (those with 100 facts or more), never to a cited section, whose facts
+//     read differently; and it twins a fact whose quote says more than its
+//     bare value.
+//
+//   node groups.mjs <ledger.jsonl> <link-report.json> <rsna-repo> <out-dir> <key.json> <n-reconcilers> [exclude.json]
+//
+// <exclude.json> names facts no canary may copy, lend a number from, or
+// show as a premise: R0d's key facts, and the conclusions of checks whose
+// premises, read by the parent before any reconciler ran, cannot refute a
+// changed number.
+//
+// Groups and checks are formed, dealt and twinned as in R0c otherwise: at
+// least 3 or 2% of each reconciler's units are canaries, unmarked. RSNA is
+// read with `git show -s` only, for the commit times.
+
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { join } from 'node:path';
+
+const [ledgerPath, reportPath, repo, outDir, keyPath, nArg, excludePath] = process.argv.slice(2);
+const N = Number(nArg);
+if (!Number.isInteger(N) || N < 2) { console.error('usage: node groups.mjs <ledger> <link-report> <rsna-repo> <out-dir> <key.json> <n-reconcilers, at least 2>'); process.exit(2); }
+const facts = readFileSync(ledgerPath, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l)).filter((o) => o.kind === 'fact');
+const byId = new Map(facts.map((f) => [f.id, f]));
+const report = JSON.parse(readFileSync(reportPath, 'utf8'));
+const docOf = (f) => (f.from && f.from.doc) || '?';
+const commitOf = (f) => String(f.at).slice(String(f.at).lastIndexOf('@') + 1);
+
+const when = new Map();
+for (const c of new Set(facts.map(commitOf))) {
+  when.set(c, execFileSync('git', ['-C', repo, 'show', '-s', '--format=%ci', c], { encoding: 'utf8', env: { ...process.env, GIT_OPTIONAL_LOCKS: '0' } }).trim().slice(0, 16));
+}
+const docCommit = new Map(facts.map((f) => [docOf(f), commitOf(f)]));
+
+// Groups: referent -> members, over cross-document non-premise pairs.
+const byRef = new Map();
+let sameDocPairs = 0;
+for (const p of report.realPairs) {
+  if (p.kind === 'premise') continue;
+  if (p.sameDoc) { sameDocPairs++; continue; }
+  for (const v of p.via) {
+    if (!byRef.has(v)) byRef.set(v, new Set());
+    byRef.get(v).add(p.a).add(p.b);
+  }
+}
+const merged = new Map();
+for (const [ref, set] of byRef) {
+  const ids = [...set].sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)));
+  const k = ids.join(',');
+  if (!merged.has(k)) merged.set(k, { via: [], ids });
+  merged.get(k).via.push(ref);
+}
+const groups = [...merged.values()].sort((a, b) => b.ids.length - a.ids.length);
+
+// Checks: each INFERRED conclusion with all its premises that are facts.
+const checks = facts.filter((f) => (f.premises || []).some((p) => byId.has(p)))
+  .map((f) => ({ conclusion: f.id, premises: f.premises.filter((p) => byId.has(p)) }));
+
+let seed = 8506;
+const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+const pick = (xs) => xs[Math.floor(rnd() * xs.length)];
+const shuffle = (xs) => { const a = xs.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+// Units, dealt largest first to the reconciler with the fewest lines.
+const units = [
+  ...groups.map((g, i) => ({ type: 'group', n: i + 1, lines: g.ids.length, g })),
+  ...checks.map((c, i) => ({ type: 'check', key: i, lines: 1 + c.premises.length, c })),
+].sort((a, b) => b.lines - a.lines);
+const load = Array.from({ length: N }, () => ({ lines: 0, units: [] }));
+for (const u of units) { const r = load.reduce((m, x) => (x.lines < m.lines ? x : m)); r.units.push(u); r.lines += u.lines; }
+const shows = load.map((r) => new Set(r.units.flatMap((u) => (u.type === 'group' ? u.g.ids : [u.c.conclusion, ...u.c.premises]))));
+
+// R0c's number and domain rules, unchanged (t082/r0c/groups.mjs).
+const UNITS = new Set(('min mins minutes h hours s sec ms px % × x GiB GB MB KB mm lines studies teams submissions ' +
+  'members epochs folds slices series views units forwards checkpoints images rows labels days GPU-h').split(' '));
+const isLetter = (c) => c !== undefined && c.toLowerCase() !== c.toUpperCase();
+const isDigit = (c) => c >= '0' && c <= '9';
+function numbers(v) {
+  const out = [];
+  for (let i = 0; i < v.length; i++) {
+    if (!isDigit(v[i])) continue;
+    let j = i, dot = false;
+    while (j < v.length && (isDigit(v[j]) || (v[j] === '.' && !dot && j + 1 < v.length && isDigit(v[j + 1])))) { if (v[j] === '.') dot = true; j++; }
+    const signed = i > 0 && (v[i - 1] === '-' || v[i - 1] === '+' || v[i - 1] === '−');
+    const start = signed ? i - 1 : i;
+    const ident = isLetter(v[i - 1]) || v[i - 1] === '§' || v[i - 1] === '#' || v[i - 1] === '.' || v[j] === '-' || v[j] === "'" || v[j] === '’' || isLetter(v[j]) && !UNITS.has(v[j]);
+    let k = j; while (k < v.length && v[k] === ' ') k++;
+    let word = ''; while (k < v.length && word.length < 8 && !' ,;:)/'.includes(v[k]) && !isDigit(v[k])) word += v[k++];
+    if (word.endsWith('.')) word = word.slice(0, -1);
+    out.push({ start, end: j, text: v.slice(start, j), num: Number(v.slice(i, j)) * (signed && v[i - 1] !== '+' ? -1 : 1), word, ident });
+    i = j;
+  }
+  return out;
+}
+const shape = (t) => { const sign = '+-−'.includes(t[0]) ? t[0] : ''; const [i, d = ''] = t.slice(sign.length).split('.'); return `${sign}:${i.length}:${d.length}`; };
+function slot(f) {
+  if (typeof f.value !== 'string') return null;
+  const ns = numbers(f.value);
+  if (ns.length !== 1) return null;
+  const n = ns[0], unit = f.unit || (UNITS.has(n.word) ? n.word : '');
+  if (n.ident || !unit || !n.num || !String(f.says || '').includes(n.text)) return null;
+  return { ...n, unit, domain: `${unit}|${shape(n.text)}` };
+}
+// T084's eligibility (t084/canary-checks.mjs): some premise holds a number in
+// the conclusion's unit.
+function units_(f) {
+  const out = new Set();
+  for (const n of numbers(`${f.value ?? ''} ${f.says ?? ''}`)) if (!n.ident && UNITS.has(n.word)) out.add(n.word);
+  if (f.unit) out.add(f.unit);
+  return out;
+}
+const eligible = (c) => { const s = slot(byId.get(c.conclusion)); return !!s && c.premises.some((p) => units_(byId.get(p)).has(s.unit)); };
+
+const byDomain = new Map();
+for (const f of facts) { const s = slot(f); if (s) { if (!byDomain.has(s.domain)) byDomain.set(s.domain, []); byDomain.get(s.domain).push(f); } }
+const excluded = new Set(excludePath ? JSON.parse(readFileSync(excludePath, 'utf8')).facts : []);
+const used = new Set(excluded);
+function lenderFor(f, far) {
+  const s = slot(f);
+  if (!s || used.has(f.id)) return null;
+  const ok = (byDomain.get(s.domain) || []).filter((g) => {
+    const t = slot(g).text;
+    return !used.has(g.id) && t !== s.text && !String(f.says || '').includes(t) && !String(f.value).includes(t) &&
+      Math.abs(slot(g).num) < Math.abs(s.num) * 10 && Math.abs(slot(g).num) * 10 > Math.abs(s.num) &&
+      (!far || Math.abs(slot(g).num - s.num) >= Math.abs(s.num) / 5);
+  });
+  return ok.length ? { from: s.text, to: slot(pick(ok)).text } : null;
+}
+const roundDocs = [...new Set(facts.map(docOf))].filter((d) => !d.includes('§') && facts.filter((f) => docOf(f) === d).length >= 100);
+let nextId = Math.max(...facts.map((f) => Number(f.id.slice(1)))) + 1;
+// The number is swapped once in the value and once in the quote, at the
+// token numbers() finds, so a digit inside another number is left alone
+// (R0c's split and join turned a 960 into a 360 beside a 9 that became 3).
+function swapOnce(text, from, to) {
+  const n = numbers(text).find((x) => x.text === from && !x.ident) || numbers(text).find((x) => x.text === from);
+  return n ? text.slice(0, n.start) + to + text.slice(n.end) : text;
+}
+function twin(f, lender, doc) {
+  used.add(f.id);
+  for (const g of byDomain.get(slot(f).domain)) if (slot(g).text === lender.to) used.add(g.id);
+  return { ...f, id: `F${nextId++}`, value: swapOnce(String(f.value), lender.from, lender.to), says: swapOnce(String(f.says || ''), lender.from, lender.to), from: { ...f.from, doc }, at: `canary@${docCommit.get(doc)}`, canaryOf: f.id };
+}
+
+// Each reconciler's canaries: at least 3 or 2% of its units. Check copies
+// are dealt in turn, one per reconciler a round, since few checks are
+// eligible and have a lender; group canaries make up the rest, at least 1.
+const canaries = [];
+const copies = load.map(() => []);
+const holder = new Map(); // real check -> reconciler index
+for (const [k, r] of load.entries()) for (const u of r.units) if (u.type === 'check') holder.set(u.c.conclusion, k);
+const want = load.map((r) => Math.max(3, Math.ceil(r.units.length * 0.02)));
+const checkQuota = load.map((r, k) => {
+  const nGroups = r.units.filter((u) => u.type === 'group').length;
+  return Math.max(0, want[k] - Math.max(1, Math.round(want[k] * (nGroups / r.units.length))));
+});
+function copyCheck(k) {
+  // An eligible check held by another reconciler, preferring one whose
+  // conclusion this reconciler is not shown anywhere.
+  const theirs = load.flatMap((x, j) => (j === k ? [] : x.units.filter((u) => u.type === 'check' && !u.copied && !u.noLender && eligible(u.c) && !u.c.premises.some((p) => excluded.has(p)))));
+  const unseen = theirs.filter((u) => !shows[k].has(u.c.conclusion));
+  for (const pool of [unseen, theirs]) {
+    for (const u of shuffle(pool)) {
+      const f = byId.get(u.c.conclusion);
+      const lender = lenderFor(f, true);
+      if (!lender) { u.noLender = true; continue; } // lenders only ever get fewer
+      const c = twin(f, lender, docOf(f));
+      c.at = f.at;
+      u.copied = true;
+      const copy = { type: 'check', lines: u.lines, c: { conclusion: c.id, premises: u.c.premises }, canary: c.id };
+      copies[k].push(copy);
+      canaries.push({ reconciler: k + 1, type: 'check', real: f.id, realHolder: holder.get(f.id) + 1, twin: c.id, copy });
+      byId.set(c.id, c);
+      return true;
+    }
+  }
+  return false;
+}
+for (let progress = true; progress;) {
+  progress = false;
+  for (const k of load.keys()) if (copies[k].length < checkQuota[k] && copyCheck(k)) progress = true;
+}
+for (const [k, r] of load.entries()) {
+  // A group canary goes only where no excluded fact is, so a twin never
+  // draws the eye to a group that holds a key fact.
+  const pool = r.units.filter((u) => u.type === 'group' && !u.g.ids.some((id) => excluded.has(id)));
+  for (let tries = 0, got = 0; got < want[k] - copies[k].length && tries < 5000; tries++) {
+    const u = pick(pool);
+    if (!u || u.canary) continue;
+    const f = byId.get(pick(u.g.ids));
+    // A bare number says nothing of what it counts, so its twin could pass
+    // for another real reading of something else.
+    if (String(f.says || '').length < String(f.value).length + 12) continue;
+    const lender = lenderFor(f, false);
+    if (!lender) continue;
+    const c = twin(f, lender, pick(roundDocs.filter((d) => d !== docOf(f))));
+    u.g = { ...u.g, ids: [...u.g.ids, c.id] };
+    u.canary = c.id; canaries.push({ reconciler: k + 1, type: 'group', unit: u.n, real: f.id, twin: c.id }); byId.set(c.id, c); got++;
+  }
+}
+for (const [k, r] of load.entries()) r.units.push(...copies[k]);
+
+// Check numbers: real checks and copies in one shuffled sequence.
+const allChecks = load.flatMap((r) => r.units.filter((u) => u.type === 'check'));
+for (let i = allChecks.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [allChecks[i], allChecks[j]] = [allChecks[j], allChecks[i]]; }
+allChecks.forEach((u, i) => { u.n = i + 1; });
+for (const c of canaries) if (c.type === 'check') { c.unit = c.copy.n; c.realUnit = allChecks.find((u) => !u.canary && u.c.conclusion === c.real).n; delete c.copy; }
+
+// View ids: document order, ledger order within a document; a canary sits
+// at a random place among its document's facts.
+const docs = [...new Set(facts.map(docOf))];
+const order = [];
+for (const d of docs) {
+  const own = facts.filter((f) => docOf(f) === d).map((f) => f.id);
+  for (const c of canaries) { const t = byId.get(c.twin); if (docOf(t) === d) own.splice(Math.floor(rnd() * (own.length + 1)), 0, t.id); }
+  order.push(...own);
+}
+const vid = new Map(order.map((id, i) => [id, `V${i + 1}`]));
+const show = (id) => { const f = byId.get(id); const c = commitOf(f); return { id: vid.get(id), doc: docOf(f), commit: `${c} ${when.get(c)}`, key: f.key, value: f.value, unit: f.unit, mark: f.mark, says: f.says }; };
+
+mkdirSync(outDir, { recursive: true });
+const summary = {
+  groups: groups.length, groupLines: groups.reduce((a, g) => a + g.ids.length, 0), checks: checks.length,
+  checkLines: checks.reduce((a, c) => a + 1 + c.premises.length, 0), eligibleChecks: checks.filter(eligible).length,
+  sameDocPairsUnreviewed: sameDocPairs, canaries: canaries.length, reconcilers: [],
+};
+for (const [k, r] of load.entries()) {
+  const rows = r.units.sort((a, b) => (a.type === b.type ? a.n - b.n : a.type === 'group' ? -1 : 1)).map((u) => u.type === 'group'
+    ? { group: u.n, via: u.g.via, facts: u.g.ids.slice().sort((a, b) => Number(vid.get(a).slice(1)) - Number(vid.get(b).slice(1))).map(show) }
+    : { check: u.n, conclusion: show(u.c.conclusion), premises: u.c.premises.map(show) });
+  writeFileSync(join(outDir, `R${k + 1}.jsonl`), rows.map((x) => JSON.stringify(x)).join('\n') + '\n');
+  const mine = canaries.filter((c) => c.reconciler === k + 1);
+  summary.reconcilers.push({
+    file: `R${k + 1}.jsonl`, groups: rows.filter((x) => x.group).length, checks: rows.filter((x) => x.check).length,
+    lines: rows.reduce((a, x) => a + (x.group ? x.facts.length : 1 + x.premises.length), 0),
+    canaries: mine.length, groupCanaries: mine.filter((c) => c.type === 'group').length, checkCanaries: mine.filter((c) => c.type === 'check').length,
+  });
+}
+writeFileSync(join(outDir, 'summary.json'), JSON.stringify(summary, null, 1) + '\n');
+writeFileSync(keyPath, JSON.stringify({ canaries: canaries.map((c) => ({ ...c, realView: vid.get(c.real), twinView: vid.get(c.twin) })), view: Object.fromEntries([...vid].map(([id, v]) => [v, id])) }, null, 1) + '\n');
+console.log(JSON.stringify(summary));

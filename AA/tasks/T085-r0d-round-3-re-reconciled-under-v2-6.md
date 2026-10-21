@@ -42,19 +42,19 @@ v2.6 is accepted or not on a held-out round (T086).
 
 ## Steps
 
-- [ ] Build the view, for free, and commit it:
+- [x] Build the view, for free, and commit it:
   - R0c's ledger, with refs from quotes. A bare file name resolves to its
     repository path when exactly one path matches.
   - Each fact's commit, restored from the cut.
   - Groups and checks regenerated. Canaries sit beside real units, only
     eligible checks are twinned, and a check canary goes to a different
     reconciler from its real check.
-- [ ] Pin the key in full and commit it before any reconciler runs. For each
+- [x] Pin the key in full and commit it before any reconciler runs. For each
       correction:
   - every clause in the cut that carries its earlier claim or its
     correction, found by searching the cut for its numbers and terms;
   - one sentence on what a `why` must state to count as catching it.
-- [ ] Write the reconciler's brief under v2.6, and its checker. Its examples
+- [x] Write the reconciler's brief under v2.6, and its checker. Its examples
       are not drawn from round 3. Commit both.
 - [ ] Run three fresh reconcilers in parallel, on the operator's go (D8).
 - [ ] Grade as R0c was graded, with the precision marked by hand.
@@ -110,14 +110,17 @@ nothing (design §7, §10).*
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: the operator ruled
-  D9 (R0d checks the mechanics; acceptance waits on a held-out round, T086)
-  and D8 (the go, after the prep). The rules above were rewritten to match,
-  before any spend.
-- **In flight:** nothing
-- **On disk:** nothing for R0d yet
-- **Resume with:** the Steps, from the view. The brief is checked against
-  the key before any subagent runs (v2.6 item 7).
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: R0d's inputs are
+  built and committed in `docs/plans/evidence/t085/` (README first): the
+  view, the key, the brief, the checker and the grade.
+  - `brief-check.mjs` finds no answer in the brief or the checker. Run on
+    R0c's briefs, it flags 27 hits.
+  - Every check canary was read by hand for fairness before the run. 19
+    were excluded, and no canary touches a key fact.
+- **In flight:** nothing yet; the three reconcilers are next
+- **On disk:** `docs/plans/evidence/t085/`
+- **Resume with:** open three runs, log `doing`, spawn the reconcilers with
+  `brief-reconciler.md` filled in for each. Then `node grade.mjs`.
 - **Next decision:** none until the grade
 
 ## Verify
