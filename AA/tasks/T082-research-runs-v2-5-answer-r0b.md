@@ -2,7 +2,7 @@
 id: T082
 title: "Research-runs design v2.5: answer R0b's recall of 2 of 12"
 status: claimed
-owner: adervark @v/1cd08a13 2026-10-17 — R0c: the auditor, then merge, link, 3 reconcilers and the grade (reclaimed, rule 3; was adervark @b/b8438f28 2026-10-13 — v2.5: transcription no longer one agent's choice)
+owner: adervark @v/2bb43cf0 2026-10-21 — R0c: the grade, on what the reconcilers left (reclaimed, rule 3; was adervark @v/1cd08a13 2026-10-17 — R0c: the auditor, then merge, link, 3 reconcilers and the grade)
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -123,19 +123,25 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-17, adervark @v/1cd08a13.
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: reclaimed to grade.
 - **Done:** the auditor's rerun caught 81 of 81 canaries and flagged 170
   of 583 real skips `missed` (pass 1: 74 of 81, 19). Merged
   (`r0c/merged/`), linked (`r0c/link/link-counts.json`; the pairs are
   regenerable, not committed), grouped (`r0c/rec/`, key `rec-key.json`),
   searches re-run (`r0c/searchflip.json`).
-- **In flight:** 3 reconcilers, runs `1cd08a13.67a5`, `.e29f`, `.36b6`,
-  writing `r0c/rec/out-R{1,2,3}.jsonl`. A dead one is rerun once on its
-  filled brief (`brief-reconciler.md`), keeping the lines on disk.
-- **Resume with:** grade each reconciler's canaries (`rec-key.json`), then
-  the twelve against `key-lines.md` and T075's `corrections.md`, plus
-  precision, costs, and a sample of the audit's `missed` flags.
-- **Next decision:** none; the operator approved 3 reconcilers, balanced.
+- **In flight:** nothing. Reconciler 3 is done, 11 of 11 canaries.
+  Reconcilers 1 and 2 finished pass 1 at 10 of 11 each
+  (`rec/out-R{1,2}-pass1.jsonl`); their reruns died at the usage limit on
+  2026-10-16 with 38 and 23 lines (`rec/out-R{1,2}.jsonl`), reaped.
+  Resuming them is a spend beyond the rule's one rerun each: the operator's.
+- **Resume with:** the grade (`grade.mjs`), on pass 1 of reconcilers 1
+  and 2 with reconciler 3: the canaries, the twelve against `key-lines.md`
+  and T075's `corrections.md`, precision and costs. Say whether finishing
+  the reruns could change it. The audit's `missed` flags are already
+  sampled (`audit-sample.md`).
+- **Next decision:** the operator's, after the grade: resume the two dead
+  reruns or not, and, below 10 of 12, accept the figure with the misses
+  listed or send v2.5 back for revision.
 - **Known gaps:** the committed cut dropped table cells of ≤2 characters.
   Pairwise linking gave 36,545 pairs on 3,081 facts, so review must be by
   group.
