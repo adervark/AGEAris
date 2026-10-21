@@ -600,8 +600,8 @@ its date, the number, and where the evidence is. Newest last.
 - **A defect the synthesis carried:** its instrument table gives OOF-AUC
   vs Sonnet 4,349 studies; lane 3 measured 3,749 (RESEARCH-0902c:381
   against lane 3:453).
-- The verdict, by T082's rule: below 10 of 12. The operator accepts 7 with
-  the misses listed, or v2.5 goes back for revision. The candidate changes
-  are in the grade.
+- The verdict, by T082's rule: below 10 of 12, so the operator decides.
+  The operator sent v2.5 back for a v2.6 (T084), using the candidate
+  changes listed in the grade.
 - Evidence: `docs/plans/evidence/t082/r0c/` (`grade.md` first). It quotes
   RSNA's research: not pushed before 2026-10-22.

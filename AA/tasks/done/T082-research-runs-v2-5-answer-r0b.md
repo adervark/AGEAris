@@ -1,7 +1,7 @@
 ---
 id: T082
 title: "Research-runs design v2.5: answer R0b's recall of 2 of 12"
-status: claimed
+status: done
 owner: adervark @v/2bb43cf0 2026-10-21 — R0c: the grade, on what the reconcilers left (reclaimed, rule 3; was adervark @v/1cd08a13 2026-10-17 — R0c: the auditor, then merge, link, 3 reconcilers and the grade)
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -57,7 +57,8 @@ be checked against T075's misses before the design is accepted again.
 - [x] R0c: re-grade T075's twelve on a ledger written under v2.5's rules
       (design §7), on the operator's go. **7 of 12**, by the rule and by
       hand (`docs/plans/evidence/t082/r0c/grade.md`).
-- [ ] The operator accepts it, or sends it for review.
+- [x] The operator accepts it, or sends it for review. Sent back for a
+      v2.6 on 2026-10-21 (T084).
 
 ## Decision rules — fixed in advance
 
@@ -123,7 +124,8 @@ be checked against T075's misses before the design is accepted again.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: R0c graded.
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: closed, sent back
+  for a v2.6 (T084).
 - **Done:** the auditor's rerun caught 81 of 81 canaries and flagged 170
   of 583 real skips `missed` (pass 1: 74 of 81, 19). Merged
   (`r0c/merged/`), linked (`r0c/link/link-counts.json`; the pairs are
@@ -153,6 +155,44 @@ be checked against T075's misses before the design is accepted again.
 The re-grade table in `docs/plans/evidence/` covers all twelve.
 
 ## Result
+
+**Recall: 7 of 12**, both by the rule fixed in `grade.mjs` and by hand. That
+is below the bar of 10. On 2026-10-21 the operator sent v2.5 back for a v2.6
+("Revise to v2.6"), which is T084. The grading is in
+`docs/plans/evidence/t082/r0c/grade.md`.
+
+- **Caught, by hand:** C1, C3, C4, C7, C10, C11 and C12.
+  - The rule credits C2 in place of C11. C2's only credit is "a premise is
+    missing".
+  - All three reconcilers found C11, on facts the key left out.
+- **Out of reach:** C6 and C8, never committed as claims.
+- **Missed within reach:**
+  - C5 and C9 are supersession, which v2.5 has no place for;
+  - C2's two sides got no refs.
+- **The measurement's own flaws:** 27 check canaries replaced the real checks
+  they copied, C11's among them. The key pinned one clause per correction.
+- **Precision:**
+  - conflicts: 44 of 49 strictly, 48 with the ambiguous;
+  - `does-not-follow`: 5 of a sample of 20 name a defect in the research.
+- **A defect the synthesis carried:** OOF-AUC vs Sonnet on 4,349 studies,
+  where lane 3 measured 3,749.
+- **Spend:** 13 subagent runs, about 145 minutes:
+  - the registrar (2.7 min);
+  - transcribers G1–G4 and the cited sections (13.4, 14.9, 14.0, 11.8 and
+    16.3 min);
+  - the auditor and its rerun (10.0, 10.9);
+  - reconcilers 1–3 (13.9, 15.1, 16.1);
+  - reconcilers 1 and 2's reruns, which died at the usage limit and were
+    left dead, because they could not change the recall.
+
+  Sessions `b8438f28` (registrar, transcribers), `1cd08a13` (auditor,
+  reconcilers) and `2bb43cf0` (the grade). The trail is retired; git keeps
+  it.
+
+**What it means:** v2.5's exhaustive transcription worked: every earlier
+claim in a commit was written down. What now fails is what may count as a
+correction, and a link the writer left out. The measurement must also stop
+removing the units it tests.
 
 ## Notes
 
