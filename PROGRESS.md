@@ -605,3 +605,23 @@ its date, the number, and where the evidence is. Newest last.
   changes listed in the grade.
 - Evidence: `docs/plans/evidence/t082/r0c/` (`grade.md` first). It quotes
   RSNA's research: not pushed before 2026-10-22.
+
+## 2026-10-21 — T084: v2.6 measured for free on R0c's material
+
+- **Refs from quotes are kept.** A linear scan of each fact's quote adds
+  544 refs to 423 of 4,033 facts: flags, paths and identifiers.
+  - R2's S1 and lane 10's "--layer-decay cannot express the hypothesis" now
+    share a group. That is C2, whose two sides never met in R0c.
+  - The review load grows 17.1% (4,848 to 5,676 fact lines), under the
+    quarter T084 allows.
+- **Supersession is a reconciler mark, not a list.** A mechanical rule
+  raises 2,933 candidates over R0c's 63 measurand groups, C5's and C9's
+  pairs among them. That is far over the 300 allowed.
+- **Fair canaries:** 70 of 1,220 checks have premises that bear on their
+  conclusion's number, enough for three reconcilers. 9 of R0c's 27 check
+  canaries were not eligible, including the one reconciler 2 missed.
+- **Code read at two commits:** `src/tta.py` was cut before and after
+  T039's fix. No fact carries its commit, though §5.2 says `at` does.
+- **A correction to R0c's grade:** C2's key sides did share a group (R1
+  group 23), on a figure lane 10 does not dispute. The count stays 7.
+- Evidence: `docs/plans/evidence/t084/measurements.md`.
