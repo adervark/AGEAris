@@ -651,3 +651,16 @@ its date, the number, and where the evidence is. Newest last.
   came from. What R0d is for is the operator's (§10, D9).
 - Evidence: the correction in `docs/plans/evidence/t082/r0c/grade.md`, and
   `brief-transcriber-recovered.md` beside it.
+
+## 2026-10-21 — T085: R0d checks the mechanics; a held-out round decides
+
+- The operator ruled what R0d is for (research-runs design §10, D9). R0d
+  checks v2.6's mechanics on round 3: `superseded`, the three-way checks,
+  and canaries beside real units. It passes when every canary is caught and
+  `superseded`, `contradicted` and `conflict` lines are each at least 90%
+  real. Its recall on the twelve is reported as in-sample and decides
+  nothing.
+- v2.6 is accepted or not on a held-out round with its own key (H1, T086).
+  The round is the operator's to choose: T112 is a candidate, T118 is not.
+- R0d's go (D8): three Opus reconcilers, once the view, the key and the
+  brief are committed and the brief passes its check against the key.

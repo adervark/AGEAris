@@ -7,10 +7,10 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** T085 (R0d), waiting on the operator. R0c's briefs turned
-out to carry three of round 3's answers. Only 4 of its 12 catches were
-unprompted, and any replay of round 3 is in-sample. The operator decides what
-R0d is for (research-runs design §10, D9), then its go (D8). T077 waits on it.
+**In progress:** T085 (R0d): three fresh reconcilers check v2.6's
+mechanics on round 3, on the operator's go (D8). Round 3 is in-sample, so
+v2.6 is accepted or not on a held-out round, T086, whose round the operator
+chooses (research-runs design §10, D9). T077 waits on T086.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -34,26 +34,26 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-21T12:34Z · 85 tasks: 30 backlog, 1 WIP (1 in progress), 54 delivered`
+`board · 2026-10-21T15:38Z · 86 tasks: 31 backlog, 1 WIP (1 in progress), 54 delivered`
 
 FLOW · **WIP 1/2** · throughput 12.6/wk (54 in 30d) · cycle time 50th 5m / 85th 46m (n=54)
-FLOW · Little's Law: 1 ÷ 12.6/wk ≈ 13h expected · flow efficiency 79% (touch 3m of 4m, n=1 trails) · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 12.6/wk ≈ 13h expected · flow efficiency 2% (touch 3m of 3h, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 4m |  |
-| **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 4m |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 86m |  |
+| **IN PROGRESS** 1/2 | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 3h | ⚠ |
+| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 1 not ready |
+| **DONE** | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 3h |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 4h |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 8d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 8d |  |
-|  | T055 | The orient contract and its scenario corpus | adervark | 9d |  |
+|  | T055 | The orient contract and its scenario corpus | adervark | 10d |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 10d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 11d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 11d |  |
-|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 11d |  |
-|  | T050 | /aa on Windows without WSL | adervark | 11d |  |
+|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 12d |  |
+|  | T050 | /aa on Windows without WSL | adervark | 12d |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 12d |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 12d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 12d |  |
@@ -99,6 +99,8 @@ FLOW · Little's Law: 1 ÷ 12.6/wk ≈ 13h expected · flow efficiency 79% (touc
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 14d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
+- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
+- ⚑ no decision rule registered — not ready to pull if it will spend (rule 5)
 <!-- /AA:generated -->
 
 <!--

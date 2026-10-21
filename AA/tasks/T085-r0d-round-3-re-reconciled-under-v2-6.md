@@ -2,7 +2,7 @@
 id: T085
 title: "R0d: round 3 re-reconciled under v2.6, graded on the same twelve"
 status: claimed
-owner: adervark @v/2bb43cf0 2026-10-21 — R0d: the view, the key and the brief, free; the reconcilers on the operator's go
+owner: adervark @v/2bb43cf0 2026-10-21 — R0d, a check of the mechanics: the view, the key and the brief, free; then the reconcilers (go given)
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -15,10 +15,13 @@ created: 2026-10-21
 
 ## Goal
 
-Test v2.6 of [`docs/plans/research-runs.md`](../../docs/plans/research-runs.md)
-(§7, R0d) on RSNA's round 3. R0c's ledger is put into v2.6's view and
-reconciled by three fresh reconcilers. The result is graded against T075's
-twelve corrections, with a key pinned in full before any reconciler runs.
+Check the mechanics of v2.6 of
+[`docs/plans/research-runs.md`](../../docs/plans/research-runs.md) (§7, R0d)
+on RSNA's round 3: `superseded`, the three-way checks, and canaries beside
+real units. R0c's ledger is put into v2.6's view and reconciled by three
+fresh reconcilers. Recall on T075's twelve corrections is reported, with a
+key pinned in full before any reconciler runs. Round 3 is in-sample, so
+v2.6 is accepted or not on a held-out round (T086).
 
 ## Context
 
@@ -58,44 +61,64 @@ twelve corrections, with a key pinned in full before any reconciler runs.
 
 ## Decision rules — fixed in advance
 
-- **Spend:** `agent-fan-out`, at most 3 Opus reconciler subagents, on the
-  operator's go.
-  - Each may be rerun once, if it misses a canary or dies. A rerun resumes
-    from its lines on disk.
+*Rewritten 2026-10-21, before any spend, after the operator's D9: R0d checks
+v2.6's mechanics. Round 3 is in-sample, so its recall is reported and decides
+nothing (design §7, §10).*
+
+- **Spend:** `agent-fan-out`, at most 3 Opus reconciler subagents. The
+  operator gave the go (D8): once the view, the key, the brief and its
+  checker are committed and the brief passes its check against the key.
+  - Each may be rerun once, if it misses a canary or dies. A rerun after a
+    death resumes from its lines on disk; a rerun after a missed canary is
+    a fresh pass, to a new file.
   - Nothing beyond that without the operator.
 - **What no subagent may read:**
-  - T075's `corrections.md`, the key, or the round 3 synthesis;
+  - T075's `corrections.md`, R0d's key, or the round 3 synthesis;
   - T047's Result;
   - T075's, T082's, T084's or T085's evidence beyond its own view, brief and
     checker;
   - AGE Aris's `docs/plans/`, `AA/tasks/`, `PROGRESS.md` or the reviews.
 - **How RSNA is read:** only with `git show`, `git grep` and `git log`,
   under `GIT_OPTIONAL_LOCKS=0`.
-- **A catch** is one of these, and the parent judges each against the key's
-  sentence:
-  - a `conflict` or `superseded` line on a pair with an earlier fact and a
-    correcting fact, whose `why` states the correction;
-  - a `contradicted` check whose conclusion is an earlier fact, whose `why`
-    states the correction;
-  - `search-flipped` on an earlier fact.
-- **Pass:** at least 9 of 12, with the conflict checks above the 90% floor
-  and every miss tied to a §5.5 gap (design §7, D7).
-- **Below 9:** the misses are listed, and the operator decides.
+- **A canary is caught:**
+  - in a group, by a `conflict` or `superseded` line that names its twin;
+  - in a check, by `contradicted`; or by `unsupported` when the reconciler
+    that holds the real check also marked it `unsupported`.
+- **Precision, by hand:** the parent marks every unique `conflict` pair,
+  `superseded` pair and `contradicted` check real, false or ambiguous. A
+  kind with more than 60 is marked on a seeded sample of 60. Ambiguous
+  counts as not real.
+- **Pass:** all four hold.
+  - Every canary is caught, after at most one rerun per reconciler.
+  - `superseded` is used, and at least 90% of its lines are real.
+  - At least 90% of `contradicted` lines are real.
+  - At least 90% of `conflict` lines are real.
+- **Otherwise:** the failing mechanics are listed, and the operator decides
+  whether v2.6 is revised before the held-out round (T086).
+- **Reported beside the verdict, not graded:** recall on the twelve.
+  - A catch is one of these, and the parent judges each against the key's
+    sentence:
+    - a `conflict` or `superseded` line on a pair with an earlier fact and
+      a correcting fact, whose `why` states the correction;
+    - a `contradicted` check whose conclusion is an earlier fact, whose
+      `why` states the correction;
+    - `search-flipped` on an earlier fact (R0c's, carried over).
+  - Shown beside R0c's 7 by the rule and 4 unprompted, with each miss's
+    §5.5 gap.
 
 ## Handoff — state at last stop
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: the view, key and
-  brief were not started. Checking R0c's briefs first found them carrying
-  answers from round 3 (C10, C11, C12). The design's incidents are round
-  3's too, so R0d would be in-sample.
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: the operator ruled
+  D9 (R0d checks the mechanics; acceptance waits on a held-out round, T086)
+  and D8 (the go, after the prep). The rules above were rewritten to match,
+  before any spend.
 - **In flight:** nothing
 - **On disk:** nothing for R0d yet
-- **Resume with:** the operator's D9 (design §10), which decides what R0d
-  is for. Then the Steps. The brief is checked against the key before any
-  subagent runs (v2.6 item 7).
-- **Next decision:** D9, what R0d is for, then D8, its go
+- **Resume with:** the Steps, from the view. The brief is checked against
+  the key before any subagent runs (v2.6 item 7).
+- **Next decision:** none until the grade
 
 ## Verify
 

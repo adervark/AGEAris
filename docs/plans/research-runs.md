@@ -1,10 +1,10 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.6, accepted to be tested on R0d** (2026-10-21, T084). Nothing
-here is built. v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5
-answered it and reached 7 of 12 on its re-grade, R0c (T082), against a bar
-of 10. v2.6 answers R0c. The operator accepted it, to be tested on R0d (§7),
-which must reach 9 of 12.
+**Status: v2.6, accepted to be tested** (2026-10-21, T084). Nothing here is
+built. v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
+and reached 7 of 12 on its re-grade, R0c (T082), against a bar of 10. v2.6
+answers R0c. R0d (T085) checks its mechanics on round 3. A held-out round
+(T086) decides whether it is accepted (§7; §10, D9).
 
 - v1 (f9ecde8) was written after reading how RSNA, AGEIS and this repository
   do research.
@@ -1173,9 +1173,11 @@ or the T112/T118 replay shows it would have changed a decision:
     gap.
   - **Recorded:** clauses, facts and skips per document; minutes and tokens
     per subagent; skips audited `missed`; measurand disputes; pairs by kind.
-- **R0d, round 3 re-reconciled under v2.6.** v2.6 changes nothing upstream
-  of linking except what can be computed. So R0d keeps R0c's ledger and
-  spends only on reconcilers.
+- **R0d, round 3 re-reconciled under v2.6: a check of the mechanics (§10,
+  D9).** v2.6 changes nothing upstream of linking except what can be
+  computed. So R0d keeps R0c's ledger and spends only on reconcilers. Round
+  3 is in-sample (item 7). So R0d shows whether the new marks work, not
+  whether the design generalises.
   - **Procedure, fixed before any subagent runs, in R0d's own task:**
     - R0c's merged ledger, with refs taken from the quotes
       (`docs/plans/evidence/t084/quote-refs.mjs`) and each fact's commit
@@ -1189,11 +1191,22 @@ or the T112/T118 replay shows it would have changed a decision:
       `unsupported`, which R0d counts;
     - graded as R0c was. A `conflict`, `superseded` or `contradicted` line
       counts as a catch only when its `why` states the correction.
-  - **Reach:** 10 of 12 (C6 and C8 are in no committed sentence).
-  - **Pass:** at least 9 of 12 (§10, D7), with the conflict checks above
-    the 90% floor and every miss tied to a §5.5 gap.
+  - **Pass:** each change works.
+    - Canaries beside real units: every canary is caught, after at most one
+      rerun.
+    - `superseded`: it is used, and at least 90% of its lines are real.
+    - Three-way checks: at least 90% of `contradicted` lines are real.
+    - Commits in the view: at least 90% of `conflict` lines are real.
+  - **Reported, not graded:** recall on the twelve, beside R0c's 7 by the
+    rule and 4 unprompted, with each miss's §5.5 gap. Reach is 10 of 12 (C6
+    and C8 are in no committed sentence).
   - **Recorded:** minutes per reconciler, findings by kind, canaries caught,
     and how many units each reconciler read.
+- **H1, a held-out round (T086).** v2.6 is accepted only on a round that no
+  incident and no brief example came from (item 7). It is replayed under
+  the full procedure, with a key of its own pinned before any subagent
+  runs. The operator chooses the round: RSNA's T112 is a candidate, and
+  T118 is not. Its rule and its spend are written in T086 before it runs.
 - **S0, a simulation of linking.** `lib/fabricate.mjs` builds a repository
   with source files and a short round of lane reports. It plants five
   conflicts: two reachable only through an inference's premises, as lane 10
@@ -1260,9 +1273,10 @@ or the T112/T118 replay shows it would have changed a decision:
 | T072 | **Team-scale research, on a hand-written ledger** (D5), facts and objects included | — | its ledger and track page are written by hand in this format; (o1) and precision are measured |
 | R0b | **Round 3 replayed with facts**, by a fresh agent and a separate reconciler (§7) | — | **Done: T075.** 2 of 12; the design was revised to v2.5 (T082) |
 | R0c | Round 3 replayed under v2.5 (§7) | T082 | **Done: T082.** 7 of 12; the design was revised to v2.6 (T084) |
-| R0d | **Round 3 re-reconciled under v2.6**: R0c's ledger with refs from quotes and commits, three fresh reconcilers, canaries beside real units (§7) | T084 | at least 9 of 12 (D7); or the misses are listed and the operator decides |
+| R0d | **Round 3 re-reconciled under v2.6**, a check of the mechanics: R0c's ledger with refs from quotes and commits, three fresh reconcilers, canaries beside real units (§7) | T084 | each change works (§7, D9); or the failures are listed and the operator decides |
+| H1 | **A held-out round**, replayed under v2.6's full procedure with its own key (§7, D9) | R0d | v2.6 is accepted on T086's rule; or the misses are listed and the operator decides |
 | S0 | **The one-writer simulation** (§7) | — | its pass bar is met; or the keying rules are revised before S1b |
-| S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | R0d | the operator has reviewed the cases |
+| S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | H1 | the operator has reviewed the cases |
 | S1b | **`AA/research.sh` here**: `brief`, `clauses`, `fact`, `skip`, `audit`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the sixteen checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
 | S1c | **In sight**: AGE Aris shows track pages, the round in progress, open conflicts and `decision-waiting` in Needs you; the operator's rulings, `stands` included, as task actions | S1b | e2e passes; the operator resolves a conflict in AGE Aris |
 | S1d | **The template**: `research.sh` and the schema in `aa-init` | S1b, T004, T072's measures | a fresh repository writes an empty track page |
@@ -1298,20 +1312,26 @@ approved a third round, on v2.3, which arrived complete.
   the field" (RESEARCH-0902c:464). So 10 of 12 are within reach, and R0d may
   miss one of them, the slack R0b's and R0c's bars had.
 
-**Open:**
+**Decided 2026-10-21 (T085):**
 
-- **D9: what R0d is for.** R0d is set before R0c's priming was found. A
-  replay of round 3 is in-sample: the design's incidents and R0c's briefs
-  came from it (item 7). R0d can still check the mechanics (`superseded`
-  and the three-way checks) cheaply. But a pass on round 3 cannot show that
-  v2.6 generalises. The operator chooses: R0d as the acceptance test, R0d as
-  a mechanics check with acceptance on a held-out round, or a held-out
-  round alone.
-- **D8: R0d's go.** Three Opus reconcilers, about 15 minutes each on R0c's
-  units, is `agent-fan-out`. R0d runs in its own task (T085), with its rule
-  written before the spend.
+- **D9: R0d checks the mechanics, and a held-out round decides
+  acceptance**, following the recommendation.
+  - A replay of round 3 is in-sample: the design's incidents and R0c's
+    briefs came from it (item 7).
+  - So R0d runs on round 3 with briefs that carry no answers. It checks
+    that `superseded`, the three-way checks and canaries beside real units
+    work.
+  - Its recall is reported as in-sample, beside D7's 9 of 12, and decides
+    nothing.
+  - v2.6 is accepted only on a held-out round with its own key (H1, T086).
+    That round is still to be chosen. T112 is a candidate; T118 is not,
+    since it supplies `instrument-unresolved`'s incident.
+- **D8: R0d's go.** Three Opus reconcilers, about 15 minutes each, once
+  the view, the key, the brief and its checker are committed and the brief
+  has passed its check against the key.
 
-R0d and S0 decide whether v2.6 holds before any code is written.
+R0d, S0 and the held-out round decide whether v2.6 holds before any code is
+written.
 
 ## ADR
 
