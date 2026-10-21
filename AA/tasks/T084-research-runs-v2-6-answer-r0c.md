@@ -61,7 +61,7 @@ material where it can be, before any new replay.
     and how many candidates are there?
   - **canaries:** how many checks have premises that determine their
     conclusion's value?
-- [ ] Write v2.6:
+- [x] Write v2.6 (`docs/plans/research-runs.md`, "Changes since v2.5"):
   - §5.2: refs, commits and ESTIMATED;
   - §5.5: `superseded` and the two premise kinds;
   - the reconciler's brief, and where canaries go;
@@ -89,20 +89,23 @@ material where it can be, before any new replay.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: measured; writing
-  v2.6
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: v2.6 written
 - **Done:** the free measurements (`docs/plans/evidence/t084/`):
   - quote refs are kept: C2's sides meet, and the load grows 17.1%;
   - supersession has 2,933 candidates, over the 300 allowed, so it is a
     reconciler mark only;
   - 70 of 1,220 checks can carry a fair canary;
   - code was cut at two commits, and no fact carries its commit.
-- **In flight:** nothing. v2.6 is not yet written into
-  `docs/plans/research-runs.md`.
-- **Resume with:** the second Step, writing v2.6 from `measurements.md` and
-  T082's `grade.md`.
-- **Next decision:** none until v2.6 is written; then the operator accepts
-  it or sends it for review.
+- **Also done:** v2.6 is written into `docs/plans/research-runs.md`:
+  "Changes since v2.5", §5.2, §5.5, §5.6, §7 (R0c done, R0d planned), §8,
+  §9 and §10.
+- **In flight:** nothing.
+- **Resume with:** the operator's decision. On acceptance, write the Result,
+  close, and register R0d with its spend rule.
+- **Next decision:** the operator's: accept v2.6, or send it for review.
+  Two more decisions in §10: D7, R0d's bar, after ruling on whether C8 is
+  within reach; and D8, R0d's go, which is three Opus reconcilers in a task
+  of their own.
 
 ## Verify
 
