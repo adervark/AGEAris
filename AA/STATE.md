@@ -7,12 +7,10 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** T085 (R0d) is run and graded, and waits on the
-operator. It is not a pass: 32 of 33 canaries were caught (R2 missed check
-498), while `superseded`, `contradicted` and `conflict` are each at least 90%
-real (`docs/plans/evidence/t085/grade.md`). The operator decides whether
-v2.6 is revised before the held-out round, T086, whose round the operator
-also chooses. T077 waits on T086.
+**In progress:** nothing. T085 (R0d) did not pass: 32 of 33 canaries
+(`docs/plans/evidence/t085/grade.md`). The operator let that stand on
+2026-10-22, so v2.6 is revised first (T087), free. Then the held-out round
+(T086), whose round the operator chooses. T077 waits on T086.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -36,22 +34,21 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-21T17:01Z · 86 tasks: 31 backlog, 1 WIP (1 in progress), 54 delivered`
+`board · 2026-10-21T21:59Z · 87 tasks: 32 backlog, 0 WIP (0 in progress), 55 delivered`
 
-FLOW · **WIP 1/2** · throughput 12.6/wk (54 in 30d) · cycle time 50th 5m / 85th 46m (n=54)
-FLOW · Little's Law: 1 ÷ 12.6/wk ≈ 13h expected · flow efficiency 100% (touch 4h of 4h, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 12.6/wk (54 in 30d) · cycle time 50th 5m / 85th 46m (n=54)
+FLOW · Little's Law: 0 ÷ 12.6/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 4h | ⚠ |
-| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 1 not ready |
-| **DONE** | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 4h |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 5h |  |
+| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 1 not ready |
+| **DONE** | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 9h |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 10h |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 8d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 8d |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 10d |  |
-|  | T070 | A run names its process, so a session reads as running or closed | adervark | 10d |  |
+|  | T070 | A run names its process, so a session reads as running or closed | adervark | 11d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 11d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 11d |  |
 |  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 12d |  |
@@ -59,14 +56,14 @@ FLOW · Little's Law: 1 ÷ 12.6/wk ≈ 13h expected · flow efficiency 100% (tou
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 12d |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 12d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 12d |  |
-|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 12d |  |
-|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 12d |  |
-|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 12d |  |
-|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 12d |  |
-|  | T040 | Aris under the logo, centred | adervark | 12d |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 12d |  |
-|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 12d |  |
-|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 12d |  |
+|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 13d |  |
+|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 13d |  |
+|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 13d |  |
+|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 13d |  |
+|  | T040 | Aris under the logo, centred | adervark | 13d |  |
+|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 13d |  |
+|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 13d |  |
+|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 13d |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 13d |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 13d |  |
 |  | T034 | Silver accents, taken from the logo | adervark | 13d |  |
@@ -89,19 +86,18 @@ FLOW · Little's Law: 1 ÷ 12.6/wk ≈ 13h expected · flow efficiency 100% (tou
 |  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 13d |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 13d |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 13d |  |
-|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 13d |  |
-|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 13d |  |
-|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 13d |  |
+|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 14d |  |
+|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 14d |  |
+|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14d |  |
 |  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 14d |  |
 |  | T020 | A cockpit test fails when run in the early hours | adervark | 14d |  |
 |  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 14d |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 14d |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 14d |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 14d |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 14d |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 15d |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 15d |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 15d |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 15d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 - ⚑ no decision rule registered — not ready to pull if it will spend (rule 5)
 <!-- /AA:generated -->
 

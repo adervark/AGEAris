@@ -7,7 +7,7 @@ owner: —
 type: measure
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
 blockedReason: ""
-depends: [T085]
+depends: [T085, T087]
 created: 2026-10-21
 ---
 
@@ -31,7 +31,8 @@ came from (§7, H1; §10, D9).
   linking, three reconcilers. About 13 subagent runs. A key of its own is
   pinned before any subagent runs.
 - R0d (T085) checks v2.6's mechanics first, so a mechanics failure is not
-  bought at this price.
+  bought at this price. R0d did not pass (one canary of 33). The operator
+  let that stand, so v2.6 is revised first (T087).
 
 ## Steps
 

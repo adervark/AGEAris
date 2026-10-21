@@ -1,7 +1,7 @@
 ---
 id: T085
 title: "R0d: round 3 re-reconciled under v2.6, graded on the same twelve"
-status: claimed
+status: done
 owner: adervark @v/2bb43cf0 2026-10-21 — R0d, a check of the mechanics: the view, the key and the brief, free; then the reconcilers (go given)
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
@@ -113,19 +113,9 @@ nothing (design §7, §10).*
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @default/4279585a: R0d is run
-  and graded, `docs/plans/evidence/t085/grade.md` (precision by unit in
-  `precision.md`). Logged in PROGRESS.md.
-- **Verdict:** not a pass. Canaries 32 of 33: R2 missed check 498, and its
-  one rerun is spent. `superseded` 90.3%, by one unit; `contradicted` 92.0%;
-  `conflict` 93.0%. Recall 8 of 12 by the rule, in-sample.
+- **Last touched:** 2026-10-22, adervark @default/4279585a: closed on the
+  operator's ruling; see Result.
 - **In flight:** nothing.
-- **On disk:** `docs/plans/evidence/t085/`, all committed.
-- **Next decision, the operator's:** revise v2.6 before T086, or rule
-  canary 498 unfair (its premises give the cost ratio, not the bag ratio).
-  Either way, `check-reconcile.mjs` must accept a dead run's ids before
-  T086.
-- **Resume with:** the operator's ruling, then close T085.
 
 ## Verify
 
@@ -133,6 +123,42 @@ The grade covers all twelve. Each row gives the unit, the line that caught
 the correction or the furthest step it reached, and its §5.5 gap.
 
 ## Result
+
+**Not a pass (2026-10-21), and the operator let it stand (2026-10-22).**
+The full grade is in `docs/plans/evidence/t085/grade.md`, and every
+precision unit is marked in `precision.md`.
+
+| Rule | Result |
+|---|---|
+| Every canary caught, after at most one rerun | **32 of 33: fails.** R2 missed check 498, and its one rerun went to its death |
+| `superseded` used, at least 90% real | 28 of 31: 90.3%, by one unit |
+| `contradicted` at least 90% real | 23 of 25: 92.0% |
+| `conflict` at least 90% real | 40 of 43: 93.0% |
+
+- **The operator's ruling:** the canary stands. v2.6 is revised before the
+  held-out round (T087, then T086).
+- **Recall on the twelve, in-sample:** 8 by the rule, against R0c's 7.
+  - 7 were caught by R0d's reconcilers.
+  - 6 rest on nothing any brief named (R0c: 4).
+  - Against R0c, C5, C9 and C11 are gained, and C3 is lost.
+- **What v2.6's revision has to answer** (T087):
+  - `check-reconcile.mjs` refuses a resumed output that keeps its dead
+    run's ids;
+  - check canary 498: a planted number whose refutation needs a figure
+    that is in no premise;
+  - `superseded` under a different condition, which made all three
+    ambiguous units;
+  - C3's pair, which sat in a unit and was passed over.
+
+**Spend:** six Opus reconciler runs, within the operator's go (D8) and its
+one rerun each. Three first passes died with session `2bb43cf0`. Three
+reruns (`4279585a.7921`, `.656b`, `.711b`) resumed from their lines,
+`7359ccc`. The trail is retired; git keeps it:
+- `2bb43cf0`: the session; died while the reconcilers ran;
+- `2bb43cf0.89c7`, `.3914`, `.cd9d`: R1–R3, died mid-pass after all groups
+  and 146, 132 and 110 checks;
+- `4279585a`: the session; reaped the dead runs, ran the reruns, graded;
+- `4279585a.7921`, `.656b`, `.711b`: R1–R3 reruns, complete, checker exit 0.
 
 ## Notes
 

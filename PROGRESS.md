@@ -689,3 +689,13 @@ its date, the number, and where the evidence is. Newest last.
   bag ratio. The checker's run-id rule is fixed either way.
 - Evidence: `docs/plans/evidence/t085/grade.md`, `precision.md`,
   `grade.json`.
+
+## 2026-10-22 — T085 closed: the operator let R0d's failure stand
+
+- The missed canary (R2, check 498) stands, so R0d is not a pass. v2.6 is
+  revised before the held-out round. The revision is T087, free.
+  - a rule that only twins checks whose premises hold the refuting figure;
+  - `check-reconcile.mjs` keeps a dead run's ids;
+  - when a different condition counts as a replacement;
+  - C3's passed-over pair.
+- T086 now depends on T087.
