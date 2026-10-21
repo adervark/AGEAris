@@ -7,10 +7,11 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** T084, the research-runs design v2.6. R0c graded v2.5 at 7
-of RSNA round 3's 12 corrections, where R0b had 2, against a bar of 10
-(`docs/plans/evidence/t082/r0c/grade.md`), and the operator sent it back.
-Design only, measured for free on R0c's material. T077 waits on it.
+**In progress:** T084, waiting on the operator. v2.6 of the research-runs
+design is written, measured for free on R0c's material
+(`docs/plans/evidence/t084/measurements.md`). R0c had graded v2.5 at 7 of
+RSNA round 3's 12 corrections. The operator accepts v2.6 or sends it for
+review, then sets R0d's bar and go (§10, D7 and D8). T077 waits on it.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -34,16 +35,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-21T11:07Z · 84 tasks: 30 backlog, 1 WIP (1 in progress), 53 delivered`
+`board · 2026-10-21T11:18Z · 84 tasks: 30 backlog, 1 WIP (1 in progress), 53 delivered`
 
 FLOW · **WIP 1/2** · throughput 12.4/wk (53 in 30d) · cycle time 50th 5m / 85th 46m (n=53)
-FLOW · Little's Law: 1 ÷ 12.4/wk ≈ 13h expected · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 12.4/wk ≈ 13h expected · flow efficiency 94% (touch 9m of 10m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | now |  |
+| **IN PROGRESS** 1/2 | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 10m |  |
 | **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | now |  |
+| **DONE** | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 10m |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 8d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 8d |  |
