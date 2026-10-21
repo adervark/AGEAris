@@ -1,8 +1,8 @@
 ---
 id: T084
 title: "Research-runs design v2.6: answer R0c's 7 of 12"
-status: open
-owner: —
+status: claimed
+owner: adervark @v/2bb43cf0 2026-10-21 — v2.6: free measurements on R0c's material, then the design
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -89,7 +89,7 @@ material where it can be, before any new replay.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, registered
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: claimed
 - **In flight:** nothing
 - **On disk:** nothing
 - **Resume with:** the Steps above

@@ -7,10 +7,10 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** nothing. T082 is done: R0c graded v2.5 of the
-research-runs design at 7 of RSNA round 3's 12 corrections, where R0b had 2,
-against a bar of 10 (`docs/plans/evidence/t082/r0c/grade.md`). The operator
-sent it back for a v2.6, registered as T084, which T077 now waits on.
+**In progress:** T084, the research-runs design v2.6. R0c graded v2.5 at 7
+of RSNA round 3's 12 corrections, where R0b had 2, against a bar of 10
+(`docs/plans/evidence/t082/r0c/grade.md`), and the operator sent it back.
+Design only, measured for free on R0c's material. T077 waits on it.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -34,15 +34,17 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-21T11:07Z · 84 tasks: 31 backlog, 0 WIP (0 in progress), 53 delivered`
+`board · 2026-10-21T11:07Z · 84 tasks: 30 backlog, 1 WIP (1 in progress), 53 delivered`
 
-FLOW · **WIP 0/2** · throughput 12.1/wk (52 in 30d) · cycle time 50th 5m / 85th 45m (n=52)
-FLOW · Little's Law: 0 ÷ 12.1/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 12.4/wk (53 in 30d) · cycle time 50th 5m / 85th 46m (n=53)
+FLOW · Little's Law: 1 ÷ 12.4/wk ≈ 13h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
+| **IN PROGRESS** 1/2 | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | now |  |
+| **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | now |  |
+|  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 8d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 8d |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 9d |  |
@@ -96,10 +98,6 @@ FLOW · Little's Law: 0 ÷ 12.1/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 14d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-
-**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
-
-- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T082
 <!-- /AA:generated -->
 
 <!--
