@@ -1,9 +1,10 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: draft v2.6** (2026-10-21, T084). Nothing here is built. v2.4 was
-accepted, then failed R0b (T075): 2 of 12. v2.5 answered it and reached 7 of
-12 on its re-grade, R0c (T082), against a bar of 10. v2.6 answers R0c, and is
-accepted only on R0d (§7).
+**Status: v2.6, accepted to be tested on R0d** (2026-10-21, T084). Nothing
+here is built. v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5
+answered it and reached 7 of 12 on its re-grade, R0c (T082), against a bar
+of 10. v2.6 answers R0c. The operator accepted it, to be tested on R0d (§7),
+which must reach 9 of 12.
 
 - v1 (f9ecde8) was written after reading how RSNA, AGEIS and this repository
   do research.
@@ -1162,8 +1163,8 @@ or the T112/T118 replay shows it would have changed a decision:
     - graded as R0c was. A `conflict`, `superseded` or `contradicted` line
       counts as a catch only when its `why` states the correction.
   - **Reach:** 10 of 12 (C6 and C8 are in no committed sentence).
-  - **Pass:** the operator's (§10, D7). The conflict checks must also be
-    above the 90% floor, and every miss tied to a §5.5 gap.
+  - **Pass:** at least 9 of 12 (§10, D7), with the conflict checks above
+    the 90% floor and every miss tied to a §5.5 gap.
   - **Recorded:** minutes per reconciler, findings by kind, canaries caught,
     and how many units each reconciler read.
 - **S0, a simulation of linking.** `lib/fabricate.mjs` builds a repository
@@ -1232,7 +1233,7 @@ or the T112/T118 replay shows it would have changed a decision:
 | T072 | **Team-scale research, on a hand-written ledger** (D5), facts and objects included | — | its ledger and track page are written by hand in this format; (o1) and precision are measured |
 | R0b | **Round 3 replayed with facts**, by a fresh agent and a separate reconciler (§7) | — | **Done: T075.** 2 of 12; the design was revised to v2.5 (T082) |
 | R0c | Round 3 replayed under v2.5 (§7) | T082 | **Done: T082.** 7 of 12; the design was revised to v2.6 (T084) |
-| R0d | **Round 3 re-reconciled under v2.6**: R0c's ledger with refs from quotes and commits, three fresh reconcilers, canaries beside real units (§7) | T084 | the operator's bar (§10, D7); or the misses are listed and the operator decides |
+| R0d | **Round 3 re-reconciled under v2.6**: R0c's ledger with refs from quotes and commits, three fresh reconcilers, canaries beside real units (§7) | T084 | at least 9 of 12 (D7); or the misses are listed and the operator decides |
 | S0 | **The one-writer simulation** (§7) | — | its pass bar is met; or the keying rules are revised before S1b |
 | S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | R0d | the operator has reviewed the cases |
 | S1b | **`AA/research.sh` here**: `brief`, `clauses`, `fact`, `skip`, `audit`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the sixteen checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
@@ -1262,16 +1263,19 @@ round of each reviewer when the Critic rejects. The Critic's second round on
 v2.1 died with no report. Its rerun on v2.2 arrived partial. The operator then
 approved a third round, on v2.3, which arrived complete.
 
-**Open, for the operator (T084):**
+**Decided 2026-10-21 (T084), each following the recommendation:**
 
-- **D7: R0d's bar.** R0b and R0c were held to 10 of 12, set when 11 were
-  thought to be within reach. By hand, C8 is out of reach too: its earlier
-  claim is in no committed sentence. **Recommendation:** rule on C8 first,
-  then keep one miss within reach allowed. That is 10 of 12 if C8 counts,
-  and 9 of 12 if it does not.
+- **v2.6 is accepted, to be tested on R0d.** No Critic round comes before it.
+- **D7: R0d's bar is 9 of 12.** C8 is out of reach: its earlier claim is in
+  no committed sentence, and the synthesis calls it R1's framing "applied to
+  the field" (RESEARCH-0902c:464). So 10 of 12 are within reach, and R0d may
+  miss one of them, the slack R0b's and R0c's bars had.
+
+**Open:**
+
 - **D8: R0d's go.** Three Opus reconcilers, about 15 minutes each on R0c's
-  units, is `agent-fan-out`. R0d runs in its own task, with its rule written
-  before the spend.
+  units, is `agent-fan-out`. R0d runs in its own task (T085), with its rule
+  written before the spend.
 
 R0d and S0 decide whether v2.6 holds before any code is written.
 

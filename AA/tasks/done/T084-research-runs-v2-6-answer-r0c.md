@@ -1,7 +1,7 @@
 ---
 id: T084
 title: "Research-runs design v2.6: answer R0c's 7 of 12"
-status: claimed
+status: done
 owner: adervark @v/2bb43cf0 2026-10-21 — v2.6: free measurements on R0c's material, then the design
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -67,8 +67,9 @@ material where it can be, before any new replay.
   - the reconciler's brief, and where canaries go;
   - §7: R0c's result, and the next replay's procedure and key;
   - §8–§10.
-- [ ] The operator accepts it, or sends it for review. A replay under v2.6
-      (R0d) is its own task, with its own spend rule.
+- [x] The operator accepts it, or sends it for review. Accepted on
+      2026-10-21, to be tested on R0d, which is T085 with its own spend
+      rule.
 
 ## Decision rules — fixed in advance
 
@@ -89,7 +90,8 @@ material where it can be, before any new replay.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: v2.6 written
+- **Last touched:** 2026-10-21, adervark @v/2bb43cf0: closed, accepted to
+  be tested on R0d (T085)
 - **Done:** the free measurements (`docs/plans/evidence/t084/`):
   - quote refs are kept: C2's sides meet, and the load grows 17.1%;
   - supersession has 2,933 candidates, over the 300 allowed, so it is a
@@ -100,12 +102,8 @@ material where it can be, before any new replay.
   "Changes since v2.5", §5.2, §5.5, §5.6, §7 (R0c done, R0d planned), §8,
   §9 and §10.
 - **In flight:** nothing.
-- **Resume with:** the operator's decision. On acceptance, write the Result,
-  close, and register R0d with its spend rule.
-- **Next decision:** the operator's: accept v2.6, or send it for review.
-  Two more decisions in §10: D7, R0d's bar, after ruling on whether C8 is
-  within reach; and D8, R0d's go, which is three Opus reconcilers in a task
-  of their own.
+- **Resume with:** nothing; R0d continues in T085.
+- **Next decision:** none here. D8, R0d's go, is T085's.
 
 ## Verify
 
@@ -114,6 +112,33 @@ each flaw in its measurement (canaries, key). Each change comes with the
 free measurement that checks it, or says there is none.
 
 ## Result
+
+**Accepted on 2026-10-21, to be tested on R0d (T085).** v2.6 is in
+`docs/plans/research-runs.md` ("Changes since v2.5"). It was measured for
+free on R0c's material first (`docs/plans/evidence/t084/measurements.md`).
+
+The operator's rulings:
+- no Critic round before R0d;
+- C8 is out of reach, so R0d's bar is 9 of 12 (D7);
+- R0d's go (D8) is still open.
+
+What v2.6 changes, and what was measured:
+- **Refs from quotes** are kept. C2's two sides meet, and the review load
+  grows 17.1%, under the quarter allowed.
+- **Supersession** is a reconciler mark. A mechanical rule raised 2,933
+  candidates, over the 300 allowed, though C5's and C9's pairs were among
+  them.
+- **Canaries** sit beside real units, and only eligible checks are twinned:
+  70 of 1,220.
+- **Premise checks** are `follows`, `contradicted` or `unsupported`, and
+  ESTIMATED marks a judgement with no derivation.
+- **Facts carry their commit** into the reconciler's view.
+- **The grade's key** pins every clause, and a catch must state the
+  correction.
+
+R0c's grade got a correction on C2's unit; its count stays 7.
+
+**Spend:** none. One session (`2bb43cf0`), no subagents.
 
 ## Notes
 

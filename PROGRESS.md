@@ -625,3 +625,11 @@ its date, the number, and where the evidence is. Newest last.
 - **A correction to R0c's grade:** C2's key sides did share a group (R1
   group 23), on a figure lane 10 does not dispute. The count stays 7.
 - Evidence: `docs/plans/evidence/t084/measurements.md`.
+
+## 2026-10-21 — T084: v2.6 accepted, to be tested on R0d
+
+- The operator accepted v2.6 of the research-runs design with no Critic
+  round, to be tested on R0d (T085). R0d is R0c's ledger in v2.6's view,
+  with three fresh reconcilers.
+- The operator ruled C8 out of reach, so 10 of 12 are within reach and
+  R0d's bar is 9 of 12 (design §10, D7). R0d's go (D8) is still open.
