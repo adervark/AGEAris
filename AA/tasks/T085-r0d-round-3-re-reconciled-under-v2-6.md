@@ -117,10 +117,15 @@ nothing (design §7, §10).*
     R0c's briefs, it flags 27 hits.
   - Every check canary was read by hand for fairness before the run. 19
     were excluded, and no canary touches a key fact.
-- **In flight:** nothing yet; the three reconcilers are next
-- **On disk:** `docs/plans/evidence/t085/`
-- **Resume with:** open three runs, log `doing`, spawn the reconcilers with
-  `brief-reconciler.md` filled in for each. Then `node grade.mjs`.
+- **In flight:** the reruns, each reconciler's one (T085's rule). The
+  first three died with session 2bb43cf0 mid-pass, after all groups and
+  146, 132 and 110 checks; their lines are committed (7359ccc). The reruns
+  resume from them: R1 `4279585a.7921`, R2 `.656b`, R3 `.711b`, opened
+  2026-10-21 ~16:45Z.
+- **On disk:** `docs/plans/evidence/t085/`, outputs in `rec/out-R*.jsonl`
+- **Resume with:** `AA/ckpt.sh live T085`. If a rerun died too, the rule
+  allows no third pass without the operator: report how far each got.
+  When all three pass `check-reconcile.mjs`, run `node grade.mjs`.
 - **Next decision:** none until the grade
 
 ## Verify
