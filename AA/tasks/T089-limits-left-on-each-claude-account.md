@@ -1,8 +1,8 @@
 ---
 id: T089
 title: "The limits left on each Claude account"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/4279585a 2026-10-22 — limits per Claude account: lib, API, Agents page, /aa limits
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -73,7 +73,7 @@ account with the most left.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, registered
+- **Last touched:** 2026-10-22, claimed; building `lib/limits.mjs` first
 - **In flight:** nothing
 - **On disk:** nothing uncommitted
 

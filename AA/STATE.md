@@ -33,15 +33,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T10:35Z · 89 tasks: 32 backlog, 1 WIP (1 in progress), 56 delivered`
+`board · 2026-10-22T10:35Z · 89 tasks: 31 backlog, 2 WIP (2 in progress), 56 delivered`
 
-FLOW · **WIP 1/2** · throughput 13.1/wk (56 in 30d) · cycle time 50th 5m / 85th 81m (n=56)
-FLOW · Little's Law: 1 ÷ 13.1/wk ≈ 12h expected · flow efficiency 77% (touch 4h of 6h, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 2/2** · throughput 13.1/wk (56 in 30d) · cycle time 50th 5m / 85th 81m (n=56)
+FLOW · Little's Law: 2 ÷ 13.1/wk ≈ 25h expected · flow efficiency 77% (touch 4h of 6h, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 6h | ⚠ |
-| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
+| **IN PROGRESS** 2/2 | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 6h | ⚠ |
+|  | T089 | The limits left on each Claude account | adervark | now |  |
+| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 6h |  |
 |  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 12h |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 22h |  |
