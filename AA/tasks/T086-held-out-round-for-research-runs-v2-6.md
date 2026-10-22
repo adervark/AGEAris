@@ -1,8 +1,8 @@
 ---
 id: T086
 title: "H1: research-runs v2.6 replayed on a round it was not built from"
-status: open
-owner: —
+status: claimed
+owner: adervark @default/4279585a 2026-10-22 — H1 on RSNA T112: the free work first (cut, key, reach gate, briefs), then the go
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -41,7 +41,7 @@ came from (§7, H1; §10, D9).
 - [x] The operator chooses the round: **RSNA T112**, "The 4090's first day"
       (2026-10-22).
 - [x] Write the decision rules here: the round, its key, the bar, the spend.
-- [ ] The operator approves these rules. Then claim.
+- [x] The operator approves these rules (2026-10-22). Then claim.
 - [ ] **Free, before any subagent runs:**
   - cut the record;
   - pin the key in full and commit it;
@@ -52,8 +52,8 @@ came from (§7, H1; §10, D9).
 
 ## Decision rules — fixed in advance
 
-*Drafted 2026-10-22, before any spend, after the operator chose T112. They
-bind once the operator approves them.*
+*Drafted 2026-10-22, before any spend, after the operator chose T112, and
+approved by the operator as drafted the same day.*
 
 - **The round:** RSNA's T112, its committed record from `3ed78d4`
   (2026-09-18) to `fc0d19e` (2026-09-21). That is the task file at every
