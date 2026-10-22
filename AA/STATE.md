@@ -7,9 +7,9 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** T089, each Claude account's limits on the Agents page,
-`GET /api/limits` and `/aa limits`: built and committed, closing after a
-live check. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
+**In progress:** nothing. T089 is done: each Claude account's limits are
+on the Agents page, `GET /api/limits` and `/aa limits`; check them before a
+fan-out. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
 stands after H1's 4 of 13, its blind spot in §5.5, and v2.8 registered
 (T090). T077 (S1a) can start.
 
@@ -35,14 +35,13 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T18:03Z · 90 tasks: 32 backlog, 1 WIP (1 in progress), 57 delivered`
+`board · 2026-10-22T18:03Z · 90 tasks: 32 backlog, 0 WIP (0 in progress), 58 delivered`
 
-FLOW · **WIP 1/2** · throughput 13.3/wk (57 in 30d) · cycle time 50th 6m / 85th 1h (n=57)
-FLOW · Little's Law: 1 ÷ 13.3/wk ≈ 12h expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 13.3/wk (57 in 30d) · cycle time 50th 6m / 85th 1h (n=57)
+FLOW · Little's Law: 0 ÷ 13.3/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T089 | The limits left on each Claude account | adervark | 7h | ⚠ |
 | **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | now |  |
 |  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 13h |  |
@@ -103,7 +102,6 @@ FLOW · Little's Law: 1 ÷ 13.3/wk ≈ 12h expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 15d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 <!-- /AA:generated -->
 
 <!--

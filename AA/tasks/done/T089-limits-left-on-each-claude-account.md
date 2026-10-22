@@ -1,7 +1,7 @@
 ---
 id: T089
 title: "The limits left on each Claude account"
-status: claimed
+status: done
 owner: adervark @k/4279585a 2026-10-22 — limits per Claude account: lib, API, Agents page, /aa limits
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
@@ -87,6 +87,8 @@ account with the most left.
   - Screenshots, wide and phone, no console errors and no sideways scroll.
 - **Not verified:** that the numbers agree with `/usage` inside each
   profile (Verify, below). They come from the same endpoint.
+- **Closed** 2026-10-22 18:03Z: `/aa limits` read `default`, `b` and `k`
+  live, with `b` the most left; `v` expired.
 - **In flight:** nothing
 - **On disk:** nothing uncommitted
 
@@ -96,6 +98,26 @@ account with the most left.
 numbers, and those agree with Claude Code's `/usage` in each profile.
 
 ## Result
+
+**Done (2026-10-22), `3c08f3a`.** Every account on this machine shows its
+session and weekly use and their resets, on the Agents page's Account
+limits tab, from `GET /api/limits`, and from `/aa limits`, with the one
+that has the most left named.
+
+- `lib/limits.mjs` reads the accounts one after another; read together,
+  connections to api.anthropic.com timed out in Node's dual-stack race.
+- An expired token is never refreshed; the row says so and keeps its last
+  good reading. Nothing under `~/.claude*` is written, and no token or
+  email reaches a reading (tested).
+- Readings are held 5 minutes per account, a forced read once a minute.
+  The endpoint answers 429 to a few quick reads in a row, which is why.
+- 8 new tests on temporary home folders with a stubbed fetch; `npm test`
+  550 of 550, `npm run check` clean. Screenshots, wide and phone: no
+  console errors, no sideways scroll.
+- **Not verified:** agreement with `/usage` inside each profile. The
+  numbers come from the endpoint `/usage` reads.
+
+**Spend:** none.
 
 ## Notes
 

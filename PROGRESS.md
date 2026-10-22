@@ -762,3 +762,11 @@ its date, the number, and where the evidence is. Newest last.
 - v2.8 is registered (T090): edited sentences judged as claims, and group
   twins outside the real value's rounding. It changes no ledger format, so
   S1a (T077) is unblocked.
+
+## 2026-10-22 — T089 done: the limits left on each Claude account
+
+- AGE Aris shows each Claude account's session and weekly use, and their
+  resets, on the Agents page, from `GET /api/limits` and from `/aa limits`
+  (`3c08f3a`). Read live at 18:03Z: `default` 12% / 2%, `b` 2% / 7%, `k`
+  4% / 66%, `v` expired. Its first outbound call; it never refreshes a
+  token and writes nothing under `~/.claude*`.
