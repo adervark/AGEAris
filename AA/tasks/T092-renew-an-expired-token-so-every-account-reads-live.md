@@ -1,8 +1,8 @@
 ---
 id: T092
 title: "Renew an expired token, so every account reads live"
-status: backlog
-owner: ""
+status: in_progress
+owner: adervark @default/1f16c0d5 2026-10-22 — renew a lapsed token and write it back
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
