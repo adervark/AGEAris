@@ -1,0 +1,231 @@
+
+## K1: 12 clauses (not legal | illegal | 32 x 10.5 | 32 × 10.5 | decode size | only res)
+T112#55 @59efe32: A correction this task had to make about its own claim. "336 is illegal" is true of res — the size the model sees — and false of img, the decode size.
+T112#57 @59efe32: Their own dominant arm, maxspan-v5, decodes at img 336 — 32 × 10.5 — and is perfectly legal because only res reaches the backbone.
+build_t112_kernel.py#70 @1661b58: {replace} sits in (img {want_img}, k_eval {want_k}).nimg is the DECODE size and is shared across a group;
+build_t112_kernel.py#117 @1661b58: The 32-pixel grid constrains res -- the size the MODEL sees -- and NOT img, the decode size.
+build_t112_kernel.py#118 @1661b58: Their own dominant arm decodes at img 336, which is 32 x 10.5: legal there precisely because eval_windows resizes each window to res before the forward.
+build_t112_kernel.py#121 @1661b58: coatnet_rmlp_ partitions attention on a {STRIDE}-pixel grid, and res is the size the MODEL sees (ck['res'], applied per arm in eval_windows). 336 -- the corpus's native size -- is 32 x 10.5 and is NOT a legal res, which is why the published
+build_t112_kernel.py@3ed78d4#2 @3ed78d4: coatnet_rmlp_ partitions attention on a {STRIDE}-pixel grid. 336 -- the corpus's native size -- is 32 x 10.5 and is NOT legal, which is why the published pipeline upsamples to 384.
+dry_run.py#28 @416447b: img is THEIRS (the decode size, part of the recipe-group key);
+_order.py#49 @1661b58: So a new img is a whole extra pass over the test set -- against 429-434 min measured and a 495-min cap -- and the multiple-of-32 rule belongs to res, not img (their own dominant arm decodes at img 336, which is 32 x 10.5).
+coat.py#39 @1661b58: So img is the DECODE size -- a new value is a whole extra pass over the test set, against T105's measured 429-434 min and a registered 495-min cap -- while res is the only thing the model actually sees.
+coat.py#40 @1661b58: Two mistakes followed from conflating them, and both are pinned below: img defaulting to our resolution (a fourth decode group), and the multiple-of-32 rule guarding img instead of res (which refused to render a maxspan-v5 swap at all, with
+paired_vs_member.py#9 @f700f85: For v5_full_swa the 336 corpus IS its decode size, so its chain is faithful.
+
+## K2: 9 clauses (0.9128 | 0.9054 | silently dropped)
+T112#142 @59efe32: The published arm reads 0.9054–0.9213 on gold-58 — four irreconcilable public figures for that checkpoint, with T044's rule that "no single one may be quoted as the target";
+T112#143 @59efe32: the range T107/T111 carried, 0.9128–0.9213, silently dropped the lowest.
+T112#177 @59efe32: the member it replaces reads 0.9054–0.9213 on the same 58 studies.
+T112#229 @59efe32: The gap it can close is the one gold-58 already shows — ours 0.8854 against the published member's 0.9054–0.9213 — so that the first submission after the reset carries an arm worth submitting at any weight.
+T112#276 @59efe32: Not a blocker: the published native384-v8 carries the same class of mismatch in the other direction and still reads 0.9054–0.9213.
+T112@416447b#2 @416447b: The published arm reads 0.9128–0.9213;
+T112@416447b#6 @416447b: Not a blocker: the published native384-v8 carries the same class of mismatch in the other direction and still reads 0.9128–0.9213.
+PROGRESS#48 @029cbb8: And that our arm trails the member it replaces on gold-58: 0.8854 vs 0.9054–0.9213. Swapping it in is not yet a bet worth a submission at any weight;
+trail#11 @fc0d19e: 2026-09-18T02:13:38Z blocked next: 4090: close the gold-58 gap (0.8854 vs the member's 0.9054-0.9213) before the reset;
+
+## K3: 8 clauses (full fidelity | condition b | resample chain)
+T112#140 @59efe32: BROKEN → do not submit, debug. gold-58 < 0.85 at full fidelity — defined here, on review, as measured under the KERNEL's resample chain and window count (condition B of scripts/t112/resample_delta.py: 336 → 384 → 224, k_eval 42), not the tr
+T112#141 @59efe32: "Full fidelity" was undefined when this was written, and the difference between the two chains is exactly what D4 measures.
+T112#226 @59efe32: What still works, all verified: the load path (bit-identical), the dataset (uploaded, ready), the kernel (rendered, private, internet off, dataset attached), the resample chain (B − A = 0.0000).
+T112#287 @59efe32: Window count −0.0025, resample chain +0.0025, total B − A = −0.0000, against the registered ±0.036.
+T112#289 @59efe32: Under the kernel's chain — the "full fidelity" this task now defines — the arm reads 0.8854 and clears the BROKEN floor. Condition B still approximates the kernel (it upsamples the 336 corpus rather than decoding the DICOM at 384);
+T112@416447b#1 @416447b: BROKEN → do not submit, debug. gold-58 < 0.85 at full fidelity.
+resample_delta.py#5 @ac3a38c: A 336 -> 224, k 24 what the trainer measured (0.8848 on GPU/bf16) C 336 -> 224, k 42 the kernel's window count, the trainer's resample B 336 -> 384 -> 224, k 42 the kernel's window count AND its resample chain
+resample_delta.py#6 @ac3a38c: So C - A isolates the window count and B - C the resample chain.
+
+## K4: 3 clauses (realistic | best case | stretch)
+T112#197 @59efe32: The one lever with real headroom left is exactly this task's: a better CoAtNet arm than theirs, because our teacher is ours and it is good. ~~A realistic good day is~~ (struck on review: "realistic" was the word the four rows directly above
+T112#198 @59efe32: 0.950 is the stretch, not the plan.
+T112@416447b#5 @416447b: The one lever with real headroom left is exactly this task's: a better CoAtNet arm than theirs, because our teacher is ours and it is good. A realistic good day is clearing 0.948 and resolving ADOPT — which would be the first time our own m
+
+## K5: 13 clauses (9/9 | 13/13 | seven stages | all seven | expected_stages | crashed | traceback)
+T112#215 @59efe32: - [x] Run the whole chain end to end — make dryrun, 9/9 stages on the real corpus and the real notebook, CPU-only so it cannot claim a CUDA context
+T112#259 @59efe32: BLOCKER — make dryrun did not pass, and "9/9" was read off a crashed run. My own two previous fixes broke it: train_norm made stage 4's key assertion false, and the decode-group guard refused the img=224 the script still passed.
+T112#260 @59efe32: It printed nine PASS lines and then a traceback.
+T112#261 @59efe32: A report that passes for the wrong reason is the same defect as a check that does, one level up. Fixed, and the stage count is now gated like the smoke suite: EXPECTED_STAGES is asserted, a crash is recorded as a failed stage, and the gate 
+T112#262 @59efe32: 13/13 now.
+T112#318 @59efe32: it must report 13/13 stages.
+T112#364 @59efe32: All seven findings are addressed in 416447b–029cbb8, but the re-review never ran because the reviewer hit its weekly limit.
+dry_run.py#5 @416447b: Review on 2026-09-18 caught this script printing nine PASS lines and then dying on a traceback, while the summary being quoted upstream was "passes 9/9" -- which is exactly what you get by reading the PASS lines of a crashed run.
+dry_run.py#7 @416447b: So EXPECTED_STAGES is asserted, main() catches its own crash and records it as a FAILED stage, and the docstring's count is checked against the code rather than believed.
+dry_run.py@3ed78d4#1 @3ed78d4: Seven stages stand between a trained checkpoint and a scored leaderboard submission.
+dry_run.py@3ed78d4#3 @3ed78d4: This runs all seven, on the REAL corpus and the REAL notebook, with a tiny backbone on CPU so it costs seconds rather than hours -- and prints PASS or FAIL per stage.
+PROGRESS#11 @029cbb8: scripts/t112/dry_run.py (make dryrun — the whole chain on the real corpus and the real notebook, CPU-only, 9/9 stages);
+trail#15 @fc0d19e: 2026-09-18T03:40:44Z end next: 4090: fetch the four Kaggle inputs, reproduce 0.8854/0.9131/-0.0277 and dry_run 13/13, then R1 -> R2 per the T112 handoff
+
+## K6: 5 clauses (two sequential | read-then-act | zero cycles | two cycles | lane is closed | lane closed | submission lane)
+T112#95 @59efe32: So the day has at most two sequential read-then-act cycles:
+T112#221 @59efe32: No kernel can run, and with no saved kernel version there is nothing to submit. The two-cycle schedule above assumed a submission lane;
+T112#222 @59efe32: today it has zero cycles, not two. Nothing was spent: no submission, no kernel.
+PROGRESS#16 @029cbb8: The constraint that shapes tomorrow, and it is not the GPU. Submit-to-COMPLETE is 429–434 min, so at five a day there are at most two read-then-act cycles.
+PROGRESS#43 @029cbb8: The day's submission lane is closed until the quota resets. Whether a code-competition submission rerun counts against the 30 h is not verified — if it does, each 0.941-stack submission (~7 h) is ~24% of a week's GPU, which is a budget of ~
+
+## K7: 14 clauses (not resolved | resolved-behind | resolved behind | edge of the | −0.02 to −0.04 | -0.02 to -0.04 | behind)
+T112#5 @59efe32: our arm resolved-behind v5 depends_on: [T107, T110, T111] created: 2026-09-18 ---
+T112#178 @59efe32: That is a −0.02 to −0.04 gap — at the edge of the ±0.036 band, so not resolved, but against us in all four of the published readings.
+T112#230 @59efe32: ## RESOLVED 2026-09-18: our 224 arm is BEHIND the published member — do not submit it
+T112#240 @59efe32: Paired Δ (ours − theirs) = −0.0277, 95% CI [−0.0483, −0.0076] → RESOLVED, ours is BEHIND.
+T112#244 @59efe32: An arm that is resolved-behind the member it replaces is expected to lower the stack at any weight — at ~7% effective weight, too little to see;
+T112#250 @59efe32: The instrument this leaves behind is the real deliverable. Every 4090 run can now be read as a paired delta against v5 with a CI of roughly ±0.02 — against gold-58's absolute ±0.036, the first local instrument in this project that can rank 
+T112#313 @59efe32: Do not submit the 224 arm. It is resolved-behind v5 (Δ −0.0277, CI [−0.0483, −0.0076]).
+T112@7966326#9 @7966326: - But do not submit this arm: paired against v5_full_swa it is resolved-behind (Δ −0.0277, CI [−0.0483, −0.0076]).
+dry_run.py#11 @416447b: This script is meant to be safe to run while a fold is queued behind it.
+_order.py#24 @1661b58: T094 put the selection behind a name, and the test now finds the guard by what it BINDS, not how it is spelled. === 1009 checks -- md5 of the ordered names: 597a1cfc6fe11c0e80167eea2ebba2c0 ⚠ ENVIRONMENT-DEPENDENT, found 2026-09-14: a clean
+PROGRESS#50 @029cbb8: ## T112 — our 224 arm is resolved-BEHIND the member it would replace (2026-09-18)
+PROGRESS#60 @029cbb8: Paired Δ −0.0277, 95% CI [−0.0483, −0.0076] — RESOLVED, ours is behind. v5's reading sits inside T071's independent 0.9002–0.9187 on the same studies, and is held-out (T071 verified the gold set is our 58;
+trail#19 @fc0d19e: Found the operator's 2026-09-18 decision in the UNCOMMITTED working-tree copy of T112: 'Do not submit the 224 arm' -- it is resolved-behind v5 (paired delta -0.0277, CI [-0.0483, -0.0076], outputs/t112/paired_vs_member.json), and the regist
+trail#24 @fc0d19e: 2026-09-19T18:57:47Z did what: both 4090 arms read paired vs v5. 224/imagenet: 0.8825 vs 0.9131, delta -0.0306, CI [-0.0552,-0.0062] RESOLVED BEHIND. 384/imagenet: 0.8896 vs 0.9131, delta -0.0235, CI [-0.0516,+0.0024] not resolved.
+
+## K8: 25 clauses (quota | reset)
+T112#1 @59efe32: --- id: T112 title: "The 4090's first day, pre-registered and verified the night before" status: blocked — Kaggle weekly GPU quota exhausted 2026-09-18 02:04Z;
+T112#2 @59efe32: unblocks at the quota reset.
+T112#4 @59efe32: blocked on the Kaggle quota;
+T112#190 @59efe32: T108 — two registered presets
+T112#203 @59efe32: - No weight sweep, no variant resubmit, no third preset, whatever anything scores (T057 rule 6, T108's cap).
+T112#218 @59efe32: ## BLOCKED 2026-09-18 02:04Z: the Kaggle weekly GPU quota is exhausted
+T112#223 @59efe32: What it means beyond today, and this part is NOT verified: the quota fell to zero in a week that ran T105, T106, T108 ×2 and T110 — five full-stack kernels at ~7 h each — plus T107's Kaggle training.
+T112#225 @59efe32: Check the quota page before relying on either reading.
+T112#227 @59efe32: When the quota resets, only kaggle kernels push -p outputs/t112/rsna-knee-t112-ourarm and the save run stand between this arm and a submittable version — arm_t112.sh re-runs the whole thing idempotently (datasets version rather than create 
+T112#228 @59efe32: What the 4090 is for, now: the card does not touch the Kaggle quota at all.
+T112#229 @59efe32: The gap it can close is the one gold-58 already shows — ours 0.8854 against the published member's 0.9054–0.9213 — so that the first submission after the reset carries an arm worth submitting at any weight.
+T112#312 @59efe32: The bar for submitting any arm of ours, once the Kaggle quota resets: the 95% CI's lower bound is ≥ 0.
+T112#365 @59efe32: - Kaggle. The weekly GPU quota was exhausted at 02:04Z on 2026-09-18.
+T112#366 @59efe32: After the reset, arm_t112.sh pushes, waits for the save run and VOID-checks, and never submits.
+T112@7966326#5 @7966326: - Blocked on Kaggle, not on us: the weekly GPU quota is exhausted, so no kernel can run until it resets.
+build_t112_kernel.py#11 @1661b58: THE THING THAT ALMOST COST A QUOTA KILL, and the reason img defaults to the REPLACED MEMBER'S value rather than to our resolution.
+build_t112_kernel.py#29 @1661b58: META_SRC is T108's kernel-metadata.json, and T108's two kernels are the only recent family that ship no checkpoint of ours -- they are preset flips of the public stack.
+PROGRESS#27 @029cbb8: ## T112 — the 224 fold, the resample gate, and a Kaggle quota wall (2026-09-18)
+PROGRESS#41 @029cbb8: The push was refused: Kernel push error: Maximum weekly GPU quota of 30.00 hours reached. The dataset bhavishnithinr/rsna-knee-t112-arm (279 MB, private) is uploaded and ready;
+PROGRESS#43 @029cbb8: The day's submission lane is closed until the quota resets. Whether a code-competition submission rerun counts against the 30 h is not verified — if it does, each 0.941-stack submission (~7 h) is ~24% of a week's GPU, which is a budget of ~
+arm_t112.sh#6 @71dc5cf: Fixed strings only -- a preset name is data, never a pattern (T108 lost a check to + read as a regex quantifier).
+arm_t112.sh#7 @71dc5cf: --no-push skips step 1 when the kernel is already up, which is the normal case once a push has happened: re-pushing would burn another save run off the 30 h/week quota to produce the identical version.
+paired_vs_member.py#3 @f700f85: With the Kaggle GPU quota exhausted (T112, 2026-09-18) the leaderboard is closed, and gold-58 is the only truth-anchored instrument left.
+trail#11 @fc0d19e: 2026-09-18T02:13:38Z blocked next: 4090: close the gold-58 gap (0.8854 vs the member's 0.9054-0.9213) before the reset;
+trail#33 @fc0d19e: Quota HAD reset -- the 09-18 block is gone
+
+## K9: 11 clauses (void banner | banner prints | really did run | at import)
+T112#78 @59efe32: What makes this the dangerous kind of defect rather than the loud kind: the kernel runs clean, the VOID banner prints because the arm really did run, and the score comes back low — which this task's own registered rule reads as "≤ 0.934 → R
+T112#86 @59efe32: The VOID banner names the normalisation, so the log proves which distribution the arm was scored under.
+T112#209 @59efe32: - [x] Build the swap kernel — scripts/t112/build_t112_kernel.py, exactly one cell differs, the replaced member's weight is carried rather than re-chosen, VOID banner emitted
+T112#214 @59efe32: Nothing in it submits: the 5/day cap makes a submission the scarcest thing here, so a human reads the VOID banner and submits by hand
+build_t112_kernel.py#25 @1661b58: What makes this the dangerous kind of bug rather than the loud kind: the kernel runs clean, the VOID banner prints because the arm really did run, and the score comes back low -- which T112's registered rule reads as "<= 0.934 REJECT, our a
+build_t112_kernel.py#90 @1661b58: The kernel runs to COMPLETE, the VOID banner prints (it prints at import, before the arms run), and our column stays a constant 0.5 for every study.
+build_t112_kernel.py#97 @1661b58: WITHOUT this edit the backbone is built on the 384 grid, every forward at another res raises into the per-study except, and the arm scores a constant 0.5 while the kernel completes and the VOID banner prints.
+_order.py#56 @1661b58: The reason it needed checks rather than just a fix is the failure MODE -- the kernel runs clean, the VOID banner prints because the arm really ran, and the low score reads as the registered "REJECT, our arm is worse".
+coat.py#47 @1661b58: '"norm": "' also counts the VOID banner, which names the normalisation on purpose.
+coat.py#63 @1661b58: The kernel reaches COMPLETE, the VOID banner prints -- it prints at import, before the arms run -- and our column stays a constant 0.5 for every study.
+push_arm.py#15 @1661b58: a human reads its log for the VOID banner and submits by hand.
+
+## K10: 35 clauses (bit-identical | end to end | could not execute | 0.5 | 384 grid | img_size | load path)
+T112#3 @59efe32: The 4090 lane is unaffected owner: adervark @b/c480ad78 2026-09-18 — chain verified end to end;
+T112#20 @59efe32: Fixed and proven today, offline, on CPU (src/coat_export.py): the converted state dict loads at strict=True with zero missing and zero unexpected keys, and on identical weights and an identical bag the two forwards agree to max |Δ| = 0.000e
+T112#47 @59efe32: 0.55
+T112#57 @59efe32: Their own dominant arm, maxspan-v5, decodes at img 336 — 32 × 10.5 — and is perfectly legal because only res reaches the backbone.
+T112#150 @59efe32: Submission 2 becomes the dominant-member swap (maxspan-v5, w 0.55 + reverse 0.15 = 0.70).
+T112#208 @59efe32: - [x] Prove our checkpoint loads into their inference code — src/coat_export.py, strict=True clean, forwards bit-identical, with the controls that must refuse an unconverted dict, a double conversion, a shadowed res and a rotted anchor
+T112#215 @59efe32: - [x] Run the whole chain end to end — make dryrun, 9/9 stages on the real corpus and the real notebook, CPU-only so it cannot claim a CUDA context
+T112#226 @59efe32: What still works, all verified: the load path (bit-identical), the dataset (uploaded, ready), the kernel (rendered, private, internet off, dataset attached), the resample chain (B − A = 0.0000).
+T112@ac3a38c#1 @ac3a38c: --- id: T112 title: "The 4090's first day, pre-registered and verified the night before" status: claimed owner: adervark @b/c480ad78 2026-09-18 — load path proven, swap kernel built;
+T112@029cbb8#1 @029cbb8: The 4090 lane is unaffected owner: adervark @b/c480ad78 2026-09-18 — load path proven, swap kernel built;
+build_t112_kernel.py#6 @1661b58: maxspan-v5 v5_full_swa.pt _SLOTS64 img 336 k_eval 62 w 0.55 native384dense-v10 v10_full.pt _SLOTS64 img 384 k_eval 62 w 0.10 maxspan-v5-reverse v5_full_swa.pt _SLOTS64 img 336 k_eval 62 w 0.15 native384-v8 v8_full_swa.pt _SLOTS44 img 384 k_
+build_t112_kernel.py#50 @1661b58: Their build_backbone takes no img_size, so timm builds coatnet_rmlp_ on the architecture default 384 grid -- 576 relative-position slots -- while eval_windows hands the model windows at ck['res'].
+build_t112_kernel.py#57 @1661b58: Threading img_size=ck_res is a no-op for them ONLY because it equals the architecture default -- verified bit-identical, weights and forward.
+build_t112_kernel.py#77 @1661b58: grid_edit threads img_size=ck_res into a build that previously took none.
+build_t112_kernel.py#78 @1661b58: That is invisible to the three arms we do not touch only because their ck_res is 384 and 384 is the architecture default -- measured bit-identical, both the loaded weights and a forward.
+build_t112_kernel.py#80 @1661b58: the parent stage declares res {declared}, and img_size=ck_res is only a no-op for the arms we do not touch at res {PARENT_RES} (verified bit-identical there).
+build_t112_kernel.py#85 @1661b58: Their build_backbone passes no img_size, so timm uses the architecture default 384 -- 576 positions -- while load_model reads ck['res'] and eval_windows then hands the model 224 px windows, which are 196 tokens.
+build_t112_kernel.py#87 @1661b58: built WITHOUT img_size -> forward 224 FAILS: "The size of tensor a (196) must match the size of tensor b (576)" built WITH img_size=224 -> forward 224 OK
+build_t112_kernel.py#89 @1661b58: arm_probs is pre-filled with 0.5, load_model SUCCEEDS, and the forward raises inside a per-arm per-study try/except that prints FALLBACK and continues.
+build_t112_kernel.py#90 @1661b58: The kernel runs to COMPLETE, the VOID banner prints (it prints at import, before the arms run), and our column stays a constant 0.5 for every study.
+build_t112_kernel.py#97 @1661b58: WITHOUT this edit the backbone is built on the 384 grid, every forward at another res raises into the per-study except, and the arm scores a constant 0.5 while the kernel completes and the VOID banner prints.
+build_t112_kernel.py#118 @1661b58: Their own dominant arm decodes at img 336, which is 32 x 10.5: legal there precisely because eval_windows resizes each window to res before the forward.
+build_t112_kernel.py#121 @1661b58: coatnet_rmlp_ partitions attention on a {STRIDE}-pixel grid, and res is the size the MODEL sees (ck['res'], applied per arm in eval_windows). 336 -- the corpus's native size -- is 32 x 10.5 and is NOT a legal res, which is why the published
+build_t112_kernel.py#136 @1661b58: The per-arm per-study try/except in cell 47 prints it and continues, so a kernel whose forwards all raise still reaches COMPLETE with the banner printed and our column pinned at its 0.5 initialisation -- a submission that measures the REMOV
+build_t112_kernel.py@3ed78d4#2 @3ed78d4: coatnet_rmlp_ partitions attention on a {STRIDE}-pixel grid. 336 -- the corpus's native size -- is 32 x 10.5 and is NOT legal, which is why the published pipeline upsamples to 384.
+dry_run.py#1 @416447b: The whole chain, end to end, on this laptop, before the 4090 arrives.
+_order.py#39 @1661b58: Aimed at the SILENT failures rather than the arithmetic: a half-staged corpus (part 2 holds 1,207 of the 4,407 studies and its absence trains quietly on the rest), a leaked label file (the first version of that guard inspected the training 
+_order.py#49 @1661b58: So a new img is a whole extra pass over the test set -- against 429-434 min measured and a 495-min cap -- and the multiple-of-32 rule belongs to res, not img (their own dominant arm decodes at img 336, which is 32 x 10.5).
+coat.py#21 @1661b58: --- the trainer, end to end on CPU ---------------------------------
+coat.py#40 @1661b58: Two mistakes followed from conflating them, and both are pinned below: img defaulting to our resolution (a fourth decode group), and the multiple-of-32 rule guarding img instead of res (which refused to render a maxspan-v5 swap at all, with
+coat.py#59 @1661b58: Their build_backbone passed no img_size, so timm built the architecture default -- 384, i.e. 576 positions -- while load_model read ck['res'] and eval_windows then fed the model 224 px windows, which are 196 tokens.
+coat.py#62 @1661b58: arm_probs is pre-filled with 0.5, load_model SUCCEEDS, and the forward raises inside a per-arm per-study try/except that prints FALLBACK and continues.
+coat.py#63 @1661b58: The kernel reaches COMPLETE, the VOID banner prints -- it prints at import, before the arms run -- and our column stays a constant 0.5 for every study.
+coat.py#79 @1661b58: 384 is the parent's resolution and must be untouched by the edit: it is the only reason threading img_size is invisible to their arms.
+PROGRESS#9 @029cbb8: Verified offline on CPU: zero missing, zero unexpected, and the two forwards agree to max |Δ| = 0.000e+00 — bit-identical. The reference class is extracted from the notebook, never retyped, so a change on their side fails the test instead o
+
+## K11: 17 clauses (submission 1 | withdrawn | do not submit | swap kernel)
+T112#127 @59efe32: SUBMISSION 1: tonight's arm, converted, swapped for native384-v8 at its own w = 0.20
+T112#133 @59efe32: read submission 1
+T112#140 @59efe32: BROKEN → do not submit, debug. gold-58 < 0.85 at full fidelity — defined here, on review, as measured under the KERNEL's resample chain and window count (condition B of scripts/t112/resample_delta.py: 336 → 384 → 224, k_eval 42), not the tr
+T112#148 @59efe32: SUBMISSION 1, read against S = 0.941 at ±0.007 (T111's registered band, not renegotiated):
+T112#209 @59efe32: - [x] Build the swap kernel — scripts/t112/build_t112_kernel.py, exactly one cell differs, the replaced member's weight is carried rather than re-chosen, VOID banner emitted
+T112#217 @59efe32: - [ ] Tomorrow: bring-up, submission 1, the family, submission 2, read and record
+T112#230 @59efe32: ## RESOLVED 2026-09-18: our 224 arm is BEHIND the published member — do not submit it
+T112#243 @59efe32: What this changes, before any score exists: the registered swap (submission 1) is withdrawn.
+T112#313 @59efe32: Do not submit the 224 arm. It is resolved-behind v5 (Δ −0.0277, CI [−0.0483, −0.0076]).
+T112@416447b#1 @416447b: BROKEN → do not submit, debug. gold-58 < 0.85 at full fidelity.
+T112@ac3a38c#1 @ac3a38c: --- id: T112 title: "The 4090's first day, pre-registered and verified the night before" status: claimed owner: adervark @b/c480ad78 2026-09-18 — load path proven, swap kernel built;
+T112@029cbb8#1 @029cbb8: The 4090 lane is unaffected owner: adervark @b/c480ad78 2026-09-18 — load path proven, swap kernel built;
+T112@7966326#9 @7966326: - But do not submit this arm: paired against v5_full_swa it is resolved-behind (Δ −0.0277, CI [−0.0483, −0.0076]).
+dry_run.py#27 @416447b: 7. the swap kernel renders and changes exactly one cell -------------
+PROGRESS#62 @029cbb8: The registered T112 swap is withdrawn before any leaderboard read.
+trail#16 @fc0d19e: 2026-09-19T18:42:53Z open brief: T112 submission 1: push the H1-fixed arm kernel, save run, VOID, submit
+trail#19 @fc0d19e: Found the operator's 2026-09-18 decision in the UNCOMMITTED working-tree copy of T112: 'Do not submit the 224 arm' -- it is resolved-behind v5 (paired delta -0.0277, CI [-0.0483, -0.0076], outputs/t112/paired_vs_member.json), and the regist
+
+## K12: 48 clauses (windows | wsl | bringup_4090 | on arrival | linux)
+T112#56 @59efe32: Cell 47 groups arms by (img, slots, span, k_eval), decodes each group's studies once, and then resizes per arm to res inside eval_windows.
+T112#72 @59efe32: scripts/t112/bringup_4090.sh measures it for real in 30 seconds before a single hour is committed — nothing downstream depends on the projection being right.
+T112#74 @59efe32: Their eval_windows ends:
+T112#122 @59efe32: on arrival
+T112#123 @59efe32: bringup_4090.sh — refuses on the first failure, prints the exact train command
+T112#210 @59efe32: - [x] scripts/t112/bringup_4090.sh + transfer_manifest.tsv — three modes (manifest / verify / bring-up), refusing at the first failure, with the control that proves its teacher check can fail on the leak file. 20 carried entries verified on
+T112#247 @59efe32: Stated limits: the comparison is against v5, not v8 (the member the registered swap replaces) — v8 is not on disk. v5 was deployed on 64 slots with 62 windows;
+T112#248 @59efe32: it is scored here with 42 windows over the corpus's 44 slices.
+T112#343 @59efe32: ### The 4090 is a WINDOWS machine, and three things follow from that
+T112#344 @59efe32: - WSL did not install. wsl --install -d Ubuntu-24.04 returned 403, and so did --web-download.
+T112#346 @59efe32: That cause is unverified on the 4090 itself. The laptop can reach https://cloud-images.ubuntu.com/wsl/releases/24.04/current/ubuntu-noble-wsl-amd64-24.04lts.rootfs.tar.gz (SHA256SUMS in the same folder) and the WSL installer https://github.
+T112#349 @59efe32: - Without WSL, the Python runs natively and the bash does not. src/coat_train.py, scripts/t112/paired_vs_member.py, scripts/t112/resample_delta.py and scripts/t111/calib_4070.py are plain Python.
+T112#350 @59efe32: fetch_corpus.sh, bringup_4090.sh, gpu_queue.sh, gpu_watchdog.sh and arm_t112.sh need bash, which means Git Bash or WSL, or a port.
+T112#351 @59efe32: Check that DataLoader workers start under Windows' spawn.
+T112#352 @59efe32: - systemd-inhibit cannot stop Windows from sleeping. The T058 failure mode, idle suspend killing a fold (T041, T050, T067 arm c), is guarded on this machine only by Windows power settings: sleep set to Never when plugged in, and Windows Upd
+T112#354 @59efe32: If WSL is used, keep the corpus on WSL's own filesystem (~), never under /mnt/c.
+T112@7542d2b#1 @7542d2b: - [ ] scripts/t112/bringup_4090.sh + transfer manifest
+build_t112_kernel.py#7 @1661b58: native384-v8 is the only one framed on _SLOTS44, and _SLOTS44 is the framing our corpus and our trainer already use -- (N, 44, 336, 336), windows of three consecutive slices, eval centres spread over the valid slices.
+build_t112_kernel.py#13 @1661b58: key = (int(arm["img"]), arm["slots"], arm["span"], int(arm["k_eval"])) ... volume, mask = build_study(...) # ONCE per group for arm_index, arm, model, resolution in loaded: windows = eval_windows(volume, mask, k=K_EVAL, res=resolution, ...)
+build_t112_kernel.py#14 @1661b58: So img/slots/span/k_eval are the decode recipe -- every distinct combination costs a full pass over the test set -- while res, which comes from ck['res'], is applied per arm, after the decode, inside eval_windows.
+build_t112_kernel.py#15 @1661b58: A 224-trained arm therefore does NOT need img 224: it needs img 384 so it joins native384-v8's existing group, and res 224 so eval_windows hands it 224 px.
+build_t112_kernel.py#19 @1661b58: Their eval_windows ends with
+build_t112_kernel.py#50 @1661b58: Their build_backbone takes no img_size, so timm builds coatnet_rmlp_ on the architecture default 384 grid -- 576 relative-position slots -- while eval_windows hands the model windows at ck['res'].
+build_t112_kernel.py#53 @1661b58: res is threaded to the BUILD as well as to the windows.
+build_t112_kernel.py#71 @1661b58: res -- which comes from ck['res'] and is applied per arm in eval_windows -- is what feeds our model its own resolution.
+build_t112_kernel.py#75 @1661b58: could not find the eval_windows call site to make normalisation per-arm.n expected: {NORM_CALL_OLD}nWithout this edit our arm is fed imagenet-normalised inputs it was never trained on -- ~4.48x the standard deviation and a -0.24 mean shift 
+build_t112_kernel.py#85 @1661b58: Their build_backbone passes no img_size, so timm uses the architecture default 384 -- 576 positions -- while load_model reads ck['res'] and eval_windows then hands the model 224 px windows, which are 196 tokens.
+build_t112_kernel.py#118 @1661b58: Their own dominant arm decodes at img 336, which is 32 x 10.5: legal there precisely because eval_windows resizes each window to res before the forward.
+build_t112_kernel.py#121 @1661b58: coatnet_rmlp_ partitions attention on a {STRIDE}-pixel grid, and res is the size the MODEL sees (ck['res'], applied per arm in eval_windows). 336 -- the corpus's native size -- is 32 x 10.5 and is NOT a legal res, which is why the published
+coat_export.py#34 @416447b: Their eval_windows applies ImageNet normalisation to every arm by default, which is ~4.48x our trainer's standard deviation -- and a model scored under the wrong one comes back low and reads as REJECT rather than as a bug.
+_order.py#53 @1661b58: Their eval_windows applies ImageNet mean/std to EVERY arm;
+coat.py#38 @1661b58: The subtler failure, and the one that cost two drafts: cell 47 groups arms by (img, slots, span, k_eval) and decodes each group's studies ONCE, then resizes per arm to res inside eval_windows.
+coat.py#59 @1661b58: Their build_backbone passed no img_size, so timm built the architecture default -- 384, i.e. 576 positions -- while load_model read ck['res'] and eval_windows then fed the model 224 px windows, which are 196 tokens.
+coat.py#84 @1661b58: test_t115_notebook_builds_at_the_checkpoints_res proves the transformation -- grid_edit applied to their own definitions produces a model that consumes the windows the kernel builds.
+PROGRESS#12 @029cbb8: and scripts/t112/bringup_4090.sh with a 20-entry transfer manifest, including the control that proves its teacher check can fail on the leak file.
+coat_data.py#3 @416447b: A study becomes a bag of windows, not a stack of slices.
+coat_data.py#13 @416447b: The normalisation the adopted inference notebook applies to every window (eval_windows, cell 47): x = (x - _MEAN) / _STD with the ImageNet constants, under NORM = "imagenet".
+coat_train.py#18 @416447b: Evaluation sees k_eval windows per study, not k, so reusing --bs would put bsk_eval windows through the backbone in one forward -- at bs 2, k 12, k_eval 24 that is 48 against training's 24, and the allocator was observed to hit OOM and reco
+resample_delta.py#3 @ac3a38c: It also evaluates with the native384-v8 group's k_eval 42, where the trainer scored gold-58 with 24 windows.
+paired_vs_member.py#10 @f700f85: What is NOT faithful, stated: v5 was trained and deployed on a 64-slot volume with 62 windows;
+paired_vs_member.py#21 @f700f85: Encode in chunks, pool over ALL k windows.
+paired_vs_member.py#23 @f700f85: Needed because 42 windows at 384 in fp32 do not fit the laptop's 8 GiB.
+selftest_4090.py#1 @eefcc9c: The 4090 (Windows) is ready to train, or it says exactly why not.
+selftest_4090.py#2 @eefcc9c: scripts/t112/bringup_4090.sh is the Linux version of this and needs bash;
+selftest_4090.py#3 @eefcc9c: the 4090 turned out to be a Windows machine with no WSL (its install was refused with 403s, 2026-09-18).
+selftest_4090.py#12 @eefcc9c: DataLoader workers start under Windows' spawn -- the one thing about this machine the Linux runs could never have told us
+setup_4090.cmd#7 @eefcc9c: TEMP is deliberately NOT made permanent: every Windows program would then depend on this drive.
+setup_4090.cmd@3659952#2 @3659952: The PC's line is 10 Mbps: torch alone is ~3 GB, about 40 minutes there, so every wheel was downloaded on the laptop instead -- resolved for Windows / CPython 3.12 by uv pip compile --python-platform x86_64-pc-windows-msvc into win-lock.txt 
+
+## K13: 5 clauses (20% | 20 % | w = 0.20 | w=0.20 | 0.072 | 7.2 | share of)
+T112#127 @59efe32: SUBMISSION 1: tonight's arm, converted, swapped for native384-v8 at its own w = 0.20
+T112#157 @59efe32: Our arm's share of the final submission is not 20%.
+T112#171 @59efe32: ≈ 0.072
+PROGRESS#47 @029cbb8: It also found that our arm's effective weight in the final blend is ~7.2% (0.20 × 0.60 × 0.60) — the same weight at which T106 moved 0.000 — so the registered prediction (0.938–0.946) sat inside the UNRESOLVED band.
+coat_train.py#6 @416447b: res 384 bs 2 7.13 GiB 45.7 ms/window 10.6 h for 16 epochs res 352 bs 2 6.06 GiB 38.1 ms/window 8.8 h for 16 epochs res 320 bs 2 5.66 GiB 30.9 ms/window 7.2 h for 16 epochs
