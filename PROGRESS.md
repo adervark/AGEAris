@@ -699,3 +699,22 @@ its date, the number, and where the evidence is. Newest last.
   - when a different condition counts as a replacement;
   - C3's passed-over pair.
 - T086 now depends on T087.
+
+## 2026-10-22 — T087: research-runs v2.7 answers R0d, measured for free
+
+- **Check canaries:** a check is twinned only when its premises give the
+  figure the twin replaces, and the parent writes the refutation first. On
+  R0d's 20 check canaries the rule drops 9, the missed 498 among them. The
+  other 8 were caught, so the rule is conservative. It leaves 22 twinnable
+  checks, against v2.6's 31.
+- **Group canaries** go into each reconciler's largest groups. R0d's 13
+  sat in groups of 5 to 36 facts, none in the 29 groups of 40 or more. C3's
+  pair sat in a group of 118.
+- **`superseded`:** the brief says a later figure under another condition
+  replaces nothing. All three of R0d's ambiguous units turned on that.
+- **The checker** keeps a dead run's lines under their own ids. Its 6
+  cases pass, R0d's rebuilt outputs among them.
+- **§5.5** lists a pair a reconciler passes over as caught by no check.
+- **Evidence:** `docs/plans/evidence/t087/measurements.md`. The brief,
+  checker and test carry nothing from R0d's key (`brief-check.mjs`: 0
+  hits). Waiting on the operator's acceptance.

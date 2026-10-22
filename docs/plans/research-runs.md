@@ -1,10 +1,11 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.6, accepted to be tested** (2026-10-21, T084). Nothing here is
+**Status: v2.7, for the operator** (2026-10-22, T087). Nothing here is
 built. v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
 and reached 7 of 12 on its re-grade, R0c (T082), against a bar of 10. v2.6
-answers R0c. R0d (T085) checks its mechanics on round 3. A held-out round
-(T086) decides whether it is accepted (§7; §10, D9).
+answered R0c. R0d (T085) checked v2.6's mechanics on round 3 and missed one
+canary of 33. The operator let that stand (§10, D10). v2.7 answers R0d. A
+held-out round (T086) decides whether it is accepted (§7; §10, D9).
 
 - v1 (f9ecde8) was written after reading how RSNA, AGEIS and this repository
   do research.
@@ -37,6 +38,87 @@ answers R0c. R0d (T085) checks its mechanics on round 3. A held-out round
   (`docs/plans/evidence/t082/r0c/grade.md`). The operator sent it back for a
   v2.6 (T084), measured for free on R0c's material first
   (`docs/plans/evidence/t084/measurements.md`).
+
+## Changes since v2.6
+
+R0d re-reconciled round 3 under v2.6: R0c's ledger with refs from quotes and
+commits in the view, three fresh reconcilers, canaries beside real units
+(`docs/plans/evidence/t085/grade.md`). Three of its four mechanics held:
+- `superseded`: 28 of 31 pairs real, 90.3%. It caught C5 and C9, the two
+  R0c missed for want of it;
+- `contradicted`: 23 of 25 real, 92.0%;
+- `conflict`: 40 of 43 real, 93.0%, against R0c's 89.8% before facts
+  carried their commit.
+
+The fourth failed: 32 of 33 canaries, and the operator let it stand (D10).
+Each change below was measured for free on R0d's material where it could be
+(`docs/plans/evidence/t087/measurements.md`).
+
+1. **A check is twinned only when its premises give the figure the twin
+   replaces** (R0d's missed canary).
+   - Reconciler 2 missed check canary 498. Lane 12's "already throttling at
+     2×" became "3×". The premises held a 1.85× cost ratio, so v2.6's rule,
+     a premise number in the conclusion's unit, let the check be twinned.
+     But refuting 3× as a multiple of the bag needed arm C's bag size, which
+     no premise held. Reconciler 2 marked it `unsupported`, and said why.
+   - A check is now eligible only when the premises give the conclusion's
+     own figure, within its rounding: a premise states it, or one step on
+     two premise figures gives it. A step is a sum, a difference, a product,
+     a ratio, a midpoint, or a ratio or difference read as a percentage. A
+     one-digit figure must be stated, since one step hits it by chance.
+   - The rule is a filter. For each check it twins, the parent writes the
+     refutation from the premises alone, into the canary key, before any
+     reconciler runs. A check with no such sentence is not twinned.
+   - *Measured* (`canary-fair.mjs` on R0d's 20 check canaries): it drops 9,
+     498 among them. The other 8 were caught, so the rule costs fair
+     canaries. On R0d's material it leaves 22 twinnable checks, against
+     v2.6's 31. Where checks run short, group canaries make up the count,
+     as before.
+2. **Group canaries go into the largest groups too** (C3).
+   - C3's pair sat in two reconcilers' groups and both passed it over. One
+     group held 118 facts, the third largest of 344.
+   - R0d's 13 group canaries all sat in groups of 5 to 36 facts. None went
+     into the 29 groups of 40 or more. So R0d measured attention only where
+     groups are small.
+   - Each reconciler now gets at least one group canary in its largest
+     decile of groups by size.
+   - *Measured:* marks per thousand pairs fall from about 10 in groups under
+     10 facts to 0.4 in groups of 40 or more. Large groups hold more
+     unrelated pairs, so that alone does not show lost attention. These
+     canaries will.
+3. **A changed condition is not a replacement** (`superseded`'s ambiguous
+   units).
+   - All three of R0d's ambiguous `superseded` units turned on one
+     question the brief left open. Is a later figure under another
+     condition a replacement? The three were deployed against current code,
+     a tie the board could not separate, and another recipe.
+   - The brief now says no: a later figure under another condition
+     replaces nothing, unless the later fact says it does. Nor does a
+     reading too coarse to separate two values. Its example comes from
+     outside the graded round (`docs/plans/evidence/t087/brief-reconciler.md`).
+   - *Measured:* nothing to measure before the held-out round.
+4. **A resumed pass keeps its dead run's lines as they are.**
+   - R0d's three first reconcilers died with their session. Their reruns
+     resumed from the lines on disk, as the brief said. But the checker
+     refused a file with two run ids, so each rerun relabelled the dead
+     run's lines.
+   - The checker now accepts more than one run when each run's lines form
+     one unbroken block, and a run that has stopped never writes again.
+   - *Measured:* `check-reconcile.test.mjs` passes six cases. Among them
+     are R0d's three outputs rebuilt with the dead runs' ids from
+     `7359ccc`, which v2.6's checker refuses.
+5. **A pair a reconciler passes over is said plainly** (C3, §5.5).
+   - No check fires on a pair that sits in a unit unmarked. A second
+     reading would not have saved C3: two reconcilers read its pair and
+     both passed it over.
+   - §5.5 lists it among what no check can see. Item 2's canaries bound how
+     often it happens where groups are large.
+
+**What stays.** Everything else v2.6 has. R0d showed `superseded`, the
+three-way checks and commits in the view working.
+
+**In-sample.** These changes were drawn from round 3, so a replay of round 3
+cannot accept them. The held-out round (T086) does.
 
 ## Changes since v2.5
 
@@ -1000,8 +1082,12 @@ number without its id is not checked, so the rule for writers is the one
   - **A supersession the reconciler calls consistent.** No mechanical rule
     finds one: on R0c's material, a rule over differing readings raised
     2,933 candidates, most of them other configurations of one quantity.
-    Canaries test conflicts, not supersessions. R0d counts how often one
-    slips through.
+    Canaries test conflicts, not supersessions. On R0d, the two corrections
+    of this kind that were in reach, C5 and C9, were both marked.
+  - **A pair a reconciler passes over.** A pair can sit in a unit and go
+    unmarked while its neighbours are marked. R0d lost C3 this way, in two
+    reconcilers' groups. Group canaries in each reconciler's largest groups
+    bound how often (v2.7 item 2). No check catches the pair itself.
   - **A result nobody wrote down.** That needs a reconciliation against the
     outside record, which stays in the repository's own scripts, as RSNA's
     `reconcile_kaggle.py` does.
@@ -1053,7 +1139,11 @@ number without its id is not checked, so the rule for writers is the one
      - a group canary is a twin fact inside a real group, carrying another
        real value of its unit and shape;
      - a check canary is a copy of an eligible check, shown to a different
-       reconciler from the one that gets the real check.
+       reconciler from the one that gets the real check. A check is
+       eligible when its premises give the figure the twin replaces, and
+       the parent has written the refutation from them (v2.7 item 1).
+     - each reconciler gets at least one group canary in its largest decile
+       of groups (v2.7 item 2).
 
      Nothing is taken out of review to make room for a canary.
    - Every `cmd:` source is re-run at the round's head for `search-flipped`.
@@ -1202,7 +1292,11 @@ or the T112/T118 replay shows it would have changed a decision:
     and C8 are in no committed sentence).
   - **Recorded:** minutes per reconciler, findings by kind, canaries caught,
     and how many units each reconciler read.
-- **H1, a held-out round (T086).** v2.6 is accepted only on a round that no
+  - **Result (T085): not a pass.** 32 of 33 canaries were caught.
+    `superseded` was 90.3% real, `contradicted` 92.0% and `conflict` 93.0%.
+    Recall was 8 of 12 by the rule, and 6 rested on nothing any brief named.
+    The operator let the missed canary stand (D10), and v2.7 answers it.
+- **H1, a held-out round (T086).** v2.7 is accepted only on a round that no
   incident and no brief example came from (item 7). It is replayed under
   the full procedure, with a key of its own pinned before any subagent
   runs. The operator chooses the round: RSNA's T112 is a candidate, and
@@ -1273,8 +1367,8 @@ or the T112/T118 replay shows it would have changed a decision:
 | T072 | **Team-scale research, on a hand-written ledger** (D5), facts and objects included | — | its ledger and track page are written by hand in this format; (o1) and precision are measured |
 | R0b | **Round 3 replayed with facts**, by a fresh agent and a separate reconciler (§7) | — | **Done: T075.** 2 of 12; the design was revised to v2.5 (T082) |
 | R0c | Round 3 replayed under v2.5 (§7) | T082 | **Done: T082.** 7 of 12; the design was revised to v2.6 (T084) |
-| R0d | **Round 3 re-reconciled under v2.6**, a check of the mechanics: R0c's ledger with refs from quotes and commits, three fresh reconcilers, canaries beside real units (§7) | T084 | each change works (§7, D9); or the failures are listed and the operator decides |
-| H1 | **A held-out round**, replayed under v2.6's full procedure with its own key (§7, D9) | R0d | v2.6 is accepted on T086's rule; or the misses are listed and the operator decides |
+| R0d | **Round 3 re-reconciled under v2.6**, a check of the mechanics: R0c's ledger with refs from quotes and commits, three fresh reconcilers, canaries beside real units (§7) | T084 | **Done: T085.** Not a pass: 32 of 33 canaries; the design was revised to v2.7 (T087) |
+| H1 | **A held-out round**, replayed under v2.7's full procedure with its own key (§7, D9) | T087 | v2.7 is accepted on T086's rule; or the misses are listed and the operator decides |
 | S0 | **The one-writer simulation** (§7) | — | its pass bar is met; or the keying rules are revised before S1b |
 | S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | H1 | the operator has reviewed the cases |
 | S1b | **`AA/research.sh` here**: `brief`, `clauses`, `fact`, `skip`, `audit`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the sixteen checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
@@ -1330,7 +1424,14 @@ approved a third round, on v2.3, which arrived complete.
   the view, the key, the brief and its checker are committed and the brief
   has passed its check against the key.
 
-R0d, S0 and the held-out round decide whether v2.6 holds before any code is
+**Decided 2026-10-22 (T085):**
+
+- **D10: R0d's missed canary stands**, following the recommendation. R0d
+  is not a pass. v2.6 is revised before the held-out round (T087).
+  Ruling the canary unfair would have changed a rule after its result was
+  known.
+
+S0 and the held-out round decide whether v2.7 holds before any code is
 written.
 
 ## ADR

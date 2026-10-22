@@ -1,0 +1,282 @@
+{
+ "checkCanaries": 20,
+ "keptByV27": 11,
+ "droppedByV27": [
+  "R3 check 463",
+  "R3 check 46",
+  "R1 check 587",
+  "R1 check 31",
+  "R2 check 498",
+  "R1 check 236",
+  "R3 check 11",
+  "R2 check 16",
+  "R2 check 820"
+ ],
+ "realChecks": 1220,
+ "eligibleV26": 31,
+ "eligibleV27": 22,
+ "canaries": [
+  {
+   "reconciler": 1,
+   "unit": 344,
+   "real": "F629",
+   "says": "~5 lines, one fold.",
+   "twin": "~8 lines, one fold",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "direct",
+    "figure": "5",
+    "from": "F623: 5"
+   }
+  },
+  {
+   "reconciler": 2,
+   "unit": 40,
+   "real": "F2964",
+   "says": "implying ~1.4×",
+   "twin": "~2.2×",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "direct",
+    "figure": "1.4",
+    "from": "F2963: 1.4"
+   }
+  },
+  {
+   "reconciler": 3,
+   "unit": 463,
+   "real": "F1620",
+   "says": "Budget the rerun to ≤ 7 h",
+   "twin": "≤ 9 h",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "7 h: a one-digit figure, not stated in a premise"
+   }
+  },
+  {
+   "reconciler": 1,
+   "unit": 466,
+   "real": "F617",
+   "says": "2.3× our corpus.",
+   "twin": "1.6× our corpus",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "derived",
+    "figure": "2.3",
+    "from": "F614: 10000 / F460: 4349 = 2.29938"
+   }
+  },
+  {
+   "reconciler": 2,
+   "unit": 483,
+   "real": "F2532",
+   "says": "2.8× the deployed 66.",
+   "twin": "3.9×",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "direct",
+    "figure": "2.8",
+    "from": "F2531: 2.8"
+   }
+  },
+  {
+   "reconciler": 3,
+   "unit": 46,
+   "real": "F642",
+   "says": "+0.009",
+   "twin": "+0.023",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "+0.009 AUC: a one-digit figure, not stated in a premise"
+   }
+  },
+  {
+   "reconciler": 1,
+   "unit": 587,
+   "real": "F2676",
+   "says": "so this is ~1 h of local inference GPU and zero training hours, read against the OOF instrument.",
+   "twin": "~2 h of local inference GPU and zero training hours",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "1 h: a one-digit figure, not stated in a premise"
+   }
+  },
+  {
+   "reconciler": 2,
+   "unit": 96,
+   "real": "F369",
+   "says": "Adopt/kill bands for submissions: nested member-set step ≥ +0.006",
+   "twin": "≥ +0.034",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "direct",
+    "figure": "+0.006",
+    "from": "F204: 0.006"
+   }
+  },
+  {
+   "reconciler": 3,
+   "unit": 475,
+   "real": "F2455",
+   "says": "using B's 73 min midpoint",
+   "twin": "B's 20 min midpoint",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "derived",
+    "figure": "73",
+    "from": "F2416: 68 mid F2416: 78 = 73"
+   }
+  },
+  {
+   "reconciler": 1,
+   "unit": 31,
+   "real": "F2908",
+   "says": "(ten passes over 4,349 studies, so ~2.7 min/pass);",
+   "twin": "~1.0 min/pass",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "2.7 min: not in the premises, nor one step from two of them"
+   }
+  },
+  {
+   "reconciler": 2,
+   "unit": 498,
+   "real": "F3073",
+   "says": "on a card that is already throttling at 2×.",
+   "twin": "already throttling at 3×",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "2 ×: a one-digit figure, not stated in a premise"
+   }
+  },
+  {
+   "reconciler": 3,
+   "unit": 343,
+   "real": "F2608",
+   "says": "The 10 non-adjacent members are the ones literally seeing 34.5 %.",
+   "twin": "84.5 %",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "direct",
+    "figure": "34.5",
+    "from": "F2580: 34.5"
+   }
+  },
+  {
+   "reconciler": 1,
+   "unit": 236,
+   "real": "F2909",
+   "says": "22 passes over ~3,500 studies is INFERRED ~50 min, call it under 2 h with reloads",
+   "twin": "~27 min",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "50 min: not in the premises, nor one step from two of them"
+   }
+  },
+  {
+   "reconciler": 2,
+   "unit": 653,
+   "real": "F436",
+   "says": "The gold gap itself, 0.0261",
+   "twin": "0.0034",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "derived",
+    "figure": "0.0261",
+    "from": "F433: 0.9054 - F432: 0.8793 = 0.0261"
+   }
+  },
+  {
+   "reconciler": 3,
+   "unit": 11,
+   "real": "F633",
+   "says": "doubles fold cost to ~5 h.",
+   "twin": "doubles fold cost to ~1 h",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "5 h: a one-digit figure, not stated in a premise"
+   }
+  },
+  {
+   "reconciler": 1,
+   "unit": 883,
+   "real": "F2934",
+   "says": "i.e. +17% runtime against a 9 h cap the deployed kernel uses a fraction of.",
+   "twin": "+25% runtime",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "derived",
+    "figure": "+17",
+    "from": "F2933: 22 / as % F2933: 132 = 16.6667"
+   }
+  },
+  {
+   "reconciler": 2,
+   "unit": 16,
+   "real": "F322",
+   "says": "A 130 mm crop at a 160 mm median FOV trims ~19 % per side of the field",
+   "twin": "~72 % per side",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "19 %: not in the premises, nor one step from two of them"
+   }
+  },
+  {
+   "reconciler": 3,
+   "unit": 253,
+   "real": "F92",
+   "says": "so magnification varies 1.39×",
+   "twin": "magnification varies 1.03×",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "direct",
+    "figure": "1.39",
+    "from": "F88: 1.39"
+   }
+  },
+  {
+   "reconciler": 1,
+   "unit": 299,
+   "real": "F2966",
+   "says": "so everything below is computed at the optimistic 400 slices/s.",
+   "twin": "the optimistic 135 slices/s",
+   "v26": true,
+   "v27": {
+    "ok": true,
+    "how": "direct",
+    "figure": "400",
+    "from": "F2961: 400"
+   }
+  },
+  {
+   "reconciler": 2,
+   "unit": 820,
+   "real": "F197",
+   "says": "T037's B1 rule passes a true zero 16 % of the time",
+   "twin": "24 % of the time",
+   "v26": true,
+   "v27": {
+    "ok": false,
+    "why": "16 %: not in the premises, nor one step from two of them"
+   }
+  }
+ ]
+}

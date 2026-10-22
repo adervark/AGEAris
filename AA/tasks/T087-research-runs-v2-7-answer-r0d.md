@@ -42,14 +42,19 @@ that R0d's missed canary stands.
 
 ## Steps
 
-- [ ] A canary-eligibility rule: the premises must hold the figure that
-      refutes the twin. Measure it for free on R0d's 20 check canaries.
-- [ ] `check-reconcile.mjs` accepts the dead run's ids on lines it kept.
-      A test covers it.
-- [ ] The reconciler brief says when a different condition is a
-      replacement, with an example not drawn from round 3.
-- [ ] Say in §5.5 whether a passed-over pair can be caught, or say plainly
-      that it cannot.
+- [x] A canary-eligibility rule: the premises must hold the figure that
+      refutes the twin. Measured on R0d's 20 check canaries: it drops 9,
+      498 among them (`docs/plans/evidence/t087/measurements.md` §1). It
+      is a filter; the parent writes each refutation by hand.
+- [x] `check-reconcile.mjs` accepts the dead run's ids on lines it kept,
+      with a test (`docs/plans/evidence/t087/check-reconcile.test.mjs`, 6
+      cases).
+- [x] The reconciler brief says when a different condition is a
+      replacement, with an example not drawn from round 3
+      (`docs/plans/evidence/t087/brief-reconciler.md`).
+- [x] §5.5 says plainly that a passed-over pair is not caught. Group
+      canaries now go into each reconciler's largest groups, where R0d had
+      none (measurements §2).
 - [ ] The operator accepts v2.7; T086's brief inherits it.
 
 ## Decision rules — fixed in advance
@@ -62,12 +67,15 @@ that R0d's missed canary stands.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, registered by T085's close on the
-  operator's ruling
-- **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** claim it
-- **Next decision:** none until v2.7 is drafted
+- **Last touched:** 2026-10-22, adervark @default/4279585a: v2.7 is
+  written in `docs/plans/research-runs.md` ("Changes since v2.6", D10).
+  Its measurements, brief, checker and test are in
+  `docs/plans/evidence/t087/`.
+- **In flight:** nothing.
+- **On disk:** all committed.
+- **Next decision, the operator's:** accept v2.7, or send it back.
+- **Resume with:** the operator's answer. On acceptance, mark the design's
+  status accepted, close T087, and T086 waits only on the choice of round.
 
 ## Verify
 

@@ -32,7 +32,9 @@ came from (§7, H1; §10, D9).
   pinned before any subagent runs.
 - R0d (T085) checks v2.6's mechanics first, so a mechanics failure is not
   bought at this price. R0d did not pass (one canary of 33). The operator
-  let that stand, so v2.6 is revised first (T087).
+  let that stand, so v2.6 is revised first (T087). T086 runs under v2.7:
+  its reconciler brief and checker start from
+  `docs/plans/evidence/t087/`, and its check canaries follow v2.7 item 1.
 
 ## Steps
 
