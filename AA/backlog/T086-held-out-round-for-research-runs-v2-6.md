@@ -38,14 +38,79 @@ came from (§7, H1; §10, D9).
 
 ## Steps
 
-- [ ] The operator chooses the round.
-- [ ] Write the decision rules here: the round, its key, the bar, the spend.
-- [ ] Cut, transcribe, audit, link, reconcile, grade.
+- [x] The operator chooses the round: **RSNA T112**, "The 4090's first day"
+      (2026-10-22).
+- [x] Write the decision rules here: the round, its key, the bar, the spend.
+- [ ] The operator approves these rules. Then claim.
+- [ ] **Free, before any subagent runs:**
+  - cut the record;
+  - pin the key in full and commit it;
+  - measure reach and pass the viability gate below;
+  - write the briefs from v2.7's templates, and run `brief-check.mjs`
+    against this key.
+- [ ] The operator's go. Then transcribe, audit, link, reconcile, grade.
 
 ## Decision rules — fixed in advance
 
-*(Not written yet. The round is chosen first; this task is not ready until
-its rule is here, rule 5.)*
+*Drafted 2026-10-22, before any spend, after the operator chose T112. They
+bind once the operator approves them.*
+
+- **The round:** RSNA's T112, its committed record from `3ed78d4`
+  (2026-09-18) to `fc0d19e` (2026-09-21). That is the task file at every
+  commit that changed it, its checkpoints, PROGRESS.md's T112 sections, and
+  the scripts and code its commits touched, each cut at the commits it was
+  written. Nothing after `fc0d19e` is in scope. T118 and later tasks are
+  out: T118 supplies one of v2.7's incidents.
+- **The key:** every correction T112's own record states, meaning a
+  committed sentence that a later committed sentence corrects or
+  supersedes, within the round.
+  - The parent finds them by reading the whole record and searching it,
+    and pins each in full, as R0d's key was. That covers every clause
+    carrying the earlier claim or the correction, and one sentence on what
+    a `why` must state.
+  - The key is committed before any subagent runs and is never shown to
+    one.
+- **The viability gate (free, before any spend):** reach is measured on the
+  pinned key.
+  - A correction is in reach when its earlier claim and its correction are
+    in committed sentences, and the pipeline can bring them together. That
+    means different documents (`groups.mjs` skips same-document pairs), one
+    file at two commits, or a premise check.
+  - T086 spends only if at least 8 corrections are in reach. Otherwise it
+    stops, and the operator chooses again. T112 is one author's task file
+    in the main, and its self-corrections may sit in one document.
+- **Procedure:** v2.7 in full.
+  - The cut, transcribers by document group, the blind auditor, citation
+    closure, linking and three reconcilers.
+  - Canaries follow v2.7 items 1 and 2. The parent writes each check
+    canary's refutation into the canary key first.
+  - Every brief starts from `docs/plans/evidence/t087/`, takes its examples
+    from neither round 3 nor T112, and shows 0 hits against this key.
+  - RSNA is read only with `git show`, `git grep` and `git log`, under
+    `GIT_OPTIONAL_LOCKS=0`.
+- **Spend:** `agent-fan-out`, at most 10 Opus subagent first passes: up to
+  6 transcribers, 1 auditor and 3 reconcilers, sized from the cut. It
+  starts only on the operator's go, given after the gate passes and the
+  inputs are committed.
+  - Each may be rerun once, if it dies or misses a canary. A rerun after a
+    death resumes from its lines.
+  - Nothing beyond that without the operator.
+- **What no subagent may read:** this key or this file, the grade, AGE
+  Aris's `docs/plans/`, `AA/tasks/` and `PROGRESS.md`, or RSNA's later
+  tasks.
+- **Pass, and v2.7 is accepted:** all of these hold.
+  - **Recall:** at least 80% of the corrections in reach are caught, by
+    R0d's rule. A catch is a `conflict` or `superseded` line on an earlier
+    and a correcting fact, a `contradicted` check on an earlier fact, or
+    `search-flipped` on one, each with a `why` the parent judges states the
+    correction.
+  - Every canary is caught, the auditor's and the reconcilers', after at
+    most one rerun each.
+  - `conflict`, `superseded` and `contradicted` lines are each at least
+    90% real. They are marked by hand, on a seeded sample of 60 where a
+    kind has more than 60.
+- **Otherwise:** each miss is listed with its §5.5 gap, and the operator
+  decides between revising the design and accepting it as it stands.
 
 ## Handoff — state at last stop
 
@@ -55,9 +120,10 @@ its rule is here, rule 5.)*
   D9
 - **In flight:** nothing
 - **On disk:** nothing
-- **Resume with:** the operator's choice of round. v2.7 is accepted
-  (T087, 2026-10-22)
-- **Next decision:** which round
+- **Resume with:** the operator's approval of the decision rules; then
+  claim. v2.7 is accepted (T087, 2026-10-22), and the round is T112
+- **Next decision:** approve the rules (the viability gate's 8 and the
+  80% bar especially)
 
 ## Verify
 

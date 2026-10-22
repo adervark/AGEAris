@@ -33,17 +33,18 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T04:03Z · 87 tasks: 31 backlog, 0 WIP (0 in progress), 56 delivered`
+`board · 2026-10-22T04:08Z · 87 tasks: 31 backlog, 0 WIP (0 in progress), 56 delivered`
 
-FLOW · **WIP 0/2** · throughput 12.8/wk (55 in 30d) · cycle time 50th 5m / 85th 81m (n=55)
-FLOW · Little's Law: 0 ÷ 12.8/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 13.1/wk (56 in 30d) · cycle time 50th 5m / 85th 81m (n=56)
+FLOW · Little's Law: 0 ÷ 13.1/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 1 not ready |
-| **DONE** | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 6h |  |
+| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 3m |  |
+|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 6h |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 15h |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 16h |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 17h |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 8d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 8d |  |
@@ -98,7 +99,6 @@ FLOW · Little's Law: 0 ÷ 12.8/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 15d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚑ no decision rule registered — not ready to pull if it will spend (rule 5)
 <!-- /AA:generated -->
 
 <!--
