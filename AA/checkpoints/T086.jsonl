@@ -13,3 +13,12 @@
 {"ts":"2026-10-22T04:43:04Z","run":"4279585a.bf5b","kind":"doing","what":"G2: transcribing 428 clauses","next":"dispose of every clause"}
 {"ts":"2026-10-22T04:43:06Z","run":"4279585a.2f32","kind":"doing","what":"G1: transcribing 461 clauses","next":"dispose of every clause"}
 {"ts":"2026-10-22T04:43:08Z","run":"4279585a.f127","kind":"doing","what":"G3: transcribing 426 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-22T04:49:22Z","run":"4279585a.bf5b","kind":"did","what":"G2: 202 of 428 clauses disposed","next":"the rest of G2"}
+{"ts":"2026-10-22T04:49:47Z","run":"4279585a.f127","kind":"did","what":"G3: 227 of 426 clauses disposed","next":"the rest of G3"}
+{"ts":"2026-10-22T04:51:48Z","run":"4279585a.2f32","kind":"did","what":"G1: 206 of 461 clauses disposed","next":"the rest of G1"}
+{"ts":"2026-10-22T04:55:00Z","run":"4279585a.f127","kind":"did","what":"G3 clean: 651 facts, 38 skips, 11 min","next":"parent merges"}
+{"ts":"2026-10-22T04:55:00Z","run":"4279585a.f127","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-22T04:56:37Z","run":"4279585a.bf5b","kind":"did","what":"G2 clean: 609 facts, 70 skips, 13 min","next":"parent merges"}
+{"ts":"2026-10-22T04:56:37Z","run":"4279585a.bf5b","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-22T05:01:07Z","run":"4279585a.2f32","kind":"did","what":"G1 clean: 551 facts, 62 skips, 17 min","next":"parent merges"}
+{"ts":"2026-10-22T05:01:07Z","run":"4279585a.2f32","kind":"end","left":"nothing","next":"parent merges"}
