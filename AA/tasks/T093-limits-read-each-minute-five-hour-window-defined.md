@@ -1,8 +1,8 @@
 ---
 id: T093
 title: "Limits read each minute, the 5-hour window defined, /aa current"
-status: backlog
-owner: ""
+status: in_progress
+owner: adervark @default/1f16c0d5 2026-10-22 — faster reads with back-off, 5-hour window, /aa installed
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
