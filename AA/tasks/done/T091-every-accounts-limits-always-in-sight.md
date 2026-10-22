@@ -1,7 +1,7 @@
 ---
 id: T091
 title: "Every account's limits in sight on every page, kept fresh"
-status: claimed
+status: done
 owner: adervark @default/1f16c0d5 2026-10-22 — a limits strip on every page, refreshed every minute
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
@@ -56,8 +56,9 @@ AGE Aris, and they keep themselves current without a click.
   top bar, no console errors, no sideways scroll; 97 px tall at 390 px.
   A grid that aligned the phone rows wrapped each account to two lines
   and was dropped.
-- **In flight:** a page left open 5.5 minutes, to see the reading move on.
-  Not yet seen.
+- **Closed** 2026-10-22 18:18Z: a page left open 5.5 minutes asked 6
+  times; each account's reading moved on 5 minutes after the last.
+- **In flight:** nothing
 - **On disk:** nothing uncommitted
 
 ## Verify
@@ -66,6 +67,22 @@ Open any page: every account's windows are in the strip, and match
 `/aa limits`. Leave it open past 5 minutes: the reading's time moves on.
 
 ## Result
+
+**Done (2026-10-22), `af3ec0b`.** A strip under the top bar, on every page,
+shows every Claude account with every window it has: percent used, the
+reset, the most-left account, and why one cannot be read.
+
+- The page reads `/api/limits` on load and each minute while visible. Left
+  open 5.5 minutes, it asked 6 times; each account's reading moved on 5
+  minutes after the last (18:12:30Z → 18:17:31Z), and the strip with it
+  (`default` 15% → 17%). The server's hold keeps Anthropic at one read per
+  account per 5 minutes.
+- Wide and phone, Home and Projects scrolled: pinned under the top bar, no
+  console errors, no sideways scroll, 57 px tall wide and 97 px at 390 px.
+- `npm test` 550 of 550, `npm run check` clean. No new test: the
+  read-rate guarantee is the server's, tested in T089.
+
+**Spend:** none.
 
 ## Notes
 

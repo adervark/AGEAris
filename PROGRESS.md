@@ -770,3 +770,9 @@ its date, the number, and where the evidence is. Newest last.
   (`3c08f3a`). Read live at 18:03Z: `default` 12% / 2%, `b` 2% / 7%, `k`
   4% / 66%, `v` expired. Its first outbound call; it never refreshes a
   token and writes nothing under `~/.claude*`.
+
+## 2026-10-22 — T091 done: every account's limits on every page, kept fresh
+
+- A strip under the top bar shows every Claude account and every window it
+  has, on every page (`af3ec0b`). A page left open 5.5 minutes asked 6
+  times, and each reading moved on after 5 minutes, the server's hold.

@@ -7,9 +7,9 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** nothing. T089 is done: each Claude account's limits are
-on the Agents page, `GET /api/limits` and `/aa limits`; check them before a
-fan-out. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
+**In progress:** nothing. T089 and T091 are done: each Claude account's
+limits are in a strip on every page, kept fresh, on the Agents page, from
+`GET /api/limits` and `/aa limits`; check them before a fan-out. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
 stands after H1's 4 of 13, its blind spot in §5.5, and v2.8 registered
 (T090). T077 (S1a) can start.
 
@@ -35,17 +35,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T18:10Z · 91 tasks: 32 backlog, 1 WIP (1 in progress), 58 delivered`
+`board · 2026-10-22T18:19Z · 91 tasks: 32 backlog, 0 WIP (0 in progress), 59 delivered`
 
-FLOW · **WIP 1/2** · throughput 13.5/wk (58 in 30d) · cycle time 50th 6m / 85th 1h (n=58)
-FLOW · Little's Law: 1 ÷ 13.5/wk ≈ 12h expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 13.5/wk (58 in 30d) · cycle time 50th 6m / 85th 1h (n=58)
+FLOW · Little's Law: 0 ÷ 13.5/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T091 | Every account's limits in sight on every page, kept fresh | adervark | now |  |
 | **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T089 | The limits left on each Claude account | adervark | 6m |  |
-|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 7m |  |
+| **DONE** | T089 | The limits left on each Claude account | adervark | 15m |  |
+|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 15m |  |
 |  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 14h |  |
 |  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 20h |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 29h |  |
@@ -69,7 +68,7 @@ FLOW · Little's Law: 1 ÷ 13.5/wk ≈ 12h expected · lead time 85th 35h
 |  | T040 | Aris under the logo, centred | adervark | 13d |  |
 |  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 13d |  |
 |  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 13d |  |
-|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 13d |  |
+|  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 14d |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 14d |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 14d |  |
 |  | T034 | Silver accents, taken from the logo | adervark | 14d |  |
