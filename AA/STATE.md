@@ -33,15 +33,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T04:08Z · 87 tasks: 31 backlog, 0 WIP (0 in progress), 56 delivered`
+`board · 2026-10-22T04:11Z · 88 tasks: 31 backlog, 1 WIP (1 in progress), 56 delivered`
 
-FLOW · **WIP 0/2** · throughput 13.1/wk (56 in 30d) · cycle time 50th 5m / 85th 81m (n=56)
-FLOW · Little's Law: 0 ÷ 13.1/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 13.1/wk (56 in 30d) · cycle time 50th 5m / 85th 81m (n=56)
+FLOW · Little's Law: 1 ÷ 13.1/wk ≈ 12h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
+| **IN PROGRESS** 1/2 | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 12h | ⚠ |
 | **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 3m |  |
+| **DONE** | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 6m |  |
 |  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 6h |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 15h |  |
 |  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 17h |  |
@@ -99,6 +100,7 @@ FLOW · Little's Law: 0 ÷ 13.1/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 15d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
+- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 <!-- /AA:generated -->
 
 <!--
