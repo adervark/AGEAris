@@ -120,15 +120,17 @@ approved by the operator as drafted the same day.*
 
 - **Last touched:** 2026-10-22, adervark @default/4279585a: the spend is
   under way on the operator's go.
-  - The registrar is done: 122 measurands, committed at `02ed6a5`.
-- **In flight:** transcribers G1, G2 and G3 (runs `4279585a.2f32`, `.bf5b`
-  and `.f127`), writing `docs/plans/evidence/t086/ledger-G*.jsonl`.
-- **Agents used:** 4 of the 10 allowed first passes.
-- **Resume with:** `AA/ckpt.sh live T086`. A transcriber that died is rerun
-  once, resuming from its lines.
-  - When all three are clean (`t082/r0c/check.mjs`), run `t082/r0c/closure.mjs`
-    to `cut/GC.jsonl`, then the closure transcriber.
-  - Then `audit-view.mjs`, with `--exclude key.json`, then the auditor.
+  - Registrar, transcribers G1–G3 and GC, and the auditor are done and
+    clean. The auditor caught all 40 of its canaries. All committed, the
+    reconcilers' views, canary key and `grade.mjs` last, at `7a4bfff`.
+- **In flight:** reconcilers R1, R2 and R3 (runs `4279585a.5f2e`, `.6df6`
+  and `.bf4b`), writing `docs/plans/evidence/t086/rec/out-R*.jsonl`.
+- **Agents used:** 9 of the 10 allowed first passes.
+- **Resume with:** `AA/ckpt.sh live T086`. A reconciler that died, or
+  missed a canary, is rerun once, resuming from its lines.
+  - When all three are clean (`check-reconcile.mjs`), run `node grade.mjs >
+    grade.json` in `docs/plans/evidence/t086/`, judge each candidate's
+    `why` by hand and mark `precision-units.txt` by hand.
 - **Next decision:** none until the grade, unless a stage fails twice.
 
 ## Verify
