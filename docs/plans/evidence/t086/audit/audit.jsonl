@@ -1,0 +1,808 @@
+{"kind":"audit","clause":"T112#4","finding":"ok","why":"same claim as the status line (line 4) and the BLOCKED heading (line 289): the task is blocked on the exhausted Kaggle weekly GPU quota","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#6","finding":"ok","why":"task title: names the task's aim, states nothing that could be true or false","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#7","finding":"ok","why":"heading that only names a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#11","finding":"missed","why":"heading asserts a consequence: the state-dict key mismatch would have cost the day (refusal at the end of an eight-hour run)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#14","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#15","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#20","finding":"missed","why":"says the converted dict loads strict=True with zero missing/unexpected keys and the two forwards agree to max |Δ| = 0 on CPU: measured result","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#22","finding":"missed","why":"heading asserts that 224 changes the day (cost of the plan depends on resolution): a consequence claim","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#24","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#25","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#26","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#27","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#28","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#29","finding":"missed","why":"table cell value: res 224 is the row key of the measured bs2 row (3.36 GiB, 15.21 ms, 3.5 h)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#34","finding":"missed","why":"table cell value: res 224 of the bs4 row (5.55 GiB, 15.40 ms, 3.6 h)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#39","finding":"missed","why":"table cell value: res 256 of the measured row (3.98 GiB, 19.66 ms, 4.6 h)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#44","finding":"missed","why":"table cell value: res 352 of the measured row (6.06 GiB, 38.07 ms, 8.8 h)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#47","finding":"missed","why":"table cell value: 0.55 h/epoch at res 352 bs 2, a measurement","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#49","finding":"missed","why":"table cell value: res 384 of the measured row (7.13 GiB, 45.72 ms, 10.6 h)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#64","finding":"missed","why":"adds subject and values beyond the competitor-at-0.95 intel: our corpus is (N,44,336,336) and our window is three consecutive slices as RGB","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#66","finding":"missed","why":"says the intel is a reason to prefer 224 and not a measurement: a claim about its evidential status","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#73","finding":"missed","why":"heading asserts a consequence: the norm defect would have been recorded as a (negative) result","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#74","finding":"ok","why":"connective introducing a quoted code block; asserts nothing itself","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#91","finding":"ok","why":"same claim as line 140 'Training is no longer the bottleneck. Scoring is.'","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#96","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#97","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#107","finding":"ok","why":"connective","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#110","finding":"missed","why":"heading asserts the schedule is pre-registered (fixed before any score): a state claim about the plan","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#118","finding":"ok","why":"label introducing the table","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#119","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#120","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#121","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#122","finding":"missed","why":"table cell value: the time 'on arrival' at which bringup_4090.sh runs, part of the schedule row's claim","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#125","finding":"missed","why":"table cell value: ~08:00, time the first 4090 fold starts and submission 1 is pushed","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#128","finding":"missed","why":"table cell value: 08:00–15:00, the window for folds 2–N","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#132","finding":"missed","why":"table cell value: ~15:10, time submission 1 is read","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#134","finding":"missed","why":"table cell value: ~15:30, time submission 2 is pushed","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#135","finding":"missed","why":"table cell value: the card 'continue's training at ~15:30, part of the row's plan","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#137","finding":"missed","why":"table cell value: ~22:40, time to read, record and stop","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#149","finding":"missed","why":"decision rule: ≥ 0.948 → ADOPT, and it asserts our arm is then better than theirs in the stage","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#158","finding":"missed","why":"says the factors were measured off the notebook: the instrument behind the 0.20 × 0.60 × 0.60 table","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#159","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#160","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#161","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#162","finding":"ok","why":"row label naming the stage only; the value 0.20 is in its own cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#165","finding":"missed","why":"row label states structure: an inner blend against the private resgated CoAt (factor × 0.60)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#168","finding":"missed","why":"row label states structure: an outer blend against the transformer stack (factor × 0.60)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#177","finding":"ok","why":"same claim at lines 184, 317 and 397: the published member reads 0.9054–0.9213 on gold-58","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#183","finding":"missed","why":"heading carries a value: +0.009 is what the rank move requires (0.941 → 0.950)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#186","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#187","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#199","finding":"ok","why":"heading naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#202","finding":"missed","why":"rule plus cause: no b2 work, because the 2026-09-16 adoption ruling superseded it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#204","finding":"ok","why":"same rule as the BROKEN floor at line 180: gold-58 < 0.85 → do not submit","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#207","finding":"ok","why":"heading naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#218","finding":"ok","why":"same claim as status line 4 and line 496: weekly GPU quota exhausted 2026-09-18 02:04Z","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#230","finding":"ok","why":"same claim as line 330 and line 441: our 224 arm is resolved-behind v5, do not submit it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#232","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#233","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#234","finding":"missed","why":"row label names the checkpoint compared: ours is coat_t112_224_fold0.best.pt","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#236","finding":"missed","why":"table cell value: ours reads gold-58 0.8854 in the paired read","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#237","finding":"missed","why":"row label names the checkpoint compared: theirs is raptor_ft_coatnet_v5_full_swa.pt","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#246","finding":"missed","why":"says the withdrawal was decided on a resolved local instrument before any leaderboard read, so T057 rule 6 is not engaged: cause and rule","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#247","finding":"missed","why":"says the comparison is against v5 not v8, and v5 was deployed on 64 slots with 62 windows: values and a limit","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#252","finding":"ok","why":"heading naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#270","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#271","finding":"ok","why":"row label naming the training side only","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#273","finding":"ok","why":"row label naming the kernel side only","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#279","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#280","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#281","finding":"missed","why":"table cell value: condition A's chain is 336 → 224, the trainer's","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#282","finding":"missed","why":"table cell value: condition A reads gold-58 0.8854","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#283","finding":"missed","why":"table cell value: condition C's chain is 336 → 224 (at k 42)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#285","finding":"missed","why":"table cell value: condition B's chain is 336 → 384 → 224, the kernel's","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#290","finding":"ok","why":"rhetorical aside about the write-up itself; no claim about code, data or plan","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#295","finding":"ok","why":"heading naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#296","finding":"missed","why":"state and date: moving machines, last touched 2026-09-18 on the laptop by adervark @b/c480ad78","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#299","finding":"missed","why":"heading carries a date and a rule: the operator decided on 2026-09-18 and it binds the next session","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#301","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#308","finding":"missed","why":"plan rule with values: calibrate first with calib_4070.py --res 384 --bs 8 4 --k 12 --steps 6","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#309","finding":"missed","why":"estimate: laptop numbers extrapolate batch 8 at 384 to about 23 GiB, tight on a 24 GB card","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#312","finding":"missed","why":"adds a condition to the line-351 bar: it applies once the Kaggle quota resets","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#314","finding":"missed","why":"heading states a rule: reproduce the anchor before trusting any number on the new machine","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#317","finding":"missed","why":"plan rule: run dry_run.py too (it must report 13/13 stages)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#321","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#322","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#323","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#335","finding":"missed","why":"table cell value: v5 goes to outputs/t071/raptor/raptor_ft_coatnet_v5_full_swa.pt","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#337","finding":"missed","why":"table cell value: tonight's arm is 279 MB","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#341","finding":"missed","why":"says the full checkpoint with optimizer state is outputs/t112/coat_t112_224_fold0.best.pt, 878 MB, laptop-only","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#355","finding":"missed","why":"heading asserts a state: these lessons lived only in the laptop's memory (not in the record)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#362","finding":"ok","why":"heading naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#365","finding":"ok","why":"same claim as line 289 heading: quota exhausted 02:04Z 2026-09-18","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#367","finding":"ok","why":"same claim at line 474: arm_t112.sh needs bash","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112#368","finding":"ok","why":"heading naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112@ac3a38c#1","finding":"missed","why":"front matter of the earlier version states status 'claimed' and that the load path was proven and the swap kernel built: state claims","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T112@7966326#6","finding":"missed","why":"state claim: the dataset bhavishnithinr/rsna-knee-t112-arm is uploaded, private and ready","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#1","finding":"missed","why":"heading asserts a consequence with a date: the state-dict join would have cost the 4090's first day (2026-09-18)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#27","finding":"ok","why":"heading that names the section's topics and date; the quota claim is made in the body (line 72)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#31","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#32","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#33","finding":"missed","why":"table cell value: condition A's chain is 336 → 224, the trainer's","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#35","finding":"missed","why":"table cell value: condition C's chain is 336 → 224 (at k 42)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#37","finding":"missed","why":"table cell value: condition B's chain is 336 → 384 → 224, the kernel's","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#50","finding":"ok","why":"same claim in the section body (line 97): RESOLVED, ours is behind v5 (paired Δ −0.0277)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#52","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#53","finding":"ok","why":"table header cell","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#54","finding":"missed","why":"row label names the checkpoint compared: ours is coat_t112_224_fold0.best.pt","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#55","finding":"missed","why":"table cell value: our recipe is 384 decode → res 224, norm none, k 42","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#57","finding":"missed","why":"row label names the other checkpoint compared: raptor_ft_coatnet_v5_full_swa.pt","run":"4279585a.d49c"}
+{"kind":"audit","clause":"PROGRESS#64","finding":"missed","why":"rule: the bar for submitting our arm is now a paired Δ whose CI lower bound is ≥ 0","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#4","finding":"ok","why":"same next step as the 21:50:02Z doing entry: read gold-58 in the morning against the BROKEN floor","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#7","finding":"ok","why":"bare next-step pointer (read the A/B/C results); asserts nothing","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#9","finding":"missed","why":"names where the VOID verdict is read: outputs/t112/arm_t112.log, checked for VOID-CLEAN before the submit decision","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#12","finding":"missed","why":"plan with an order: re-run arm_t112.sh only after the 4090 closes the gold-58 gap","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#13","finding":"ok","why":"hands the next action to the operator; asserts nothing testable","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#17","finding":"missed","why":"procedure rule: run arm_t112.sh, then read the VOID lines before submitting","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#22","finding":"ok","why":"bare next-step pointer (read ci95[0]); the bar it is read against is the next clause","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#23","finding":"ok","why":"same bar as the 18:44:16Z blocked entry and T112 line 440: CI lower bound >= 0 clears it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#28","finding":"ok","why":"same claim as the 18:57:47Z did entry: neither arm clears the registered bar; all three fail it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#30","finding":"ok","why":"hands the next step to the operator; asserts nothing","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#31","finding":"missed","why":"plan with an order: VOID-check the save run before submitting","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#32","finding":"missed","why":"says the 384/imagenet arm was pushed: dataset versioned (279MB, ready), kernel version 1 pushed: an event with values","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#34","finding":"missed","why":"plan with an order: poll the save run, VOID-check, then submit","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#38","finding":"ok","why":"same rule as the 21:31:34Z entry and T112 line 194: read against S=0.941 at ±0.007","run":"4279585a.d49c"}
+{"kind":"audit","clause":"trail#39","finding":"missed","why":"drops a qualifier: the 21:31:34Z entry and T112 line 259 bar a variant resubmit; this says no resubmit at all on any outcome","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#1","finding":"missed","why":"says what the code does: renders T112's kernel from T105's and swaps exactly one CoAtNet-stage member for ours","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#18","finding":"ok","why":"label for the paragraph; the consequence it names is stated in full in the same docstring (resolved negative entered on a normalisation mismatch)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#19","finding":"ok","why":"connective introducing a quoted code block","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#20","finding":"missed","why":"quotes their eval_windows to state a fact about it: imagenet norm subtracts mean [0.485,0.456,0.406] and divides by std [0.229,0.224,0.225]","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#35","finding":"ok","why":"label that only names the paragraph's topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#47","finding":"ok","why":"lead-in label to the TRAINER_NORM comment; the claim (coat_data divides by 255, no mean/std) is in the next sentence and in the docstring","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#49","finding":"ok","why":"label that only names the constant block's topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#50","finding":"missed","why":"says build_backbone takes no img_size so timm builds on the default 384 grid (576 slots) while eval_windows feeds ck['res']: a claim about their code","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#56","finding":"ok","why":"same claim in the grid_edit docstring and the GRID EDIT comment: every parent arm evaluates at 384","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#63","finding":"missed","why":"rule in the error message: when the anchor count is wrong the notebook changed shape and must be re-read before rendering","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#64","finding":"ok","why":"same claim as the PARENT_ARMS comment: the table is read off the notebook and check_arms re-reads it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#65","finding":"ok","why":"same refusal as the PARENT_ARMS comment: check_arms refuses if the notebook no longer matches the 0.941 parent's stage","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#66","finding":"ok","why":"same rule as the PARENT_DECODE comment: replacing a member must not change its decode key","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#67","finding":"ok","why":"same claim in the module docstring: every distinct (img, slots, span, k_eval) costs a full pass over the test set","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#69","finding":"ok","why":"same behaviour as the module docstring: assert_decode_group_preserved refuses a new decode group","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#70","finding":"ok","why":"same claim in the module docstring: img/slots/span/k_eval are the decode recipe, shared per group","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#71","finding":"ok","why":"same claim in the module docstring: res comes from ck['res'] and is applied per arm inside eval_windows","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#73","finding":"ok","why":"same claim as the module docstring: the arm carries its own norm, the call site becomes per-arm","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#78","finding":"ok","why":"same claim as the PARENT_RES comment: img_size=ck_res is a no-op only at the 384 default, verified bit-identical, weights and forward","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#80","finding":"ok","why":"same claim as the PARENT_RES comment and assert_parent_res docstring: no-op only at res 384, verified bit-identical","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#81","finding":"ok","why":"same claim as the assert_parent_res docstring: another res would be built differently, so render refuses","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#85","finding":"ok","why":"same claim as the GRID EDIT comment: no img_size, default 384 grid of 576, a 224 window is 196 tokens","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#88","finding":"missed","why":"says the grid failure is silent and that silence is why it gets a raising edit rather than a comment: a state and a cause","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#93","finding":"ok","why":"same claim as the GRID EDIT comment: every arm they ship evaluates at 384, so it was never exercised","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#94","finding":"ok","why":"same claim as the GRID EDIT comment: ours is the first member with res != 384","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#96","finding":"ok","why":"format fragment of an error message reporting a runtime count; asserts nothing","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#97","finding":"ok","why":"same consequence in the grid_edit docstring: built on the 384 grid, forwards raise into the except, column a constant 0.5, VOID banner still prints","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#111","finding":"ok","why":"same rule as the ARM_DATASET comment: the dataset must be in dataset_sources or find_weight_file raises","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#114","finding":"missed","why":"adds the validation rule's form: a dataset reference must be owner/slug; the docstring says only that empty or malformed slugs are refused","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#120","finding":"ok","why":"same rule as the comment above it: the 32-pixel grid constrains res","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#122","finding":"ok","why":"same claim as the comment above it: the dominant arm decodes at img 336, legal there","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#128","finding":"ok","why":"same check as the comment above it: assert against the written metadata that it names the dataset","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#133","finding":"ok","why":"same claim as the void_patterns docstring: the must-NOT half is void_forbidden()","run":"4279585a.d49c"}
+{"kind":"audit","clause":"build_t112_kernel.py#136","finding":"ok","why":"same consequence as the grid_edit docstring: the per-study except prints FALLBACK, run completes, column stays 0.5, measuring a removal","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#18","finding":"missed","why":"count history with values: +10 came from counting call sites; 984 checks, md5 edefbf8d…, the gate 2026-09-12 to 09-14; +6 from test_ckpt_inflight (T092)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#48","finding":"ok","why":"same claim as build_t112_kernel.py's docstring: arms grouped by (img, slots, span, k_eval), decoded once per group, resized per arm to res","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#53","finding":"ok","why":"same claim as build_t112_kernel.py's docstring: NORM = \"imagenet\" for every arm in their eval_windows","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#57","finding":"ok","why":"same consequence as build_t112_kernel.py's docstring: a resolved negative about our architecture from a normalisation mismatch","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#60","finding":"ok","why":"same invariant as build_t112_kernel.py render(): the pushed metadata names the dataset holding the file the ARMS entry asks for","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#61","finding":"ok","why":"same claim as add_dataset_source's docstring: the control failed on an empty slug that satisfied the assertion","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#75","finding":"ok","why":"same claim as build_t112_kernel.py's GRID EDIT comment: their four arms evaluate at 384, ours is the first member with another res","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#79","finding":"ok","why":"same claim as the header's +9 entry: test_gpu_watchdog defined since f896e38, never called until wired 2026-09-12","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#80","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#81","finding":"ok","why":"same claim as the header's +6 entry: test_ckpt_inflight, 2026-09-14 (T092)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#82","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#83","finding":"ok","why":"same claim as the header's +18 entry: test_gold_in_training, 2026-09-14 (T094)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#84","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#85","finding":"ok","why":"same claim as the header's +14 entry: test_cam_viewer, 2026-09-15 (T096)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#86","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#87","finding":"ok","why":"same claim as the header's +9 entry: test_t100_bn_recalibration, 2026-09-15 (T100)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#88","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#89","finding":"ok","why":"same claim as the header's +10 entry: test_t101_spatial_queries, 2026-09-15 (T101)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#90","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#91","finding":"ok","why":"same claim as the header's +14 entry: test_t104_asl_soft, 2026-09-15 (T104)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#92","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#93","finding":"ok","why":"same claim as the header's +13 entry: test_t103_report_auxiliary, 2026-09-15 (T103)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#94","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#95","finding":"ok","why":"same claim as the header's +32 entry: test_record_guard wired in 2026-09-18 (T057)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#96","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#97","finding":"ok","why":"same claim as the header's +31 entry: test_coat_export wired in 2026-09-18 (T112)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#98","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#99","finding":"ok","why":"same claim as the header's +22 entry: test_t115_notebook_builds_at_the_checkpoints_res, 2026-09-19 (T115)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#100","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#102","finding":"ok","why":"same claim as the header's -79 entry: a clean worktree died with FileNotFoundError out of test_coat_export, 83 later checks never run","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#104","finding":"ok","why":"lead-in to the rule stated in the next sentence; adds nothing of its own","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#108","finding":"missed","why":"says ENV_ORDER checks do not move the md5, because an artifact-dependent hash is not an identity: behaviour plus cause","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#116","finding":"ok","why":"restates the docstring's preceding sentence: both entry points call this one function instead of a copy each","run":"4279585a.d49c"}
+{"kind":"audit","clause":"_order.py#129","finding":"ok","why":"bare remedy in an error message; the rule (a check name defined in two modules is refused) is the comment and raise around it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"Makefile#5","finding":"ok","why":"same rule as the header's make check line: lint + guards + smoke, stop at first failure","run":"4279585a.d49c"}
+{"kind":"audit","clause":"Makefile#9","finding":"ok","why":"label naming the constants below; the rule about them is the next sentence","run":"4279585a.d49c"}
+{"kind":"audit","clause":"dry_run.py#10","finding":"missed","why":"consequence measured by T067: a CUDA-context process makes gpu_queue.sh log 'GPU busy again; deferring' and restart a queued fold's 20-minute cooldown","run":"4279585a.d49c"}
+{"kind":"audit","clause":"dry_run.py#16","finding":"missed","why":"says CUDA_VISIBLE_DEVICES is cleared before torch is imported: an ordering claim about the code","run":"4279585a.d49c"}
+{"kind":"audit","clause":"dry_run.py#17","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"dry_run.py#18","finding":"ok","why":"same claim as the docstring: EXPECTED_STAGES (thirteen) is asserted, every stage must be reached","run":"4279585a.d49c"}
+{"kind":"audit","clause":"dry_run.py#23","finding":"missed","why":"says a window is (3, H, W) with three consecutive slices as the three channels, and that this is what 2.5D means here","run":"4279585a.d49c"}
+{"kind":"audit","clause":"dry_run.py#31","finding":"missed","why":"says why the bare reference exists: to_raptor_state is referenced so the import is not decorative (a cause about the code)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"dry_run.py#32","finding":"missed","why":"rule about the code: a crash is recorded as a failed stage, hence the broad except","run":"4279585a.d49c"}
+{"kind":"audit","clause":"arm_t112.sh#1","finding":"missed","why":"says what the script does: pushes our arm, waits for the save run, downloads it and VOID-checks it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"paired_vs_member.py#2","finding":"ok","why":"label that only names the section","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#2","finding":"ok","why":"label that only names the paragraph's topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#7","finding":"ok","why":"label introducing the paragraph; the mistake itself is stated in the sentences that follow","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#8","finding":"missed","why":"says the teacher is outputs/t107/labels_ours.parquet and that it scores gold-58 0.8976: a location and a measured value","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#12","finding":"ok","why":"citation fragment pointing at a memory note","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#21","finding":"ok","why":"citation fragment pointing at CLAUDE.md","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#25","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#26","finding":"ok","why":"section label; the claim about refusals is the next sentence","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#30","finding":"ok","why":"section label; the contract is stated in the next sentences","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#34","finding":"missed","why":"values and a consequence: N = 3200 (part 1) and 1207 (part 2) make 4,407 studies; a half-staged corpus trains on 3,200 and reports nothing wrong","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#45","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#48","finding":"ok","why":"same claim as the header's THREE MODES list: --manifest runs on the laptop","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#55","finding":"missed","why":"says what the repository copy carries: src/, $GOLD, this script and the manifest (as opposed to the gitignored corpus and teacher)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#62","finding":"ok","why":"step label with no content of its own","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#63","finding":"ok","why":"same claim as the header's THREE MODES list: --verify runs on the 4090","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#69","finding":"ok","why":"section label","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#70","finding":"ok","why":"same claim as the header: bring-up is five checks in order, refusing at the first failure","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#71","finding":"ok","why":"same claim as the header's check (a): a card >= 20 GiB and idle","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#73","finding":"ok","why":"step label naming a topic; check (b)'s content is stated in the header","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#74","finding":"ok","why":"same claim as the header's check (c): every corpus file at its exact byte size","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#79","finding":"ok","why":"lint pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#80","finding":"ok","why":"lint pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#82","finding":"ok","why":"label; the control is described in the sentences that follow","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#85","finding":"ok","why":"same claim as the header's check (e): a short CUDA smoke","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#88","finding":"ok","why":"lint pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#89","finding":"ok","why":"lint pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#90","finding":"ok","why":"lint pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"bringup_4090.sh#100","finding":"ok","why":"same claim as the header: the script prints the exact training command so nobody retypes it","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_export.py#15","finding":"missed","why":"heading presupposes a claim about the code: the reference class is extracted from the notebook, not retyped","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#10","finding":"ok","why":"lint pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#13","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#14","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#17","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#42","finding":"missed","why":"says the check used to count distinct values in the builder's own PARENT_DECODE constant, a property of the builder not the kernel (D7, review)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#44","finding":"missed","why":"says the registered default is res 224 from our checkpoint and img 384 from the replaced member, so the decode-group count does not change","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#50","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#66","finding":"missed","why":"heading presupposes a state: every existing guard (export test, dry run, push_arm, builder) missed the grid defect","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py#74","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat.py@3ed78d4#4","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"push_arm.py#9","finding":"missed","why":"says kaggle datasets version replaces a directory, so adding a file re-uploads all of it, measured at 130-250 kB/s in T066","run":"4279585a.d49c"}
+{"kind":"audit","clause":"push_arm.py#19","finding":"ok","why":"usage-example label","run":"4279585a.d49c"}
+{"kind":"audit","clause":"push_arm.py#20","finding":"ok","why":"example invocation in the usage text; asserts nothing","run":"4279585a.d49c"}
+{"kind":"audit","clause":"push_arm.py#23","finding":"ok","why":"pointer","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_data.py#4","finding":"missed","why":"says each window is three consecutive slices as the three RGB channels, giving most of a 3D model's benefit at a 2D cost","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_data.py#45","finding":"ok","why":"docstring lead naming what the function returns; the rule (ends excluded) is the next sentence","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_train.py#8","finding":"missed","why":"says gradient checkpointing is required: without it res 352 bs 1 runs out of memory asking for 24 MiB","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_train.py#15","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_train.py#20","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"selftest_4090.py#1","finding":"missed","why":"says what the script establishes: the Windows 4090 is ready to train, or it reports exactly why not","run":"4279585a.d49c"}
+{"kind":"audit","clause":"selftest_4090.py#17","finding":"ok","why":"lint pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"setup_4090.cmd#9","finding":"missed","why":"values and a consequence: the line is ~10 Mbps, torch is 1.9 GB (~30 min), so it is never downloaded again (--offline); CUDA 13.0 exact for this driver","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_curve.py#3","finding":"missed","why":"heading presupposes a claim: AUC, not accuracy, is what the figure plots","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_curve.py#10","finding":"ok","why":"heading naming a topic; the findings are in the sentences that follow","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_curve.py#29","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"coat_curve.py#33","finding":"ok","why":"section divider naming a topic","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T065-branch-out-on-the-base-model.md§104#2","finding":"missed","why":"attributed claim: 224–288 is the sweet spot and resolution is not a driver (Arrants + tennogh)","run":"4279585a.d49c"}
+{"kind":"audit","clause":"T111-one-model-on-the-card-we-have.md§77#1","finding":"missed","why":"heading asserts the decision rules were fixed in advance, before any run: a state claim about the plan","run":"4279585a.d49c"}
+{"kind":"audit","clause":"tooling.py§test_gpu_watchdog#6","finding":"ok","why":"coverage pragma","run":"4279585a.d49c"}
+{"kind":"audit","clause":"tooling.py§test_gpu_watchdog#8","finding":"ok","why":"connective pointing back at the previous sentence","run":"4279585a.d49c"}
+{"kind":"audit","clause":"smoke_test.py§main#8","finding":"ok","why":"label naming the constants below","run":"4279585a.d49c"}
+{"kind":"assign","item":1,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":2,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":3,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":4,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":5,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":6,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":7,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":8,"measurand":"competitor-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":9,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":10,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":11,"measurand":"coat-train-hours-per-epoch-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":12,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":13,"measurand":"coat-train-hours-per-epoch-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":14,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":15,"measurand":"coat-train-hours-per-epoch-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":16,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":17,"measurand":"coat-train-hours-per-epoch-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":18,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":19,"measurand":"coat-train-hours-per-epoch-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":20,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":21,"measurand":"train-cost-ratio-vs-224","run":"4279585a.d49c"}
+{"kind":"assign","item":22,"measurand":"train-cost-ratio-vs-224","run":"4279585a.d49c"}
+{"kind":"assign","item":23,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":24,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":25,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":26,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":27,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":28,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":29,"measurand":"public-trainer-4090-16-epoch-hours","run":"4279585a.d49c"}
+{"kind":"assign","item":30,"measurand":"rtx4090-vs-laptop-speedup-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":31,"measurand":"rtx4090-224-fold-hours-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":32,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":33,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":34,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":35,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":36,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":37,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":38,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":39,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":40,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":41,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":42,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":43,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":44,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":45,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":46,"measurand":"t105-submit-to-complete-time","run":"4279585a.d49c"}
+{"kind":"assign","item":47,"measurand":"kaggle-daily-submission-limit","run":"4279585a.d49c"}
+{"kind":"assign","item":48,"measurand":"read-then-act-cycles-per-day","run":"4279585a.d49c"}
+{"kind":"assign","item":49,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":50,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":51,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":52,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":53,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":54,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":55,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":56,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":57,"measurand":"four090-day-utilisation","run":"4279585a.d49c"}
+{"kind":"assign","item":58,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":59,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":60,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":61,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":62,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":63,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":64,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":65,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":66,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":67,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":68,"measurand":"t091-b2-accum4-mb2-score","run":"4279585a.d49c"}
+{"kind":"assign","item":69,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":70,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":71,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":72,"measurand":"coatnet-rmlp2-batchnorm-layer-count","run":"4279585a.d49c"}
+{"kind":"assign","item":73,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":74,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":75,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":76,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":77,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":78,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":79,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":80,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":81,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":82,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":83,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":84,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":85,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":86,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":87,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":88,"measurand":"parent-stack-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":89,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":90,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":91,"measurand":"t112-swap-submission-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":92,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":93,"measurand":"our-arm-effective-blend-weight","run":"4279585a.d49c"}
+{"kind":"assign","item":94,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":95,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":96,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":97,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":98,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":99,"measurand":"our-arm-effective-blend-weight","run":"4279585a.d49c"}
+{"kind":"assign","item":100,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":101,"measurand":"t106-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":102,"measurand":"public-lb-noise-band","run":"4279585a.d49c"}
+{"kind":"assign","item":103,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":104,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":105,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":106,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":107,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":108,"measurand":"gold58-gap-ours-vs-published-member","run":"4279585a.d49c"}
+{"kind":"assign","item":109,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":110,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":111,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":112,"measurand":"maxspan-v5-slot-effective-blend-weight","run":"4279585a.d49c"}
+{"kind":"assign","item":113,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":114,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":115,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":116,"measurand":"public-lb-rank-at-score","run":"4279585a.d49c"}
+{"kind":"assign","item":117,"measurand":"public-lb-rank-at-score","run":"4279585a.d49c"}
+{"kind":"assign","item":118,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":119,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":120,"measurand":"t106-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":121,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":122,"measurand":"t108-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":123,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":124,"measurand":"t110-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":125,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":126,"measurand":"t105-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":127,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":128,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":129,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":130,"measurand":"t112-swap-submission-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":131,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":132,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":133,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":134,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":135,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":136,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":137,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":138,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":139,"measurand":"transfer-manifest-entry-count","run":"4279585a.d49c"}
+{"kind":"assign","item":140,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":141,"measurand":"dry-run-stages-passed","run":"4279585a.d49c"}
+{"kind":"assign","item":142,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":143,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":144,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":145,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":146,"measurand":"read-then-act-cycles-per-day","run":"4279585a.d49c"}
+{"kind":"assign","item":147,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":148,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":149,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":150,"measurand":"kaggle-weekly-gpu-quota","run":"4279585a.d49c"}
+{"kind":"assign","item":151,"measurand":"stack-submission-share-of-weekly-quota","run":"4279585a.d49c"}
+{"kind":"assign","item":152,"measurand":"stack-submissions-per-week-budget","run":"4279585a.d49c"}
+{"kind":"assign","item":153,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":154,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":155,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":156,"measurand":"resample-delta-b-minus-a","run":"4279585a.d49c"}
+{"kind":"assign","item":157,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":158,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":159,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":160,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":161,"measurand":"t112-224-fold-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":162,"measurand":"v5-full-swa-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":163,"measurand":"t112-224-fold-paired-delta-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":164,"measurand":"t112-224-fold-paired-delta-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":165,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":166,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":167,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":168,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":169,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":170,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":171,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":172,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":173,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":174,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":175,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":176,"measurand":"gold58-paired-ci-halfwidth-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":177,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":178,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":179,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":180,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":181,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":182,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":183,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":184,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":185,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":186,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":187,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":188,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":189,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":190,"measurand":"t112-224-fold-gold58-auc-resample-a","run":"4279585a.d49c"}
+{"kind":"assign","item":191,"measurand":"t112-224-fold-gold58-auc-resample-c","run":"4279585a.d49c"}
+{"kind":"assign","item":192,"measurand":"t112-224-fold-gold58-auc-resample-b","run":"4279585a.d49c"}
+{"kind":"assign","item":193,"measurand":"resample-delta-window-count-effect","run":"4279585a.d49c"}
+{"kind":"assign","item":194,"measurand":"resample-delta-chain-effect","run":"4279585a.d49c"}
+{"kind":"assign","item":195,"measurand":"resample-delta-b-minus-a","run":"4279585a.d49c"}
+{"kind":"assign","item":196,"measurand":"t112-224-fold-gold58-auc-resample-b","run":"4279585a.d49c"}
+{"kind":"assign","item":197,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":198,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":199,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":200,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":201,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":202,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":203,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":204,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":205,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":206,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":207,"measurand":"coat-train-peak-vram-384-bs8-extrapolated","run":"4279585a.d49c"}
+{"kind":"assign","item":208,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":209,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":210,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":211,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":212,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":213,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":214,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":215,"measurand":"corpus-fetch-time","run":"4279585a.d49c"}
+{"kind":"assign","item":216,"measurand":"corpus-fetch-time","run":"4279585a.d49c"}
+{"kind":"assign","item":217,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":218,"measurand":"teacher-file-size","run":"4279585a.d49c"}
+{"kind":"assign","item":219,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":220,"measurand":"v5-full-swa-checkpoint-size","run":"4279585a.d49c"}
+{"kind":"assign","item":221,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":222,"measurand":"t112-arm-checkpoint-size","run":"4279585a.d49c"}
+{"kind":"assign","item":223,"measurand":"t112-full-checkpoint-size","run":"4279585a.d49c"}
+{"kind":"assign","item":224,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":225,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":226,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":227,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":228,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":229,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":230,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":231,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":232,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":233,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":234,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":235,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":236,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":237,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":238,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":239,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":240,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":241,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":242,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":243,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":244,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":245,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":246,"measurand":"controls-caught-check-defects","run":"4279585a.d49c"}
+{"kind":"assign","item":247,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":248,"measurand":"critic-review-finding-count","run":"4279585a.d49c"}
+{"kind":"assign","item":249,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":250,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":251,"measurand":"t112-swap-submission-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":252,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":253,"measurand":"published-coat-member-gold58-auc-public","run":"4279585a.d49c"}
+{"kind":"assign","item":254,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":255,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":256,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":257,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":258,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":259,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":260,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":261,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":262,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":263,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":264,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":265,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":266,"measurand":"t112-224-fold-paired-delta-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":267,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":268,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":269,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":270,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":271,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":272,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":273,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":274,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":275,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":276,"measurand":"transfer-manifest-entry-count","run":"4279585a.d49c"}
+{"kind":"assign","item":277,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":278,"measurand":"train-cost-ratio-vs-224","run":"4279585a.d49c"}
+{"kind":"assign","item":279,"measurand":"competitor-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":280,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":281,"measurand":"t105-submit-to-complete-time","run":"4279585a.d49c"}
+{"kind":"assign","item":282,"measurand":"read-then-act-cycles-per-day","run":"4279585a.d49c"}
+{"kind":"assign","item":283,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":284,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":285,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":286,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":287,"measurand":"t112-swap-submission-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":288,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":289,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":290,"measurand":"t105-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":291,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":292,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":293,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":294,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":295,"measurand":"t112-224-fold-minutes-per-epoch-actual","run":"4279585a.d49c"}
+{"kind":"assign","item":296,"measurand":"laptop-gpu-power-draw-during-fold","run":"4279585a.d49c"}
+{"kind":"assign","item":297,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":298,"measurand":"t112-224-fold-best-epoch","run":"4279585a.d49c"}
+{"kind":"assign","item":299,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":300,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":301,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":302,"measurand":"t112-224-fold-gold58-auc-resample-a","run":"4279585a.d49c"}
+{"kind":"assign","item":303,"measurand":"t112-224-fold-gold58-auc-resample-c","run":"4279585a.d49c"}
+{"kind":"assign","item":304,"measurand":"t112-224-fold-gold58-auc-resample-b","run":"4279585a.d49c"}
+{"kind":"assign","item":305,"measurand":"resample-delta-b-minus-a","run":"4279585a.d49c"}
+{"kind":"assign","item":306,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":307,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":308,"measurand":"kaggle-weekly-gpu-quota","run":"4279585a.d49c"}
+{"kind":"assign","item":309,"measurand":"t112-arm-checkpoint-size","run":"4279585a.d49c"}
+{"kind":"assign","item":310,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":311,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":312,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":313,"measurand":"stack-submission-share-of-weekly-quota","run":"4279585a.d49c"}
+{"kind":"assign","item":314,"measurand":"stack-submissions-per-week-budget","run":"4279585a.d49c"}
+{"kind":"assign","item":315,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":316,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":317,"measurand":"our-arm-effective-blend-weight","run":"4279585a.d49c"}
+{"kind":"assign","item":318,"measurand":"t106-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":319,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":320,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":321,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":322,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":323,"measurand":"t112-224-fold-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":324,"measurand":"v5-full-swa-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":325,"measurand":"t112-224-fold-paired-delta-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":326,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":327,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":328,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":329,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":330,"measurand":"gold58-paired-ci-halfwidth-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":331,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":332,"measurand":"lint-runtime","run":"4279585a.d49c"}
+{"kind":"assign","item":333,"measurand":"guards-runtime","run":"4279585a.d49c"}
+{"kind":"assign","item":334,"measurand":"smoke-suite-runtime","run":"4279585a.d49c"}
+{"kind":"assign","item":335,"measurand":"raptor-corpus-size","run":"4279585a.d49c"}
+{"kind":"assign","item":336,"measurand":"smoke-suite-runtime","run":"4279585a.d49c"}
+{"kind":"assign","item":337,"measurand":"t105-submit-to-complete-time","run":"4279585a.d49c"}
+{"kind":"assign","item":338,"measurand":"scoring-kernel-runtime-cap","run":"4279585a.d49c"}
+{"kind":"assign","item":339,"measurand":"scoring-kernel-runtime-margin","run":"4279585a.d49c"}
+{"kind":"assign","item":340,"measurand":"kernel-vs-trainer-input-std-ratio","run":"4279585a.d49c"}
+{"kind":"assign","item":341,"measurand":"kernel-vs-trainer-input-mean-shift","run":"4279585a.d49c"}
+{"kind":"assign","item":342,"measurand":"stage4-elapsed-time-in-kernel","run":"4279585a.d49c"}
+{"kind":"assign","item":343,"measurand":"t110-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":344,"measurand":"coatnet-grid-position-count","run":"4279585a.d49c"}
+{"kind":"assign","item":345,"measurand":"coatnet-grid-position-count","run":"4279585a.d49c"}
+{"kind":"assign","item":346,"measurand":"scoring-kernel-runtime-margin","run":"4279585a.d49c"}
+{"kind":"assign","item":347,"measurand":"scoring-kernel-runtime-margin","run":"4279585a.d49c"}
+{"kind":"assign","item":348,"measurand":"kernel-vs-trainer-input-std-ratio","run":"4279585a.d49c"}
+{"kind":"assign","item":349,"measurand":"kernel-vs-trainer-input-mean-shift","run":"4279585a.d49c"}
+{"kind":"assign","item":350,"measurand":"coatnet-grid-position-count","run":"4279585a.d49c"}
+{"kind":"assign","item":351,"measurand":"dry-run-stages-passed","run":"4279585a.d49c"}
+{"kind":"assign","item":352,"measurand":"coat-train-ms-per-window-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":353,"measurand":"coat-train-peak-vram-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":354,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":355,"measurand":"smoke-subject-module-line-count","run":"4279585a.d49c"}
+{"kind":"assign","item":356,"measurand":"smoke-subject-module-line-count","run":"4279585a.d49c"}
+{"kind":"assign","item":357,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":358,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":359,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":360,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":361,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":362,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":363,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":364,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":365,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":366,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":367,"measurand":"smoke-checks-run-clean-worktree","run":"4279585a.d49c"}
+{"kind":"assign","item":368,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":369,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":370,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":371,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":372,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":373,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":374,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":375,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":376,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":377,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":378,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":379,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":380,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":381,"measurand":"raptor-corpus-part2-study-count","run":"4279585a.d49c"}
+{"kind":"assign","item":382,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":383,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":384,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":385,"measurand":"t105-submit-to-complete-time","run":"4279585a.d49c"}
+{"kind":"assign","item":386,"measurand":"scoring-kernel-runtime-cap","run":"4279585a.d49c"}
+{"kind":"assign","item":387,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":388,"measurand":"kernel-vs-trainer-input-std-ratio","run":"4279585a.d49c"}
+{"kind":"assign","item":389,"measurand":"kernel-vs-trainer-input-mean-shift","run":"4279585a.d49c"}
+{"kind":"assign","item":390,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":391,"measurand":"stage4-elapsed-time-in-kernel","run":"4279585a.d49c"}
+{"kind":"assign","item":392,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":393,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":394,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":395,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":396,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":397,"measurand":"opencv-rendered-pixel-change","run":"4279585a.d49c"}
+{"kind":"assign","item":398,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":399,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":400,"measurand":"smoke-env-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":401,"measurand":"smoke-checks-run-clean-worktree","run":"4279585a.d49c"}
+{"kind":"assign","item":402,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":403,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":404,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":405,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":406,"measurand":"smoke-suite-gated-check-count","run":"4279585a.d49c"}
+{"kind":"assign","item":407,"measurand":"smoke-check-count-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":408,"measurand":"coatnet-grid-position-count","run":"4279585a.d49c"}
+{"kind":"assign","item":409,"measurand":"upstream-notebook-cell-count","run":"4279585a.d49c"}
+{"kind":"assign","item":410,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":411,"measurand":"smoke-checks-run-full-machine","run":"4279585a.d49c"}
+{"kind":"assign","item":412,"measurand":"smoke-checks-run-clean-worktree","run":"4279585a.d49c"}
+{"kind":"assign","item":413,"measurand":"ckpt22-bank-checkpoint-count","run":"4279585a.d49c"}
+{"kind":"assign","item":414,"measurand":"raptor-corpus-size","run":"4279585a.d49c"}
+{"kind":"assign","item":415,"measurand":"raptor-corpus-size","run":"4279585a.d49c"}
+{"kind":"assign","item":416,"measurand":"upstream-notebook-cell-count","run":"4279585a.d49c"}
+{"kind":"assign","item":417,"measurand":"kaggle-save-run-duration","run":"4279585a.d49c"}
+{"kind":"assign","item":418,"measurand":"kaggle-save-run-duration","run":"4279585a.d49c"}
+{"kind":"assign","item":419,"measurand":"kaggle-daily-submission-limit","run":"4279585a.d49c"}
+{"kind":"assign","item":420,"measurand":"our-arm-effective-blend-weight","run":"4279585a.d49c"}
+{"kind":"assign","item":421,"measurand":"t106-public-lb-delta","run":"4279585a.d49c"}
+{"kind":"assign","item":422,"measurand":"kaggle-weekly-gpu-quota","run":"4279585a.d49c"}
+{"kind":"assign","item":423,"measurand":"eval-decimation-factor","run":"4279585a.d49c"}
+{"kind":"assign","item":424,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":425,"measurand":"gpu-queue-cooldown-length","run":"4279585a.d49c"}
+{"kind":"assign","item":426,"measurand":"gold58-absolute-noise-band","run":"4279585a.d49c"}
+{"kind":"assign","item":427,"measurand":"gold58-paired-band-t057","run":"4279585a.d49c"}
+{"kind":"assign","item":428,"measurand":"raptor-corpus-slices-per-study","run":"4279585a.d49c"}
+{"kind":"assign","item":429,"measurand":"v5-full-swa-gold58-auc-t071-fidelity","run":"4279585a.d49c"}
+{"kind":"assign","item":430,"measurand":"v5-full-swa-stored-gold-auc","run":"4279585a.d49c"}
+{"kind":"assign","item":431,"measurand":"laptop-gpu-vram-capacity","run":"4279585a.d49c"}
+{"kind":"assign","item":432,"measurand":"laptop-gpu-power-limit","run":"4279585a.d49c"}
+{"kind":"assign","item":433,"measurand":"our-arm-effective-blend-weight","run":"4279585a.d49c"}
+{"kind":"assign","item":434,"measurand":"published-coat-member-gold58-auc-public","run":"4279585a.d49c"}
+{"kind":"assign","item":435,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":436,"measurand":"dry-run-stages-passed","run":"4279585a.d49c"}
+{"kind":"assign","item":437,"measurand":"r1-224-imagenet-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":438,"measurand":"r1-224-imagenet-paired-delta-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":439,"measurand":"r2-384-imagenet-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":440,"measurand":"r2-384-imagenet-paired-delta-vs-v5","run":"4279585a.d49c"}
+{"kind":"assign","item":441,"measurand":"v5-full-swa-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":442,"measurand":"v5-full-swa-gold58-auc-paired-script","run":"4279585a.d49c"}
+{"kind":"assign","item":443,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":444,"measurand":"parent-stack-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":445,"measurand":"public-lb-noise-band","run":"4279585a.d49c"}
+{"kind":"assign","item":446,"measurand":"full-stack-kernel-runtime-estimate","run":"4279585a.d49c"}
+{"kind":"assign","item":447,"measurand":"raptor-corpus-size","run":"4279585a.d49c"}
+{"kind":"assign","item":448,"measurand":"leaked-label-file-gold58-auc","run":"4279585a.d49c"}
+{"kind":"assign","item":449,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":450,"measurand":"laptop-rtc-backward-jump","run":"4279585a.d49c"}
+{"kind":"assign","item":451,"measurand":"raptor-corpus-size","run":"4279585a.d49c"}
+{"kind":"assign","item":452,"measurand":"teacher-file-size","run":"4279585a.d49c"}
+{"kind":"assign","item":453,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":454,"measurand":"calib-repeat-run-spread","run":"4279585a.d49c"}
+{"kind":"assign","item":455,"measurand":"laptop-gpu-vram-capacity","run":"4279585a.d49c"}
+{"kind":"assign","item":456,"measurand":"rtx4090-vram-capacity","run":"4279585a.d49c"}
+{"kind":"assign","item":457,"measurand":"full-stack-kernel-runtime-estimate","run":"4279585a.d49c"}
+{"kind":"assign","item":458,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":459,"measurand":"kernel-vs-trainer-input-std-ratio","run":"4279585a.d49c"}
+{"kind":"assign","item":460,"measurand":"raptor-corpus-part2-study-count","run":"4279585a.d49c"}
+{"kind":"assign","item":461,"measurand":"laptop-gpu-vram-capacity","run":"4279585a.d49c"}
+{"kind":"assign","item":462,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":463,"measurand":"head-key-prefix-length","run":"4279585a.d49c"}
+{"kind":"assign","item":464,"measurand":"full-stack-kernel-runtime-estimate","run":"4279585a.d49c"}
+{"kind":"assign","item":465,"measurand":"parent-stack-public-lb-score","run":"4279585a.d49c"}
+{"kind":"assign","item":466,"measurand":"full-stack-kernel-runtime-estimate","run":"4279585a.d49c"}
+{"kind":"assign","item":467,"measurand":"stage4-elapsed-time-in-kernel","run":"4279585a.d49c"}
+{"kind":"assign","item":468,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":469,"measurand":"full-stack-kernel-runtime-estimate","run":"4279585a.d49c"}
+{"kind":"assign","item":470,"measurand":"full-stack-kernel-runtime-estimate","run":"4279585a.d49c"}
+{"kind":"assign","item":471,"measurand":"kaggle-dataset-upload-throughput","run":"4279585a.d49c"}
+{"kind":"assign","item":472,"measurand":"read-then-act-cycles-per-day","run":"4279585a.d49c"}
+{"kind":"assign","item":473,"measurand":"kaggle-dataset-to-kernel-start-gap","run":"4279585a.d49c"}
+{"kind":"assign","item":474,"measurand":"kaggle-concurrent-gpu-session-limit","run":"4279585a.d49c"}
+{"kind":"assign","item":475,"measurand":"kaggle-gpu-slot-wait-time","run":"4279585a.d49c"}
+{"kind":"assign","item":476,"measurand":"raptor-corpus-slices-per-study","run":"4279585a.d49c"}
+{"kind":"assign","item":477,"measurand":"raptor-corpus-study-count","run":"4279585a.d49c"}
+{"kind":"assign","item":478,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":479,"measurand":"kernel-vs-trainer-input-std-ratio","run":"4279585a.d49c"}
+{"kind":"assign","item":480,"measurand":"kernel-vs-trainer-input-mean-shift","run":"4279585a.d49c"}
+{"kind":"assign","item":481,"measurand":"raptor-corpus-size","run":"4279585a.d49c"}
+{"kind":"assign","item":482,"measurand":"raptor-corpus-part1-study-count","run":"4279585a.d49c"}
+{"kind":"assign","item":483,"measurand":"raptor-corpus-part2-study-count","run":"4279585a.d49c"}
+{"kind":"assign","item":484,"measurand":"teacher-labels-gold58-auc","run":"4279585a.d49c"}
+{"kind":"assign","item":485,"measurand":"leaked-label-file-gold58-auc","run":"4279585a.d49c"}
+{"kind":"assign","item":486,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":487,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":488,"measurand":"laptop-gpu-vram-capacity","run":"4279585a.d49c"}
+{"kind":"assign","item":489,"measurand":"coat-train-peak-vram-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":490,"measurand":"coat-train-ms-per-window-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":491,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":492,"measurand":"coat-train-peak-vram-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":493,"measurand":"coat-train-ms-per-window-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":494,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":495,"measurand":"coat-train-peak-vram-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":496,"measurand":"coat-train-ms-per-window-laptop-calib","run":"4279585a.d49c"}
+{"kind":"assign","item":497,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":498,"measurand":"t4-ms-per-window","run":"4279585a.d49c"}
+{"kind":"assign","item":499,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":500,"measurand":"coat-train-16-epoch-hours-laptop-projected","run":"4279585a.d49c"}
+{"kind":"assign","item":501,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":502,"measurand":"leaked-label-file-gold58-auc","run":"4279585a.d49c"}
+{"kind":"assign","item":503,"measurand":"torch-download-size","run":"4279585a.d49c"}
+{"kind":"assign","item":504,"measurand":"rtx4090-pc-line-bandwidth","run":"4279585a.d49c"}
+{"kind":"assign","item":505,"measurand":"torch-download-size","run":"4279585a.d49c"}
+{"kind":"assign","item":506,"measurand":"torch-download-time-4090-line","run":"4279585a.d49c"}
+{"kind":"assign","item":507,"measurand":"other-deps-download-size","run":"4279585a.d49c"}
+{"kind":"assign","item":508,"measurand":"rtx4090-pc-line-bandwidth","run":"4279585a.d49c"}
+{"kind":"assign","item":509,"measurand":"torch-download-size","run":"4279585a.d49c"}
+{"kind":"assign","item":510,"measurand":"torch-download-time-4090-line","run":"4279585a.d49c"}
+{"kind":"assign","item":511,"measurand":"win-lock-package-count","run":"4279585a.d49c"}
+{"kind":"assign","item":512,"measurand":"torch-download-time-4090-line","run":"4279585a.d49c"}
+{"kind":"assign","item":513,"measurand":"t112-224-fold-gold58-auc-trainer-eval","run":"4279585a.d49c"}
+{"kind":"assign","item":514,"measurand":"t112-224-fold-best-epoch","run":"4279585a.d49c"}
+{"kind":"assign","item":515,"measurand":"t112-224-fold-final-train-loss","run":"4279585a.d49c"}
+{"kind":"assign","item":516,"measurand":"t112-224-fold-wall-time","run":"4279585a.d49c"}
+{"kind":"assign","item":517,"measurand":"legal-window-centres-per-study","run":"4279585a.d49c"}
+{"kind":"assign","item":518,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":519,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":520,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":521,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":522,"measurand":"published-coat-member-gold58-auc-public","run":"4279585a.d49c"}
+{"kind":"assign","item":523,"measurand":"published-coat-member-gold58-auc-public","run":"4279585a.d49c"}
+{"kind":"assign","item":524,"measurand":"published-coat-member-gold58-auc-public","run":"4279585a.d49c"}
+{"kind":"assign","item":525,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":526,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":527,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":528,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":529,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":530,"measurand":"smoke-checks-run-clean-worktree","run":"4279585a.d49c"}
+{"kind":"assign","item":531,"measurand":"smoke-checks-run-full-machine","run":"4279585a.d49c"}
+{"kind":"assign","item":532,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":533,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":534,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":535,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":536,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":537,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":538,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":539,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":540,"measurand":"kaggle-weekly-gpu-quota","run":"4279585a.d49c"}
+{"kind":"assign","item":541,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":542,"measurand":"public-trainer-4090-16-epoch-hours","run":"4279585a.d49c"}
+{"kind":"assign","item":543,"measurand":"none","run":"4279585a.d49c"}
+{"kind":"assign","item":544,"measurand":"laptop-gpu-vram-capacity","run":"4279585a.d49c"}

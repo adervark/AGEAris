@@ -306,5 +306,5 @@ writeFileSync(join(outDir, 'eligible.json'), JSON.stringify(checks.filter((c) =>
   conclusion: c.conclusion, value: byId.get(c.conclusion).value, says: byId.get(c.conclusion).says, givenBy: givenBy(c),
   premises: c.premises.map((p) => ({ id: p, value: byId.get(p).value, says: byId.get(p).says })), refuted: !!refutations[c.conclusion],
 })), null, 1) + '\n');
-writeFileSync(keyPath, JSON.stringify({ canaries: canaries.map((c) => ({ ...c, realView: vid.get(c.real), twinView: vid.get(c.twin) })), view: Object.fromEntries([...vid].map(([id, v]) => [v, id])) }, null, 1) + '\n');
+writeFileSync(keyPath, JSON.stringify({ canaries: canaries.map((c) => ({ ...c, realView: vid.get(c.real), twinView: vid.get(c.twin), ...(c.type === 'check' ? { refutation: refutations[c.real] } : {}) })), view: Object.fromEntries([...vid].map(([id, v]) => [v, id])) }, null, 1) + '\n');
 console.log(JSON.stringify(summary));

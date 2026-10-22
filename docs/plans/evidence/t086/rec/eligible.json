@@ -1,0 +1,342 @@
+[
+ {
+  "conclusion": "F51",
+  "value": "3.01×",
+  "says": "224 is 3.01× cheaper than 384",
+  "givenBy": "F48: 45.72 / F32: 15.21",
+  "premises": [
+   {
+    "id": "F32",
+    "value": "15.21",
+    "says": "15.21"
+   },
+   {
+    "id": "F48",
+    "value": "45.72",
+    "says": "45.72"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F52",
+  "value": "2.50×",
+  "says": "2.50× cheaper than 352",
+  "givenBy": "F44: 38.07 / F32: 15.21",
+  "premises": [
+   {
+    "id": "F32",
+    "value": "15.21",
+    "says": "15.21"
+   },
+   {
+    "id": "F44",
+    "value": "38.07",
+    "says": "38.07"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F77",
+  "value": "~3.5×",
+  "says": "our laptop does 384/bs2 in 10.6 h, so the card is ~3.5×.",
+  "givenBy": "F50: 10.6 / F76: 3",
+  "premises": [
+   {
+    "id": "F76",
+    "value": "~3.0 h",
+    "says": "the public trainer's author documents ~3.0 h for the full 384/bs8 16-epoch recipe on one 4090"
+   },
+   {
+    "id": "F50",
+    "value": "10.6 h",
+    "says": "10.6 h"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F125",
+  "value": "~3.6 h",
+  "says": "Tonight (laptop, ~3.6 h, requires operator approval — it is a GPU spend)",
+  "givenBy": "F38: 3.6",
+  "premises": [
+   {
+    "id": "F38",
+    "value": "3.6 h",
+    "says": "3.6 h"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F128",
+  "value": "effective batch 8",
+  "says": "effective batch 8, the recipe's own",
+  "givenBy": "F127: 8",
+  "premises": [
+   {
+    "id": "F127",
+    "value": "--res 224 --bs 4 --accum 2 --epochs 16",
+    "says": "One fold, --res 224 --bs 4 --accum 2 --epochs 16 (effective batch 8, the recipe's own)"
+   },
+   {
+    "id": "F128",
+    "value": "effective batch 8",
+    "says": "effective batch 8, the recipe's own"
+   },
+   {
+    "id": "F129",
+    "value": "the idle+sleep inhibitor is held",
+    "says": "under scripts/gpu_queue.sh so the idle+sleep inhibitor is held"
+   },
+   {
+    "id": "F130",
+    "value": "--what=idle alone does not stop gsd-power",
+    "says": "T067: --what=idle alone does not stop gsd-power"
+   },
+   {
+    "id": "F131",
+    "value": "it fits without chunking",
+    "says": "5.55 GiB of 7.62 — it fits without chunking"
+   },
+   {
+    "id": "F132",
+    "value": "inside the one-fold-then-cool-down ruling at 3.6 h",
+    "says": "it is inside the one-fold-then-cool-down ruling at 3.6 h, unlike the 8.8 h 352 fold."
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F132",
+  "value": "inside the one-fold-then-cool-down ruling at 3.6 h",
+  "says": "it is inside the one-fold-then-cool-down ruling at 3.6 h, unlike the 8.8 h 352 fold.",
+  "givenBy": "F38: 3.6",
+  "premises": [
+   {
+    "id": "F38",
+    "value": "3.6 h",
+    "says": "3.6 h"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F142",
+  "value": "a second, independent reason 224 is the right lane tonight",
+  "says": "which is a second, independent reason 224 is the right lane tonight.",
+  "givenBy": "F141: 224",
+  "premises": [
+   {
+    "id": "F141",
+    "value": "micro-batch 4 (5.55 GiB of 7.62) where at 352 it could only afford 2",
+    "says": "At 224 the laptop affords micro-batch 4 (5.55 GiB of 7.62) where at 352 it could only afford 2"
+   },
+   {
+    "id": "F142",
+    "value": "a second, independent reason 224 is the right lane tonight",
+    "says": "which is a second, independent reason 224 is the right lane tonight."
+   }
+  ],
+  "refuted": false
+ },
+ {
+  "conclusion": "F180",
+  "value": "× 0.60",
+  "says": "× 0.60",
+  "givenBy": "F181: 0.6",
+  "premises": [
+   {
+    "id": "F181",
+    "value": "RUN['coatnet_w']['default'] = 0.60, cell 3",
+    "says": "RUN['coatnet_w']['default'] = 0.60, cell 3"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F197",
+  "value": "≈ 25%",
+  "says": "0.70 of the stage ≈ 25% of the final blend — 3.5× the signal",
+  "givenBy": "F196: 25",
+  "premises": [
+   {
+    "id": "F196",
+    "value": "0.70 of the stage",
+    "says": "swapping maxspan-v5 + its reverse view puts our arm at 0.70 of the stage ≈ 25% of the final blend"
+   },
+   {
+    "id": "F197",
+    "value": "≈ 25%",
+    "says": "0.70 of the stage ≈ 25% of the final blend — 3.5× the signal"
+   },
+   {
+    "id": "F198",
+    "value": "3.5×",
+    "says": "3.5× the signal"
+   },
+   {
+    "id": "F199",
+    "value": "_SLOTS64 and span 0.02–0.98",
+    "says": "moves the framing to _SLOTS64 and span 0.02–0.98"
+   },
+   {
+    "id": "F200",
+    "value": "trained on _SLOTS44",
+    "says": "where our fold (trained on _SLOTS44) has never been"
+   },
+   {
+    "id": "F178",
+    "value": "× 0.60",
+    "says": "× 0.60"
+   },
+   {
+    "id": "F180",
+    "value": "× 0.60",
+    "says": "× 0.60"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F374",
+  "value": "about 21 h",
+  "says": "The single-stream kaggle CLI measured 282 KiB/s, about 21 h.",
+  "givenBy": "F373: 21",
+  "premises": [
+   {
+    "id": "F373",
+    "value": "282 KiB/s",
+    "says": "The single-stream kaggle CLI measured 282 KiB/s, about 21 h."
+   },
+   {
+    "id": "F368",
+    "value": "21.9 GB",
+    "says": "corpus, 21.9 GB"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F433",
+  "value": "The 4090 lane is unaffected",
+  "says": "The 4090 lane is unaffected",
+  "givenBy": "F262: 4090",
+  "premises": [
+   {
+    "id": "F262",
+    "value": "does not touch the Kaggle quota at all",
+    "says": "What the 4090 is for, now: the card does not touch the Kaggle quota at all."
+   }
+  ],
+  "refuted": false
+ },
+ {
+  "conclusion": "F1040",
+  "value": "burn another save run off the 30 h/week quota to produce the identical version",
+  "says": "re-pushing would burn another save run off the 30 h/week quota to produce the identical version.",
+  "givenBy": "F1041: 30",
+  "premises": [
+   {
+    "id": "F1039",
+    "value": "skips step 1 when the kernel is already up",
+    "says": "--no-push skips step 1 when the kernel is already up"
+   },
+   {
+    "id": "F1040",
+    "value": "burn another save run off the 30 h/week quota to produce the identical version",
+    "says": "re-pushing would burn another save run off the 30 h/week quota to produce the identical version."
+   },
+   {
+    "id": "F1041",
+    "value": "30 h/week",
+    "says": "the 30 h/week quota"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F1791",
+  "value": "not safely readable as \"16 epochs is too many\"",
+  "says": "so the flat tail is not safely readable as \"16 epochs is too many\".",
+  "givenBy": "F1788: 16",
+  "premises": [
+   {
+    "id": "F1785",
+    "value": "persistent_workers=True",
+    "says": "Every CoAtNet fold to date, this one included, trained with persistent_workers=True"
+   },
+   {
+    "id": "F1786",
+    "value": "froze set_epoch in the workers",
+    "says": "which froze set_epoch in the workers"
+   },
+   {
+    "id": "F1787",
+    "value": "never happened",
+    "says": "so the per-epoch window resampling that coat_data.py calls \"the augmentation\" never happened"
+   },
+   {
+    "id": "F1788",
+    "value": "ONE fixed draw of 12 of ~42 legal window centres for all 16 epochs",
+    "says": "the model saw ONE fixed draw of 12 of ~42 legal window centres for all 16 epochs."
+   },
+   {
+    "id": "F1789",
+    "value": "~42",
+    "says": "12 of ~42 legal window centres"
+   },
+   {
+    "id": "F1790",
+    "value": "plateaus early and then overfits",
+    "says": "A fixed augmented copy of the corpus is exactly the setup in which a model plateaus early and then overfits"
+   },
+   {
+    "id": "F1791",
+    "value": "not safely readable as \"16 epochs is too many\"",
+    "says": "so the flat tail is not safely readable as \"16 epochs is too many\"."
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F1857",
+  "value": "≥ 0.948",
+  "says": "≥ 0.948 ADOPT",
+  "givenBy": "F1855: 0.941 + F1855: 0.007",
+  "premises": [
+   {
+    "id": "F1855",
+    "value": "S = 0.941",
+    "says": "±0.007 against S = 0.941"
+   },
+   {
+    "id": "F1856",
+    "value": "±0.007",
+    "says": "±0.007 against S = 0.941"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F1858",
+  "value": "≤ 0.934",
+  "says": "≤ 0.934 REJECT",
+  "givenBy": "F1855: 0.941 - F1855: 0.007",
+  "premises": [
+   {
+    "id": "F1855",
+    "value": "S = 0.941",
+    "says": "±0.007 against S = 0.941"
+   },
+   {
+    "id": "F1856",
+    "value": "±0.007",
+    "says": "±0.007 against S = 0.941"
+   }
+  ],
+  "refuted": true
+ }
+]

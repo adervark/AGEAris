@@ -1,0 +1,15 @@
+{
+ "F51": "F48 / F32 = 45.72 / 15.21 = 3.006 ms per window, so 224 is 3.01× cheaper than 384 and no other multiple follows.",
+ "F52": "F44 / F32 = 38.07 / 15.21 = 2.503 ms per window, so 224 is 2.50× cheaper than 352 and no other multiple follows.",
+ "F77": "F50 / F76 = 10.6 h / ~3.0 h = 3.53, so the card is ~3.5× the laptop and no other multiple follows.",
+ "F125": "F38 gives the laptop's 224, batch 4, 16-epoch fold as 3.6 h, so tonight's laptop fold is ~3.6 h and no other figure.",
+ "F128": "F127 gives --bs 4 --accum 2, and 4 × 2 = 8, so the effective batch is 8 and no other.",
+ "F132": "F38 gives the 224 fold as 3.6 h, so the fold falls inside the ruling at 3.6 h and at no other figure.",
+ "F180": "F181 gives RUN['coatnet_w']['default'] = 0.60, so the factor is × 0.60 and no other.",
+ "F197": "F196's own quote states the arm at 0.70 of the stage ≈ 25% of the final blend, so ≈ 25% and no other share.",
+ "F374": "F368 ÷ F373 = 21.9 GB ÷ 282 KiB/s ≈ 75,800 s ≈ 21.1 h, so about 21 h and no other duration.",
+ "F1040": "F1041 gives the quota as 30 h/week, so the save run burns the 30 h/week quota and no other allowance.",
+ "F1791": "F1788 gives the run as ONE fixed draw for all 16 epochs, so the reading at stake is \"16 epochs is too many\" and no other count.",
+ "F1857": "F1855 and F1856 give S = 0.941 ± 0.007, and 0.941 + 0.007 = 0.948, so ADOPT is ≥ 0.948 and no other bound.",
+ "F1858": "F1855 and F1856 give S = 0.941 ± 0.007, and 0.941 − 0.007 = 0.934, so REJECT is ≤ 0.934 and no other bound."
+}

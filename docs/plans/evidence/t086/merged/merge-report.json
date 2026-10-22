@@ -1,0 +1,247 @@
+{
+ "premiseUnwritten": [
+  {
+   "fact": "G1-F189",
+   "premise": "T112#177"
+  },
+  {
+   "fact": "G2-F359",
+   "premise": "_order.py#48"
+  },
+  {
+   "fact": "G2-F362",
+   "premise": "_order.py#48"
+  },
+  {
+   "fact": "G3-F23",
+   "premise": "bringup_4090.sh#12"
+  }
+ ],
+ "measurandDisputed": [
+  {
+   "fact": "G1-F2",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota-remaining"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F6",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F118",
+   "transcriber": [
+    "rtx4090-224-fold-hours-projected"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F139",
+   "transcriber": [
+    "rtx4090-vram-capacity"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F175",
+   "transcriber": [],
+   "auditor": "our-arm-effective-blend-weight"
+  },
+  {
+   "fact": "G1-F185",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ],
+   "auditor": "public-lb-noise-band"
+  },
+  {
+   "fact": "G1-F186",
+   "transcriber": [
+    "t106-public-lb-delta",
+    "t108-public-lb-delta",
+    "t110-public-lb-delta"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F194",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval",
+    "teacher-labels-gold58-auc"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F217",
+   "transcriber": [],
+   "auditor": "t112-swap-submission-public-lb-score"
+  },
+  {
+   "fact": "G1-F251",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F263",
+   "transcriber": [
+    "gold58-gap-ours-vs-published-member",
+    "published-coat-member-gold58-auc-public"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F281",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F282",
+   "transcriber": [
+    "maxspan-v5-slot-effective-blend-weight"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F312",
+   "transcriber": [
+    "dry-run-declared-stage-count"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F359",
+   "transcriber": [
+    "rtx4090-vram-capacity"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F362",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F363",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-paired-script",
+    "v5-full-swa-gold58-auc-paired-script",
+    "t112-224-fold-paired-delta-vs-v5"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F426",
+   "transcriber": [],
+   "auditor": "t112-swap-submission-public-lb-score"
+  },
+  {
+   "fact": "G1-F444",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota-remaining"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F492",
+   "transcriber": [
+    "t112-swap-submission-public-lb-score",
+    "parent-stack-public-lb-score"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F497",
+   "transcriber": [
+    "t106-public-lb-delta",
+    "t108-public-lb-delta",
+    "t110-public-lb-delta"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F512",
+   "transcriber": [
+    "teacher-labels-gold58-auc"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F519",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval",
+    "t112-224-fold-gold58-auc-resample-a"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F535",
+   "transcriber": [
+    "gold58-gap-ours-vs-published-member",
+    "published-coat-member-gold58-auc-public"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G2-F401",
+   "transcriber": [
+    "smoke-env-gated-check-count"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G2-F404",
+   "transcriber": [
+    "smoke-check-count-delta",
+    "smoke-env-gated-check-count"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G2-F603",
+   "transcriber": [
+    "t112-arm-checkpoint-size"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F32",
+   "transcriber": [
+    "raptor-corpus-size"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F246",
+   "transcriber": [],
+   "auditor": "parent-stack-public-lb-score"
+  },
+  {
+   "fact": "G3-F493",
+   "transcriber": [
+    "laptop-gpu-vram-capacity"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "GC-F37",
+   "transcriber": [],
+   "auditor": "published-coat-member-gold58-auc-public"
+  },
+  {
+   "fact": "GC-F149",
+   "transcriber": [],
+   "auditor": "public-trainer-4090-16-epoch-hours"
+  }
+ ],
+ "measurandAgreed": 512
+}
