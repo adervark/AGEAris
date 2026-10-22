@@ -718,3 +718,8 @@ its date, the number, and where the evidence is. Newest last.
 - **Evidence:** `docs/plans/evidence/t087/measurements.md`. The brief,
   checker and test carry nothing from R0d's key (`brief-check.mjs`: 0
   hits). Waiting on the operator's acceptance.
+
+## 2026-10-22 — T087 closed: v2.7 accepted, to be tested on the held-out round
+
+- The operator accepted research-runs v2.7, the stricter canary rule
+  included. T086 runs under it and waits only on the choice of round.

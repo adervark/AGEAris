@@ -7,10 +7,9 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** T087: research-runs v2.7 is written and waits on the
-operator's acceptance. It answers R0d (T085), which missed one canary of
-33. Then the held-out round (T086), whose round the operator chooses. T077
-waits on T086.
+**In progress:** nothing. Research-runs v2.7 was accepted on 2026-10-22
+(T087), to be tested on the held-out round (T086). T086 waits only on the
+operator's choice of round. T077 waits on T086.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -34,14 +33,13 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T04:01Z · 87 tasks: 31 backlog, 1 WIP (1 in progress), 55 delivered`
+`board · 2026-10-22T04:03Z · 87 tasks: 31 backlog, 0 WIP (0 in progress), 56 delivered`
 
-FLOW · **WIP 1/2** · throughput 12.8/wk (55 in 30d) · cycle time 50th 5m / 85th 81m (n=55)
-FLOW · Little's Law: 1 ÷ 12.8/wk ≈ 13h expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 12.8/wk (55 in 30d) · cycle time 50th 5m / 85th 81m (n=55)
+FLOW · Little's Law: 0 ÷ 12.8/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 5m |  |
 | **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 1 not ready |
 | **DONE** | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 6h |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 15h |  |

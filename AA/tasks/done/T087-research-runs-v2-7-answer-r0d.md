@@ -1,7 +1,7 @@
 ---
 id: T087
 title: "Research-runs design v2.7: answer R0d's missed canary and its loose ends"
-status: claimed
+status: done
 owner: adervark @default/4279585a 2026-10-22 — v2.7: canary eligibility, the checker's run ids, superseded under a changed condition, C3
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -55,7 +55,7 @@ that R0d's missed canary stands.
 - [x] §5.5 says plainly that a passed-over pair is not caught. Group
       canaries now go into each reconciler's largest groups, where R0d had
       none (measurements §2).
-- [ ] The operator accepts v2.7; T086's brief inherits it.
+- [x] The operator accepts v2.7 (2026-10-22); T086's brief inherits it.
 
 ## Decision rules — fixed in advance
 
@@ -67,15 +67,9 @@ that R0d's missed canary stands.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, adervark @default/4279585a: v2.7 is
-  written in `docs/plans/research-runs.md` ("Changes since v2.6", D10).
-  Its measurements, brief, checker and test are in
-  `docs/plans/evidence/t087/`.
+- **Last touched:** 2026-10-22, adervark @default/4279585a: closed on the
+  operator's acceptance; see Result.
 - **In flight:** nothing.
-- **On disk:** all committed.
-- **Next decision, the operator's:** accept v2.7, or send it back.
-- **Resume with:** the operator's answer. On acceptance, mark the design's
-  status accepted, close T087, and T086 waits only on the choice of round.
 
 ## Verify
 
@@ -83,6 +77,24 @@ Each item above links to the change that answers it, and the free
 measurement of the eligibility rule is in its evidence.
 
 ## Result
+
+**Accepted on 2026-10-22, to be tested on the held-out round (T086).** v2.7
+is in `docs/plans/research-runs.md` ("Changes since v2.6"; §10, D10). It was
+measured for free on R0d's material (`docs/plans/evidence/t087/measurements.md`).
+
+- **Check canaries:** a check is twinned only when its premises give the
+  figure the twin replaces, and the parent writes its refutation first. On
+  R0d it drops 9 of 20 check canaries, the missed 498 among them. It leaves
+  22 twinnable checks, against 31.
+- **Group canaries** reach each reconciler's largest groups. R0d had none
+  in its 29 groups of 40 or more facts, where C3's pair sat.
+- **`superseded`:** a later figure under another condition replaces
+  nothing. That question made all three ambiguous units.
+- **The checker** keeps a dead run's lines under their own ids. It has a
+  test of 6 cases.
+- **§5.5** lists a pair a reconciler passes over as caught by no check.
+
+**Spend:** none. One session (`4279585a`), no subagents.
 
 ## Notes
 

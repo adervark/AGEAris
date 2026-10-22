@@ -1,6 +1,6 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.7, for the operator** (2026-10-22, T087). Nothing here is
+**Status: v2.7, accepted to be tested** (2026-10-22, T087). Nothing here is
 built. v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
 and reached 7 of 12 on its re-grade, R0c (T082), against a bar of 10. v2.6
 answered R0c. R0d (T085) checked v2.6's mechanics on round 3 and missed one
@@ -1430,6 +1430,9 @@ approved a third round, on v2.3, which arrived complete.
   is not a pass. v2.6 is revised before the held-out round (T087).
   Ruling the canary unfair would have changed a rule after its result was
   known.
+- **v2.7 is accepted, to be tested on the held-out round (T086)**,
+  following the recommendation. Its stricter canary rule stands, with the
+  hand-written refutation beside it.
 
 S0 and the held-out round decide whether v2.7 holds before any code is
 written.

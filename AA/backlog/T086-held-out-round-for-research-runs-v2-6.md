@@ -55,7 +55,8 @@ its rule is here, rule 5.)*
   D9
 - **In flight:** nothing
 - **On disk:** nothing
-- **Resume with:** the operator's choice of round
+- **Resume with:** the operator's choice of round. v2.7 is accepted
+  (T087, 2026-10-22)
 - **Next decision:** which round
 
 ## Verify
