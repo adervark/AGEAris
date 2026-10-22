@@ -1964,21 +1964,69 @@ function renderAgents() {
   $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : state.agentsTab === 'limits' ? accountLimits() : workingNow());
 }
 
-// The Account limits tab reads /api/limits when it opens and when asked to
-// read again; the server holds each reading for 5 minutes.
-async function loadLimits(refresh = false) {
-  if (state.limitsLoading) return;
-  state.limitsLoading = true;
-  if (state.view === 'agents') renderMain();
-  try {
-    state.limits = await api(`/limits${refresh ? '?refresh=1' : ''}`);
-    state.limitsError = '';
-  } catch (error) {
-    state.limitsError = error.message;
-  } finally {
-    state.limitsLoading = false;
+// Every page reads /api/limits when it loads and each minute while it is in
+// sight; the strip under the top bar and the Account limits tab show the same
+// reading. The server holds each account's reading for 5 minutes, so this
+// never asks Anthropic more often than that; Read again asks past the hold, at
+// most once a minute per account.
+const LIMITS_POLL_MS = 60000;
+let limitsRequest = null;
+
+function loadLimits(refresh = false) {
+  if (limitsRequest) return limitsRequest;
+  if (refresh) {
+    state.limitsLoading = true;
     if (state.view === 'agents') renderMain();
   }
+  limitsRequest = api(`/limits${refresh ? '?refresh=1' : ''}`).then((limits) => {
+    state.limits = limits;
+    state.limitsError = '';
+  }, (error) => {
+    state.limitsError = error.message;
+  }).finally(() => {
+    limitsRequest = null;
+    state.limitsLoading = false;
+    renderLimitsStrip();
+    if (state.view === 'agents' && state.agentsTab === 'limits' && (refresh || !refreshPaused())) renderMain();
+  });
+  return limitsRequest;
+}
+
+// A reset in a few characters, for the strip: 47m, 4h 17m, Thu 14:00.
+function shortReset(iso) {
+  if (!iso) return 'no window open';
+  const minutes = Math.round((new Date(iso).getTime() - Date.now()) / 60000);
+  if (!Number.isFinite(minutes)) return '';
+  if (minutes <= 0) return 'now';
+  if (minutes < 60) return `${minutes}m`;
+  if (minutes < 24 * 60) return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+  return new Date(iso).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+}
+
+const STRIP_WINDOWS = [['session', '5h', 'Session (5 hours)'], ['weekly', 'Week', 'Weekly'], ['weeklyOpus', 'Opus', 'Weekly, Opus'], ['weeklySonnet', 'Sonnet', 'Weekly, Sonnet']];
+
+// Every account and every window it has, on every page. An account that
+// cannot be read says why, beside its last good reading.
+function renderLimitsStrip() {
+  const strip = $('#limits-strip');
+  const accounts = state.limits?.accounts || [];
+  if (!accounts.length) {
+    strip.hidden = !state.limitsError;
+    strip.innerHTML = state.limitsError ? `<span class="ls-error">Account limits: ${escape(state.limitsError)}</span>` : '';
+    return;
+  }
+  strip.hidden = false;
+  strip.innerHTML = accounts.map((account) => {
+    const windows = STRIP_WINDOWS.filter(([key]) => account.windows?.[key]).map(([key, short, long]) => {
+      const window = account.windows[key];
+      const used = Math.min(100, Math.max(0, window.percent));
+      const reset = shortReset(window.resetsAt);
+      return `<span class="ls-window ${limitTone(window.percent)}" title="${escape(`${long}: ${window.percent}% used, ${resetText(window.resetsAt)}`)}"><span class="ls-label">${escape(short)}</span><svg class="ls-bar" viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="4" rx="2"></rect><rect class="limit-fill" width="${used}" height="4" rx="2"></rect></svg><strong>${escape(String(window.percent))}%</strong><small>${escape(reset)}</small></span>`;
+    }).join('');
+    const note = account.state === 'ok' ? '' : `<span class="ls-note ${account.state === 'expired' ? 'tone-wait' : account.state === 'error' ? 'tone-fail' : 'tone-idle'}" title="${escape(account.reason)}">${escape({ expired: 'token expired', error: 'not read', 'no token': 'no token' }[account.state] || account.state)}${account.stale ? ', last reading' : ''}</span>`;
+    const best = account.profile === state.limits.mostLeft ? '<span class="ls-best">most left</span>' : '';
+    return `<span class="ls-account${account.state === 'ok' ? '' : ' is-stale'}"><span class="ls-who"><b>${escape(account.profile)}</b>${best}${note}</span><span class="ls-windows">${windows}</span></span>`;
+  }).join('');
 }
 
 function resetText(iso) {
@@ -2328,7 +2376,7 @@ function onAction(event) {
     case 'toggle-delta': toggleExpanded(target.dataset.value); break;
     case 'add-project': openAddProject(); break;
     case 'copy-path': copyPath(target.dataset.value); break;
-    case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); if (state.agentsTab === 'limits') loadLimits(); break;
+    case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); break;
     case 'read-limits': loadLimits(true); break;
     case 'open-project': navigate(target.dataset.id); break;
     case 'layout': setLayout(target.dataset.value); break;
@@ -2524,6 +2572,16 @@ new ResizeObserver(() => {
   }, 150);
 }).observe($('#main'));
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !refreshing && !state.authLost && !editingMain()) refresh().catch(monitorOffline); });
+setInterval(() => { if (!document.hidden && !state.authLost) loadLimits(); }, LIMITS_POLL_MS);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && !state.authLost) loadLimits(); });
+// The strip opens the Agents page on its Account limits tab.
+$('#limits-strip').addEventListener('click', (event) => {
+  event.preventDefault();
+  state.agentsTab = 'limits';
+  if (state.view === 'agents') renderMain();
+  else navigate('agents');
+});
+loadLimits();
 
 lastView = state.view;
 refresh().catch((error) => {

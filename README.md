@@ -259,7 +259,9 @@ holds the agents the pipeline routes stages to and their record per role.
 **Account limits** shows, for each Claude account signed in on this machine,
 how much of its session (5-hour) and weekly limits is used and when each
 resets, so a fan-out goes to the account with room; agents get the same from
-`GET /api/limits` and `/aa limits`.
+`GET /api/limits` and `/aa limits`. The same numbers stay in a strip under the
+top bar on every page, every account and every limit it has, and the page
+reads them again each minute while it is in sight.
 **Activity** shows one row per task per day (for example, Backlog → In
 progress → Done); expanding a row lists each raw change with its commit. It
 filters by kind and project. **All tasks** (from Projects) and search span the
@@ -470,7 +472,7 @@ Choose another data directory or port when starting:
 AGEARIS_DATA_DIR=/path/to/workspace PORT=4400 npm start
 ```
 
-AGE Aris makes one outbound call, and only when the Account limits tab, `GET
+AGE Aris makes one outbound call, and only when an open page, `GET
 /api/limits` or `/aa limits` asks: `GET https://api.anthropic.com/api/oauth/usage`,
 once per Claude account, the request Claude Code's `/usage` makes. It finds the
 accounts as the Claude Code config folders in the home folder, `~/.claude` and
@@ -481,7 +483,9 @@ under `~/.claude*` is written, and an expired token is never refreshed, since
 refreshing would rotate the refresh token Claude Code keeps; that account shows
 as expired, with its last good reading, until Claude Code next runs in its
 profile. Readings are held in memory for 5 minutes per account, and
-`?refresh=1` reads again at most once a minute.
+`?refresh=1` reads again at most once a minute; a page left open asks each
+minute and gets the held reading, so it reaches Anthropic at most once per
+account every 5 minutes.
 
 The server listens on `127.0.0.1`. This release uses one local operator, with the
 git identity configured on the machine. Named task owners are planning metadata;

@@ -28,15 +28,15 @@ AGE Aris, and they keep themselves current without a click.
 
 ## Steps
 
-- [ ] A limits strip under the top bar on every page: one cell per
+- [x] A limits strip under the top bar on every page: one cell per
       account, every window it has (session, weekly, and the Opus and
       Sonnet weeklies when the plan has them), the percent used and when it
       resets; an account that cannot be read says why, with its last good
       reading. The most-left account is marked. It opens the tab.
-- [ ] The page reads `/api/limits` when it loads and every minute while it
+- [x] The page reads `/api/limits` when it loads and every minute while it
       is visible; the Account limits tab shares the same reading.
-- [ ] Narrow screens: the strip wraps, with no sideways scroll.
-- [ ] README.
+- [x] Narrow screens: the strip wraps, with no sideways scroll.
+- [x] README.
 
 ## Decision rules — fixed in advance
 
@@ -50,8 +50,14 @@ AGE Aris, and they keep themselves current without a click.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, claimed; building the strip in `public/app.js`
-- **In flight:** nothing
+- **Last touched:** 2026-10-22: the strip, the minute poll and README
+  committed. Screenshots on Home and Projects (scrolled), wide and phone:
+  4 accounts, 6 windows (`v` expired, no reading yet), pinned under the
+  top bar, no console errors, no sideways scroll; 97 px tall at 390 px.
+  A grid that aligned the phone rows wrapped each account to two lines
+  and was dropped.
+- **In flight:** a page left open 5.5 minutes, to see the reading move on.
+  Not yet seen.
 - **On disk:** nothing uncommitted
 
 ## Verify
