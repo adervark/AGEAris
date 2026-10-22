@@ -42,12 +42,13 @@ came from (§7, H1; §10, D9).
       (2026-10-22).
 - [x] Write the decision rules here: the round, its key, the bar, the spend.
 - [x] The operator approves these rules (2026-10-22). Then claim.
-- [ ] **Free, before any subagent runs:**
-  - cut the record;
-  - pin the key in full and commit it;
-  - measure reach and pass the viability gate below;
-  - write the briefs from v2.7's templates, and run `brief-check.mjs`
-    against this key.
+- [x] **Free, before any subagent runs** (`docs/plans/evidence/t086/`, README
+      first):
+  - the record cut: 1,315 clauses over 20 documents;
+  - the key pinned and committed: 20 corrections, 13 in reach;
+  - the gate passed, 13 against 8 (`reach.mjs`);
+  - the briefs written from v2.7's templates. `brief-check.mjs` finds 0
+    hits against this key in the nine files subagents get.
 - [ ] The operator's go. Then transcribe, audit, link, reconcile, grade.
 
 ## Decision rules — fixed in advance
@@ -116,14 +117,17 @@ approved by the operator as drafted the same day.*
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-21, registered by T085 when the operator ruled
-  D9
-- **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the operator's approval of the decision rules; then
-  claim. v2.7 is accepted (T087, 2026-10-22), and the round is T112
-- **Next decision:** approve the rules (the viability gate's 8 and the
-  80% bar especially)
+- **Last touched:** 2026-10-22, adervark @default/4279585a: the free work
+  is done and committed in `docs/plans/evidence/t086/` (README first). The
+  gate passes, with 13 corrections in reach against 8.
+- **In flight:** nothing. No subagent has run.
+- **On disk:** all committed.
+- **Next decision, the operator's:** the go for the spend. That is 9 Opus
+  first passes against the cap of 10: a measurand registrar, three
+  transcribers, a transcriber for cited sections outside the cut, an
+  auditor and three reconcilers.
+- **Resume with:** on the go, open the registrar's run and spawn it with
+  `brief-registrar.md` filled in.
 
 ## Verify
 
