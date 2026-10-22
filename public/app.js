@@ -2068,7 +2068,7 @@ function accountLimits() {
     const when = ago ? `${account.stale ? 'Last good reading ' : 'Read '}${escape(ago === 'Just now' ? 'just now' : ago)}` : '';
     return `<li class="session-row limit-row"><div class="session-who"><strong>${escape(account.profile)}</strong><small>${escape(account.folder)}${account.plan ? ` · ${escape(account.plan)}` : ''}</small></div><div class="session-work">${account.reason ? `<p class="session-note">${escape(account.reason)}</p>` : ''}${windows ? `<div class="limit-meters">${windows}</div>` : ''}</div><div class="session-state">${status}<span>${when}</span></div></li>`;
   }).join('');
-  return `<p class="flow-intro">How much of each Claude account’s session and weekly limits is used, read from Anthropic with each account’s own sign-in. AGE Aris never renews an expired token: run Claude Code in that profile and it renews it. Agents read the same numbers from <code>/api/limits</code> and <code>/aa limits</code>.</p>${state.limitsError ? `<p class="form-error" role="alert">${escape(state.limitsError)}</p>` : ''}<ul class="session-list">${rows}</ul>`;
+  return `<p class="flow-intro">How much of each Claude account’s session and weekly limits is used, read from Anthropic with each account’s own sign-in. An expired token is renewed the way Claude Code renews it, and the renewed sign-in is saved back in that profile. Agents read the same numbers from <code>/api/limits</code> and <code>/aa limits</code>.</p>${state.limitsError ? `<p class="form-error" role="alert">${escape(state.limitsError)}</p>` : ''}<ul class="session-list">${rows}</ul>`;
 }
 
 // One row per agent session holding work: what it holds, its latest note, and

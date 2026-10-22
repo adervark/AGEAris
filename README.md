@@ -472,17 +472,24 @@ Choose another data directory or port when starting:
 AGEARIS_DATA_DIR=/path/to/workspace PORT=4400 npm start
 ```
 
-AGE Aris makes one outbound call, and only when an open page, `GET
-/api/limits` or `/aa limits` asks: `GET https://api.anthropic.com/api/oauth/usage`,
-once per Claude account, the request Claude Code's `/usage` makes. It finds the
-accounts as the Claude Code config folders in the home folder, `~/.claude` and
-`~/.claude-<profile>`, and reads each one's `.credentials.json` for its OAuth
-access token and plan. The token goes in that request's `Authorization` header
-and nowhere else: not to the browser, a log, the data folder or git. Nothing
-under `~/.claude*` is written, and an expired token is never refreshed, since
-refreshing would rotate the refresh token Claude Code keeps; that account shows
-as expired, with its last good reading, until Claude Code next runs in its
-profile. Readings are held in memory for 5 minutes per account, and
+AGE Aris makes two kinds of outbound call, and only when an open page, `GET
+/api/limits` or `/aa limits` asks. The first is `GET
+https://api.anthropic.com/api/oauth/usage`, once per Claude account, the request
+Claude Code's `/usage` makes. It finds the accounts as the Claude Code config
+folders in the home folder, `~/.claude` and `~/.claude-<profile>`, and reads
+each one's `.credentials.json` for its OAuth access token and plan. The second
+is made only for an account whose access token has lapsed: `POST
+https://platform.claude.com/v1/oauth/token`, the renewal Claude Code makes, with
+that profile's refresh token. Renewing rotates the refresh token, so AGE Aris
+writes the renewed sign-in back into that `.credentials.json` (the access token,
+refresh token and their expiry times and scopes; every other field stays, the
+file stays 0600, and the write is a temporary file renamed over it). If Claude
+Code renewed the file in the meantime, its sign-in is kept and nothing is
+written. A refused renewal changes nothing: the account shows as expired, with
+its last good reading, and says to sign in again; it is tried again after 5
+minutes. That file is the only one under `~/.claude*` AGE Aris writes. Tokens go
+in those requests and that file and nowhere else: not to the browser, a log,
+the data folder or git. Readings are held in memory for 5 minutes per account, and
 `?refresh=1` reads again at most once a minute; a page left open asks each
 minute and gets the held reading, so it reaches Anthropic at most once per
 account every 5 minutes.

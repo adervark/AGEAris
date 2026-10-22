@@ -34,7 +34,8 @@ into that profile, so Claude Code there carries on signed in.
 
 - Spend: `global-config` — AGE Aris writes `~/.claude*/.credentials.json`.
   The operator's word above authorises it, for this and only this file.
-- Only the three token fields (`accessToken`, `refreshToken`, `expiresAt`)
+- Only the token fields (`accessToken`, `refreshToken`, `expiresAt`, and
+  `refreshTokenExpiresAt` and `scopes` when the reply gives them)
   change; every other field and the file's mode (0600) stay. The write is a
   temporary file renamed over the old one.
 - Renew only a token that has lapsed. Re-read the file just before renewing
@@ -45,8 +46,8 @@ into that profile, so Claude Code there carries on signed in.
 
 ## Steps
 
-- [ ] `lib/limits.mjs`: renew a lapsed token, write it back, then read.
-- [ ] Tests: renewal and write-back with other fields kept; Claude Code
+- [x] `lib/limits.mjs`: renew a lapsed token, write it back, then read.
+- [x] Tests: renewal and write-back with other fields kept; Claude Code
       renewing first; a refused renewal; no refresh token.
-- [ ] README: the outbound calls and the one write.
-- [ ] Live: `v` reads with numbers, and Claude Code in `v` still signed in.
+- [x] README: the outbound calls and the one write.
+- [x] Live: `v` reads with numbers, and Claude Code in `v` still signed in.

@@ -7,7 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 
-import { Limits, parseUsage, USAGE_URL } from '../lib/limits.mjs';
+import { Limits, parseUsage, RENEW_URL, USAGE_URL } from '../lib/limits.mjs';
 import { createServer } from '../server.mjs';
 
 const NOW = Date.parse('2026-10-22T12:00:00Z');
@@ -62,19 +62,31 @@ function usage(session, weekly, extra = {}) {
 }
 
 // A fetch that answers per token and records every call; `replies` maps a
-// profile to a body, a status number, or an Error to throw.
+// profile to a body, a status number, or an Error to throw. Usage reads go in
+// `calls`; renewals, answered from `replies.renew` by the profile in the
+// refresh token (400 when it has none), go in `renewals`.
 function stubFetch(replies) {
   const calls = [];
-  const fetch = async (url, init) => {
-    const auth = init.headers.Authorization;
-    const profile = /^Bearer sk-ant-oat01-([^-]+)-/.exec(auth)?.[1];
-    calls.push({ url, profile, headers: init.headers });
-    const reply = replies[profile];
+  const renewals = [];
+  const answer = (reply) => {
     if (reply instanceof Error) throw reply;
     if (typeof reply === 'number') return new Response('{"error":"no"}', { status: reply });
     return new Response(JSON.stringify(reply), { status: 200, headers: { 'content-type': 'application/json' } });
   };
-  return { fetch, calls };
+  const fetch = async (url, init) => {
+    if (url === RENEW_URL) {
+      const body = JSON.parse(init.body);
+      const profile = /^sk-ant-ort01-(.+)$/.exec(body.refresh_token)?.[1];
+      renewals.push({ profile, body, headers: init.headers, method: init.method });
+      const reply = replies.renew?.[profile] ?? 400;
+      return answer(typeof reply === 'function' ? await reply() : reply);
+    }
+    const auth = init.headers.Authorization;
+    const profile = /^Bearer sk-ant-oat01-([^-]+)-/.exec(auth)?.[1];
+    calls.push({ url, profile, headers: init.headers });
+    return answer(replies[profile]);
+  };
+  return { fetch, calls, renewals };
 }
 
 async function snapshot(dir) {
@@ -111,12 +123,13 @@ test('reads every account with its own token, says why one cannot be read, and w
   assert.equal(byProfile.k.left, 34);
   assert.equal(byProfile.b.left, 70);
   assert.equal(result.mostLeft, 'b');
-  assert.match(byProfile.x.reason, /^expired: .*never does/);
+  assert.match(byProfile.x.reason, /^expired: the sign-in could not be renewed \(HTTP 400\); sign in again in Claude Code there$/);
   assert.match(byProfile.n.reason, /^no token/);
   assert.match(byProfile.bad.reason, /^error: \.credentials\.json could not be read/);
   assert.equal(result.readAt, new Date(NOW).toISOString());
 
-  // Each account's own token, to Claude Code's endpoint; none for the expired one.
+  // Each account's own token, to Claude Code's endpoint; none for the one
+  // whose renewal was refused.
   assert.deepEqual(calls.map((call) => call.profile), ['default', 'b', 'k']);
   for (const call of calls) {
     assert.equal(call.url, USAGE_URL);
@@ -185,15 +198,115 @@ test('a failed read, and a token that has since expired, show the last good read
   now += 5 * 60_000;
   assert.match((await limits.read()).accounts[0].reason, /the token was refused \(HTTP 401\); sign in again in Claude Code/);
 
-  // Claude Code has not run in the profile since: the token lapses, and is not renewed.
+  // The token lapses and its renewal is refused: the last good reading, and
+  // the file as it was.
   now += 2 * 3600_000;
+  const before = await readFile(credentials, 'utf8');
   const calledBefore = calls.length;
   const expired = (await limits.read({ refresh: true })).accounts[0];
   assert.equal(calls.length, calledBefore);
   assert.equal(expired.state, 'expired');
   assert.equal(expired.stale, true);
   assert.deepEqual(expired.windows, good.windows);
-  assert.equal(JSON.parse(await readFile(credentials, 'utf8')).claudeAiOauth.refreshToken, 'sk-ant-ort01-k');
+  assert.equal(await readFile(credentials, 'utf8'), before);
+});
+
+// A profile signed in as Claude Code leaves it, its access token lapsed.
+async function lapsedProfile(dir, name) {
+  await mkdir(path.join(dir, `.claude-${name}`));
+  const file = path.join(dir, `.claude-${name}`, '.credentials.json');
+  const signIn = oauth(name, { expiresAt: NOW - 60_000 });
+  Object.assign(signIn.claudeAiOauth, { scopes: ['user:inference', 'user:profile'], rateLimitTier: 'default_claude_max_5x', refreshTokenExpiresAt: NOW + 86400_000 });
+  await writeFile(file, JSON.stringify({ ...signIn, mcpOAuth: { server: { token: 'kept' } } }), { mode: 0o600 });
+  return file;
+}
+
+test('a lapsed token is renewed as Claude Code renews it, and the renewed sign-in written back', async () => {
+  const dir = await scratch();
+  const file = await lapsedProfile(dir, 'k');
+  const { fetch, calls, renewals } = stubFetch({
+    kk: usage(25, 40),
+    renew: { k: { access_token: token('kk'), refresh_token: 'sk-ant-ort01-kk', expires_in: 28800, refresh_token_expires_in: 864000, scope: 'user:inference user:profile', token_type: 'Bearer' } },
+  });
+  let now = NOW;
+  const limits = new Limits({ home: dir, fetch, clock: () => now });
+  const result = await limits.read();
+  const account = result.accounts[0];
+  assert.equal(account.state, 'ok');
+  assert.equal(account.left, 60);
+  assert.equal(result.mostLeft, 'k');
+
+  assert.equal(renewals.length, 1);
+  assert.equal(renewals[0].method, 'POST');
+  assert.equal(renewals[0].headers['Content-Type'], 'application/json');
+  assert.deepEqual(renewals[0].body, { grant_type: 'refresh_token', refresh_token: 'sk-ant-ort01-k', client_id: '9d1c250a-e61b-44d9-88ed-5944d1962f5e', scope: 'user:inference user:profile' });
+  assert.deepEqual(calls.map((call) => call.headers.Authorization), [`Bearer ${token('kk')}`]);
+
+  // Only the token fields change; the rest of the file, and its mode, stay.
+  const saved = JSON.parse(await readFile(file, 'utf8'));
+  assert.deepEqual(saved, {
+    claudeAiOauth: {
+      accessToken: token('kk'),
+      refreshToken: 'sk-ant-ort01-kk',
+      expiresAt: NOW + 28800_000,
+      subscriptionType: 'pro',
+      scopes: ['user:inference', 'user:profile'],
+      rateLimitTier: 'default_claude_max_5x',
+      refreshTokenExpiresAt: NOW + 864000_000,
+    },
+    mcpOAuth: { server: { token: 'kept' } },
+  });
+  assert.equal((await stat(file)).mode & 0o777, 0o600);
+  assert.deepEqual(await readdir(path.dirname(file)), ['.credentials.json']);
+  assert.doesNotMatch(JSON.stringify(result), /sk-ant-/);
+
+  // The renewed token is good: no second renewal.
+  now += 5 * 60_000;
+  assert.equal((await limits.read()).accounts[0].state, 'ok');
+  assert.equal(renewals.length, 1);
+  assert.equal(calls.length, 2);
+});
+
+test('when Claude Code renews the sign-in first, its sign-in stays and AGE Aris writes nothing', async () => {
+  const dir = await scratch();
+  const file = await lapsedProfile(dir, 'k');
+  const theirs = JSON.stringify({ claudeAiOauth: { accessToken: token('cc'), refreshToken: 'sk-ant-ort01-cc', expiresAt: NOW + 28800_000, subscriptionType: 'pro' } });
+  const { fetch, calls } = stubFetch({
+    kk: usage(10, 10),
+    renew: { k: async () => { await writeFile(file, theirs); return { access_token: token('kk'), refresh_token: 'sk-ant-ort01-kk', expires_in: 28800 }; } },
+  });
+  const account = (await new Limits({ home: dir, fetch, clock: () => NOW }).read()).accounts[0];
+  assert.equal(account.state, 'ok');
+  assert.equal(calls.length, 1);
+  assert.equal(await readFile(file, 'utf8'), theirs);
+});
+
+test('a refused renewal leaves the file alone, says to sign in again, and is not asked again each minute', async () => {
+  const dir = await scratch();
+  const file = await lapsedProfile(dir, 'k');
+  const before = await readFile(file, 'utf8');
+  await mkdir(path.join(dir, '.claude-r'));
+  await writeFile(path.join(dir, '.claude-r', '.credentials.json'), JSON.stringify({ claudeAiOauth: { accessToken: token('r'), expiresAt: NOW - 1 } }));
+  const replies = { renew: { k: 400 } };
+  const { fetch, calls, renewals } = stubFetch(replies);
+  let now = NOW;
+  const limits = new Limits({ home: dir, fetch, clock: () => now });
+  const [k, r] = (await limits.read()).accounts;
+  assert.equal(k.state, 'expired');
+  assert.equal(k.reason, 'expired: the sign-in could not be renewed (HTTP 400); sign in again in Claude Code there');
+  assert.equal(r.state, 'expired');
+  assert.equal(r.reason, 'expired: this profile keeps no refresh token; sign in again in Claude Code there');
+  assert.equal(await readFile(file, 'utf8'), before);
+  assert.deepEqual(renewals.map((renewal) => renewal.profile), ['k']);
+
+  now += 60_000;
+  await limits.read({ refresh: true });
+  assert.equal(renewals.length, 1, 'a refused renewal waits out the 5 minutes');
+  replies.renew.k = Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET' } });
+  now += 5 * 60_000;
+  assert.equal((await limits.read()).accounts[0].reason, 'expired: could not reach platform.claude.com (ECONNRESET)');
+  assert.equal(renewals.length, 2);
+  assert.equal(calls.length, 0);
 });
 
 test('a network failure or a bad reply is named without the token', async () => {
