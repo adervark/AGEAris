@@ -776,3 +776,12 @@ its date, the number, and where the evidence is. Newest last.
 - A strip under the top bar shows every Claude account and every window it
   has, on every page (`af3ec0b`). A page left open 5.5 minutes asked 6
   times, and each reading moved on after 5 minutes, the server's hold.
+
+## 2026-10-22 — T092 done: a lapsed token renewed, so every account reads live
+
+- AGE Aris renews a lapsed access token as Claude Code does and writes the
+  renewed sign-in back into that profile (`c1f96a6`). Live at 19:41Z: `v`,
+  expired since 12:38Z, read 20% / 63%, and `claude auth status` in `v` still
+  says signed in. `npm test` 553 of 553.
+- **Spend:** `global-config`, on the operator's word: `v`'s
+  `.credentials.json`, its token fields only.

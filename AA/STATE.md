@@ -7,9 +7,10 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** nothing. T089 and T091 are done: each Claude account's
-limits are in a strip on every page, kept fresh, on the Agents page, from
-`GET /api/limits` and `/aa limits`; check them before a fan-out. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
+**In progress:** nothing. T089, T091 and T092 are done: each Claude
+account's limits are in a strip on every page, kept fresh, on the Agents
+page, from `GET /api/limits` and `/aa limits`; a lapsed token is renewed and
+written back, so every account reads live. Check them before a fan-out. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
 stands after H1's 4 of 13, its blind spot in §5.5, and v2.8 registered
 (T090). T077 (S1a) can start.
 
@@ -35,25 +36,26 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T18:19Z · 91 tasks: 32 backlog, 0 WIP (0 in progress), 59 delivered`
+`board · 2026-10-22T19:41Z · 92 tasks: 32 backlog, 0 WIP (0 in progress), 60 delivered`
 
-FLOW · **WIP 0/2** · throughput 13.5/wk (58 in 30d) · cycle time 50th 6m / 85th 1h (n=58)
-FLOW · Little's Law: 0 ÷ 13.5/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 13.8/wk (59 in 30d) · cycle time 50th 6m / 85th 1h (n=59)
+FLOW · Little's Law: 0 ÷ 13.8/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T089 | The limits left on each Claude account | adervark | 15m |  |
-|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 15m |  |
-|  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 14h |  |
-|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 20h |  |
-|  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 29h |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 31h |  |
+| **DONE** | T091 | Every account's limits in sight on every page, kept fresh | adervark | 82m |  |
+|  | T089 | The limits left on each Claude account | adervark | 1h |  |
+|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 1h |  |
+|  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 15h |  |
+|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 21h |  |
+|  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 31h |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 32h |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 9d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 9d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 9d |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 11d |  |
-|  | T070 | A run names its process, so a session reads as running or closed | adervark | 11d |  |
+|  | T070 | A run names its process, so a session reads as running or closed | adervark | 12d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 12d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 12d |  |
 |  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 13d |  |
@@ -62,12 +64,12 @@ FLOW · Little's Law: 0 ÷ 13.5/wk ≈ now expected · lead time 85th 35h
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 13d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 13d |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 13d |  |
-|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 13d |  |
-|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 13d |  |
-|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 13d |  |
-|  | T040 | Aris under the logo, centred | adervark | 13d |  |
-|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 13d |  |
-|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 13d |  |
+|  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 14d |  |
+|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 14d |  |
+|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 14d |  |
+|  | T040 | Aris under the logo, centred | adervark | 14d |  |
+|  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 14d |  |
+|  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 14d |  |
 |  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 14d |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 14d |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 14d |  |
@@ -92,8 +94,8 @@ FLOW · Little's Law: 0 ÷ 13.5/wk ≈ now expected · lead time 85th 35h
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 14d |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 14d |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 14d |  |
-|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 14d |  |
-|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14d |  |
+|  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 15d |  |
+|  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 15d |  |
 |  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 15d |  |
 |  | T020 | A cockpit test fails when run in the early hours | adervark | 15d |  |
 |  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 15d |  |
