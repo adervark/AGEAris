@@ -1,8 +1,8 @@
 ---
 id: T091
 title: "Every account's limits in sight on every page, kept fresh"
-status: open
-owner: —
+status: claimed
+owner: adervark @default/1f16c0d5 2026-10-22 — a limits strip on every page, refreshed every minute
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -50,7 +50,9 @@ AGE Aris, and they keep themselves current without a click.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, registered
+- **Last touched:** 2026-10-22, claimed; building the strip in `public/app.js`
+- **In flight:** nothing
+- **On disk:** nothing uncommitted
 
 ## Verify
 
