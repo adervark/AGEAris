@@ -785,3 +785,14 @@ its date, the number, and where the evidence is. Newest last.
   says signed in. `npm test` 553 of 553.
 - **Spend:** `global-config`, on the operator's word: `v`'s
   `.credentials.json`, its token fields only.
+
+## 2026-10-22 — T093 done: limits each minute, each window's span, /aa current
+
+- Each account is read fresh once a minute, backing off on a 429 by its
+  `retry-after`, doubled up to 30 minutes (`b5c61c0`). Live for 6 minutes at
+  20:14–20:22Z: all four accounts fresh each minute, no 429.
+- Each window says when it began and ends; with no 5-hour window open, the
+  next message starts one.
+- `~/.claude/skills/aa` is the repository's again; `/aa limits` runs.
+  `npm test` 554 of 554.
+- **Spend:** `global-config`, on the operator's word: `~/.claude/skills/aa`.
