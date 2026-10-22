@@ -1,8 +1,8 @@
 ---
 id: T090
 title: "Research-runs design v2.8: catch a correction of a word, a scope or a reason"
-status: open
-owner: —
+status: in_progress
+owner: adervark @default/1f16c0d5 2026-10-22 — write v2.8, measured free on T086
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
