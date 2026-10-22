@@ -1,0 +1,3376 @@
+{
+ "canaries": [
+  "T112#236",
+  "build_t112_kernel.py#50",
+  "arm_t112.sh#1",
+  "T112#149",
+  "coat.py#42",
+  "PROGRESS#55",
+  "bringup_4090.sh#8",
+  "T112#337",
+  "_order.py#18",
+  "T112#308",
+  "coat_data.py#4",
+  "T112#335",
+  "dry_run.py#32",
+  "PROGRESS#64",
+  "push_arm.py#9",
+  "setup_4090.cmd#9",
+  "build_t112_kernel.py#20",
+  "T112#296",
+  "coat.py#44",
+  "T112@7966326#6",
+  "T112#247",
+  "T112#282",
+  "coat_train.py#8",
+  "dry_run.py#10",
+  "T112#202",
+  "T112#66",
+  "T112#309",
+  "bringup_4090.sh#34",
+  "dry_run.py#23",
+  "selftest_4090.py#1",
+  "build_t112_kernel.py#1",
+  "T112#341",
+  "T065-branch-out-on-the-base-model.md§104#2",
+  "bringup_4090.sh#55",
+  "T112@ac3a38c#1",
+  "trail#32",
+  "_order.py#108",
+  "T112#47",
+  "T112#246",
+  "T112#20"
+ ],
+ "items": [
+  {
+   "item": 1,
+   "fact": "G1-F1",
+   "transcriber": []
+  },
+  {
+   "item": 2,
+   "fact": "G1-F2",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota-remaining"
+   ]
+  },
+  {
+   "item": 3,
+   "fact": "G1-F3",
+   "transcriber": []
+  },
+  {
+   "item": 4,
+   "fact": "G1-F4",
+   "transcriber": []
+  },
+  {
+   "item": 5,
+   "fact": "G1-F6",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 6,
+   "fact": "G1-F7",
+   "transcriber": []
+  },
+  {
+   "item": 7,
+   "fact": "G1-F8",
+   "transcriber": []
+  },
+  {
+   "item": 8,
+   "fact": "G1-F9",
+   "transcriber": [
+    "competitor-public-lb-score"
+   ]
+  },
+  {
+   "item": 9,
+   "fact": "G1-F10",
+   "transcriber": []
+  },
+  {
+   "item": 10,
+   "fact": "G1-F11",
+   "transcriber": []
+  },
+  {
+   "item": 11,
+   "fact": "G1-F33",
+   "transcriber": [
+    "coat-train-hours-per-epoch-laptop-projected"
+   ]
+  },
+  {
+   "item": 12,
+   "fact": "G1-F34",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 13,
+   "fact": "G1-F37",
+   "transcriber": [
+    "coat-train-hours-per-epoch-laptop-projected"
+   ]
+  },
+  {
+   "item": 14,
+   "fact": "G1-F38",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 15,
+   "fact": "G1-F41",
+   "transcriber": [
+    "coat-train-hours-per-epoch-laptop-projected"
+   ]
+  },
+  {
+   "item": 16,
+   "fact": "G1-F42",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 17,
+   "fact": "G1-F45",
+   "transcriber": [
+    "coat-train-hours-per-epoch-laptop-projected"
+   ]
+  },
+  {
+   "item": 18,
+   "fact": "G1-F46",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 19,
+   "fact": "G1-F49",
+   "transcriber": [
+    "coat-train-hours-per-epoch-laptop-projected"
+   ]
+  },
+  {
+   "item": 20,
+   "fact": "G1-F50",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 21,
+   "fact": "G1-F51",
+   "transcriber": [
+    "train-cost-ratio-vs-224"
+   ]
+  },
+  {
+   "item": 22,
+   "fact": "G1-F52",
+   "transcriber": [
+    "train-cost-ratio-vs-224"
+   ]
+  },
+  {
+   "item": 23,
+   "fact": "G1-F59",
+   "transcriber": []
+  },
+  {
+   "item": 24,
+   "fact": "G1-F69",
+   "transcriber": []
+  },
+  {
+   "item": 25,
+   "fact": "G1-F71",
+   "transcriber": []
+  },
+  {
+   "item": 26,
+   "fact": "G1-F72",
+   "transcriber": []
+  },
+  {
+   "item": 27,
+   "fact": "G1-F73",
+   "transcriber": []
+  },
+  {
+   "item": 28,
+   "fact": "G1-F75",
+   "transcriber": []
+  },
+  {
+   "item": 29,
+   "fact": "G1-F76",
+   "transcriber": [
+    "public-trainer-4090-16-epoch-hours"
+   ]
+  },
+  {
+   "item": 30,
+   "fact": "G1-F77",
+   "transcriber": [
+    "rtx4090-vs-laptop-speedup-projected"
+   ]
+  },
+  {
+   "item": 31,
+   "fact": "G1-F78",
+   "transcriber": [
+    "rtx4090-224-fold-hours-projected"
+   ]
+  },
+  {
+   "item": 32,
+   "fact": "G1-F80",
+   "transcriber": []
+  },
+  {
+   "item": 33,
+   "fact": "G1-F85",
+   "transcriber": []
+  },
+  {
+   "item": 34,
+   "fact": "G1-F86",
+   "transcriber": []
+  },
+  {
+   "item": 35,
+   "fact": "G1-F87",
+   "transcriber": []
+  },
+  {
+   "item": 36,
+   "fact": "G1-F88",
+   "transcriber": []
+  },
+  {
+   "item": 37,
+   "fact": "G1-F89",
+   "transcriber": []
+  },
+  {
+   "item": 38,
+   "fact": "G1-F90",
+   "transcriber": []
+  },
+  {
+   "item": 39,
+   "fact": "G1-F91",
+   "transcriber": []
+  },
+  {
+   "item": 40,
+   "fact": "G1-F92",
+   "transcriber": []
+  },
+  {
+   "item": 41,
+   "fact": "G1-F103",
+   "transcriber": []
+  },
+  {
+   "item": 42,
+   "fact": "G1-F104",
+   "transcriber": []
+  },
+  {
+   "item": 43,
+   "fact": "G1-F105",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 44,
+   "fact": "G1-F106",
+   "transcriber": []
+  },
+  {
+   "item": 45,
+   "fact": "G1-F107",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 46,
+   "fact": "G1-F108",
+   "transcriber": [
+    "t105-submit-to-complete-time"
+   ]
+  },
+  {
+   "item": 47,
+   "fact": "G1-F109",
+   "transcriber": [
+    "kaggle-daily-submission-limit"
+   ]
+  },
+  {
+   "item": 48,
+   "fact": "G1-F111",
+   "transcriber": [
+    "read-then-act-cycles-per-day"
+   ]
+  },
+  {
+   "item": 49,
+   "fact": "G1-F112",
+   "transcriber": []
+  },
+  {
+   "item": 50,
+   "fact": "G1-F113",
+   "transcriber": []
+  },
+  {
+   "item": 51,
+   "fact": "G1-F114",
+   "transcriber": []
+  },
+  {
+   "item": 52,
+   "fact": "G1-F115",
+   "transcriber": []
+  },
+  {
+   "item": 53,
+   "fact": "G1-F116",
+   "transcriber": []
+  },
+  {
+   "item": 54,
+   "fact": "G1-F117",
+   "transcriber": []
+  },
+  {
+   "item": 55,
+   "fact": "G1-F118",
+   "transcriber": [
+    "rtx4090-224-fold-hours-projected"
+   ]
+  },
+  {
+   "item": 56,
+   "fact": "G1-F119",
+   "transcriber": []
+  },
+  {
+   "item": 57,
+   "fact": "G1-F120",
+   "transcriber": [
+    "four090-day-utilisation"
+   ]
+  },
+  {
+   "item": 58,
+   "fact": "G1-F121",
+   "transcriber": []
+  },
+  {
+   "item": 59,
+   "fact": "G1-F122",
+   "transcriber": []
+  },
+  {
+   "item": 60,
+   "fact": "G1-F123",
+   "transcriber": []
+  },
+  {
+   "item": 61,
+   "fact": "G1-F124",
+   "transcriber": []
+  },
+  {
+   "item": 62,
+   "fact": "G1-F125",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 63,
+   "fact": "G1-F126",
+   "transcriber": []
+  },
+  {
+   "item": 64,
+   "fact": "G1-F128",
+   "transcriber": []
+  },
+  {
+   "item": 65,
+   "fact": "G1-F131",
+   "transcriber": []
+  },
+  {
+   "item": 66,
+   "fact": "G1-F132",
+   "transcriber": []
+  },
+  {
+   "item": 67,
+   "fact": "G1-F133",
+   "transcriber": []
+  },
+  {
+   "item": 68,
+   "fact": "G1-F134",
+   "transcriber": [
+    "t091-b2-accum4-mb2-score"
+   ]
+  },
+  {
+   "item": 69,
+   "fact": "G1-F135",
+   "transcriber": []
+  },
+  {
+   "item": 70,
+   "fact": "G1-F136",
+   "transcriber": []
+  },
+  {
+   "item": 71,
+   "fact": "G1-F137",
+   "transcriber": []
+  },
+  {
+   "item": 72,
+   "fact": "G1-F138",
+   "transcriber": [
+    "coatnet-rmlp2-batchnorm-layer-count"
+   ]
+  },
+  {
+   "item": 73,
+   "fact": "G1-F139",
+   "transcriber": [
+    "rtx4090-vram-capacity"
+   ]
+  },
+  {
+   "item": 74,
+   "fact": "G1-F140",
+   "transcriber": []
+  },
+  {
+   "item": 75,
+   "fact": "G1-F141",
+   "transcriber": []
+  },
+  {
+   "item": 76,
+   "fact": "G1-F142",
+   "transcriber": []
+  },
+  {
+   "item": 77,
+   "fact": "G1-F144",
+   "transcriber": []
+  },
+  {
+   "item": 78,
+   "fact": "G1-F145",
+   "transcriber": []
+  },
+  {
+   "item": 79,
+   "fact": "G1-F147",
+   "transcriber": []
+  },
+  {
+   "item": 80,
+   "fact": "G1-F148",
+   "transcriber": []
+  },
+  {
+   "item": 81,
+   "fact": "G1-F149",
+   "transcriber": []
+  },
+  {
+   "item": 82,
+   "fact": "G1-F150",
+   "transcriber": []
+  },
+  {
+   "item": 83,
+   "fact": "G1-F151",
+   "transcriber": []
+  },
+  {
+   "item": 84,
+   "fact": "G1-F152",
+   "transcriber": []
+  },
+  {
+   "item": 85,
+   "fact": "G1-F153",
+   "transcriber": []
+  },
+  {
+   "item": 86,
+   "fact": "G1-F156",
+   "transcriber": []
+  },
+  {
+   "item": 87,
+   "fact": "G1-F157",
+   "transcriber": []
+  },
+  {
+   "item": 88,
+   "fact": "G1-F163",
+   "transcriber": [
+    "parent-stack-public-lb-score"
+   ]
+  },
+  {
+   "item": 89,
+   "fact": "G1-F170",
+   "transcriber": []
+  },
+  {
+   "item": 90,
+   "fact": "G1-F171",
+   "transcriber": []
+  },
+  {
+   "item": 91,
+   "fact": "G1-F173",
+   "transcriber": [
+    "t112-swap-submission-public-lb-score"
+   ]
+  },
+  {
+   "item": 92,
+   "fact": "G1-F174",
+   "transcriber": []
+  },
+  {
+   "item": 93,
+   "fact": "G1-F175",
+   "transcriber": []
+  },
+  {
+   "item": 94,
+   "fact": "G1-F177",
+   "transcriber": []
+  },
+  {
+   "item": 95,
+   "fact": "G1-F178",
+   "transcriber": []
+  },
+  {
+   "item": 96,
+   "fact": "G1-F179",
+   "transcriber": []
+  },
+  {
+   "item": 97,
+   "fact": "G1-F180",
+   "transcriber": []
+  },
+  {
+   "item": 98,
+   "fact": "G1-F181",
+   "transcriber": []
+  },
+  {
+   "item": 99,
+   "fact": "G1-F182",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 100,
+   "fact": "G1-F183",
+   "transcriber": []
+  },
+  {
+   "item": 101,
+   "fact": "G1-F184",
+   "transcriber": [
+    "t106-public-lb-delta"
+   ]
+  },
+  {
+   "item": 102,
+   "fact": "G1-F185",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 103,
+   "fact": "G1-F186",
+   "transcriber": [
+    "t106-public-lb-delta",
+    "t108-public-lb-delta",
+    "t110-public-lb-delta"
+   ]
+  },
+  {
+   "item": 104,
+   "fact": "G1-F187",
+   "transcriber": []
+  },
+  {
+   "item": 105,
+   "fact": "G1-F188",
+   "transcriber": []
+  },
+  {
+   "item": 106,
+   "fact": "G1-F189",
+   "transcriber": []
+  },
+  {
+   "item": 107,
+   "fact": "G1-F190",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 108,
+   "fact": "G1-F191",
+   "transcriber": [
+    "gold58-gap-ours-vs-published-member"
+   ]
+  },
+  {
+   "item": 109,
+   "fact": "G1-F193",
+   "transcriber": []
+  },
+  {
+   "item": 110,
+   "fact": "G1-F194",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval",
+    "teacher-labels-gold58-auc"
+   ]
+  },
+  {
+   "item": 111,
+   "fact": "G1-F195",
+   "transcriber": []
+  },
+  {
+   "item": 112,
+   "fact": "G1-F197",
+   "transcriber": [
+    "maxspan-v5-slot-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 113,
+   "fact": "G1-F198",
+   "transcriber": []
+  },
+  {
+   "item": 114,
+   "fact": "G1-F201",
+   "transcriber": []
+  },
+  {
+   "item": 115,
+   "fact": "G1-F202",
+   "transcriber": []
+  },
+  {
+   "item": 116,
+   "fact": "G1-F203",
+   "transcriber": [
+    "public-lb-rank-at-score"
+   ]
+  },
+  {
+   "item": 117,
+   "fact": "G1-F204",
+   "transcriber": [
+    "public-lb-rank-at-score"
+   ]
+  },
+  {
+   "item": 118,
+   "fact": "G1-F205",
+   "transcriber": []
+  },
+  {
+   "item": 119,
+   "fact": "G1-F206",
+   "transcriber": []
+  },
+  {
+   "item": 120,
+   "fact": "G1-F207",
+   "transcriber": [
+    "t106-public-lb-delta"
+   ]
+  },
+  {
+   "item": 121,
+   "fact": "G1-F208",
+   "transcriber": []
+  },
+  {
+   "item": 122,
+   "fact": "G1-F209",
+   "transcriber": [
+    "t108-public-lb-delta"
+   ]
+  },
+  {
+   "item": 123,
+   "fact": "G1-F210",
+   "transcriber": []
+  },
+  {
+   "item": 124,
+   "fact": "G1-F211",
+   "transcriber": [
+    "t110-public-lb-delta"
+   ]
+  },
+  {
+   "item": 125,
+   "fact": "G1-F212",
+   "transcriber": []
+  },
+  {
+   "item": 126,
+   "fact": "G1-F213",
+   "transcriber": [
+    "t105-public-lb-delta"
+   ]
+  },
+  {
+   "item": 127,
+   "fact": "G1-F214",
+   "transcriber": []
+  },
+  {
+   "item": 128,
+   "fact": "G1-F215",
+   "transcriber": []
+  },
+  {
+   "item": 129,
+   "fact": "G1-F216",
+   "transcriber": []
+  },
+  {
+   "item": 130,
+   "fact": "G1-F217",
+   "transcriber": []
+  },
+  {
+   "item": 131,
+   "fact": "G1-F218",
+   "transcriber": []
+  },
+  {
+   "item": 132,
+   "fact": "G1-F219",
+   "transcriber": []
+  },
+  {
+   "item": 133,
+   "fact": "G1-F220",
+   "transcriber": []
+  },
+  {
+   "item": 134,
+   "fact": "G1-F221",
+   "transcriber": []
+  },
+  {
+   "item": 135,
+   "fact": "G1-F222",
+   "transcriber": []
+  },
+  {
+   "item": 136,
+   "fact": "G1-F223",
+   "transcriber": []
+  },
+  {
+   "item": 137,
+   "fact": "G1-F225",
+   "transcriber": []
+  },
+  {
+   "item": 138,
+   "fact": "G1-F226",
+   "transcriber": []
+  },
+  {
+   "item": 139,
+   "fact": "G1-F232",
+   "transcriber": [
+    "transfer-manifest-entry-count"
+   ]
+  },
+  {
+   "item": 140,
+   "fact": "G1-F235",
+   "transcriber": []
+  },
+  {
+   "item": 141,
+   "fact": "G1-F241",
+   "transcriber": [
+    "dry-run-stages-passed"
+   ]
+  },
+  {
+   "item": 142,
+   "fact": "G1-F243",
+   "transcriber": []
+  },
+  {
+   "item": 143,
+   "fact": "G1-F244",
+   "transcriber": []
+  },
+  {
+   "item": 144,
+   "fact": "G1-F247",
+   "transcriber": []
+  },
+  {
+   "item": 145,
+   "fact": "G1-F248",
+   "transcriber": []
+  },
+  {
+   "item": 146,
+   "fact": "G1-F249",
+   "transcriber": [
+    "read-then-act-cycles-per-day"
+   ]
+  },
+  {
+   "item": 147,
+   "fact": "G1-F250",
+   "transcriber": []
+  },
+  {
+   "item": 148,
+   "fact": "G1-F251",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 149,
+   "fact": "G1-F252",
+   "transcriber": []
+  },
+  {
+   "item": 150,
+   "fact": "G1-F253",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota"
+   ]
+  },
+  {
+   "item": 151,
+   "fact": "G1-F254",
+   "transcriber": [
+    "stack-submission-share-of-weekly-quota"
+   ]
+  },
+  {
+   "item": 152,
+   "fact": "G1-F255",
+   "transcriber": [
+    "stack-submissions-per-week-budget"
+   ]
+  },
+  {
+   "item": 153,
+   "fact": "G1-F256",
+   "transcriber": []
+  },
+  {
+   "item": 154,
+   "fact": "G1-F257",
+   "transcriber": []
+  },
+  {
+   "item": 155,
+   "fact": "G1-F258",
+   "transcriber": []
+  },
+  {
+   "item": 156,
+   "fact": "G1-F259",
+   "transcriber": [
+    "resample-delta-b-minus-a"
+   ]
+  },
+  {
+   "item": 157,
+   "fact": "G1-F260",
+   "transcriber": []
+  },
+  {
+   "item": 158,
+   "fact": "G1-F262",
+   "transcriber": []
+  },
+  {
+   "item": 159,
+   "fact": "G1-F263",
+   "transcriber": [
+    "gold58-gap-ours-vs-published-member",
+    "published-coat-member-gold58-auc-public"
+   ]
+  },
+  {
+   "item": 160,
+   "fact": "G1-F264",
+   "transcriber": []
+  },
+  {
+   "item": 161,
+   "fact": "G1-F267",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 162,
+   "fact": "G1-F269",
+   "transcriber": [
+    "v5-full-swa-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 163,
+   "fact": "G1-F270",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 164,
+   "fact": "G1-F271",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 165,
+   "fact": "G1-F272",
+   "transcriber": []
+  },
+  {
+   "item": 166,
+   "fact": "G1-F275",
+   "transcriber": []
+  },
+  {
+   "item": 167,
+   "fact": "G1-F276",
+   "transcriber": []
+  },
+  {
+   "item": 168,
+   "fact": "G1-F277",
+   "transcriber": []
+  },
+  {
+   "item": 169,
+   "fact": "G1-F278",
+   "transcriber": []
+  },
+  {
+   "item": 170,
+   "fact": "G1-F279",
+   "transcriber": []
+  },
+  {
+   "item": 171,
+   "fact": "G1-F280",
+   "transcriber": []
+  },
+  {
+   "item": 172,
+   "fact": "G1-F281",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 173,
+   "fact": "G1-F282",
+   "transcriber": [
+    "maxspan-v5-slot-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 174,
+   "fact": "G1-F287",
+   "transcriber": []
+  },
+  {
+   "item": 175,
+   "fact": "G1-F289",
+   "transcriber": []
+  },
+  {
+   "item": 176,
+   "fact": "G1-F290",
+   "transcriber": [
+    "gold58-paired-ci-halfwidth-vs-v5"
+   ]
+  },
+  {
+   "item": 177,
+   "fact": "G1-F292",
+   "transcriber": []
+  },
+  {
+   "item": 178,
+   "fact": "G1-F293",
+   "transcriber": []
+  },
+  {
+   "item": 179,
+   "fact": "G1-F294",
+   "transcriber": []
+  },
+  {
+   "item": 180,
+   "fact": "G1-F295",
+   "transcriber": []
+  },
+  {
+   "item": 181,
+   "fact": "G1-F303",
+   "transcriber": []
+  },
+  {
+   "item": 182,
+   "fact": "G1-F308",
+   "transcriber": []
+  },
+  {
+   "item": 183,
+   "fact": "G1-F312",
+   "transcriber": [
+    "dry-run-declared-stage-count"
+   ]
+  },
+  {
+   "item": 184,
+   "fact": "G1-F321",
+   "transcriber": []
+  },
+  {
+   "item": 185,
+   "fact": "G1-F326",
+   "transcriber": []
+  },
+  {
+   "item": 186,
+   "fact": "G1-F327",
+   "transcriber": []
+  },
+  {
+   "item": 187,
+   "fact": "G1-F328",
+   "transcriber": []
+  },
+  {
+   "item": 188,
+   "fact": "G1-F329",
+   "transcriber": []
+  },
+  {
+   "item": 189,
+   "fact": "G1-F330",
+   "transcriber": []
+  },
+  {
+   "item": 190,
+   "fact": "G1-F332",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-resample-a"
+   ]
+  },
+  {
+   "item": 191,
+   "fact": "G1-F333",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-resample-c"
+   ]
+  },
+  {
+   "item": 192,
+   "fact": "G1-F334",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-resample-b"
+   ]
+  },
+  {
+   "item": 193,
+   "fact": "G1-F335",
+   "transcriber": [
+    "resample-delta-window-count-effect"
+   ]
+  },
+  {
+   "item": 194,
+   "fact": "G1-F336",
+   "transcriber": [
+    "resample-delta-chain-effect"
+   ]
+  },
+  {
+   "item": 195,
+   "fact": "G1-F337",
+   "transcriber": [
+    "resample-delta-b-minus-a",
+    "gold58-absolute-noise-band"
+   ]
+  },
+  {
+   "item": 196,
+   "fact": "G1-F339",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-resample-b"
+   ]
+  },
+  {
+   "item": 197,
+   "fact": "G1-F341",
+   "transcriber": []
+  },
+  {
+   "item": 198,
+   "fact": "G1-F344",
+   "transcriber": []
+  },
+  {
+   "item": 199,
+   "fact": "G1-F345",
+   "transcriber": []
+  },
+  {
+   "item": 200,
+   "fact": "G1-F346",
+   "transcriber": []
+  },
+  {
+   "item": 201,
+   "fact": "G1-F347",
+   "transcriber": []
+  },
+  {
+   "item": 202,
+   "fact": "G1-F350",
+   "transcriber": []
+  },
+  {
+   "item": 203,
+   "fact": "G1-F352",
+   "transcriber": []
+  },
+  {
+   "item": 204,
+   "fact": "G1-F353",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 205,
+   "fact": "G1-F355",
+   "transcriber": []
+  },
+  {
+   "item": 206,
+   "fact": "G1-F356",
+   "transcriber": []
+  },
+  {
+   "item": 207,
+   "fact": "G1-F358",
+   "transcriber": [
+    "coat-train-peak-vram-384-bs8-extrapolated"
+   ]
+  },
+  {
+   "item": 208,
+   "fact": "G1-F359",
+   "transcriber": [
+    "rtx4090-vram-capacity"
+   ]
+  },
+  {
+   "item": 209,
+   "fact": "G1-F360",
+   "transcriber": []
+  },
+  {
+   "item": 210,
+   "fact": "G1-F362",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 211,
+   "fact": "G1-F363",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-paired-script",
+    "v5-full-swa-gold58-auc-paired-script",
+    "t112-224-fold-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 212,
+   "fact": "G1-F364",
+   "transcriber": []
+  },
+  {
+   "item": 213,
+   "fact": "G1-F367",
+   "transcriber": []
+  },
+  {
+   "item": 214,
+   "fact": "G1-F370",
+   "transcriber": []
+  },
+  {
+   "item": 215,
+   "fact": "G1-F372",
+   "transcriber": [
+    "corpus-fetch-time"
+   ]
+  },
+  {
+   "item": 216,
+   "fact": "G1-F374",
+   "transcriber": [
+    "corpus-fetch-time"
+   ]
+  },
+  {
+   "item": 217,
+   "fact": "G1-F375",
+   "transcriber": []
+  },
+  {
+   "item": 218,
+   "fact": "G1-F376",
+   "transcriber": [
+    "teacher-file-size"
+   ]
+  },
+  {
+   "item": 219,
+   "fact": "G1-F378",
+   "transcriber": []
+  },
+  {
+   "item": 220,
+   "fact": "G1-F381",
+   "transcriber": [
+    "v5-full-swa-checkpoint-size"
+   ]
+  },
+  {
+   "item": 221,
+   "fact": "G1-F383",
+   "transcriber": []
+  },
+  {
+   "item": 222,
+   "fact": "G1-F384",
+   "transcriber": [
+    "t112-arm-checkpoint-size"
+   ]
+  },
+  {
+   "item": 223,
+   "fact": "G1-F388",
+   "transcriber": [
+    "t112-full-checkpoint-size"
+   ]
+  },
+  {
+   "item": 224,
+   "fact": "G1-F389",
+   "transcriber": []
+  },
+  {
+   "item": 225,
+   "fact": "G1-F390",
+   "transcriber": []
+  },
+  {
+   "item": 226,
+   "fact": "G1-F392",
+   "transcriber": []
+  },
+  {
+   "item": 227,
+   "fact": "G1-F393",
+   "transcriber": []
+  },
+  {
+   "item": 228,
+   "fact": "G1-F394",
+   "transcriber": []
+  },
+  {
+   "item": 229,
+   "fact": "G1-F395",
+   "transcriber": []
+  },
+  {
+   "item": 230,
+   "fact": "G1-F396",
+   "transcriber": []
+  },
+  {
+   "item": 231,
+   "fact": "G1-F397",
+   "transcriber": []
+  },
+  {
+   "item": 232,
+   "fact": "G1-F398",
+   "transcriber": []
+  },
+  {
+   "item": 233,
+   "fact": "G1-F399",
+   "transcriber": []
+  },
+  {
+   "item": 234,
+   "fact": "G1-F400",
+   "transcriber": []
+  },
+  {
+   "item": 235,
+   "fact": "G1-F401",
+   "transcriber": []
+  },
+  {
+   "item": 236,
+   "fact": "G1-F404",
+   "transcriber": []
+  },
+  {
+   "item": 237,
+   "fact": "G1-F405",
+   "transcriber": []
+  },
+  {
+   "item": 238,
+   "fact": "G1-F407",
+   "transcriber": []
+  },
+  {
+   "item": 239,
+   "fact": "G1-F408",
+   "transcriber": []
+  },
+  {
+   "item": 240,
+   "fact": "G1-F409",
+   "transcriber": []
+  },
+  {
+   "item": 241,
+   "fact": "G1-F410",
+   "transcriber": []
+  },
+  {
+   "item": 242,
+   "fact": "G1-F411",
+   "transcriber": []
+  },
+  {
+   "item": 243,
+   "fact": "G1-F412",
+   "transcriber": []
+  },
+  {
+   "item": 244,
+   "fact": "G1-F413",
+   "transcriber": []
+  },
+  {
+   "item": 245,
+   "fact": "G1-F414",
+   "transcriber": []
+  },
+  {
+   "item": 246,
+   "fact": "G1-F415",
+   "transcriber": [
+    "controls-caught-check-defects"
+   ]
+  },
+  {
+   "item": 247,
+   "fact": "G1-F416",
+   "transcriber": []
+  },
+  {
+   "item": 248,
+   "fact": "G1-F417",
+   "transcriber": [
+    "critic-review-finding-count"
+   ]
+  },
+  {
+   "item": 249,
+   "fact": "G1-F418",
+   "transcriber": []
+  },
+  {
+   "item": 250,
+   "fact": "G1-F420",
+   "transcriber": []
+  },
+  {
+   "item": 251,
+   "fact": "G1-F426",
+   "transcriber": []
+  },
+  {
+   "item": 252,
+   "fact": "G1-F427",
+   "transcriber": []
+  },
+  {
+   "item": 253,
+   "fact": "G1-F428",
+   "transcriber": [
+    "published-coat-member-gold58-auc-public"
+   ]
+  },
+  {
+   "item": 254,
+   "fact": "G1-F429",
+   "transcriber": []
+  },
+  {
+   "item": 255,
+   "fact": "G1-F433",
+   "transcriber": []
+  },
+  {
+   "item": 256,
+   "fact": "G1-F435",
+   "transcriber": []
+  },
+  {
+   "item": 257,
+   "fact": "G1-F436",
+   "transcriber": []
+  },
+  {
+   "item": 258,
+   "fact": "G1-F437",
+   "transcriber": []
+  },
+  {
+   "item": 259,
+   "fact": "G1-F438",
+   "transcriber": []
+  },
+  {
+   "item": 260,
+   "fact": "G1-F439",
+   "transcriber": []
+  },
+  {
+   "item": 261,
+   "fact": "G1-F440",
+   "transcriber": []
+  },
+  {
+   "item": 262,
+   "fact": "G1-F441",
+   "transcriber": []
+  },
+  {
+   "item": 263,
+   "fact": "G1-F442",
+   "transcriber": []
+  },
+  {
+   "item": 264,
+   "fact": "G1-F443",
+   "transcriber": []
+  },
+  {
+   "item": 265,
+   "fact": "G1-F444",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota-remaining"
+   ]
+  },
+  {
+   "item": 266,
+   "fact": "G1-F448",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 267,
+   "fact": "G1-F449",
+   "transcriber": []
+  },
+  {
+   "item": 268,
+   "fact": "G1-F450",
+   "transcriber": []
+  },
+  {
+   "item": 269,
+   "fact": "G1-F452",
+   "transcriber": []
+  },
+  {
+   "item": 270,
+   "fact": "G1-F453",
+   "transcriber": []
+  },
+  {
+   "item": 271,
+   "fact": "G1-F454",
+   "transcriber": []
+  },
+  {
+   "item": 272,
+   "fact": "G1-F455",
+   "transcriber": []
+  },
+  {
+   "item": 273,
+   "fact": "G1-F456",
+   "transcriber": []
+  },
+  {
+   "item": 274,
+   "fact": "G1-F457",
+   "transcriber": []
+  },
+  {
+   "item": 275,
+   "fact": "G1-F458",
+   "transcriber": []
+  },
+  {
+   "item": 276,
+   "fact": "G1-F477",
+   "transcriber": [
+    "transfer-manifest-entry-count"
+   ]
+  },
+  {
+   "item": 277,
+   "fact": "G1-F481",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 278,
+   "fact": "G1-F482",
+   "transcriber": [
+    "train-cost-ratio-vs-224"
+   ]
+  },
+  {
+   "item": 279,
+   "fact": "G1-F483",
+   "transcriber": [
+    "competitor-public-lb-score"
+   ]
+  },
+  {
+   "item": 280,
+   "fact": "G1-F485",
+   "transcriber": []
+  },
+  {
+   "item": 281,
+   "fact": "G1-F486",
+   "transcriber": [
+    "t105-submit-to-complete-time"
+   ]
+  },
+  {
+   "item": 282,
+   "fact": "G1-F487",
+   "transcriber": [
+    "read-then-act-cycles-per-day",
+    "kaggle-daily-submission-limit"
+   ]
+  },
+  {
+   "item": 283,
+   "fact": "G1-F488",
+   "transcriber": []
+  },
+  {
+   "item": 284,
+   "fact": "G1-F489",
+   "transcriber": []
+  },
+  {
+   "item": 285,
+   "fact": "G1-F490",
+   "transcriber": []
+  },
+  {
+   "item": 286,
+   "fact": "G1-F492",
+   "transcriber": [
+    "t112-swap-submission-public-lb-score",
+    "parent-stack-public-lb-score"
+   ]
+  },
+  {
+   "item": 287,
+   "fact": "G1-F494",
+   "transcriber": [
+    "t112-swap-submission-public-lb-score"
+   ]
+  },
+  {
+   "item": 288,
+   "fact": "G1-F496",
+   "transcriber": []
+  },
+  {
+   "item": 289,
+   "fact": "G1-F497",
+   "transcriber": [
+    "t106-public-lb-delta",
+    "t108-public-lb-delta",
+    "t110-public-lb-delta"
+   ]
+  },
+  {
+   "item": 290,
+   "fact": "G1-F498",
+   "transcriber": [
+    "t105-public-lb-delta"
+   ]
+  },
+  {
+   "item": 291,
+   "fact": "G1-F501",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 292,
+   "fact": "G1-F502",
+   "transcriber": []
+  },
+  {
+   "item": 293,
+   "fact": "G1-F503",
+   "transcriber": []
+  },
+  {
+   "item": 294,
+   "fact": "G1-F504",
+   "transcriber": []
+  },
+  {
+   "item": 295,
+   "fact": "G1-F506",
+   "transcriber": [
+    "t112-224-fold-minutes-per-epoch-actual"
+   ]
+  },
+  {
+   "item": 296,
+   "fact": "G1-F507",
+   "transcriber": [
+    "laptop-gpu-power-draw-during-fold"
+   ]
+  },
+  {
+   "item": 297,
+   "fact": "G1-F508",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 298,
+   "fact": "G1-F509",
+   "transcriber": [
+    "t112-224-fold-best-epoch"
+   ]
+  },
+  {
+   "item": 299,
+   "fact": "G1-F510",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 300,
+   "fact": "G1-F511",
+   "transcriber": []
+  },
+  {
+   "item": 301,
+   "fact": "G1-F512",
+   "transcriber": [
+    "teacher-labels-gold58-auc"
+   ]
+  },
+  {
+   "item": 302,
+   "fact": "G1-F514",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-resample-a"
+   ]
+  },
+  {
+   "item": 303,
+   "fact": "G1-F515",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-resample-c"
+   ]
+  },
+  {
+   "item": 304,
+   "fact": "G1-F516",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-resample-b"
+   ]
+  },
+  {
+   "item": 305,
+   "fact": "G1-F517",
+   "transcriber": [
+    "resample-delta-b-minus-a",
+    "gold58-absolute-noise-band"
+   ]
+  },
+  {
+   "item": 306,
+   "fact": "G1-F518",
+   "transcriber": []
+  },
+  {
+   "item": 307,
+   "fact": "G1-F519",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval",
+    "t112-224-fold-gold58-auc-resample-a"
+   ]
+  },
+  {
+   "item": 308,
+   "fact": "G1-F520",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota"
+   ]
+  },
+  {
+   "item": 309,
+   "fact": "G1-F521",
+   "transcriber": [
+    "t112-arm-checkpoint-size"
+   ]
+  },
+  {
+   "item": 310,
+   "fact": "G1-F522",
+   "transcriber": []
+  },
+  {
+   "item": 311,
+   "fact": "G1-F523",
+   "transcriber": []
+  },
+  {
+   "item": 312,
+   "fact": "G1-F524",
+   "transcriber": []
+  },
+  {
+   "item": 313,
+   "fact": "G1-F525",
+   "transcriber": [
+    "stack-submission-share-of-weekly-quota",
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 314,
+   "fact": "G1-F526",
+   "transcriber": [
+    "stack-submissions-per-week-budget"
+   ]
+  },
+  {
+   "item": 315,
+   "fact": "G1-F527",
+   "transcriber": []
+  },
+  {
+   "item": 316,
+   "fact": "G1-F530",
+   "transcriber": []
+  },
+  {
+   "item": 317,
+   "fact": "G1-F532",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 318,
+   "fact": "G1-F533",
+   "transcriber": [
+    "t106-public-lb-delta"
+   ]
+  },
+  {
+   "item": 319,
+   "fact": "G1-F534",
+   "transcriber": []
+  },
+  {
+   "item": 320,
+   "fact": "G1-F535",
+   "transcriber": [
+    "gold58-gap-ours-vs-published-member",
+    "published-coat-member-gold58-auc-public"
+   ]
+  },
+  {
+   "item": 321,
+   "fact": "G1-F536",
+   "transcriber": []
+  },
+  {
+   "item": 322,
+   "fact": "G1-F537",
+   "transcriber": []
+  },
+  {
+   "item": 323,
+   "fact": "G1-F540",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 324,
+   "fact": "G1-F542",
+   "transcriber": [
+    "v5-full-swa-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 325,
+   "fact": "G1-F543",
+   "transcriber": [
+    "t112-224-fold-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 326,
+   "fact": "G1-F544",
+   "transcriber": []
+  },
+  {
+   "item": 327,
+   "fact": "G1-F546",
+   "transcriber": []
+  },
+  {
+   "item": 328,
+   "fact": "G1-F547",
+   "transcriber": []
+  },
+  {
+   "item": 329,
+   "fact": "G1-F548",
+   "transcriber": []
+  },
+  {
+   "item": 330,
+   "fact": "G1-F549",
+   "transcriber": [
+    "gold58-paired-ci-halfwidth-vs-v5"
+   ]
+  },
+  {
+   "item": 331,
+   "fact": "G1-F551",
+   "transcriber": []
+  },
+  {
+   "item": 332,
+   "fact": "G2-F6",
+   "transcriber": [
+    "lint-runtime"
+   ]
+  },
+  {
+   "item": 333,
+   "fact": "G2-F8",
+   "transcriber": [
+    "guards-runtime"
+   ]
+  },
+  {
+   "item": 334,
+   "fact": "G2-F13",
+   "transcriber": [
+    "smoke-suite-runtime"
+   ]
+  },
+  {
+   "item": 335,
+   "fact": "G2-F29",
+   "transcriber": [
+    "raptor-corpus-size"
+   ]
+  },
+  {
+   "item": 336,
+   "fact": "G2-F37",
+   "transcriber": [
+    "smoke-suite-runtime"
+   ]
+  },
+  {
+   "item": 337,
+   "fact": "G2-F68",
+   "transcriber": [
+    "t105-submit-to-complete-time"
+   ]
+  },
+  {
+   "item": 338,
+   "fact": "G2-F69",
+   "transcriber": [
+    "scoring-kernel-runtime-cap"
+   ]
+  },
+  {
+   "item": 339,
+   "fact": "G2-F70",
+   "transcriber": [
+    "scoring-kernel-runtime-margin"
+   ]
+  },
+  {
+   "item": 340,
+   "fact": "G2-F75",
+   "transcriber": [
+    "kernel-vs-trainer-input-std-ratio"
+   ]
+  },
+  {
+   "item": 341,
+   "fact": "G2-F76",
+   "transcriber": [
+    "kernel-vs-trainer-input-mean-shift"
+   ]
+  },
+  {
+   "item": 342,
+   "fact": "G2-F89",
+   "transcriber": [
+    "stage4-elapsed-time-in-kernel"
+   ]
+  },
+  {
+   "item": 343,
+   "fact": "G2-F95",
+   "transcriber": [
+    "t110-public-lb-delta"
+   ]
+  },
+  {
+   "item": 344,
+   "fact": "G2-F108",
+   "transcriber": [
+    "coatnet-grid-position-count"
+   ]
+  },
+  {
+   "item": 345,
+   "fact": "G2-F112",
+   "transcriber": [
+    "coatnet-grid-position-count"
+   ]
+  },
+  {
+   "item": 346,
+   "fact": "G2-F122",
+   "transcriber": [
+    "scoring-kernel-runtime-margin"
+   ]
+  },
+  {
+   "item": 347,
+   "fact": "G2-F125",
+   "transcriber": [
+    "scoring-kernel-runtime-margin",
+    "scoring-kernel-runtime-cap"
+   ]
+  },
+  {
+   "item": 348,
+   "fact": "G2-F127",
+   "transcriber": [
+    "kernel-vs-trainer-input-std-ratio"
+   ]
+  },
+  {
+   "item": 349,
+   "fact": "G2-F128",
+   "transcriber": [
+    "kernel-vs-trainer-input-mean-shift"
+   ]
+  },
+  {
+   "item": 350,
+   "fact": "G2-F138",
+   "transcriber": [
+    "coatnet-grid-position-count"
+   ]
+  },
+  {
+   "item": 351,
+   "fact": "G2-F199",
+   "transcriber": [
+    "dry-run-stages-passed"
+   ]
+  },
+  {
+   "item": 352,
+   "fact": "G2-F248",
+   "transcriber": [
+    "coat-train-ms-per-window-laptop-calib"
+   ]
+  },
+  {
+   "item": 353,
+   "fact": "G2-F249",
+   "transcriber": [
+    "coat-train-peak-vram-laptop-calib"
+   ]
+  },
+  {
+   "item": 354,
+   "fact": "G2-F251",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 355,
+   "fact": "G2-F259",
+   "transcriber": [
+    "smoke-subject-module-line-count"
+   ]
+  },
+  {
+   "item": 356,
+   "fact": "G2-F260",
+   "transcriber": [
+    "smoke-subject-module-line-count"
+   ]
+  },
+  {
+   "item": 357,
+   "fact": "G2-F261",
+   "transcriber": []
+  },
+  {
+   "item": 358,
+   "fact": "G2-F269",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 359,
+   "fact": "G2-F270",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 360,
+   "fact": "G2-F277",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 361,
+   "fact": "G2-F280",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 362,
+   "fact": "G2-F285",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 363,
+   "fact": "G2-F288",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 364,
+   "fact": "G2-F293",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 365,
+   "fact": "G2-F294",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 366,
+   "fact": "G2-F297",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 367,
+   "fact": "G2-F300",
+   "transcriber": [
+    "smoke-checks-run-clean-worktree"
+   ]
+  },
+  {
+   "item": 368,
+   "fact": "G2-F301",
+   "transcriber": []
+  },
+  {
+   "item": 369,
+   "fact": "G2-F305",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 370,
+   "fact": "G2-F309",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 371,
+   "fact": "G2-F312",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 372,
+   "fact": "G2-F317",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 373,
+   "fact": "G2-F319",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 374,
+   "fact": "G2-F321",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 375,
+   "fact": "G2-F323",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 376,
+   "fact": "G2-F325",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 377,
+   "fact": "G2-F327",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 378,
+   "fact": "G2-F329",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 379,
+   "fact": "G2-F333",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 380,
+   "fact": "G2-F334",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 381,
+   "fact": "G2-F337",
+   "transcriber": [
+    "raptor-corpus-part2-study-count",
+    "raptor-corpus-study-count"
+   ]
+  },
+  {
+   "item": 382,
+   "fact": "G2-F343",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 383,
+   "fact": "G2-F349",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 384,
+   "fact": "G2-F357",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 385,
+   "fact": "G2-F360",
+   "transcriber": [
+    "t105-submit-to-complete-time"
+   ]
+  },
+  {
+   "item": 386,
+   "fact": "G2-F361",
+   "transcriber": [
+    "scoring-kernel-runtime-cap"
+   ]
+  },
+  {
+   "item": 387,
+   "fact": "G2-F366",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 388,
+   "fact": "G2-F368",
+   "transcriber": [
+    "kernel-vs-trainer-input-std-ratio"
+   ]
+  },
+  {
+   "item": 389,
+   "fact": "G2-F369",
+   "transcriber": [
+    "kernel-vs-trainer-input-mean-shift"
+   ]
+  },
+  {
+   "item": 390,
+   "fact": "G2-F371",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 391,
+   "fact": "G2-F373",
+   "transcriber": [
+    "stage4-elapsed-time-in-kernel"
+   ]
+  },
+  {
+   "item": 392,
+   "fact": "G2-F374",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 393,
+   "fact": "G2-F377",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 394,
+   "fact": "G2-F380",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 395,
+   "fact": "G2-F384",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 396,
+   "fact": "G2-F387",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 397,
+   "fact": "G2-F389",
+   "transcriber": [
+    "opencv-rendered-pixel-change"
+   ]
+  },
+  {
+   "item": 398,
+   "fact": "G2-F392",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 399,
+   "fact": "G2-F395",
+   "transcriber": [
+    "smoke-check-count-delta",
+    "smoke-env-gated-check-count"
+   ]
+  },
+  {
+   "item": 400,
+   "fact": "G2-F397",
+   "transcriber": [
+    "smoke-env-gated-check-count"
+   ]
+  },
+  {
+   "item": 401,
+   "fact": "G2-F398",
+   "transcriber": [
+    "smoke-checks-run-clean-worktree"
+   ]
+  },
+  {
+   "item": 402,
+   "fact": "G2-F400",
+   "transcriber": []
+  },
+  {
+   "item": 403,
+   "fact": "G2-F401",
+   "transcriber": [
+    "smoke-env-gated-check-count"
+   ]
+  },
+  {
+   "item": 404,
+   "fact": "G2-F404",
+   "transcriber": [
+    "smoke-check-count-delta",
+    "smoke-env-gated-check-count"
+   ]
+  },
+  {
+   "item": 405,
+   "fact": "G2-F405",
+   "transcriber": []
+  },
+  {
+   "item": 406,
+   "fact": "G2-F408",
+   "transcriber": [
+    "smoke-suite-gated-check-count"
+   ]
+  },
+  {
+   "item": 407,
+   "fact": "G2-F411",
+   "transcriber": [
+    "smoke-check-count-delta"
+   ]
+  },
+  {
+   "item": 408,
+   "fact": "G2-F416",
+   "transcriber": [
+    "coatnet-grid-position-count"
+   ]
+  },
+  {
+   "item": 409,
+   "fact": "G2-F419",
+   "transcriber": [
+    "upstream-notebook-cell-count"
+   ]
+  },
+  {
+   "item": 410,
+   "fact": "G2-F424",
+   "transcriber": []
+  },
+  {
+   "item": 411,
+   "fact": "G2-F427",
+   "transcriber": [
+    "smoke-checks-run-full-machine"
+   ]
+  },
+  {
+   "item": 412,
+   "fact": "G2-F428",
+   "transcriber": [
+    "smoke-checks-run-clean-worktree"
+   ]
+  },
+  {
+   "item": 413,
+   "fact": "G2-F431",
+   "transcriber": [
+    "ckpt22-bank-checkpoint-count"
+   ]
+  },
+  {
+   "item": 414,
+   "fact": "G2-F432",
+   "transcriber": [
+    "raptor-corpus-size"
+   ]
+  },
+  {
+   "item": 415,
+   "fact": "G2-F439",
+   "transcriber": [
+    "raptor-corpus-size"
+   ]
+  },
+  {
+   "item": 416,
+   "fact": "G2-F442",
+   "transcriber": [
+    "upstream-notebook-cell-count"
+   ]
+  },
+  {
+   "item": 417,
+   "fact": "G2-F476",
+   "transcriber": [
+    "kaggle-save-run-duration"
+   ]
+  },
+  {
+   "item": 418,
+   "fact": "G2-F477",
+   "transcriber": [
+    "kaggle-save-run-duration"
+   ]
+  },
+  {
+   "item": 419,
+   "fact": "G2-F479",
+   "transcriber": [
+    "kaggle-daily-submission-limit"
+   ]
+  },
+  {
+   "item": 420,
+   "fact": "G2-F481",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 421,
+   "fact": "G2-F482",
+   "transcriber": [
+    "t106-public-lb-delta"
+   ]
+  },
+  {
+   "item": 422,
+   "fact": "G2-F490",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota"
+   ]
+  },
+  {
+   "item": 423,
+   "fact": "G2-F507",
+   "transcriber": [
+    "eval-decimation-factor"
+   ]
+  },
+  {
+   "item": 424,
+   "fact": "G2-F512",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 425,
+   "fact": "G2-F524",
+   "transcriber": [
+    "gpu-queue-cooldown-length"
+   ]
+  },
+  {
+   "item": 426,
+   "fact": "G2-F530",
+   "transcriber": [
+    "gold58-absolute-noise-band"
+   ]
+  },
+  {
+   "item": 427,
+   "fact": "G2-F533",
+   "transcriber": [
+    "gold58-paired-band-t057"
+   ]
+  },
+  {
+   "item": 428,
+   "fact": "G2-F540",
+   "transcriber": [
+    "raptor-corpus-slices-per-study"
+   ]
+  },
+  {
+   "item": 429,
+   "fact": "G2-F542",
+   "transcriber": [
+    "v5-full-swa-gold58-auc-t071-fidelity"
+   ]
+  },
+  {
+   "item": 430,
+   "fact": "G2-F543",
+   "transcriber": [
+    "v5-full-swa-stored-gold-auc"
+   ]
+  },
+  {
+   "item": 431,
+   "fact": "G2-F557",
+   "transcriber": [
+    "laptop-gpu-vram-capacity"
+   ]
+  },
+  {
+   "item": 432,
+   "fact": "G2-F564",
+   "transcriber": [
+    "laptop-gpu-power-limit"
+   ]
+  },
+  {
+   "item": 433,
+   "fact": "G2-F569",
+   "transcriber": [
+    "our-arm-effective-blend-weight"
+   ]
+  },
+  {
+   "item": 434,
+   "fact": "G2-F571",
+   "transcriber": [
+    "published-coat-member-gold58-auc-public"
+   ]
+  },
+  {
+   "item": 435,
+   "fact": "G2-F574",
+   "transcriber": []
+  },
+  {
+   "item": 436,
+   "fact": "G2-F578",
+   "transcriber": [
+    "dry-run-stages-passed"
+   ]
+  },
+  {
+   "item": 437,
+   "fact": "G2-F589",
+   "transcriber": [
+    "r1-224-imagenet-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 438,
+   "fact": "G2-F590",
+   "transcriber": [
+    "r1-224-imagenet-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 439,
+   "fact": "G2-F592",
+   "transcriber": [
+    "r2-384-imagenet-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 440,
+   "fact": "G2-F593",
+   "transcriber": [
+    "r2-384-imagenet-paired-delta-vs-v5"
+   ]
+  },
+  {
+   "item": 441,
+   "fact": "G2-F595",
+   "transcriber": [
+    "v5-full-swa-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 442,
+   "fact": "G2-F598",
+   "transcriber": [
+    "v5-full-swa-gold58-auc-paired-script"
+   ]
+  },
+  {
+   "item": 443,
+   "fact": "G2-F603",
+   "transcriber": [
+    "t112-arm-checkpoint-size"
+   ]
+  },
+  {
+   "item": 444,
+   "fact": "G2-F606",
+   "transcriber": [
+    "parent-stack-public-lb-score"
+   ]
+  },
+  {
+   "item": 445,
+   "fact": "G2-F607",
+   "transcriber": [
+    "public-lb-noise-band"
+   ]
+  },
+  {
+   "item": 446,
+   "fact": "G2-F609",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 447,
+   "fact": "G3-F9",
+   "transcriber": [
+    "raptor-corpus-size"
+   ]
+  },
+  {
+   "item": 448,
+   "fact": "G3-F16",
+   "transcriber": [
+    "leaked-label-file-gold58-auc"
+   ]
+  },
+  {
+   "item": 449,
+   "fact": "G3-F32",
+   "transcriber": [
+    "raptor-corpus-size"
+   ]
+  },
+  {
+   "item": 450,
+   "fact": "G3-F49",
+   "transcriber": [
+    "laptop-rtc-backward-jump"
+   ]
+  },
+  {
+   "item": 451,
+   "fact": "G3-F97",
+   "transcriber": [
+    "raptor-corpus-size"
+   ]
+  },
+  {
+   "item": 452,
+   "fact": "G3-F100",
+   "transcriber": [
+    "teacher-file-size"
+   ]
+  },
+  {
+   "item": 453,
+   "fact": "G3-F117",
+   "transcriber": []
+  },
+  {
+   "item": 454,
+   "fact": "G3-F139",
+   "transcriber": [
+    "calib-repeat-run-spread"
+   ]
+  },
+  {
+   "item": 455,
+   "fact": "G3-F141",
+   "transcriber": [
+    "laptop-gpu-vram-capacity"
+   ]
+  },
+  {
+   "item": 456,
+   "fact": "G3-F143",
+   "transcriber": [
+    "rtx4090-vram-capacity"
+   ]
+  },
+  {
+   "item": 457,
+   "fact": "G3-F158",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 458,
+   "fact": "G3-F167",
+   "transcriber": []
+  },
+  {
+   "item": 459,
+   "fact": "G3-F194",
+   "transcriber": [
+    "kernel-vs-trainer-input-std-ratio"
+   ]
+  },
+  {
+   "item": 460,
+   "fact": "G3-F204",
+   "transcriber": [
+    "raptor-corpus-part2-study-count"
+   ]
+  },
+  {
+   "item": 461,
+   "fact": "G3-F209",
+   "transcriber": [
+    "laptop-gpu-vram-capacity"
+   ]
+  },
+  {
+   "item": 462,
+   "fact": "G3-F212",
+   "transcriber": []
+  },
+  {
+   "item": 463,
+   "fact": "G3-F236",
+   "transcriber": [
+    "head-key-prefix-length"
+   ]
+  },
+  {
+   "item": 464,
+   "fact": "G3-F237",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 465,
+   "fact": "G3-F246",
+   "transcriber": []
+  },
+  {
+   "item": 466,
+   "fact": "G3-F247",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 467,
+   "fact": "G3-F281",
+   "transcriber": [
+    "stage4-elapsed-time-in-kernel"
+   ]
+  },
+  {
+   "item": 468,
+   "fact": "G3-F302",
+   "transcriber": []
+  },
+  {
+   "item": 469,
+   "fact": "G3-F336",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 470,
+   "fact": "G3-F346",
+   "transcriber": [
+    "full-stack-kernel-runtime-estimate"
+   ]
+  },
+  {
+   "item": 471,
+   "fact": "G3-F352",
+   "transcriber": [
+    "kaggle-dataset-upload-throughput"
+   ]
+  },
+  {
+   "item": 472,
+   "fact": "G3-F358",
+   "transcriber": [
+    "read-then-act-cycles-per-day"
+   ]
+  },
+  {
+   "item": 473,
+   "fact": "G3-F397",
+   "transcriber": [
+    "kaggle-dataset-to-kernel-start-gap"
+   ]
+  },
+  {
+   "item": 474,
+   "fact": "G3-F400",
+   "transcriber": [
+    "kaggle-concurrent-gpu-session-limit"
+   ]
+  },
+  {
+   "item": 475,
+   "fact": "G3-F401",
+   "transcriber": [
+    "kaggle-gpu-slot-wait-time"
+   ]
+  },
+  {
+   "item": 476,
+   "fact": "G3-F409",
+   "transcriber": [
+    "raptor-corpus-slices-per-study"
+   ]
+  },
+  {
+   "item": 477,
+   "fact": "G3-F410",
+   "transcriber": [
+    "raptor-corpus-study-count"
+   ]
+  },
+  {
+   "item": 478,
+   "fact": "G3-F428",
+   "transcriber": []
+  },
+  {
+   "item": 479,
+   "fact": "G3-F435",
+   "transcriber": [
+    "kernel-vs-trainer-input-std-ratio"
+   ]
+  },
+  {
+   "item": 480,
+   "fact": "G3-F436",
+   "transcriber": [
+    "kernel-vs-trainer-input-mean-shift"
+   ]
+  },
+  {
+   "item": 481,
+   "fact": "G3-F445",
+   "transcriber": [
+    "raptor-corpus-size"
+   ]
+  },
+  {
+   "item": 482,
+   "fact": "G3-F450",
+   "transcriber": [
+    "raptor-corpus-part1-study-count",
+    "raptor-corpus-study-count"
+   ]
+  },
+  {
+   "item": 483,
+   "fact": "G3-F451",
+   "transcriber": [
+    "raptor-corpus-part2-study-count"
+   ]
+  },
+  {
+   "item": 484,
+   "fact": "G3-F460",
+   "transcriber": [
+    "teacher-labels-gold58-auc"
+   ]
+  },
+  {
+   "item": 485,
+   "fact": "G3-F462",
+   "transcriber": [
+    "leaked-label-file-gold58-auc"
+   ]
+  },
+  {
+   "item": 486,
+   "fact": "G3-F487",
+   "transcriber": []
+  },
+  {
+   "item": 487,
+   "fact": "G3-F493",
+   "transcriber": [
+    "laptop-gpu-vram-capacity"
+   ]
+  },
+  {
+   "item": 488,
+   "fact": "G3-F494",
+   "transcriber": [
+    "laptop-gpu-vram-capacity"
+   ]
+  },
+  {
+   "item": 489,
+   "fact": "G3-F496",
+   "transcriber": [
+    "coat-train-peak-vram-laptop-calib"
+   ]
+  },
+  {
+   "item": 490,
+   "fact": "G3-F497",
+   "transcriber": [
+    "coat-train-ms-per-window-laptop-calib"
+   ]
+  },
+  {
+   "item": 491,
+   "fact": "G3-F498",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 492,
+   "fact": "G3-F499",
+   "transcriber": [
+    "coat-train-peak-vram-laptop-calib"
+   ]
+  },
+  {
+   "item": 493,
+   "fact": "G3-F500",
+   "transcriber": [
+    "coat-train-ms-per-window-laptop-calib"
+   ]
+  },
+  {
+   "item": 494,
+   "fact": "G3-F501",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 495,
+   "fact": "G3-F502",
+   "transcriber": [
+    "coat-train-peak-vram-laptop-calib"
+   ]
+  },
+  {
+   "item": 496,
+   "fact": "G3-F503",
+   "transcriber": [
+    "coat-train-ms-per-window-laptop-calib"
+   ]
+  },
+  {
+   "item": 497,
+   "fact": "G3-F504",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 498,
+   "fact": "G3-F505",
+   "transcriber": [
+    "t4-ms-per-window"
+   ]
+  },
+  {
+   "item": 499,
+   "fact": "G3-F507",
+   "transcriber": []
+  },
+  {
+   "item": 500,
+   "fact": "G3-F508",
+   "transcriber": [
+    "coat-train-16-epoch-hours-laptop-projected"
+   ]
+  },
+  {
+   "item": 501,
+   "fact": "G3-F522",
+   "transcriber": []
+  },
+  {
+   "item": 502,
+   "fact": "G3-F547",
+   "transcriber": [
+    "leaked-label-file-gold58-auc"
+   ]
+  },
+  {
+   "item": 503,
+   "fact": "G3-F567",
+   "transcriber": [
+    "torch-download-size"
+   ]
+  },
+  {
+   "item": 504,
+   "fact": "G3-F572",
+   "transcriber": [
+    "rtx4090-pc-line-bandwidth"
+   ]
+  },
+  {
+   "item": 505,
+   "fact": "G3-F573",
+   "transcriber": [
+    "torch-download-size"
+   ]
+  },
+  {
+   "item": 506,
+   "fact": "G3-F574",
+   "transcriber": [
+    "torch-download-time-4090-line"
+   ]
+  },
+  {
+   "item": 507,
+   "fact": "G3-F580",
+   "transcriber": [
+    "other-deps-download-size"
+   ]
+  },
+  {
+   "item": 508,
+   "fact": "G3-F589",
+   "transcriber": [
+    "rtx4090-pc-line-bandwidth"
+   ]
+  },
+  {
+   "item": 509,
+   "fact": "G3-F590",
+   "transcriber": [
+    "torch-download-size"
+   ]
+  },
+  {
+   "item": 510,
+   "fact": "G3-F591",
+   "transcriber": [
+    "torch-download-time-4090-line"
+   ]
+  },
+  {
+   "item": 511,
+   "fact": "G3-F594",
+   "transcriber": [
+    "win-lock-package-count"
+   ]
+  },
+  {
+   "item": 512,
+   "fact": "G3-F597",
+   "transcriber": [
+    "torch-download-time-4090-line"
+   ]
+  },
+  {
+   "item": 513,
+   "fact": "G3-F617",
+   "transcriber": [
+    "t112-224-fold-gold58-auc-trainer-eval"
+   ]
+  },
+  {
+   "item": 514,
+   "fact": "G3-F618",
+   "transcriber": [
+    "t112-224-fold-best-epoch"
+   ]
+  },
+  {
+   "item": 515,
+   "fact": "G3-F620",
+   "transcriber": [
+    "t112-224-fold-final-train-loss"
+   ]
+  },
+  {
+   "item": 516,
+   "fact": "G3-F623",
+   "transcriber": [
+    "t112-224-fold-wall-time"
+   ]
+  },
+  {
+   "item": 517,
+   "fact": "G3-F629",
+   "transcriber": [
+    "legal-window-centres-per-study"
+   ]
+  },
+  {
+   "item": 518,
+   "fact": "GC-F19",
+   "transcriber": []
+  },
+  {
+   "item": 519,
+   "fact": "GC-F22",
+   "transcriber": []
+  },
+  {
+   "item": 520,
+   "fact": "GC-F34",
+   "transcriber": []
+  },
+  {
+   "item": 521,
+   "fact": "GC-F36",
+   "transcriber": []
+  },
+  {
+   "item": 522,
+   "fact": "GC-F37",
+   "transcriber": []
+  },
+  {
+   "item": 523,
+   "fact": "GC-F39",
+   "transcriber": [
+    "published-coat-member-gold58-auc-public"
+   ]
+  },
+  {
+   "item": 524,
+   "fact": "GC-F54",
+   "transcriber": [
+    "published-coat-member-gold58-auc-public"
+   ]
+  },
+  {
+   "item": 525,
+   "fact": "GC-F74",
+   "transcriber": []
+  },
+  {
+   "item": 526,
+   "fact": "GC-F75",
+   "transcriber": []
+  },
+  {
+   "item": 527,
+   "fact": "GC-F76",
+   "transcriber": []
+  },
+  {
+   "item": 528,
+   "fact": "GC-F77",
+   "transcriber": []
+  },
+  {
+   "item": 529,
+   "fact": "GC-F113",
+   "transcriber": []
+  },
+  {
+   "item": 530,
+   "fact": "GC-F120",
+   "transcriber": [
+    "smoke-checks-run-clean-worktree"
+   ]
+  },
+  {
+   "item": 531,
+   "fact": "GC-F121",
+   "transcriber": [
+    "smoke-checks-run-full-machine"
+   ]
+  },
+  {
+   "item": 532,
+   "fact": "GC-F125",
+   "transcriber": []
+  },
+  {
+   "item": 533,
+   "fact": "GC-F130",
+   "transcriber": []
+  },
+  {
+   "item": 534,
+   "fact": "GC-F133",
+   "transcriber": []
+  },
+  {
+   "item": 535,
+   "fact": "GC-F134",
+   "transcriber": []
+  },
+  {
+   "item": 536,
+   "fact": "GC-F135",
+   "transcriber": []
+  },
+  {
+   "item": 537,
+   "fact": "GC-F136",
+   "transcriber": []
+  },
+  {
+   "item": 538,
+   "fact": "GC-F142",
+   "transcriber": []
+  },
+  {
+   "item": 539,
+   "fact": "GC-F145",
+   "transcriber": []
+  },
+  {
+   "item": 540,
+   "fact": "GC-F147",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota"
+   ]
+  },
+  {
+   "item": 541,
+   "fact": "GC-F148",
+   "transcriber": []
+  },
+  {
+   "item": 542,
+   "fact": "GC-F149",
+   "transcriber": []
+  },
+  {
+   "item": 543,
+   "fact": "GC-F150",
+   "transcriber": []
+  },
+  {
+   "item": 544,
+   "fact": "GC-F154",
+   "transcriber": [
+    "laptop-gpu-vram-capacity"
+   ]
+  }
+ ]
+}

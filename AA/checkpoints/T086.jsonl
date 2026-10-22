@@ -22,3 +22,10 @@
 {"ts":"2026-10-22T04:56:37Z","run":"4279585a.bf5b","kind":"end","left":"nothing","next":"parent merges"}
 {"ts":"2026-10-22T05:01:07Z","run":"4279585a.2f32","kind":"did","what":"G1 clean: 551 facts, 62 skips, 17 min","next":"parent merges"}
 {"ts":"2026-10-22T05:01:07Z","run":"4279585a.2f32","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-22T05:03:43Z","run":"4279585a.d669","kind":"open","operator":"adervark","profile":"k","session":"4279585a-61d9-422e-bac2-201bf52475ad","boot":"39cd5032-e5d4-43e2-8016-4b5c64d62a77","pid":2707373,"pstart":"Thu Oct 22 04:35:32 2026","agent":"GC","brief":"T086 closure transcriber GC: ledger-GC.jsonl from cut/GC.jsonl","budget":"one Opus pass, about 10 min"}
+{"ts":"2026-10-22T05:04:15Z","run":"4279585a","kind":"did","what":"G1-G3 clean (1,811 facts), committed 5923aee; closure 78 clauses","next":"GC transcriber"}
+{"ts":"2026-10-22T05:04:15Z","run":"4279585a","kind":"doing","what":"spawning closure transcriber GC (agent 5 of 10)","next":"check ledger-GC, then audit-view and the auditor","until":"2026-10-22T05:34:15Z"}
+{"ts":"2026-10-22T05:04:30Z","run":"4279585a.d669","kind":"doing","what":"GC: transcribing 78 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-22T05:07:15Z","run":"4279585a.d669","kind":"did","what":"GC: 34 of 78 clauses disposed","next":"the rest of GC"}
+{"ts":"2026-10-22T05:09:57Z","run":"4279585a.d669","kind":"did","what":"GC clean: 166 facts, 4 skips, 6 min","next":"parent merges"}
+{"ts":"2026-10-22T05:09:57Z","run":"4279585a.d669","kind":"end","left":"nothing","next":"parent merges"}

@@ -24,3 +24,17 @@ registrar → three transcribers → merge and citation closure → the closure
 transcriber → the auditor → refs from quotes, linking, groups and canaries
 (each check canary's refutation written into the canary key first) → three
 reconcilers → the grade. Nine Opus first passes against a cap of ten.
+
+## After the go
+
+| File | What it is |
+|---|---|
+| `measurands.jsonl` | The registrar's 122 measurands; `check-measurands.mjs` clean |
+| `ledger-G1–G3.jsonl` | The transcribers' ledgers: 551, 609 and 651 facts; 62, 70 and 38 skips. `t082/r0c/check.mjs` exits 0 on each |
+| `cut/GC.jsonl` | The citation closure (`t082/r0c/closure.mjs`): 78 clauses from 21 cited units outside the cut |
+
+A filled transcriber brief scores hits on brief-check from its `Documents:`
+line alone: the names of the group's own files, which the transcriber reads
+anyway (`T112`, `bringup`, `4090`, `dry_run`, `paired`, the figure 224,
+`T111`, `CoAtNet`, `smoke`). With that line removed, all four filled briefs
+score 0.
