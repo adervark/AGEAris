@@ -6,3 +6,10 @@
 {"ts":"2026-10-22T04:41:22Z","run":"4279585a.18e2","kind":"did","what":"checker passes: 122 measurands, 0 problems, in 4 min","next":"end the run"}
 {"ts":"2026-10-22T04:41:22Z","run":"4279585a.18e2","kind":"end","left":"nothing","next":"parent starts the transcribers"}
 {"ts":"2026-10-22T04:41:40Z","run":"4279585a","kind":"did","what":"registrar done: 122 measurands, check-measurands exit 0, 4 min","next":"spawn the three transcribers"}
+{"ts":"2026-10-22T04:42:48Z","run":"4279585a.2f32","kind":"open","operator":"adervark","profile":"k","session":"4279585a-61d9-422e-bac2-201bf52475ad","boot":"39cd5032-e5d4-43e2-8016-4b5c64d62a77","pid":2707373,"pstart":"Thu Oct 22 04:35:32 2026","agent":"G1","brief":"T086 transcriber G1: ledger-G1.jsonl from cut/G1.jsonl","budget":"one Opus pass, about 20 min"}
+{"ts":"2026-10-22T04:42:48Z","run":"4279585a.bf5b","kind":"open","operator":"adervark","profile":"k","session":"4279585a-61d9-422e-bac2-201bf52475ad","boot":"39cd5032-e5d4-43e2-8016-4b5c64d62a77","pid":2707373,"pstart":"Thu Oct 22 04:35:32 2026","agent":"G2","brief":"T086 transcriber G2: ledger-G2.jsonl from cut/G2.jsonl","budget":"one Opus pass, about 20 min"}
+{"ts":"2026-10-22T04:42:48Z","run":"4279585a.f127","kind":"open","operator":"adervark","profile":"k","session":"4279585a-61d9-422e-bac2-201bf52475ad","boot":"39cd5032-e5d4-43e2-8016-4b5c64d62a77","pid":2707373,"pstart":"Thu Oct 22 04:35:32 2026","agent":"G3","brief":"T086 transcriber G3: ledger-G3.jsonl from cut/G3.jsonl","budget":"one Opus pass, about 20 min"}
+{"ts":"2026-10-22T04:42:48Z","run":"4279585a","kind":"doing","what":"spawning transcribers G1-G3","next":"wait; check.mjs on each ledger, then closure","until":"2026-10-22T05:42:48Z"}
+{"ts":"2026-10-22T04:43:04Z","run":"4279585a.bf5b","kind":"doing","what":"G2: transcribing 428 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-22T04:43:06Z","run":"4279585a.2f32","kind":"doing","what":"G1: transcribing 461 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-22T04:43:08Z","run":"4279585a.f127","kind":"doing","what":"G3: transcribing 426 clauses","next":"dispose of every clause"}

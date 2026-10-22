@@ -49,7 +49,8 @@ came from (§7, H1; §10, D9).
   - the gate passed, 13 against 8 (`reach.mjs`);
   - the briefs written from v2.7's templates. `brief-check.mjs` finds 0
     hits against this key in the nine files subagents get.
-- [ ] The operator's go. Then transcribe, audit, link, reconcile, grade.
+- [x] The operator's go (2026-10-22).
+- [ ] Register, transcribe, audit, link, reconcile, grade.
 
 ## Decision rules — fixed in advance
 
@@ -117,17 +118,18 @@ approved by the operator as drafted the same day.*
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, adervark @default/4279585a: the free work
-  is done and committed in `docs/plans/evidence/t086/` (README first). The
-  gate passes, with 13 corrections in reach against 8.
-- **In flight:** nothing. No subagent has run.
-- **On disk:** all committed.
-- **Next decision, the operator's:** the go for the spend. That is 9 Opus
-  first passes against the cap of 10: a measurand registrar, three
-  transcribers, a transcriber for cited sections outside the cut, an
-  auditor and three reconcilers.
-- **Resume with:** on the go, open the registrar's run and spawn it with
-  `brief-registrar.md` filled in.
+- **Last touched:** 2026-10-22, adervark @default/4279585a: the spend is
+  under way on the operator's go.
+  - The registrar is done: 122 measurands, committed at `02ed6a5`.
+- **In flight:** transcribers G1, G2 and G3 (runs `4279585a.2f32`, `.bf5b`
+  and `.f127`), writing `docs/plans/evidence/t086/ledger-G*.jsonl`.
+- **Agents used:** 4 of the 10 allowed first passes.
+- **Resume with:** `AA/ckpt.sh live T086`. A transcriber that died is rerun
+  once, resuming from its lines.
+  - When all three are clean (`t082/r0c/check.mjs`), run `t082/r0c/closure.mjs`
+    to `cut/GC.jsonl`, then the closure transcriber.
+  - Then `audit-view.mjs`, with `--exclude key.json`, then the auditor.
+- **Next decision:** none until the grade, unless a stage fails twice.
 
 ## Verify
 
