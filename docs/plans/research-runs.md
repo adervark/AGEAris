@@ -1,9 +1,11 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.7, accepted as it stands** (2026-10-22, T086). Nothing here is
-built. H1, the held-out round, caught 4 of 13 corrections, every one of a
-figure or a count; §5.5 names the blind spot, and v2.8 is registered to
-answer it (T090). v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
+**Status: v2.8, written, for the operator to accept for testing** (T090).
+v2.7 stays accepted as it stands (2026-10-22, T086) until a held-out round
+decides v2.8. Nothing here is built. H1, the held-out round, caught 4 of 13
+corrections, every one of a figure or a count; §5.5 names the blind spot,
+and v2.8 answers it, measured for free on H1's material
+(`docs/plans/evidence/t090/measurements.md`). v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
 and reached 7 of 12 on its re-grade, R0c (T082), against a bar of 10. v2.6
 answered R0c. R0d (T085) checked v2.6's mechanics on round 3 and missed one
 canary of 33. The operator let that stand (§10, D10). v2.7 answers R0d. A
@@ -40,6 +42,97 @@ held-out round (T086) decides whether it is accepted (§7; §10, D9).
   (`docs/plans/evidence/t082/r0c/grade.md`). The operator sent it back for a
   v2.6 (T084), measured for free on R0c's material first
   (`docs/plans/evidence/t084/measurements.md`).
+
+## Changes since v2.7
+
+H1 (T086) caught 4 of 13 corrections in reach on RSNA's T112, every one of a
+figure or a count, and 0 of 9 of a word, a scope or a reason
+(`docs/plans/evidence/t086/grade.md`). In six, both sides sat in one
+reconciler's unit, and the line said `ok`. Three of those six the brief
+itself told the reconciler to pass: "one file read at two commits can say two
+things because the file changed in between; that is not a disagreement". Each
+change below was measured for free on H1's material
+(`docs/plans/evidence/t090/measurements.md`); all of it is in-sample.
+
+1. **An edit is a unit, judged as a claim** (K1, K3, K4).
+   - The cut already records an edit: an earlier version's clause that the
+     next version dropped is cut as `<doc>@<commit>`. The linker now pairs
+     each with the clause of a later version of the same document most like
+     it: the Dice coefficient over their word sets, at least 0.4 and below 1.
+     Each pair is an **edit** unit, beside the groups and checks.
+   - The reconciler marks an edit `conflict` when the later clause corrects
+     the earlier, `superseded` when the earlier was right as of its date
+     and the later gives a moving state's current value, and `ok` for a
+     rewording or two clauses about different things.
+   - *Measured:* 39 edit units on H1, against 330 groups. They reach K1, K3
+     and K4, and K2 and K14, which v2.7 caught as groups. Marked by hand, 23
+     of the 39 change a claim (10 on the key, 13 off it, among them
+     `dry_run.py`'s seven stages to thirteen and `setup_4090.cmd`'s wheels,
+     which H1's reconcilers found in groups), and 16 are rewordings. 0.4 is
+     the lowest threshold that reaches K3, whose edit appended a definition
+     to an unchanged sentence; 0.5 loses it.
+2. **A fact that reads like a correction gets a cue unit** (K6, K11).
+   - A fact whose quote carries a correction cue gets a **cue** unit:
+     itself and the 12 facts recorded before it, in any document, most like
+     it. The cues: `struck` or `~~`, `superseded`, `turned out`, `was` or `is
+     wrong`, `mistake`, `was undefined` or `never happened`, `assumed`,
+     `withdrawn`, and `not` before a figure or a number word ("zero, not
+     two"). Each is a bounded pattern; quotes are untrusted text.
+   - The reconciler finds what the cued fact corrects among the 12 and
+     marks that pair, or writes `ok`.
+   - *Measured:* 33 of H1's 1,977 facts carry a cue. By hand, 19 correct
+     something earlier and 13 correct nothing. A cue sits on a correcting
+     fact of K1, K3, K4, K6, K11 and K12. The cue unit holds an earlier fact
+     of the same correction for K3, K4, K6 and K11. K11 is one of the three
+     whose sides never met in H1. "instead of", "rather than", "in fact" and
+     "actually" were tried and dropped: 69 more flags, none on a correction.
+     The unit's size, 12, was chosen on this material; 8 loses K11.
+3. **The reconciler judges claims, not only values** (K1, K3, K4, K6, K9,
+   K12).
+   - The brief no longer says a file changed between commits is not a
+     disagreement. It says an earlier version's sentence is what the record
+     said until then, and that a later version saying something else about
+     the same thing is a correction made in place.
+   - Every pair is judged as two claims: could someone who acted on the
+     earlier one be wrong by the later? A correction can change a word, a
+     scope or a reason. "Not a quantity" is never a reason to pass a pair.
+     A later clause that denies an earlier one by name or value corrects it
+     even when it names a date; it is another condition only when the later
+     fact leaves the earlier one true.
+   - The examples come from neither round
+     (`docs/plans/evidence/t090/brief-reconciler.md`). H1's brief checker
+     finds 0 hits in it against H1's key, after it caught two of the
+     draft's words and its header.
+   - *Measured:* nothing an agent did. By hand, the brief's text decides
+     each of the six in-group misses as a correction; its author marked them,
+     so this shows the words cover each pair, not that a reconciler will.
+4. **A group twin takes no figure its group already states** (H1's unfair
+   canary).
+   - R2's group 299 got a twin of "197 KiB" at "200 KiB", in a group that
+     held "200 KB". R2 called it rounding of one size, which it was.
+   - A twin's figure, rounded to the precision another fact in its group
+     writes, must now differ from that fact's figure, in any unit;
+     one-digit figures elsewhere are passed over, as for checks (v2.7 item
+     1). The rule picks the twin's value, not which groups get a twin, so no
+     canary is lost.
+   - *Measured:* it re-picks 4 of H1's 10 twins: the unfair one, and three
+     that were caught. A 10% bound was tried first and dropped: it re-picked
+     6, 0.941 → 0.869 among them.
+
+**What v2.8 can reach on H1, at best.** v2.7 caught 4. Edit and cue units
+put both sides of 5 more in front of a reconciler (K1, K3, K4, K6, K11). Two
+more sit only in groups of 119 and 175 facts, where only the brief's frame
+helps (K9, K12). Two never meet (K7, K10). If every pointed unit is marked
+and both large-group pairs too, that is 11 of 13, exactly H1's bar, and any
+other miss fails it. It is an upper bound, in-sample.
+
+**What stays.** The ledger's format, the transcribers, the auditor, groups,
+checks, `superseded`, the check canaries and the grade. The reconciler's
+output gains two unit kinds, `edit` and `cue`, each with the lines a group
+has.
+
+**In-sample.** T112 is now the round these changes were drawn from. A
+held-out round of its own decides v2.8 (T090).
 
 ## Changes since v2.6
 
@@ -1091,8 +1184,11 @@ number without its id is not checked, so the rule for writers is the one
     of a figure or a count in reach and 0 of 9 of a word, a scope or a
     reason. In six, both sides sat in one reconciler's group and the line
     said `ok`; twice it named the edit, "not a quantity". In three, prose
-    states shared no referent and never met in a unit. v2.8 (T090) is to
-    answer the first kind; the second has no mechanical rule.
+    states shared no referent and never met in a unit. v2.8 answers the
+    first kind with edit units, cue units and a brief that judges claims.
+    It does not answer two of the six: they sit only in groups of 119 and
+    175 facts, with no edit and no cue. The second kind has no mechanical
+    rule; a cue unit reached one of the three (K11) on H1, in-sample.
   - **A pair a reconciler passes over.** A pair can sit in a unit and go
     unmarked while its neighbours are marked. R0d lost C3 this way, in two
     reconcilers' groups. Group canaries in each reconciler's largest groups
@@ -1140,13 +1236,18 @@ number without its id is not checked, so the rule for writers is the one
    - Review is by unit, not by pair: R0c's 4,033 facts made 59,480 pairs.
      A **group** is every fact, from two documents or more, linked through
      one referent. A **check** is an INFERRED fact with all its premises.
-     Each fact shows its document, its commit and its quote.
-   - For a group, the reconciler writes `ok`, or a `same` line for each
-     pair in conflict or superseded. For a check, it writes `follows`,
+     An **edit** is a clause a later version of a document dropped, beside
+     the later clause most like it (v2.8 item 1). A **cue** is a fact that
+     reads like a correction, beside the 12 earlier facts most like it
+     (v2.8 item 2). Each fact shows its document, its commit and its quote,
+     and every pair is judged as two claims (v2.8 item 3).
+   - For a group, an edit or a cue, the reconciler writes `ok`, or a `same`
+     line for each pair in conflict or superseded. For a check, it writes `follows`,
      `contradicted` or `unsupported`. Every line quotes what it compared.
    - Canaries made from this round's facts sit beside real units, unmarked:
      - a group canary is a twin fact inside a real group, carrying another
-       real value of its unit and shape;
+       real value of its unit and shape, and no figure another fact in its
+       group states (v2.8 item 4);
      - a check canary is a copy of an eligible check, shown to a different
        reconciler from the one that gets the real check. A check is
        eligible when its premises give the figure the twin replaces, and
@@ -1453,6 +1554,19 @@ approved a third round, on v2.3, which arrived complete.
   one document is judged as a claim, not only as a value; and a group twin
   takes a value outside the real one's rounding. Neither changes the
   ledger's format. It is accepted only on a held-out round of its own.
+
+**Open (T090), for the operator:**
+
+- **D12: accept v2.8 to be tested, or drop it.** Recommended: accept. It
+  answers the six in-group misses with units and a brief, measured for free,
+  and changes no ledger format. Its best case on H1 is exactly the bar, so a
+  held-out round can still fail it.
+- **D13: the held-out round.** T112 is in-sample now, and T118 supplies an
+  incident. Recommended: RSNA's T121, its next-largest task (15 commits,
+  done), with self-corrections in its record. Nothing in v2.8 was drawn from
+  it. Of it, T090 read only its commit subjects, its task file's length and
+  a count of correction words in it (5). Its decision rules, spend and bar are written and approved before
+  anything runs, as T086's were.
 
 S0 still runs before any code is written.
 

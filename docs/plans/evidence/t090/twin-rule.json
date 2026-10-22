@@ -1,0 +1,120 @@
+{
+ "twins": 10,
+ "repick": 4,
+ "repickCaught": 3,
+ "repickMissed": 1,
+ "keptMissed": 0,
+ "detail": [
+  {
+   "reconciler": 1,
+   "group": 14,
+   "size": 33,
+   "real": "30%",
+   "twin": "25%",
+   "caught": true,
+   "givenBy": [],
+   "repick": false
+  },
+  {
+   "reconciler": 1,
+   "group": 35,
+   "size": 22,
+   "real": "the unchanged 0.941 parent",
+   "twin": "the unchanged 0.869 parent",
+   "caught": true,
+   "givenBy": [],
+   "repick": false
+  },
+  {
+   "reconciler": 1,
+   "group": 168,
+   "size": 6,
+   "real": "would be scored at their 384",
+   "twin": "would be scored at their 320",
+   "caught": true,
+   "givenBy": [],
+   "repick": false
+  },
+  {
+   "reconciler": 2,
+   "group": 10,
+   "size": 39,
+   "real": "15.21 ms/window",
+   "twin": "15.40 ms/window",
+   "caught": true,
+   "givenBy": [
+    "calib 224 bs4/ms per window = 15.40",
+    "224 bs4 calib/ms per window = 15.40 ms/window"
+   ],
+   "repick": true
+  },
+  {
+   "reconciler": 2,
+   "group": 55,
+   "size": 15,
+   "real": "7.62 GiB",
+   "twin": "6.06 GiB",
+   "caught": true,
+   "givenBy": [],
+   "repick": false
+  },
+  {
+   "reconciler": 2,
+   "group": 299,
+   "size": 3,
+   "real": "197 KiB",
+   "twin": "200 KiB",
+   "caught": false,
+   "givenBy": [
+    "teacher file/size = 200 KB"
+   ],
+   "repick": true
+  },
+  {
+   "reconciler": 3,
+   "group": 12,
+   "size": 39,
+   "real": "7.62 GiB",
+   "twin": "5.55 GiB",
+   "caught": true,
+   "givenBy": [
+    "laptop affordable micro-batch/224 vs 352 = micro-batch 4 (5.55 GiB of 7.62) where at 352 it could only afford 2"
+   ],
+   "repick": true
+  },
+  {
+   "reconciler": 3,
+   "group": 279,
+   "size": 3,
+   "real": "+22",
+   "twin": "+32",
+   "caught": true,
+   "givenBy": [],
+   "repick": false
+  },
+  {
+   "reconciler": 3,
+   "group": 60,
+   "size": 15,
+   "real": "24 windows",
+   "twin": "42 windows",
+   "caught": true,
+   "givenBy": [
+    "kernel eval/k_eval = the native384-v8 group's k_eval 42",
+    "condition C/definition = C 336 -> 224, k 42 the kernel's window count, the trainer's resample",
+    "condition B/definition = B 336 -> 384 -> 224, k 42 the kernel's window count AND its resample chain"
+   ],
+   "repick": true
+  },
+  {
+   "reconciler": 3,
+   "group": 127,
+   "size": 8,
+   "real": "280 px",
+   "twin": "384 px",
+   "caught": true,
+   "givenBy": [],
+   "repick": false
+  }
+ ]
+}

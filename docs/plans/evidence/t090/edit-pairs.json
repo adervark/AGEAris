@@ -1,0 +1,385 @@
+{
+ "threshold": 0.4,
+ "dropped": 53,
+ "pairs": 39,
+ "pairsOnKey": 10,
+ "reached": [
+  "K1",
+  "K2",
+  "K3",
+  "K4",
+  "K14"
+ ],
+ "notReached": [
+  "K5",
+  "K6",
+  "K7",
+  "K8",
+  "K9",
+  "K10",
+  "K11",
+  "K12"
+ ],
+ "detail": [
+  {
+   "key": "K1",
+   "reached": true,
+   "pair": {
+    "earlier": "build_t112_kernel.py@3ed78d4#2",
+    "later": "build_t112_kernel.py#121",
+    "likeness": 0.79
+   }
+  },
+  {
+   "key": "K2",
+   "reached": true,
+   "pair": {
+    "earlier": "T112@416447b#6",
+    "later": "T112#276",
+    "likeness": 0.95
+   }
+  },
+  {
+   "key": "K3",
+   "reached": true,
+   "pair": {
+    "earlier": "T112@416447b#1",
+    "later": "T112#140",
+    "likeness": 0.45
+   }
+  },
+  {
+   "key": "K4",
+   "reached": true,
+   "pair": {
+    "earlier": "T112@416447b#5",
+    "later": "T112#197",
+    "likeness": 0.86
+   }
+  },
+  {
+   "key": "K5",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K6",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K7",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K8",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K9",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K10",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K11",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K12",
+   "reached": false,
+   "pair": null
+  },
+  {
+   "key": "K14",
+   "reached": true,
+   "pair": {
+    "earlier": "Makefile@3ed78d4#1",
+    "later": "Makefile@7edf46e#1",
+    "likeness": 0.98
+   }
+  }
+ ],
+ "all": [
+  {
+   "earlier": "Makefile@3ed78d4#1",
+   "later": "Makefile@7edf46e#1",
+   "likeness": 0.98,
+   "earlierText": "not in check) make dryrun the full submit chain on CPU (needs the corpus) make smoke the 1164-check suite (~95 s, no GPU) asserts the ordered check-name hash, s",
+   "laterText": "not in check) make dryrun the full submit chain on CPU (needs the corpus) make smoke the 1176-check suite (~95 s, no GPU) asserts the ordered check-name hash, s"
+  },
+  {
+   "earlier": "Makefile@7edf46e#1",
+   "later": "Makefile@416447b#1",
+   "likeness": 0.98,
+   "earlierText": "not in check) make dryrun the full submit chain on CPU (needs the corpus) make smoke the 1176-check suite (~95 s, no GPU) asserts the ordered check-name hash, s",
+   "laterText": "not in check) make dryrun the full submit chain on CPU (needs the corpus) make smoke the 1192-check suite (~95 s, no GPU) asserts the ordered check-name hash, s"
+  },
+  {
+   "earlier": "Makefile@416447b#1",
+   "later": "Makefile#3",
+   "likeness": 0.82,
+   "earlierText": "not in check) make dryrun the full submit chain on CPU (needs the corpus) make smoke the 1192-check suite (~95 s, no GPU) asserts the ordered check-name hash, s",
+   "laterText": "not in check) make dryrun the full submit chain on CPU (needs the corpus) make smoke the 1159-check suite (~95 s, no GPU) plus the environment-gated checks that"
+  },
+  {
+   "earlier": "T112@416447b#1",
+   "later": "T112#140",
+   "likeness": 0.45,
+   "earlierText": "BROKEN → do not submit, debug. gold-58 < 0.85 at full fidelity.",
+   "laterText": "BROKEN → do not submit, debug. gold-58 < 0.85 at full fidelity — defined here, on review, as measured under the KERNEL's resample chain and window count (condit"
+  },
+  {
+   "earlier": "T112@416447b#5",
+   "later": "T112#197",
+   "likeness": 0.86,
+   "earlierText": "The one lever with real headroom left is exactly this task's: a better CoAtNet arm than theirs, because our teacher is ours and it is good. A realistic good day",
+   "laterText": "The one lever with real headroom left is exactly this task's: a better CoAtNet arm than theirs, because our teacher is ours and it is good. ~~A realistic good d"
+  },
+  {
+   "earlier": "T112@416447b#6",
+   "later": "T112#276",
+   "likeness": 0.95,
+   "earlierText": "Not a blocker: the published native384-v8 carries the same class of mismatch in the other direction and still reads 0.9128–0.9213.",
+   "laterText": "Not a blocker: the published native384-v8 carries the same class of mismatch in the other direction and still reads 0.9054–0.9213."
+  },
+  {
+   "earlier": "T112@ac3a38c#1",
+   "later": "T112#1",
+   "likeness": 0.64,
+   "earlierText": "--- id: T112 title: \"The 4090's first day, pre-registered and verified the night before\" status: claimed owner: adervark @b/c480ad78 2026-09-18 — load path prov",
+   "laterText": "--- id: T112 title: \"The 4090's first day, pre-registered and verified the night before\" status: blocked — Kaggle weekly GPU quota exhausted 2026-09-18 02:04Z;"
+  },
+  {
+   "earlier": "T112@ac3a38c#3",
+   "later": "T112#294",
+   "likeness": 0.83,
+   "earlierText": "be used to clear the BROKEN floor for this submission.",
+   "laterText": "be used to clear the BROKEN floor for this submission.~~ — superseded by the row above."
+  },
+  {
+   "earlier": "T112@029cbb8#1",
+   "later": "T112#3",
+   "likeness": 0.71,
+   "earlierText": "The 4090 lane is unaffected owner: adervark @b/c480ad78 2026-09-18 — load path proven, swap kernel built;",
+   "laterText": "The 4090 lane is unaffected owner: adervark @b/c480ad78 2026-09-18 — chain verified end to end;"
+  },
+  {
+   "earlier": "T112@029cbb8#2",
+   "later": "T112#5",
+   "likeness": 0.67,
+   "earlierText": "the day is registered depends_on: [T107, T110, T111] created: 2026-09-18 ---",
+   "laterText": "our arm resolved-behind v5 depends_on: [T107, T110, T111] created: 2026-09-18 ---"
+  },
+  {
+   "earlier": "T112@029cbb8#3",
+   "later": "T112#296",
+   "likeness": 0.76,
+   "earlierText": "- Last touched: 2026-09-18, adervark @b/c480ad78.",
+   "laterText": "Moving machines. Last touched 2026-09-18 on the laptop, adervark @b/c480ad78."
+  },
+  {
+   "earlier": "T112@029cbb8#4",
+   "later": "T112#298",
+   "likeness": 0.85,
+   "earlierText": "- NOTHING IS IN FLIGHT. GPU idle, nothing on Kaggle, no submission pending.",
+   "laterText": "Nothing is in flight: the laptop GPU is idle, nothing is running on Kaggle, and no submission is pending."
+  },
+  {
+   "earlier": "T112@029cbb8#5",
+   "later": "T112#216",
+   "likeness": 0.41,
+   "earlierText": "- The one decision outstanding is tonight's fold, and it is a GPU spend, so it is the operator's.",
+   "laterText": "- [ ] OPERATOR: approve tonight's 224 fold. Without it there is no 08:00 submission and the day loses a full cycle"
+  },
+  {
+   "earlier": "T112@7966326#1",
+   "later": "T112#296",
+   "likeness": 0.64,
+   "earlierText": "- Last touched: 2026-09-18 ~02:40Z, adervark @b/c480ad78 (the session restarted mid-task;",
+   "laterText": "Moving machines. Last touched 2026-09-18 on the laptop, adervark @b/c480ad78."
+  },
+  {
+   "earlier": "T112@7966326#3",
+   "later": "T112#298",
+   "likeness": 0.57,
+   "earlierText": "- NOTHING IS IN FLIGHT. GPU idle.",
+   "laterText": "Nothing is in flight: the laptop GPU is idle, nothing is running on Kaggle, and no submission is pending."
+  },
+  {
+   "earlier": "T112@7966326#4",
+   "later": "T112#298",
+   "likeness": 0.55,
+   "earlierText": "No kernel running on Kaggle, no submission pending.",
+   "laterText": "Nothing is in flight: the laptop GPU is idle, nothing is running on Kaggle, and no submission is pending."
+  },
+  {
+   "earlier": "T112@7966326#5",
+   "later": "T112#218",
+   "likeness": 0.5,
+   "earlierText": "- Blocked on Kaggle, not on us: the weekly GPU quota is exhausted, so no kernel can run until it resets.",
+   "laterText": "## BLOCKED 2026-09-18 02:04Z: the Kaggle weekly GPU quota is exhausted"
+  },
+  {
+   "earlier": "T112@7966326#7",
+   "later": "T112#212",
+   "likeness": 0.52,
+   "earlierText": "the kernel is rendered at outputs/t112/rsna-knee-t112-ourarm/.",
+   "laterText": "The dataset is rsna-knee-t112-arm, the kernel rsna-knee-t112-ourarm, and assert_distinct_slugs() refuses before anything is uploaded."
+  },
+  {
+   "earlier": "T112@7966326#8",
+   "later": "T112#366",
+   "likeness": 0.58,
+   "earlierText": "scripts/t112/arm_t112.sh re-runs the whole push → save run → VOID check, and never submits.",
+   "laterText": "After the reset, arm_t112.sh pushes, waits for the save run and VOID-checks, and never submits."
+  },
+  {
+   "earlier": "T112@7966326#9",
+   "later": "T112#313",
+   "likeness": 0.76,
+   "earlierText": "- But do not submit this arm: paired against v5_full_swa it is resolved-behind (Δ −0.0277, CI [−0.0483, −0.0076]).",
+   "laterText": "Do not submit the 224 arm. It is resolved-behind v5 (Δ −0.0277, CI [−0.0483, −0.0076])."
+  },
+  {
+   "earlier": "T112@7966326#10",
+   "later": "T112#251",
+   "likeness": 0.6,
+   "earlierText": "The bar for any submission of ours is a paired Δ vs v5 with CI lower bound ≥ 0 — scripts/t112/paired_vs_member.py --ours <checkpoint> reads it in ~90 s on a GPU",
+   "laterText": "The bar for any future submission of our arm: paired Δ vs v5 whose 95% CI lower bound is ≥ 0."
+  },
+  {
+   "earlier": "T112@7966326#11",
+   "later": "T112#205",
+   "likeness": 0.46,
+   "earlierText": "- Next decision, the operator's: what the 4090 trains, and whether the laptop's one-fold-then-cool-down ruling binds the desktop.",
+   "laterText": "- No chained folds on the laptop. The 2026-08-26 one-fold-then-cool-down ruling is a laptop ruling and still binds it."
+  },
+  {
+   "earlier": "T112@7966326#12",
+   "later": "T112#363",
+   "likeness": 0.54,
+   "earlierText": "- Independent re-review of the review fixes did NOT happen — the critic hit its weekly limit before re-reviewing (outputs/t112/critic_review.md is the first, RE",
+   "laterText": "- An independent re-review. The first critic review REJECTED this work (outputs/t112/critic_review.md, laptop only)."
+  },
+  {
+   "earlier": "build_t112_kernel.py@3ed78d4#1",
+   "later": "build_t112_kernel.py#120",
+   "likeness": 0.86,
+   "earlierText": "img {img} is not a multiple of {STRIDE};",
+   "laterText": "res {res} is not a multiple of {STRIDE};"
+  },
+  {
+   "earlier": "build_t112_kernel.py@3ed78d4#2",
+   "later": "build_t112_kernel.py#121",
+   "likeness": 0.79,
+   "earlierText": "coatnet_rmlp_ partitions attention on a {STRIDE}-pixel grid. 336 -- the corpus's native size -- is 32 x 10.5 and is NOT legal, which is why the published pipeli",
+   "laterText": "coatnet_rmlp_ partitions attention on a {STRIDE}-pixel grid, and res is the size the MODEL sees (ck['res'], applied per arm in eval_windows). 336 -- the corpus'"
+  },
+  {
+   "earlier": "build_t112_kernel.py@416447b#1",
+   "later": "build_t112_kernel.py#130",
+   "likeness": 0.92,
+   "earlierText": "What the log must contain, and must not, for this submission to be read.",
+   "laterText": "What the log MUST contain for this submission to be read."
+  },
+  {
+   "earlier": "dry_run.py@3ed78d4#1",
+   "later": "dry_run.py#2",
+   "likeness": 0.91,
+   "earlierText": "Seven stages stand between a trained checkpoint and a scored leaderboard submission.",
+   "laterText": "Thirteen stages stand between a trained checkpoint and a scored leaderboard submission."
+  },
+  {
+   "earlier": "dry_run.py@3ed78d4#3",
+   "later": "dry_run.py#3",
+   "likeness": 0.96,
+   "earlierText": "This runs all seven, on the REAL corpus and the REAL notebook, with a tiny backbone on CPU so it costs seconds rather than hours -- and prints PASS or FAIL per ",
+   "laterText": "This runs all thirteen, on the REAL corpus and the REAL notebook, with a tiny backbone on CPU so it costs seconds rather than hours -- and prints PASS or FAIL p"
+  },
+  {
+   "earlier": "_order.py@3ed78d4#1",
+   "later": "_order.py@7edf46e#1",
+   "likeness": 0.83,
+   "earlierText": "1164 checks -- md5 of the ordered names: 8dc635f9c78ad7409e0414ba922078eb Enforced by make smoke;",
+   "laterText": "1176 checks -- md5 of the ordered names: 1422c3376b7f7ecfbb1414886130c461 Enforced by make smoke;"
+  },
+  {
+   "earlier": "_order.py@7edf46e#1",
+   "later": "_order.py@416447b#1",
+   "likeness": 0.83,
+   "earlierText": "1176 checks -- md5 of the ordered names: 1422c3376b7f7ecfbb1414886130c461 Enforced by make smoke;",
+   "laterText": "1192 checks -- md5 of the ordered names: 73dd644f0640df4bcbeba378c63c1aa7 Enforced by make smoke;"
+  },
+  {
+   "earlier": "_order.py@416447b#1",
+   "later": "_order.py#77",
+   "likeness": 0.69,
+   "earlierText": "1192 checks -- md5 of the ordered names: 73dd644f0640df4bcbeba378c63c1aa7 Enforced by make smoke;",
+   "laterText": "Those are not counted here. === 1159 checks -- md5 of the ordered names: 152d242b9037178161569e13c4236297 Enforced by make smoke;"
+  },
+  {
+   "earlier": "_order.py@416447b#2",
+   "later": "_order.py#37",
+   "likeness": 0.44,
+   "earlierText": "re-derive with smoke_test.py --names.",
+   "laterText": "re-derive with smoke_test.py --names. === 1074 checks -- md5 of the ordered names: fb1ec63c40a94d8970c1aab239ed2ca9 +27 -- test_coat_arm, 2026-09-17 (T111)."
+  },
+  {
+   "earlier": "_order.py@416447b#3",
+   "later": "_order.py#81",
+   "likeness": 0.5,
+   "earlierText": "T111, 2026-09-17;",
+   "laterText": "T092, 2026-09-14;"
+  },
+  {
+   "earlier": "coat.py@3ed78d4#1",
+   "later": "coat.py#35",
+   "likeness": 0.57,
+   "earlierText": "The swap must take, and must REFUSE to render when it cannot.",
+   "laterText": "The swap must take, must preserve the DECODE GROUP, and must refuse otherwise."
+  },
+  {
+   "earlier": "coat.py@3ed78d4#2",
+   "later": "coat.py#36",
+   "likeness": 0.91,
+   "earlierText": "A kernel whose patch silently no-ops scores the unchanged 0.941 parent and reads as a clean null -- eight hours of Kaggle GPU spent proving nothing, and a resul",
+   "laterText": "A kernel whose patch silently no-ops scores the unchanged 0.941 parent and reads as a clean null -- eight hours of Kaggle GPU spent proving nothing."
+  },
+  {
+   "earlier": "coat.py@3ed78d4#3",
+   "later": "coat.py#37",
+   "likeness": 0.8,
+   "earlierText": "Every edit therefore raises rather than returning the input, and every one of those refusals is exercised here against the REAL T105 notebook.",
+   "laterText": "So every edit raises rather than returning its input, and every refusal is exercised here against the REAL T105 notebook."
+  },
+  {
+   "earlier": "paired_vs_member.py@029cbb8#1",
+   "later": "paired_vs_member.py#16",
+   "likeness": 0.5,
+   "earlierText": "ours: CoatMIL key names, its recipe carried in the checkpoint",
+   "laterText": "A CoatMIL checkpoint (ours) carries head. keys and its recipe;"
+  },
+  {
+   "earlier": "setup_4090.cmd@5136aae#2",
+   "later": "setup_4090.cmd#12",
+   "likeness": 0.48,
+   "earlierText": "CUDA 13.0 because the driver supports up to 13.1. torchvision must come from here as well: timm depends on it, and resolving it from PyPI can swap in a differen",
+   "laterText": "Everything else is small (~150 MB) and goes through the SSD's cache. torchvision FIRST and from the SAME CUDA index as torch: timm depends on it, and letting ti"
+  },
+  {
+   "earlier": "setup_4090.cmd@3659952#2",
+   "later": "setup_4090.cmd#9",
+   "likeness": 0.42,
+   "earlierText": "The PC's line is 10 Mbps: torch alone is ~3 GB, about 40 minutes there, so every wheel was downloaded on the laptop instead -- resolved for Windows / CPython 3.",
+   "laterText": "The line is ~10 Mbps and torch is 1.9 GB (~30 minutes), so it is never downloaded again: --offline, and whichever CUDA build is there (13.0 is exact for this dr"
+  }
+ ]
+}

@@ -41,8 +41,9 @@ not in a figure. Then accept or reject v2.8 on a held-out round of its own.
 
 ## Steps
 
-- [ ] Write v2.8: the two items, each measured for free on T086's material
-      where it can be.
+- [x] Write v2.8: the two items, each measured for free on T086's material
+      where it can be. Four items in the end: edit units, cue units, the
+      brief's claim frame, the twin rule (`docs/plans/evidence/t090/`).
 - [ ] The operator accepts v2.8 to be tested, and chooses the held-out
       round.
 - [ ] Write the decision rules for the held-out spend, before any spend.
@@ -58,7 +59,17 @@ not in a figure. Then accept or reject v2.8 on a held-out round of its own.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, registered
+- **Last touched:** 2026-10-22, v2.8 written
+- **In flight:** nothing
+- **On disk:** `docs/plans/evidence/t090/` (three measuring scripts, their
+  outputs, the brief template, `measurements.md`); v2.8 in the design
+  (Changes since v2.7, §5.5, §5.6, §10 D12–D13)
+- **Resume with:** the operator's D12 and D13
+- **Next decision:** D12, accept v2.8 to be tested or drop it; D13, the
+  held-out round (T121 recommended)
+- **Verify, by hand:** the brief's text decides each of the six in-group
+  misses as a correction (`measurements.md`); `t086/brief-check.mjs` finds
+  0 hits in the brief against T086's key
 
 ## Verify
 
