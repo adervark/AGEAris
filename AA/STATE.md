@@ -7,9 +7,11 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** nothing. Research-runs v2.7 was accepted on 2026-10-22
-(T087), to be tested on the held-out round (T086). T086 waits only on the
-operator's choice of round. T077 waits on T086.
+**In progress:** T089, each Claude account's limits on the Agents page,
+`GET /api/limits` and `/aa limits`: built and committed, closing after a
+live check. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
+stands after H1's 4 of 13, its blind spot in §5.5, and v2.8 registered
+(T090). T077 (S1a) can start.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -33,29 +35,28 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T10:35Z · 89 tasks: 31 backlog, 2 WIP (2 in progress), 56 delivered`
+`board · 2026-10-22T18:02Z · 90 tasks: 32 backlog, 1 WIP (1 in progress), 57 delivered`
 
-FLOW · **WIP 2/2** · throughput 13.1/wk (56 in 30d) · cycle time 50th 5m / 85th 81m (n=56)
-FLOW · Little's Law: 2 ÷ 13.1/wk ≈ 25h expected · flow efficiency 77% (touch 4h of 6h, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 13.1/wk (56 in 30d) · cycle time 50th 5m / 85th 81m (n=56)
+FLOW · Little's Law: 1 ÷ 13.1/wk ≈ 12h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 2/2 | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 6h | ⚠ |
-|  | T089 | The limits left on each Claude account | adervark | now |  |
-| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 6h |  |
-|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 12h |  |
-|  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 22h |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 23h |  |
+| **IN PROGRESS** 1/2 | T089 | The limits left on each Claude account | adervark | 7h | ⚠ |
+| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 13h |  |
+|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 20h |  |
+|  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 29h |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 30h |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 9d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 9d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 9d |  |
-|  | T055 | The orient contract and its scenario corpus | adervark | 10d |  |
+|  | T055 | The orient contract and its scenario corpus | adervark | 11d |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 11d |  |
-|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 11d |  |
+|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 12d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 12d |  |
-|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 12d |  |
-|  | T050 | /aa on Windows without WSL | adervark | 12d |  |
+|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 13d |  |
+|  | T050 | /aa on Windows without WSL | adervark | 13d |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 13d |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 13d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 13d |  |
@@ -67,9 +68,9 @@ FLOW · Little's Law: 2 ÷ 13.1/wk ≈ 25h expected · flow efficiency 77% (touc
 |  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 13d |  |
 |  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 13d |  |
 |  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 13d |  |
-|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 13d |  |
-|  | T035 | The forecast samples days from before the board existed | adervark | 13d |  |
-|  | T034 | Silver accents, taken from the logo | adervark | 13d |  |
+|  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 14d |  |
+|  | T035 | The forecast samples days from before the board existed | adervark | 14d |  |
+|  | T034 | Silver accents, taken from the logo | adervark | 14d |  |
 |  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 14d |  |
 |  | T032 | A forecast from throughput: when, and how many | adervark | 14d |  |
 |  | T030 | An aging WIP chart: what is not moving | adervark | 14d |  |
@@ -102,6 +103,10 @@ FLOW · Little's Law: 2 ÷ 13.1/wk ≈ 25h expected · flow efficiency 77% (touc
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 - ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
+
+**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
+
+- **1** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T086
 <!-- /AA:generated -->
 
 <!--

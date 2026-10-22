@@ -1,7 +1,7 @@
 ---
 id: T086
 title: "H1: research-runs v2.6 replayed on a round it was not built from"
-status: claimed
+status: done
 owner: adervark @default/4279585a 2026-10-22 — H1 on RSNA T112: the free work first (cut, key, reach gate, briefs), then the go
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
@@ -50,7 +50,9 @@ came from (§7, H1; §10, D9).
   - the briefs written from v2.7's templates. `brief-check.mjs` finds 0
     hits against this key in the nine files subagents get.
 - [x] The operator's go (2026-10-22).
-- [ ] Register, transcribe, audit, link, reconcile, grade.
+- [x] Register, transcribe, audit, link, reconcile, grade.
+- [x] The operator decides (2026-10-22): accept v2.7 as it stands, and
+      register v2.8 (T090).
 
 ## Decision rules — fixed in advance
 
@@ -127,9 +129,8 @@ approved by the operator as drafted the same day.*
     9/9. `docs/plans/evidence/t086/grade.md`.
 - **In flight:** nothing. Every run has ended.
 - **Agents used:** 9 of the 10 allowed first passes; no rerun.
-- **Next decision:** the operator's, per the rules' "Otherwise": revise
-  the design for a v2.8, or accept v2.7 as it stands with H1's blind spot
-  written into §5.5. Then the Result is written and T086 closes.
+- **Closed** 2026-10-22, adervark @default/1f16c0d5: the operator accepted
+  v2.7 as it stands and registered v2.8 (T090).
 
 ## Verify
 
@@ -137,6 +138,40 @@ The grade covers every correction in the round's key, each with the unit
 that caught it or the furthest step it reached.
 
 ## Result
+
+**Not a pass (2026-10-22), and the operator accepted v2.7 as it stands,
+with v2.8 registered (T090).** The full grade is in
+`docs/plans/evidence/t086/grade.md`; precision is marked in `precision.md`.
+
+| Rule | Result |
+|---|---|
+| Recall at least 80% of the 13 in reach | **4 of 13 (31%): fails.** The bar was 11 |
+| Every canary caught, after at most one rerun | auditor 40 of 40; reconcilers 14 of 15, the miss a group twin inside the real value's rounding |
+| `conflict`, `superseded`, `contradicted` at least 90% real | 9 of 9, 9 of 9, none real to mark |
+
+- **The operator's ruling:** v2.7 is accepted as it stands (D11). The blind
+  spot is written into §5.5 of `docs/plans/research-runs.md`, so S1a (T077)
+  builds on a design whose limit is stated.
+- **The shape of the miss:** every catch corrects a figure or a count, 4 of
+  4 in reach; 0 of 9 corrections of a word, a scope or a reason.
+  - 6 sat in one group with both sides and were marked `ok`.
+  - 3 never met in a unit: prose states with no referent in common.
+- **What v2.8 has to answer** (T090): a sentence edited between two
+  commits of one document, judged as a claim; group twins outside the real
+  value's rounding.
+- **Outside the key:** 18 unique findings, all real. One is a correction
+  the key omits (`coat_curve.py`); with it, recall would be 5 of 14.
+
+**Spend:** nine Opus first passes of the ten allowed, no rerun: the
+registrar, transcribers G1–G3 and GC, the auditor, reconcilers R1–R3. The
+account's session limit stopped the three reconcilers before their first
+line; the same agents were continued after the reset. The trail is retired;
+git keeps it:
+- `4279585a`: the session; cut, key, gate, briefs, merge, link, grade;
+- `4279585a.18e2`: the registrar's handoff to the transcribers;
+- `4279585a.2f32`, `.bf5b`, `.f127`, `.d669`: G1–G3 and GC, complete;
+- `4279585a.d49c`: the auditor, complete;
+- `4279585a.5f2e`, `.6df6`, `.bf4b`: R1–R3, complete.
 
 ## Notes
 

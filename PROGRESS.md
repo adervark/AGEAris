@@ -753,3 +753,12 @@ its date, the number, and where the evidence is. Newest last.
   with H1's blind spot written into §5.5.
 - Evidence: `docs/plans/evidence/t086/grade.md`, `precision.md`,
   `grade.json`.
+
+## 2026-10-22 — T086 closed: v2.7 accepted as it stands; v2.8 registered
+
+- The operator accepted research-runs v2.7 as it stands after H1's 4 of
+  13 (§10, D11). §5.5 now names the blind spot: corrections of a word, a
+  scope or a reason, 0 of 9 on T112.
+- v2.8 is registered (T090): edited sentences judged as claims, and group
+  twins outside the real value's rounding. It changes no ledger format, so
+  S1a (T077) is unblocked.

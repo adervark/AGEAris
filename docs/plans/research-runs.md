@@ -1,7 +1,9 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.7, accepted to be tested** (2026-10-22, T087). Nothing here is
-built. v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
+**Status: v2.7, accepted as it stands** (2026-10-22, T086). Nothing here is
+built. H1, the held-out round, caught 4 of 13 corrections, every one of a
+figure or a count; §5.5 names the blind spot, and v2.8 is registered to
+answer it (T090). v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
 and reached 7 of 12 on its re-grade, R0c (T082), against a bar of 10. v2.6
 answered R0c. R0d (T085) checked v2.6's mechanics on round 3 and missed one
 canary of 33. The operator let that stand (§10, D10). v2.7 answers R0d. A
@@ -1084,6 +1086,13 @@ number without its id is not checked, so the rule for writers is the one
     2,933 candidates, most of them other configurations of one quantity.
     Canaries test conflicts, not supersessions. On R0d, the two corrections
     of this kind that were in reach, C5 and C9, were both marked.
+  - **A correction of a word, a scope or a reason.** H1 (T086), on one
+    author correcting their own record in place, caught 4 of 4 corrections
+    of a figure or a count in reach and 0 of 9 of a word, a scope or a
+    reason. In six, both sides sat in one reconciler's group and the line
+    said `ok`; twice it named the edit, "not a quantity". In three, prose
+    states shared no referent and never met in a unit. v2.8 (T090) is to
+    answer the first kind; the second has no mechanical rule.
   - **A pair a reconciler passes over.** A pair can sit in a unit and go
     unmarked while its neighbours are marked. R0d lost C3 this way, in two
     reconcilers' groups. Group canaries in each reconciler's largest groups
@@ -1368,7 +1377,7 @@ or the T112/T118 replay shows it would have changed a decision:
 | R0b | **Round 3 replayed with facts**, by a fresh agent and a separate reconciler (§7) | — | **Done: T075.** 2 of 12; the design was revised to v2.5 (T082) |
 | R0c | Round 3 replayed under v2.5 (§7) | T082 | **Done: T082.** 7 of 12; the design was revised to v2.6 (T084) |
 | R0d | **Round 3 re-reconciled under v2.6**, a check of the mechanics: R0c's ledger with refs from quotes and commits, three fresh reconcilers, canaries beside real units (§7) | T084 | **Done: T085.** Not a pass: 32 of 33 canaries; the design was revised to v2.7 (T087) |
-| H1 | **A held-out round**, replayed under v2.7's full procedure with its own key (§7, D9) | T087 | v2.7 is accepted on T086's rule; or the misses are listed and the operator decides |
+| H1 | **A held-out round**, replayed under v2.7's full procedure with its own key (§7, D9) | T087 | **Done: T086.** Not a pass: 4 of 13; v2.7 accepted as it stands (D11), v2.8 registered (T090) |
 | S0 | **The one-writer simulation** (§7) | — | its pass bar is met; or the keying rules are revised before S1b |
 | S1a | **The contract and the corpus**: `AA/findings/_SCHEMA.md`, `docs/RESEARCH.md`, and `tests/research/`, with an incident and a counterfactual per check | H1 | the operator has reviewed the cases |
 | S1b | **`AA/research.sh` here**: `brief`, `clauses`, `fact`, `skip`, `audit`, `same`, `resolve`, `conflicts`, `--check`, `--write`, the JSON summary, the sixteen checks | S1a, S0 | it passes the corpus; T072's hand-written page and the generated one agree |
@@ -1434,8 +1443,18 @@ approved a third round, on v2.3, which arrived complete.
   following the recommendation. Its stricter canary rule stands, with the
   hand-written refutation beside it.
 
-S0 and the held-out round decide whether v2.7 holds before any code is
-written.
+**Decided 2026-10-22 (T086):**
+
+- **D11: v2.7 is accepted as it stands after H1**, following the
+  recommendation. H1 was not a pass: recall 4 of 13 against a bar of 11
+  (`docs/plans/evidence/t086/grade.md`). Its blind spot is written into
+  §5.5, so S1a builds on a design whose limit is stated.
+- **v2.8 is registered (T090)**: a sentence edited between two commits of
+  one document is judged as a claim, not only as a value; and a group twin
+  takes a value outside the real one's rounding. Neither changes the
+  ledger's format. It is accepted only on a held-out round of its own.
+
+S0 still runs before any code is written.
 
 ## ADR
 
