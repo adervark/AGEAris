@@ -1,8 +1,8 @@
 ---
 id: T087
 title: "Research-runs design v2.7: answer R0d's missed canary and its loose ends"
-status: open
-owner: —
+status: claimed
+owner: adervark @default/4279585a 2026-10-22 — v2.7: canary eligibility, the checker's run ids, superseded under a changed condition, C3
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock

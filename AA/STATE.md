@@ -34,16 +34,18 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-21T21:59Z · 87 tasks: 32 backlog, 0 WIP (0 in progress), 55 delivered`
+`board · 2026-10-22T03:55Z · 87 tasks: 31 backlog, 1 WIP (1 in progress), 55 delivered`
 
-FLOW · **WIP 0/2** · throughput 12.6/wk (54 in 30d) · cycle time 50th 5m / 85th 46m (n=54)
-FLOW · Little's Law: 0 ÷ 12.6/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 12.8/wk (55 in 30d) · cycle time 50th 5m / 85th 81m (n=55)
+FLOW · Little's Law: 1 ÷ 12.8/wk ≈ 13h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 1 not ready |
-| **DONE** | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 9h |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 10h |  |
+| **IN PROGRESS** 1/2 | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 5h | ⚠ |
+| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 1 not ready |
+| **DONE** | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 5h |  |
+|  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 15h |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 16h |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 8d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 8d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 8d |  |
@@ -89,15 +91,16 @@ FLOW · Little's Law: 0 ÷ 12.6/wk ≈ now expected · lead time 85th 35h
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 14d |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 14d |  |
 |  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 14d |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 14d |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 14d |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 14d |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 15d |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 15d |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 15d |  |
 |  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 15d |  |
 |  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 15d |  |
 |  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 15d |  |
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 15d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
+- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 - ⚑ no decision rule registered — not ready to pull if it will spend (rule 5)
 <!-- /AA:generated -->
 
