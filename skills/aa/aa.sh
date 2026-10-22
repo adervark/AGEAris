@@ -269,12 +269,14 @@ if [ "$LIMITS" = 1 ]; then
   jqlf -er '
     def at: .[0:10] + " " + .[11:16] + "Z";
     def win: if . then "\(.percent)% · \(if .resetsAt then "resets \(.resetsAt | at)" else "no window open" end)" else "—" end;
+    def span: if . == null then "—" elif .resetsAt and .beganAt then "\(.percent)% · \(.beganAt | at) – \(.resetsAt[11:16])Z" elif .resetsAt then win else "\(.percent)% · no window open; the next message starts one" end;
     "Claude account limits · read \(.readAt | at)\(if .mostLeft then " · most left: \(.mostLeft)" else "" end)",
     "",
     "| profile | plan | session (5 h) | weekly | left | |",
     "|---|---|---|---|---|---|",
-    (.accounts[] as $a | "| \($a.profile) | \($a.plan // "—") | \($a.windows.session | win) | \($a.windows.weekly | win) | \(if $a.left == null then "—" else "\($a.left)%" end) | \([
+    (.accounts[] as $a | "| \($a.profile) | \($a.plan // "—") | \($a.windows.session | span) | \($a.windows.weekly | win) | \(if $a.left == null then "—" else "\($a.left)%" end) | \([
       (if $a.state == "ok" then empty else $a.reason end),
+      (if $a.nextReadAt then "next read \($a.nextReadAt | at)" else empty end),
       (if $a.stale then "last good reading \($a.readAt | at)" else empty end),
       (if $a.windows.weeklyOpus then "Opus weekly \($a.windows.weeklyOpus | win)" else empty end),
       (if $a.windows.weeklySonnet then "Sonnet weekly \($a.windows.weeklySonnet | win)" else empty end),

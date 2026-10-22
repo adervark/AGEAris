@@ -29,7 +29,7 @@ repository's.
 
 ## Decision rules (written before the spend)
 
-- Hold a reading 1 minute, not 5; a forced read 30 seconds. On a 429, read
+- Hold a reading 55 seconds, not 5 minutes (so a page asking every 30 seconds gets a fresh one each minute); a forced read 30 seconds. On a 429, read
   that account again only after its `retry-after` (5 minutes when it gives
   none), doubling on each 429 in a row up to 30 minutes; show the last good
   reading and when the next read is.
@@ -41,9 +41,9 @@ repository's.
 
 ## Steps
 
-- [ ] `lib/limits.mjs`: 1-minute hold, 429 back-off with `retry-after`.
-- [ ] The 5-hour window: began, ends, time left, in the strip, the tab and
+- [x] `lib/limits.mjs`: 1-minute hold, 429 back-off with `retry-after`.
+- [x] The 5-hour window: began, ends, time left, in the strip, the tab and
       `/aa limits`; "no window open" says one starts with the next message.
-- [ ] The page asks every 30 seconds.
-- [ ] Tests, README.
-- [ ] `/aa` installed from the repository; `/aa limits` runs.
+- [x] The page asks every 30 seconds.
+- [x] Tests, README.
+- [x] `/aa` installed from the repository; `/aa limits` runs.

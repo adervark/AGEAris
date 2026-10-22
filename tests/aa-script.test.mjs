@@ -315,8 +315,8 @@ test('/aa limits prints one row per Claude account instead of the board', async 
     readAt: '2026-10-22T17:40:12.000Z',
     mostLeft: 'default',
     accounts: [
-      { profile: 'default', folder: '~/.claude', plan: 'pro', state: 'ok', reason: '', readAt: '2026-10-22T17:40:12.000Z', stale: false, left: 96, windows: { session: { percent: 4, resetsAt: '2026-10-22T22:19:59.700Z' }, weekly: { percent: 0, resetsAt: '2026-10-29T13:59:59.701Z' } }, extraUsage: false },
-      { profile: 'k', folder: '~/.claude-k', plan: 'max', state: 'error', reason: 'error: asked too often (HTTP 429); try again in a few minutes', readAt: '2026-10-22T17:30:00.000Z', stale: true, left: 34, windows: { session: { percent: 0, resetsAt: null }, weekly: { percent: 66, resetsAt: '2026-10-24T03:00:00.420Z' }, weeklyOpus: { percent: 12, resetsAt: '2026-10-24T03:00:00.420Z' } }, extraUsage: false },
+      { profile: 'default', folder: '~/.claude', plan: 'pro', state: 'ok', reason: '', readAt: '2026-10-22T17:40:12.000Z', stale: false, left: 96, windows: { session: { percent: 4, beganAt: '2026-10-22T17:19:59.700Z', resetsAt: '2026-10-22T22:19:59.700Z' }, weekly: { percent: 0, resetsAt: '2026-10-29T13:59:59.701Z' } }, extraUsage: false },
+      { profile: 'k', folder: '~/.claude-k', plan: 'max', state: 'error', reason: 'error: asked too often (HTTP 429); AGE Aris waits before asking again', nextReadAt: '2026-10-22T17:45:12.000Z', readAt: '2026-10-22T17:30:00.000Z', stale: true, left: 34, windows: { session: { percent: 0, beganAt: null, resetsAt: null }, weekly: { percent: 66, resetsAt: '2026-10-24T03:00:00.420Z' }, weeklyOpus: { percent: 12, resetsAt: '2026-10-24T03:00:00.420Z' } }, extraUsage: false },
       { profile: 'v', folder: '~/.claude-v', plan: 'pro', state: 'expired', reason: 'expired: the sign-in could not be renewed (HTTP 400); sign in again in Claude Code there', readAt: null, stale: false, left: null, windows: null, extraUsage: null },
     ],
   }));
@@ -332,8 +332,8 @@ test('/aa limits prints one row per Claude account instead of the board', async 
     '',
     '| profile | plan | session (5 h) | weekly | left | |',
     '|---|---|---|---|---|---|',
-    '| default | pro | 4% · resets 2026-10-22 22:19Z | 0% · resets 2026-10-29 13:59Z | 96% | most left |',
-    '| k | max | 0% · no window open | 66% · resets 2026-10-24 03:00Z | 34% | error: asked too often (HTTP 429); try again in a few minutes; last good reading 2026-10-22 17:30Z; Opus weekly 12% · resets 2026-10-24 03:00Z |',
+    '| default | pro | 4% · 2026-10-22 17:19Z – 22:19Z | 0% · resets 2026-10-29 13:59Z | 96% | most left |',
+    '| k | max | 0% · no window open; the next message starts one | 66% · resets 2026-10-24 03:00Z | 34% | error: asked too often (HTTP 429); AGE Aris waits before asking again; next read 2026-10-22 17:45Z; last good reading 2026-10-22 17:30Z; Opus weekly 12% · resets 2026-10-24 03:00Z |',
     '| v | pro | — | — | — | expired: the sign-in could not be renewed (HTTP 400); sign in again in Claude Code there |',
     '',
   ].join('\n'));

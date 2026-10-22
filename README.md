@@ -257,11 +257,14 @@ projects are edited there.
 their latest note, and whether their claim has gone stale. **Pipeline agents**
 holds the agents the pipeline routes stages to and their record per role.
 **Account limits** shows, for each Claude account signed in on this machine,
-how much of its session (5-hour) and weekly limits is used and when each
-resets, so a fan-out goes to the account with room; agents get the same from
-`GET /api/limits` and `/aa limits`. The same numbers stay in a strip under the
-top bar on every page, every account and every limit it has, and the page
-reads them again each minute while it is in sight.
+how much of its session (5-hour) and weekly limits is used, when each window
+began and when it resets, so a fan-out goes to the account with room; agents
+get the same from `GET /api/limits` (each window's `beganAt` and `resetsAt`)
+and `/aa limits`. A 5-hour window opens with the first message after the last
+one closed, so an account with none open says the next message starts one. The
+same numbers stay in a strip under the top bar on every page, every account and
+every limit it has, and the page reads them again every 30 seconds while it is
+in sight.
 **Activity** shows one row per task per day (for example, Backlog → In
 progress → Done); expanding a row lists each raw change with its commit. It
 filters by kind and project. **All tasks** (from Projects) and search span the
@@ -489,10 +492,13 @@ written. A refused renewal changes nothing: the account shows as expired, with
 its last good reading, and says to sign in again; it is tried again after 5
 minutes. That file is the only one under `~/.claude*` AGE Aris writes. Tokens go
 in those requests and that file and nowhere else: not to the browser, a log,
-the data folder or git. Readings are held in memory for 5 minutes per account, and
-`?refresh=1` reads again at most once a minute; a page left open asks each
-minute and gets the held reading, so it reaches Anthropic at most once per
-account every 5 minutes.
+the data folder or git. Both requests name AGE Aris (`User-Agent: agearis`).
+Readings are held in memory for 55 seconds per account, and `?refresh=1` reads
+again at most every 30 seconds, so Anthropic is asked at most about once a
+minute per account. When it answers 429, that account is not asked again until
+the reply's `retry-after` has passed (5 minutes when it gives none), doubled
+for each 429 in a row up to 30 minutes; meanwhile it shows its last good
+reading and `nextReadAt`, when it will be read next.
 
 The server listens on `127.0.0.1`. This release uses one local operator, with the
 git identity configured on the machine. Named task owners are planning metadata;

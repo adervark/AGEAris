@@ -1964,12 +1964,12 @@ function renderAgents() {
   $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : state.agentsTab === 'limits' ? accountLimits() : workingNow());
 }
 
-// Every page reads /api/limits when it loads and each minute while it is in
-// sight; the strip under the top bar and the Account limits tab show the same
-// reading. The server holds each account's reading for 5 minutes, so this
-// never asks Anthropic more often than that; Read again asks past the hold, at
-// most once a minute per account.
-const LIMITS_POLL_MS = 60000;
+// Every page reads /api/limits when it loads and every 30 seconds while it is
+// in sight; the strip under the top bar and the Account limits tab show the
+// same reading. The server holds each account's reading for 55 seconds, and
+// longer after Anthropic answers 429, so this never asks Anthropic more often
+// than that; Read again asks past the hold, at most every 30 seconds.
+const LIMITS_POLL_MS = 30000;
 let limitsRequest = null;
 
 function loadLimits(refresh = false) {
@@ -2003,6 +2003,25 @@ function shortReset(iso) {
   return new Date(iso).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' });
 }
 
+// A time of day, with the weekday when it is not today: 22:19, Thu 13:59.
+function clockTime(iso) {
+  const date = new Date(iso);
+  const today = date.toDateString() === new Date().toDateString();
+  return date.toLocaleString(undefined, today ? { hour: 'numeric', minute: '2-digit' } : { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+}
+
+// When a window began and ends: the 5-hour one by time of day, a week by date.
+// A 5-hour window opens with the first message after the last one closed, so
+// with none open the next message starts one.
+function windowSpan(key, window) {
+  if (!window.resetsAt) return key === 'session' ? 'No 5-hour window open: the next message starts one' : 'No window open';
+  if (key === 'session') return `Window ${clockTime(window.beganAt)}–${clockTime(window.resetsAt)} · ${resetText(window.resetsAt)}`;
+  const day = (iso) => new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  return `Week ${day(window.beganAt)} – ${day(window.resetsAt)}`;
+}
+
+const nextRead = (account) => (account.nextReadAt ? `; next read ${clockTime(account.nextReadAt)}` : '');
+
 const STRIP_WINDOWS = [['session', '5h', 'Session (5 hours)'], ['weekly', 'Week', 'Weekly'], ['weeklyOpus', 'Opus', 'Weekly, Opus'], ['weeklySonnet', 'Sonnet', 'Weekly, Sonnet']];
 
 // Every account and every window it has, on every page. An account that
@@ -2020,10 +2039,10 @@ function renderLimitsStrip() {
     const windows = STRIP_WINDOWS.filter(([key]) => account.windows?.[key]).map(([key, short, long]) => {
       const window = account.windows[key];
       const used = Math.min(100, Math.max(0, window.percent));
-      const reset = shortReset(window.resetsAt);
-      return `<span class="ls-window ${limitTone(window.percent)}" title="${escape(`${long}: ${window.percent}% used, ${resetText(window.resetsAt)}`)}"><span class="ls-label">${escape(short)}</span><svg class="ls-bar" viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="4" rx="2"></rect><rect class="limit-fill" width="${used}" height="4" rx="2"></rect></svg><strong>${escape(String(window.percent))}%</strong><small>${escape(reset)}</small></span>`;
+      const reset = key === 'session' ? (window.resetsAt ? `to ${clockTime(window.resetsAt)} · ${shortReset(window.resetsAt)}` : 'not started') : shortReset(window.resetsAt);
+      return `<span class="ls-window ${limitTone(window.percent)}" title="${escape(`${long}: ${window.percent}% used. ${windowSpan(key, window)}`)}"><span class="ls-label">${escape(short)}</span><svg class="ls-bar" viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="4" rx="2"></rect><rect class="limit-fill" width="${used}" height="4" rx="2"></rect></svg><strong>${escape(String(window.percent))}%</strong><small>${escape(reset)}</small></span>`;
     }).join('');
-    const note = account.state === 'ok' ? '' : `<span class="ls-note ${account.state === 'expired' ? 'tone-wait' : account.state === 'error' ? 'tone-fail' : 'tone-idle'}" title="${escape(account.reason)}">${escape({ expired: 'token expired', error: 'not read', 'no token': 'no token' }[account.state] || account.state)}${account.stale ? ', last reading' : ''}</span>`;
+    const note = account.state === 'ok' ? '' : `<span class="ls-note ${account.state === 'expired' ? 'tone-wait' : account.state === 'error' ? 'tone-fail' : 'tone-idle'}" title="${escape(account.reason + nextRead(account))}">${escape({ expired: 'token expired', error: 'not read', 'no token': 'no token' }[account.state] || account.state)}${account.stale ? ', last reading' : ''}</span>`;
     const best = account.profile === state.limits.mostLeft ? '<span class="ls-best">most left</span>' : '';
     return `<span class="ls-account${account.state === 'ok' ? '' : ' is-stale'}"><span class="ls-who"><b>${escape(account.profile)}</b>${best}${note}</span><span class="ls-windows">${windows}</span></span>`;
   }).join('');
@@ -2047,9 +2066,9 @@ function limitTone(percent) {
 
 // One bar per window. An SVG's width attribute, not a style: the page's CSP
 // allows no inline styles.
-function limitMeter(label, window) {
+function limitMeter(key, label, window) {
   const used = Math.min(100, Math.max(0, window.percent));
-  return `<div class="limit-meter ${limitTone(window.percent)}"><div class="limit-label"><span>${escape(label)}</span><strong>${escape(String(window.percent))}% used</strong></div><svg class="limit-bar" viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="6" rx="3"></rect><rect class="limit-fill" width="${used}" height="6" rx="3"></rect></svg><small>${escape(resetText(window.resetsAt))}</small></div>`;
+  return `<div class="limit-meter ${limitTone(window.percent)}"><div class="limit-label"><span>${escape(label)}</span><strong>${escape(String(window.percent))}% used</strong></div><svg class="limit-bar" viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="6" rx="3"></rect><rect class="limit-fill" width="${used}" height="6" rx="3"></rect></svg><small>${escape(windowSpan(key, window))}</small></div>`;
 }
 
 function accountLimits() {
@@ -2060,13 +2079,13 @@ function accountLimits() {
   const { accounts, mostLeft } = state.limits;
   if (!accounts.length) return `<div class="empty-results">${icon('agent')}<h2>No Claude account found</h2><p>AGE Aris looks for Claude Code config folders in your home folder: ~/.claude and ~/.claude-&lt;profile&gt;.</p></div>`;
   const rows = accounts.map((account) => {
-    const windows = LIMIT_WINDOWS.filter(([key]) => account.windows?.[key]).map(([key, label]) => limitMeter(label, account.windows[key])).join('');
+    const windows = LIMIT_WINDOWS.filter(([key]) => account.windows?.[key]).map(([key, label]) => limitMeter(key, label, account.windows[key])).join('');
     const status = account.state === 'ok'
       ? `<span class="chip ${limitTone(100 - account.left)}">${escape(String(account.left))}% left</span>${account.profile === mostLeft ? '<span class="chip tone-run">Most left</span>' : ''}`
       : `<span class="chip ${account.state === 'expired' ? 'tone-wait' : account.state === 'error' ? 'tone-fail' : 'tone-idle'}">${escape({ expired: 'Token expired', error: 'Not read', 'no token': 'No token' }[account.state] || account.state)}</span>`;
     const ago = account.readAt ? relativeTime(account.readAt) : '';
     const when = ago ? `${account.stale ? 'Last good reading ' : 'Read '}${escape(ago === 'Just now' ? 'just now' : ago)}` : '';
-    return `<li class="session-row limit-row"><div class="session-who"><strong>${escape(account.profile)}</strong><small>${escape(account.folder)}${account.plan ? ` · ${escape(account.plan)}` : ''}</small></div><div class="session-work">${account.reason ? `<p class="session-note">${escape(account.reason)}</p>` : ''}${windows ? `<div class="limit-meters">${windows}</div>` : ''}</div><div class="session-state">${status}<span>${when}</span></div></li>`;
+    return `<li class="session-row limit-row"><div class="session-who"><strong>${escape(account.profile)}</strong><small>${escape(account.folder)}${account.plan ? ` · ${escape(account.plan)}` : ''}</small></div><div class="session-work">${account.reason ? `<p class="session-note">${escape(account.reason + nextRead(account))}</p>` : ''}${windows ? `<div class="limit-meters">${windows}</div>` : ''}</div><div class="session-state">${status}<span>${when}</span></div></li>`;
   }).join('');
   return `<p class="flow-intro">How much of each Claude account’s session and weekly limits is used, read from Anthropic with each account’s own sign-in. An expired token is renewed the way Claude Code renews it, and the renewed sign-in is saved back in that profile. Agents read the same numbers from <code>/api/limits</code> and <code>/aa limits</code>.</p>${state.limitsError ? `<p class="form-error" role="alert">${escape(state.limitsError)}</p>` : ''}<ul class="session-list">${rows}</ul>`;
 }

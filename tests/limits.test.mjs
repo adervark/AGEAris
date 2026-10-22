@@ -114,9 +114,10 @@ test('reads every account with its own token, says why one cannot be read, and w
   ]);
   const byProfile = Object.fromEntries(result.accounts.map((account) => [account.profile, account]));
   assert.deepEqual(byProfile.default.windows, {
-    session: { percent: 40, resetsAt: '2026-10-22T14:30:00.123Z' },
-    weekly: { percent: 10, resetsAt: '2026-10-24T03:00:00.420Z' },
+    session: { percent: 40, beganAt: '2026-10-22T09:30:00.123Z', resetsAt: '2026-10-22T14:30:00.123Z' },
+    weekly: { percent: 10, beganAt: '2026-10-17T03:00:00.420Z', resetsAt: '2026-10-24T03:00:00.420Z' },
   });
+  assert.equal(byProfile.k.windows.session.beganAt, null, 'no 5-hour window open');
   assert.equal(byProfile.default.plan, 'max');
   assert.equal(byProfile.default.left, 60);
   assert.equal(byProfile.k.windows.session.resetsAt, null);
@@ -135,6 +136,7 @@ test('reads every account with its own token, says why one cannot be read, and w
     assert.equal(call.url, USAGE_URL);
     assert.equal(call.headers.Authorization, `Bearer ${token(call.profile)}`);
     assert.equal(call.headers['anthropic-beta'], 'oauth-2025-04-20');
+    assert.equal(call.headers['User-Agent'], 'agearis', 'AGE Aris names itself, not Claude Code');
   }
   // No token and no email reaches the reading.
   const text = JSON.stringify(result);
@@ -143,7 +145,7 @@ test('reads every account with its own token, says why one cannot be read, and w
   assert.deepEqual(await snapshot(dir), before);
 });
 
-test('a reading is held for 5 minutes, and a forced read for a minute', async () => {
+test('a reading is held for 55 seconds, and a forced read for 30 seconds', async () => {
   const dir = await scratch();
   await mkdir(path.join(dir, '.claude-k'));
   await writeFile(path.join(dir, '.claude-k', '.credentials.json'), JSON.stringify(oauth('k', { expiresAt: NOW + 86400_000 })));
@@ -152,22 +154,22 @@ test('a reading is held for 5 minutes, and a forced read for a minute', async ()
   const limits = new Limits({ home: dir, fetch, clock: () => now });
 
   await limits.read();
-  now += 30_000;
+  now += 20_000;
   await limits.read();
   await limits.read({ refresh: true });
-  assert.equal(calls.length, 1, 'within a minute neither a read nor a forced one asks again');
-  now += 31_000;
+  assert.equal(calls.length, 1, 'within 30 seconds neither a read nor a forced one asks again');
+  now += 11_000;
   await limits.read();
-  assert.equal(calls.length, 1, 'a plain read waits out the 5 minutes');
+  assert.equal(calls.length, 1, 'a plain read waits out the minute');
   await limits.read({ refresh: true });
-  assert.equal(calls.length, 2, 'a forced read after a minute asks again');
-  now += 5 * 60_000;
+  assert.equal(calls.length, 2, 'a forced read after 30 seconds asks again');
+  now += 60_000;
   const result = await limits.read();
   assert.equal(calls.length, 3);
   assert.equal(result.accounts[0].readAt, new Date(now).toISOString());
 
   // Reads that arrive together share one request.
-  now += 5 * 60_000;
+  now += 60_000;
   await Promise.all([limits.read(), limits.read(), limits.read({ refresh: true })]);
   assert.equal(calls.length, 4);
 });
@@ -309,6 +311,59 @@ test('a refused renewal leaves the file alone, says to sign in again, and is not
   assert.equal(calls.length, 0);
 });
 
+test('a 429 waits out its retry-after, doubling while they keep coming, and says when it reads next', async () => {
+  const dir = await scratch();
+  for (const name of ['k', 'b']) {
+    await mkdir(path.join(dir, `.claude-${name}`));
+    await writeFile(path.join(dir, `.claude-${name}`, '.credentials.json'), JSON.stringify(oauth(name, { expiresAt: NOW + 86400_000 })));
+  }
+  let now = NOW;
+  let retryAfter = '120';
+  const replies = { k: usage(10, 20), b: usage(5, 5) };
+  const { fetch: answer, calls } = stubFetch(replies);
+  const fetch = async (url, init) => {
+    const response = await answer(url, init);
+    if (response.status !== 429 || retryAfter === null) return response;
+    return new Response(await response.text(), { status: 429, headers: { 'retry-after': retryAfter } });
+  };
+  const limits = new Limits({ home: dir, fetch, clock: () => now });
+  const k = async (options) => (await limits.read(options)).accounts.find((account) => account.profile === 'k');
+  const kCalls = () => calls.filter((call) => call.profile === 'k').length;
+  await k();
+
+  replies.k = 429;
+  now += 60_000;
+  const limited = await k();
+  assert.equal(limited.state, 'error');
+  assert.equal(limited.reason, 'error: asked too often (HTTP 429); AGE Aris waits before asking again');
+  assert.equal(limited.stale, true);
+  assert.equal(limited.nextReadAt, new Date(now + 120_000).toISOString());
+  now += 60_000;
+  await k({ refresh: true });
+  assert.equal(kCalls(), 2, 'not even a forced read before the retry-after');
+  assert.equal(calls.filter((call) => call.profile === 'b').length, 3, 'the other account reads on');
+
+  // A second 429 in a row doubles the wait; one with no retry-after waits 5 minutes, doubled.
+  now += 60_000;
+  assert.equal((await k()).nextReadAt, new Date(now + 240_000).toISOString());
+  retryAfter = null;
+  now += 240_000;
+  assert.equal((await k()).nextReadAt, new Date(now + 20 * 60_000).toISOString());
+  now += 20 * 60_000;
+  assert.equal((await k()).nextReadAt, new Date(now + 30 * 60_000).toISOString(), 'never more than 30 minutes');
+
+  // A good reading clears it.
+  replies.k = usage(11, 21);
+  now += 30 * 60_000;
+  const back = await k();
+  assert.equal(back.state, 'ok');
+  assert.equal(back.nextReadAt, null);
+  assert.equal(back.windows.session.percent, 11);
+  replies.k = 429;
+  now += 60_000;
+  assert.equal((await k()).nextReadAt, new Date(now + 5 * 60_000).toISOString());
+});
+
 test('a network failure or a bad reply is named without the token', async () => {
   const dir = await scratch();
   for (const name of ['a', 'b', 'c', 'd']) {
@@ -335,9 +390,9 @@ test('parseUsage keeps the windows the plan has, and only numbers and instants f
     extra_usage: { is_enabled: true },
   })), {
     windows: {
-      session: { percent: 1.2, resetsAt: '2026-10-22T14:30:00.123Z' },
-      weekly: { percent: 100, resetsAt: '2026-10-24T03:00:00.420Z' },
-      weeklyOpus: { percent: 12, resetsAt: null },
+      session: { percent: 1.2, beganAt: '2026-10-22T09:30:00.123Z', resetsAt: '2026-10-22T14:30:00.123Z' },
+      weekly: { percent: 100, beganAt: '2026-10-17T03:00:00.420Z', resetsAt: '2026-10-24T03:00:00.420Z' },
+      weeklyOpus: { percent: 12, beganAt: null, resetsAt: null },
     },
     extraUsage: true,
   });
@@ -376,7 +431,7 @@ test('GET /api/limits is behind the API token, and ?refresh=1 reads past the cac
   assert.equal(first.mostLeft, 'b');
   assert.deepEqual(first.accounts.map((account) => account.profile), ['default', 'b', 'bad', 'k', 'n', 'x']);
   assert.equal(calls.length, 3);
-  now += 61_000;
+  now += 31_000;
   await (await globalThis.fetch(base, { headers })).json();
   assert.equal(calls.length, 3);
   const forced = await (await globalThis.fetch(`${base}?refresh=1`, { headers })).json();
