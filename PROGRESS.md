@@ -723,3 +723,33 @@ its date, the number, and where the evidence is. Newest last.
 
 - The operator accepted research-runs v2.7, the stricter canary rule
   included. T086 runs under it and waits only on the choice of round.
+
+## 2026-10-22 — T086: H1 graded, not a pass: recall 4 of 13
+
+- **The verdict, by T086's rules: not a pass.** Recall fails.
+  - Recall: 4 of the 13 corrections in reach, against a bar of 11. Caught:
+    K2 (the published range), K5 (the crashed dry run), K8 (the quota
+    reset) and K14 (the smoke counts).
+  - Canaries: the auditor's 40 of 40, the reconcilers' 14 of 15. All 5
+    check canaries were caught, and all 3 largest-decile group canaries.
+    The miss is unfair: a group twin put "200 KiB" where the real fact
+    says 197 KiB, beside a real "200 KB". R2 called it rounding, rightly.
+    No rerun: it would meet the same twin, and recall fails either way.
+  - Precision: `conflict` 9 of 9, `superseded` 9 of 9. No real check was
+    marked `contradicted`; the 5 such lines were all canaries.
+- **The shape of the miss.** Every catch corrects a figure or a count.
+  None of the 9 corrections of a word, a scope or a reason was caught.
+  - 6 sat in one group with both sides, and were marked `ok`. Two of the
+    lines name the edit: "one file edited, not a quantity".
+  - 3 never met in a unit: prose states with no referent in common.
+- **Outside the key:** 5 real findings. One is a correction the key
+  omits: `coat_curve.py` says the per-epoch resampling "never happened".
+  With it, recall would be 5 of 14.
+- **The runs.** 9 Opus first passes of 10; no rerun. The account's session
+  limit stopped the three reconcilers before their first line. The same
+  agents were continued after the reset.
+- **Next: the operator's.** Revise for a v2.8 (edited sentences judged as
+  claims; group twins outside the real value's rounding), or accept v2.7
+  with H1's blind spot written into §5.5.
+- Evidence: `docs/plans/evidence/t086/grade.md`, `precision.md`,
+  `grade.json`.

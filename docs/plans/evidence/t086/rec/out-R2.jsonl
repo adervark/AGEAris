@@ -1,0 +1,238 @@
+{"kind":"ok","group":2,"why":"119 facts on bringup_4090.sh; teacher 0.8976 and leak 1.0000 agree everywhere; N 3200+1207=4407; five checks (a)-(e); /proc/uptime in shell vs perf_counter in the python smoke are different clocks","run":"4279585a.6df6"}
+{"kind":"ok","group":5,"why":"57 facts on push_arm.py; BROKEN floor 0.85 everywhere, 0.8854 clears it; V1535 5/day cap vs V1544 two slots in the day: a Kaggle cap and the day's practical slots, same file, two does not break five","run":"4279585a.6df6"}
+{"kind":"same","group":8,"facts":["V480","V317"],"finding":"conflict","why":"V480 (PROGRESS 07:54): make dryrun 9/9 stages; V317 (T112 09:08): it did not pass, 9/9 was read off a crashed run, 13/13 now. A correction of a wrong claim","run":"4279585a.6df6"}
+{"kind":"same","group":8,"facts":["V480","V753"],"finding":"conflict","why":"V753: dry_run.py at 416447b (07:00) runs thirteen stages; V480 at 07:54 reports 9/9 stages, a count the script then in force could not give","run":"4279585a.6df6"}
+{"kind":"same","group":8,"facts":["V792","V753"],"finding":"superseded","why":"V792: Seven stages at 3ed78d4 (03:36); V753: Thirteen stages at 416447b (07:00), the script grew; a later count of a moving quantity","run":"4279585a.6df6"}
+{"kind":"same","group":10,"facts":["V1656","V483"],"finding":"conflict","why":"res 224 bs2 on the laptop 4070, same sentence: V1656 15.40 ms/window, V483 and V32 15.21; 15.40 is the bs4 figure (V36), and 416447b:src/coat_train.py holds no such line","run":"4279585a.6df6"}
+{"kind":"ok","group":13,"why":"35 facts on T111's decision rules; S = 0.941 ±0.007 gives 0.934/0.948 at both commits; BROKEN 0.85, ONE submission, leak 1.0000 all agree; prediction 0.938-0.946 sits inside the band as V188 says","run":"4279585a.6df6"}
+{"kind":"ok","group":17,"why":"29 facts on arm_t112.sh: push, save run, VOID check, never submits, at every commit; hardcoded VOID strings replaced by derived ones at 71dc5cf, which the file itself records as a change","run":"4279585a.6df6"}
+{"kind":"ok","group":20,"why":"27 facts; paired delta -0.0277 CI [-0.0483,-0.0076] identical in T112, PROGRESS and trail; 0.8854-0.9131 = -0.0277; CI half-width 0.0204 matches the stated ~±0.02","run":"4279585a.6df6"}
+{"kind":"ok","group":23,"why":"27 facts on the t115 grid test; 384 px = 576 positions and 224 px = 196 tokens (24² and 14² at /16) agree; parent res 384 throughout; no two facts give one quantity two values","run":"4279585a.6df6"}
+{"kind":"ok","group":26,"why":"24 facts on coat_model.py; same head layers and backbone args in T112 and coat_export.py; 'mathematically identical' and 'not the same state dict' are different attributes, the file says why","run":"4279585a.6df6"}
+{"kind":"ok","group":29,"why":"22 facts; ~7 h per full-stack kernel, 7/30 h = 23% matches ~24% and 30/7 = 4.3 matches ~4 per week; 'eight-hour run' is a loose round figure for the same ~7-8 h, not a second measurement","run":"4279585a.6df6"}
+{"kind":"ok","group":31,"why":"22 facts; the 224 fold's gold-58 is 0.8848 (epoch 7) in T112, PROGRESS, resample_delta.py and coat_curve.py; 0.8854 is the CPU fp32 read, a stated other condition; 0.869 is epoch 15, another epoch","run":"4279585a.6df6"}
+{"kind":"ok","group":34,"why":"21 facts; their loader strict=True and our unconverted checkpoints refused, in T112, PROGRESS, coat_export.py and push_arm.py alike; converted dict loads with zero missing, zero unexpected","run":"4279585a.6df6"}
+{"kind":"ok","group":37,"why":"20 facts on --bs; bs4 accum2 and bs2 accum4 both give effective batch 8; smoke 6 studies / bs2 = 3 micro-batches, 1 step/epoch at accum 2; T4 figures are another machine","run":"4279585a.6df6"}
+{"kind":"ok","group":40,"why":"19 facts on dataset_sources; never attached pre-fix, find_weight_file would raise at Stage 4 after ~6 of ~7 hours, fixed and asserted, in T112, PROGRESS, build_t112_kernel.py and coat.py alike","run":"4279585a.6df6"}
+{"kind":"ok","group":43,"why":"18 facts; parent S = 0.941 ±0.007, ADOPT ≥0.948, REJECT ≤0.934 at every commit and in trail; prediction 0.938-0.946 inside UNRESOLVED as stated","run":"4279585a.6df6"}
+{"kind":"ok","group":46,"why":"17 facts on smoke_test.py main; --names prints only the names, env-gated checks outside the identity gate but counting toward pass/fail; consistent across _order.py and smoke_test.py","run":"4279585a.6df6"}
+{"kind":"ok","group":50,"why":"15 facts on convert_and_verify; --res was an input pre-fix and is an assertion against the checkpoint's recipe now, as T112 and push_arm.py both say; strict load into their class before upload","run":"4279585a.6df6"}
+{"kind":"ok","group":52,"why":"14 facts on eval_windows; res applied per arm inside eval_windows after the decode, img is the decode size, ImageNet normalisation by default; T112, coat.py, build_t112_kernel.py and coat_data.py agree","run":"4279585a.6df6"}
+{"kind":"same","group":55,"facts":["V588","V1667"],"finding":"conflict","why":"same 'Measured envelope, RTX 4070 Laptop' line: V588 6.06 GiB, V1667 and V29 7.62 GiB; 6.06 GiB is the res 352 bs2 peak, and 1661b58 has that line only in coat_train.py, at 7.62","run":"4279585a.6df6"}
+{"kind":"ok","group":58,"why":"14 facts on test_coat_export; strict load zero missing/unexpected and max |Δ| 0.000e+00 in T112 and PROGRESS alike; resnet18 backbone; reference class extracted from the notebook","run":"4279585a.6df6"}
+{"kind":"ok","group":61,"why":"13 facts; llm_labels.csv reads gold-58 1.0000 because its 58 is_gold rows carry gold, in T112, bringup_4090.sh, coat_data.py and T111 alike; the teacher is built from llm_labels_raw.csv into labels_ours.parquet","run":"4279585a.6df6"}
+{"kind":"ok","group":64,"why":"13 facts on img_size; their build passes none, timm defaults to 384 = 576 slots, threading img_size=ck_res is a no-op at 384; without it a 224 forward fails, with it it runs; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":67,"why":"12 facts; the teacher reads gold-58 0.8976 in every document and commit (~0.8976 in coat_data.py is the same figure)","run":"4279585a.6df6"}
+{"kind":"ok","group":70,"why":"12 facts on test_gpu_watchdog; ten call sites emitting nine with the bash check firing only when bash is absent; fake nvidia-smi, no real card; no two facts on one quantity disagree","run":"4279585a.6df6"}
+{"kind":"ok","group":73,"why":"11 facts on arm_t112.sh; push, save run, VOID check, never submits; trail's 'do not run without an override' is a later instruction, not a different reading of the script","run":"4279585a.6df6"}
+{"kind":"same","group":76,"facts":["V999","V586"],"finding":"conflict","why":"V999 (_order.py 1661b58): test_coat_arm needs the staged corpus, 533 GB; V586 (Makefile, same commit), V372, V1180: that corpus is 21.9 GB (20.4 GiB). 533 GB is the raw DICOM tree, not the staged corpus","run":"4279585a.6df6"}
+{"kind":"ok","group":79,"why":"11 facts; 0.20 × 0.60 × 0.60 = 0.072 ≈ 7.2%, 0.70 × 0.60 × 0.60 = 0.25, 0.25/0.072 = 3.5×; T112 and PROGRESS agree","run":"4279585a.6df6"}
+{"kind":"ok","group":82,"why":"11 facts; gold-58 absolute band ±0.036 everywhere; B − A = −0.0000 in T112 and PROGRESS alike","run":"4279585a.6df6"}
+{"kind":"ok","group":85,"why":"10 facts; T071 range 0.9002-0.9187, stored 0.9214 is another reading; v5's paired 0.9131 sits inside the range as PROGRESS says","run":"4279585a.6df6"}
+{"kind":"ok","group":88,"why":"10 facts on paired_vs_member.py; 4,000 bootstrap resamples in T112 and PROGRESS; anchor 0.8854/0.9131/−0.0277; ~90 s on GPU and a --device cpu option are different attributes","run":"4279585a.6df6"}
+{"kind":"ok","group":91,"why":"10 facts; arm_probs pre-filled 0.5, constant column under the grid defect, submission = parent with our member zero-weighted; build_t112_kernel.py and coat.py say the same","run":"4279585a.6df6"}
+{"kind":"ok","group":93,"why":"9 facts on CoatMIL; mathematically identical to RaptorClassifier in T112 and coat_export.py; selftest's res 384 batch 8 and bringup's smoke are different attributes","run":"4279585a.6df6"}
+{"kind":"ok","group":96,"why":"9 facts on run_224_fold0.sh; --res 224 --bs 4 --accum 2 --epochs 16, effective batch 8, in T112, PROGRESS and the script; 224 = 32 × 7","run":"4279585a.6df6"}
+{"kind":"ok","group":99,"why":"9 facts; not the same state dict (head. prefix vs direct attributes), every checkpoint refused under strict=True, in T112 and PROGRESS alike","run":"4279585a.6df6"}
+{"kind":"ok","group":102,"why":"9 facts; 495-min cap everywhere; 495 − 429..434 = 61-66 min, matching 'about 60 minutes' and 'about an hour'","run":"4279585a.6df6"}
+{"kind":"ok","group":105,"why":"9 facts; find_weight_file would raise at Stage 4 with ~6 of ~7 hours spent, in T112, PROGRESS, build_t112_kernel.py, _order.py and coat.py alike","run":"4279585a.6df6"}
+{"kind":"ok","group":106,"why":"8 facts on dry_run.py; Makefile's 'whole chain on CPU in seconds' agrees with the script; V480's 9/9 count is marked in group 8, nothing here gives another count","run":"4279585a.6df6"}
+{"kind":"ok","group":109,"why":"8 facts on CoatMIL __init__; same LayerNorm, Sequential head and clsW/clsb in T112 and coat_export.py; state dicts differ by the head. prefix, as both say","run":"4279585a.6df6"}
+{"kind":"ok","group":112,"why":"8 facts; the 4090 desktop is exempt from the laptop's one-fold ruling and chains R1 then R2 with no cooldown, in T112 and AGENTS.md alike; the ruling still binds the laptop","run":"4279585a.6df6"}
+{"kind":"ok","group":115,"why":"8 facts on bringup_4090.sh; three modes, refuses at first failure; the [ ] at 7542d2b is a to-do before the script existed in T112's list; 20-entry manifest stated once","run":"4279585a.6df6"}
+{"kind":"ok","group":118,"why":"8 facts; FALLBACK printed per arm per study, kernel reaches COMPLETE, constant 0.5 column; one account in coat.py and build_t112_kernel.py","run":"4279585a.6df6"}
+{"kind":"ok","group":123,"why":"7 facts on --resume; refuses a different recipe, so cannot refuse the same one; restores optimizer, schedule and RNG; grad_ckpt toggle does not invalidate it; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":126,"why":"7 facts; the clean worktree of the 1,216 tree ran 1,086, three times over in _order.py and smoke_test.py; 945 of 990 is an older tree","run":"4279585a.6df6"}
+{"kind":"ok","group":129,"why":"6 facts; strict-load refusal at the end of an eight-hour run and the Stage 4 twin at ~6 of 7 hours; T112 and PROGRESS agree","run":"4279585a.6df6"}
+{"kind":"ok","group":131,"why":"6 facts; the T112 arm checkpoint/dataset is 279 MB in T112, PROGRESS and trail","run":"4279585a.6df6"}
+{"kind":"ok","group":134,"why":"6 facts on --names; it re-derives the baseline and now prints only the names; the old line at 416447b says the same instruction","run":"4279585a.6df6"}
+{"kind":"ok","group":137,"why":"6 facts on ENV_ORDER; 79 checks moved out of the gate, not deleted; test_t115_rendered_kernel_runs adds 4 there and coat.py calls it environment-gated","run":"4279585a.6df6"}
+{"kind":"ok","group":140,"why":"6 facts; default grid 576 positions, a 224 window 196 tokens, the measured error 196 vs 576; all agree","run":"4279585a.6df6"}
+{"kind":"ok","group":143,"why":"6 facts; 0.036 is the gold-58 band and the resample rule's threshold in T112, PROGRESS and resample_delta.py alike","run":"4279585a.6df6"}
+{"kind":"same","group":146,"facts":["V2","V1167"],"finding":"superseded","why":"V2: weekly GPU quota exhausted 2026-09-18 02:04Z, no kernel can run; V1167 (trail 09-21): quota HAD reset, the 09-18 block is gone; a later reading of a moving state","run":"4279585a.6df6"}
+{"kind":"ok","group":149,"why":"6 facts on to_raptor_state; only the head. prefix moves, backbone keys identical, a rename not a port; T112's [x] and four refused controls agree","run":"4279585a.6df6"}
+{"kind":"ok","group":152,"why":"6 facts; ~3.5× projection, training no longer the bottleneck in T112 and PROGRESS; train seven score two = 2/7 = 29%, matching ~30%","run":"4279585a.6df6"}
+{"kind":"ok","group":155,"why":"5 facts on test_t112_swap_kernel; must refuse when it cannot apply, a no-op scores the unchanged 0.941 parent; 3ed78d4 and 1661b58 say the same","run":"4279585a.6df6"}
+{"kind":"ok","group":158,"why":"5 facts on banner_edit; banner names the normalisation (norm is a parameter), edits raise when they do not apply; consistent","run":"4279585a.6df6"}
+{"kind":"same","group":161,"facts":["V1762","V1745"],"finding":"superseded","why":"setup_4090.cmd at 3659952 (10:17): packages OFFLINE from wheels carried on the drive; at eefcc9c (10:24): torch from the copy already in uv's cache on C:, --offline; the later version replaces the source","run":"4279585a.6df6"}
+{"kind":"ok","group":164,"why":"5 facts sharing 'drift': T110 kernel cells byte-identical and roc_curves.py's NaN gate are different things; no shared quantity","run":"4279585a.6df6"}
+{"kind":"ok","group":167,"why":"5 facts; 4,407 studies, part 2 holds 1,207, part 1 alone 3,200; 3,200 + 1,207 = 4,407; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":170,"why":"5 facts; BROKEN floor gold-58 < 0.85 in T112 and PROGRESS; 0.8854 clears it","run":"4279585a.6df6"}
+{"kind":"ok","group":173,"why":"5 facts; laptop fold --res 224 --bs 4 --accum 2 --epochs 16 norm none, R1 the same plus --norm imagenet: one variable, as stated","run":"4279585a.6df6"}
+{"kind":"ok","group":176,"why":"5 facts naming PROGRESS.md: a watchdog hand run, coat_curve's --expect, roc_curves' NaN gate; different attributes, no shared quantity","run":"4279585a.6df6"}
+{"kind":"ok","group":179,"why":"5 facts; ~1 h/fold, seven arms, 2/7 ≈ 30%; training not the bottleneck in T112 and PROGRESS alike","run":"4279585a.6df6"}
+{"kind":"ok","group":182,"why":"5 facts on norm; the arm carries its own norm, the other three stay on imagenet, one cell; norm joined RECIPE on 09-18 with a default; consistent","run":"4279585a.6df6"}
+{"kind":"same","group":186,"facts":["V1765","V1748"],"finding":"conflict","why":"same 10 Mbps line, same torch download: 3659952 says torch ~3 GB, about 40 min; eefcc9c says torch 1.9 GB, ~30 min. A correction of the size and time, not a change in the line","run":"4279585a.6df6"}
+{"kind":"ok","group":189,"why":"4 facts on forward; same einsum('bkn,bkf->bnf'), softmax over windows, logits (B,n); consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":192,"why":"4 facts; their build_backbone takes no img_size so timm builds the 384 grid, 576 slots; ours takes a chosen resolution; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":195,"why":"4 facts; ARMS entry norm none, --norm {none,imagenet} recorded in RECIPE and read by build_t112_kernel.py; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":198,"why":"4 facts; sw_in12k_ft_in1k pretrained under ImageNet normalisation, in T112 and coat_data.py alike","run":"4279585a.6df6"}
+{"kind":"ok","group":201,"why":"4 facts; backbone args num_classes=0, in_chans=3, global_pool='avg' identical in T112, PROGRESS and coat_export.py","run":"4279585a.6df6"}
+{"kind":"ok","group":204,"why":"4 facts; the laptop fold recipe --bs 4 --accum 2, effective batch 8, the same in T112 and PROGRESS","run":"4279585a.6df6"}
+{"kind":"ok","group":207,"why":"4 facts; gpu_queue cooldown 20 minutes in PROGRESS, dry_run.py and resample_delta.py","run":"4279585a.6df6"}
+{"kind":"ok","group":210,"why":"4 facts; calibration under bf16 + channels_last + grad checkpointing, k = 12, in T112 and coat_train.py; channels_last applied to the flattened rank-4 batch","run":"4279585a.6df6"}
+{"kind":"ok","group":213,"why":"4 facts; resample A reads 0.8854 (CPU fp32) in T112 and PROGRESS; 0.8848 is the trainer's GPU bf16 read, another condition, as stated","run":"4279585a.6df6"}
+{"kind":"ok","group":216,"why":"4 facts; --what=idle alone does not stop gsd-power in T112 and run_224_fold0.sh; the other two share only the identifier","run":"4279585a.6df6"}
+{"kind":"ok","group":219,"why":"3 facts; tonight's 224 fold on the laptop on operator approval, res 224 = 32 × 7; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":222,"why":"3 facts; 1,216 checks on the full machine in _order.py and smoke_test.py alike","run":"4279585a.6df6"}
+{"kind":"ok","group":225,"why":"3 facts; the head key prefix is eight characters ('head.' is 5; the quotes all say eight, same claim in PROGRESS, coat_export.py, coat.py), no disagreement among them","run":"4279585a.6df6"}
+{"kind":"ok","group":228,"why":"3 facts naming AGENTS.md; the smoke count and md5 change together with _order.py and AGENTS.md in one commit, as Makefile and coat.py both say","run":"4279585a.6df6"}
+{"kind":"ok","group":231,"why":"3 facts; window count C − A = −0.0025, which with chain +0.0025 gives B − A = −0.0000 as T112 records; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":234,"why":"3 facts; evaluation centres deterministic and evenly spread, in coat_data.py and coat_train.py alike","run":"4279585a.6df6"}
+{"kind":"same","group":237,"facts":["V1765","V1748"],"finding":"conflict","why":"torch over the same 10 Mbps line: 3659952 'torch alone is ~3 GB, about 40 minutes'; eefcc9c 'torch is 1.9 GB (~30 minutes)'; the later version corrects the size and the time","run":"4279585a.6df6"}
+{"kind":"ok","group":240,"why":"3 facts; the other three arms keep imagenet; normalisation after jitter and clamp; different attributes","run":"4279585a.6df6"}
+{"kind":"ok","group":243,"why":"3 facts; add_dataset_source() attaches the dataset and render() asserts it, in T112 and build_t112_kernel.py","run":"4279585a.6df6"}
+{"kind":"ok","group":246,"why":"3 facts; resample chain B − C = +0.0025, consistent with C − A −0.0025 and B − A −0.0000","run":"4279585a.6df6"}
+{"kind":"ok","group":249,"why":"3 facts; data/raptor_corpus/ gitignored and does not travel with git push; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":252,"why":"3 facts; outputs/ artifacts gitignored, none travels with git push; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":255,"why":"3 facts; same clsW/clsb in T112 and coat_export.py; logits (B,n); consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":258,"why":"3 facts on test_coat_export: +31 checks, the FileNotFoundError in a clean worktree, resnet18 backbone; different attributes","run":"4279585a.6df6"}
+{"kind":"ok","group":261,"why":"3 facts; maxspan-v5 decodes at img 336 (32 × 10.5), legal because only res reaches the backbone; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":263,"why":"2 facts; corpus destination path and dry_run's thirteen stages on the real corpus; different attributes","run":"4279585a.6df6"}
+{"kind":"ok","group":266,"why":"2 facts; two missing-file messages in two scripts, different things","run":"4279585a.6df6"}
+{"kind":"ok","group":269,"why":"2 facts; teacher path outputs/t107/labels_ours.parquet in T112 and bringup_4090.sh","run":"4279585a.6df6"}
+{"kind":"ok","group":272,"why":"2 facts; setup_4090.cmd builds the env then runs selftest_4090.py; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":275,"why":"2 facts; the manifest mode writes transfer_manifest.tsv, one of three modes; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":278,"why":"2 facts; torch CUDA 13.0 build seeing the 4090, and the desktop's cooldown exemption; different attributes","run":"4279585a.6df6"}
+{"kind":"ok","group":281,"why":"2 facts; the fixture caches three definitions and is refused when it disagrees with the live notebook; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":284,"why":"2 facts; the resample-chain measurement was registered in T112 before it ran, both say","run":"4279585a.6df6"}
+{"kind":"ok","group":287,"why":"2 facts; a real forward+backward on the card in bringup (e) and in the self-test; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":290,"why":"2 facts; --bs 4 --accum 2 = effective batch 8, the fallback when batch 8 does not fit; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":293,"why":"2 facts; same Sequential head in T112 and coat_export.py","run":"4279585a.6df6"}
+{"kind":"ok","group":296,"why":"2 facts; test_t112_swap_kernel needs the full T105 notebook, 51 cells; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":299,"why":"3 facts; teacher 197 KiB (bringup) = 202 KB, given as 200 KB and 200 KiB elsewhere: rounding of one size","run":"4279585a.6df6"}
+{"kind":"ok","group":302,"why":"2 facts; two kaggle binaries pre-fix, one client throughout now; T112 records the fix","run":"4279585a.6df6"}
+{"kind":"ok","group":305,"why":"2 facts; v5's stored gold AUC 0.9214 in T112 and paired_vs_member.py","run":"4279585a.6df6"}
+{"kind":"ok","group":308,"why":"2 facts; zero missing, zero unexpected keys in T112 and PROGRESS","run":"4279585a.6df6"}
+{"kind":"ok","group":311,"why":"2 facts; 224 = 32 × 7 legal, 336 = 32 × 10.5 not a legal res; different values of res, consistent rule","run":"4279585a.6df6"}
+{"kind":"ok","group":314,"why":"2 facts; smoke count re-recorded in _order.py, Makefile and AGENTS.md in one commit, both say","run":"4279585a.6df6"}
+{"kind":"ok","group":317,"why":"2 facts; v5 recipe decode 336 → res 384, norm imagenet, k 42 in T112 and PROGRESS","run":"4279585a.6df6"}
+{"kind":"ok","group":320,"why":"2 facts; --norm {none,imagenet} recorded and printed because it decides scorability; consistent","run":"4279585a.6df6"}
+{"kind":"ok","group":323,"why":"2 facts; CROP_MM 140.0 both sides and test_t041's worked example; different attributes","run":"4279585a.6df6"}
+{"kind":"ok","group":326,"why":"2 facts; resample C (336→224, k 42) reads 0.8829 in T112 and PROGRESS","run":"4279585a.6df6"}
+{"kind":"ok","group":329,"why":"2 facts; assert_decode_group_preserved refuses an img/k_eval that would form a new group, both say","run":"4279585a.6df6"}
+{"kind":"same","check":1,"finding":"follows","why":"+0.007 from a ≈0.072-weight member asks ~0.1 AUC of the member itself, and T106, the same swap, moved 0.000 with the last four changes at 0.000 to −0.002: close to unreachable follows","run":"4279585a.6df6"}
+{"kind":"same","check":8,"finding":"follows","why":"v5's paired reading 0.9131 lies inside 0.9002-0.9187 as stated","run":"4279585a.6df6"}
+{"kind":"same","check":11,"finding":"follows","why":"the fact carries its own ground: B1 was registered against tf_efficientnet_b2 at 320, so it does not bind a CoAtNet at 224","run":"4279585a.6df6"}
+{"kind":"same","check":15,"finding":"unsupported","why":"6 = 3 micro-batches × 2 epochs, but the only premise gives 3 micro-batches per epoch; the epoch count (2) is not in it","run":"4279585a.6df6"}
+{"kind":"same","check":16,"finding":"follows","why":"RUN['coatnet_w']['default'] = 0.60 gives the × 0.60 factor directly","run":"4279585a.6df6"}
+{"kind":"same","check":20,"finding":"follows","why":"the loader reads ck['res'], --res alone set it, nothing compared it to the trained res: a 224 fold given --res 352 is scored at 352, the wrong thing","run":"4279585a.6df6"}
+{"kind":"same","check":27,"finding":"follows","why":"metadata copied from T108, whose kernels ship no checkpoint of ours, so dataset_sources lacks our dataset and find_weight_file cannot find ours_coat_t112.pt","run":"4279585a.6df6"}
+{"kind":"same","check":28,"finding":"unsupported","why":"premises give four LB moves (0.000, 0.000, −0.001, −0.002) and no history before them; 'the first time our own modelling moved the standing at all' needs every earlier gain to be adoption, not stated","run":"4279585a.6df6"}
+{"kind":"same","check":31,"finding":"follows","why":"the reload must reproduce its own stored 0.9167 ±0.010 on our decode, with the preprocessing checklist as the test; a miss with its own weights points at our preprocessing","run":"4279585a.6df6"}
+{"kind":"same","check":37,"finding":"unsupported","why":"the premise lists the keys load_model reads (model, arch, res); the default of 384 when res is absent is in no premise","run":"4279585a.6df6"}
+{"kind":"same","check":38,"finding":"unsupported","why":"a constant 0.5 column becomes a zero-weighted member only if the routing is rank-percentile and so ignores a constant; that premise (V1471) is not given","run":"4279585a.6df6"}
+{"kind":"same","check":43,"finding":"unsupported","why":"the premise gives 3.6 h; the ruling's bound that 3.6 h meets and 8.8 h breaks is in no premise","run":"4279585a.6df6"}
+{"kind":"same","check":45,"finding":"follows","why":"0.941 + 0.007 = 0.948 ADOPT, 0.941 − 0.007 = 0.934 REJECT, as stated","run":"4279585a.6df6"}
+{"kind":"same","check":46,"finding":"follows","why":"a ~3.6 h laptop fold run tonight, on approval, finishes by morning, so its gold-58 reading exists before the next day's 4090 hours","run":"4279585a.6df6"}
+{"kind":"same","check":47,"finding":"follows","why":"nine PASS lines then a traceback, quoted upstream as 'passes 9/9': a report passing for the wrong reason, the check defect one level up","run":"4279585a.6df6"}
+{"kind":"same","check":49,"finding":"follows","why":"submit-to-COMPLETE is a fixed 429-434 min on Kaggle whatever the local GPU, capping the day at two read-then-act cycles; so scoring stays the bottleneck","run":"4279585a.6df6"}
+{"kind":"same","check":52,"finding":"unsupported","why":"the premise says only what a silent no-op patch does (scores the parent, looks null); what a silently absent metadata field does, needed to call it the same class, is in no premise","run":"4279585a.6df6"}
+{"kind":"same","check":56,"finding":"follows","why":"A reads 0.8854 (CPU fp32) against the trainer's 0.8848 (GPU bf16), 0.0006 apart, well inside the ±0.036 band: a reproduction, so the harness is sound","run":"4279585a.6df6"}
+{"kind":"same","check":59,"finding":"follows","why":"four irreconcilable public figures 0.9054/0.9128/0.9167/0.9213 leave no single target, hence a band","run":"4279585a.6df6"}
+{"kind":"same","check":67,"finding":"follows","why":"load_model succeeds and every forward error is caught per arm per study with FALLBACK and continue, so the kernel runs to COMPLETE","run":"4279585a.6df6"}
+{"kind":"same","check":70,"finding":"unsupported","why":"the only premise is that load_model reads ck['res']; that --res wrote ck['res'] unchecked against the trained res (V318, V1549-V1550) is not given","run":"4279585a.6df6"}
+{"kind":"same","check":78,"finding":"follows","why":"part 1 precedes part 2 in volumes, masks and ids alike, so row order is the pairing; sorting one array alone mis-pairs rows of the same shapes, which still train","run":"4279585a.6df6"}
+{"kind":"same","check":80,"finding":"follows","why":"a plain CNN rejects img_size and is built without it rather than refused, which is what lets a tiny CPU backbone run the whole path","run":"4279585a.6df6"}
+{"kind":"same","check":81,"finding":"follows","why":"Δ −0.0277 with 95% CI [−0.0483, −0.0076] wholly below zero: resolved-behind v5, so do not submit","run":"4279585a.6df6"}
+{"kind":"same","check":83,"finding":"follows","why":"paired_vs_member.py loads either key format, so the paired read does not need the converted checkpoint","run":"4279585a.6df6"}
+{"kind":"same","check":86,"finding":"follows","why":"--resume restores optimizer, schedule, scaler, SWA and all four RNG streams, so a suspended fold loses wall clock, not work","run":"4279585a.6df6"}
+{"kind":"same","check":88,"finding":"follows","why":"495 − 434 = 61 and 495 − 429 = 66 min: about 60 minutes of margin","run":"4279585a.6df6"}
+{"kind":"same","check":91,"finding":"follows","why":"V483 measures 15.21 ms/window and 3.5 h for 16 epochs; 15.21 ms × 4,349 × 12 windows ≈ 0.22 h/epoch × 16 = 3.5 h","run":"4279585a.6df6"}
+{"kind":"same","check":92,"finding":"follows","why":"the export test and dry run use resnet18 with no grid constraint, and the builder's res % 32 == 0 is arithmetic: proxies that could not fail on the grid defect","run":"4279585a.6df6"}
+{"kind":"same","check":96,"finding":"unsupported","why":"the premise gives only the score (four files read 1.0000); that their 58 is_gold rows carry gold values is a mechanism no premise states","run":"4279585a.6df6"}
+{"kind":"same","check":104,"finding":"follows","why":"gains above 0.928 came from adopting, not tuning, and our teacher reads 0.8976; the remaining lever is a better arm trained on our own teacher","run":"4279585a.6df6"}
+{"kind":"same","check":106,"finding":"unsupported","why":"head. prefix vs direct attributes under strict=True gives refusal, but 'at the END of an eight-hour run' needs when the kernel loads our arm, which no premise states","run":"4279585a.6df6"}
+{"kind":"same","check":114,"finding":"follows","why":"~24% of a week's GPU each: 1/0.24 = 4.2, ~4 per week","run":"4279585a.6df6"}
+{"kind":"same","check":117,"finding":"follows","why":"B1 at 224 is ~2× cheaper per fold, so branches built on it run cheaper","run":"4279585a.6df6"}
+{"kind":"same","check":119,"finding":"follows","why":"the kernel runs clean, the banner prints, the score comes back low, and ≤ 0.934 reads as REJECT: the failure mode itself hides the bug, hence checks","run":"4279585a.6df6"}
+{"kind":"same","check":120,"finding":"follows","why":"30.00 h weekly quota; a ~7 h (429-434 min = 7.2 h) submission is 7.2/30 = 24%","run":"4279585a.6df6"}
+{"kind":"same","check":121,"finding":"follows","why":"jitter and clamp are defined on [0, 1]; ImageNet-normalised values fall far outside it, so clamping after normalising would cut most of the signal","run":"4279585a.6df6"}
+{"kind":"same","check":125,"finding":"unsupported","why":"the premise gives OneCycleLR's tolerance (exactly total_steps calls); what the '+1 <' guard computes, needed for 'one step short', is not stated","run":"4279585a.6df6"}
+{"kind":"same","check":126,"finding":"unsupported","why":"different state dicts under strict=True give refusal, but 'at the end of an eight-hour run, not at the start' needs the load's place in the run, which no premise gives","run":"4279585a.6df6"}
+{"kind":"same","check":127,"finding":"follows","why":"the identity gate is checked before the pass/fail summary; without it a suite emitting fewer checks would still print all checks passed","run":"4279585a.6df6"}
+{"kind":"same","check":130,"finding":"follows","why":"ADOPT is ≥ 0.948, so the best case is clearing 0.948 and resolving ADOPT","run":"4279585a.6df6"}
+{"kind":"same","check":133,"finding":"follows","why":"at most two sequential read-then-act cycles a day, one arm read per cycle: at most two arms","run":"4279585a.6df6"}
+{"kind":"same","check":138,"finding":"follows","why":"495 − 429..434 = 61-66 min, about 60 minutes","run":"4279585a.6df6"}
+{"kind":"same","check":141,"finding":"follows","why":"a leaked file scores gold 1.0000, so a teacher built on it measures gold against itself","run":"4279585a.6df6"}
+{"kind":"same","check":150,"finding":"follows","why":"check() printed every check as it ran, so --names output was mixed with the run and could not re-derive the baseline","run":"4279585a.6df6"}
+{"kind":"same","check":151,"finding":"follows","why":"load_model succeeds, forwards fail into a catch that prints FALLBACK and continues, arm_probs stays 0.5: the kernel reaches COMPLETE","run":"4279585a.6df6"}
+{"kind":"same","check":153,"finding":"follows","why":"the listed contents split into instruments (gpu capability, gradcam, cam sheet) and ops (validators, push_family, layout, watchdog)","run":"4279585a.6df6"}
+{"kind":"same","check":157,"finding":"follows","why":"45.72/15.21 = 3.006 → 3.01×; 38.07/15.21 = 2.503 → 2.50×; 224 = 32 × 7","run":"4279585a.6df6"}
+{"kind":"same","check":159,"finding":"follows","why":"kaggle datasets version replaces the directory, so adding one file re-uploads the whole dataset","run":"4279585a.6df6"}
+{"kind":"same","check":160,"finding":"follows","why":"CI [−0.0483, −0.0076] lies wholly below zero: the arm is worse than the member it replaces, so substituting it is expected to lower the stack","run":"4279585a.6df6"}
+{"kind":"same","check":164,"finding":"unsupported","why":"premises: 384 is the parent's resolution and must be untouched; 'the only reason' also needs 384 to be the architecture default timm builds, which no premise states","run":"4279585a.6df6"}
+{"kind":"same","check":165,"finding":"unsupported","why":"the premise gives 3 channels per window; 9 channels needs a 3× repeat over C, a factor no premise states","run":"4279585a.6df6"}
+{"kind":"same","check":168,"finding":"follows","why":"backbone keys already identical (and only the head. prefix moves), so the conversion renames keys, it does not port weights","run":"4279585a.6df6"}
+{"kind":"same","check":169,"finding":"follows","why":"the maxspan-v5 slot also moves framing to _SLOTS64, span 0.02-0.98, where our fold (_SLOTS44) has never been: a second variable","run":"4279585a.6df6"}
+{"kind":"same","check":175,"finding":"follows","why":"paired v5 0.9131 lies inside T071's independent 0.9002-0.9187","run":"4279585a.6df6"}
+{"kind":"same","check":187,"finding":"follows","why":"the public trainer holds real-labelled studies out and the gold set is our 58, so v5's gold-58 reading is held-out","run":"4279585a.6df6"}
+{"kind":"same","check":193,"finding":"follows","why":"Δ −0.0277, 95% CI [−0.0483, −0.0076] excludes zero on the negative side: RESOLVED, ours behind","run":"4279585a.6df6"}
+{"kind":"same","check":194,"finding":"follows","why":"an empty slug satisfies the assertion while attaching nothing, and without our dataset find_weight_file raises at Stage 4","run":"4279585a.6df6"}
+{"kind":"same","check":203,"finding":"follows","why":"off means off is what makes the flag-off path the pipeline behind every earlier number, the condition the screen needs","run":"4279585a.6df6"}
+{"kind":"same","check":204,"finding":"follows","why":"the trainer divides by 255 and stops, so its arms must be evaluated with norm none","run":"4279585a.6df6"}
+{"kind":"same","check":205,"finding":"unsupported","why":"the premise gives Kaggle's bare 409 on a shared slug; that our slugs would have collided and that the 409 forfeits the 08:00 slot are in no premise","run":"4279585a.6df6"}
+{"kind":"same","check":212,"finding":"follows","why":"45.72/15.21 = 3.006 → 3.01× as stated","run":"4279585a.6df6"}
+{"kind":"same","check":213,"finding":"unsupported","why":"the premise gives the ADOPT threshold ≥ 0.948 only; calling clearing it 'realistic' needs a likelihood no premise gives (T112 later struck the word)","run":"4279585a.6df6"}
+{"kind":"same","check":214,"finding":"unsupported","why":"the premise is only the refusal text 'failed to attach'; that an empty or malformed slug would pass the in-sources assertion is not stated","run":"4279585a.6df6"}
+{"kind":"same","check":217,"finding":"follows","why":"kernel 384 → 224 is 384/224 = 1.714×; trainer 336 → 224 is 336/224 = 1.5×, as stated","run":"4279585a.6df6"}
+{"kind":"same","check":219,"finding":"unsupported","why":"0.28 h/epoch needs windows per epoch; the only premise is 19.66 ms/window (it is consistent with 224's 15.21 → 0.22, but that is not given)","run":"4279585a.6df6"}
+{"kind":"same","check":221,"finding":"follows","why":"the CoAtNet weights load offline from the SSD's HF cache, so training needs no reach to huggingface.co","run":"4279585a.6df6"}
+{"kind":"same","check":224,"finding":"contradicted","why":"38.07/15.21 = 2.50×, not 4.48× cheaper than 352 (T112 itself gives 2.50× in V52)","run":"4279585a.6df6"}
+{"kind":"same","check":228,"finding":"unsupported","why":"premises give the two slot/span pairs, _SLOTS44 (0.06,0.94) vs _SLOTS64 (0.02,0.98); which arguments the guard inspects (img/k_eval only) is not in them","run":"4279585a.6df6"}
+{"kind":"same","check":229,"finding":"follows","why":"img/slots/span/k_eval are the decode recipe and native384-v8's is _SLOTS44 img 384 k_eval 42; res is applied per arm after decode: img 384 joins that group, res 224 gives 224 px","run":"4279585a.6df6"}
+{"kind":"same","check":231,"finding":"follows","why":"T067 measured that a CUDA context makes gpu_queue.sh's idle gate see a busy card","run":"4279585a.6df6"}
+{"kind":"same","check":234,"finding":"unsupported","why":"the premise covers test_gpu_watchdog's two halves on a fake nvidia-smi; 'no check in this file' covers all of tooling.py, which also holds gpu capability checks","run":"4279585a.6df6"}
+{"kind":"same","check":235,"finding":"follows","why":"the 4090 does not touch the Kaggle quota, so its lane is unaffected by the quota","run":"4279585a.6df6"}
+{"kind":"same","check":236,"finding":"follows","why":"k window centres drawn at random every epoch: the same study presents differently each time","run":"4279585a.6df6"}
+{"kind":"same","check":237,"finding":"unsupported","why":"~3.6 h needs windows per epoch and the epoch count; premises give 15.40 ms/window and 5.55 GiB only (the figure is consistent: 15.40/15.21 × 3.5 h = 3.6)","run":"4279585a.6df6"}
+{"kind":"same","check":240,"finding":"unsupported","why":"S = 0.941 ±0.007 is the reading band; the forecast 0.938-0.946 needs an expected effect of the swap, which no premise gives","run":"4279585a.6df6"}
+{"kind":"same","check":242,"finding":"contradicted","why":"10.6 h on the laptop / ~3.0 h on a 4090 = 3.5×, not ~2.1× (T112 itself says ~3.5× in V78)","run":"4279585a.6df6"}
+{"kind":"same","check":244,"finding":"follows","why":"a bare 409 with no message at 08:00 fails the push unexplained, and the day has only two slots, so it costs the first","run":"4279585a.6df6"}
+{"kind":"same","check":246,"finding":"follows","why":"--no-push exists because a re-push of an up kernel takes another save run from the 30 h/week quota for an identical version","run":"4279585a.6df6"}
+{"kind":"same","check":248,"finding":"follows","why":"−0.0025 + 0.0025 = B − A −0.0000, inside ±0.036: the morning's gold-58 predicts the kernel","run":"4279585a.6df6"}
+{"kind":"same","check":251,"finding":"unsupported","why":"the premise gives cell 47's decode grouping key; that only res reaches the backbone (resize to res inside eval_windows, V56) is not in it","run":"4279585a.6df6"}
+{"kind":"same","check":255,"finding":"unsupported","why":"8.8 h for 16 epochs needs windows per epoch; the only premise is 38.07 ms/window (consistent: 38.07/15.21 × 3.5 = 8.8, but not given)","run":"4279585a.6df6"}
+{"kind":"same","check":257,"finding":"follows","why":"a gate that hardcodes one arm's recipe goes stale whenever the arm changes; three of its strings were wrong against the 384/imagenet arm","run":"4279585a.6df6"}
+{"kind":"same","check":259,"finding":"follows","why":"its 58 is_gold rows carry the gold values, so it is truth for validation and a leak as a training target","run":"4279585a.6df6"}
+{"kind":"same","check":270,"finding":"follows","why":"with the Kaggle quota exhausted the leaderboard cannot be read, leaving gold-58 as the only truth-anchored instrument","run":"4279585a.6df6"}
+{"kind":"same","check":272,"finding":"follows","why":"0.20 × 0.60 × 0.60 = 0.072 as stated","run":"4279585a.6df6"}
+{"kind":"same","check":273,"finding":"follows","why":"a silently no-op patch scores the unchanged parent and looks like a null: a check passing for the wrong reason","run":"4279585a.6df6"}
+{"kind":"same","check":274,"finding":"follows","why":"ImageNet normalisation on every arm, ~4.48× our std: our arm is fed off-distribution, scores low, and a low score reads as the registered REJECT","run":"4279585a.6df6"}
+{"kind":"same","check":285,"finding":"unsupported","why":"one point (7.13 GiB at bs2) cannot fix a bs8 extrapolation: 4 × 7.13 = 28.5 GiB if all memory scaled; ~23 GiB needs a fixed/per-sample split no premise gives","run":"4279585a.6df6"}
+{"kind":"same","check":286,"finding":"follows","why":"--bs 4 × --accum 2 = effective batch 8","run":"4279585a.6df6"}
+{"kind":"same","check":287,"finding":"unsupported","why":"336 being illegal does not pick 384: 352 = 32 × 11 is legal and nearer; the choice needs 384 as the architecture default, not in the premise","run":"4279585a.6df6"}
+{"kind":"same","check":288,"finding":"follows","why":"a (path, size) cache key keeps a stale hash when a file changes at the same size, hence --rehash and contract-pinned sizes","run":"4279585a.6df6"}
+{"kind":"same","check":289,"finding":"follows","why":"the missing dataset is the strict=True defect's twin one layer out, fixed by attach plus assertion: the same shape as the finding T112 was made for","run":"4279585a.6df6"}
+{"kind":"same","check":294,"finding":"follows","why":"cell 47 keys groups by (img, slots, span, k_eval) and builds each study once per group: those four are the decode recipe","run":"4279585a.6df6"}
+{"kind":"same","check":296,"finding":"follows","why":"a constant 0.5 column, invariant under rank-percentile routing as the fact itself states, adds nothing: the parent with our member zero-weighted","run":"4279585a.6df6"}
+{"kind":"same","check":298,"finding":"follows","why":"the backbone is per-window and BatchNorm is in eval mode, so chunking cannot change any window's features","run":"4279585a.6df6"}
+{"kind":"same","check":300,"finding":"follows","why":"(−0.0076 − (−0.0483))/2 = 0.0204, roughly ±0.02","run":"4279585a.6df6"}
+{"kind":"same","check":301,"finding":"follows","why":"clean run, banner printed, low score: indistinguishable from a real loss, so the mismatch would enter the record as a resolved negative","run":"4279585a.6df6"}
+{"kind":"same","check":302,"finding":"follows","why":"a hash that depends on which artifacts are on the machine is not an identity, so env-gated checks must not move the md5","run":"4279585a.6df6"}
+{"kind":"same","check":304,"finding":"unsupported","why":"the premise gives ~60 min of margin; how long one decode pass over the test set takes, needed for 'less than one pass', is not stated","run":"4279585a.6df6"}
+{"kind":"same","check":307,"finding":"follows","why":"the bar is a 95% CI lower bound ≥ 0; the 224 arm's is −0.0483 and neither R1 nor R2 clears it: all three fail","run":"4279585a.6df6"}
+{"kind":"same","check":314,"finding":"follows","why":"a silently no-op patch scores the unchanged 0.941 parent and reads as a clean null, so each edit must raise instead","run":"4279585a.6df6"}
+{"kind":"same","check":323,"finding":"unsupported","why":"premises say dataset_sources never attached our dataset; that Stage 4 is the last and is reached after ~6 of 7 hours is in no premise","run":"4279585a.6df6"}
+{"kind":"same","check":326,"finding":"unsupported","why":"30 h / 49.6 h/fold = 0.6 fold; 'ten epochs' needs the epochs per fold (16 → 3.1 h/epoch → 9.7), which no premise gives","run":"4279585a.6df6"}
+{"kind":"same","check":331,"finding":"follows","why":"the identity gate hashes names only, so a duplicate name with a different body discards one body and leaves the md5 unchanged","run":"4279585a.6df6"}
+{"kind":"same","check":333,"finding":"unsupported","why":"premises give rule 5's 3-of-5 cap and the ledger that shows a curse; that resubmitting variants for a better draw is the curse is defined in no premise","run":"4279585a.6df6"}
+{"kind":"same","check":334,"finding":"follows","why":"persistent_workers froze set_epoch, so one fixed draw of 12 of ~42 centres for 16 epochs; a fixed corpus plateaus then overfits, so the flat tail does not show 16 is too many","run":"4279585a.6df6"}
+{"kind":"same","check":335,"finding":"follows","why":"bringup measures the real speed in 30 s before any hour is committed, so no plan rests on the projection","run":"4279585a.6df6"}
+{"kind":"same","check":338,"finding":"follows","why":"an 8.8 h fold, longer than any run before, under a one-fold-then-cooldown cap, must survive interruption: --resume restores optimizer, schedule, epoch, RNG","run":"4279585a.6df6"}
+{"kind":"same","check":339,"finding":"follows","why":"08:00 + 7 h 09-7 h 14 = 15:09-15:14, ~15:10","run":"4279585a.6df6"}
+{"kind":"same","check":343,"finding":"unsupported","why":"44 slices give 42 window centres only for 3-slice windows (44 − 2); the window width is not in the premises","run":"4279585a.6df6"}
+{"kind":"same","check":345,"finding":"follows","why":"~1.0 h per fold against at most two ~7 h read-then-act cycles a day: scoring, not training, is the bottleneck","run":"4279585a.6df6"}
+{"kind":"same","check":350,"finding":"unsupported","why":"3.5 h for 16 epochs needs windows per epoch; the only premise is 15.21 ms/window","run":"4279585a.6df6"}
+{"kind":"same","check":352,"finding":"follows","why":"refused by the scoring pipeline at the end of an eight-hour Kaggle run: the day's run and its slot are lost","run":"4279585a.6df6"}
+{"kind":"same","check":353,"finding":"follows","why":"most of the arm's inputs do not travel with a git clone, so finding them one by one would eat the first day","run":"4279585a.6df6"}
+{"kind":"same","check":354,"finding":"follows","why":"0.8848 − 0.9054 = −0.021, 0.8848 − 0.9213 = −0.037: a −0.02 to −0.04 gap","run":"4279585a.6df6"}
+{"kind":"same","check":356,"finding":"follows","why":"B − A = −0.0000 inside the ±0.036 rule: the morning's gold-58 predicts the kernel","run":"4279585a.6df6"}
+{"kind":"same","check":357,"finding":"follows","why":"a carry entry arrives only by copying, so it is fatal and its mismatch can only be a broken copy","run":"4279585a.6df6"}
+{"kind":"same","check":358,"finding":"follows","why":"~3 GB × 8 / 10 Mbps = 2,400 s = 40 minutes","run":"4279585a.6df6"}
+{"kind":"same","check":362,"finding":"unsupported","why":"R1 adds --k 12 --k-eval 24 --norm imagenet; tonight's premise recipe gives no k, k-eval or norm, so 'one variable' needs tonight's k 12, k-eval 24, norm none, not given","run":"4279585a.6df6"}
+{"kind":"same","check":370,"finding":"follows","why":"train.py logs once an epoch, so a log-only watchdog would kill every healthy fold twenty minutes in: worse than none","run":"4279585a.6df6"}
+{"kind":"same","check":375,"finding":"follows","why":"sklearn returns NaN on a single-class column, max(|nan − logged|) is NaN, and nan > 0.001 is False: the refusal never fires","run":"4279585a.6df6"}
+{"kind":"same","check":376,"finding":"follows","why":"the 5/day cap with T057 rule 6 makes each submission scarce, hence the deliberate push/submit split","run":"4279585a.6df6"}
+{"kind":"same","check":377,"finding":"follows","why":"the arm carries norm none and the call site reads arm.get('norm', NORM), so tonight's fold is scored as trained and stays submittable","run":"4279585a.6df6"}
+{"kind":"same","check":188,"finding":"unsupported","why":"the premise says every non-underscore module is executed; that pytest also collects test_*.py and that check() prints instead of asserting, which make phantoms, are not in it","run":"4279585a.6df6"}

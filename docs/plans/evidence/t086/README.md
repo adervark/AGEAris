@@ -41,6 +41,10 @@ reconcilers → the grade. Nine Opus first passes against a cap of ten.
 | `rec/eligible.json`, `refutations.json` | The 15 checks v2.7's rule admits, and the parent's refutation of 13, written from the premises alone. F142 and F433 are left out: their number names a lane or a card, not a figure the premises give |
 | `rec/R1–R3.jsonl`, `rec-key.json` | The reconcilers' views, 236 units each (330 groups, 373 checks, 2,608 same-document pairs unreviewed as in R0d), and the canary key: 10 group canaries, each reconciler's first in its largest decile, and 5 check canaries, each with its refutation |
 | `grade.mjs` | The grade, committed before any reconciler ran: R0d's, on this key, with the auditor's canaries and the 80% bar |
+| `rec/out-R1–R3.jsonl` | The reconcilers' outputs; `check-reconcile.mjs` exits 0 on each |
+| `grade.json`, `precision-units.txt` | `node grade.mjs > grade.json` |
+| `precision.md` | Precision marked by hand: conflict 9/9, superseded 9/9, no real `contradicted` |
+| `grade.md` | **The grade: not a pass.** Recall 4 of 13 against 11; canaries 40/40 and 14/15, the miss unfair |
 
 The link outputs and `scanned.jsonl` are regenerable and ignored, as in R0d.
 

@@ -119,19 +119,17 @@ approved by the operator as drafted the same day.*
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-10-22, adervark @default/4279585a: the spend is
-  under way on the operator's go.
-  - Registrar, transcribers G1–G3 and GC, and the auditor are done and
-    clean. The auditor caught all 40 of its canaries. All committed, the
-    reconcilers' views, canary key and `grade.mjs` last, at `7a4bfff`.
-- **In flight:** reconcilers R1, R2 and R3 (runs `4279585a.5f2e`, `.6df6`
-  and `.bf4b`), writing `docs/plans/evidence/t086/rec/out-R*.jsonl`.
-- **Agents used:** 9 of the 10 allowed first passes.
-- **Resume with:** `AA/ckpt.sh live T086`. A reconciler that died, or
-  missed a canary, is rerun once, resuming from its lines.
-  - When all three are clean (`check-reconcile.mjs`), run `node grade.mjs >
-    grade.json` in `docs/plans/evidence/t086/`, judge each candidate's
-    `why` by hand and mark `precision-units.txt` by hand.
-- **Next decision:** none until the grade, unless a stage fails twice.
+  done and graded.
+  - All nine agents ran clean, first passes only; R1–R3 were continued
+    after the account's session limit stopped them before their first line.
+  - **Graded: not a pass.** Recall 4 of 13 against 11; canaries 40/40
+    (auditor) and 14/15 (reconcilers, the miss unfair); precision 9/9 and
+    9/9. `docs/plans/evidence/t086/grade.md`.
+- **In flight:** nothing. Every run has ended.
+- **Agents used:** 9 of the 10 allowed first passes; no rerun.
+- **Next decision:** the operator's, per the rules' "Otherwise": revise
+  the design for a v2.8, or accept v2.7 as it stands with H1's blind spot
+  written into §5.5. Then the Result is written and T086 closes.
 
 ## Verify
 

@@ -1,0 +1,521 @@
+{
+ "auditCanaries": {
+  "caught": 40,
+  "of": 40,
+  "missed": []
+ },
+ "canaries": {
+  "caught": 14,
+  "of": 15,
+  "byReconciler": [
+   "5/5",
+   "4/5",
+   "5/5"
+  ],
+  "missed": [
+   {
+    "reconciler": 2,
+    "type": "group",
+    "unit": 299,
+    "real": "F1260",
+    "twin": "F1988",
+    "realView": "V1271",
+    "twinView": "V523",
+    "caught": false,
+    "line": "ok: 3 facts; teacher 197 KiB (bringup) = 202 KB, given as 200 KB and 200 KiB elsewhere: rounding of one size"
+   }
+  ]
+ },
+ "findings": {
+  "ok": 307,
+  "conflict": 11,
+  "superseded": 15,
+  "follows": 277,
+  "contradicted": 0,
+  "unsupported": 96
+ },
+ "precision": {
+  "conflict": {
+   "unique": 9,
+   "marked": 9
+  },
+  "superseded": {
+   "unique": 9,
+   "marked": 9
+  },
+  "contradicted": {
+   "unique": 0,
+   "marked": 0
+  }
+ },
+ "recall": {
+  "inReach": 13,
+  "bar": 11,
+  "withCandidates": 4
+ },
+ "corrections": {
+  "K1": {
+   "reach": true,
+   "earlier": [
+    "F741",
+    "F742"
+   ],
+   "correction": [
+    "F54",
+    "F57",
+    "F58",
+    "F721",
+    "F722",
+    "F723",
+    "F725",
+    "F726",
+    "F910",
+    "F911",
+    "F912",
+    "F913",
+    "F914",
+    "F1413",
+    "F1414",
+    "F1415",
+    "F1416",
+    "F1417",
+    "F1418",
+    "F1419",
+    "F1420",
+    "F1421"
+   ],
+   "why": "336 is illegal only as res, the size the model sees; as img, the decode size, it is legal (the dominant member decodes at 336)",
+   "step": "in a unit, not marked: R1 group 1: ok; R3 group 18: ok",
+   "candidates": []
+  },
+  "K2": {
+   "reach": true,
+   "earlier": [
+    "F423",
+    "F428"
+   ],
+   "correction": [
+    "F158",
+    "F159",
+    "F160",
+    "F263",
+    "F264",
+    "F327",
+    "F535",
+    "F536",
+    "F1121",
+    "F1122",
+    "F1123"
+   ],
+   "why": "the published arm's gold-58 range is 0.9054-0.9213; 0.9128-0.9213 dropped the lowest of four public figures",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 group 53 conflict F423/F158: correction: T112 at 416447b quoted the member at 0.9128–0.9213; at 59efe32 it is 0.9054–0.9213, the earlier range having dropped 0.9054, one of the four public figures",
+    "R1 group 122 conflict F423/F158: correction: 0.9128–0.9213 (T112 at 416447b) vs 0.9054–0.9213 (59efe32) for the same member's gold-58; V161 says the earlier range silently dropped the lowest of four figures"
+   ]
+  },
+  "K3": {
+   "reach": true,
+   "earlier": [
+    "F422"
+   ],
+   "correction": [
+    "F154",
+    "F155",
+    "F156",
+    "F157",
+    "F339",
+    "F340"
+   ],
+   "why": "full fidelity was undefined; the floor is read under the kernel's chain and window count (condition B), not the trainer's",
+   "step": "in a unit, not marked: R1 group 19: ok; R2 group 5: ok",
+   "candidates": []
+  },
+  "K4": {
+   "reach": true,
+   "earlier": [
+    "F426",
+    "F427"
+   ],
+   "correction": [
+    "F215",
+    "F216",
+    "F217",
+    "F218",
+    "F219"
+   ],
+   "why": "clearing 0.948 is the best case, not a realistic day: the recorded moves (0.000, 0.000, -0.001, -0.002) argue against it",
+   "step": "in a unit, not marked: R1 group 59: ok; R1 group 71: ok; R1 group 113: ok; R1 group 128: ok; R2 group 13: ok; R3 group 48: ok; R3 group 75: ok; R2 check 213: unsupported; R3 check 189: unsupported",
+   "candidates": []
+  },
+  "K5": {
+   "reach": true,
+   "earlier": [
+    "F241",
+    "F242",
+    "F476",
+    "F783",
+    "F785"
+   ],
+   "correction": [
+    "F307",
+    "F308",
+    "F309",
+    "F310",
+    "F311",
+    "F312",
+    "F313",
+    "F365",
+    "F750",
+    "F751",
+    "F752",
+    "F754",
+    "F755",
+    "F756",
+    "F1125",
+    "F1126",
+    "F1127",
+    "F1128",
+    "F1129",
+    "F1130"
+   ],
+   "why": "the dry run did not pass 9/9: it printed nine PASS lines and crashed; with the stage count gated it passes 13/13",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R2 group 8 conflict F476/F313: V480 (PROGRESS 07:54): make dryrun 9/9 stages; V317 (T112 09:08): it did not pass, 9/9 was read off a crashed run, 13/13 now. A correction of a wrong claim",
+    "R3 group 101 conflict F241/F313: make dryrun: V243 9/9 stages passed as first reported; V317 13/13 after the fix. The 9/9 was the PASS lines of a run that crashed (V758, V760): a correction",
+    "R3 group 101 conflict F476/F750: V480 (PROGRESS 07:54) reports make dryrun 9/9 stages passing; V758 (dry_run.py 07:00) says those nine PASS lines preceded a traceback and the script runs thirteen stages"
+   ]
+  },
+  "K6": {
+   "reach": true,
+   "earlier": [
+    "F111",
+    "F485",
+    "F486",
+    "F487"
+   ],
+   "correction": [
+    "F247",
+    "F248",
+    "F249",
+    "F250",
+    "F523",
+    "F524",
+    "F525",
+    "F526"
+   ],
+   "why": "with the weekly GPU quota exhausted the day had no submission cycle, not two",
+   "step": "in a unit, not marked: R3 group 42: ok; R1 check 18: unsupported; R1 check 230: unsupported; R3 check 337: follows",
+   "candidates": []
+  },
+  "K7": {
+   "reach": true,
+   "earlier": [
+    "F191",
+    "F192",
+    "F193"
+   ],
+   "correction": [
+    "F270",
+    "F271",
+    "F272",
+    "F362",
+    "F448",
+    "F449",
+    "F543",
+    "F544",
+    "F545",
+    "F546"
+   ],
+   "why": "the paired read resolves the gap: ours is behind v5 (delta -0.0277, CI [-0.0483, -0.0076]), where the absolute reads could not resolve it",
+   "step": "in a unit, not marked: R2 check 354: follows; R3 check 57: follows",
+   "candidates": []
+  },
+  "K8": {
+   "reach": true,
+   "earlier": [
+    "F1",
+    "F2",
+    "F3",
+    "F444",
+    "F523",
+    "F524",
+    "F525",
+    "F526",
+    "F1078",
+    "F1079",
+    "F1080"
+   ],
+   "correction": [
+    "F1156"
+   ],
+   "why": "the quota had reset by 2026-09-19: the 09-18 block was gone (a later reading of a state that moves)",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R2 group 146 superseded F2/F1156: V2: weekly GPU quota exhausted 2026-09-18 02:04Z, no kernel can run; V1167 (trail 09-21): quota HAD reset, the 09-18 block is gone; a later reading of a moving state"
+   ]
+  },
+  "K9": {
+   "reach": true,
+   "earlier": [
+    "F86",
+    "F87",
+    "F629",
+    "F630",
+    "F631",
+    "F921"
+   ],
+   "correction": [
+    "F694",
+    "F695",
+    "F696",
+    "F1457",
+    "F1458",
+    "F1459"
+   ],
+   "why": "the banner prints at import, before the arms run, so it does not show that our arm ran",
+   "step": "in a unit, not marked: R1 group 1: ok; R1 check 71: unsupported; R1 check 89: follows; R2 check 119: follows; R3 check 271: follows",
+   "candidates": []
+  },
+  "K10": {
+   "reach": true,
+   "earlier": [
+    "F4",
+    "F5",
+    "F241",
+    "F242",
+    "F258",
+    "F259",
+    "F744"
+   ],
+   "correction": [
+    "F688",
+    "F689",
+    "F690",
+    "F691",
+    "F692",
+    "F693",
+    "F1448",
+    "F1449",
+    "F1450",
+    "F1451",
+    "F1454",
+    "F1455",
+    "F1456"
+   ],
+   "why": "the 224 arm could not run in the kernel: built without img_size the backbone is on the 384 grid, every 224 forward raises, and the arm scores a constant 0.5",
+   "step": "in a unit, not marked: R2 check 235: follows",
+   "candidates": []
+  },
+  "K11": {
+   "reach": true,
+   "earlier": [
+    "F146",
+    "F166"
+   ],
+   "correction": [
+    "F279",
+    "F362",
+    "F448",
+    "F449",
+    "F548"
+   ],
+   "why": "submission 1 is withdrawn: the 224 arm is resolved-behind the member it would replace",
+   "step": "transcribed, not in one unit",
+   "candidates": []
+  },
+  "K12": {
+   "reach": true,
+   "earlier": [
+    "F79",
+    "F80",
+    "F143"
+   ],
+   "correction": [
+    "F392",
+    "F393",
+    "F401",
+    "F402",
+    "F403",
+    "F1693",
+    "F1694",
+    "F1695"
+   ],
+   "why": "the 4090 is a Windows machine without WSL, so the bash bring-up cannot run there; a Python self-test replaces it",
+   "step": "in a unit, not marked: R2 group 2: ok; R2 group 115: ok; R2 check 335: follows",
+   "candidates": []
+  },
+  "K14": {
+   "reach": true,
+   "earlier": [
+    "F585",
+    "F586",
+    "F587",
+    "F588",
+    "F1013",
+    "F1014",
+    "F1015",
+    "F1016",
+    "F1017",
+    "F1018",
+    "F1019",
+    "F1020",
+    "F1021"
+   ],
+   "correction": [
+    "F586",
+    "F587",
+    "F588",
+    "F561",
+    "F562",
+    "F563",
+    "F564",
+    "F565",
+    "F566",
+    "F567",
+    "F568",
+    "F569",
+    "F1016",
+    "F1017",
+    "F1018",
+    "F1019",
+    "F1020",
+    "F1021",
+    "F971",
+    "F972",
+    "F973"
+   ],
+   "why": "a later count of the gated suite replaces the earlier one (a moving quantity), the last once environment-gated checks were split out",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 group 7 superseded F585/F586: Makefile smoke suite: 1164 checks at 3ed78d4 (09-18 03:36), 1176 at 7edf46e (06:24); a later count of a moving quantity",
+    "R1 group 7 superseded F586/F587: Makefile smoke suite: 1176 checks at 7edf46e (06:24), 1192 at 416447b (07:00); a later count of a moving quantity",
+    "R1 group 7 superseded F587/F563: Makefile smoke suite: 1192 checks at 416447b (09-18 07:00), 1159 at 1661b58 (09-19 09:59), the current count",
+    "R1 group 7 superseded F1013/F1016: _order.py smoke gate: 1164 checks at 3ed78d4, 1176 at 7edf46e; later count of a moving quantity (md5 re-recorded with it)",
+    "R1 group 7 superseded F1016/F1019: _order.py smoke gate: 1176 checks at 7edf46e, 1192 at 416447b; later count of a moving quantity",
+    "R1 group 7 superseded F1019/F972: _order.py smoke gate: 1192 checks at 416447b (09-18), 1159 at 1661b58 (09-19), the current count; matches Makefile's 1159",
+    "R1 group 135 superseded F585/F586: Makefile smoke suite: 1164 checks at 3ed78d4 (03:36), 1176 at 7edf46e (06:24); a later count of a moving quantity",
+    "R1 group 135 superseded F586/F587: Makefile smoke suite: 1176 checks at 7edf46e (06:24), 1192 at 416447b (07:00); a later count of a moving quantity",
+    "R1 group 135 superseded F587/F563: Makefile smoke suite: 1192 checks at 416447b (09-18), 1159 at 1661b58 (09-19), the current count",
+    "R3 group 27 superseded F587/F563: make smoke check count: V594 1192 at 416447b (09-18 07:00); V569 1159 at 1661b58 (09-19), a later count of a moving quantity, matching _order's last entry V981 1159",
+    "R3 group 27 superseded F1019/F972: _order.py smoke gate: V1028 1192 checks at 416447b (09-18); V981 1159 at 1661b58 (09-19), the later count after 1214, 1216, 1137"
+   ]
+  },
+  "K13": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F175",
+    "F182",
+    "F532",
+    "F533",
+    "F534"
+   ],
+   "why": "the arm's effective weight in the final blend is about 0.072 (0.20 x 0.60 x 0.60), not 20%",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K15": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F296",
+    "F297",
+    "F298",
+    "F299",
+    "F637",
+    "F528",
+    "F529",
+    "F530",
+    "F1436",
+    "F1437",
+    "F1438",
+    "F1439",
+    "F1440",
+    "F1441",
+    "F923",
+    "F924"
+   ],
+   "why": "the kernel metadata was copied from T108, so our dataset was never attached and the weight lookup would raise at Stage 4",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K16": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F314",
+    "F315",
+    "F316",
+    "F1543"
+   ],
+   "why": "a wrong --res rendered a consistent kernel that would score the wrong thing; it is now checked against the checkpoint's recipe",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K17": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F82",
+    "F83",
+    "F84",
+    "F1353",
+    "F1354",
+    "F1355",
+    "F1590",
+    "F1591"
+   ],
+   "why": "their eval_windows applies ImageNet normalisation to every arm, about 4.48x our standard deviation",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K18": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F60",
+    "F61",
+    "F62",
+    "F63",
+    "F64",
+    "F607",
+    "F608",
+    "F1418",
+    "F1419",
+    "F1420",
+    "F1421"
+   ],
+   "why": "img defaulting to our resolution opens a fourth decode group; img is the replaced member's",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K19": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F1043",
+    "F1044",
+    "F1045",
+    "F1046",
+    "F1047",
+    "F1052",
+    "F1053"
+   ],
+   "why": "patterns hardcoded for the 224/none arm would have failed a correct 384/imagenet run",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K20": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F319"
+   ],
+   "why": "one kaggle binary decided whether the dataset existed and a different one acted",
+   "step": "out of reach",
+   "candidates": []
+  }
+ }
+}
