@@ -41,14 +41,14 @@ account with the most left.
 
 ## Steps
 
-- [ ] `lib/limits.mjs`: find the accounts, read each token, call the
+- [x] `lib/limits.mjs`: find the accounts, read each token, call the
       endpoint, cache, and say plainly when an account cannot be read.
-- [ ] `GET /api/limits`, behind the API token like every other route;
+- [x] `GET /api/limits`, behind the API token like every other route;
       `?refresh=1` bypasses the cache.
-- [ ] The Agents page shows one row per account.
-- [ ] `/aa limits` prints the same table (`skills/aa/aa.sh`, `SKILL.md`).
-- [ ] Tests on temporary home folders with a stubbed fetch: no network.
-- [ ] README: the outbound call and what it reads, under "Storage and
+- [x] The Agents page shows one row per account.
+- [x] `/aa limits` prints the same table (`skills/aa/aa.sh`, `SKILL.md`).
+- [x] Tests on temporary home folders with a stubbed fetch: no network.
+- [x] README: the outbound call and what it reads, under "Storage and
       behavior".
 
 ## Decision rules — fixed in advance
@@ -73,7 +73,20 @@ account with the most left.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, claimed; building `lib/limits.mjs` first
+- **Last touched:** 2026-10-22, adervark @default/1f16c0d5: every step
+  built and committed.
+  - `npm test` (550, 0 failing) and `npm run check` pass. Read live on this
+    machine: `default`, `b` and `k` read; `v` shows expired (its token
+    lapsed 12:38Z, Claude Code has not run there since).
+  - The accounts are read one after another: read together, connections
+    to api.anthropic.com timed out in Node's dual-stack race (ETIMEDOUT
+    in ~500 ms).
+  - The endpoint answers 429 after a few reads in quick succession. That
+    was only from probing while building it, but it is why the 5-minute
+    cache matters.
+  - Screenshots, wide and phone, no console errors and no sideways scroll.
+- **Not verified:** that the numbers agree with `/usage` inside each
+  profile (Verify, below). They come from the same endpoint.
 - **In flight:** nothing
 - **On disk:** nothing uncommitted
 

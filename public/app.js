@@ -20,7 +20,7 @@ const stageStatuses = { done: 'Done', active: 'Running', awaiting_approval: 'Nee
 const attemptStatuses = { queued: 'Queued', running: 'Running', awaiting_input: 'Waiting for a person', succeeded: 'Succeeded', failed: 'Failed', awaiting_approval: 'Awaiting approval', approved: 'Approved', rejected: 'Changes requested', cancelled: 'Cancelled' };
 // A project's tabs. It opens on its board.
 const LAYOUTS = { board: ['board', 'Board'], threads: ['route', 'Threads'], list: ['list', 'List'], flow: ['activity', 'Flow'], method: ['shield', 'Method'] };
-const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'home', layout: 'board', agentsTab: 'now', query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
+const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'home', layout: 'board', agentsTab: 'now', limits: null, limitsError: '', limitsLoading: false, query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
 const detailsOpen = new Map();
 // Decisions inbox: full runs fetched for rows opened inline, and which of them
 // show the request-changes form.
@@ -1959,9 +1959,68 @@ function actingApplies(agent, role) {
 
 // Agents: the sessions working on the boards now, and the pipeline's agents.
 function renderAgents() {
-  const tabs = [['now', 'Working now'], ['pipeline', 'Pipeline agents']].map(([value, label]) => `<button class="view-tab ${state.agentsTab === value ? 'selected' : ''}" data-action="agents-tab" data-value="${value}" aria-pressed="${state.agentsTab === value}">${label}</button>`).join('');
-  const heading = `<section class="page-heading"><div><h1>Agents</h1><p>Who is doing the work: the agent sessions holding tasks on each board, and the agents the pipeline routes stages to.</p></div>${state.agentsTab === 'pipeline' ? `<button class="button button-secondary" data-action="add-agent">${icon('plus')}Add agent</button>` : ''}</section><div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Agents view">${tabs}</div></div>`;
-  $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : workingNow());
+  const tabs = [['now', 'Working now'], ['pipeline', 'Pipeline agents'], ['limits', 'Account limits']].map(([value, label]) => `<button class="view-tab ${state.agentsTab === value ? 'selected' : ''}" data-action="agents-tab" data-value="${value}" aria-pressed="${state.agentsTab === value}">${label}</button>`).join('');
+  const heading = `<section class="page-heading"><div><h1>Agents</h1><p>Who is doing the work: the agent sessions holding tasks on each board, the agents the pipeline routes stages to, and how much each Claude account has left.</p></div>${state.agentsTab === 'pipeline' ? `<button class="button button-secondary" data-action="add-agent">${icon('plus')}Add agent</button>` : ''}${state.agentsTab === 'limits' ? `<button class="button button-secondary" data-action="read-limits" ${state.limitsLoading ? 'disabled' : ''}>${icon('activity')}${state.limitsLoading ? 'Reading…' : 'Read again'}</button>` : ''}</section><div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Agents view">${tabs}</div></div>`;
+  $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : state.agentsTab === 'limits' ? accountLimits() : workingNow());
+}
+
+// The Account limits tab reads /api/limits when it opens and when asked to
+// read again; the server holds each reading for 5 minutes.
+async function loadLimits(refresh = false) {
+  if (state.limitsLoading) return;
+  state.limitsLoading = true;
+  if (state.view === 'agents') renderMain();
+  try {
+    state.limits = await api(`/limits${refresh ? '?refresh=1' : ''}`);
+    state.limitsError = '';
+  } catch (error) {
+    state.limitsError = error.message;
+  } finally {
+    state.limitsLoading = false;
+    if (state.view === 'agents') renderMain();
+  }
+}
+
+function resetText(iso) {
+  if (!iso) return 'no window open';
+  const minutes = Math.round((new Date(iso).getTime() - Date.now()) / 60000);
+  if (!Number.isFinite(minutes)) return '';
+  if (minutes <= 0) return 'resets now';
+  if (minutes < 60) return `resets in ${minutes}m`;
+  if (minutes < 24 * 60) return `resets in ${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+  return `resets ${new Date(iso).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`;
+}
+
+const LIMIT_WINDOWS = [['session', 'Session (5 hours)'], ['weekly', 'Weekly'], ['weeklyOpus', 'Weekly, Opus'], ['weeklySonnet', 'Weekly, Sonnet']];
+
+function limitTone(percent) {
+  return percent >= 90 ? 'tone-fail' : percent >= 70 ? 'tone-wait' : 'tone-done';
+}
+
+// One bar per window. An SVG's width attribute, not a style: the page's CSP
+// allows no inline styles.
+function limitMeter(label, window) {
+  const used = Math.min(100, Math.max(0, window.percent));
+  return `<div class="limit-meter ${limitTone(window.percent)}"><div class="limit-label"><span>${escape(label)}</span><strong>${escape(String(window.percent))}% used</strong></div><svg class="limit-bar" viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="6" rx="3"></rect><rect class="limit-fill" width="${used}" height="6" rx="3"></rect></svg><small>${escape(resetText(window.resetsAt))}</small></div>`;
+}
+
+function accountLimits() {
+  if (!state.limits) {
+    if (state.limitsError) return `<div class="empty-results">${icon('agent')}<h2>The limits could not be read</h2><p>${escape(state.limitsError)}</p></div>`;
+    return `<div class="empty-results">${icon('agent')}<h2>Reading each account’s limits…</h2></div>`;
+  }
+  const { accounts, mostLeft } = state.limits;
+  if (!accounts.length) return `<div class="empty-results">${icon('agent')}<h2>No Claude account found</h2><p>AGE Aris looks for Claude Code config folders in your home folder: ~/.claude and ~/.claude-&lt;profile&gt;.</p></div>`;
+  const rows = accounts.map((account) => {
+    const windows = LIMIT_WINDOWS.filter(([key]) => account.windows?.[key]).map(([key, label]) => limitMeter(label, account.windows[key])).join('');
+    const status = account.state === 'ok'
+      ? `<span class="chip ${limitTone(100 - account.left)}">${escape(String(account.left))}% left</span>${account.profile === mostLeft ? '<span class="chip tone-run">Most left</span>' : ''}`
+      : `<span class="chip ${account.state === 'expired' ? 'tone-wait' : account.state === 'error' ? 'tone-fail' : 'tone-idle'}">${escape({ expired: 'Token expired', error: 'Not read', 'no token': 'No token' }[account.state] || account.state)}</span>`;
+    const ago = account.readAt ? relativeTime(account.readAt) : '';
+    const when = ago ? `${account.stale ? 'Last good reading ' : 'Read '}${escape(ago === 'Just now' ? 'just now' : ago)}` : '';
+    return `<li class="session-row limit-row"><div class="session-who"><strong>${escape(account.profile)}</strong><small>${escape(account.folder)}${account.plan ? ` · ${escape(account.plan)}` : ''}</small></div><div class="session-work">${account.reason ? `<p class="session-note">${escape(account.reason)}</p>` : ''}${windows ? `<div class="limit-meters">${windows}</div>` : ''}</div><div class="session-state">${status}<span>${when}</span></div></li>`;
+  }).join('');
+  return `<p class="flow-intro">How much of each Claude account’s session and weekly limits is used, read from Anthropic with each account’s own sign-in. AGE Aris never renews an expired token: run Claude Code in that profile and it renews it. Agents read the same numbers from <code>/api/limits</code> and <code>/aa limits</code>.</p>${state.limitsError ? `<p class="form-error" role="alert">${escape(state.limitsError)}</p>` : ''}<ul class="session-list">${rows}</ul>`;
 }
 
 // One row per agent session holding work: what it holds, its latest note, and
@@ -2269,7 +2328,8 @@ function onAction(event) {
     case 'toggle-delta': toggleExpanded(target.dataset.value); break;
     case 'add-project': openAddProject(); break;
     case 'copy-path': copyPath(target.dataset.value); break;
-    case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); break;
+    case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); if (state.agentsTab === 'limits') loadLimits(); break;
+    case 'read-limits': loadLimits(true); break;
     case 'open-project': navigate(target.dataset.id); break;
     case 'layout': setLayout(target.dataset.value); break;
     case 'clear-filters': state.priority = ''; state.status = ''; state.owner = ''; state.query = ''; $('#search').value = ''; renderMain(); break;

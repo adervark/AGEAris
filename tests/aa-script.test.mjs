@@ -307,3 +307,36 @@ test('a task file with CRLF line endings is read as it is with LF', async () => 
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.ok(result.stdout.includes('| T001 | Saved on Windows | claimed | someone |\n'), result.stdout);
 });
+
+test('/aa limits prints one row per Claude account instead of the board', async () => {
+  const bash = await gitBash({ windows: false });
+  await writeFile(path.join(bash.calls, 'started'), '');
+  await writeFile(path.join(bash.dir, 'limits.json'), JSON.stringify({
+    readAt: '2026-10-22T17:40:12.000Z',
+    mostLeft: 'default',
+    accounts: [
+      { profile: 'default', folder: '~/.claude', plan: 'pro', state: 'ok', reason: '', readAt: '2026-10-22T17:40:12.000Z', stale: false, left: 96, windows: { session: { percent: 4, resetsAt: '2026-10-22T22:19:59.700Z' }, weekly: { percent: 0, resetsAt: '2026-10-29T13:59:59.701Z' } }, extraUsage: false },
+      { profile: 'k', folder: '~/.claude-k', plan: 'max', state: 'error', reason: 'error: asked too often (HTTP 429); try again in a few minutes', readAt: '2026-10-22T17:30:00.000Z', stale: true, left: 34, windows: { session: { percent: 0, resetsAt: null }, weekly: { percent: 66, resetsAt: '2026-10-24T03:00:00.420Z' }, weeklyOpus: { percent: 12, resetsAt: '2026-10-24T03:00:00.420Z' } }, extraUsage: false },
+      { profile: 'v', folder: '~/.claude-v', plan: 'pro', state: 'expired', reason: 'expired: Claude Code renews the token the next time it runs in this profile; AGE Aris never does', readAt: null, stale: false, left: null, windows: null, extraUsage: null },
+    ],
+  }));
+  await script(path.join(bash.dir, 'bin'), 'curl', [
+    `i=0; while [ -e "${bash.calls}/curl.$i" ]; do i=$((i + 1)); done`,
+    `printf '%s\\n' "$@" > "${bash.calls}/curl.$i"`,
+    `case "$*" in *http_code*) printf 200 ;; *api/limits*) cat "${bash.dir}/limits.json" ;; *) printf '{}' ;; esac`,
+  ].join('\n'));
+  const result = bash.run(['limits']);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.equal(result.stdout, [
+    'Claude account limits · read 2026-10-22 17:40Z · most left: default',
+    '',
+    '| profile | plan | session (5 h) | weekly | left | |',
+    '|---|---|---|---|---|---|',
+    '| default | pro | 4% · resets 2026-10-22 22:19Z | 0% · resets 2026-10-29 13:59Z | 96% | most left |',
+    '| k | max | 0% · no window open | 66% · resets 2026-10-24 03:00Z | 34% | error: asked too often (HTTP 429); try again in a few minutes; last good reading 2026-10-22 17:30Z; Opus weekly 12% · resets 2026-10-24 03:00Z |',
+    '| v | pro | — | — | — | expired: Claude Code renews the token the next time it runs in this profile; AGE Aris never does |',
+    '',
+  ].join('\n'));
+  const asked = (await bash.requests()).find((args) => args.some((arg) => arg.endsWith('/api/limits')));
+  assert.ok(asked.includes(`X-AGEAris-Token: ${TOKEN}`));
+});

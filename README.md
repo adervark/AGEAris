@@ -256,6 +256,10 @@ projects are edited there.
 **Agents** lists the agent sessions holding work now, with what they hold,
 their latest note, and whether their claim has gone stale. **Pipeline agents**
 holds the agents the pipeline routes stages to and their record per role.
+**Account limits** shows, for each Claude account signed in on this machine,
+how much of its session (5-hour) and weekly limits is used and when each
+resets, so a fan-out goes to the account with room; agents get the same from
+`GET /api/limits` and `/aa limits`.
 **Activity** shows one row per task per day (for example, Backlog → In
 progress → Done); expanding a row lists each raw change with its commit. It
 filters by kind and project. **All tasks** (from Projects) and search span the
@@ -466,6 +470,19 @@ Choose another data directory or port when starting:
 AGEARIS_DATA_DIR=/path/to/workspace PORT=4400 npm start
 ```
 
+AGE Aris makes one outbound call, and only when the Account limits tab, `GET
+/api/limits` or `/aa limits` asks: `GET https://api.anthropic.com/api/oauth/usage`,
+once per Claude account, the request Claude Code's `/usage` makes. It finds the
+accounts as the Claude Code config folders in the home folder, `~/.claude` and
+`~/.claude-<profile>`, and reads each one's `.credentials.json` for its OAuth
+access token and plan. The token goes in that request's `Authorization` header
+and nowhere else: not to the browser, a log, the data folder or git. Nothing
+under `~/.claude*` is written, and an expired token is never refreshed, since
+refreshing would rotate the refresh token Claude Code keeps; that account shows
+as expired, with its last good reading, until Claude Code next runs in its
+profile. Readings are held in memory for 5 minutes per account, and
+`?refresh=1` reads again at most once a minute.
+
 The server listens on `127.0.0.1`. This release uses one local operator, with the
 git identity configured on the machine. Named task owners are planning metadata;
 agent claim ownership is recorded separately in the task frontmatter.
@@ -504,7 +521,8 @@ skills/aa-init/               existing agent task-board integration
 The AGE Aris plugin, `agearis`, gives Claude Code two commands: `/aa-init`
 sets up an AA board in a repository, and `/aa` shows a repository's board and
 the link to its page in AGE Aris, starting AGE Aris when it is not running
-(`/aa open` opens the page). Install it from a terminal, in one line:
+(`/aa open` opens the page; `/aa limits` lists each Claude account's limits
+instead of the board). Install it from a terminal, in one line:
 
 ```sh
 claude plugin marketplace add adervark/AGEAris && claude plugin install agearis@agearis

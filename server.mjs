@@ -5,6 +5,7 @@ import { extname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { AgentRegistry } from './lib/agents.mjs';
 import { Cockpit } from './lib/brief.mjs';
+import { Limits } from './lib/limits.mjs';
 import { PipelineEngine } from './lib/pipeline.mjs';
 import { dataFolder, redactEmails, trackedWritesOff, Workspace, WorkspaceError } from './lib/workspace.mjs';
 
@@ -180,15 +181,17 @@ function logTrackedAction(error) {
 }
 
 // `clock` (milliseconds, like Date.now) is the time the engine and the cockpit
-// compute their read models at; tests inject it, and `ledgerOptions` (spawn,
-// stat) for the history ledgers.
-export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DATA_DIR || process.env.AGESIGHT_DATA_DIR || undefined), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {} } = {}) {
+// compute their read models at; tests inject it, `ledgerOptions` (spawn,
+// stat) for the history ledgers, and `limitsOptions` (home, fetch) for the
+// account limits.
+export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DATA_DIR || process.env.AGESIGHT_DATA_DIR || undefined), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {}, limitsOptions = {} } = {}) {
   // AGEARIS_TRACKED_WRITES=0 turns task actions off on every tracked
   // repository, whatever each one's switch says.
   const workspace = await new Workspace({ dataDir, trackedWrites: !trackedWritesOff() }).init();
   const registry = await new AgentRegistry({ dataDir: workspace.dataDir, operator: workspace.operator, email: workspace.email, ...registryOptions }).init();
   const engine = await new PipelineEngine({ workspace, registry, ...engineOptions, ...(clock ? { clock } : {}) }).init();
   const cockpit = new Cockpit({ workspace, engine, clock: clock || (() => Date.now()), ledgerOptions, ...cockpitOptions });
+  const limits = new Limits({ ...(clock ? { clock } : {}), ...limitsOptions });
   const token = await apiToken(workspace.dataDir);
   const server = createHttpServer(async (request, response) => {
     securityHeaders(response);
@@ -232,6 +235,9 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
         return sendJson(response, 200, { runId: run.id, path: run.path, audit: run.audit, events: run.events });
       }
       if (request.method === 'POST' && runMatch?.[2] === '/actions') return sendJson(response, 200, await engine.act(runMatch[1], await readJson(request)));
+      // Each Claude account's session and weekly use; ?refresh=1 reads past the
+      // cache, at most once a minute per account.
+      if (request.method === 'GET' && pathname === '/api/limits') return sendJson(response, 200, await limits.read({ refresh: query.refresh === '1' }));
       if (request.method === 'GET' && pathname === '/api/agents') return sendJson(response, 200, await engine.agentPerformance());
       if (request.method === 'POST' && pathname === '/api/agents') {
         const agent = await registry.create(await readJson(request));
@@ -324,6 +330,7 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
   server.registry = registry;
   server.engine = engine;
   server.cockpit = cockpit;
+  server.limits = limits;
   server.apiToken = token;
   engine.start();
   server.on('close', () => {

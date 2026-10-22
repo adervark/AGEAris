@@ -1,7 +1,7 @@
 ---
 name: aa
-description: Pull up this project's AA board — the NOW block, the columns and WIP, or the open tasks on an older board — and its page in AGE Aris, starting AGE Aris if it is not running and restarting it if its code has changed since. Read-only. Use when the user types /aa or asks to see, show or pull up the board.
-argument-hint: "[open | link]"
+description: Pull up this project's AA board — the NOW block, the columns and WIP, or the open tasks on an older board — and its page in AGE Aris, starting AGE Aris if it is not running and restarting it if its code has changed since; or, with `limits`, how much of each Claude account's session and weekly limits is left. Read-only. Use when the user types /aa, asks to see, show or pull up the board, or asks how much usage or limit each Claude account has left.
+argument-hint: "[open | link | limits]"
 allowed-tools: Bash(bash *aa/aa.sh*)
 ---
 
@@ -18,6 +18,11 @@ bash "<this skill's base directory>/aa.sh" $ARGUMENTS
 - No argument: print the board, then the AGE Aris link. The link carries the
   sign-in token, so it opens in any browser without a sign-in error.
 - `open`: the same, and open the link in the browser.
+- `limits`: instead of the board, one row per Claude account signed in on
+  this machine: how much of its session (5-hour) and weekly limits is used,
+  when each resets, and which has the most left. Times are UTC. Check it
+  before fanning out subagents, and spend from the account with the most
+  left.
 - `link`: track this repository in AGE Aris first. Do this only when the user
   asked for it. AGE Aris reads the repository; it changes the board's task
   files only through task actions the user switches on in AGE Aris.
