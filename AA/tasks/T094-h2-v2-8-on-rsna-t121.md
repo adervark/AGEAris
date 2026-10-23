@@ -31,11 +31,13 @@ units, brief and twin rule.
 
 - [x] The operator approves the decision rules below, as drafted or
       changed: approved as drafted, 2026-10-22.
-- [ ] Free: the cut, the key, the viability gate; v2.8's edit and cue units
-      in the linker, the checker and the grade; the briefs, checked against
-      the key.
-- [ ] The operator's go, then the round.
-- [ ] The grade, and the operator's decision.
+- [x] Free: the cut (2,271 clauses), the key (10 in reach, gate passes),
+      the briefs (0 hits). v2.8's linker and grade are built while the
+      transcribers run, committed before any reconciler.
+- [x] The operator's go, then the round. Go given 2026-10-23, from
+      `default` (83% left; `b` had 92%), the operator's choice.
+- [x] The grade: not a pass, 5 of 10 against 8 (`docs/plans/evidence/t094/grade.md`).
+- [ ] The operator's decision (§10, D14).
 
 ## Decision rules — fixed in advance
 
@@ -98,7 +100,11 @@ approved by the operator as drafted the same day.*
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-22, registered with drafted rules
+- **Last touched:** 2026-10-24, graded
+- **In flight:** nothing; every run ended
+- **On disk:** `docs/plans/evidence/t094/` (README lists every file)
+- **Resume with:** the operator's D14
+- **Next decision:** D14, revise to v2.9 or accept v2.8 as it stands
 
 ## Verify
 

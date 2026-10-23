@@ -1,8 +1,9 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.8, accepted to be tested on a held-out round, RSNA's T121**
-(2026-10-22, T090; H2 is T094). v2.7 stays accepted as it stands (T086)
-until H2 decides v2.8. Nothing here is built. H1, the held-out round, caught 4 of 13
+**Status: v2.8, tested on H2 and not a pass** (T094, 2026-10-24): recall 5
+of 10 against 8 (`docs/plans/evidence/t094/grade.md`). v2.7 stays accepted
+as it stands (T086) until the operator decides between a v2.9 and accepting
+v2.8 as it stands (§10, D14). Nothing here is built. H1, the held-out round, caught 4 of 13
 corrections, every one of a figure or a count; §5.5 names the blind spot,
 and v2.8 answers it, measured for free on H1's material
 (`docs/plans/evidence/t090/measurements.md`). v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
@@ -1189,6 +1190,12 @@ number without its id is not checked, so the rule for writers is the one
     It does not answer two of the six: they sit only in groups of 119 and
     175 facts, with no edit and no cue. The second kind has no mechanical
     rule; a cue unit reached one of the three (K11) on H1, in-sample.
+    **H2 (T094), held out:** v2.8 caught 5 of 10, against v2.7's units' 4 of
+    10 there; its edit unit alone caught one (a refuted 97%). It missed a
+    clause struck through (`~~49.4 GB~~`: the same words, so no edit
+    forms), corrections that name themselves "CORRECTED" or "REFUTED" (not
+    cues), and corrections of a premise, a plan or a target inside units
+    that held both sides, marked `ok` or "a later state".
   - **A pair a reconciler passes over.** A pair can sit in a unit and go
     unmarked while its neighbours are marked. R0d lost C3 this way, in two
     reconcilers' groups. Group canaries in each reconciler's largest groups
@@ -1564,6 +1571,21 @@ approved a third round, on v2.3, which arrived complete.
   drawn from it; of it, T090 read only its commit subjects, its task file's
   length and a count of correction words in it. Its decision rules, spend
   and bar are written and approved before anything runs, as T086's were.
+
+**Open (T094), for the operator:**
+
+- **D14: H2 is not a pass; revise to v2.9, or accept v2.8 as it stands.**
+  - v2.8 caught 5 of 10 on H2, which v2.8 was not drawn from. v2.7's units
+    alone would have caught 4 of the 10. Its precision held, and every canary
+    but one was caught.
+  - Three of the five misses are mechanical, and each can be fixed for free:
+    struck clauses, two missing cue words, and a cue firing on a negation.
+    The other two are judgement: a premise, plan or target corrected inside
+    one unit, which marking did not turn.
+  - **Recommended: accept v2.8 as it stands**, with H2's measurements in
+    §5.5, and register the three mechanical items as v2.9 for when a round
+    needs it. A third held-out round costs another ten passes, and its best
+    case still leaves the judgement misses.
 
 S0 still runs before any code is written.
 

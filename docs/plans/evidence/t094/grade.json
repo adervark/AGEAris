@@ -1,0 +1,411 @@
+{
+ "auditCanaries": {
+  "caught": 73,
+  "of": 73,
+  "missed": []
+ },
+ "canaries": {
+  "caught": 23,
+  "of": 24,
+  "byReconciler": [
+   "8/8",
+   "7/8",
+   "8/8"
+  ],
+  "missed": [
+   {
+    "reconciler": 2,
+    "type": "check",
+    "real": "F3294",
+    "realHolder": 1,
+    "twin": "F3608",
+    "unit": 153,
+    "realUnit": 620,
+    "realView": "V3318",
+    "twinView": "V3274",
+    "refutation": "F3266 states 53 GiB free.",
+    "caught": false,
+    "line": "premises give 330 MB per family and 53 GiB free on 09-12; the 18 GiB set against it (a projection for the close date) is in no premise"
+   }
+  ]
+ },
+ "findings": {
+  "ok": 411,
+  "conflict": 23,
+  "superseded": 32,
+  "follows": 612,
+  "contradicted": 5,
+  "unsupported": 65
+ },
+ "precision": {
+  "conflict": {
+   "unique": 22,
+   "marked": 22
+  },
+  "superseded": {
+   "unique": 26,
+   "marked": 26
+  },
+  "contradicted": {
+   "unique": 5,
+   "marked": 5
+  }
+ },
+ "recall": {
+  "inReach": 10,
+  "bar": 8,
+  "withCandidates": 5
+ },
+ "corrections": {
+  "K1": {
+   "reach": true,
+   "earlier": [
+    "F276"
+   ],
+   "correction": [
+    "F44",
+    "F46",
+    "F57",
+    "F58",
+    "F59",
+    "F60",
+    "F61",
+    "F62",
+    "F63",
+    "F64",
+    "F65",
+    "F66"
+   ],
+   "why": "the 'current data/raptor_corpus' row counted part 1 only (3,200 studies, 15.9 GB); both parts hold 4,407 studies, 21 GB",
+   "step": "transcribed, not in one unit",
+   "candidates": []
+  },
+  "K2": {
+   "reach": true,
+   "earlier": [
+    "F284",
+    "F285",
+    "F67",
+    "F68",
+    "F69",
+    "F70",
+    "F71",
+    "F72",
+    "F73",
+    "F75",
+    "F90",
+    "F91",
+    "F106",
+    "F107"
+   ],
+   "correction": [
+    "F51",
+    "F52",
+    "F54",
+    "F56"
+   ],
+   "why": "measured, the dicom_bag corpus is 148.2 GB (76 slots x 3 channels), not the registered 49.4 GB, about 3x",
+   "step": "in a unit, not marked: R1 check 203: follows; R1 check 217: follows; R1 check 396: follows; R2 group 38: ok; R2 check 83: follows; R2 check 559: follows; R3 group 31: conflict; R1 check 506: follows; R1 check 659: unsupported; R2 check 363: follows; R2 check 552: unsupported; R3 check 80: follows; R3 check 263: follows; R3 check 604: follows",
+   "candidates": []
+  },
+  "K3": {
+   "reach": true,
+   "earlier": [
+    "F277"
+   ],
+   "correction": [
+    "F80",
+    "F81"
+   ],
+   "why": "/ had 26 GB free when measured on 2026-09-21, not the 29 GB written on 09-20",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 group 33 superseded F277/F80: V278 (T121@2e7ffc6): / has 29 GB free; V80 (T121 at 3c8fcaa): 26 GB measured 09-21, 'not the 29 GB written on 09-20': a later reading of free space",
+    "R1 edit 7 superseded F277/F80: V278: / has 29 GB free (written 09-20); V80: 26 GB free measured 09-21, a later reading of a moving quantity"
+   ]
+  },
+  "K4": {
+   "reach": true,
+   "earlier": [
+    "F279",
+    "F280",
+    "F281",
+    "F282",
+    "F283",
+    "F676",
+    "F254"
+   ],
+   "correction": [
+    "F83",
+    "F84",
+    "F85",
+    "F86",
+    "F87",
+    "F88",
+    "F90",
+    "F91",
+    "F92",
+    "F93",
+    "F94",
+    "F95",
+    "F96",
+    "F97",
+    "F103",
+    "F104"
+   ],
+   "why": "EXT1 is an external USB disk that dropped off the bus, so the registered target is under review; the internal /mnt/S is the alternative; availability, not capacity, is the problem",
+   "step": "in a unit, not marked: R1 group 191: ok; R2 group 197: ok; R3 group 194: ok; R3 cue 25: ok; R3 check 186: follows",
+   "candidates": []
+  },
+  "K5": {
+   "reach": true,
+   "earlier": [
+    "F286",
+    "F287",
+    "F288",
+    "F289",
+    "F290",
+    "F291"
+   ],
+   "correction": [
+    "F144",
+    "F145",
+    "F146",
+    "F147",
+    "F148",
+    "F149",
+    "F150",
+    "F151",
+    "F153",
+    "F154",
+    "F155",
+    "F156",
+    "F165",
+    "F166",
+    "F167"
+   ],
+   "why": "profiled with the SWA copy held, res 384 bs 2 peaks at 5.74 GiB, 75% of the card, not 97%",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R3 edit 28 conflict F289/F149: V290 (T121@685d4b9): 384/bs2 is 97% full with the SWA copy; V148/V149 (3c8fcaa) strike it: 'MEASURED 2026-09-21 (US-003) and the 97% is REFUTED: it is 75%': a correction"
+   ]
+  },
+  "K6": {
+   "reach": true,
+   "earlier": [
+    "F12",
+    "F13",
+    "F14"
+   ],
+   "correction": [
+    "F304",
+    "F305",
+    "F306",
+    "F307",
+    "F308",
+    "F309",
+    "F310",
+    "F311",
+    "F312",
+    "F182",
+    "F183",
+    "F184",
+    "F185",
+    "F186",
+    "F187",
+    "F188",
+    "F189"
+   ],
+   "why": "E - D = +0.010 closed a deficit-sized gap with no input change, so the task's opening premise (a checkpoint difference, closed first) no longer holds unqualified",
+   "step": "in a unit, not marked: R2 group 51: ok; R2 check 402: unsupported; R2 check 432: follows; R3 check 148: follows",
+   "candidates": []
+  },
+  "K7": {
+   "reach": true,
+   "earlier": [
+    "F2992"
+   ],
+   "correction": [
+    "F2933",
+    "F2934",
+    "F2935",
+    "F2936",
+    "F2941",
+    "F2942"
+   ],
+   "why": "since --train-gold (default on, 2026-09-20) the gold studies are in training, so the viewer's 'held out' flag was false and certified a contaminated number as clean",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R3 group 4 conflict F2992/F2935: V3013 (cam_viewer@2e7ffc6): load_split holds the 58 gold studies out of training by construction; V2956: T117 added --train-gold DEFAULT ON, and V2962 says the old page certified contaminated as clean: a correction",
+    "R3 edit 31 conflict F2992/F2934: V3013 (2e7ffc6, 09-21): load_split holds the 58 gold out of training by construction; V2955: that comment was 'false since 2026-09-20' when T117 made --train-gold DEFAULT ON, so it was already wrong at 2e7ffc6: corrected"
+   ]
+  },
+  "K8": {
+   "reach": true,
+   "earlier": [
+    "F335",
+    "F336",
+    "F337",
+    "F338",
+    "F339",
+    "F341",
+    "F342",
+    "F343",
+    "F344",
+    "F699"
+   ],
+   "correction": [
+    "F351",
+    "F352",
+    "F353",
+    "F354",
+    "F355",
+    "F356",
+    "F703",
+    "F704",
+    "F705",
+    "F706",
+    "F707",
+    "F708",
+    "F709",
+    "F714",
+    "F715",
+    "F716",
+    "F717"
+   ],
+   "why": "the fold was not started by the queue: it was launched by hand while the other service held the card, OOM'd at step 1, was relaunched, and the service was then stopped",
+   "step": "in a unit, not marked: R3 group 100: superseded; R3 group 222: superseded; R3 check 206: unsupported; R2 check 340: follows",
+   "candidates": []
+  },
+  "K9": {
+   "reach": true,
+   "earlier": [
+    "F2413",
+    "F2414",
+    "F2417",
+    "F2418",
+    "F2421",
+    "F2422",
+    "F2427",
+    "F2428",
+    "F681"
+   ],
+   "correction": [
+    "F2417",
+    "F2418",
+    "F2421",
+    "F2422",
+    "F2427",
+    "F2428",
+    "F2361",
+    "F2362"
+   ],
+   "why": "the gated count of smoke checks moved as checks were added; each later count replaces the earlier",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 edit 5 superseded F2418/F2362: The smoke gate count moved: V2450 1306 checks at ec7da60; V2380 1335 checks at 0b783b8, a later count with a new md5",
+    "R1 edit 6 superseded F2428/F2362: The smoke gate count moved: V2460 1331 checks at 9508307 (03:52); V2380 1335 checks at 0b783b8 (04:04), a later count",
+    "R2 group 12 superseded F2414/F2418: V2446: gate 1302 checks at 2e7ffc6 (09-21 11:07); V2450: 1306 at ec7da60 (09-21 14:18), a later count of a moving quantity",
+    "R2 group 12 superseded F2418/F2422: V2450: gate 1306 checks at ec7da60 (09-21); V2454: 1323 at 685d4b9 (09-22 02:56), a later count",
+    "R2 group 12 superseded F2422/F2428: V2454: gate 1323 at 685d4b9 (09-22 02:56); V2460: 1331 at 9508307 (09-22 03:52), a later count",
+    "R2 group 12 superseded F2428/F2362: V2460: gate 1331 at 9508307 (09-22 03:52); V2380: 1335 checks at 0b783b8 (09-22 04:04), a later count",
+    "R2 edit 19 superseded F2414/F2362: V2446: gate 1302 checks, md5 dae276cf, at 2e7ffc6 (09-21); V2380: 1335 checks, md5 6e773a57, at 0b783b8 (09-22): a later count",
+    "R2 edit 20 superseded F2422/F2362: V2454: gate 1323 checks at 685d4b9 (09-22 02:56); V2380: 1335 at 0b783b8 (04:04): a later count"
+   ]
+  },
+  "K10": {
+   "reach": true,
+   "earlier": [
+    "F657",
+    "F658"
+   ],
+   "correction": [
+    "F630",
+    "F631",
+    "F642",
+    "F643",
+    "F644"
+   ],
+   "why": "G cannot insert at the _coat_substitute anchor: it must write ours before the 0941 takes its Raptor backup, or a failed child restores the public output and G silently scores the parent",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 group 14 conflict F657/F642: V660 (f46796c): both kernels insert at 'the one module-level anchor _coat_n = _coat_substitute()'; V645: the 0941 calls it inside a try (first G smoke died there, V648); later text says INSERT_AT: corrected",
+    "R2 edit 21 conflict F657/F630: V660: both kernels insert at 'the one module-level anchor _coat_n = _coat_substitute()'; V632: at INSERT_AT, where G's anchor is now '_coat_public_path = _KePath(' (bd616cc: G inserts before the Raptor backup): corrected"
+   ]
+  },
+  "K11": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F105"
+   ],
+   "why": "the earlier belief is in CLAUDE.md, outside the round",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K12": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F2411",
+    "F2412",
+    "F2771",
+    "F2772",
+    "F2773",
+    "F2774",
+    "F2775",
+    "F2776",
+    "F2777",
+    "F2778",
+    "F2779",
+    "F2780"
+   ],
+   "why": "the earlier accusation was the guard's runtime output, never a committed sentence",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K13": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F199",
+    "F200",
+    "F201",
+    "F202",
+    "F687"
+   ],
+   "why": "the defect and its finding are T128's, outside the round; the launch line claims nothing T121#123 corrects",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K14": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F377",
+    "F378",
+    "F379",
+    "F380",
+    "F381",
+    "F698"
+   ],
+   "why": "no in-scope sentence called G v2 clean before the defect was found",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "K15": {
+   "reach": false,
+   "earlier": [],
+   "correction": [
+    "F1011",
+    "F1012",
+    "F1013",
+    "F1017",
+    "F1018"
+   ],
+   "why": "the earlier behaviour was code, not a sentence in scope",
+   "step": "out of reach",
+   "candidates": []
+  }
+ }
+}
