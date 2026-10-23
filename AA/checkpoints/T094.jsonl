@@ -24,3 +24,8 @@
 {"ts":"2026-10-23T04:14:59Z","run":"1f16c0d5.13a9","kind":"did","what":"G2 clean: 740 facts, 26 skips, 16 min","next":"parent merges"}
 {"ts":"2026-10-23T04:14:59Z","run":"1f16c0d5.13a9","kind":"end","left":"nothing","next":"parent merges"}
 {"ts":"2026-10-23T04:15:29Z","run":"1f16c0d5.f207","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 closure transcriber GC: 227 clauses","agent":"transcriber-GC"}
+{"ts":"2026-10-23T04:15:44Z","run":"1f16c0d5.f207","kind":"doing","what":"GC: transcribing 227 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-23T05:28:31Z","run":"1f16c0d5.f207","kind":"did","what":"GC: 107 of 227 clauses disposed","next":"the rest of GC"}
+{"ts":"2026-10-23T05:33:59Z","run":"1f16c0d5.f207","kind":"did","what":"GC clean: 401 facts, 4 skips, 78 min","next":"parent merges"}
+{"ts":"2026-10-23T05:33:59Z","run":"1f16c0d5.f207","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-23T05:34:20Z","run":"1f16c0d5.d58f","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 auditor: skips and blind measurand assignments","agent":"auditor"}
