@@ -132,7 +132,7 @@ replaces the other; rounding.
 For a group with nothing to mark, append one line:
 
     {"kind":"ok","group":12,"why":"7 facts, 3 quantities, all consistent","run":"{RUN}"}
-    {"kind":"ok","group":52,"why":"V310: the nightly build takes 41 min on the 8-core runner; V655: 26 min on the 16-core runner, another condition, so neither replaces the other","run":"{RUN}"}
+    {"kind":"ok","group":52,"why":"V310: the nightly build takes 41 min on the 8-core runner; V655: 24 min on the 16-core runner, another condition, so neither replaces the other","run":"{RUN}"}
 
 ## Edits
 
