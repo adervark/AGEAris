@@ -1,8 +1,8 @@
 ---
 id: T094
 title: "H2: research-runs v2.8 on RSNA T121, the held-out round"
-status: open
-owner: —
+status: in_progress
+owner: adervark @default/1f16c0d5 2026-10-22 — H2: free inputs first, then the go
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: research
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -29,8 +29,8 @@ units, brief and twin rule.
 
 ## Steps
 
-- [ ] The operator approves the decision rules below, as drafted or
-      changed.
+- [x] The operator approves the decision rules below, as drafted or
+      changed: approved as drafted, 2026-10-22.
 - [ ] Free: the cut, the key, the viability gate; v2.8's edit and cue units
       in the linker, the checker and the grade; the briefs, checked against
       the key.
@@ -39,8 +39,8 @@ units, brief and twin rule.
 
 ## Decision rules — fixed in advance
 
-*Drafted 2026-10-22, before any spend, after the operator chose T121; for
-the operator's approval.*
+*Drafted 2026-10-22, before any spend, after the operator chose T121, and
+approved by the operator as drafted the same day.*
 
 - **The round:** RSNA's T121, its committed record from `2e7ffc6`
   (2026-09-21) to `3c8fcaa` (2026-09-28): the commits whose message names
