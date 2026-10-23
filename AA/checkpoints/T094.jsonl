@@ -1,0 +1,5 @@
+{"ts":"2026-10-23T03:52:38Z","run":"1f16c0d5.fc91","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 registrar: measurands over T121's cut","agent":"registrar"}
+{"ts":"2026-10-23T03:52:58Z","run":"1f16c0d5.fc91","kind":"doing","what":"registrar: read the 2,271 clauses of G1-G4 and register the record's measurands in measurands.jsonl","next":"read the clauses, draft measurands, run check-measurands.mjs"}
+{"ts":"2026-10-23T03:54:13Z","run":"1f16c0d5.fc91","kind":"did","what":"registrar: read all 2,271 clauses of G1-G4; measurand candidates noted","next":"write measurands.jsonl, run check-measurands.mjs"}
+{"ts":"2026-10-23T03:57:40Z","run":"1f16c0d5.fc91","kind":"did","what":"registrar: 136 measurands in measurands.jsonl; check-measurands.mjs exits 0 (problems 0); ~5 min","next":"parent starts the transcribers"}
+{"ts":"2026-10-23T03:57:40Z","run":"1f16c0d5.fc91","kind":"end","left":"nothing","next":"parent starts the transcribers"}
