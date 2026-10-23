@@ -805,3 +805,14 @@ its date, the number, and where the evidence is. Newest last.
   exactly the bar, in-sample.
 - The operator accepted it to be tested, on RSNA's T121 (D12, D13); H2 is
   T094. **Spend:** none.
+
+## 2026-10-24 — T094 done: H2, v2.8 on RSNA T121, not a pass; v2.8 accepted
+
+- Recall 5 of 10 against 8 on a held-out round (`docs/plans/evidence/t094/grade.md`);
+  v2.7's units alone would have caught 4. Canaries 73/73 and 23/24.
+  Precision 20/22, 25/26, 5/5. v2.8's edit unit: 18 real lines, none false.
+- Misses: a struck clause forms no edit; CORRECTED and REFUTED are not cues;
+  a cue fires on a negation; corrections of a premise or plan inside one
+  unit were marked `ok`.
+- The operator accepted v2.8 as it stands (D14); v2.9 is T095.
+- **Spend:** `agent-fan-out`, 10 Opus first passes, no rerun.

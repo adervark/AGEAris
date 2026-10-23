@@ -1,9 +1,9 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.8, tested on H2 and not a pass** (T094, 2026-10-24): recall 5
-of 10 against 8 (`docs/plans/evidence/t094/grade.md`). v2.7 stays accepted
-as it stands (T086) until the operator decides between a v2.9 and accepting
-v2.8 as it stands (§10, D14). Nothing here is built. H1, the held-out round, caught 4 of 13
+**Status: v2.8, accepted as it stands** (2026-10-24, T094, D14). H2, its
+held-out round on RSNA's T121, caught 5 of 10 against a bar of 8
+(`docs/plans/evidence/t094/grade.md`); §5.5 states what it misses, and three
+mechanical fixes wait as v2.9 (T095). S1a (T077) builds on v2.8. Nothing here is built. H1, the held-out round, caught 4 of 13
 corrections, every one of a figure or a count; §5.5 names the blind spot,
 and v2.8 answers it, measured for free on H1's material
 (`docs/plans/evidence/t090/measurements.md`). v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
@@ -1572,20 +1572,16 @@ approved a third round, on v2.3, which arrived complete.
   length and a count of correction words in it. Its decision rules, spend
   and bar are written and approved before anything runs, as T086's were.
 
-**Open (T094), for the operator:**
+**Decided 2026-10-24 (T094), following the recommendation:**
 
-- **D14: H2 is not a pass; revise to v2.9, or accept v2.8 as it stands.**
-  - v2.8 caught 5 of 10 on H2, which v2.8 was not drawn from. v2.7's units
-    alone would have caught 4 of the 10. Its precision held, and every canary
-    but one was caught.
-  - Three of the five misses are mechanical, and each can be fixed for free:
-    struck clauses, two missing cue words, and a cue firing on a negation.
-    The other two are judgement: a premise, plan or target corrected inside
-    one unit, which marking did not turn.
-  - **Recommended: accept v2.8 as it stands**, with H2's measurements in
-    §5.5, and register the three mechanical items as v2.9 for when a round
-    needs it. A third held-out round costs another ten passes, and its best
-    case still leaves the judgement misses.
+- **D14: v2.8 is accepted as it stands after H2.** H2 was not a pass: recall
+  5 of 10 against 8, on a round v2.8 was not drawn from; v2.7's units alone
+  would have caught 4. Precision held (20 of 22, 25 of 26, 5 of 5), and 96 of
+  97 canaries were caught. What it misses is in §5.5.
+- **v2.9 is registered (T095)** with H2's three mechanical misses: an edit
+  made by striking a clause through, the cues `corrected` and `refuted`, and
+  no cue on a negated word. Each is measured for free on H1 and H2 first. It
+  is tested only when a round needs it.
 
 S0 still runs before any code is written.
 

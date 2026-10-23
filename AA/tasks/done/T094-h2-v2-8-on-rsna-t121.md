@@ -1,7 +1,7 @@
 ---
 id: T094
 title: "H2: research-runs v2.8 on RSNA T121, the held-out round"
-status: in_progress
+status: done
 owner: adervark @default/1f16c0d5 2026-10-22 — H2: free inputs first, then the go
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: research
@@ -37,7 +37,8 @@ units, brief and twin rule.
 - [x] The operator's go, then the round. Go given 2026-10-23, from
       `default` (83% left; `b` had 92%), the operator's choice.
 - [x] The grade: not a pass, 5 of 10 against 8 (`docs/plans/evidence/t094/grade.md`).
-- [ ] The operator's decision (§10, D14).
+- [x] The operator's decision (§10, D14): v2.8 accepted as it stands;
+      v2.9 registered (T095).
 
 ## Decision rules — fixed in advance
 
@@ -103,8 +104,8 @@ approved by the operator as drafted the same day.*
 - **Last touched:** 2026-10-24, graded
 - **In flight:** nothing; every run ended
 - **On disk:** `docs/plans/evidence/t094/` (README lists every file)
-- **Resume with:** the operator's D14
-- **Next decision:** D14, revise to v2.9 or accept v2.8 as it stands
+- **Resume with:** nothing; done
+- **Next decision:** none
 
 ## Verify
 
@@ -112,6 +113,22 @@ approved by the operator as drafted the same day.*
 grade's `why` judgements in `grade.md`.
 
 ## Result
+
+- **Not a pass.** Recall 5 of 10 against 8 (K3, K5, K7, K9, K10); K2 caught
+  against clauses the key did not pin (6 of 10 counted in). Canaries: auditor
+  73 of 73, reconcilers 23 of 24 (a fair miss, no rerun since recall fails
+  by 3). Precision: conflict 20 of 22, superseded 25 of 26, contradicted 5
+  of 5 (`docs/plans/evidence/t094/grade.md`, `precision.md`).
+- v2.8's edit unit carried the round: 18 real lines, none false, and K5
+  through it alone. v2.7's units alone would have caught 4 of 10.
+- Misses: a struck-through clause forms no edit (K2); "CORRECTED" and
+  "REFUTED" are not cues (K1); a cue fires on "not withdrawn"; a premise, a
+  plan or a target corrected inside one unit was marked `ok` or "a later
+  state" (K4, K6, K8).
+- The operator accepted v2.8 as it stands (D14); v2.9 is T095.
+
+**Spend:** `agent-fan-out`, 10 Opus first passes (the cap), no rerun; one
+pass, the closure transcriber, continued across a session limit.
 
 ## Notes
 
