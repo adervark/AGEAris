@@ -1,0 +1,348 @@
+{
+ "commits": [
+  "2e7ffc6",
+  "da77768",
+  "ec7da60",
+  "685d4b9",
+  "6ce8324",
+  "61ffa68",
+  "4f80199",
+  "b3e35d5",
+  "9508307",
+  "0b783b8",
+  "000c32e",
+  "f46796c",
+  "bd616cc",
+  "da31b2e",
+  "84df4f1",
+  "1f772fd",
+  "e35af30",
+  "0029f47",
+  "3c8fcaa"
+ ],
+ "documents": [
+  {
+   "doc": "Makefile",
+   "path": "Makefile",
+   "versions": [
+    "2e7ffc6",
+    "ec7da60",
+    "685d4b9",
+    "9508307",
+    "0b783b8"
+   ],
+   "clauses": 16,
+   "dropped": []
+  },
+  {
+   "doc": "T121",
+   "path": "deaddrop/tasks/T121-the-clean-baseline-package.md",
+   "versions": [
+    "2e7ffc6",
+    "da77768",
+    "685d4b9",
+    "6ce8324",
+    "000c32e",
+    "f46796c",
+    "bd616cc",
+    "da31b2e",
+    "84df4f1",
+    "1f772fd",
+    "e35af30",
+    "0029f47",
+    "3c8fcaa"
+   ],
+   "clauses": 185,
+   "dropped": [
+    {
+     "commit": "2e7ffc6",
+     "clauses": 4
+    },
+    {
+     "commit": "da77768",
+     "clauses": 2
+    },
+    {
+     "commit": "685d4b9",
+     "clauses": 2
+    },
+    {
+     "commit": "6ce8324",
+     "clauses": 2
+    },
+    {
+     "commit": "f46796c",
+     "clauses": 14
+    },
+    {
+     "commit": "bd616cc",
+     "clauses": 2
+    },
+    {
+     "commit": "84df4f1",
+     "clauses": 6
+    },
+    {
+     "commit": "1f772fd",
+     "clauses": 2
+    },
+    {
+     "commit": "e35af30",
+     "clauses": 23
+    },
+    {
+     "commit": "0029f47",
+     "clauses": 14
+    }
+   ]
+  },
+  {
+   "doc": "cam_viewer.py",
+   "path": "scripts/cam_viewer.py",
+   "versions": [
+    "2e7ffc6",
+    "ec7da60"
+   ],
+   "clauses": 172,
+   "dropped": [
+    {
+     "commit": "2e7ffc6",
+     "clauses": 1
+    }
+   ]
+  },
+  {
+   "doc": "claims_guard.py",
+   "path": "scripts/claims_guard.py",
+   "versions": [
+    "2e7ffc6"
+   ],
+   "clauses": 107,
+   "dropped": []
+  },
+  {
+   "doc": "build_t112_kernel.py",
+   "path": "scripts/t112/build_t112_kernel.py",
+   "versions": [
+    "2e7ffc6"
+   ],
+   "clauses": 191,
+   "dropped": []
+  },
+  {
+   "doc": "paired_vs_member.py",
+   "path": "scripts/t112/paired_vs_member.py",
+   "versions": [
+    "2e7ffc6"
+   ],
+   "clauses": 27,
+   "dropped": []
+  },
+  {
+   "doc": "push_arm.py",
+   "path": "scripts/t112/push_arm.py",
+   "versions": [
+    "2e7ffc6",
+    "b3e35d5"
+   ],
+   "clauses": 73,
+   "dropped": []
+  },
+  {
+   "doc": "resample_delta.py",
+   "path": "scripts/t112/resample_delta.py",
+   "versions": [
+    "2e7ffc6"
+   ],
+   "clauses": 15,
+   "dropped": []
+  },
+  {
+   "doc": "coat_gradcam.py",
+   "path": "scripts/t113/coat_gradcam.py",
+   "versions": [
+    "2e7ffc6"
+   ],
+   "clauses": 74,
+   "dropped": []
+  },
+  {
+   "doc": "g2_precision.py",
+   "path": "scripts/t113/g2_precision.py",
+   "versions": [
+    "2e7ffc6"
+   ],
+   "clauses": 9,
+   "dropped": []
+  },
+  {
+   "doc": "coat_data.py",
+   "path": "src/coat_data.py",
+   "versions": [
+    "2e7ffc6",
+    "685d4b9"
+   ],
+   "clauses": 143,
+   "dropped": []
+  },
+  {
+   "doc": "coat_train.py",
+   "path": "src/coat_train.py",
+   "versions": [
+    "2e7ffc6",
+    "685d4b9"
+   ],
+   "clauses": 94,
+   "dropped": [
+    {
+     "commit": "2e7ffc6",
+     "clauses": 1
+    }
+   ]
+  },
+  {
+   "doc": "_order.py",
+   "path": "tests/smoke/_order.py",
+   "versions": [
+    "2e7ffc6",
+    "ec7da60",
+    "685d4b9",
+    "9508307",
+    "0b783b8"
+   ],
+   "clauses": 268,
+   "dropped": [
+    {
+     "commit": "2e7ffc6",
+     "clauses": 2
+    },
+    {
+     "commit": "ec7da60",
+     "clauses": 2
+    },
+    {
+     "commit": "685d4b9",
+     "clauses": 2
+    },
+    {
+     "commit": "9508307",
+     "clauses": 3
+    }
+   ]
+  },
+  {
+   "doc": "coat.py",
+   "path": "tests/smoke/coat.py",
+   "versions": [
+    "2e7ffc6",
+    "685d4b9",
+    "b3e35d5"
+   ],
+   "clauses": 327,
+   "dropped": []
+  },
+  {
+   "doc": "tooling.py",
+   "path": "tests/smoke/tooling.py",
+   "versions": [
+    "2e7ffc6",
+    "ec7da60",
+    "9508307",
+    "0b783b8"
+   ],
+   "clauses": 175,
+   "dropped": []
+  },
+  {
+   "doc": "gpu_stop.sh",
+   "path": "scripts/gpu_stop.sh",
+   "versions": [
+    "685d4b9"
+   ],
+   "clauses": 14,
+   "dropped": []
+  },
+  {
+   "doc": "gpu_watchdog.sh",
+   "path": "scripts/gpu_watchdog.sh",
+   "versions": [
+    "685d4b9"
+   ],
+   "clauses": 50,
+   "dropped": []
+  },
+  {
+   "doc": "materialise.py",
+   "path": "scripts/t121/materialise.py",
+   "versions": [
+    "685d4b9",
+    "9508307",
+    "0b783b8"
+   ],
+   "clauses": 38,
+   "dropped": []
+  },
+  {
+   "doc": "profile_vram.py",
+   "path": "scripts/t121/profile_vram.py",
+   "versions": [
+    "685d4b9",
+    "6ce8324"
+   ],
+   "clauses": 15,
+   "dropped": []
+  },
+  {
+   "doc": "run_bag_384_fold0.sh",
+   "path": "scripts/t121/run_bag_384_fold0.sh",
+   "versions": [
+    "61ffa68"
+   ],
+   "clauses": 15,
+   "dropped": []
+  },
+  {
+   "doc": "bag_child.py",
+   "path": "scripts/t121/bag_child.py",
+   "versions": [
+    "f46796c"
+   ],
+   "clauses": 50,
+   "dropped": []
+  },
+  {
+   "doc": "build_bag_kernels.py",
+   "path": "scripts/t121/build_bag_kernels.py",
+   "versions": [
+    "f46796c",
+    "bd616cc",
+    "da31b2e"
+   ],
+   "clauses": 32,
+   "dropped": [
+    {
+     "commit": "f46796c",
+     "clauses": 1
+    }
+   ]
+  },
+  {
+   "doc": "PROGRESS",
+   "path": "PROGRESS.md",
+   "versions": [
+    "3c8fcaa"
+   ],
+   "clauses": 14,
+   "dropped": []
+  },
+  {
+   "doc": "trail",
+   "path": "deaddrop/checkpoints/T121.jsonl",
+   "versions": [
+    "3c8fcaa"
+   ],
+   "clauses": 84,
+   "dropped": []
+  }
+ ]
+}
