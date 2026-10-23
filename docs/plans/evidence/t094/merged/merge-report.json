@@ -1,0 +1,143 @@
+{
+ "premiseUnwritten": [],
+ "measurandDisputed": [
+  {
+   "fact": "G1-F67",
+   "transcriber": [
+    "raptor-corpus-size",
+    "dicombag-corpus-size-estimate"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F72",
+   "transcriber": [],
+   "auditor": "dicombag-corpus-size-estimate"
+  },
+  {
+   "fact": "G1-F126",
+   "transcriber": [
+    "c-prime-public-lb-score"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G1-F144",
+   "transcriber": [
+    "t121-fold-wall-time-estimate"
+   ],
+   "auditor": "t111-envelope-16-epoch-time"
+  },
+  {
+   "fact": "G1-F286",
+   "transcriber": [
+    "t121-fold-wall-time-estimate"
+   ],
+   "auditor": "t111-envelope-16-epoch-time"
+  },
+  {
+   "fact": "G2-F125",
+   "transcriber": [
+    "blank-touching-eval-fraction",
+    "blank-touching-train-fraction"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G2-F213",
+   "transcriber": [],
+   "auditor": "t111-envelope-16-epoch-time"
+  },
+  {
+   "fact": "G2-F327",
+   "transcriber": [
+    "kaggle-weekly-gpu-quota"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G2-F646",
+   "transcriber": [
+    "blank-touching-eval-fraction",
+    "blank-touching-train-fraction"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F158",
+   "transcriber": [],
+   "auditor": "raptor-corpus-part1-study-count"
+  },
+  {
+   "fact": "G3-F363",
+   "transcriber": [
+    "kaggle-daily-submission-limit"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F377",
+   "transcriber": [
+    "kaggle-daily-submission-limit"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F501",
+   "transcriber": [],
+   "auditor": "archived-task-tree-count"
+  },
+  {
+   "fact": "G3-F502",
+   "transcriber": [
+    "never-passed-flag-count-guard"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F616",
+   "transcriber": [],
+   "auditor": "raptor-corpus-part2-study-count"
+  },
+  {
+   "fact": "G3-F796",
+   "transcriber": [],
+   "auditor": "raptor-corpus-part1-study-count"
+  },
+  {
+   "fact": "G3-F797",
+   "transcriber": [
+    "boundary-crossing-train-fraction",
+    "blank-touching-train-fraction"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F798",
+   "transcriber": [
+    "boundary-crossing-eval-fraction",
+    "boundary-crossing-train-fraction"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G3-F855",
+   "transcriber": [
+    "clean-worktree-smoke-check-count",
+    "smoke-gated-check-count"
+   ],
+   "auditor": "none"
+  },
+  {
+   "fact": "G4-F599",
+   "transcriber": [],
+   "auditor": "training-study-count"
+  },
+  {
+   "fact": "GC-F12",
+   "transcriber": [],
+   "auditor": "dense-fixed-window-overlap"
+  }
+ ],
+ "measurandAgreed": 489
+}

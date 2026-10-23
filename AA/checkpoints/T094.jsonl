@@ -29,3 +29,11 @@
 {"ts":"2026-10-23T05:33:59Z","run":"1f16c0d5.f207","kind":"did","what":"GC clean: 401 facts, 4 skips, 78 min","next":"parent merges"}
 {"ts":"2026-10-23T05:33:59Z","run":"1f16c0d5.f207","kind":"end","left":"nothing","next":"parent merges"}
 {"ts":"2026-10-23T05:34:20Z","run":"1f16c0d5.d58f","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 auditor: skips and blind measurand assignments","agent":"auditor"}
+{"ts":"2026-10-23T05:34:33Z","run":"1f16c0d5.d58f","kind":"doing","what":"auditor: auditing 251 skips and assigning 510 items, blind","next":"audit skips in order, append to audit/audit.jsonl"}
+{"ts":"2026-10-23T05:38:13Z","run":"1f16c0d5.d58f","kind":"did","what":"audited 160 of 251","next":"audit skips 160-250, then the 510 assignments"}
+{"ts":"2026-10-23T05:39:43Z","run":"1f16c0d5.d58f","kind":"did","what":"audited 251 of 251","next":"assign the 510 items to measurands"}
+{"ts":"2026-10-23T05:43:17Z","run":"1f16c0d5.d58f","kind":"did","what":"audit done: 251 audit (ok 141, missed 110), 510 assign (320 named, 190 none); check-audit exit 0, problems 0; 8 min","next":"end"}
+{"ts":"2026-10-23T05:43:17Z","run":"1f16c0d5.d58f","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-23T05:44:36Z","run":"1f16c0d5.20c6","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 reconciler R1: 387 units","agent":"reconciler-R1"}
+{"ts":"2026-10-23T05:44:36Z","run":"1f16c0d5.b999","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 reconciler R2: 386 units","agent":"reconciler-R2"}
+{"ts":"2026-10-23T05:44:36Z","run":"1f16c0d5.112b","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 reconciler R3: 388 units","agent":"reconciler-R3"}

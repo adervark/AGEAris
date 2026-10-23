@@ -1,0 +1,761 @@
+{"kind": "audit", "clause": "T121#4", "finding": "ok", "why": "heading that only names the topic of the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#10", "finding": "ok", "why": "heading that only names the topic of the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#14", "finding": "missed", "why": "says the adapter seam is coat_train.py:44 (imports StudyWindows) and :240/:243 (the two constructions): a location claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#16", "finding": "missed", "why": "says src/cc0_resgated/ is not edited and a smoke check pins the vendored hashes: a rule and a state claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#22", "finding": "missed", "why": "estimates per-__getitem__ make_bag would add ~24 min of CPU to a 13 min GPU epoch: a cost estimate", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#24", "finding": "ok", "why": "header cell of the corpus-size table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#25", "finding": "ok", "why": "header cell of the corpus-size table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#26", "finding": "ok", "why": "header cell of the corpus-size table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#27", "finding": "ok", "why": "header cell of the corpus-size table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#28", "finding": "ok", "why": "row label naming the subject (current all_vols.npy); the row's values are separate cells", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#32", "finding": "ok", "why": "row label naming the subject (current extra_vols.npy); the row's values are separate cells", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#36", "finding": "ok", "why": "row label naming the subject (current corpus, both parts); the values are separate cells", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#46", "finding": "missed", "why": "table cell value: the measured dicom_bag geometry row covers 4,407 studies", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#61", "finding": "ok", "why": "only the tail of a quoted mount error message (\"Unable to mount volume EXT1 ... Unknown error\"); asserts nothing of its own", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#77", "finding": "ok", "why": "header cell of the parity-rule table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#78", "finding": "ok", "why": "header cell of the parity-rule table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#91", "finding": "ok", "why": "header cell of the VRAM table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#92", "finding": "ok", "why": "header cell of the VRAM table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#93", "finding": "missed", "why": "header cell embeds a value: the card's capacity is 7.65 GiB, the denominator of the percentage column", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#121", "finding": "missed", "why": "says if the fold lands below 0.935 rule 3's re-derivation has the bundle-at-384 control as first candidate: a conditional rule", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#125", "finding": "missed", "why": "says the fold is relaunched unchanged via gpu_queue.sh run_bag_384_fold0.sh and T128's assert_row_map is in both datasets: plan and code-state claims", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#131", "finding": "missed", "why": "says child vs evaluate() max |dp| is 3.1e-4 and that it is fp16-on-GPU against fp32: a measurement and its cause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#132", "finding": "missed", "why": "completes the previous line's claim: fp32 is the reference side of the 3.1e-4 comparison (qualifier of the measured difference)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#136", "finding": "ok", "why": "header cell of the G/H table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#137", "finding": "ok", "why": "header cell of the G/H table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#138", "finding": "ok", "why": "header cell of the G/H table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#146", "finding": "missed", "why": "lead-in asserts the H rules were written now, i.e. before G/H were scored: a timing (pre-registration) claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#159", "finding": "ok", "why": "heading that only names the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#164", "finding": "missed", "why": "plan step: profile 384 VRAM with the SWA copy held before launching, shown not done: a plan rule and its state", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#166", "finding": "ok", "why": "heading that only names the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#170", "finding": "ok", "why": "heading that only names the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#171", "finding": "ok", "why": "header cell of the result table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#172", "finding": "ok", "why": "header cell of the result table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121#173", "finding": "ok", "why": "header cell of the result table, no value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121@f46796c#8", "finding": "ok", "why": "completes 'the bundle has never run at 384', made identically at line 156 of the same doc (and in T117, PROGRESS)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121@e35af30#21", "finding": "ok", "why": "same rule at line 206 (H submitted only if G >= 0.937) and line 209 (read against T133-A) of the same doc", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121@e35af30#11", "finding": "missed", "why": "says bag_child.py and build_bag_kernels.py are on disk and bag_child parity was 8/8 byte-identical: state and measurement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T121@e35af30#15", "finding": "missed", "why": "says resume when coat_t121_bag384_fold0.swa.pt exists and that the log's [select] line names it: a conditional rule and a claim about the log", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "materialise.py#7", "finding": "ok", "why": "docstring section label 'LAYOUT.'; the layout claims follow in separate clauses", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "materialise.py#10", "finding": "missed", "why": "heading embeds a claim: each worker writes its own memmap row (rows never overlap, nothing pickled back)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "materialise.py#30", "finding": "ok", "why": "imperative in an error message ('Re-read the allocator'); an instruction, not true or false", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "profile_vram.py#15", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "run_bag_384_fold0.sh#14", "finding": "missed", "why": "says the teacher file was rebuilt from llm_labels_raw.csv, equal to the parquet to 2.9e-8 over 4,407 studies, 4,407 rows, 0 NaN, range 0.03-0.98, gold-58 0.8976 under the 0.99 guard: measurements", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "bag_child.py#15", "finding": "ok", "why": "legend line in the usage block naming the next command", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "bag_child.py#20", "finding": "missed", "why": "gives the reason for the E402 suppression: the dicom_bag import must follow the sys.path insert it lives on; a small cause claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "bag_child.py#31", "finding": "ok", "why": "bare lint suppression marker at bag_child.py:119, no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "bag_child.py#39", "finding": "ok", "why": "comment that only labels the argument group ('worker mode')", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "bag_child.py#40", "finding": "missed", "why": "says with a cv2 other than 4.12.0 make_bag refuses every bag (I8) and the raw path renders with a renderer changing 7.9% of pixels: consequence and measurement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_bag_kernels.py#17", "finding": "ok", "why": "lead-in naming what the dict holds; the per-parent claims follow in separate clauses", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_bag_kernels.py#26", "finding": "ok", "why": "code fragment (assignment opener), no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_bag_kernels.py#29", "finding": "ok", "why": "code fragment (assignment opener), no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_bag_kernels.py#30", "finding": "missed", "why": "says the H member is not in a try because a dropped member of ours scores exactly the parent (T115/H1): a rule and a consequence", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "PROGRESS#2", "finding": "ok", "why": "header cell of the PROGRESS result table", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "PROGRESS#3", "finding": "ok", "why": "header cell of the PROGRESS result table", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "PROGRESS#4", "finding": "ok", "why": "header cell of the PROGRESS result table", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "PROGRESS#5", "finding": "ok", "why": "header cell of the PROGRESS result table", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "PROGRESS#8", "finding": "missed", "why": "table cell value: T121-H scored 0.943 public", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#2", "finding": "missed", "why": "trail entry records that at 04:15:04Z the run was doing T120's four review findings before the adapter: an event and a count", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#4", "finding": "missed", "why": "trail entry records T120's four findings closed at 05:37:05Z: a state claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#7", "finding": "missed", "why": "trail entry records the planned order: the dicom_bag adapter at coat_train.py:240/243, then the materialisation pass: a plan claim and code location", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#17", "finding": "ok", "why": "same claim in the task doc at 3c8fcaa:219 (smoke manifest purpose 'SMOKE -- NEVER SUBMIT') and trail line 8 ('NEVER SUBMIT')", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#19", "finding": "missed", "why": "says the G smoke keeps the parent resgated member at weight 0.40: a state claim with a value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#36", "finding": "missed", "why": "says the next step is the inhibited, expandable_segments launch line and that it resumes from .last.pt: a plan and a behaviour claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#38", "finding": "missed", "why": "says the fold resumed at epoch 5/16 as trainer pid 9485 using 7188 MiB: state and measurement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#40", "finding": "ok", "why": "same resume command is the next of trail line 18 (end) and line 14; same subject and value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#42", "finding": "ok", "why": "same resume command is the next of trail line 17 (doing, 'resume: ...') and line 14; same subject and value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#46", "finding": "ok", "why": "identical 'same launch line again if it dies' in trail line 19 (run e804d562), same subject", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#47", "finding": "ok", "why": "identical in trail line 19, and line 22 restates it (read [swa] line, gold-58 floor 0.85 after ep 15)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#59", "finding": "missed", "why": "says the G v1 save run completed clean: 3/3 must-strings present, 0 VOID/unavailable/Traceback: a state and count claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#69", "finding": "ok", "why": "'then rule 3' is the next of trail line 27, and line 29 says read 56526064 against rule 3; same plan", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#70", "finding": "ok", "why": "same rule in the task doc (H submitted only if G >= 0.937, line 206) and trail line 29", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#71", "finding": "missed", "why": "says G v1 was submitted as ref 56526064 and is PENDING: an event and a state with a value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#73", "finding": "ok", "why": "same rule in trail line 28 ('H only if G >= 0.937') and the task doc line 206", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "trail#77", "finding": "missed", "why": "records the planned next action after the clean H save run: submit H; a plan claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#31", "finding": "missed", "why": "says the train_gold flag implements the 2026-09-20 operator ruling of no holdout: a claim about what the code implements", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#33", "finding": "missed", "why": "says gold-58 could not separate the three recipes (deltas +0.0036/+0.0079/+0.0043 vs bands +/-0.020 to 0.028) and selecting on it added +0.004 to +0.013 bias: measurements", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#34", "finding": "missed", "why": "says gold-58 was doing two jobs badly and its best use is as the only 58 rows of truth: an evaluative claim with a count", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#36", "finding": "ok", "why": "pointer to T117 rule 3", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#37", "finding": "ok", "why": "same claim in the load_split docstring lines 119-120: a gold study is never given teacher targets, carries its expert values whether or not it trains", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#39", "finding": "ok", "why": "same claim in the load_split docstring lines 119-120: gold rows carry expert values whether or not they train", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#55", "finding": "missed", "why": "says under the 2026-09-20 ruling nothing is held out: a rule claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#72", "finding": "ok", "why": "bare task pointer 'T119.' opening a comment; the claims follow separately", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#75", "finding": "ok", "why": "bare pointer 'T120 finding 2.' opening a comment", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#82", "finding": "missed", "why": "heading asserts this function replaces a defect found in T119: a state claim about the code's history", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#83", "finding": "missed", "why": "completes 'this read lo, hi = valid.min/max; range(lo+1, hi)': a claim about what the replaced code did", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#98", "finding": "ok", "why": "same rule in the _centres docstring (coat_data.py:~307): the full triplet lies in one typed group and touches no blank slot (T119)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#112", "finding": "missed", "why": "states a rule in the error message: degenerate (blank-slot) windows must not pass silently (T120 finding 2)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#115", "finding": "missed", "why": "says normalisation is applied after the jitter and its clamp, which are defined on [0, 1]: an ordering and a domain claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#131", "finding": "missed", "why": "states a rule: a corpus short on bytes must not be trained on", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_data.py#132", "finding": "ok", "why": "same claim at coat_data.py:456 (a short corpus reads zeros as real pixels wherever the mask said valid, nothing downstream can tell)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_train.py#7", "finding": "missed", "why": "says a Kaggle T4 measured 207 ms/window: a measurement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_train.py#31", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_train.py#34", "finding": "missed", "why": "says the T119 rule has nothing to do in the bag-corpus branch, by design of the corpus rather than an omission: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_train.py#49", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#3", "finding": "missed", "why": "states a rule: edits to these checks are made in this file (it is their source of truth)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#10", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#13", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#14", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#17", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#18", "finding": "ok", "why": "same claim in coat_train.py's docstring lines 4-7: accumulation is the whole point of the file, the only way a small card reaches the batch", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#34", "finding": "missed", "why": "gives the reason for the S102 suppression: the anchor deliberately executes the notebook's own code: a claim about what the test does", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#35", "finding": "ok", "why": "section divider naming the controls block; the refusals are separate clauses", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#58", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#60", "finding": "missed", "why": "says META_SRC is T108's, T108's kernels ship nothing of ours, so dataset_sources lacked our dataset and find_weight_file would have raised at Stage 4 after ~6 of 7 h: a cause and consequence", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#80", "finding": "missed", "why": "says scored that way it is fed the 19%-boundary-crossing distribution it never saw, so F - E would have measured the mismatch: a consequence with a value", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#106", "finding": "missed", "why": "says their build_backbone passed no img_size so timm built 384 (576 positions) while eval fed 224 px windows (196 tokens): a cause and values", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#108", "finding": "missed", "why": "heading embeds claims: the failure was silent, and it is worth this much machinery", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#113", "finding": "missed", "why": "heading embeds a claim: every existing guard missed the defect", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#121", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#149", "finding": "missed", "why": "says test_t115_notebook_builds_at_the_checkpoints_res proves grid_edit on their definitions yields a model consuming the kernel's windows: a claim about a test", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#177", "finding": "ok", "why": "label naming the section; the unconditional-ceiling claim follows in its own clause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#183", "finding": "missed", "why": "says this is precisely the failure T115 partitioned ORDER and ENV_ORDER to end (a machine-property gate is not an identity): a causal/historical claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#195", "finding": "missed", "why": "says the defect was found 2026-09-20 by a pre-flight review before the first clean fold launched: an event with a date", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#220", "finding": "missed", "why": "states the uninterrupted SWA answer is mean(13^2, 14^2, 15^2) = 196.666: a value the test asserts", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#221", "finding": "missed", "why": "describes the fixture: a crash after epoch 14's save leaves two of three tail epochs done, then resume: a count claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#225", "finding": "missed", "why": "says dropping the first of three equally spaced points lands on the same centre, so on a near-linear OneCycle tail the defect yields a numerically identical checkpoint labelled n_avg=2", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#240", "finding": "ok", "why": "label 'THE DEFECT.'; the defect's description follows in separate clauses", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#284", "finding": "ok", "why": "label naming the section; the failure is described in the following clauses", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#304", "finding": "ok", "why": "label naming the section; the claim itself is the next clause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#305", "finding": "missed", "why": "says every window in this corpus was rendered inside one typed slot from one series and stored whole as a (3, res, res) triplet: a state claim about the data", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat.py#323", "finding": "missed", "why": "says an exact current-windows control is impossible by construction: the bag corpus stores 76 triplets per study, the legacy one 44 slices built at load: a claim with counts", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "Makefile#9", "finding": "ok", "why": "label naming what the following variables are; the rule is the next clause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#6", "finding": "missed", "why": "lists the four members with checkpoint, slots, img, k_eval and blend weight (0.55/0.10/0.15/0.20): values", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#35", "finding": "ok", "why": "label naming the section; each not-done item is a separate clause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#52", "finding": "missed", "why": "says OURS is the first member with res != 384 and a 224 window is 196 tokens against 576: a state and values", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#63", "finding": "ok", "why": "remediation instruction in an error message; nothing true or false", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#68", "finding": "missed", "why": "says T105 measured the run at 429-434 min against a 495-min cap, so the margin is about an hour, less than one pass: measurement and consequence", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#73", "finding": "ok", "why": "bare pointer 'T119.' opening a comment", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#120", "finding": "ok", "why": "format fragment of an error message that prints a runtime count; asserts nothing", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "build_t112_kernel.py#144", "finding": "ok", "why": "remediation instruction in an error message", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "paired_vs_member.py#2", "finding": "ok", "why": "label 'Why this exists.'; the reason follows in its own clause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#8", "finding": "missed", "why": "states the dataset rule: one checkpoint per one-file dataset: a rule about the push", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#19", "finding": "ok", "why": "legend line in the usage block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#20", "finding": "ok", "why": "example command line in the usage block, no assertion", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#23", "finding": "ok", "why": "pointer to the slug trap in the docstring", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#38", "finding": "ok", "why": "bare pointer 'T120 finding 1.' closing a comment", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#40", "finding": "missed", "why": "says a clean-trained model scored with boundary-crossing windows runs clean, passes every control and returns a number reading as REJECT: a consequence claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#62", "finding": "ok", "why": "remediation instruction in an error message", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "push_arm.py#73", "finding": "missed", "why": "says when no GPU slot frees within 3 h the kernel is not pushed: a claim about the code's behaviour and timeout", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#5", "finding": "missed", "why": "says there are two grouping decisions, both raised by T085's review: a count and an attribution", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#13", "finding": "missed", "why": "states a rule: adding a name is done deliberately and the baseline re-recorded in the same commit", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#31", "finding": "ok", "why": "emphasis pointing the reader at the -20; the -20's content is in the following clauses", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#62", "finding": "missed", "why": "says the 0942's window allocator is extracted from the notebook and executed from its own source, never copied: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#69", "finding": "missed", "why": "says --sidecar-only writes slot ids and the (K,2) depth the pool needs, which the first materialisation discarded, for ~2.7 MB instead of 148 GB: state and sizes", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#121", "finding": "missed", "why": "says a clean git worktree ran 1,086 of 1,216 checks and died on a FileNotFoundError in test_coat_export with 83 never run: a measurement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#124", "finding": "missed", "why": "says it is now a property of the commit; +37 of 45 came back; only 8 of test_t049_gate2's checks touched a checkpoint: counts", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#133", "finding": "missed", "why": "says the M5 fixture is deliberately weak (a separable one scores 1.0000 every resample); 1170 checks, md5 13470443..., +14 for T115/H10: values", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#137", "finding": "missed", "why": "says every property now has a separating fixture and wrong implementations are executed; +6 for the epoch-reaches-workers check with real workers: counts and state", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#149", "finding": "missed", "why": "says the clean-worktree run is now how this is checked; 1219 checks, md5 f0a252f9..., +20 for test_t117_no_holdout on 2026-09-20: values", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#178", "finding": "missed", "why": "says a table covered only _SLOTS44 while our arm inherits the replaced member's slots (both 44 and 64): a defect claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#189", "finding": "missed", "why": "says the gated count is unchanged because the function is in ENV_ORDER, since rendering needs all 51 notebook cells; +10 for test_t118_swa_survives_resume: counts and cause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#194", "finding": "missed", "why": "says on the 16-epoch tail-3 recipe a crash after epoch 14 resumes with n_avg=1 and ends at 2 of 3: a consequence with values", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#207", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#208", "finding": "missed", "why": "dates the check: added under T115 on 2026-09-19: a date claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#209", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#211", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#213", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#215", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#217", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#219", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#221", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#223", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#225", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#227", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#229", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#231", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#233", "finding": "ok", "why": "pointer to the file header", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#237", "finding": "ok", "why": "lead-in characterising the rule that the next clauses state", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "_order.py#268", "finding": "ok", "why": "remediation instruction in an error message", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#3", "finding": "ok", "why": "label naming the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#11", "finding": "ok", "why": "label naming the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#14", "finding": "ok", "why": "tail of a citation '(gradcam.py's docstring; T074)'", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#16", "finding": "ok", "why": "label naming the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#19", "finding": "missed", "why": "heading embeds a claim: the viewer is cheap (the measured basis follows)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#20", "finding": "missed", "why": "says one forward plus one batched autograd.grad gives all twelve labels' gradients, measured 0.17 s on CPU vs 3.6-4.4 s per label: a measurement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#26", "finding": "ok", "why": "label naming the section (CoAtNet checkpoints, T113)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#30", "finding": "missed", "why": "heading embeds a claim: the viewer is local only", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#33", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#34", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#37", "finding": "missed", "why": "section title says the methods offered are ours plus only pytorch-grad-cam's gradient-based ones (T097): a claim about what the code includes", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#38", "finding": "ok", "why": "label naming what the constant is", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#53", "finding": "missed", "why": "says RandomCAM is a weaker version of T074's control: a comparison", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#59", "finding": "missed", "why": "shape annotation: forward returns a (1, L) tensor: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#60", "finding": "ok", "why": "section divider comment naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#68", "finding": "missed", "why": "shape annotation: the channel weights are (L, S, C, 1, 1): a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#70", "finding": "missed", "why": "says attn_entropy, cam_entropy, top1_attn, top5_mass are gradcam.py's with the same definitions, so a view and a --records row agree: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#100", "finding": "missed", "why": "section title names the arm as the adopted CoAtNet arm (T113): a status claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#108", "finding": "missed", "why": "shape annotation: _CoatBag.forward returns a (1, L) tensor: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#114", "finding": "ok", "why": "bare pointer 'T120 finding 4.' opening a comment", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#131", "finding": "missed", "why": "shape annotation: CoatEngine.bag returns (K, 3, res, res): a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#133", "finding": "missed", "why": "the hook-fired-once guard here is CoatEngine's (line 541); the cited repeat is the other engine's at line 305: adds a subject", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#134", "finding": "missed", "why": "consequence claim for CoatEngine's hook (line 542); the identical text at line 306 is about the other engine: adds a subject", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#138", "finding": "missed", "why": "CoatEngine.maps refuses an unknown CAM method (line 574); the identical refusal at line 368 is the other engine's: adds a subject", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#140", "finding": "ok", "why": "section divider naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#149", "finding": "missed", "why": "App.stack_payload refuses a uid not in the CoAtNet corpus (line 695); the identical message at 518 is CoatEngine.bag's: adds a subject", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#155", "finding": "ok", "why": "section divider naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "cam_viewer.py#158", "finding": "ok", "why": "section divider naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#2", "finding": "ok", "why": "label 'WHY THIS EXISTS.'; the reason follows in separate clauses", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#5", "finding": "missed", "why": "says T085 findings B-2/B-3/B-5 were six citations to files those commits had just moved, in two repo_guard entry files: a count and a defect claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#8", "finding": "ok", "why": "label naming the section; each exclusion is its own clause", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#28", "finding": "ok", "why": "label naming the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#32", "finding": "ok", "why": "instruction to run the guard; asserts nothing", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#35", "finding": "ok", "why": "label naming the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#54", "finding": "ok", "why": "same claim at claims_guard.py:28 (tests/smoke/_order.ORDER is a module attribute written in path style)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#76", "finding": "ok", "why": "same claim at claims_guard.py:204-206 (without it the syntax cannot be documented; the guard fires on a dated record only fixable by editing it)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#78", "finding": "ok", "why": "same claim at claims_guard.py:199-201 (a typo in a marker used to be silently skipped, removing its protection and telling nobody, M-1)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "claims_guard.py#82", "finding": "ok", "why": "same claim at claims_guard.py:256-258 (resolved correctly only because ast.walk is breadth-first, luck not design, M-3)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "resample_delta.py#14", "finding": "missed", "why": "says resample_delta measures what resampling costs this checkpoint so it must draw the windows it was trained on (T120 finding 4): a rule with its reason", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#25", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#26", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#27", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#28", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#29", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#31", "finding": "missed", "why": "section title says the model is rebuilt from the checkpoint's own recipe: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#41", "finding": "missed", "why": "shape annotation: native_cam returns (K, h, w): a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#42", "finding": "missed", "why": "section title says the data are the trainer's own evaluation windows: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#45", "finding": "missed", "why": "section title says there are two defect screens (T113 S1, S2): a count", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#52", "finding": "missed", "why": "shape annotation: the air mask is (K, H, W): a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#53", "finding": "ok", "why": "section divider naming the block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#54", "finding": "missed", "why": "section title says G3 is an independent implementation on the same layer: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#68", "finding": "ok", "why": "format fragment of an error message listing valid labels", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#72", "finding": "missed", "why": "shape annotation: the stacked gray slices are (K, H, W): a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "coat_gradcam.py#73", "finding": "missed", "why": "shape annotation: the native CAM is (K, h, w): a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "g2_precision.py#1", "finding": "missed", "why": "question embeds claims: there is an fp32-vs-saved gap and the saved reference is bf16", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "g2_precision.py#7", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "g2_precision.py#8", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#1", "finding": "ok", "why": "module title naming the subject", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#3", "finding": "missed", "why": "states a rule: edits to these checks are made in this file (it is their source of truth)", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#7", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#8", "finding": "missed", "why": "gives the reason for the F401 suppression: check and _failures are both used by name: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#11", "finding": "ok", "why": "lint suppression marker with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#65", "finding": "missed", "why": "says the standfirst and bootstrap note used to state this run's own 696 / 58 / twelve, three lines above a comment forbidding it: a historical claim with values", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#72", "finding": "ok", "why": "coverage pragma with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#74", "finding": "missed", "why": "says it is deliberate that the log-growth half of the AND alone separates the two runs: a design-intent claim completing the previous line", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#86", "finding": "ok", "why": "coverage pragma with no statement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#94", "finding": "missed", "why": "says on this seed 10 of 12 labels carry a non-zero map: a count", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#121", "finding": "ok", "why": "section divider naming the control block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#131", "finding": "ok", "why": "section divider naming the control block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#132", "finding": "ok", "why": "section divider naming the control block", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#160", "finding": "missed", "why": "says the b2 engine one class up has always read self.a[\"train_gold\"]: a claim about the code", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "tooling.py#163", "finding": "missed", "why": "says the first draft looped over outputs/t119 and t117 and skipped when absent, making the gated count depend on gitignored artifacts: a claim about code and its consequence", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "gpu_stop.sh#2", "finding": "ok", "why": "label 'WHY THIS EXISTS.'; the reason follows", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "gpu_stop.sh#8", "finding": "ok", "why": "admonition in a usage line; nothing true or false", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "gpu_watchdog.sh#16", "finding": "missed", "why": "says neither previous hang could be read (ptrace_scope=1, no sudo, so no py-spy): a state and cause claim", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "gpu_watchdog.sh#27", "finding": "missed", "why": "consequence claim: in wrap mode a job script therefore changes from the redirected form to the wrapped one", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "dicom_bag.py\u00a7make_bag#12", "finding": "ok", "why": "bare lint suppression marker at dicom_bag.py:260", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "AGENTS.md\u00a7100#3", "finding": "missed", "why": "says lsblk -f reports sda1 as NTFS, label EXT1, UUID 4AF517611B48A271, mounted all along at /run/media/ade/EXT1 by the automounter, no sudo or fstab: a measurement", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "T120-t119-regression-review.md\u00a724#1", "finding": "ok", "why": "heading that only names the section", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "train.py\u00a7accumulate#2", "finding": "missed", "why": "says run 2's last five epochs scored 0.8727/0.8662/0.8740/0.8711/0.8674, a spread of 0.0078 against a +/-0.036 band on 58 studies: measurements", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "dataset.py\u00a7__init__#4", "finding": "ok", "why": "bare pointer 'T054.' opening a comment", "run": "1f16c0d5.d58f"}
+{"kind": "audit", "clause": "dataset.py\u00a7__init__#19", "finding": "ok", "why": "bare pointer 'T094.' opening a comment", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 1, "measurand": "g-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 2, "measurand": "dicom-bag-smoke-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 3, "measurand": "make-bag-a2-served-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 4, "measurand": "make-bag-a2-pass-runtime", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 5, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 6, "measurand": "materialisation-pass-cpu-time-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 7, "measurand": "reference-gpu-epoch-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 8, "measurand": "raptor-corpus-part1-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 9, "measurand": "raptor-corpus-part1-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 10, "measurand": "raptor-corpus-part2-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 11, "measurand": "raptor-corpus-part2-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 12, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 13, "measurand": "raptor-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 14, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 15, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 16, "measurand": "dicombag-corpus-size-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 17, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 18, "measurand": "dicombag-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 19, "measurand": "raptor-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 20, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 21, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 22, "measurand": "dicombag-corpus-growth-factor", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 23, "measurand": "dicombag-corpus-growth-factor", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 24, "measurand": "dicombag-corpus-size-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 25, "measurand": "corpus-coexistence-disk-need", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 26, "measurand": "raptor-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 27, "measurand": "corpus-coexistence-disk-need", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 28, "measurand": "root-fs-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 29, "measurand": "usb-disk-drop-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 30, "measurand": "archived-task-tree-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 31, "measurand": "mnt-s-capacity", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 32, "measurand": "mnt-s-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 33, "measurand": "materialisation-pass-cpu-time-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 34, "measurand": "materialisation-write-volume-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 35, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 36, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 37, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 38, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 39, "measurand": "t111-envelope-16-epoch-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 40, "measurand": "swa-fp32-copy-vram", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 41, "measurand": "t117-res384-vram-fill-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 42, "measurand": "t121-res384-vram-fill-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 43, "measurand": "laptop-gpu-total-vram-torch", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 44, "measurand": "t121-res384-peak-vram-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 45, "measurand": "t121-res384-vram-fill-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 46, "measurand": "t121-res384-peak-vram-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 47, "measurand": "t121-res384-vram-fill-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 48, "measurand": "t121-res384-peak-vram-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 49, "measurand": "t121-res384-vram-fill-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 50, "measurand": "gold58-recipe-paired-band", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 51, "measurand": "gold58-recipe-pair-correlation", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 52, "measurand": "g-predicted-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 53, "measurand": "e-minus-d-lb-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 54, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 55, "measurand": "b-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 56, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 57, "measurand": "t128-misrouted-study-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 58, "measurand": "t121-fold-epoch-time-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 59, "measurand": "t121-fold-wall-time-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 60, "measurand": "bag-child-parity-match-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 61, "measurand": "bag-child-parity-match-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 62, "measurand": "bag-child-vs-evaluate-max-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 63, "measurand": "bag-child-vs-evaluate-max-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 64, "measurand": "f-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 65, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 66, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 67, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 68, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 69, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 70, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 71, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 72, "measurand": "t133a-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 73, "measurand": "h-minus-a-predicted-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 74, "measurand": "h-minus-a-predicted-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 75, "measurand": "our-member-insertion-lb-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 76, "measurand": "g-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 77, "measurand": "h-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 78, "measurand": "h-minus-a-lb-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 79, "measurand": "root-fs-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 80, "measurand": "ext1-capacity", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 81, "measurand": "ext1-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 82, "measurand": "ext1-write-throughput", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 83, "measurand": "dicombag-corpus-size-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 84, "measurand": "t111-envelope-16-epoch-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 85, "measurand": "swa-fp32-copy-vram", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 86, "measurand": "t117-res384-vram-fill-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 87, "measurand": "d-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 88, "measurand": "e-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 89, "measurand": "f-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 90, "measurand": "t118-checkpoint-gap-lb", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 91, "measurand": "e-minus-d-lb-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 92, "measurand": "b-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 93, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 94, "measurand": "synthetic-validity-blank-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 95, "measurand": "ageis-embedding-service-vram", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 96, "measurand": "t121-fold-wall-time-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 97, "measurand": "t121-fold-epoch-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 98, "measurand": "t121-fold-epoch0-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 99, "measurand": "t121-fold-wall-time-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 100, "measurand": "g-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 101, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 102, "measurand": "t133a-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 103, "measurand": "materialise-per-study-pixels", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 104, "measurand": "dicombag-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 105, "measurand": "materialisation-pass-runtime", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 106, "measurand": "dicombag-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 107, "measurand": "swa-fp32-copy-vram", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 108, "measurand": "t117-res384-vram-fill-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 109, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 110, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 111, "measurand": "gold-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 112, "measurand": "t121-res384-peak-vram-profiled", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 113, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 114, "measurand": "teacher-label-value-range", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 115, "measurand": "teacher-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 116, "measurand": "opencv5-pixel-change-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 117, "measurand": "f-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 118, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 119, "measurand": "g-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 120, "measurand": "h-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 121, "measurand": "h-minus-a-lb-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 122, "measurand": "g-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 123, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 124, "measurand": "our-member-insertion-lb-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 125, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 126, "measurand": "t121-fold-steps-per-epoch", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 127, "measurand": "t121-oom-fragmentation", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 128, "measurand": "t121-fold-gpu-memory-used", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 129, "measurand": "t121-fold-gpu-utilization", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 130, "measurand": "t121-fold-gpu-temperature", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 131, "measurand": "t121-fold-gpu-memory-used", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 132, "measurand": "laptop-gpu-total-vram-nvidia-smi", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 133, "measurand": "t121-fold-gpu-memory-used", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 134, "measurand": "t121-fold-gpu-memory-used", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 135, "measurand": "t121-fold-swa-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 136, "measurand": "c-prime-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 137, "measurand": "t133a-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 138, "measurand": "t133a-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 139, "measurand": "h-public-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 140, "measurand": "h-minus-a-lb-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 141, "measurand": "imagenet-input-std-ratio", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 142, "measurand": "raptor-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 143, "measurand": "raptor-corpus-part1-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 144, "measurand": "raptor-corpus-part2-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 145, "measurand": "raptor-corpus-part2-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 146, "measurand": "gold58-recipe-paired-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 147, "measurand": "gold58-recipe-paired-band", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 148, "measurand": "gold58-selection-bias", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 149, "measurand": "teacher-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 150, "measurand": "leaked-label-files-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 151, "measurand": "leaked-label-files-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 152, "measurand": "teacher-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 153, "measurand": "teacher-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 154, "measurand": "boundary-crossing-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 155, "measurand": "boundary-crossing-train-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 156, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 157, "measurand": "raptor-corpus-part1-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 158, "measurand": "clean-centres-per-study", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 159, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 160, "measurand": "k-eval-repeated-centres", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 161, "measurand": "clean-centres-per-study", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 162, "measurand": "clean-centres-per-study", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 163, "measurand": "synthetic-validity-blank-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 164, "measurand": "dicombag-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 165, "measurand": "dicombag-corpus-size-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 166, "measurand": "raptor-corpus-part2-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 167, "measurand": "dense-0942-boundary-straddle-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 168, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 169, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 170, "measurand": "laptop-gpu-total-vram-torch", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 171, "measurand": "kaggle-t4-ms-per-window", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 172, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 173, "measurand": "t111-envelope-16-epoch-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 174, "measurand": "gold58-selection-bias", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 175, "measurand": "coatnet-between-fold-spread", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 176, "measurand": "span-rule-legal-centres", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 177, "measurand": "coat-fold-wall-time-res224", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 178, "measurand": "resume-defect-lost-gpu-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 179, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 180, "measurand": "raptor-corpus-part1-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 181, "measurand": "raptor-corpus-part2-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 182, "measurand": "stub-trainer-gold-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 183, "measurand": "public-0941-kernel-lb-score", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 184, "measurand": "t105-kernel-runtime", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 185, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 186, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 187, "measurand": "boundary-crossing-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 188, "measurand": "k-eval-repeated-centres", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 189, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 190, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 191, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 192, "measurand": "bootstrap-band-half-width-t019", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 193, "measurand": "bootstrap-band-half-width-t019", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 194, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 195, "measurand": "gold58-recipe-paired-delta", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 196, "measurand": "gold58-recipe-pair-correlation", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 197, "measurand": "gold58-selection-bias", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 198, "measurand": "coatnet-between-fold-spread", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 199, "measurand": "leaked-label-files-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 200, "measurand": "teacher-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 201, "measurand": "swa-tail-duration", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 202, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 203, "measurand": "boundary-crossing-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 204, "measurand": "boundary-crossing-train-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 205, "measurand": "raptor-corpus-part1-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 206, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 207, "measurand": "diag-consumer-centre-change-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 208, "measurand": "dense-0942-boundary-straddle-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 209, "measurand": "dicombag-corpus-size-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 210, "measurand": "dicombag-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 211, "measurand": "t105-kernel-runtime", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 212, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 213, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 214, "measurand": "imagenet-input-std-ratio", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 215, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 216, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 217, "measurand": "transformer-branch-lb-contribution", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 218, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 219, "measurand": "t105-kernel-runtime", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 220, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 221, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 222, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 223, "measurand": "synthetic-validity-blank-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 224, "measurand": "boundary-crossing-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 225, "measurand": "blank-touching-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 226, "measurand": "raptor-corpus-part1-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 227, "measurand": "clean-centres-per-study", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 228, "measurand": "imagenet-input-std-ratio", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 229, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 230, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 231, "measurand": "gold58-absolute-band", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 232, "measurand": "gold58-paired-band-t057", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 233, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 234, "measurand": "v5-full-swa-gold58-auc-t071", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 235, "measurand": "v5-full-swa-stored-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 236, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 237, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 238, "measurand": "kaggle-dataset-upload-throughput", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 239, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 240, "measurand": "kaggle-daily-submission-limit", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 241, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 242, "measurand": "kaggle-dataset-to-kernel-delay", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 243, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 244, "measurand": "kaggle-gpu-slot-wait", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 245, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 246, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 247, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 248, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 249, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 250, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 251, "measurand": "root-fs-usage-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 252, "measurand": "archived-task-tree-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 253, "measurand": "never-passed-flag-count-guard", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 254, "measurand": "never-passed-flag-count-page", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 255, "measurand": "synthetic-validity-blank-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 256, "measurand": "diag-consumer-centre-change-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 257, "measurand": "usb-disk-drop-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 258, "measurand": "archived-task-tree-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 259, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 260, "measurand": "dicombag-cost-table-error-factor", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 261, "measurand": "dicombag-corpus-size-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 262, "measurand": "dicombag-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 263, "measurand": "dense-fixed-window-overlap", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 264, "measurand": "fixed-allocator-mean-windows", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 265, "measurand": "dense-allocator-mean-windows", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 266, "measurand": "ours-only-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 267, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 268, "measurand": "corpus-sidecar-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 269, "measurand": "dicombag-corpus-size", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 270, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 271, "measurand": "clean-worktree-smoke-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 272, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 273, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 274, "measurand": "raptor-corpus-part2-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 275, "measurand": "ledger-row-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 276, "measurand": "result-sections-misreported", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 277, "measurand": "t105-kernel-runtime", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 278, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 279, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 280, "measurand": "imagenet-input-std-ratio", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 281, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 282, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 283, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 284, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 285, "measurand": "opencv5-pixel-change-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 286, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 287, "measurand": "clean-worktree-smoke-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 288, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 289, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 290, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 291, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 292, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 293, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 294, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 295, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 296, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 297, "measurand": "gold58-recipe-paired-band", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 298, "measurand": "gold58-recipe-pair-correlation", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 299, "measurand": "gold58-selection-bias", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 300, "measurand": "coatnet-between-fold-spread", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 301, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 302, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 303, "measurand": "boundary-crossing-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 304, "measurand": "blank-touching-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 305, "measurand": "raptor-corpus-part1-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 306, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 307, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 308, "measurand": "t118-checkpoint-gap-lb", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 309, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 310, "measurand": "boundary-crossing-eval-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 311, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 312, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 313, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 314, "measurand": "resume-defect-lost-gpu-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 315, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 316, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 317, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 318, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 319, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 320, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 321, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 322, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 323, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 324, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 325, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 326, "measurand": "gpu-stop-accident-cost", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 327, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 328, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 329, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 330, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 331, "measurand": "hung-fold-time-to-kill", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 332, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 333, "measurand": "hung-fold-time-to-kill", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 334, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 335, "measurand": "b2-train-epoch-duration", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 336, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 337, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 338, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 339, "measurand": "t112-ckpt-trainer-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 340, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 341, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 342, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 343, "measurand": "gold-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 344, "measurand": "coat-split-forward-logit-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 345, "measurand": "coat-split-forward-logit-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 346, "measurand": "coat-split-forward-logit-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 347, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 348, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 349, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 350, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 351, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 352, "measurand": "claims-guard-first-pass-hits", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 353, "measurand": "claims-guard-live-file-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 354, "measurand": "claims-guard-live-file-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 355, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 356, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 357, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 358, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 359, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 360, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 361, "measurand": "root-fs-usage-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 362, "measurand": "archived-task-tree-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 363, "measurand": "never-passed-flag-count-guard", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 364, "measurand": "never-passed-flag-count-page", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 365, "measurand": "usb-disk-drop-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 366, "measurand": "archived-task-tree-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 367, "measurand": "never-passed-flag-count-guard", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 368, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 369, "measurand": "cam-batched-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 370, "measurand": "cam-per-label-backward-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 371, "measurand": "edge-mass-gradcam-armc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 372, "measurand": "edge-mass-layercam-armc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 373, "measurand": "gradcam-library-vs-ours-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 374, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 375, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 376, "measurand": "cam-bag-load-time", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 377, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 378, "measurand": "corpus-pixel-spacing", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 379, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 380, "measurand": "missing-series-when-blank-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 381, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 382, "measurand": "missing-series-when-blank-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 383, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 384, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 385, "measurand": "diag-consumer-centre-change-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 386, "measurand": "coat-split-forward-logit-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 387, "measurand": "coat-split-forward-logit-diff", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 388, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 389, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 390, "measurand": "gradcam-library-vs-ours-diff-single-pass", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 391, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 392, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 393, "measurand": "kaggle-push-gpu-cost", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 394, "measurand": "kaggle-push-gpu-cost", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 395, "measurand": "training-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 396, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 397, "measurand": "b2-train-epoch-duration", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 398, "measurand": "cam-viewer-speedup", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 399, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 400, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 401, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 402, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 403, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 404, "measurand": "result-sections-misreported", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 405, "measurand": "root-fs-usage-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 406, "measurand": "archived-task-tree-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 407, "measurand": "never-passed-flag-count-guard", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 408, "measurand": "never-passed-flag-count-page", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 409, "measurand": "usb-disk-drop-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 410, "measurand": "archived-task-tree-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 411, "measurand": "never-passed-flag-count-page", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 412, "measurand": "never-passed-flag-count-guard", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 413, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 414, "measurand": "dense-fixed-window-overlap", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 415, "measurand": "fixed-allocator-mean-windows", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 416, "measurand": "dense-allocator-mean-windows", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 417, "measurand": "ours-only-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 418, "measurand": "ours-only-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 419, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 420, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 421, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 422, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 423, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 424, "measurand": "dense-fixed-window-overlap", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 425, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 426, "measurand": "ext1-capacity", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 427, "measurand": "ext1-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 428, "measurand": "ext1-write-throughput", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 429, "measurand": "root-fs-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 430, "measurand": "root-fs-usage-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 431, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 432, "measurand": "root-fs-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 433, "measurand": "root-fs-usage-fraction", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 434, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 435, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 436, "measurand": "dicombag-corpus-size-estimate", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 437, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 438, "measurand": "root-fs-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 439, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 440, "measurand": "root-fs-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 441, "measurand": "root-fs-free-space", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 442, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 443, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 444, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 445, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 446, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 447, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 448, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 449, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 450, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 451, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 452, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 453, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 454, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 455, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 456, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 457, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 458, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 459, "measurand": "synthetic-validity-blank-window-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 460, "measurand": "diag-consumer-centre-change-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 461, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 462, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 463, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 464, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 465, "measurand": "gold58-absolute-band", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 466, "measurand": "gold-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 467, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 468, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 469, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 470, "measurand": "gold-study-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 471, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 472, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 473, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 474, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 475, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 476, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 477, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 478, "measurand": "bootstrap-band-half-width-t019", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 479, "measurand": "bootstrap-band-half-width-t019", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 480, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 481, "measurand": "bootstrap-band-half-width-t019", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 482, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 483, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 484, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 485, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 486, "measurand": "b2-train-epoch-duration", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 487, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 488, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 489, "measurand": "smoke-gated-check-count", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 490, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 491, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 492, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 493, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 494, "measurand": "kaggle-weekly-gpu-quota", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 495, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 496, "measurand": "teacher-gold58-auc", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 497, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 498, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 499, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 500, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 501, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 502, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 503, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 504, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 505, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 506, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 507, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 508, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 509, "measurand": "none", "run": "1f16c0d5.d58f"}
+{"kind": "assign", "item": 510, "measurand": "none", "run": "1f16c0d5.d58f"}
