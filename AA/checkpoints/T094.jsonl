@@ -3,3 +3,24 @@
 {"ts":"2026-10-23T03:54:13Z","run":"1f16c0d5.fc91","kind":"did","what":"registrar: read all 2,271 clauses of G1-G4; measurand candidates noted","next":"write measurands.jsonl, run check-measurands.mjs"}
 {"ts":"2026-10-23T03:57:40Z","run":"1f16c0d5.fc91","kind":"did","what":"registrar: 136 measurands in measurands.jsonl; check-measurands.mjs exits 0 (problems 0); ~5 min","next":"parent starts the transcribers"}
 {"ts":"2026-10-23T03:57:40Z","run":"1f16c0d5.fc91","kind":"end","left":"nothing","next":"parent starts the transcribers"}
+{"ts":"2026-10-23T03:57:57Z","run":"1f16c0d5.3e18","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 transcriber G1: 505 clauses","agent":"transcriber-G1"}
+{"ts":"2026-10-23T03:57:58Z","run":"1f16c0d5.13a9","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 transcriber G2: 565 clauses","agent":"transcriber-G2"}
+{"ts":"2026-10-23T03:57:58Z","run":"1f16c0d5.89bd","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 transcriber G3: 584 clauses","agent":"transcriber-G3"}
+{"ts":"2026-10-23T03:57:58Z","run":"1f16c0d5.0d23","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 transcriber G4: 617 clauses","agent":"transcriber-G4"}
+{"ts":"2026-10-23T03:58:14Z","run":"1f16c0d5.3e18","kind":"doing","what":"G1: transcribing 505 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-23T03:58:17Z","run":"1f16c0d5.13a9","kind":"doing","what":"G2: transcribing 565 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-23T03:58:19Z","run":"1f16c0d5.0d23","kind":"doing","what":"G4: transcribing 617 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-23T03:58:19Z","run":"1f16c0d5.89bd","kind":"doing","what":"G3: transcribing 584 clauses","next":"dispose of every clause"}
+{"ts":"2026-10-23T04:04:46Z","run":"1f16c0d5.3e18","kind":"did","what":"G1: 256 of 505 clauses disposed","next":"the rest of G1"}
+{"ts":"2026-10-23T04:05:32Z","run":"1f16c0d5.89bd","kind":"did","what":"G3: 307 of 584 clauses disposed","next":"the rest of G3"}
+{"ts":"2026-10-23T04:07:44Z","run":"1f16c0d5.0d23","kind":"did","what":"G4: 347 of 617 clauses disposed","next":"the rest of G4"}
+{"ts":"2026-10-23T04:09:18Z","run":"1f16c0d5.13a9","kind":"did","what":"G2: 348 of 565 clauses disposed","next":"the rest of G2"}
+{"ts":"2026-10-23T04:11:19Z","run":"1f16c0d5.3e18","kind":"did","what":"G1 clean: 772 facts, 37 skips, 13 min","next":"parent merges"}
+{"ts":"2026-10-23T04:11:19Z","run":"1f16c0d5.3e18","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-23T04:11:56Z","run":"1f16c0d5.89bd","kind":"did","what":"G3 clean: 931 facts, 17 skips, 13 min","next":"parent merges"}
+{"ts":"2026-10-23T04:11:56Z","run":"1f16c0d5.89bd","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-23T04:14:43Z","run":"1f16c0d5.0d23","kind":"did","what":"G4 clean: 762 facts, 51 skips, 16 min","next":"parent merges"}
+{"ts":"2026-10-23T04:14:43Z","run":"1f16c0d5.0d23","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-23T04:14:59Z","run":"1f16c0d5.13a9","kind":"did","what":"G2 clean: 740 facts, 26 skips, 16 min","next":"parent merges"}
+{"ts":"2026-10-23T04:14:59Z","run":"1f16c0d5.13a9","kind":"end","left":"nothing","next":"parent merges"}
+{"ts":"2026-10-23T04:15:29Z","run":"1f16c0d5.f207","kind":"open","operator":"adervark","profile":"default","session":"1f16c0d5-3fea-443a-b671-ba486afa6a54","boot":"c10c4e64-90a3-4e86-85a8-a1141b289701","pid":11967,"pstart":"Thu Oct 22 17:28:44 2026","brief":"H2 closure transcriber GC: 227 clauses","agent":"transcriber-GC"}
