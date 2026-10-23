@@ -1,8 +1,8 @@
 # Research runs, aggregated: one line of thought, in the operator's sight
 
-**Status: v2.8, written, for the operator to accept for testing** (T090).
-v2.7 stays accepted as it stands (2026-10-22, T086) until a held-out round
-decides v2.8. Nothing here is built. H1, the held-out round, caught 4 of 13
+**Status: v2.8, accepted to be tested on a held-out round, RSNA's T121**
+(2026-10-22, T090; H2 is T094). v2.7 stays accepted as it stands (T086)
+until H2 decides v2.8. Nothing here is built. H1, the held-out round, caught 4 of 13
 corrections, every one of a figure or a count; §5.5 names the blind spot,
 and v2.8 answers it, measured for free on H1's material
 (`docs/plans/evidence/t090/measurements.md`). v2.4 was accepted, then failed R0b (T075): 2 of 12. v2.5 answered it
@@ -1555,18 +1555,15 @@ approved a third round, on v2.3, which arrived complete.
   takes a value outside the real one's rounding. Neither changes the
   ledger's format. It is accepted only on a held-out round of its own.
 
-**Open (T090), for the operator:**
+**Decided 2026-10-22 (T090), each following the recommendation:**
 
-- **D12: accept v2.8 to be tested, or drop it.** Recommended: accept. It
-  answers the six in-group misses with units and a brief, measured for free,
-  and changes no ledger format. Its best case on H1 is exactly the bar, so a
-  held-out round can still fail it.
-- **D13: the held-out round.** T112 is in-sample now, and T118 supplies an
-  incident. Recommended: RSNA's T121, its next-largest task (15 commits,
-  done), with self-corrections in its record. Nothing in v2.8 was drawn from
-  it. Of it, T090 read only its commit subjects, its task file's length and
-  a count of correction words in it (5). Its decision rules, spend and bar are written and approved before
-  anything runs, as T086's were.
+- **D12: v2.8 is accepted, to be tested on a held-out round.** Its best case
+  on H1 is exactly the bar, so the round can still fail it. v2.7 stays the
+  accepted design until then.
+- **D13: the held-out round is RSNA's T121** (H2, T094). Nothing in v2.8 was
+  drawn from it; of it, T090 read only its commit subjects, its task file's
+  length and a count of correction words in it. Its decision rules, spend
+  and bar are written and approved before anything runs, as T086's were.
 
 S0 still runs before any code is written.
 

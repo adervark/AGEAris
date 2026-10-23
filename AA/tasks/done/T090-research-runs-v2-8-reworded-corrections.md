@@ -1,7 +1,7 @@
 ---
 id: T090
 title: "Research-runs design v2.8: catch a correction of a word, a scope or a reason"
-status: in_progress
+status: done
 owner: adervark @default/1f16c0d5 2026-10-22 — write v2.8, measured free on T086
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -44,9 +44,10 @@ not in a figure. Then accept or reject v2.8 on a held-out round of its own.
 - [x] Write v2.8: the two items, each measured for free on T086's material
       where it can be. Four items in the end: edit units, cue units, the
       brief's claim frame, the twin rule (`docs/plans/evidence/t090/`).
-- [ ] The operator accepts v2.8 to be tested, and chooses the held-out
-      round.
-- [ ] Write the decision rules for the held-out spend, before any spend.
+- [x] The operator accepts v2.8 to be tested, and chooses the held-out
+      round: accepted, RSNA's T121 (D12, D13).
+- [x] Write the decision rules for the held-out spend, before any spend:
+      drafted in T094 for the operator's approval.
 
 ## Decision rules — fixed in advance
 
@@ -77,6 +78,24 @@ The revised brief, run by hand on T086's six in-group misses, marks each
 pair as a correction, and its checker shows 0 hits against T086's key.
 
 ## Result
+
+- v2.8 written (`73c5d93`), four items, each measured for free on H1's
+  material (`docs/plans/evidence/t090/measurements.md`):
+  1. **edit units:** a clause an edit dropped, beside the later clause most
+     like it. 39 on H1, reaching K1, K3, K4 (and K2, K14); by hand 23 change
+     a claim, 16 are rewordings;
+  2. **cue units:** a fact that reads like a correction, beside the 12
+     earlier facts most like it. 33 on H1; both sides of K3, K4, K6 and K11
+     meet in one;
+  3. **the brief judges claims, not only values**, and no longer tells a
+     reconciler an edit is not a disagreement; 0 hits against H1's key;
+  4. **fair twins:** no figure the group already states; it re-picks H1's
+     unfair twin and three others, and loses no canary.
+- At best on H1, 11 of 13, exactly the bar; in-sample.
+- The operator accepted v2.8 to be tested (D12) and chose RSNA's T121 as
+  the held-out round (D13). H2 is T094.
+
+**Spend:** none.
 
 ## Notes
 

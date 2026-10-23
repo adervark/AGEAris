@@ -11,9 +11,9 @@ found is fixed (2026-10-08: T002, T007–T016, T026).
 account's limits, read fresh each minute and backing off on a 429, with each
 window's start and end, are in a strip on every page, on the Agents page,
 from `GET /api/limits` and `/aa limits`; a lapsed token is renewed and
-written back. Check them before a fan-out. T086 closed on 2026-10-22: research-runs v2.7 accepted as it
-stands after H1's 4 of 13, its blind spot in §5.5, and v2.8 registered
-(T090). T077 (S1a) can start.
+written back. Check them before a fan-out. Research: v2.8 is written and accepted to be tested
+(T090, 2026-10-22); H2, the held-out round on RSNA's T121, is T094, its
+rules drafted for the operator. T077 (S1a) can start.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
@@ -37,22 +37,23 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-22T20:22Z · 93 tasks: 32 backlog, 0 WIP (0 in progress), 61 delivered`
+`board · 2026-10-23T00:25Z · 94 tasks: 32 backlog, 0 WIP (0 in progress), 62 delivered`
 
-FLOW · **WIP 0/2** · throughput 14.0/wk (60 in 30d) · cycle time 50th 6m / 85th 1h (n=60)
-FLOW · Little's Law: 0 ÷ 14.0/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 14.2/wk (61 in 30d) · cycle time 50th 6m / 85th 1h (n=61)
+FLOW · Little's Law: 0 ÷ 14.2/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T092 | Renew an expired token, so every account reads live | adervark | 40m |  |
-|  | T091 | Every account's limits in sight on every page, kept fresh | adervark | 2h |  |
-|  | T089 | The limits left on each Claude account | adervark | 2h |  |
-|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 2h |  |
-|  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 16h |  |
-|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 22h |  |
-|  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 31h |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 33h |  |
+| **DONE** | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 4h |  |
+|  | T092 | Renew an expired token, so every account reads live | adervark | 4h |  |
+|  | T091 | Every account's limits in sight on every page, kept fresh | adervark | 6h |  |
+|  | T089 | The limits left on each Claude account | adervark | 6h |  |
+|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 6h |  |
+|  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 20h |  |
+|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 26h |  |
+|  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 35h |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 37h |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 9d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 9d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 9d |  |
@@ -98,13 +99,13 @@ FLOW · Little's Law: 0 ÷ 14.0/wk ≈ now expected · lead time 85th 35h
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 15d |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 15d |  |
 |  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 15d |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 15d |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 15d |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 15d |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 15d |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 15d |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 15d |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 15d |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 16d |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 16d |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 16d |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 16d |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 16d |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 16d |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 16d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 <!-- /AA:generated -->

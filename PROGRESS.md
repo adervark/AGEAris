@@ -796,3 +796,12 @@ its date, the number, and where the evidence is. Newest last.
 - `~/.claude/skills/aa` is the repository's again; `/aa limits` runs.
   `npm test` 554 of 554.
 - **Spend:** `global-config`, on the operator's word: `~/.claude/skills/aa`.
+
+## 2026-10-22 — T090 done: research-runs v2.8, accepted to be tested
+
+- v2.8 answers H1's misses with edit units, cue units, a brief that judges
+  claims, and fair twins, each measured for free on H1's material
+  (`docs/plans/evidence/t090/measurements.md`). At best 11 of 13 on H1,
+  exactly the bar, in-sample.
+- The operator accepted it to be tested, on RSNA's T121 (D12, D13); H2 is
+  T094. **Spend:** none.
