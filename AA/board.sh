@@ -450,22 +450,22 @@ check_state() { # exit 1 when the region is stale — for CI or a pre-commit hoo
 }
 
 # What an agent may do on this board, and how: one line each, tab-separated
-# id, class, how, inputs and refusals. AGE Aris keeps the same table, with its
-# read endpoints, at GET /api/capabilities (lib/capabilities.mjs, which a test
-# holds this copy to).
+# id, class, how, inputs, what the tools refuse, and what the protocol says to
+# stop on though git would not. AGE Aris serves the same table, with its own
+# endpoints, at GET /api/capabilities; its tests hold this copy to it.
 capabilities() {
   cat <<'CAPABILITIES'
-board	agent-git	AA/board.sh [--all]		
-state	agent-git	AA/board.sh --write, then commit AA/STATE.md (rule 11)		--check exits 1 while the generated region is stale
-register	agent-git	a new file AA/backlog/<next id>-<slug>.md, shaped as the other task files are (aa-init's TASK.md), its decision rules written before it can be claimed; commit (rules 5, 12)	title; goal; decision rules	
-claim	agent-git	git mv AA/backlog/T-*.md AA/tasks/; set status: claimed and owner: <operator> @<profile>/<session> <date> — <note>; commit "claim T" (rule 1)	task; note	the WIP limit is reached (rule 10); the task has no decision rules (rule 5); the commit conflicts: someone else has it (rule 1); another operator holds the task (rule 2)
-checkpoint	agent-git	AA/ckpt.sh open T, then AA/ckpt.sh log T doing|did|blocked|end … before and after each spend (rule 6)	task; kind; what; next	a task id that is not one; a run on the task is live (`AA/ckpt.sh live T`): keep off unless it is yours (rule 6)
-live	agent-git	AA/ckpt.sh live [T]	task	
-block	agent-git	set status: blocked and blockedReason: <what unblocks it> in AA/tasks/T-*.md; commit	task; reason	another operator holds the task (rule 2)
-unblock	agent-git	set status: claimed and clear blockedReason in AA/tasks/T-*.md; commit	task	another operator holds the task (rule 2)
-release	agent-git	git mv AA/tasks/T-*.md AA/backlog/; set status: open and owner: —; commit "release T" (rule 4)	task	another operator holds the task (rule 2); a run on the task is live (`AA/ckpt.sh live T`): keep off unless it is yours (rule 6)
-done	agent-git	fill ## Result, with AA/ckpt.sh close T --delete's digest when T has a trail; git mv AA/tasks/T-*.md AA/tasks/done/, set status: done; commit	task; result	another operator holds the task (rule 2); the Result is empty or a placeholder
-kill	agent-git	say why in ## Result, git mv the task file to AA/tasks/done/, set status: killed; commit	task; reason	another operator holds the task (rule 2)
+board	agent-git	AA/board.sh [--all]			
+state	agent-git	AA/board.sh --write, then commit AA/STATE.md (rule 11)		--check exits 1 while the generated region is stale	
+register	agent-git	a new file AA/backlog/<next id>-<slug>.md, shaped as the other task files are (aa-init's TASK.md), its decision rules written before it can be claimed; commit (rules 5, 12)	title; goal; decision rules		
+claim	agent-git	git mv AA/backlog/T-*.md AA/tasks/; set status: claimed and owner: <operator> @<profile>/<session> <date> — <note>; commit "claim T" (rule 1)	task; note	the commit conflicts: someone else has it (rule 1)	the WIP limit is reached (rule 10); the task has no decision rules (rule 5); another operator holds the task (rule 2); a run on the task is live (AA/ckpt.sh live T): keep off unless it is yours (rule 6)
+checkpoint	agent-git	AA/ckpt.sh open T, then AA/ckpt.sh log T doing|did|blocked|end … before and after each spend (rule 6)	task; kind; what; next	a task id that is not one	a run on the task is live (AA/ckpt.sh live T): keep off unless it is yours (rule 6)
+live	agent-git	AA/ckpt.sh live [T]	task		
+block	agent-git	set status: blocked and blockedReason: <what unblocks it> in AA/tasks/T-*.md; commit	task; reason		another operator holds the task (rule 2)
+unblock	agent-git	set status: claimed and clear blockedReason in AA/tasks/T-*.md; commit	task		another operator holds the task (rule 2)
+release	agent-git	git mv AA/tasks/T-*.md AA/backlog/; set status: open and owner: —; commit "release T" (rule 4)	task	the commit conflicts: someone else has it (rule 1)	another operator holds the task (rule 2); a run on the task is live (AA/ckpt.sh live T): keep off unless it is yours (rule 6)
+done	agent-git	fill ## Result, with AA/ckpt.sh close T --delete's digest when T has a trail; git mv AA/tasks/T-*.md AA/tasks/done/, set status: done; commit	task; result	ckpt.sh close: T has no trail	another operator holds the task (rule 2); the Result is empty or a placeholder
+kill	agent-git	say why in ## Result, git mv the task file to AA/tasks/done/, set status: killed; commit	task; reason		another operator holds the task (rule 2)
 CAPABILITIES
 }
 

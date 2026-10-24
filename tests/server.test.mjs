@@ -1019,7 +1019,7 @@ test('GET /api/capabilities lists every action; ?for=agent only what an agent ma
   assert.equal(all.schema, 'aa.capabilities/1');
   assert.ok(all.capabilities.some((entry) => entry.id === 'stop-tracking' && entry.class === 'operator-only'));
   const agent = await call('GET', '/api/capabilities?for=agent');
-  assert.ok(agent.may.length > 0 && agent.may.every((entry) => entry.class === 'agent-git' || entry.class === 'agent-read'));
+  assert.ok(agent.may.length > 0 && agent.may.every((entry) => ['agent-git', 'agent-read', 'agent-runner'].includes(entry.class)));
   assert.ok(agent.may.some((entry) => entry.id === 'orient' && entry.how.startsWith('GET /api/orient')));
   assert.ok(agent.askOperator.some((entry) => entry.id === 'task-action' && entry.instead === 'claim'));
   await call('GET', '/api/capabilities?for=operator', undefined, 400);
