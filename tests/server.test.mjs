@@ -1011,3 +1011,17 @@ test('GET /api/orient answers aa.orient/1 for a tracked repository, and writes n
 
   assert.deepEqual(await repositoryState(repository), before, 'orient wrote nothing');
 });
+
+test('GET /api/capabilities lists every action; ?for=agent only what an agent may do', async (t) => {
+  const { base, fetch } = await tokenServer(t);
+  const call = caller(base, fetch);
+  const all = await call('GET', '/api/capabilities');
+  assert.equal(all.schema, 'aa.capabilities/1');
+  assert.ok(all.capabilities.some((entry) => entry.id === 'stop-tracking' && entry.class === 'operator-only'));
+  const agent = await call('GET', '/api/capabilities?for=agent');
+  assert.ok(agent.may.length > 0 && agent.may.every((entry) => entry.class === 'agent-git' || entry.class === 'agent-read'));
+  assert.ok(agent.may.some((entry) => entry.id === 'orient' && entry.how.startsWith('GET /api/orient')));
+  assert.ok(agent.askOperator.some((entry) => entry.id === 'task-action' && entry.instead === 'claim'));
+  await call('GET', '/api/capabilities?for=operator', undefined, 400);
+  assert.equal((await globalThis.fetch(`${base}/api/capabilities`)).status, 401);
+});

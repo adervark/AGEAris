@@ -5,6 +5,7 @@ import { extname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { AgentRegistry } from './lib/agents.mjs';
 import { Cockpit } from './lib/brief.mjs';
+import { capabilities } from './lib/capabilities.mjs';
 import { Limits } from './lib/limits.mjs';
 import { PipelineEngine } from './lib/pipeline.mjs';
 import { dataFolder, redactEmails, trackedWritesOff, Workspace, WorkspaceError } from './lib/workspace.mjs';
@@ -216,6 +217,12 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
       if (request.method === 'GET' && pathname === '/api/brief') return sendJson(response, 200, await cockpit.brief(query));
       if (request.method === 'GET' && pathname === '/api/changes') return sendJson(response, 200, await cockpit.changes(query));
       if (request.method === 'GET' && pathname === '/api/orient') return sendJson(response, 200, await cockpit.orient(query));
+      // What an agent may do and how; ?for=agent leaves out what only the
+      // operator or the page does.
+      if (request.method === 'GET' && pathname === '/api/capabilities') {
+        if (![undefined, '', 'agent'].includes(query.for)) throw new WorkspaceError(400, 'for must be agent, or left out');
+        return sendJson(response, 200, capabilities({ for: query.for }));
+      }
       const metricsMatch = /^\/api\/projects\/([^/]+)\/metrics$/.exec(pathname);
       if (request.method === 'GET' && metricsMatch) return sendJson(response, 200, await cockpit.projectMetrics(metricsMatch[1], query));
       const explainMatch = /^\/api\/explain\/([a-z0-9_]+)$/.exec(pathname);

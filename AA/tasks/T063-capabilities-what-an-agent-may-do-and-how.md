@@ -23,8 +23,10 @@ created: 2026-10-10
 
 ## Steps
 
-- [ ] Write the manifest.
-- [ ] Parity test: every `data-action` in `public/` has an entry, and no `operator-only` entry is offered to agents.
+- [x] Write the manifest: `lib/capabilities.mjs`, 38 entries (11 agent-git, 15 agent-read, 9 operator-only, 3 ui-only); `GET /api/capabilities[?for=agent]`;
+      `AA/board.sh --capabilities` (and the aa-init template's copy) prints the agent-git part.
+- [x] Parity test: every `data-action` in `public/` has an entry, and no `operator-only` entry is offered to agents
+      (`tests/capabilities.test.mjs`; board.sh's copy is held to the manifest too).
 
 ## Decision rules — fixed in advance
 
@@ -35,11 +37,14 @@ created: 2026-10-10
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-24, claimed
+- **Last touched:** 2026-10-24, built and committed; awaiting an independent review
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Steps above
-- **Next decision:** none
+- **On disk:** `lib/capabilities.mjs`, the route in `server.mjs`, `--capabilities` in
+  `AA/board.sh` and `skills/aa-init/template/board.sh`, `tests/capabilities.test.mjs`,
+  an endpoint test at the end of `tests/server.test.mjs`, two rows in `docs/PIPELINE.md`.
+  `npm test` 562/562, `npm run check` clean.
+- **Resume with:** the review's findings, then close
+- **Next decision:** for the operator, two classifications the design leaves open (Notes)
 
 ## Result
 
@@ -47,3 +52,12 @@ created: 2026-10-10
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-24, adervark: **two classifications for the operator.** (1) Writes
+  to AGE Aris's own projects (new task, edit task, new or edited project, the
+  sample) are classed `operator-only`, the cautious reading; agent-first would
+  open them to agents through the API. (2) The pull-runner endpoints
+  (`POST /api/agents/:id/claim`, `/api/attempts/:id/heartbeat|complete`) are
+  writes made by agents, which none of §5.6's four classes covers. They are
+  left out of the manifest until a fifth class, `agent-runner`, is agreed.
+  Each is a one-line change to the table.
