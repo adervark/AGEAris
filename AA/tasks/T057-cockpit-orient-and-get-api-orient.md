@@ -1,8 +1,8 @@
 ---
 id: T057
 title: "`Cockpit.orient` and `GET /api/orient`"
-status: open
-owner: —
+status: claimed
+owner: adervark @default/906416cf 2026-10-24 — Cockpit.orient and the endpoint, test-first against the corpus
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -36,7 +36,7 @@ The server answers `aa.orient/1` for one tracked repository, `task=` included, a
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-10, registered
+- **Last touched:** 2026-10-24, claimed
 - **In flight:** nothing
 - **On disk:** nothing
 - **Resume with:** the Steps above
