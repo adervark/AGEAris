@@ -816,3 +816,18 @@ its date, the number, and where the evidence is. Newest last.
   unit were marked `ok`.
 - The operator accepted v2.8 as it stands (D14); v2.9 is T095.
 - **Spend:** `agent-fan-out`, 10 Opus first passes, no rerun.
+
+## 2026-10-24 — T063 done: what an agent may do, and how
+
+- `GET /api/capabilities[?for=agent]` and `AA/board.sh --capabilities`: 39
+  actions classed `agent-git` 11, `agent-read` 15, `agent-runner` 1,
+  `operator-only` 9, `ui-only` 3, with how, inputs and refusals.
+- Held to the page (every `data-action`), to the server (every route, read
+  from `server.mjs` and called live) and to board.sh's copy; each check
+  fails when broken.
+- Review: changes requested (missing pull-runner routes, inputs and
+  refusals not as the code has them, protocol stops listed as refusals, a
+  bypassable scan); fixed and re-checked.
+- `npm test` 564 of 564. Evidence: `tests/capabilities.test.mjs`, T063's
+  Result.
+

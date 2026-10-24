@@ -1,7 +1,7 @@
 ---
 id: T063
 title: "Capabilities: what an agent may do, and how"
-status: claimed
+status: done
 owner: adervark @default/906416cf 2026-10-24 — the capabilities manifest and its parity test
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
@@ -37,16 +37,39 @@ created: 2026-10-10
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-24, review findings fixed
+- **Last touched:** 2026-10-24, done
 - **In flight:** nothing
 - **On disk:** `lib/capabilities.mjs`, the route in `server.mjs`, `--capabilities` in
   `AA/board.sh` and `skills/aa-init/template/board.sh`, `tests/capabilities.test.mjs`,
   an endpoint test at the end of `tests/server.test.mjs`, two rows in `docs/PIPELINE.md`.
   `npm test` 562/562, `npm run check` clean.
-- **Resume with:** close
+- **Resume with:** nothing; delivered
 - **Next decision:** for the operator, two classifications the design leaves open (Notes)
 
 ## Result
+
+- `lib/capabilities.mjs`: 39 entries, 11 `agent-git`, 15 `agent-read`, 1
+  `agent-runner`, 9 `operator-only`, 3 `ui-only`, each with how, inputs,
+  refusals (and, on agent-git, what the protocol says to stop on), the
+  server routes and the page actions it covers. `GET /api/capabilities`
+  gives all; `?for=agent` gives what an agent may do, and what to ask the
+  operator for without the how. `AA/board.sh --capabilities`, identical in
+  the aa-init template, prints the agent-git part (`45c97fd`, `90aaef7`,
+  `617cfde`).
+- Parity, each check shown to fail when broken: every `data-action` the page
+  writes or `onAction` handles has an entry and every entry's is written;
+  every route in `server.mjs` has an entry and every route named answers on
+  a live server; no operator-only entry reaches the agent view; board.sh's
+  copy matches. The 2026-10-10 incident: stop tracking is in `askOperator`.
+- Review (sonnet): changes requested, then 1–4 fixed and 5–7 fixed or
+  answered on re-check. A dead `onAction` case, `open-project`, removed.
+- `npm test` 564 of 564, `npm run check` clean.
+
+**Spend:** none.
+
+**For the operator:** two classifications, each one line (Notes): AGE Aris
+projects' writes are `operator-only` for now, and the pull runner is a fifth
+class, `agent-runner`.
 
 ## Notes
 
