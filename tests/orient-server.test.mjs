@@ -146,6 +146,14 @@ test('orient: what the review found', { timeout: 120000 }, async (t) => {
     await once(child, 'exit');
     const second = await orient(dir, readCall({ operator: 'ade' }), { view: live });
     assert.deepEqual(second.inFlight, [], 'the ended run is no longer in flight');
+    // A pid no process can have, in any trail, hides no other process.
+    const other = spawn('sleep', ['60'], { stdio: 'ignore' });
+    try {
+      const seen = await live.starts([other.pid, 99999999999, 4194304]);
+      assert.ok(seen.has(other.pid), 'the live pid is still seen beside one ps refuses');
+    } finally {
+      other.kill();
+    }
   }
 
   // A sweep whose subject holds the old separators forges no commit, and a
@@ -170,6 +178,10 @@ test('orient: what the review found', { timeout: 120000 }, async (t) => {
     const root = execFileSync('git', ['rev-list', '--max-parents=0', 'HEAD'], { cwd: dir, encoding: 'utf8' }).trim();
     await remove(join(dir, '.git', 'objects', root.slice(0, 2), root.slice(2)));
     await assert.rejects(orient(dir, call(), { view }), (error) => error.status === 500);
+    // So is a HEAD whose commit is missing: a broken repository, not an empty board.
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: dir, encoding: 'utf8' }).trim();
+    await remove(join(dir, '.git', 'objects', head.slice(0, 2), head.slice(2)));
+    await assert.rejects(orient(dir, call(), { view }), (error) => error.status === 500 && /HEAD/.test(error.message));
   }
 
   // remote=1 runs no program the repository's config names.
@@ -191,6 +203,14 @@ test('orient: what the review found', { timeout: 120000 }, async (t) => {
     const answer = await orient(dir, call({ remote: '1' }), { view });
     assert.equal(answer.remote.moved, 'no');
     assert.equal(existsSync(marker), false, 'the configured upload-pack did not run');
+    // Nor a proxy for git://.
+    const proxy = join(scratch, 'proxy.sh');
+    const proxied = join(scratch, 'PROXIED');
+    await import('node:fs/promises').then(({ writeFile }) => writeFile(proxy, `#!/bin/sh\ntouch ${proxied}\n`, { mode: 0o755 }));
+    execFileSync('git', ['config', 'core.gitProxy', proxy], { cwd: dir });
+    execFileSync('git', ['config', 'remote.origin.url', 'git://example.invalid/repo.git'], { cwd: dir });
+    await orient(dir, call({ remote: '1' }), { view });
+    assert.equal(existsSync(proxied), false, 'the configured git proxy did not run');
   }
 
   // An empty input is malformed, not absent (§1).

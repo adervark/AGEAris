@@ -84,3 +84,12 @@ owner's alone, rule 2)*
   placeholder and opens another reads as the awk reads it, which ORIENT.md
   §3.1's wording does not quite say; the wording or a corpus case is P1e's
   (T059) to settle, with both doors in hand.
+- 2026-10-24, adervark: **the re-check.** 1, 3, 5–9, 11–13 fixed; 10 left
+  for T059 as agreed. Three more, fixed with a test each: the batched `ps`
+  let one pid no process can have (`99999999999`, in any trail) make every
+  process-decided run read as closed, so pids above 4194304 never reach
+  `ps`, and a `ps` that complains is asked again one pid at a time; a HEAD
+  naming a missing commit read as an unborn branch and an empty board, and
+  is now a 500; `core.gitProxy`, multi-valued and not clearable from the
+  command line, still ran for `git://`, which `remote=1` no longer allows.
+
