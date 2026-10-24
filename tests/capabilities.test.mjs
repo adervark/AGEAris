@@ -36,9 +36,8 @@ const server = await readFile(new URL('server.mjs', root), 'utf8');
 function pageActions() {
   const written = new Map();
   for (const { name, text } of pages) {
-    for (const match of text.matchAll(/(.)data-action\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>"'`]+))/g)) {
-      if (match[1] === '[') continue;
-      const value = match[2] ?? match[3] ?? match[4];
+    for (const match of text.matchAll(/(?<!\[)data-action\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>"'`]+))/g)) {
+      const value = match[1] ?? match[2] ?? match[3];
       if (!written.has(value)) written.set(value, name);
     }
   }
@@ -66,8 +65,9 @@ test('capabilities: every data-action the page writes or handles has one entry, 
   }
   const missing = [...new Set([...written.keys(), ...handled])].filter((action) => !covered.has(action));
   assert.deepEqual(missing, [], `data-actions with no entry in lib/capabilities.mjs: ${missing.join(', ')}`);
-  const stale = [...covered.keys()].filter((action) => !written.has(action) && !handled.has(action));
-  assert.deepEqual(stale, [], `entries name data-actions the page no longer has: ${stale.join(', ')}`);
+  // An action handled but never written is dead code, and its entry with it.
+  const stale = [...covered.keys()].filter((action) => !written.has(action));
+  assert.deepEqual(stale, [], `entries name data-actions the page no longer writes: ${stale.join(', ')}`);
 });
 
 // The server's API routes, read from server.mjs: each `request.method ===`

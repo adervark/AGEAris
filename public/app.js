@@ -2397,7 +2397,6 @@ function onAction(event) {
     case 'copy-path': copyPath(target.dataset.value); break;
     case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); break;
     case 'read-limits': loadLimits(true); break;
-    case 'open-project': navigate(target.dataset.id); break;
     case 'layout': setLayout(target.dataset.value); break;
     case 'clear-filters': state.priority = ''; state.status = ''; state.owner = ''; state.query = ''; $('#search').value = ''; renderMain(); break;
     case 'sample-project': createSample(target); break;
