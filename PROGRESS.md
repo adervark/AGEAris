@@ -831,3 +831,18 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` 564 of 564. Evidence: `tests/capabilities.test.mjs`, T063's
   Result.
 
+## 2026-10-24 — T057 done: GET /api/orient, 82 of 82 corpus cases
+
+- `lib/orient.mjs`, `Cockpit.orient` and `GET /api/orient` answer
+  `aa.orient/1` (docs/ORIENT.md); every corpus case, the server-only one
+  included, byte for byte.
+- On this repository: `continue T057` with `state-stale` and
+  `claim-unpushed`, all three true; about 215 ms a call, uncached.
+- Review (opus), three passes: a process cache that never forgot, git
+  failures read as empty history, forgeable history fields, `remote=1`
+  running the repository's configured programs, a pid batch one bad pid
+  could blind, and smaller ones. Fixed, each pinned by a test that failed on
+  the first cut; approved.
+- `npm test` 565 of 565. Evidence: `tests/orient-server.test.mjs`, T057's
+  Result.
+

@@ -1,7 +1,7 @@
 ---
 id: T057
 title: "`Cockpit.orient` and `GET /api/orient`"
-status: claimed
+status: done
 owner: adervark @default/906416cf 2026-10-24 — Cockpit.orient and the endpoint, test-first against the corpus
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
@@ -38,17 +38,37 @@ The server answers `aa.orient/1` for one tracked repository, `task=` included, a
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-24, review findings fixed; awaiting the reviewer's re-check
+- **Last touched:** 2026-10-24, done
 - **In flight:** nothing
 - **On disk:** `lib/orient.mjs`, `Cockpit.orient` and `_gatesOf` in
   `lib/brief.mjs`, `GET /api/orient` in `server.mjs`,
   `tests/orient-server.test.mjs` (the corpus, 82/82 byte for byte, and a
   structured-field fuzz), an endpoint test at the end of `tests/server.test.mjs`.
   `npm test` 565/565, `npm run check` clean.
-- **Resume with:** the re-check, then close
+- **Resume with:** nothing; delivered
 - **Next decision:** none
 
 ## Result
+
+- `GET /api/orient` answers `aa.orient/1` for a tracked repository through
+  `Cockpit.orient` and `lib/orient.mjs` (`038ce53`, `c0cd455`, `8ea3b9a`,
+  and the close). Every corpus case, the server-only `gate-waiting`
+  included, matches byte for byte: 82 of 82 (`tests/orient-server.test.mjs`).
+  The runner was shown to fail when a rule is broken.
+- Beyond the corpus: a fuzz test (no repository text reaches a structured
+  field), an endpoint test (answers, 400s, 404, 401, and the repository's
+  HEAD, status and log unchanged), and one test per review finding that
+  failed on the first cut.
+- On this repository: `continue T057`, `state-stale` and `claim-unpushed`,
+  all true; about 215 ms a call, uncached (T060 adds the cache).
+- Review (opus), three passes: 13 findings, then 3 more from the fixes, all
+  fixed with tests except (10), left to T059 with both doors in hand.
+  Approved on the third pass. Two low leftovers, not fixed: a ref file
+  holding garbage reads as an unborn branch (needs a corrupted ref); the
+  per-pid `ps` retry is now one at a time.
+- `npm test` 565 of 565, `npm run check` clean.
+
+**Spend:** none.
 
 ## Notes
 

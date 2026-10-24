@@ -37,19 +37,19 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-24T08:36Z · 95 tasks: 30 backlog, 1 WIP (1 in progress), 64 delivered`
+`board · 2026-10-24T08:42Z · 95 tasks: 30 backlog, 0 WIP (0 in progress), 65 delivered`
 
-FLOW · **WIP 1/2** · throughput 14.7/wk (63 in 30d) · cycle time 50th 6m / 85th 3h (n=63)
-FLOW · Little's Law: 1 ÷ 14.7/wk ≈ 11h expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 14.9/wk (64 in 30d) · cycle time 50th 6m / 85th 3h (n=64)
+FLOW · Little's Law: 0 ÷ 14.9/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 30m |  |
 | **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 12h |  |
+| **DONE** | T063 | Capabilities: what an agent may do, and how | adervark | 5m |  |
+|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 12h |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 32h |  |
 |  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 36h |  |
-|  | T092 | Renew an expired token, so every account reads live | adervark | 36h |  |
+|  | T092 | Renew an expired token, so every account reads live | adervark | 37h |  |
 |  | T091 | Every account's limits in sight on every page, kept fresh | adervark | 38h |  |
 |  | T089 | The limits left on each Claude account | adervark | 38h |  |
 |  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 38h |  |
