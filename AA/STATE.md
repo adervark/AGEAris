@@ -17,8 +17,10 @@ wait as T095. T077 (S1a) can start, on v2.8.
 
 **Next action:** make AGE Aris an agent's brain (T052, approved
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
-82 cases, is done (2026-10-11). T053, T054, T057 and T063 can start;
-T056 waits on T004. Before
+82 cases, is done (2026-10-11). T057 (`GET /api/orient`, 82 of 82) and
+T063 (`GET /api/capabilities`, `board.sh --capabilities`) are done
+(2026-10-24). T053 and T054 can start; T056, the board.sh door, waits on
+T004, and T059 compares the two doors once it lands. Before
 that, the Flow tab's first slice of charts was done (T030–T032:
 aging WIP, cycle-time scatterplot, forecast). The rest of
 `docs/plans/visualisation.md` (CFD, burnup, where a task's time went, process
@@ -39,13 +41,14 @@ closes on that date.
 <!-- AA:generated -->
 `board · 2026-10-24T08:42Z · 95 tasks: 30 backlog, 0 WIP (0 in progress), 65 delivered`
 
-FLOW · **WIP 0/2** · throughput 14.9/wk (64 in 30d) · cycle time 50th 6m / 85th 3h (n=64)
-FLOW · Little's Law: 0 ÷ 14.9/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 15.2/wk (65 in 30d) · cycle time 50th 6m / 85th 3h (n=65)
+FLOW · Little's Law: 0 ÷ 15.2/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
 | **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T063 | Capabilities: what an agent may do, and how | adervark | 5m |  |
+| **DONE** | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | now |  |
+|  | T063 | Capabilities: what an agent may do, and how | adervark | 5m |  |
 |  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 12h |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 32h |  |
 |  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 36h |  |
