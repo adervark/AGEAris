@@ -975,3 +975,39 @@ test('every module the page imports is served: a new public/ file not added to t
   }
   assert.ok(seen.has('charts.js') && seen.has('markdown.js'), [...seen].join(', '));
 });
+
+// --- orient ------------------------------------------------------------------------
+
+test('GET /api/orient answers aa.orient/1 for a tracked repository, and writes nothing to it', async (t) => {
+  const { base, fetch } = await tokenServer(t);
+  const call = caller(base, fetch);
+  const repository = await trackedRepository(t);
+  const project = await call('POST', '/api/projects/link', { path: repository }, 201);
+  const before = await repositoryState(repository);
+  const orient = (params, status) => call('GET', `/api/orient?${new URLSearchParams({ project: project.id, ...params })}`, undefined, status);
+
+  // The operator who holds T002 continues it; one bound to it continues it too.
+  const mine = await orient({ operator: 'ade', run: 'e857a8c8' });
+  assert.deepEqual([mine.schema, mine.repo.board, mine.repo.door, mine.repo.head], ['aa.orient/1', 'AA/', 'server', before.head.trim()]);
+  assert.deepEqual(mine.next, { do: 'continue', task: 'T002', reasons: ['in-progress'], rule: [3, 8] });
+  assert.deepEqual(mine.you, [{ task: 'T002', column: 'in_progress' }]);
+  assert.deepEqual(mine.rules.wip, { used: 1, limit: 3, blocked: 0, blockedLimit: 3 });
+  assert.equal(mine.data.T002.title, 'Parse the dates');
+  assert.deepEqual((await orient({ operator: 'ade', task: 'T002' })).next, { do: 'continue', task: 'T002', reasons: ['bound'], rule: [7] });
+  // To anyone else, ade's claim has shown no sign of life since its commit,
+  // day 1 09:00 in the fabricator's +01:00.
+  assert.deepEqual((await orient({ operator: 'bea' })).next, { do: 'release', task: 'T002', since: '2026-09-02T08:00:00Z', reasons: ['expired'], rule: [4] });
+  // A smaller budget cuts data first.
+  const small = await orient({ operator: 'bea', budget: '4096' });
+  assert.ok(Buffer.byteLength(JSON.stringify(small)) <= 4096);
+
+  // A malformed input gets no answer (§1).
+  for (const params of [{ task: 'T1' }, { task: 'T0001234' }, { run: 'no spaces' }, { budget: '4095' }, { budget: '8192.0' }, { asOf: '2026-10-10T12:00:00+01:00' }, { asOf: '2999-01-01T00:00:00Z' }, { remote: 'yes' }, { operator: '' }]) {
+    assert.equal(typeof (await orient({ operator: 'ade', ...params }, 400)).error, 'string', JSON.stringify(params));
+  }
+  assert.match((await call('GET', '/api/orient', undefined, 400)).error, /project/);
+  await call('GET', `/api/orient?project=${'0c0c0c0c-0000-4000-8000-000000000009'}`, undefined, 404);
+  assert.equal((await globalThis.fetch(`${base}/api/orient?project=${project.id}`)).status, 401);
+
+  assert.deepEqual(await repositoryState(repository), before, 'orient wrote nothing');
+});

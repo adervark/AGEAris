@@ -215,6 +215,7 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
       const query = Object.fromEntries(url.searchParams);
       if (request.method === 'GET' && pathname === '/api/brief') return sendJson(response, 200, await cockpit.brief(query));
       if (request.method === 'GET' && pathname === '/api/changes') return sendJson(response, 200, await cockpit.changes(query));
+      if (request.method === 'GET' && pathname === '/api/orient') return sendJson(response, 200, await cockpit.orient(query));
       const metricsMatch = /^\/api\/projects\/([^/]+)\/metrics$/.exec(pathname);
       if (request.method === 'GET' && metricsMatch) return sendJson(response, 200, await cockpit.projectMetrics(metricsMatch[1], query));
       const explainMatch = /^\/api\/explain\/([a-z0-9_]+)$/.exec(pathname);

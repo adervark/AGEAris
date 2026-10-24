@@ -23,9 +23,11 @@ The server answers `aa.orient/1` for one tracked repository, `task=` included, a
 
 ## Steps
 
-- [ ] Add the `depends` read and the `ready` test to the ledger, and bump `SCHEMA`.
-- [ ] Add `Cockpit.orient`, the live overlay and the endpoint.
-- [ ] Run the corpus.
+- [x] ~~Add the `depends` read and the `ready` test to the ledger, and bump
+      `SCHEMA`.~~ Not taken: orient does not read the ledger (see Notes).
+- [x] Add `Cockpit.orient`, the live overlay and the endpoint:
+      `lib/orient.mjs`, `Cockpit.orient`, `GET /api/orient`.
+- [x] Run the corpus: `tests/orient-server.test.mjs`, 82 of 82 byte for byte.
 
 ## Decision rules — fixed in advance
 
@@ -36,10 +38,14 @@ The server answers `aa.orient/1` for one tracked repository, `task=` included, a
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-24, claimed
+- **Last touched:** 2026-10-24, built and committed; awaiting an independent review
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Steps above
+- **On disk:** `lib/orient.mjs`, `Cockpit.orient` and `_gatesOf` in
+  `lib/brief.mjs`, `GET /api/orient` in `server.mjs`,
+  `tests/orient-server.test.mjs` (the corpus, 82/82 byte for byte, and a
+  structured-field fuzz), an endpoint test at the end of `tests/server.test.mjs`.
+  `npm test` 557/557, `npm run check` clean.
+- **Resume with:** the review's findings, then close
 - **Next decision:** none
 
 ## Result
@@ -48,3 +54,13 @@ The server answers `aa.orient/1` for one tracked repository, `task=` included, a
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-10-24, adervark: **orient is its own engine, not a ledger view.**
+  ORIENT.md §12 lists where the ledger and `brief.mjs` drift from the
+  contract: history read `--first-parent -m`, the layout from the working
+  tree, `boardPolicy`'s parse, only WIP tasks' trails, a 64 KB trail window.
+  Bending the ledger to the contract would change what every other page
+  shows. So `lib/orient.mjs` reads git and the working tree as §2 says, on
+  each call, and the ledger is untouched. What this costs: no cache yet. On
+  this repository (95 tasks, ~1,000 commits) a call takes about 230 ms. P2a
+  (T060) adds the cache, keyed as §2's inputs are.

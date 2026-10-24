@@ -37,27 +37,30 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-23T20:17Z · 95 tasks: 32 backlog, 0 WIP (0 in progress), 63 delivered`
+`board · 2026-10-24T08:17Z · 95 tasks: 30 backlog, 2 WIP (2 in progress), 63 delivered`
 
-FLOW · **WIP 0/2** · throughput 14.5/wk (62 in 30d) · cycle time 50th 6m / 85th 1h (n=62)
-FLOW · Little's Law: 0 ÷ 14.5/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 2/2** · throughput 14.7/wk (63 in 30d) · cycle time 50th 6m / 85th 3h (n=63)
+FLOW · Little's Law: 2 ÷ 14.7/wk ≈ 22h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 19h |  |
-|  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 23h |  |
-|  | T092 | Renew an expired token, so every account reads live | adervark | 24h |  |
-|  | T091 | Every account's limits in sight on every page, kept fresh | adervark | 25h |  |
-|  | T089 | The limits left on each Claude account | adervark | 26h |  |
-|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 26h |  |
-|  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 40h |  |
-|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 46h |  |
+| **IN PROGRESS** 2/2 | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 12m |  |
+|  | T063 | Capabilities: what an agent may do, and how | adervark | 12m |  |
+| **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 11h |  |
+|  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 31h |  |
+|  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 35h |  |
+|  | T092 | Renew an expired token, so every account reads live | adervark | 36h |  |
+|  | T091 | Every account's limits in sight on every page, kept fresh | adervark | 37h |  |
+|  | T089 | The limits left on each Claude account | adervark | 38h |  |
+|  | T086 | H1: research-runs v2.6 replayed on a round it was not built from | adervark | 38h |  |
+|  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 2d |  |
+|  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 2d |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 2d |  |
 |  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 2d |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 10d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 10d |  |
-|  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 10d |  |
+|  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 11d |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 12d |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 13d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 13d |  |
@@ -66,7 +69,7 @@ FLOW · Little's Law: 0 ÷ 14.5/wk ≈ now expected · lead time 85th 35h
 |  | T050 | /aa on Windows without WSL | adervark | 14d |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 14d |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 14d |  |
-|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 14d |  |
+|  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 15d |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 15d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 15d |  |
 |  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 15d |  |
@@ -95,18 +98,18 @@ FLOW · Little's Law: 0 ÷ 14.5/wk ≈ now expected · lead time 85th 35h
 |  | T013 | The Method view names a settings file the board does not have | adervark | 15d |  |
 |  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 15d |  |
 |  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 15d |  |
-|  | T028 | A README that explains the workflow, for a first-time tester | adervark | 15d |  |
-|  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 15d |  |
+|  | T028 | A README that explains the workflow, for a first-time tester | adervark | 16d |  |
+|  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 16d |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 16d |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 16d |  |
 |  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 16d |  |
-|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 16d |  |
-|  | T020 | A cockpit test fails when run in the early hours | adervark | 16d |  |
-|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 16d |  |
-|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 16d |  |
-|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 16d |  |
-|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 16d |  |
-|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 16d |  |
+|  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 17d |  |
+|  | T020 | A cockpit test fails when run in the early hours | adervark | 17d |  |
+|  | T018 | /aa pulls up a project's board in any Claude Code session | adervark | 17d |  |
+|  | T017 | Two owner-line regexes take quadratic time on a long line | adervark | 17d |  |
+|  | T005 | A dollar pattern in a task title corrupts the task file on every edit | adervark | 17d |  |
+|  | T006 | A stray AA/tasks/ folder switches a project's board | adervark | 17d |  |
+|  | T001 | Review 479b6e7 and e64f823 independently | adervark | 17d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
 
