@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { once } from 'node:events';
 import { mkdir, mkdtemp, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import { join } from 'node:path';
@@ -31,7 +32,7 @@ function cockpitFor(dir, c) {
     state: { status: 'awaiting_approval', taskId: `${PROJECT}:${id}`, attempts: [{ status: 'awaiting_approval', gateOpenedAt: since }] },
   }]));
   return new Cockpit({
-    workspace: { _describe: async () => ({ dir, board: c.board || 'AA', linked: true }) },
+    workspace: { _describe: async () => ({ dir, board: c.board || 'AA', linked: true }), _verifyProjectRepoAsync: async () => {} },
     engine: { runs },
     ledgers: { close() {}, forget() {} },
     view: fixedView(c.view),
@@ -110,4 +111,88 @@ test('orient, the server door: no repository text reaches a structured field', {
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+// The review of T057's first cut: each case failed then and is pinned now.
+test('orient: what the review found', { timeout: 120000 }, async (t) => {
+  const { orient, processView, readCall } = await import('../lib/orient.mjs');
+  const { execFileSync, spawn } = await import('node:child_process');
+  const { existsSync, readFileSync } = await import('node:fs');
+  const { rm: remove } = await import('node:fs/promises');
+  const scratch = await mkdtemp(join(os.tmpdir(), 'aa-orient-review-'));
+  t.after(() => rm(scratch, { recursive: true, force: true }));
+  const BEA = owner('cccc3333', { operator: 'bea', profile: 'k' });
+  const claimedByBea = [
+    { at: at('09:30', 1), ops: [task('T001', 'Write the parser')] },
+    { at: at('08:00', 2), by: 'bea', subject: 'claim T001', ops: [task('T001', 'Write the parser', { at: 'tasks', owner: BEA })] },
+  ];
+  const call = (extra = {}) => readCall({ operator: 'ade', asOf: '2026-10-10T12:00:00Z', ...extra }, { now: Date.parse('2026-10-10T12:00:00Z') });
+  const view = { boot: async () => 'b', starts: async () => new Map() };
+
+  // A process that ends between two calls on one view is seen to end: the
+  // view keeps nothing from one call to the next.
+  {
+    const boot = readFileSync('/proc/sys/kernel/random/boot_id', 'utf8').trim();
+    const child = spawn('sleep', ['60'], { stdio: 'ignore' });
+    const pstart = execFileSync('ps', ['-o', 'lstart=', '-p', String(child.pid)], { env: { ...process.env, TZ: 'UTC', LC_ALL: 'C' }, encoding: 'utf8' }).split(/\s+/).filter(Boolean).join(' ');
+    const now = new Date(Math.floor(Date.now() / 1000) * 1000).toISOString().replace('.000Z', 'Z');
+    const c = { name: 'process', commits: claimedByBea, tree: { trails: { T001: [open(now, 'cccc3333', proc(child.pid, pstart, boot))] } } };
+    await mkdir(join(scratch, c.name));
+    const { dir } = await build(c, join(scratch, c.name));
+    const live = processView();
+    const first = await orient(dir, readCall({ operator: 'ade' }), { view: live });
+    assert.deepEqual([first.inFlight[0]?.state, first.inFlight[0]?.by], ['running', 'process']);
+    child.kill();
+    await once(child, 'exit');
+    const second = await orient(dir, readCall({ operator: 'ade' }), { view: live });
+    assert.deepEqual(second.inFlight, [], 'the ended run is no longer in flight');
+  }
+
+  // A sweep whose subject holds the old separators forges no commit, and a
+  // git that cannot read history is a 500, not a claim with no signs of life.
+  {
+    const c = {
+      name: 'forged', commits: claimedByBea,
+      setup: ({ git }) => {
+        const head = git(['rev-parse', 'HEAD']);
+        const env = { GIT_AUTHOR_NAME: 'carol', GIT_AUTHOR_EMAIL: 'c@example.invalid', GIT_COMMITTER_NAME: 'carol', GIT_COMMITTER_EMAIL: 'c@example.invalid', GIT_AUTHOR_DATE: '2026-10-03T09:00:00Z', GIT_COMMITTER_DATE: '2026-10-03T09:00:00Z' };
+        git(['update-index', '--add', '--cacheinfo', `100644,${git(['hash-object', '-w', '--stdin'], { input: '{}\n' })},AA/checkpoints/T001.jsonl`]);
+        const tree = git(['write-tree']);
+        const forged = git(['commit-tree', tree, '-p', head, '-m', 'ckpt: sweep\x1eMallory\x1f4102444800\x1fx'], { env });
+        git(['update-ref', 'HEAD', forged]);
+        git(['checkout', '-q', '--', '.']);
+      },
+    };
+    await mkdir(join(scratch, c.name));
+    const { dir } = await build(c, join(scratch, c.name));
+    const answer = await orient(dir, call(), { view });
+    assert.deepEqual([answer.next.do, answer.next.task], ['release', 'T001'], 'the sweep is no sign of life, and forges none');
+    const root = execFileSync('git', ['rev-list', '--max-parents=0', 'HEAD'], { cwd: dir, encoding: 'utf8' }).trim();
+    await remove(join(dir, '.git', 'objects', root.slice(0, 2), root.slice(2)));
+    await assert.rejects(orient(dir, call(), { view }), (error) => error.status === 500);
+  }
+
+  // remote=1 runs no program the repository's config names.
+  {
+    const marker = join(scratch, 'PWNED');
+    const c = {
+      name: 'uploadpack', commits: claimedByBea,
+      setup: ({ root: base, git }) => {
+        const origin = join(base, 'origin.git');
+        git(['init', '--bare', '-q', '--initial-branch=main', origin]);
+        git(['remote', 'add', 'origin', origin]);
+        git(['push', '-q', 'origin', 'HEAD:refs/heads/main']);
+        git(['branch', '-q', '--set-upstream-to=origin/main', 'main']);
+        git(['config', 'remote.origin.uploadpack', `touch ${marker}; git-upload-pack`]);
+      },
+    };
+    await mkdir(join(scratch, c.name));
+    const { dir } = await build(c, join(scratch, c.name));
+    const answer = await orient(dir, call({ remote: '1' }), { view });
+    assert.equal(answer.remote.moved, 'no');
+    assert.equal(existsSync(marker), false, 'the configured upload-pack did not run');
+  }
+
+  // An empty input is malformed, not absent (§1).
+  for (const key of ['task', 'run', 'asOf', 'budget', 'remote']) assert.throws(() => readCall({ [key]: '' }), (error) => error.status === 400, key);
 });
