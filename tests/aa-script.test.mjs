@@ -254,9 +254,11 @@ test('the old ~/.agesight-data is read until AGE Aris starts, which moves it to 
   const app = path.join(bash.dir, 'app');
   await mkdir(app);
   // Stands in for AGE Aris: takes its data folder as the server does, records it, then counts as up.
+  // It starts late, as under a loaded run, so /aa polls before the folder has moved (T097).
   await writeFile(path.join(app, 'server.mjs'), [
     `import { dataFolder } from ${JSON.stringify(pathToFileURL(WORKSPACE).href)};`,
     "import { writeFileSync } from 'node:fs';",
+    'await new Promise((resolve) => setTimeout(resolve, 500));',
     "writeFileSync(`${process.env.STUB_CALLS}/server`, dataFolder(process.env.AGEARIS_DATA_DIR));",
     "writeFileSync(`${process.env.STUB_CALLS}/started`, '');",
   ].join('\n'));

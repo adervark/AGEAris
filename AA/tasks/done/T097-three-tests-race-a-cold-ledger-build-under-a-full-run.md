@@ -1,7 +1,7 @@
 ---
 id: T097
 title: "Three tests race a cold ledger build when the whole suite runs at once"
-status: claimed
+status: done
 owner: adervark @default/a29cee11 2026-10-25 — the tests that race a cold build wait as server.test.mjs does; then five default npm test runs
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: bug
@@ -36,10 +36,10 @@ created: 2026-10-25
 
 ## Steps
 
-- [ ] Give the tests that assert on a ready project a wait that load cannot
+- [x] Give the tests that assert on a ready project a wait that load cannot
       outlast, as `server.test.mjs` does; find what the aa-script test waits
       on.
-- [ ] Run `npm test` five times at its default concurrency.
+- [x] Run `npm test` five times at its default concurrency.
 
 ## Decision rules — fixed in advance
 
@@ -51,10 +51,13 @@ created: 2026-10-25
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-25, claimed by adervark @default/a29cee11
+- **Last touched:** 2026-10-25, done
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Steps above. T053's commit waits on this: its default `npm test` fails only these flakes.
+- **On disk:** `buildWaitMs: 60_000` on the brief's Cockpit in
+  `tests/brief.test.mjs`, `tests/sample.test.mjs` and
+  `tests/cockpit-ui.test.mjs`; `token()` in `skills/aa/aa.sh`; the
+  aa-script stub server starts 500 ms late.
+- **Resume with:** nothing; delivered
 - **Next decision:** none
 
 ## Verify
@@ -62,6 +65,32 @@ created: 2026-10-25
 `for i in 1 2 3 4 5; do npm test || break; done` ends with five passes.
 
 ## Result
+
+- Four tests failed only under a full default `npm test`, with all 24 files
+  running at once, and on clean `1afc8e4` as well. Which ones failed changed
+  from run to run.
+- Three read a brief. A brief gives a cold ledger build 250 ms, then answers
+  `building`. The three: the projects in `brief.test.mjs`, the sample
+  project, and the cockpit views. Their Cockpits now wait 60 s, as
+  `server.test.mjs`'s already did. The app's 250 ms is unchanged.
+- The fourth, in `aa-script.test.mjs`, was a race in `/aa` itself.
+  - While the server moved `~/.agesight-data` to `~/.agearis-data`,
+    `start()` read the token from the new folder, so the polls before the
+    move went out without it.
+  - `token()` now reads the old path first. The move is a rename, then a
+    link, so between them the token is at one path or the other at every
+    moment.
+  - The test's stand-in server now starts 500 ms late, as under load. The
+    old `token()` fails the test every time; the new one passes it.
+- Five default `npm test` runs in a row passed 572 of 572 each, on the
+  working tree with T053's changes in it. The committed tree alone passes
+  565 of 565. `npm run check` is clean.
+- Not changed: the installed copy at `~/.claude/skills/aa/aa.sh`, which is
+  now behind the repository's. Updating it is `global-config`, and T004
+  decides copy or link. Its unsigned polls reach no server, because AGE Aris
+  moves the folder before it listens.
+
+**Spend:** none.
 
 ## Notes
 

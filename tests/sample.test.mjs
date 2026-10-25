@@ -29,7 +29,8 @@ test('the sample project is a fixed, simulated history with every kind of item T
   const { workspace, project, dir } = await sample(t);
   assert.equal(project.sample, true);
   assert.match(project.description, /^Sample project — its history is simulated/);
-  const cockpit = new Cockpit({ workspace, engine: null, clock: () => NOW });
+  // The brief waits for the ledger, so the line is ready however loaded the run (T097).
+  const cockpit = new Cockpit({ workspace, engine: null, clock: () => NOW, buildWaitMs: 60_000 });
   t.after(() => cockpit.close());
   const brief = await cockpit.brief({ window: 'previous-workday' });
   const [line] = brief.projects;

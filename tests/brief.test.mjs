@@ -44,7 +44,8 @@ async function workspaceWith(projects, { runs = {} } = {}) {
     ids.push(id);
   }
   const engine = { eventsByProject: () => new Map(ids.map((id, index) => [id, runs[index] || []])) };
-  const cockpit = new Cockpit({ workspace, engine, clock: () => Date.parse(ASOF) });
+  // The brief waits for every ledger, so each line is ready however loaded the run (T097).
+  const cockpit = new Cockpit({ workspace, engine, clock: () => Date.parse(ASOF), buildWaitMs: 60_000 });
   return { cockpit, ids, fabrications, workspace };
 }
 

@@ -106,7 +106,8 @@ test('the cockpit views render the sample project, escape what they show, and ci
     delete process.env.GIT_AUTHOR_DATE;
     delete process.env.GIT_COMMITTER_DATE;
   }
-  const cockpit = new Cockpit({ workspace, engine: null, clock: () => SAMPLE_END + 120_000 });
+  // The brief waits for the ledger, so the views show the project, not "Indexing", however loaded the run (T097).
+  const cockpit = new Cockpit({ workspace, engine: null, clock: () => SAMPLE_END + 120_000, buildWaitMs: 60_000 });
   t.after(() => cockpit.close());
 
   const brief = await cockpit.brief({ window: 'previous-workday' });

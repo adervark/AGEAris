@@ -172,7 +172,11 @@ native() { if [ "$WIN" = 1 ]; then cygpath -w "$1"; else printf '%s' "$1"; fi; }
 # jq 1.6 does not have; pipefail keeps jq's exit status.
 jqlf() { if [ "$WIN" = 1 ]; then jq "$@" | tr -d '\r'; else jq "$@"; fi; }
 
-token() { [ -f "$DATA/.api-token" ] && tr -d '\n' < "$DATA/.api-token"; }
+# While the server moves the old folder (start()), the token is at the old path
+# until the rename and at the new one from then on: reading the old path first
+# finds it at every moment, where the new one alone sends the first polls
+# without it.
+token() { local d; for d in ${MOVE:+"$HOME/.agesight-data"} "$DATA"; do tr -d '\n' 2>/dev/null < "$d/.api-token" && return; done; }
 # The token under the old header name too, for an AGE Aris started before the
 # rename, until it restarts.
 signed() { local t; t=$(token); curl -H "X-AGEAris-Token: $t" -H "X-AGESight-Token: $t" "$@"; }
