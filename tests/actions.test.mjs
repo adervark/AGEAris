@@ -103,6 +103,17 @@ test('tracked boards with the switch on: AA\'s actions by column (§4), Claim fo
   assert.equal(ask(task('backlog'), NATIVE).start.label, 'Start');
 });
 
+test('a deprecated or archived project, of either kind, disables every action and says why (T068)', () => {
+  for (const project of [NATIVE, tracked(true, true)]) {
+    for (const state of ['deprecated', 'archived']) {
+      const inactive = { ...project, name: 'Old', lifecycle: { state, since: '', reason: '', successor: '' } };
+      for (const entry of availability(task('backlog'), inactive, { operator: OPERATOR }).filter((candidate) => candidate.relevant)) {
+        assert.deepEqual([entry.enabled, entry.why], [false, `Old is ${state}: restore it in the project header to act on its tasks`]);
+      }
+    }
+  }
+});
+
 test('tracked boards: a live run disables every action with its own words, and a claim waits for the WIP limit', () => {
   const liveRun = { id: '2e8b687e', text: 'Run 2e8b687e on T001 last wrote `doing: fold 0` 12 min ago and has not ended.' };
   for (const entry of availability(task('in_progress', 'agent', { liveRun }), tracked(true, true), { operator: OPERATOR }).filter((candidate) => candidate.relevant)) {

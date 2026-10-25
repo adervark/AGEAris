@@ -454,8 +454,10 @@ settled, or named, when AGE Aris starts again.
 A project of either kind can be deprecated or archived from its header, and
 restored. The state is `lifecycle` in its `project.json`:
 `{state: "deprecated" | "archived", since, reason, successor}`, where
-`successor` is the id of the project that replaces it. Without `lifecycle`, a
-project is active.
+`successor` is the id of the active project that replaces it. Without
+`lifecycle`, a project is active. Archiving a deprecated project keeps its
+reason and successor unless new ones are given. A project with a pipeline run
+still going is refused until the run is finished or cancelled.
 - **Deprecated:** the project stays listed, badged, and leaves Needs you,
   Decisions and Activity across projects.
 - **Archived:** the project moves to an Archived list on the Projects page,

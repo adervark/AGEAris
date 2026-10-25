@@ -89,6 +89,8 @@ async function confirmed(workspace, project, lifecycle) {
   return workspace.updateProject(project.id, { version: project.version, lifecycle, confirm: asked.details.confirmToken });
 }
 
+const STAGES = [{ id: 'write', name: 'Write', role: 'implement', tier: 'sonnet', executor: 'human', gate: 'none', verdict: false, maxAttempts: 2, onFail: 'retry', pinnedAgent: '', instructions: 'Write it' }];
+
 const claim = async (workspace, project, id) => {
   const found = await workspace.getTask(`${project.id}:${id}`);
   return workspace.actOnTask(`${project.id}:${id}`, { action: 'claim', version: found.version });
@@ -111,6 +113,7 @@ test('a tracked repository is deprecated, archived and restored with only AGE Ar
   assert.deepEqual([deprecated.lifecycle.state, deprecated.lifecycle.reason, deprecated.lifecycle.successor], ['deprecated', 'Moved on', other.id]);
   assert.ok(Date.parse(deprecated.lifecycle.since));
   assert.equal(deprecated.taskActions.on, true, 'the switch is kept');
+  assert.deepEqual([deprecated.actions.on, deprecated.actions.reason], [false, 'Theirs is deprecated: restore it in the project header to act on its tasks.']);
 
   // Read-only while deprecated: task actions, and the switch itself.
   assert.equal((await refusal(claim(repo.workspace, repo.project, 'T001'))).code, 'PROJECT_INACTIVE');
@@ -135,9 +138,21 @@ test('an AGE Aris project is deprecated and restored by one commit each to its p
   const workspace = await new Workspace({ dataDir: await tempDir('data'), operator: 'ade', email: 'ade@example.invalid' }).init();
   const project = await workspace.createProject({ name: 'Mine', wipLimit: 3 });
   const created = await workspace.createTask({ projectId: project.id, title: 'Keep me' });
+  // Claimed already, so a run would not move it: only the run's own check refuses.
+  const claimed = await workspace.createTask({ projectId: project.id, title: 'Going', status: 'in_progress' });
   const dir = path.join(workspace.dataDir, 'projects', project.id);
   const commits = Number(await g(dir, 'rev-list', '--count', 'HEAD'));
   const files = await g(dir, 'ls-files');
+
+  // A commit that fails leaves project.json and the history as they were.
+  await writeFile(path.join(dir, '.git', 'index.lock'), '');
+  const asked = await refusal(workspace.updateProject(project.id, { version: project.version, lifecycle: { state: 'deprecated' } }));
+  const failed = await refusal(workspace.updateProject(project.id, { version: project.version, lifecycle: { state: 'deprecated' }, confirm: asked.details.confirmToken }));
+  assert.notEqual(failed.code, 'CONFIRM');
+  await rm(path.join(dir, '.git', 'index.lock'));
+  assert.equal(Number(await g(dir, 'rev-list', '--count', 'HEAD')), commits);
+  assert.equal(await g(dir, 'status', '--porcelain'), '');
+  assert.equal('lifecycle' in (await workspace.read()).projects[0], false);
 
   const deprecated = await confirmed(workspace, project, { state: 'deprecated', reason: 'Winding down' });
   assert.equal(deprecated.lifecycle.state, 'deprecated');
@@ -153,6 +168,7 @@ test('an AGE Aris project is deprecated and restored by one commit each to its p
   assert.ok(pipeline.version);
   for (const attempt of [
     () => engine.startRun({ taskId: created.id }),
+    () => engine.startRun({ taskId: claimed.id }),
     () => engine.savePipeline(project.id, { stages: pipeline.stages, version: pipeline.version }),
     () => workspace.createTask({ projectId: project.id, title: 'New' }),
     () => workspace.updateTask(created.id, { version: created.version, title: 'Changed' }),
@@ -195,6 +211,56 @@ test('a lifecycle change refuses a bad state, successor, field or version, and w
     else assert.equal(error.status, 400, JSON.stringify(input));
   }
   assert.equal(await g(dir, 'rev-parse', 'HEAD'), head);
+});
+
+test('a token confirms only the state, reason and successor it was handed out for; a successor is another active project, kept on archive', async () => {
+  const workspace = await new Workspace({ dataDir: await tempDir('data'), operator: 'ade', email: 'ade@example.invalid' }).init();
+  const [a, b, c] = [await workspace.createProject({ name: 'A' }), await workspace.createProject({ name: 'B' }), await workspace.createProject({ name: 'C' })];
+  const fresh = async (id) => (await workspace.read()).projects.find((project) => project.id === id);
+  const asked = await refusal(workspace.updateProject(a.id, { version: a.version, lifecycle: { state: 'deprecated', reason: 'shown' } }));
+  for (const lifecycle of [{ state: 'deprecated', reason: 'never shown' }, { state: 'deprecated', reason: 'shown', successor: b.id }, { state: 'archived', reason: 'shown' }]) {
+    assert.equal((await refusal(workspace.updateProject(a.id, { version: a.version, lifecycle, confirm: asked.details.confirmToken }))).code, 'CONFIRM', JSON.stringify(lifecycle));
+  }
+
+  // B gives way to C; C cannot then give way to B, a deprecated project.
+  const deprecatedB = await confirmed(workspace, b, { state: 'deprecated', reason: 'Moved', successor: c.id });
+  assert.equal((await refusal(workspace.updateProject(c.id, { version: c.version, lifecycle: { state: 'deprecated', successor: b.id } }))).code, 'BAD_INPUT');
+  // Archiving B keeps its reason and successor; '' clears one.
+  const archivedB = await confirmed(workspace, deprecatedB, { state: 'archived' });
+  assert.deepEqual([archivedB.lifecycle.reason, archivedB.lifecycle.successor], ['Moved', c.id]);
+  const cleared = await confirmed(workspace, archivedB, { state: 'archived', successor: '' });
+  assert.deepEqual([cleared.lifecycle.reason, cleared.lifecycle.successor], ['Moved', '']);
+  // Nor can A give way to an archived project.
+  assert.equal((await refusal(workspace.updateProject(a.id, { version: (await fresh(a.id)).version, lifecycle: { state: 'deprecated', successor: b.id } }))).code, 'BAD_INPUT');
+});
+
+test('a project with a run still going is not deprecated or archived, and a run that starts first holds it active', async () => {
+  const workspace = await new Workspace({ dataDir: await tempDir('data'), operator: 'ade', email: 'ade@example.invalid' }).init();
+  const registry = await new AgentRegistry({ dataDir: workspace.dataDir, operator: 'ade', email: 'ade@example.invalid', seed: () => [] }).init();
+  const engine = await new PipelineEngine({ workspace, registry }).init();
+  const project = await workspace.createProject({ name: 'P' });
+  await engine.savePipeline(project.id, { stages: STAGES, version: 'default' });
+  const task = await workspace.createTask({ projectId: project.id, title: 'T' });
+  const run = await engine.startRun({ taskId: task.id });
+  await engine.settle();
+  const current = (await workspace.read()).projects[0];
+  for (const state of ['deprecated', 'archived']) {
+    const refused = await refusal(workspace.updateProject(project.id, { version: current.version, lifecycle: { state } }));
+    assert.deepEqual([refused.code, refused.message], ['RUNS_ACTIVE', `P has a run still going (${run.localId}).`]);
+  }
+  await engine.act(run.id, { action: 'cancel', expectedSeq: (await engine.getRun(run.id)).lastSeq });
+  await engine.settle();
+  await confirmed(workspace, (await workspace.read()).projects[0], { state: 'deprecated' });
+  await engine.stop();
+});
+
+test('a lifecycle on disk is read to what AGE Aris writes: an ISO since, a reason of at most 200 characters', async () => {
+  const repo = await tracked();
+  const file = path.join(repo.dataDir, 'projects', repo.project.id, 'project.json');
+  const stored = JSON.parse(await readFile(file, 'utf8'));
+  await writeFile(file, JSON.stringify({ ...stored, lifecycle: { state: 'deprecated', since: 'Jan 1 2026 00:00:00 GMT (<img src=x>)', reason: 'x'.repeat(500), successor: 'not an id' } }));
+  const [listed] = (await repo.workspace.read()).projects;
+  assert.deepEqual(listed.lifecycle, { state: 'deprecated', since: '2026-01-01T00:00:00.000Z', reason: 'x'.repeat(200), successor: '' });
 });
 
 test('a tracked repository that cannot be read can still be archived and restored', async () => {

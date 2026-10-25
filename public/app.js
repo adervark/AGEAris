@@ -1073,6 +1073,7 @@ function drawerTimeline(task, open) {
 function openTaskEditor(task = null, status = '') {
   if (task && !writable(projectOf(task))) return openTaskViewer(task);
   const here = selectedProject();
+  if (!task && here && here.lifecycle) return toast(`${WHY.inactive(here)}.`, true);
   if (!task && here && !writable(here)) return toast(`New tasks for ${here.name} are added in the repository; AGE Aris acts on the tasks already there.`, true);
   const choices = writableProjects();
   if (!task && !choices.length) return openAddProject();
@@ -1490,11 +1491,14 @@ function runRow(run) {
 }
 
 function renderDecisions() {
-  const waiting = state.runs.filter((run) => run.needsHuman);
-  const moving = state.runs.filter((run) => !run.needsHuman && isActiveRun(run));
-  const recent = state.runs.filter((run) => !run.needsHuman && !isActiveRun(run)).slice(0, 20);
+  // A deprecated or archived project's runs are on its own pages only.
+  const inactive = new Set(state.projects.filter((project) => project.lifecycle).map((project) => project.id));
+  const runs = state.runs.filter((run) => !inactive.has(run.projectId));
+  const waiting = runs.filter((run) => run.needsHuman);
+  const moving = runs.filter((run) => !run.needsHuman && isActiveRun(run));
+  const recent = runs.filter((run) => !run.needsHuman && !isActiveRun(run)).slice(0, 20);
   const section = (key, title, runs, empty, row = runRow) => `<section class="run-section run-section-${key}" aria-labelledby="runs-${key}"><div class="section-heading"><h2 id="runs-${key}" tabindex="-1">${title}</h2><span class="${key === 'waiting' && runs.length ? 'count-alert' : ''}">${runs.length}</span></div>${runs.length ? `<ol class="run-list">${runs.map(row).join('')}</ol>` : `<p class="run-empty">${empty}</p>`}</section>`;
-  const body = state.runs.length
+  const body = runs.length
     ? `${section('waiting', 'Waiting on you', waiting, `${icon('check')}Nothing is waiting on you.`, (run) => (inlineDecision(run) ? inboxItem(run) : runRow(run)))}${section('moving', 'In progress', moving, 'No runs are moving right now.')}${section('recent', 'Recent', recent, 'Finished runs will appear here.')}`
     : `<div class="empty-results">${icon('pipeline')}<h2>No agent runs yet</h2><p>Open a task and choose Run with agents. Runs that need you will wait here.</p><a class="button button-secondary" href="#work">Go to work</a></div>`;
   $('#main').innerHTML = `<section class="page-heading"><div><h1>Decisions</h1><p>Runs waiting on you come first. Expand an approval or a request for input to answer it here, or open the run for the full record.</p>${decisionsSummary(cockpit.brief)}</div></section>${body}`;
