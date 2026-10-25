@@ -1,8 +1,8 @@
 ---
 id: T068
 title: "Deprecate or archive a project, either kind, and restore it"
-status: open
-owner: —
+status: claimed
+owner: adervark @k/6bab66ff 2026-10-25 — lifecycle in project.json, PATCH with confirmation, refusals, aggregates, UI
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -62,7 +62,7 @@ Nothing is deleted, and a tracked repository is never touched.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-25, widened
+- **Last touched:** 2026-10-25, adervark @k/6bab66ff
 - **In flight:** nothing
 - **On disk:** nothing
 - **Resume with:** the Steps above
