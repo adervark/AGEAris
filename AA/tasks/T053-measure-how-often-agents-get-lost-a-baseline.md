@@ -2,7 +2,7 @@
 id: T053
 title: "Measure how often agents get lost: a baseline"
 status: claimed
-owner: adervark @default/a29cee11 2026-10-25 — measures (a)–(d) in lib/lost.mjs, then the baseline on the three repositories
+owner: adervark @k/6bab66ff 2026-10-25 — the second review pass, re-checking 5ece75a — continued from @default/a29cee11
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -38,7 +38,7 @@ Measures (a)–(d) of the lost-agent metric run on this repository, AGEIS and RS
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-25, adervark @default/a29cee11
+- **Last touched:** 2026-10-25, adervark @k/6bab66ff
 - **In flight:** nothing
 - **On disk:**
   - `lib/lost.mjs` and `tests/lost.test.mjs` (10 tests, passing).
