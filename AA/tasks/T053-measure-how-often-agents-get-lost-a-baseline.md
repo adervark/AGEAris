@@ -40,9 +40,26 @@ Measures (a)–(d) of the lost-agent metric run on this repository, AGEIS and RS
 
 - **Last touched:** 2026-10-25, adervark @default/a29cee11
 - **In flight:** nothing
-- **On disk:** `lib/lost.mjs` and `tests/lost.test.mjs` (7 tests, passing); the readings pinned in `docs/METRICS.md` § The lost-agent measures; the baseline in PROGRESS.md and `docs/plans/evidence/t053/baseline.json`; T096 registered (the ledger and merged branches) and T097 (three tests that race a cold build under a full `npm test`).
-- **Resume with:** the review step; re-run `node lib/lost.mjs --as-of 2026-10-25T07:40:00Z /home/ade/Code/AGEAris /home/ade/Code/AGEIS /home/ade/Code/RSNA` after any fix and compare it with the baseline.
-- **Next decision:** none
+- **On disk:**
+  - `lib/lost.mjs` and `tests/lost.test.mjs` (10 tests, passing).
+  - The readings, pinned in `docs/METRICS.md` § The lost-agent measures.
+  - The baseline, in PROGRESS.md and `docs/plans/evidence/t053/baseline.json`.
+  - The first review pass (run `a29cee11.3776`, ended): 8 findings and 3
+    test gaps, fixed in the commit "T053: the review's findings". Re-measured:
+    no PROGRESS.md number changes.
+  - T096 registered; T097 done; T098 registered (a fifth test that races
+    the cold build, seen once under load).
+- **Resume with:** the second review pass, which only re-checks the fixes
+  (decision rule). Open it on T053's trail with a `doing` line first, as the
+  first pass was. It was not started on 2026-10-25: account `default` was at
+  78% of its 5-hour window at 08:26Z, with the window resetting at 12:09Z.
+  Accounts `k` and `v` were almost unused. After any further fix:
+  - Re-run `node lib/lost.mjs --json --as-of 2026-10-25T07:40:00Z` on AGEIS
+    and RSNA in place.
+  - Re-run it on AGE Aris from a clone at `1afc8e4`, the baseline's HEAD.
+  - Compare the output with `baseline.json`.
+- **Next decision:** the operator's: which account runs the second pass, and
+  when.
 
 ## Result
 

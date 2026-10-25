@@ -48,6 +48,7 @@ day 0 08:00 ade: create T001 backlog "Repeat"
 + create T004 backlog "What"
 + create T005 backlog "No act"
 + create T006 backlog "Subagent"
++ create T007 backlog "Answered"
 day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
 day 1 09:05 ade: ${line('T001', 1, '09:05', 'aaaa1111', 'open', { operator: 'ade' })}
 + ${line('T001', 1, '09:06', 'aaaa1111', 'doing', { act: 'train fold 0' })}
@@ -65,10 +66,14 @@ day 1 18:00 ade: ${line('T005', 1, '18:00', 'aaaa1111', 'doing', { key: 'act=not
 + ${line('T005', 1, '18:30', 'bbbb2222', 'doing', { key: 'act=nothing a reader can compare' })}
 day 1 19:00 ade: ${line('T006', 1, '19:00', 'aaaa1111', 'doing', { act: 'spawn the reviewer' })}
 + ${line('T006', 1, '19:01', 'aaaa1111.c0de', 'doing', { act: 'spawn the reviewer' })}
+day 1 20:00 ade: ${line('T007', 1, '20:00', 'aaaa1111', 'doing', { act: 'compile' })}
++ ${line('T007', 1, '20:10', 'aaaa1111', 'did', { what: 'compiled' })}
++ ${line('T007', 1, '20:30', 'bbbb2222', 'doing', { act: 'compile' })}
 `);
   const { a, read } = await lostAgents(dir, { asOf: AS_OF });
   // T001 counts once for bbbb2222 and once for cccc3333; T002's act was
-  // answered by the reaping end; T003 is one run; T004 matches through what.
+  // answered by the reaping end, T007's by a did; T003 is one run; T004
+  // matches through what.
   assert.deepEqual(a.items.map((item) => [item.task, item.earlier.run, item.run, item.sameFamily]), [
     ['T001', 'aaaa1111', 'bbbb2222', false],
     ['T001', 'bbbb2222', 'cccc3333', false],
@@ -77,9 +82,9 @@ day 1 19:00 ade: ${line('T006', 1, '19:00', 'aaaa1111', 'doing', { act: 'spawn t
   ]);
   assert.equal(a.items[0].act, 'train fold 0');
   assert.equal(a.noAct, 2);
-  assert.equal(read.runs, 12);
-  assert.equal(a.runs, 12);
-  assert.equal(a.per100Runs, 33.33);
+  assert.equal(read.runs, 14);
+  assert.equal(a.runs, 14);
+  assert.equal(a.per100Runs, 28.57);
   assert.equal(read.malformed, 0);
 });
 
@@ -90,6 +95,7 @@ day 0 08:00 ade: create T001 backlog "At once"
 + create T003 backlog "Reaped"
 + create T004 backlog "Resumed"
 + create T005 backlog "Two branches"
++ create T006 backlog "Handed back"
 day 1 08:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
 day 1 10:00 ade: ${line('T001', 1, '10:00', 'aaaa1111', 'open', { operator: 'ade' })}
 + ${line('T001', 1, '10:20', 'bbbb2222', 'did', { what: 'a second session, at once' })}
@@ -118,10 +124,19 @@ day 3 10:45 bea: ${line('T005', 3, '10:45', 'eeee5555', 'did', { what: 'mine too
 checkout main
 day 3 11:20 ade: ${line('T005', 3, '11:20', 'aaaa1111', 'did', { what: 'still mine' })}
 day 3 12:00 ade: merge other
+day 4 10:00 ade: ${line('T006', 4, '10:00', 'aaaa1111', 'open', { operator: 'ade', boot: 'b1', pid: 300, pstart: 'Sat Sep  5 08:59:00 2026' })}
++ ${line('T006', 4, '10:10', 'aaaa1111', 'did', { what: 'first part' })}
++ ${line('T006', 4, '10:30', 'aaaa1111', 'end', { left: 'handed over' })}
++ ${line('T006', 4, '12:00', 'bbbb2222', 'open', { operator: 'ade' })}
++ ${line('T006', 4, '12:10', 'bbbb2222', 'did', { what: 'second part' })}
++ ${line('T006', 4, '12:30', 'bbbb2222', 'end', { left: 'handed back' })}
++ ${line('T006', 4, '15:00', 'aaaa1111', 'open', { operator: 'ade', boot: 'b1', pid: 300, pstart: 'Sat Sep  5 08:59:00 2026' })}
++ ${line('T006', 4, '15:10', 'aaaa1111', 'did', { what: 'third part' })}
 `);
   const { b, read } = await lostAgents(dir, { asOf: AS_OF });
   assert.equal(read.merges, 1);
-  // T005's runs overlap too, but that pair is the owner lines' pair.
+  // T005's runs overlap too, but that pair is the owner lines' pair. T006's
+  // first run ended before the second began, and opened again after it ended.
   assert.deepEqual(b.items.map((item) => [item.task, item.source, item.from, item.to]), [
     ['T005', 'owner-lines', ts(3, '10:30'), ts(3, '12:00')],
     ['T001', 'runs', ts(1, '10:20'), ts(1, '10:20')],
@@ -164,6 +179,52 @@ day 1 10:00 ade: move T002 tasks ${claim('ade', 'aaaa1111')}
   assert.deepEqual(unlimited.wipAtClaim, { median: 0, max: 1 });
 });
 
+test('(c) takes a commit\'s claims in numeric id order, keeps a renamed board\'s limit, and gives WIP at a claim for claims with no limit', async () => {
+  const together = await fabricated(`
+day 0 08:00 ade: write AA/AA.yml "wip:\\n  in_progress: 2\\n"
++ create T005 backlog "Five"
++ create T999 backlog "Nine nine nine"
++ create T1000 backlog "One thousand"
+day 1 09:00 ade: move T005 blocked ${claim('ade', 'aaaa1111')}
+day 1 10:00 ade: move T999 tasks ${claim('ade', 'bbbb2222')}
++ move T1000 tasks ${claim('ade', 'bbbb2222')}
+`);
+  // T999 comes before T1000, as orient orders ids, so T1000 is the one over.
+  assert.deepEqual((await lostAgents(together, { asOf: AS_OF })).c.items.map((item) => [item.task, item.wip, item.limit]), [['T1000', 2, 2]]);
+
+  // The commit that moves the board to AA/ also raises the limit; the claim it
+  // makes is held to the limit before it, under the board's old name.
+  const task = (id, status, owner) => `"---\\nid: ${id}\\ntitle: \\"x\\"\\nstatus: ${status}\\nowner: ${owner}\\n---\\n\\n# ${id} — x\\n"`;
+  const renamed = await fabricated(`
+day 0 08:00 ade: write deaddrop/deaddrop.yml "wip:\\n  in_progress: 1\\n"
++ write deaddrop/backlog/T001-x.md ${task('T001', 'open', '—')}
++ write deaddrop/tasks/T002-y.md ${task('T002', 'claimed', 'ade @k/aaaa1111 2026-09-02 — w')}
+day 1 09:00 ade: delete deaddrop/deaddrop.yml
++ delete deaddrop/backlog/T001-x.md
++ delete deaddrop/tasks/T002-y.md
++ write AA/AA.yml "wip:\\n  in_progress: 9\\n"
++ write AA/tasks/T002-y.md ${task('T002', 'claimed', 'ade @k/aaaa1111 2026-09-02 — w')}
++ write AA/tasks/T001-x.md ${task('T001', 'claimed', 'ade @k/bbbb2222 2026-09-02 — w')}
+`);
+  const moved = (await lostAgents(renamed, { asOf: AS_OF })).c;
+  assert.deepEqual(moved.items.map((item) => [item.task, item.wip, item.limit]), [['T001', 1, 1]]);
+
+  // T001 and T003 are claimed with no limit set, at WIP 1 and 2; T004 is
+  // claimed over the limit that comes after them.
+  const mixed = await fabricated(`
+day 0 08:00 ade: write pm/tasks/T001-a.md ${task('T001', 'open', 'ade @k/aaaa1111 2026-09-02 — w')}
++ write pm/tasks/T002-b.md ${task('T002', 'queued', '—')}
+day 1 09:00 ade: write pm/tasks/T001-a.md ${task('T001', 'claimed', 'ade @k/aaaa1111 2026-09-02 — w')}
+day 1 10:00 ade: write pm/tasks/T003-c.md ${task('T003', 'open', 'ade @k/bbbb2222 2026-09-02 — w')}
+day 2 09:00 ade: write pm/deaddrop.yml "wip:\\n  in_progress: 2\\n"
+day 2 10:00 ade: write pm/tasks/T004-d.md ${task('T004', 'claimed', 'ade @k/cccc3333 2026-09-02 — w')}
+`);
+  const both = (await lostAgents(mixed, { asOf: AS_OF })).c;
+  assert.deepEqual(both.items.map((item) => [item.task, item.wip, item.limit]), [['T004', 3, 2]]);
+  assert.deepEqual([both.claims, both.limited, both.noLimit], [3, 1, 2]);
+  assert.deepEqual(both.wipAtClaim, { median: 1, max: 2 });
+});
+
 test('(d) times a claim to the first did while it is held, from the commit that made it, branch or not', async () => {
   const dir = await fabricated(`
 day 0 08:00 ade: create T001 backlog "Quick"
@@ -198,6 +259,10 @@ day 3 09:00 ade: merge side
   // A window counts what starts in it.
   const later = (await lostAgents(dir, { since: ts(2, '00:00'), asOf: AS_OF })).d;
   assert.deepEqual(later.items.map((item) => item.task), ['T005']);
+  // Nothing after --as-of counts: at 13:30, T003's trail has not begun.
+  const early = (await lostAgents(dir, { asOf: ts(1, '13:30') })).d;
+  assert.deepEqual(early.items.map((item) => [item.task, item.state, item.trail]), [['T001', 'measured', true], ['T002', 'measured', true], ['T003', 'no-did', false]]);
+  assert.equal(early.withTrail, 2);
 });
 
 test('a stay ends where the line that held it let it go, not where a line nobody worked on caught up', async () => {
@@ -225,18 +290,79 @@ day 5 09:00 ade: merge work
   ]);
 });
 
+test('a merge goes on with the hold that no line has ended, whether or not the task is held at HEAD', async () => {
+  // The branch releases and claims the task again; main, which never saw the
+  // release, still holds the first claim when it merges the branch.
+  const history = `
+day 0 08:00 ade: create T001 backlog "Stale main"
+day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
+branch work
+day 2 09:00 ade: set T001 {"priority": "high"}
+checkout main
+day 2 10:00 ade: merge work
+checkout work
+day 3 09:00 ade: move T001 backlog {"owner": "—"}
+day 4 09:00 ade: move T001 tasks ${claim('ade', 'bbbb2222')}`;
+  const held = await fabricated(`${history}
+day 4 09:08 ade: ${line('T001', 4, '09:08', 'bbbb2222', 'did', { what: 'the second claim\'s' })}
+checkout main
+day 5 09:00 ade: merge work
+`);
+  assert.deepEqual((await lostAgents(held, { asOf: AS_OF })).d.items.map((item) => [item.at, item.left, item.state, item.minutes ?? null]), [
+    [ts(1, '09:00'), ts(3, '09:00'), 'no-did', null],
+    [ts(4, '09:00'), null, 'measured', 8],
+  ]);
+  const done = await fabricated(`${history}
+checkout main
+day 5 09:00 ade: merge work
+day 5 10:00 ade: ${line('T001', 5, '10:00', 'bbbb2222', 'did', { what: 'after the merge' })}
+day 6 09:00 ade: move T001 done
+`);
+  assert.deepEqual((await lostAgents(done, { asOf: AS_OF })).d.items.map((item) => [item.at, item.left, item.state, item.minutes ?? null]), [
+    [ts(1, '09:00'), ts(3, '09:00'), 'no-did', null],
+    [ts(4, '09:00'), ts(6, '09:00'), 'measured', 1500],
+  ]);
+});
+
+test('owner lines read the same whatever comes after them: a takeover on one line ends the stint there', async () => {
+  // bea takes the task over on main while ade goes on with it on a branch;
+  // ade's stint ends at the takeover, so the two do not overlap, done or not.
+  const history = `
+day 0 08:00 ade: create T001 backlog "Takeover"
+day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
+branch side
+day 2 09:00 ade: set T001 {"priority": "high"}
+checkout main
+day 3 09:00 bea: set T001 ${claim('bea', 'eeee5555')}
+checkout side
+day 4 09:00 ade: set T001 {"priority": "urgent"}
+checkout main
+day 5 09:00 ade: merge side`;
+  const held = (await lostAgents(await fabricated(`${history}\n`), { asOf: AS_OF })).b;
+  const done = (await lostAgents(await fabricated(`${history}\nday 6 09:00 ade: move T001 done\n`), { asOf: AS_OF })).b;
+  assert.deepEqual(held.items, done.items);
+  assert.equal(held.overlaps, 0);
+});
+
 test('an older board claims by status and owner: unowned work in tasks/ counts in WIP but is not claimed', async () => {
+  // T003 is open under an owner line: backlog on an older board, until its
+  // status says it is taken.
   const dir = await fabricated(`
 day 0 08:00 ade: create T001 tasks "One"
 + set T001 {"status": "open"}
 + create T002 tasks "Queued"
 + set T002 {"status": "queued"}
++ create T003 tasks "Owned, open"
++ set T003 {"status": "open", "owner": "ade @k/cccc3333 2026-09-02 — later"}
 day 1 09:00 ade: set T001 {"status": "claimed", "owner": "ade @k/aaaa1111 2026-09-02 — one"}
 day 1 09:10 ade: ${line('T001', 1, '09:10', 'aaaa1111', 'did', { what: 'first result' })}
+day 2 09:00 ade: set T003 {"status": "claimed"}
 `);
   const { c, d } = await lostAgents(dir, { asOf: AS_OF });
-  assert.deepEqual([c.claims, c.noLimit, c.wipAtClaim.max], [1, 1, 1]);
-  assert.deepEqual(d.items.map((item) => [item.task, item.minutes]), [['T001', 10]]);
+  assert.deepEqual([c.claims, c.noLimit, c.wipAtClaim.max], [2, 2, 2]);
+  assert.deepEqual(d.items.map((item) => [item.task, item.at, item.state, item.minutes ?? null]), [
+    ['T001', ts(1, '09:00'), 'measured', 10], ['T003', ts(2, '09:00'), 'open', null],
+  ]);
 });
 
 test('a malformed trail line is counted and skipped, and the command prints the measures as JSON', async () => {

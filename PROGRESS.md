@@ -880,4 +880,15 @@ its date, the number, and where the evidence is. Newest last.
 - Found on the way: AGE Aris's ledger dates AGEIS's work by its merges. 78 of
   106 finished cycles have no start, and 43 deliveries fall on 2026-10-13.
   Registered as T096.
-- **Spend:** none.
+- Reviewed by one Opus pass (run `a29cee11.3776`): 8 findings and 3 test
+  gaps, each with an input that fails.
+  - All 8 findings are fixed, each with a test. The three mutants the gaps
+    let through now fail.
+  - Re-measured at the same `--as-of`, with AGE Aris read from a clone at
+    `1afc8e4`: no number above changes.
+  - In `baseline.json`, RSNA T081's overlap now ends at 06:29Z, not 08:32Z,
+    because a span closes once each of the family's runs has ended.
+  - AGE Aris now shows no WIP at a claim: that figure counts only claims
+    made with no limit set, and every claim there had one.
+- **Spend:** the review, one Opus pass (`agent-fan-out`, 19 min, about
+  255k tokens). The measuring itself spent nothing.

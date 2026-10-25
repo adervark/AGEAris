@@ -36,8 +36,8 @@
       "noLimit": 0,
       "items": [],
       "wipAtClaim": {
-        "median": 0,
-        "max": 1
+        "median": null,
+        "max": null
       }
     },
     "d": {
@@ -1671,7 +1671,7 @@
             "operator": "adervark"
           },
           "from": "2026-09-11T06:25:15Z",
-          "to": "2026-09-11T08:32:18Z"
+          "to": "2026-09-11T06:29:11Z"
         }
       ]
     },
