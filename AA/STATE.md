@@ -7,11 +7,10 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** T053, the lost-agent baseline: measured on the three
-repositories (PROGRESS.md, 2026-10-25) and reviewed once. The review's 8
-findings are fixed, and no baseline number moved. The second pass, which
-re-checks the fixes, runs from a session on profile `k`, the operator's
-choice; T053's Handoff says how. T097 is done: `npm test`
+**In progress:** nothing. T053 is done (2026-10-25): the lost-agent
+baseline on the three repositories is in PROGRESS.md, reviewed twice. The
+second pass's 5 low findings are fixed without a third review, and no
+baseline number moved. T097 is done: `npm test`
 passes at its default concurrency again (three tests gave a cold build
 250 ms; `/aa` polled without its token while the old data folder moved).
 T096 is registered: the ledger dates a merged branch's work by its merge,
@@ -29,7 +28,7 @@ wait as T095. T077 (S1a) can start, on v2.8.
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
 82 cases, is done (2026-10-11). T057 (`GET /api/orient`, 82 of 82) and
 T063 (`GET /api/capabilities`, `board.sh --capabilities`) are done
-(2026-10-24). T053 is in progress and T054 can start; T056, the board.sh door, waits on
+(2026-10-24). T053, the baseline orient is judged against, is done, and T054 can start; T056, the board.sh door, waits on
 T004, and T059 compares the two doors once it lands. Before
 that, the Flow tab's first slice of charts was done (T030–T032:
 aging WIP, cycle-time scatterplot, forecast). The rest of
@@ -51,19 +50,18 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-25T08:34Z · 99 tasks: 32 backlog, 1 WIP (1 in progress), 66 delivered`
+`board · 2026-10-25T09:57Z · 99 tasks: 32 backlog, 0 WIP (0 in progress), 67 delivered`
 
-FLOW · **WIP 1/2** · throughput 15.4/wk (66 in 30d) · cycle time 50th 6m / 85th 3h (n=66)
-FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 26% (touch 18m of 70m, n=1 trails) · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 15.4/wk (66 in 30d) · cycle time 50th 6m / 85th 3h (n=66)
+FLOW · Little's Law: 0 ÷ 15.4/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 70m |  |
 | **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 26m |  |
-|  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 23h |  |
-|  | T063 | Capabilities: what an agent may do, and how | adervark | 23h |  |
-|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 36h |  |
+| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 1h |  |
+|  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 25h |  |
+|  | T063 | Capabilities: what an agent may do, and how | adervark | 25h |  |
+|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 37h |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 2d |  |
 |  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 2d |  |
 |  | T092 | Renew an expired token, so every account reads live | adervark | 2d |  |
@@ -74,8 +72,8 @@ FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 26% (touc
 |  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 3d |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 3d |  |
 |  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 3d |  |
-|  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 11d |  |
-|  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 11d |  |
+|  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 12d |  |
+|  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 12d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 12d |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 13d |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 14d |  |
@@ -83,8 +81,8 @@ FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 26% (touc
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 14d |  |
 |  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 15d |  |
 |  | T050 | /aa on Windows without WSL | adervark | 15d |  |
-|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 15d |  |
-|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 15d |  |
+|  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 16d |  |
+|  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 16d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 16d |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 16d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 16d |  |
@@ -101,19 +99,19 @@ FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 26% (touc
 |  | T032 | A forecast from throughput: when, and how many | adervark | 16d |  |
 |  | T030 | An aging WIP chart: what is not moving | adervark | 16d |  |
 |  | T031 | A cycle-time scatterplot with the service level | adervark | 16d |  |
-|  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 16d |  |
-|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 16d |  |
-|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 16d |  |
-|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 16d |  |
-|  | T015 | Code spans are not found as CommonMark finds them | adervark | 16d |  |
-|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 16d |  |
-|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 16d |  |
-|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 16d |  |
-|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 16d |  |
-|  | T011 | board.sh loses the history from before a board rename | adervark | 16d |  |
-|  | T013 | The Method view names a settings file the board does not have | adervark | 16d |  |
-|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 16d |  |
-|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 16d |  |
+|  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 17d |  |
+|  | T026 | Tracked task actions: the review's remaining low findings | adervark | 17d |  |
+|  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 17d |  |
+|  | T014 | A paragraph past MAX_INLINE drops hard breaks for a span it never renders | adervark | 17d |  |
+|  | T015 | Code spans are not found as CommonMark finds them | adervark | 17d |  |
+|  | T002 | Bold or a link that contains inline code shows raw markers | adervark | 17d |  |
+|  | T009 | Four markdown patterns take quadratic time on one long line | adervark | 17d |  |
+|  | T008 | A line separator in a wrapped list line crashes the renderer | adervark | 17d |  |
+|  | T010 | A paragraph indented less than a list item's content keeps the list's hold | adervark | 17d |  |
+|  | T011 | board.sh loses the history from before a board rename | adervark | 17d |  |
+|  | T013 | The Method view names a settings file the board does not have | adervark | 17d |  |
+|  | T007 | A board moved in one commit follows the wrong file when an id is duplicated | adervark | 17d |  |
+|  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 17d |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 17d |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 17d |  |
 |  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 17d |  |
