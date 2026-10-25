@@ -890,5 +890,18 @@ its date, the number, and where the evidence is. Newest last.
     because a span closes once each of the family's runs has ended.
   - AGE Aris now shows no WIP at a claim: that figure counts only claims
     made with no limit set, and every claim there had one.
-- **Spend:** the review, one Opus pass (`agent-fan-out`, 19 min, about
-  255k tokens). The measuring itself spent nothing.
+- Re-checked by a second Opus pass (run `6bab66ff.4df8`): all 8 fixes and 3
+  gaps hold. It found 5 more, each with an input that fails, all low:
+  - A merge read whether a hold had ended in the order git listed the
+    commits, not in time, and picked the owner's stint by its stay. Fix 7
+    gave a claim on a board without settings the limit of another board
+    whose settings the commit deleted.
+  - Two fixes had no test that a mutant reverting them would fail.
+  - All 5 are fixed, each with a test that the mutant reverting it fails.
+    No third pass reviewed them (decision rule: two passes).
+  - Re-measured the same way: `baseline.json` is unchanged on all three, and
+    no number above changes. No merge in the three repositories has two
+    different holds, and none deletes a settings file.
+- **Spend:** the reviews, two Opus passes (`agent-fan-out`): 19 min and
+  about 255k tokens on `default`, then about 25 min on `k`. The measuring
+  itself spent nothing.

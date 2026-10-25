@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { appendFile, mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -209,6 +209,18 @@ day 1 09:00 ade: delete deaddrop/deaddrop.yml
   const moved = (await lostAgents(renamed, { asOf: AS_OF })).c;
   assert.deepEqual(moved.items.map((item) => [item.task, item.wip, item.limit]), [['T001', 1, 1]]);
 
+  // A commit that deletes one board's settings and claims on another board
+  // that has none renames nothing: the claim has no limit.
+  const dropped = await fabricated(`
+day 0 08:00 ade: write AA/AA.yml "wip:\\n  in_progress: 1\\n"
++ create T001 backlog "Held"
+day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
+day 2 09:00 ade: delete AA/AA.yml
++ write pm/tasks/T002-b.md ${task('T002', 'claimed', 'bea @k/bbbb2222 2026-09-02 — w')}
+`);
+  const elsewhere = (await lostAgents(dropped, { asOf: AS_OF })).c;
+  assert.deepEqual([elsewhere.items, elsewhere.limited, elsewhere.noLimit], [[], 1, 1]);
+
   // T001 and T003 are claimed with no limit set, at WIP 1 and 2; T004 is
   // claimed over the limit that comes after them.
   const mixed = await fabricated(`
@@ -322,6 +334,54 @@ day 6 09:00 ade: move T001 done
     [ts(1, '09:00'), ts(3, '09:00'), 'no-did', null],
     [ts(4, '09:00'), ts(6, '09:00'), 'measured', 1500],
   ]);
+
+  // A third line released main's claim on day 3 and is merged only after
+  // main merges the second claim on day 4: the merge goes on with the second.
+  const third = await fabricated(`
+day 0 08:00 ade: create T001 backlog "Three lines"
+branch side
+checkout main
+day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
+branch x
+day 3 09:00 ade: move T001 backlog {"owner": "—"}
+checkout side
+day 2 09:00 ade: move T001 tasks ${claim('ade', 'bbbb2222')}
+checkout main
+day 4 09:00 ade: merge side
+day 5 09:00 ade: ${line('T001', 5, '09:00', 'bbbb2222', 'did', { what: 'after the merge' })}
+day 6 09:00 ade: merge x
+`);
+  assert.deepEqual((await lostAgents(third, { asOf: AS_OF })).d.items.map((item) => [item.at, item.left, item.state, item.minutes ?? null]), [
+    [ts(1, '09:00'), ts(3, '09:00'), 'no-did', null],
+    [ts(2, '09:00'), ts(6, '09:00'), 'measured', 4320],
+  ]);
+});
+
+test('a merge that keeps an owner neither line holds the task under goes on with the hold no line has ended', async () => {
+  // bea claims again on the branch after its release; main, still on ade's
+  // first claim, merges it keeping its own file.
+  const dir = await fabricated(`
+day 0 08:00 ade: create T001 backlog "Ours"
+day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
+branch s
+day 2 09:00 ade: move T001 backlog {"owner": "—"}
+day 3 09:00 bea: move T001 tasks ${claim('bea', 'eeee5555')}
+checkout main
+day 2 10:00 ade: set T001 {"priority": "high"}
+`);
+  const git = (args, day, clock) => {
+    const date = new Date(EPOCH + day * 86400000 + Number(clock.slice(0, 2)) * 3600000).toISOString();
+    return exec('git', ['-C', dir, ...args], { env: { ...process.env, GIT_AUTHOR_NAME: 'ade', GIT_AUTHOR_EMAIL: 'ade@example.com', GIT_COMMITTER_NAME: 'ade', GIT_COMMITTER_EMAIL: 'ade@example.com', GIT_AUTHOR_DATE: date, GIT_COMMITTER_DATE: date } });
+  };
+  await git(['checkout', '-q', 'main'], 5, '09');
+  await git(['merge', '-q', '-s', 'ours', '--no-edit', 's'], 5, '09');
+  await appendFile(path.join(dir, 'AA', 'checkpoints', 'T001.jsonl'), `${JSON.stringify({ ts: ts(5, '10:00'), run: 'eeee5555', kind: 'did', what: 'after the merge', next: 'go on' })}\n`);
+  await git(['add', 'AA/checkpoints/T001.jsonl'], 5, '10');
+  await git(['commit', '-q', '-m', 'ckpt: T001'], 5, '10');
+  assert.deepEqual((await lostAgents(dir, { asOf: AS_OF })).d.items.map((item) => [item.at, item.left, item.state, item.minutes ?? null]), [
+    [ts(1, '09:00'), ts(2, '09:00'), 'no-did', null],
+    [ts(3, '09:00'), null, 'measured', 2940],
+  ]);
 });
 
 test('owner lines read the same whatever comes after them: a takeover on one line ends the stint there', async () => {
@@ -342,6 +402,47 @@ day 5 09:00 ade: merge side`;
   const done = (await lostAgents(await fabricated(`${history}\nday 6 09:00 ade: move T001 done\n`), { asOf: AS_OF })).b;
   assert.deepEqual(held.items, done.items);
   assert.equal(held.overlaps, 0);
+
+  // ade takes it back from bea on a branch that main merges; the merge goes
+  // on with that stint, not ade's first, so cal's claim on z overlaps it.
+  const back = await fabricated(`
+day 0 08:00 ade: create T001 backlog "Take back"
+branch z
+checkout main
+day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
+branch p2
+day 3 09:00 bea: set T001 ${claim('bea', 'eeee5555')}
+day 4 09:00 ade: set T001 ${claim('ade', 'bbbb2222')}
+checkout main
+day 5 09:00 ade: merge p2
+checkout z
+day 6 09:00 cal: move T001 tasks ${claim('cal', 'cccc3333')}
+checkout main
+day 8 09:00 ade: merge z
+`);
+  assert.deepEqual((await lostAgents(back, { asOf: AS_OF })).b.items.map((item) => [item.source, [item.a.operator, item.b.operator].sort(), item.from, item.to]), [
+    ['owner-lines', ['ade', 'cal'], ts(6, '09:00'), ts(8, '09:00')],
+  ]);
+});
+
+test('a resumed session\'s new process ends its old runs, so a run that ended before another family wrote leaves no overlap', async () => {
+  // P1 dies without an end; P2's run ends before bbbb2222 writes, and P2
+  // writes again only after it.
+  const dir = await fabricated(`
+day 0 08:00 ade: create T001 backlog "Resume"
+day 1 09:00 ade: move T001 tasks ${claim('ade', 'aaaa1111')}
+day 1 10:00 ade: ${line('T001', 1, '10:00', 'aaaa1111', 'open', { operator: 'ade', boot: 'b1', pid: 100, pstart: 'P1' })}
++ ${line('T001', 1, '10:10', 'aaaa1111', 'did', { what: 'first, then the process died' })}
+day 1 12:00 ade: ${line('T001', 1, '12:00', 'aaaa1111.b', 'open', { operator: 'ade', boot: 'b1', pid: 200, pstart: 'P2' })}
++ ${line('T001', 1, '12:10', 'aaaa1111.b', 'did', { what: 'resumed' })}
++ ${line('T001', 1, '12:30', 'aaaa1111.b', 'end', { left: 'handed over' })}
+day 1 13:00 bea: ${line('T001', 1, '13:00', 'bbbb2222', 'open', { operator: 'ade' })}
++ ${line('T001', 1, '13:10', 'bbbb2222', 'did', { what: 'second worker' })}
++ ${line('T001', 1, '14:00', 'bbbb2222', 'end', { left: 'handed back' })}
+day 1 15:00 ade: ${line('T001', 1, '15:00', 'aaaa1111.c', 'open', { operator: 'ade', boot: 'b1', pid: 200, pstart: 'P2' })}
++ ${line('T001', 1, '15:10', 'aaaa1111.c', 'did', { what: 'third part' })}
+`);
+  assert.equal((await lostAgents(dir, { asOf: AS_OF })).b.overlaps, 0);
 });
 
 test('an older board claims by status and owner: unowned work in tasks/ counts in WIP but is not claimed', async () => {

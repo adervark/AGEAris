@@ -402,8 +402,9 @@ the records.
 
 - **History:** every commit reachable from HEAD that touches the board's task
   folders, settings file or trails, under `AA/`, `deaddrop/` and `pm/`, on
-  every branch merged into HEAD, parents before children. Each commit's board
-  is its first parent's with its own changes. A first-parent walk would date
+  every branch merged into HEAD, parents before children and otherwise in
+  time order, a commit dated no earlier than its latest parent. Each commit's
+  board is its first parent's with its own changes. A first-parent walk would date
   every claim made on a merged branch from the merge.
 - **Times:** a commit's committer date, as written (not clamped); a trail
   entry's `ts`.
@@ -427,7 +428,8 @@ the records.
   first commit, on any line, where it is not held under their owner line. A
   line that goes on holding it after that is one nobody worked on, until a
   merge brings it up to date. A merge that brings the task in held from two
-  lines goes on with the hold that no line has ended.
+  lines goes on with the hold that no line has ended by then, and with the
+  stint of its owner line's operator that none has.
 
 **(a) Repeated acts.** A `doing` repeats an act when an earlier `doing` on the
 same task, in another run, says the same act, and that run wrote no `did` or
@@ -458,7 +460,8 @@ record:
   leaves out `end` entries, because the session that reaps a dead run writes
   its `end`. It closes once each of the family's runs has ended, so a family
   that writes again after that starts a new span. It also splits where the
-  family names a new process, a resumed session.
+  family names a new process, a resumed session. The old process's runs died
+  with it, so they need no `end` for the span to close.
 - §8's "the same operator and two runs writing in the same interval" is read
   as the runs record. A same-operator take-back (rule 3) leaves one owner
   line, so only the trail shows the second worker.
@@ -472,8 +475,9 @@ record:
 
 **(c) Over-limit claims.** A claim made while WIP is at the board's
 `wip.in_progress`, as the settings file stood in the claim's parent. When
-the claim's commit renames the board, that is the settings file under the
-old name.
+the claim's commit renames the board, settings file and all, that is the
+settings file under the old name. A board that has no settings file after the
+commit renamed nothing.
 
 - WIP counts the tasks in progress or blocked that the commit leaves there,
   claimed or not. It also counts the commit's earlier claims, in id order by
