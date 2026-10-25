@@ -129,6 +129,15 @@ test('the cockpit views render the sample project, escape what they show, and ci
   assert.doesNotMatch(home.replace(/data-metric="[^"]*"/g, ''), /\bP50\b|\bP85\b|percentile/i, 'the service level is named, not its percentile');
   assert.doesNotMatch(home, /<\/button> \/ \d/, 'WIP states its limit once ("8 of 8"), not again after it');
 
+  assert.match(home, /needs attention\./, 'the sample needs attention');
+  // A deprecated board keeps its strip and badge, and asks for nothing (T068).
+  const retired = { ...brief, needsYou: [], projects: brief.projects.map((entry) => ({ ...entry, lifecycle: { state: 'deprecated', since: '2026-10-25T00:00:00Z', reason: 'Done with it', successor: '' } })) };
+  const homeRetired = renderHome(retired, { mode: 'previous-workday', expanded: new Set(), taskOf: (id) => byId.get(id), agentsByProject: new Map(), projects: [project] });
+  checkMarkup(homeRetired, 'Home with a deprecated board');
+  assert.match(homeRetired, /class="lifecycle-badge is-deprecated" title="Deprecated since 2026-10-25: Done with it\. Read-only until restored\.">Deprecated</);
+  assert.doesNotMatch(homeRetired, /needs attention/);
+  assert.match(homeRetired, /Every active board is on track\./);
+
   // A task shows once, under its most pressing need; a need it also has is
   // not called clear.
   const alsoBlocked = { ...brief, needsYou: brief.needsYou.filter((row) => row.kind !== 'blocked') };

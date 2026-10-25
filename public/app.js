@@ -1,5 +1,5 @@
-import { actionFor, actionRequest, availability, inputFor, projectKind, TASK_ACTIONS } from './actions.js';
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
+import { actionFor, actionRequest, availability, inputFor, projectKind, TASK_ACTIONS, WHY } from './actions.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, lifecycleBadge, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
@@ -95,8 +95,24 @@ function projectOf(task) {
 
 // The full edit form, new tasks and the pipeline are for AGE Aris's own
 // projects; a tracked repository's tasks change only through task actions.
+// A deprecated or archived project is read-only.
 function writable(project) {
-  return Boolean(project) && !project.linked;
+  return Boolean(project) && !project.linked && !project.lifecycle;
+}
+
+// An archived project is shown only in the Projects page's Archived list and
+// on its own pages; everywhere else its tasks are left out too.
+function archived(project) {
+  return project?.lifecycle?.state === 'archived';
+}
+
+function listedProjects() {
+  return state.projects.filter((project) => !archived(project));
+}
+
+function listedTasks() {
+  const hidden = new Set(state.projects.filter(archived).map((project) => project.id));
+  return state.tasks.filter((task) => !hidden.has(task.projectId));
 }
 
 // What a tracked task's file adds to the task as listed (its Result still a
@@ -310,7 +326,7 @@ function render() {
 
 function renderNavigation() {
   const needs = cockpit.brief?.needsYou.length || 0;
-  const working = state.tasks.filter((task) => task.status === 'in_progress' || task.status === 'blocked').length;
+  const working = listedTasks().filter((task) => task.status === 'in_progress' || task.status === 'blocked').length;
   const counts = {
     home: needs ? `<span class="nav-count nav-count-alert" aria-label="${needs} need you">${needs}</span>` : '',
     working: working ? `<span class="nav-count" aria-label="${working} in progress or blocked">${working}</span>` : '',
@@ -320,9 +336,11 @@ function renderNavigation() {
     const on = active[view].includes(state.view);
     return `<a href="#${view}" class="nav-link ${on ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${label}</span>${counts[view] || ''}</a>`;
   }).join('');
-  $('#project-navigation').innerHTML = state.projects.length ? state.projects.map((project) => {
+  const listed = listedProjects();
+  $('#project-navigation').innerHTML = listed.length ? listed.map((project) => {
     const health = briefLine(project.id)?.health;
-    return `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''} title="${escape(`${project.name}: ${health ? healthWord(health) : 'not computed yet'}`)}">${healthDot(health)}<span class="truncate">${escape(project.name)}</span></a>`;
+    const said = project.lifecycle ? 'deprecated' : health ? healthWord(health) : 'not computed yet';
+    return `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${project.lifecycle ? 'is-deprecated' : ''} ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''} title="${escape(`${project.name}: ${said}`)}">${healthDot(health)}<span class="truncate">${escape(project.name)}</span></a>`;
   }).join('') : '<p class="sidebar-empty">Your projects will appear here.</p>';
 }
 
@@ -330,7 +348,7 @@ function filteredTasks() {
   const project = selectedProject();
   const query = state.query.trim().toLowerCase();
   const ordered = { urgent: 0, high: 1, medium: 2, low: 3 };
-  return state.tasks.filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !ownerOf(task) : ownerOf(task) === state.owner)) && (!query || `${task.title} ${task.description} ${ownerOf(task)} ${task.claimNote || ''} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
+  return (project ? state.tasks : listedTasks()).filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !ownerOf(task) : ownerOf(task) === state.owner)) && (!query || `${task.title} ${task.description} ${ownerOf(task)} ${task.claimNote || ''} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
 }
 
 // Re-rendering replaces #main, so keep what a person was doing: open <details>,
@@ -370,7 +388,7 @@ function renderPage() {
 
 // Everything in progress or blocked, on every board.
 function renderWorkingPage() {
-  $('#main').innerHTML = renderWorking({ tasks: state.tasks, projects: state.projects, brief: cockpit.brief });
+  $('#main').innerHTML = renderWorking({ tasks: listedTasks(), projects: listedProjects(), brief: cockpit.brief });
 }
 
 // All tasks across projects, or search results: one grouped list.
@@ -379,7 +397,7 @@ function renderTaskSearch() {
   const title = state.query ? 'Search results' : 'All tasks';
   const intro = state.query ? `Tasks matching “${state.query}”` : 'Every task in every project, grouped by state.';
   $('#main').innerHTML = `<section class="page-heading"><div><h1>${escape(title)}</h1><p>${escape(intro)}</p></div></section>
-    <div class="view-toolbar"><span class="board-meta">${escape(plural(tasks.length, 'task'))}${state.query ? ' found' : ''}</span><div class="filters">${filterControls(state.tasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div></div>
+    <div class="view-toolbar"><span class="board-meta">${escape(plural(tasks.length, 'task'))}${state.query ? ' found' : ''}</span><div class="filters">${filterControls(listedTasks())}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div></div>
     ${taskList(tasks, { showProject: true })}`;
 }
 
@@ -388,12 +406,24 @@ function renderTaskSearch() {
 function renderProjectsPage() {
   const agents = agentsByProject();
   const width = mainWidth();
-  const boards = state.projects.map((project) => {
-    const line = briefLine(project.id) || { projectId: project.id, name: project.name, linked: project.linked, state: 'building', sentence: 'Reading this project’s history…' };
+  const boards = listedProjects().map((project) => {
+    const line = briefLine(project.id) || { projectId: project.id, name: project.name, linked: project.linked, lifecycle: project.lifecycle, state: 'building', sentence: 'Reading this project’s history…' };
     return boardStrip(line, { agents: agents.get(project.id) || 0, project, tasks: state.tasks.filter((task) => task.projectId === project.id), width });
   }).join('');
-  const open = state.tasks.filter((task) => task.status !== 'done').length;
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Projects</h1><p>Your own projects and the repositories you track, each with its flow and whether the work follows the method.</p></div><div class="heading-actions"><a class="button button-secondary" href="#work">${icon('tasks')}All tasks <span class="muted">${open} open</span></a><button class="button button-secondary" data-action="add-project">${icon('plus')}Add project</button></div></section><div class="home-boards">${boards}</div>`;
+  const open = listedTasks().filter((task) => task.status !== 'done').length;
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>Projects</h1><p>Your own projects and the repositories you track, each with its flow and whether the work follows the method.</p></div><div class="heading-actions"><a class="button button-secondary" href="#work">${icon('tasks')}All tasks <span class="muted">${open} open</span></a><button class="button button-secondary" data-action="add-project">${icon('plus')}Add project</button></div></section><div class="home-boards">${boards}</div>${archivedList()}`;
+}
+
+// The archived projects, collapsed under the boards: each with when and why,
+// and a way back.
+function archivedList() {
+  const gone = state.projects.filter(archived);
+  if (!gone.length) return '';
+  const rows = gone.map((project) => {
+    const { since, reason } = project.lifecycle;
+    return `<li><a class="board-name" href="#project/${escape(project.id)}">${escape(project.name)}</a>${project.linked ? '<span class="readonly-badge">Tracked</span>' : ''}<span class="archived-why">${escape(`Archived${since ? ` ${formatDate(since)}` : ''}${reason ? `: ${reason}` : ''}`)}</span><button class="text-button project-settings" data-action="restore-project" data-id="${escape(project.id)}">Restore</button></li>`;
+  }).join('');
+  return `<details class="archived-projects"><summary>Archived <span class="muted">${gone.length}</span></summary><ul class="archived-list">${rows}</ul></details>`;
 }
 
 // --- A project: status, then the board; flow and method one tab away ----------
@@ -430,8 +460,22 @@ function projectHeader(project, line) {
   const word = ready
     ? `<span class="project-health tone-${healthTone(line.health)}">${healthDot(line.health)}${metricButton({ projectId: project.id, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' })}</span>`
     : `<span class="project-health">${healthDot(null)}<span class="health-word">${line?.state === 'unavailable' ? 'Unavailable' : 'Indexing'}</span></span>`;
+  if (archived(project)) return `<header class="project-header"><div class="project-title-row"><h1>${escape(project.name)}</h1>${lifecycleBadge(project.lifecycle)}${project.linked ? trackedBadge(project) : ''}<div class="project-actions">${projectActions(project)}</div></div>${lifecycleNote(project)}${where}</header>`;
   const status = !ready || line.health.level !== 'green' ? `<p class="project-status">${escape(headline(line) || 'Reading this project’s history…')}</p>` : '';
-  return `<header class="project-header"><div class="project-title-row"><h1>${escape(project.name)}</h1>${word}${project.linked ? trackedBadge(project) : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${figures(project, line)}${projectStrip(project, line)}</header>`;
+  return `<header class="project-header"><div class="project-title-row"><h1>${escape(project.name)}</h1>${word}${lifecycleBadge(project.lifecycle)}${project.linked ? trackedBadge(project) : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${lifecycleNote(project)}${where}${status}${figures(project, line)}${projectStrip(project, line)}</header>`;
+}
+
+// What a deprecated or archived project's header says: since when, why, what
+// replaces it, and that it is read-only until restored.
+function lifecycleNote(project) {
+  const lifecycle = project.lifecycle;
+  if (!lifecycle) return '';
+  const successor = lifecycle.successor && state.projects.find((entry) => entry.id === lifecycle.successor);
+  const word = lifecycle.state === 'archived' ? 'Archived' : 'Deprecated';
+  const why = `${word}${lifecycle.since ? ` ${escape(formatDate(lifecycle.since))}` : ''}${lifecycle.reason ? `: ${escape(lifecycle.reason)}` : ''}.`;
+  const instead = successor ? ` Work goes on in <a href="#project/${escape(successor.id)}">${escape(successor.name)}</a>.` : '';
+  const left = lifecycle.state === 'archived' ? ' It is left out of Home, the sidebar, All tasks, Working and Activity.' : ' It is left out of Needs you, Decisions and Activity across projects.';
+  return `<p class="window-note lifecycle-note" role="status">${icon('alert')}<span>${why}${instead}${left} Read-only until it is restored.</span></p>`;
 }
 
 // A project's flow strip, across the page.
@@ -475,14 +519,20 @@ function figures(project, line) {
 }
 
 function projectActions(project) {
+  if (project.lifecycle) {
+    const archive = project.lifecycle.state === 'deprecated' ? '<button class="text-button project-settings" data-action="archive-project">Archive</button>' : '';
+    const copy = project.linked ? `<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button>` : '';
+    return `${copy}<button class="text-button project-settings" data-action="restore-project" data-id="${escape(project.id)}">Restore</button>${archive}${project.linked ? '<button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>' : ''}`;
+  }
+  const retire = '<button class="text-button project-settings" data-action="deprecate-project">Deprecate</button><button class="text-button project-settings" data-action="archive-project">Archive</button>';
   if (project.linked) {
     const on = Boolean(project.actions?.on);
     const label = on ? `Task actions on, ${escape(project.actions.branch)}` : 'Task actions off';
     const title = on ? 'Switch task actions off: AGE Aris stops committing here' : (project.actions?.reason || 'Switch task actions on');
     const toggle = project.unavailable ? '' : `<button class="text-button project-settings" data-action="task-actions" aria-pressed="${on}" title="${escape(title)}">${icon('git')}${label}</button>`;
-    return `${toggle}<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
+    return `${toggle}<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button>${retire}<button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
   }
-  return `<button class="text-button project-settings" data-action="edit-project">${icon('edit')}Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>`;
+  return `<button class="text-button project-settings" data-action="edit-project">${icon('edit')}Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>${retire}`;
 }
 
 // Task files in a tracked repository that could not be read; the rest of the
@@ -713,11 +763,11 @@ function renderHomePage() {
   }
   if (!document.hidden && !homeShownAt) homeShownAt = Date.now();
   const tasks = new Map(state.tasks.map((task) => [task.id, task]));
-  $('#main').innerHTML = renderHome(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded, taskOf: (id) => tasks.get(id), agentsByProject: agentsByProject(), projects: state.projects, tasks: state.tasks, width: mainWidth() });
+  $('#main').innerHTML = renderHome(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded, taskOf: (id) => tasks.get(id), agentsByProject: agentsByProject(), projects: listedProjects(), tasks: listedTasks(), width: mainWidth() });
 }
 
 function renderActivityPage() {
-  $('#main').innerHTML = renderActivity(cockpit.changes, { ...cockpit.changesFilter, projects: state.projects, timezone: cockpit.brief?.timezone });
+  $('#main').innerHTML = renderActivity(cockpit.changes, { ...cockpit.changesFilter, projects: listedProjects(), timezone: cockpit.brief?.timezone });
 }
 
 // Leaving Home after looking at it marks what it showed as seen.
@@ -943,6 +993,45 @@ async function switchTaskActions(project, button) {
   }
 }
 
+// Deprecating or archiving a project (T068): a reason, and for deprecating
+// the project that replaces it; then the server's confirmation of what it
+// means, as the task-actions switch asks for one.
+function openLifecycleDialog(project, target) {
+  if (!project) return;
+  const word = target === 'archived' ? 'Archive' : 'Deprecate';
+  const others = listedProjects().filter((entry) => entry.id !== project.id && !entry.lifecycle);
+  const successor = target === 'deprecated' && others.length
+    ? `<label class="field">Replaced by <span class="field-optional">optional</span><select name="successor"><option value="">None</option>${others.map((entry) => `<option value="${escape(entry.id)}">${escape(entry.name)}</option>`).join('')}</select></label>`
+    : '';
+  const dialog = $('#action-dialog');
+  dialog.innerHTML = `<form id="lifecycle-form">${dialogHeading(escape(project.name), `${word} ${escape(project.name)}?`, 'Close dialog')}<div class="dialog-fields"><label class="field">Why <span class="field-optional">optional</span><input name="reason" maxlength="200" placeholder="${target === 'archived' ? 'e.g. Finished in September' : 'e.g. Superseded by the new pipeline'}" autofocus></label>${successor}<p class="form-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Next</button></footer></form>`;
+  const form = $('#lifecycle-form');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    const lifecycle = { state: target, ...(data.reason?.trim() ? { reason: data.reason.trim() } : {}), ...(data.successor ? { successor: data.successor } : {}) };
+    closeDialog(dialog);
+    await setLifecycle(project, lifecycle);
+  });
+  setupDialog(dialog);
+}
+
+async function setLifecycle(project, lifecycle) {
+  const send = (confirm) => api(`/projects/${encodeURIComponent(project.id)}`, 'PATCH', { version: project.version, lifecycle, ...(confirm ? { confirm } : {}) });
+  try {
+    try { await send(); } catch (error) {
+      if (error.code !== 'CONFIRM') throw error;
+      const go = await confirmAction({ eyebrow: project.name, title: error.message, reasons: error.reasons || [], confirm: lifecycle.state === 'archived' ? 'Archive' : 'Deprecate' });
+      if (!go) return;
+      await send(error.confirmToken);
+    }
+    await refresh();
+    toast(lifecycle.state === 'active' ? `${project.name} is active again.` : `${project.name} is ${lifecycle.state}. Nothing was deleted; Restore brings it back.`);
+  } catch (error) {
+    toast(refusalText(error), true);
+  }
+}
+
 async function copyPath(path) {
   try { await navigator.clipboard.writeText(path); toast('Repository path copied'); } catch { toast(path); }
 }
@@ -1033,7 +1122,9 @@ function openTaskViewer(task) {
   const dialog = $('#task-dialog');
   const head = drawerHead(task, { editable: false });
   const actions = project?.actions;
-  const where = actions?.on
+  const where = project?.lifecycle
+    ? `${escape(WHY.inactive(project))}.`
+    : actions?.on
     ? `Commits to <code>${escape(actions.branch)}</code> in <code>${escape(project.repository)}</code> as ${escape(actions.operator || '')}; not pushed. Anything else about <code>${escape(task.file || taskNumber(task))}</code> changes in the repository, and AGE Aris picks it up.`
     : `${escape(actions?.reason || 'Task actions are off.')} Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AGE Aris picks the change up.`;
   dialog.innerHTML = `<div class="task-view" data-task="${escape(task.id)}">${head.heading}<div class="dialog-fields">${head.summary}${actionBar(task)}${drawerThread(task)}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>${where}</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
@@ -2403,6 +2494,9 @@ function onAction(event) {
     case 'link-project': openLinkEditor(); break;
     case 'unlink-project': openUnlinkDialog(selectedProject()); break;
     case 'task-actions': switchTaskActions(selectedProject(), target); break;
+    case 'deprecate-project': openLifecycleDialog(selectedProject(), 'deprecated'); break;
+    case 'archive-project': openLifecycleDialog(selectedProject(), 'archived'); break;
+    case 'restore-project': { const project = state.projects.find((entry) => entry.id === target.dataset.id); if (project) setLifecycle(project, { state: 'active' }); break; }
     case 'open-run': closeDialog($('#task-dialog')); openRun(target.dataset.id); break;
     case 'edit-pipeline': openPipelineEditor(selectedProject()); break;
     case 'add-agent': openAgentEditor(); break;

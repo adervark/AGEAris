@@ -451,6 +451,23 @@ branch they pin. `.agearis-data/tracked-inflight/` holds a marker while a task
 action on a tracked repository is being written, so an interrupted one is
 settled, or named, when AGE Aris starts again.
 
+A project of either kind can be deprecated or archived from its header, and
+restored. The state is `lifecycle` in its `project.json`:
+`{state: "deprecated" | "archived", since, reason, successor}`, where
+`successor` is the id of the project that replaces it. Without `lifecycle`, a
+project is active.
+- **Deprecated:** the project stays listed, badged, and leaves Needs you,
+  Decisions and Activity across projects.
+- **Archived:** the project moves to an Archived list on the Projects page,
+  and leaves Home, the sidebar, All tasks and Working as well.
+
+Either way the project is read-only until it is restored: no task actions,
+task edits, new tasks, new runs or project edits. Its own pages still read.
+Nothing is deleted:
+- A tracked repository's state is written only in AGE Aris's data folder.
+  Its task-actions switch is kept, and comes back on restore.
+- An AGE Aris project's change is one commit to its `project.json`.
+
 Agents are registered in `.agearis-data/registry/agents.json`, a separate git
 repository. Agents start in `.agearis-data/workdirs/` unless configured
 otherwise. `.agearis-data/.api-token` holds the local API token.

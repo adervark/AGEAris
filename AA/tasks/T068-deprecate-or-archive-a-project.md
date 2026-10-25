@@ -37,16 +37,16 @@ Nothing is deleted, and a tracked repository is never touched.
 
 ## Steps
 
-- [ ] `project.json` gains an optional `lifecycle`: `{state, since, reason, successor}`. When absent, the project is active. The field is documented in README "Storage and behavior".
-- [ ] `PATCH /api/projects/:id {version, lifecycle, confirm}` on both kinds. Deprecating or archiving first answers CONFIRM with what it means; restoring needs no confirmation.
-- [ ] Refusals while deprecated or archived: task actions, new tasks, task edits, project edits other than `lifecycle` (code `PROJECT_INACTIVE`).
-- [ ] Aggregates: Needs you and the cross-project rollups leave out deprecated and archived projects. Every view and aggregate leaves out archived ones, apart from the project's own read-only pages.
-- [ ] Reads say it: `/api/projects`, orient and the capabilities manifest carry `lifecycle`, so an agent sees a project is deprecated and where its successor is.
-- [ ] UI:
+- [x] `project.json` gains an optional `lifecycle`: `{state, since, reason, successor}`. When absent, the project is active. The field is documented in README "Storage and behavior".
+- [x] `PATCH /api/projects/:id {version, lifecycle, confirm}` on both kinds. Deprecating or archiving first answers CONFIRM with what it means; restoring needs no confirmation.
+- [x] Refusals while deprecated or archived: task actions, new tasks, task edits, project edits other than `lifecycle` (code `PROJECT_INACTIVE`).
+- [x] Aggregates: Needs you and the cross-project rollups leave out deprecated and archived projects. Every view and aggregate leaves out archived ones, apart from the project's own read-only pages.
+- [x] Reads say it: `/api/workspace`, `/api/brief` and the capabilities manifest carry `lifecycle`, so an agent sees a project is deprecated and where its successor is. (Changed 2026-10-25, before the work: orient is left alone. Its `aa.orient/1` contract is the repository's, shared with the `board.sh` door (T056, T059), and a project field does not belong in it.)
+- [x] UI:
   - Deprecate, Archive and Restore in the project header, with the confirmation.
   - A badge, the reason and a successor link on a deprecated project.
   - The Archived section.
-- [ ] Tests on temporary folders: both kinds, each transition, each refusal, the aggregates, restore bringing back the switch.
+- [x] Tests on temporary folders: both kinds, each transition, each refusal, the aggregates, restore bringing back the switch.
 
 ## Decision rules — fixed in advance
 
@@ -64,8 +64,8 @@ Nothing is deleted, and a tracked repository is never touched.
 
 - **Last touched:** 2026-10-25, adervark @k/6bab66ff
 - **In flight:** nothing
-- **On disk:** nothing
-- **Resume with:** the Steps above
+- **On disk:** committed as "T068: deprecate, archive and restore a project". Screenshots in `docs/plans/evidence/t068/`.
+- **Resume with:** the review pass: one Opus reviewer, opened on T068's trail with a `doing` line first (decision rule).
 - **Next decision:** none
 
 ## Result

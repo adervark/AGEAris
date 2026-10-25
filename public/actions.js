@@ -38,6 +38,7 @@ export const WHY = {
   reopen: 'AA has no reopen: a task in done/ goes back by hand, in the repository',
   tracked: 'Task actions are off for this repository: switch them on in the project header',
   other: (holder) => `${holder} holds this task: ask them to release it`,
+  inactive: (project) => `${project.name} is ${project.lifecycle.state}: restore it in the project header to act on its tasks`,
 };
 
 export function projectKind(project) {
@@ -85,7 +86,7 @@ function entersWip(task, action) {
 export function availability(task, project, { operator = '', wipCount = 0 } = {}) {
   const kind = projectKind(project);
   const capabilities = CAPABILITIES[kind];
-  const off = kind === 'aa' && !project.actions?.on ? project.actions?.reason || WHY.tracked : '';
+  const off = project?.lifecycle ? WHY.inactive(project) : kind === 'aa' && !project.actions?.on ? project.actions?.reason || WHY.tracked : '';
   const held = holderKind(task, (kind === 'aa' && project.actions?.operator) || operator) === 'other';
   const wipLimit = Number.isInteger(project?.wipLimit) && project.wipLimit > 0 ? project.wipLimit : 0;
   return TASK_ACTIONS.map((action) => {

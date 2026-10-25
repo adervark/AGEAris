@@ -78,6 +78,14 @@ export function healthDot(health) {
   return `<span class="health-dot tone-${healthTone(health)}" aria-hidden="true"></span>`;
 }
 
+// A deprecated or archived project's badge (T068), its reason as the title.
+export function lifecycleBadge(lifecycle) {
+  if (!lifecycle) return '';
+  const word = lifecycle.state === 'archived' ? 'Archived' : 'Deprecated';
+  const title = `${word}${lifecycle.since ? ` since ${lifecycle.since.slice(0, 10)}` : ''}${lifecycle.reason ? `: ${lifecycle.reason}` : ''}. Read-only until restored.`;
+  return `<span class="lifecycle-badge is-${escape(lifecycle.state)}" title="${escape(title)}">${word}</span>`;
+}
+
 export function sampleBadge(sample) {
   return sample ? '<span class="sample-badge" title="This project’s history was generated to show how AGE Aris works.">Simulated history</span>' : '';
 }
@@ -258,7 +266,7 @@ export function homeStripWidth(width) {
 // width the strip is shown at.
 export function boardStrip(line, { agents = 0, project, tasks = [], width = 760, height } = {}) {
   const name = `<a class="board-name" href="#project/${escape(line.projectId)}">${escape(line.name)}</a>`;
-  const badges = `${line.linked ? `<span class="readonly-badge" title="${project?.actions?.on ? 'AGE Aris changes this repository’s tasks only through task actions.' : 'AGE Aris reads this repository; task actions are off.'}">Tracked</span>` : ''}${sampleBadge(line.sample)}`;
+  const badges = `${lifecycleBadge(line.lifecycle)}${line.linked ? `<span class="readonly-badge" title="${project?.actions?.on ? 'AGE Aris changes this repository’s tasks only through task actions.' : 'AGE Aris reads this repository; task actions are off.'}">Tracked</span>` : ''}${sampleBadge(line.sample)}`;
   if (line.state !== 'ready') {
     const word = line.state === 'unavailable' ? 'Unavailable' : 'Indexing';
     return `<article class="board-strip"><header class="board-head">${healthDot(null)}${name}<span class="health-word">${word}</span>${badges}</header><p class="board-sentence">${line.state === 'unavailable' ? icon('alert') : '<span class="spinner"></span>'}${escape(headline(line))}</p></article>`;
@@ -309,8 +317,9 @@ export function renderHome(brief, { mode, expanded, taskOf, agentsByProject, pro
   const tz = brief.timezone;
   const manyProjects = brief.projects.length > 1;
   const count = brief.needsYou.length;
-  const attention = brief.projects.filter((line) => line.state === 'ready' && ['red', 'amber'].includes(line.health.level));
-  const sub = attention.length ? `${attention.map((line) => `${line.name} ${healthWord(line.health) === 'Watch' ? 'needs watching' : 'needs attention'}`).join('; ')}.` : brief.projects.length ? 'Every board is on track.' : '';
+  // A deprecated board keeps its strip, and asks for nothing.
+  const attention = brief.projects.filter((line) => line.state === 'ready' && !line.lifecycle && ['red', 'amber'].includes(line.health.level));
+  const sub = attention.length ? `${attention.map((line) => `${line.name} ${healthWord(line.health) === 'Watch' ? 'needs watching' : 'needs attention'}`).join('; ')}.` : brief.projects.length ? `Every ${brief.projects.some((line) => line.lifecycle) ? 'active ' : ''}board is on track.` : '';
   const windowMenu = `<label class="window-menu"><span class="sr-only">Window for what changed</span><select data-brief-window>${Object.entries(WINDOWS).map(([value, label]) => `<option value="${value}" ${mode === value ? 'selected' : ''}>${escape(label)}</option>`).join('')}</select></label>`;
   const moved = DELTA_LABELS.map(([name, label]) => [name, label, brief.delta[name] || []]).filter(([, , items]) => items.length);
   const clear = clearChecks(brief);
