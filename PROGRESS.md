@@ -846,3 +846,38 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` 565 of 565. Evidence: `tests/orient-server.test.mjs`, T057's
   Result.
 
+
+## 2026-10-25 — T053: how often agents get lost, the baseline
+
+- `node lib/lost.mjs --as-of 2026-10-25T07:40:00Z` on AGE Aris at `1afc8e4`,
+  AGEIS at `4f793d1` and RSNA at `4775533`, read as `docs/METRICS.md` § The
+  lost-agent measures pins it. Every instance is in
+  `docs/plans/evidence/t053/baseline.json`.
+
+  | | AGE Aris | AGEIS | RSNA |
+  |---|---|---|---|
+  | read | 270 commits, 85 runs | 608 commits (17 merges), 179 runs | 759 commits, 94 runs |
+  | (a) repeated acts | 0 | 0; 22 `doing`s name no act | 1, 1.06 per 100 runs |
+  | (b) overlapping claims | 0 | 0 | 1 (runs) |
+  | (c) over-limit claims | 0 of 66 (limit 2) | no limit; 103 claims, WIP at a claim median 1, max 8 | no limit; 133 claims, median 20, max 39 |
+  | (d) start latency, median / 85th | 9 min / 27 min (24 of 66) | 6 min / 1.2 h (56 of 103) | 36 min / 9.1 h (50 of 133) |
+
+- Pooled, (a) is 1 in 358 runs, 0.28 per 100.
+- (a), RSNA T121, 2026-09-24 11:21Z: session `e804d562` wrote "resume fold
+  from .last.pt (13/16 done)…", and 5 s later a new session on another
+  profile, `7786e95f`, wrote the same `doing`. A plan switch. The trail names
+  one trainer (pid 12860); it cannot say whether the first launch ran.
+- (b), RSNA T081, 2026-09-11: a Codex parent (run `x02f3`) and its subagents
+  (runs `codex-cu.*`). Their run ids share no root, so the rule counts two
+  workers where there was one.
+- (c) can be measured only on AGE Aris: AGEIS and RSNA set no WIP limit,
+  and RSNA claimed with up to 39 tasks in progress.
+- (d) has a value only where a `did` follows a claim: 130 of 302 claims.
+  Most claims have no trail at all. It times the trail, not the work: RSNA
+  T053's work was first committed 12 minutes after its claim, and its first
+  `did` came 12 days later.
+- Keying (a) on `tell` instead of the act's words finds no more repeats.
+- Found on the way: AGE Aris's ledger dates AGEIS's work by its merges. 78 of
+  106 finished cycles have no start, and 43 deliveries fall on 2026-10-13.
+  Registered as T096.
+- **Spend:** none.

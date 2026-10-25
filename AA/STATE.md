@@ -7,7 +7,13 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** nothing. T089, T091, T092 and T093 are done: each Claude
+**In progress:** T053, the lost-agent baseline: measured on the three
+repositories (PROGRESS.md, 2026-10-25), in review. T097 is done: `npm test`
+passes at its default concurrency again (three tests gave a cold build
+250 ms; `/aa` polled without its token while the old data folder moved).
+T096 is registered: the ledger dates a merged branch's work by its merge,
+so AGEIS's cycles read wrong. T089, T091,
+T092 and T093 are done: each Claude
 account's limits, read fresh each minute and backing off on a 429, with each
 window's start and end, are in a strip on every page, on the Agents page,
 from `GET /api/limits` and `/aa limits`; a lapsed token is renewed and
@@ -19,7 +25,7 @@ wait as T095. T077 (S1a) can start, on v2.8.
 2026-10-10: `docs/plans/agent-brain.md`). T055, the orient contract and its
 82 cases, is done (2026-10-11). T057 (`GET /api/orient`, 82 of 82) and
 T063 (`GET /api/capabilities`, `board.sh --capabilities`) are done
-(2026-10-24). T053 and T054 can start; T056, the board.sh door, waits on
+(2026-10-24). T053 is in progress and T054 can start; T056, the board.sh door, waits on
 T004, and T059 compares the two doors once it lands. Before
 that, the Flow tab's first slice of charts was done (T030–T032:
 aging WIP, cycle-time scatterplot, forecast). The rest of
@@ -31,7 +37,9 @@ operator's choice in its file before it can be claimed.
 **Watch out for:** T016 patched `AA/ckpt.sh` in AGEION, AGEIS, Gem4A and RSNA
 and left it uncommitted there; each repository's own session commits it.
 AGE Aris must go on reading `deaddrop/` and `pm/` boards. Its data folder
-must stay outside this repository, or it refuses to track it (T003).
+must stay outside this repository, or it refuses to track it (T003). The
+installed `/aa` (`~/.claude/skills/aa`, a copy) is behind `skills/aa` since
+T097; updating it is `global-config`, and T004 decides copy or link.
 **Do not push this branch before 2026-10-22 without the operator's word.**
 `docs/plans/research-runs.md` §2, PROGRESS.md (T074), T073, T074 and
 `docs/plans/evidence/t074/` quote RSNA's competition research, and RSNA
@@ -39,17 +47,18 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-25T07:23Z · 95 tasks: 29 backlog, 1 WIP (1 in progress), 65 delivered`
+`board · 2026-10-25T08:07Z · 97 tasks: 30 backlog, 1 WIP (1 in progress), 66 delivered`
 
-FLOW · **WIP 1/2** · throughput 15.2/wk (65 in 30d) · cycle time 50th 6m / 85th 3h (n=65)
-FLOW · Little's Law: 1 ÷ 15.2/wk ≈ 11h expected · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 15.4/wk (66 in 30d) · cycle time 50th 6m / 85th 3h (n=66)
+FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 25% (touch 10m of 44m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | now |  |
-| **BACKLOG** 29 | | `T003` `T004` `T024` `T025` `T047` `T051` +23 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 22h |  |
-|  | T063 | Capabilities: what an agent may do, and how | adervark | 22h |  |
+| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 44m |  |
+| **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | now |  |
+|  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 23h |  |
+|  | T063 | Capabilities: what an agent may do, and how | adervark | 23h |  |
 |  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 35h |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 2d |  |
 |  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 2d |  |

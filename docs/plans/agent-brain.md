@@ -634,6 +634,9 @@ someone else's claim. It can only report "no pushed sign of life since X".
   - **(d) start latency:** the time from a claim commit to the first `did` on
     that task.
 
+  How each is read is pinned in `docs/METRICS.md` § The lost-agent measures
+  (T053), and `node lib/lost.mjs` counts them.
+
   P0a measures a baseline on the three repositories. P6 measures again 28 days
   after P1d. Targets:
   - no (b) and no (c) among new claims;
