@@ -63,7 +63,7 @@ Nothing is deleted, and a tracked repository is never touched.
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-10-25, adervark @k/6bab66ff
-- **In flight:** nothing
+- **In flight:** the review pass, run `6bab66ff.89e4` (one Opus reviewer, account k). Its `end` line on the trail says it stopped; if none and its session is gone, reap it and re-run the pass.
 - **On disk:** committed as "T068: deprecate, archive and restore a project". Screenshots in `docs/plans/evidence/t068/`.
 - **Resume with:** the review pass: one Opus reviewer, opened on T068's trail with a `doing` line first (decision rule).
 - **Next decision:** none
