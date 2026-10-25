@@ -43,7 +43,7 @@ and left it uncommitted there; each repository's own session commits it.
 AGE Aris must go on reading `deaddrop/` and `pm/` boards. Its data folder
 must stay outside this repository, or it refuses to track it (T003). The
 installed `/aa` (`~/.claude/skills/aa`, a copy) is behind `skills/aa` since
-T097; updating it is `global-config`, and T004 decides copy or link.
+T097. Updating it is a `global-config` spend, registered as T099.
 **Do not push this branch before 2026-10-22 without the operator's word.**
 `docs/plans/research-runs.md` §2, PROGRESS.md (T074), T073, T074 and
 `docs/plans/evidence/t074/` quote RSNA's competition research, and RSNA
@@ -51,16 +51,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-25T08:30Z · 98 tasks: 31 backlog, 1 WIP (1 in progress), 66 delivered`
+`board · 2026-10-25T08:31Z · 99 tasks: 32 backlog, 1 WIP (1 in progress), 66 delivered`
 
 FLOW · **WIP 1/2** · throughput 15.4/wk (66 in 30d) · cycle time 50th 6m / 85th 3h (n=66)
-FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 28% (touch 18m of 66m, n=1 trails) · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 27% (touch 18m of 67m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 66m |  |
-| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 22m |  |
+| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 67m |  |
+| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 24m |  |
 |  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 23h |  |
 |  | T063 | Capabilities: what an agent may do, and how | adervark | 23h |  |
 |  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 36h |  |

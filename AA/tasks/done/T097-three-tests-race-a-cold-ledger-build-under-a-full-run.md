@@ -86,8 +86,8 @@ created: 2026-10-25
   working tree with T053's changes in it. The committed tree alone passes
   565 of 565. `npm run check` is clean.
 - Not changed: the installed copy at `~/.claude/skills/aa/aa.sh`, which is
-  now behind the repository's. Updating it is `global-config`, and T004
-  decides copy or link. Its unsigned polls reach no server, because AGE Aris
+  now behind the repository's. Updating it is a `global-config` spend,
+  registered as T099. Its unsigned polls reach no server, because AGE Aris
   moves the folder before it listens.
 
 **Spend:** none.
