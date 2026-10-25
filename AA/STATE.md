@@ -8,11 +8,15 @@ pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
 **In progress:** T053, the lost-agent baseline: measured on the three
-repositories (PROGRESS.md, 2026-10-25), in review. T097 is done: `npm test`
+repositories (PROGRESS.md, 2026-10-25) and reviewed once. The review's 8
+findings are fixed, and no baseline number moved. The second pass, which
+re-checks the fixes, waits on the operator to choose which account runs it,
+and when. T097 is done: `npm test`
 passes at its default concurrency again (three tests gave a cold build
 250 ms; `/aa` polled without its token while the old data folder moved).
 T096 is registered: the ledger dates a merged branch's work by its merge,
-so AGEIS's cycles read wrong. T089, T091,
+so AGEIS's cycles read wrong. T098 is registered: a fifth test races the
+cold build, seen once under load. T089, T091,
 T092 and T093 are done: each Claude
 account's limits, read fresh each minute and backing off on a 429, with each
 window's start and end, are in a strip on every page, on the Agents page,
@@ -47,19 +51,19 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-25T08:07Z · 97 tasks: 30 backlog, 1 WIP (1 in progress), 66 delivered`
+`board · 2026-10-25T08:30Z · 98 tasks: 31 backlog, 1 WIP (1 in progress), 66 delivered`
 
 FLOW · **WIP 1/2** · throughput 15.4/wk (66 in 30d) · cycle time 50th 6m / 85th 3h (n=66)
-FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 25% (touch 10m of 44m, n=1 trails) · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 28% (touch 18m of 66m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 44m |  |
-| **BACKLOG** 30 | | `T003` `T004` `T024` `T025` `T047` `T051` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | now |  |
+| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 66m |  |
+| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 22m |  |
 |  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 23h |  |
 |  | T063 | Capabilities: what an agent may do, and how | adervark | 23h |  |
-|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 35h |  |
+|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 36h |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 2d |  |
 |  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 2d |  |
 |  | T092 | Renew an expired token, so every account reads live | adervark | 2d |  |
