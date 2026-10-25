@@ -50,18 +50,20 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-25T09:57Z · 99 tasks: 32 backlog, 0 WIP (0 in progress), 67 delivered`
+`board · 2026-10-25T10:26Z · 99 tasks: 31 backlog, 1 WIP (1 in progress), 67 delivered`
 
-FLOW · **WIP 0/2** · throughput 15.4/wk (66 in 30d) · cycle time 50th 6m / 85th 3h (n=66)
-FLOW · Little's Law: 0 ÷ 15.4/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 1/2** · throughput 15.6/wk (67 in 30d) · cycle time 50th 6m / 85th 2h (n=67)
+FLOW · Little's Law: 1 ÷ 15.6/wk ≈ 10h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 1h |  |
+| **IN PROGRESS** 1/2 | T068 | Deprecate or archive a project, either kind, and restore it | adervark | now |  |
+| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T053 | Measure how often agents get lost: a baseline | adervark | 28m |  |
+|  | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 2h |  |
 |  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 25h |  |
 |  | T063 | Capabilities: what an agent may do, and how | adervark | 25h |  |
-|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 37h |  |
+|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 38h |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 2d |  |
 |  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 2d |  |
 |  | T092 | Renew an expired token, so every account reads live | adervark | 2d |  |
@@ -96,9 +98,9 @@ FLOW · Little's Law: 0 ÷ 15.4/wk ≈ now expected · lead time 85th 35h
 |  | T035 | The forecast samples days from before the board existed | adervark | 16d |  |
 |  | T034 | Silver accents, taken from the logo | adervark | 16d |  |
 |  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 16d |  |
-|  | T032 | A forecast from throughput: when, and how many | adervark | 16d |  |
-|  | T030 | An aging WIP chart: what is not moving | adervark | 16d |  |
-|  | T031 | A cycle-time scatterplot with the service level | adervark | 16d |  |
+|  | T032 | A forecast from throughput: when, and how many | adervark | 17d |  |
+|  | T030 | An aging WIP chart: what is not moving | adervark | 17d |  |
+|  | T031 | A cycle-time scatterplot with the service level | adervark | 17d |  |
 |  | T029 | Research: what Scrum masters and flow coaches use to see the work | adervark | 17d |  |
 |  | T026 | Tracked task actions: the review's remaining low findings | adervark | 17d |  |
 |  | T016 | ckpt.sh check exits 1 on a clean trail | adervark | 17d |  |
