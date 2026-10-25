@@ -49,17 +49,23 @@ Measures (a)–(d) of the lost-agent metric run on this repository, AGEIS and RS
     no PROGRESS.md number changes.
   - T096 registered; T097 done; T098 registered (a fifth test that races
     the cold build, seen once under load).
-- **Resume with:** the second review pass, which only re-checks the fixes
-  (decision rule). Open it on T053's trail with a `doing` line first, as the
-  first pass was. It was not started on 2026-10-25: account `default` was at
-  78% of its 5-hour window at 08:26Z, with the window resetting at 12:09Z.
-  Accounts `k` and `v` were almost unused. After any further fix:
-  - Re-run `node lib/lost.mjs --json --as-of 2026-10-25T07:40:00Z` on AGEIS
-    and RSNA in place.
-  - Re-run it on AGE Aris from a clone at `1afc8e4`, the baseline's HEAD.
-  - Compare the output with `baseline.json`.
-- **Next decision:** the operator's: which account runs the second pass, and
-  when.
+- **Resume with:** the second review pass, run from a session on profile `k`
+  (the operator's choice, 2026-10-25; `default` was at 78% of its 5-hour
+  window). It only re-checks the fixes (decision rule).
+  - Open it on T053's trail first, with
+    `AA/ckpt.sh open T053 --agent reviewer`, and commit a `doing` line before
+    spawning, as the first pass did.
+  - Use one Opus reviewer. Its brief carries rule 6 verbatim.
+  - It re-checks commit `5ece75a` against the first pass's findings. They
+    are listed in that commit's message and in run `a29cee11.3776`'s `did`
+    lines on the trail. Their failing inputs are now tests in
+    `tests/lost.test.mjs`.
+  - After any further fix:
+    - Re-run `node lib/lost.mjs --json --as-of 2026-10-25T07:40:00Z` on
+      AGEIS and RSNA in place.
+    - Re-run it on AGE Aris from a clone at `1afc8e4`, the baseline's HEAD.
+    - Compare the output with `baseline.json`.
+- **Next decision:** none
 
 ## Result
 

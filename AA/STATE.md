@@ -10,8 +10,8 @@ found is fixed (2026-10-08: T002, T007–T016, T026).
 **In progress:** T053, the lost-agent baseline: measured on the three
 repositories (PROGRESS.md, 2026-10-25) and reviewed once. The review's 8
 findings are fixed, and no baseline number moved. The second pass, which
-re-checks the fixes, waits on the operator to choose which account runs it,
-and when. T097 is done: `npm test`
+re-checks the fixes, runs from a session on profile `k`, the operator's
+choice; T053's Handoff says how. T097 is done: `npm test`
 passes at its default concurrency again (three tests gave a cold build
 250 ms; `/aa` polled without its token while the old data folder moved).
 T096 is registered: the ledger dates a merged branch's work by its merge,
@@ -51,16 +51,16 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-25T08:31Z · 99 tasks: 32 backlog, 1 WIP (1 in progress), 66 delivered`
+`board · 2026-10-25T08:34Z · 99 tasks: 32 backlog, 1 WIP (1 in progress), 66 delivered`
 
 FLOW · **WIP 1/2** · throughput 15.4/wk (66 in 30d) · cycle time 50th 6m / 85th 3h (n=66)
-FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 27% (touch 18m of 67m, n=1 trails) · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 15.4/wk ≈ 10h expected · flow efficiency 26% (touch 18m of 70m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 67m |  |
+| **IN PROGRESS** 1/2 | T053 | Measure how often agents get lost: a baseline | adervark | 70m |  |
 | **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 24m |  |
+| **DONE** | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 26m |  |
 |  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 23h |  |
 |  | T063 | Capabilities: what an agent may do, and how | adervark | 23h |  |
 |  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 36h |  |
