@@ -39,7 +39,7 @@ Measures (a)–(d) of the lost-agent metric run on this repository, AGEIS and RS
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-10-25, adervark @k/6bab66ff
-- **In flight:** nothing
+- **In flight:** the second review pass, run `6bab66ff.4df8` (one Opus reviewer, account k). Its `end` line on the trail says it stopped; if none and its session is gone, reap it and re-run the pass.
 - **On disk:**
   - `lib/lost.mjs` and `tests/lost.test.mjs` (10 tests, passing).
   - The readings, pinned in `docs/METRICS.md` § The lost-agent measures.
