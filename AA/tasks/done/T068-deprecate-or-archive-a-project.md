@@ -1,7 +1,7 @@
 ---
 id: T068
 title: "Deprecate or archive a project, either kind, and restore it"
-status: claimed
+status: done
 owner: adervark @k/6bab66ff 2026-10-25 — lifecycle in project.json, PATCH with confirmation, refusals, aggregates, UI
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
@@ -62,13 +62,52 @@ Nothing is deleted, and a tracked repository is never touched.
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-25, adervark @k/6bab66ff
-- **In flight:** the review pass, run `6bab66ff.89e4` (one Opus reviewer, account k). Its `end` line on the trail says it stopped; if none and its session is gone, reap it and re-run the pass.
-- **On disk:** committed as "T068: deprecate, archive and restore a project". Screenshots in `docs/plans/evidence/t068/`.
-- **Resume with:** the review pass: one Opus reviewer, opened on T068's trail with a `doing` line first (decision rule).
+- **Last touched:** 2026-10-25, done
+- **In flight:** nothing
+- **On disk:** `7a46df8` and `2198cfd`; `tests/lifecycle.test.mjs`, `tests/e2e/lifecycle.e2e.mjs`; screenshots in `docs/plans/evidence/t068/`.
+- **Resume with:** nothing; delivered
 - **Next decision:** none
 
 ## Result
+
+- Any project, tracked or AGE Aris's own, can be deprecated, archived and
+  restored: from its header, the Projects page's Archived list,
+  `PATCH /api/projects/:id {version, lifecycle}`, and the capabilities
+  manifest (`project-lifecycle`).
+  - The state is `lifecycle` in AGE Aris's `project.json`. For a tracked
+    repository that is the data folder's copy; the repository was checked
+    unchanged, byte for byte.
+  - An AGE Aris project's change is one commit. Nothing is deleted.
+- Deprecating or archiving asks for a confirmation of what it means. The
+  token covers the state, reason and successor. Restoring takes one click.
+- While inactive, the project refuses every write with `PROJECT_INACTIVE`:
+  task actions, new tasks, task edits, project edits, pipeline saves and new
+  runs. Its reads still answer. A project with a run going cannot be made
+  inactive (`RUNS_ACTIVE`).
+- Deprecated: listed and badged, and out of Needs you, Decisions, the delta
+  and Activity across projects. Archived: out of all of those, and the
+  sidebar, All tasks and Working too.
+- Orient is left alone (Steps, changed before the work): its contract is the
+  repository's.
+- One Opus review (run `6bab66ff.89e4`) found 7, 1 medium: a run going on an
+  archived project kept taking decisions. All 7 are fixed in `2198cfd`, each
+  with a test. Not reviewed again: the decision rule allows one pass.
+- Of 33 single-guard mutants, every one fails a test. The 5 in `app.js`
+  fail only `npm run e2e`'s `lifecycle.e2e.mjs`, which `npm test` does not
+  run.
+- `npm test` 587 of 587 (one earlier run failed 2, both T098's cold-build
+  races); `npm run check` clean; `lifecycle.e2e.mjs` 3 of 3.
+- Found on the way:
+  - T098 widened: a sixth test, in `sample.test.mjs`, races the cold build.
+  - T100 registered: `task-actions.e2e.mjs` fails 9 of 24, before T068 as
+    after.
+- Run digest:
+  - **6bab66ff.89e4** (reviewer @k/6bab66ff): nothing in the repository ·
+    about 40 min, one Opus pass. Left unchecked: the agent-pull attempt API
+    on an archived project's run, the Agents page, and re-creating the
+    sample while it is archived.
+
+**Spend:** `agent-fan-out`, one Opus review pass on `k`, about 40 min.
 
 ## Notes
 

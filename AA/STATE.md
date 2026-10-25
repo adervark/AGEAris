@@ -7,7 +7,10 @@ are committed on `feature/pm-cockpit`, which is not on `main` yet; it was
 pushed on 2026-10-08 so a tester can try it (T028). Every bug the reviews
 found is fixed (2026-10-08: T002, T007–T016, T026).
 
-**In progress:** nothing. T053 is done (2026-10-25): the lost-agent
+**In progress:** nothing. T068 is done (2026-10-25): any project can be
+deprecated, archived and restored, read-only between, nothing deleted.
+T100 is registered: `task-actions.e2e.mjs` fails 9 of 24, before T068 as
+after. T098 now covers a sixth cold-build race. T053 is done: the lost-agent
 baseline on the three repositories is in PROGRESS.md, reviewed twice. The
 second pass's 5 low findings are fixed without a third review, and no
 baseline number moved. T097 is done: `npm test`
@@ -50,19 +53,18 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-10-25T10:26Z · 99 tasks: 31 backlog, 1 WIP (1 in progress), 67 delivered`
+`board · 2026-10-25T11:12Z · 100 tasks: 32 backlog, 0 WIP (0 in progress), 68 delivered`
 
-FLOW · **WIP 1/2** · throughput 15.6/wk (67 in 30d) · cycle time 50th 6m / 85th 2h (n=67)
-FLOW · Little's Law: 1 ÷ 15.6/wk ≈ 10h expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 15.6/wk (67 in 30d) · cycle time 50th 6m / 85th 2h (n=67)
+FLOW · Little's Law: 0 ÷ 15.6/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T068 | Deprecate or archive a project, either kind, and restore it | adervark | now |  |
-| **BACKLOG** 31 | | `T003` `T004` `T024` `T025` `T047` `T051` +25 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T053 | Measure how often agents get lost: a baseline | adervark | 28m |  |
-|  | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 2h |  |
-|  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 25h |  |
-|  | T063 | Capabilities: what an agent may do, and how | adervark | 25h |  |
+| **BACKLOG** 32 | | `T003` `T004` `T024` `T025` `T047` `T051` +26 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T053 | Measure how often agents get lost: a baseline | adervark | 75m |  |
+|  | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 3h |  |
+|  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 26h |  |
+|  | T063 | Capabilities: what an agent may do, and how | adervark | 26h |  |
 |  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 38h |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 2d |  |
 |  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 2d |  |
@@ -73,14 +75,14 @@ FLOW · Little's Law: 1 ÷ 15.6/wk ≈ 10h expected · lead time 85th 35h
 |  | T087 | Research-runs design v2.7: answer R0d's missed canary and its loose ends | adervark | 3d |  |
 |  | T085 | R0d: round 3 re-reconciled under v2.6, graded on the same twelve | adervark | 3d |  |
 |  | T084 | Research-runs design v2.6: answer R0c's 7 of 12 | adervark | 3d |  |
-|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 3d |  |
+|  | T082 | Research-runs design v2.5: answer R0b's recall of 2 of 12 | adervark | 4d |  |
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 12d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 12d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 12d |  |
 |  | T055 | The orient contract and its scenario corpus | adervark | 13d |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 14d |  |
-|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 14d |  |
-|  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 14d |  |
+|  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 15d |  |
+|  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 15d |  |
 |  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 15d |  |
 |  | T050 | /aa on Windows without WSL | adervark | 15d |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 16d |  |
@@ -96,8 +98,8 @@ FLOW · Little's Law: 1 ÷ 15.6/wk ≈ 10h expected · lead time 85th 35h
 |  | T037 | The page fills a wide screen: on an ultrawide monitor it is a 1240px strip | adervark | 16d |  |
 |  | T036 | Silver you can see: T034's accent was too faint to notice | adervark | 16d |  |
 |  | T035 | The forecast samples days from before the board existed | adervark | 16d |  |
-|  | T034 | Silver accents, taken from the logo | adervark | 16d |  |
-|  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 16d |  |
+|  | T034 | Silver accents, taken from the logo | adervark | 17d |  |
+|  | T033 | Chart defects found on real boards: a yearless date, a thin forecast, repeated ticks, stacked dots | adervark | 17d |  |
 |  | T032 | A forecast from throughput: when, and how many | adervark | 17d |  |
 |  | T030 | An aging WIP chart: what is not moving | adervark | 17d |  |
 |  | T031 | A cycle-time scatterplot with the service level | adervark | 17d |  |
