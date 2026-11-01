@@ -1,8 +1,8 @@
 ---
 id: T054
 title: "Scale baseline: a 300-repository perf fixture"
-status: open
-owner: —
+status: claimed
+owner: adervark @b/9ba3e0ed 2026-11-01 — the 300-repository fixture and today's numbers against §5.5
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: measure
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -36,7 +36,7 @@ created: 2026-10-10
 
 *Kept true while claimed, not written on the way out (rule 8).*
 
-- **Last touched:** 2026-10-10, registered
+- **Last touched:** 2026-11-01, claimed by adervark @b/9ba3e0ed
 - **In flight:** nothing
 - **On disk:** nothing
 - **Resume with:** the Steps above
