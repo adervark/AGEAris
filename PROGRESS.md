@@ -905,3 +905,66 @@ its date, the number, and where the evidence is. Newest last.
 - **Spend:** the reviews, two Opus passes (`agent-fan-out`): 19 min and
   about 255k tokens on `default`, then about 25 min on `k`. The measuring
   itself spent nothing.
+
+## 2026-11-01 — T054: the scale baseline, 300 repositories against §5.5
+
+- The fixture (`tests/perf/scale-fixture.mjs`): 300 tracked AA repositories
+  of about 200 commits and 3 of about 5,000, 76,396 commits in all. It holds
+  9,921 delivered tasks, 606 in progress or blocked and 1,416 in backlog. It
+  was built in 8.3 s, against a 5-minute budget, into
+  `~/.cache/agearis/perf/scale-<key>/`, outside the repository and the data
+  folder. The key hashes the generator and `lib/fabricate.mjs`, so the
+  fixture is reused until either changes, and a new build removes the old one.
+- Measured by `node --test tests/perf/scale.perf.mjs`. AGE Aris ran as its own
+  process on a fresh data folder tracking all 303 repositories, and was read
+  over HTTP. There were three runs, the third with `AGEARIS_PERF_STRICT=1`;
+  the numbers below are runs 1–3. The brief's timings during the build and
+  its parts were added after run 1, so they come from runs 2–4 (run 4 was
+  `npm run perf`). Memory when first fresh is run 1's. The machine had 16
+  threads (Ryzen 9
+  8945HS) and Node 22.22.1, with the operator's own AGE Aris idle beside it.
+
+  | §5.5 target | today | met | owner |
+  |---|---|---|---|
+  | `board.sh --orient`, 5,000 commits, p95 < 1 s | not built | — | T056 (P1b) |
+  | `GET /api/orient`, one repo, warm, p95 < 150 ms | 200 commits: 112, 82, 80 ms. 5,000 commits: 260, 234, 235 ms | 200: yes. 5,000: no | T102, new |
+  | `GET /api/orient?all=1`, 300 repos, p95 < 1 s | not built (400). One orient per repository in turn: 24.5–27.9 s | — | T062 (P3) |
+  | any answer ≤ its budget | the largest 1,424 B of 8,192 | yes | — |
+  | restart to fresh, cache warm, < 10 s | no cache exists. Cold: 10.3, 9.1, 8.5 s | not testable | T060 (P2a) |
+  | server memory < 300 MB (MB here is 2^20 bytes) | 646–669 MB resident at the end (404 MB when first fresh), 684–718 MB peak | no | T062 (P3) |
+  | `/api/workspace` < 100 KB | 20.7 MB, 7.7–8.9 s | no | T061 (P2b) |
+  | Home < 100 KB | brief 1,219 KB + changes 71 KB. Warm brief p95 1.9–2.2 s | no | T062 (P3) |
+
+- **The payload is history (N12): confirmed.**
+  - On the fixture, delivered tasks and activity are 92% of
+    `/api/workspace`: 45,716 activity rows are 11.7 MB (55%), 9,921
+    delivered tasks 7.8 MB (37%). The backlog is 5%, and WIP 2.3%.
+  - On the live data the same day (3 projects), `/api/workspace` was 462 KB,
+    up from the 316 KB of 2026-10-10. Delivered tasks were 233 KB (50%) and
+    activity 139 KB (30%), so history was 80%; the backlog was 52 KB (11%)
+    and WIP 31.5 KB (7%).
+- **The brief is per-project lines, not Needs-you.** Of its 1,219 KB, the
+  `projects` lines are 1,006 KB and `needsYou` 212 KB. T062's cap on
+  Needs-you alone would leave Home at about 1 MB.
+- **Found on the way:**
+  - A 5,000-commit repository's orient misses because `lib/orient.mjs`
+    `history()` walks every board commit on every call; nothing caches the
+    committed part that §5.1 calls cacheable. Registered as T102. On the live
+    data, one-repo orient already took 165–285 ms.
+  - During the cold build the server answers late. The first brief took
+    639–736 ms, though it waits only 250 ms for a cold ledger, and the second
+    took 7.7–8.4 s. Home shows nothing until the build is over.
+  - `/api/workspace` runs one `spawnSync` `git log` per project
+    (`lib/workspace.mjs:1022`), 303 in turn inside the workspace lock, so the
+    event loop is held for the whole 7.7–8.9 s. No request made during one
+    was timed.
+  - Activity keeps 200 rows per project and is not capped across projects:
+    45,716 rows.
+- `npm run perf` now runs its files one at a time (`--test-concurrency=1`),
+  so the two suites do not measure each other.
+- Run 5, `npm run perf` after the last edits, rebuilt the fixture (8.3 s,
+  the same 76,396 commits) and fell within or below runs 1–3. Orient on 5,000
+  commits took 203 ms, `/api/workspace` 6.9 s, and memory was 597 MB
+  resident. It passed 4, with 6 todo, 1 skipped and none failed.
+- **Spend:** none. The fixture and the data folders are outside the
+  repository and `.agearis-data`.

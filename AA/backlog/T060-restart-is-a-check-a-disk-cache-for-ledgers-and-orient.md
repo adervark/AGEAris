@@ -47,3 +47,10 @@ After a restart, AGE Aris reads cached ledgers and committed parts and rebuilds 
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-11-01, T054 (adervark @b/9ba3e0ed): the baseline is in PROGRESS.md.
+  With no cache, a cold restart of the 303-repository fixture reached fresh
+  in 8.5–10.3 s, and the brief answered late while it built (7.7–8.4 s for
+  the second one). Drop the `todo` on the restart subtest in
+  `tests/perf/scale.perf.mjs` when the cache lands. The warm-path memo of
+  the committed part is T102.
