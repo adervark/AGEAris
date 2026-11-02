@@ -68,12 +68,14 @@ everywhere.
 12. **New work gets the next id and a file in `backlog/`**, however small. If
     it is not a file, no agent will pick it up and the board cannot show it.
 13. **Closing releases what the task holds.** When a task reaches `done/`,
-    `AA/ckpt.sh release T###` deletes its scratch folder, its landed
-    worktrees and its merged branches. `close --delete` runs it too. What the
-    Result cites as evidence is named on the task's `keeps:` line, fixed with
-    the decision rules, and is committed to `AA/evidence/T###/` first. Work
-    that has not landed is never deleted, only named. `board.sh --check`
-    warns while a finished task still holds anything.
+    `AA/ckpt.sh release T###` deletes its scratch folders, its landed
+    worktrees and its merged branches; `close --delete` runs it too. It keeps
+    the task's documentation, visuals and metrics (`keep_kinds` in `AA.yml`)
+    and whatever its `keeps:` line names: committed to `AA/evidence/T###/`
+    first, or, over `keep_max_kb`, copied to the archive outside git with
+    their sha256 committed. Work that has not landed, a folder an open task
+    cites, and anything a process is using are never deleted, only named.
+    `board.sh --check` warns while a finished task still holds anything.
     *(WHY § the scratch that outlived its tasks.)*
 
 ## Where things live
@@ -84,7 +86,7 @@ everywhere.
 | `tasks/` | past the commitment point. Counts against the WIP limit; its age is measured. |
 | `tasks/done/` | delivered or killed. A decision not to do something is a result and is kept. |
 | `checkpoints/T###.jsonl` | the live trail. Retired into the Result when the task closes; git keeps it. |
-| `evidence/T###/` | the files a done task kept (its `keeps:` line). Committed; nothing else of the task's outlives it. |
+| `evidence/T###/` | what a done task kept: its docs, visuals and metrics, and its `keeps:` files; `RELEASED.tsv` lists the bigger ones archived outside git. Nothing else of the task's outlives it. |
 | `scratch/T###/` (AA.yml `scratch:`) | a task's working files, worktrees and builds. Usually git-ignored. Deleted when the task is done (rule 13). |
 
 **The location is the state.** `status:` in the frontmatter adds detail within a

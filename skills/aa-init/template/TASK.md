@@ -8,7 +8,7 @@ type: {{type, or delete the line for untyped}}
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
 blockedReason: ""
 depends: []
-# keeps: the files the Result cites, committed to AA/evidence/ at close; the rest of scratch/T###/ is deleted (rule 13)
+# keeps: files the Result stands on beyond its docs, visuals and metrics (kept anyway); the rest of scratch/T###/ is deleted at close (rule 13)
 keeps: []
 created: {{DATE}}
 ---
@@ -32,9 +32,10 @@ created: {{DATE}}
 {{Pass, fail and stop criteria — required before claiming if this task will
 spend anything named in AA.yml (rule 5).}}
 
-{{What it keeps when done: list the files on the frontmatter's `keeps:` line,
-e.g. `keeps: [scratch/T###/bench.jsonl]`. Everything else under
-`scratch/T###/` is deleted at close (rule 13).}}
+{{What it keeps when done. Its documentation, visuals and metrics under
+`scratch/T###/` are kept anyway (AA.yml keep_kinds); name anything else the
+Result stands on, such as a script, on the frontmatter's `keeps:` line, e.g.
+`keeps: [scratch/T###/run.py]`. Everything else is deleted at close (rule 13).}}
 
 *(While this is empty the board marks the task ⚑.)*
 

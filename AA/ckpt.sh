@@ -389,8 +389,12 @@ cmd_close() { # close <TASK> [--delete] [--force]
   if git -C "$ROOT" commit -q --no-verify \
        -m "ckpt: $task compacted into the task result" -- "$f" >/dev/null 2>&1; then
     echo "deleted. The trail is in git: git log --diff-filter=D -p -- AA/checkpoints/$task.jsonl"
-    # Rule 13: a finished task's environment goes with its trail.
-    if ls "$TD/done/$task"-*.md >/dev/null 2>&1; then cmd_release "$task"; fi
+    # Rule 13: a finished task's environment goes with its trail. Not after
+    # --force: the runs it overrode may still be running.
+    if ls "$TD/done/$task"-*.md >/dev/null 2>&1; then
+      if [ "$force" = 0 ]; then cmd_release "$task"
+      else echo "not released (--force): once nothing of $task runs, ckpt.sh release $task"; fi
+    fi
   else
     warn "the file is removed and STAGED, but the removal is not committed yet.
      Its contents are safe in the previous commit; commit the removal with your next one."
@@ -398,28 +402,44 @@ cmd_close() { # close <TASK> [--delete] [--force]
 }
 
 # ---- release: rule 13, closing releases what the task holds ------------------
-# What a done task leaves on disk goes: its scratch folder (scratch/T###, or
-# t###, T###-*, t###_* …), the git worktrees in it, the branches named for it,
-# and subagent worktrees that are landed and idle. The files its `keeps:` line
-# names move to AA/evidence/T###/ and are committed BEFORE anything is
-# deleted. Never deleted: work not on the main line, uncommitted changes to
-# tracked files, a nested repository with commits no remote has, anything
-# outside the repository, a symlink's target.
+# What a done task leaves on disk goes: its scratch folders (scratch/T###,
+# t###, T###-*, t###_* …), the git worktrees in them, the branches named for
+# it, and subagent worktrees that are landed, idle and unused. Before anything
+# goes, what it keeps is saved: its documentation, visuals and metrics (AA.yml
+# keep_kinds) and the files its `keeps:` line names. Up to keep_max_kb each,
+# they are committed to AA/evidence/T###/; bigger ones are copied to the
+# archive outside git (AA.yml archive:, or --archive), with size and sha256 in
+# AA/evidence/T###/RELEASED.tsv.
+#
+# Never deleted: a folder an open task cites; work not on the main line by
+# ancestry; uncommitted changes to tracked files; a locked worktree; a nested
+# repository with commits no remote has; anything a running process is using;
+# a trail with a live run, or one this cannot read; anything outside the
+# scratch folder; a symlink's target. When one of these holds, the whole
+# folder stays and the release names why.
 
 lower() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
-# fm <file> <key> — one value from a task file's frontmatter (the block between
-# the first two --- lines), with any trailing comment kept as written.
-fm() { awk -v k="$2:" 'NR==1 && !/^---/ {exit} /^---/ {n++; if (n==2) exit; next} { sub(/\r$/,"") } index($0,k)==1 { v=substr($0,length(k)+1); sub(/^ +/,"",v); print v; exit }' "$1"; }
 human_kb() { awk -v k="$1" 'BEGIN { if (k >= 1048576) printf "%.1f GB", k/1048576; else if (k >= 1024) printf "%.0f MB", k/1024; else printf "%d KB", k }'; }
+canon() { (cd "$1" 2>/dev/null && pwd -P); }
+sha256() { if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | cut -d' ' -f1; else shasum -a 256 "$1" | cut -d' ' -f1; fi; }
 
-# The main line: the branch the repository's own checkout is on.
-trunk() { git -C "$ROOT" symbolic-ref -q --short HEAD; }
-# Landed: on the main line, or every commit of it is there by patch (rebased, cherry-picked).
-landed() {
-  git -C "$ROOT" merge-base --is-ancestor "$1" HEAD 2>/dev/null && return 0
-  local c; c=$(git -C "$ROOT" cherry HEAD "$1" 2>/dev/null) || return 1
-  [ -n "$c" ] && ! printf '%s\n' "$c" | grep -q '^+'
+# fm <file> <key> — one value from a task file's frontmatter (the block between
+# the first two --- lines).
+fm() { awk -v k="$2:" 'NR==1 && !/^---/ {exit} /^---/ {n++; if (n==2) exit; next} { sub(/\r$/,"") } index($0,k)==1 { v=substr($0,length(k)+1); sub(/^ +/,"",v); print v; exit }' "$1"; }
+
+# The main line: AA.yml trunk:, else the branch origin/HEAD names, else main,
+# else master. Landed means an ancestor of it; nothing weaker deletes.
+trunk() {
+  local t c; t=$(cfg trunk "")
+  if [ -z "$t" ]; then t=$(git -C "$ROOT" symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null) && t=${t#origin/}; fi
+  if [ -z "$t" ]; then for c in main master; do git -C "$ROOT" show-ref -q --verify "refs/heads/$c" && { t=$c; break; }; done; fi
+  [ -n "$t" ] && git -C "$ROOT" show-ref -q --verify "refs/heads/$t" || return 1
+  printf '%s' "$t"
 }
+TRUNK=""
+landed() { [ -n "$TRUNK" ] && git -C "$ROOT" merge-base --is-ancestor "$1" "refs/heads/$TRUNK" 2>/dev/null; }
+# Every commit of it is on the main line by patch (rebased, cherry-picked): named, never deleted.
+patch_landed() { local c; c=$(git -C "$ROOT" cherry "refs/heads/$TRUNK" "$1" 2>/dev/null) || return 1; [ -n "$c" ] && ! printf '%s\n' "$c" | grep -q '^+'; }
 
 # Is <name> (a folder or branch name) the task's own? T123, t123, T123-x, t123_x, t123/x.
 named_for() {
@@ -428,141 +448,304 @@ named_for() {
   return 1
 }
 
-# The worktrees git knows, as path<TAB>head<TAB>branch, the main checkout excluded.
+# The worktrees git knows, as path, head, branch and locked separated by \037
+# (a tab would merge the empty fields of a detached or unlocked one), the main
+# checkout excluded, each path resolved through symlinks when it exists.
 worktrees() {
-  git -C "$ROOT" worktree list --porcelain 2>/dev/null | awk -v root="$ROOT" '
-    /^worktree /{ p=substr($0,10); h=""; b="" } /^HEAD /{ h=$2 } /^branch /{ b=substr($2,12) }
-    /^$/ { if (p != "" && p != root) print p "\t" h "\t" b; p="" }
-    END { if (p != "" && p != root) print p "\t" h "\t" b }'
+  local rroot; rroot=$(canon "$ROOT")
+  git -C "$ROOT" worktree list --porcelain 2>/dev/null | awk '
+    /^worktree /{ p=substr($0,10); h=""; b=""; l="" } /^HEAD /{ h=$2 } /^branch /{ b=substr($2,12) } /^locked/{ l="locked" }
+    /^$/ { if (p != "") print p "\037" h "\037" b "\037" l; p="" }
+    END { if (p != "") print p "\037" h "\037" b "\037" l }' \
+  | while IFS=$'\037' read -r p h b l; do
+      c=$(canon "$p"); [ -n "$c" ] || c=$p
+      [ "$c" = "$rroot" ] || printf '%s\037%s\037%s\037%s\n' "$c" "$h" "$b" "$l"
+    done
 }
 
-# Why a worktree must stay, or nothing: commits not landed, or tracked changes.
+# Why a worktree must stay, or nothing.
 worktree_holds() {
-  local p="$1" h="$2"
-  landed "$h" || { printf 'its HEAD %s is not on %s' "${h:0:7}" "$(trunk)"; return; }
-  [ -z "$(git -C "$p" status --porcelain --untracked-files=no 2>/dev/null)" ] || printf 'it has uncommitted changes to tracked files'
+  local p="$1" h="$2" lk="${3:-}" st
+  [ -z "$lk" ] || { printf 'it is locked'; return; }
+  if [ -z "$h" ] || ! landed "$h"; then
+    if [ -n "$h" ] && patch_landed "$h"; then printf 'its commits are on %s by patch only, not by ancestry: check, then remove it by hand' "$TRUNK"
+    else printf 'its HEAD %s is not on %s' "${h:0:7}" "$TRUNK"; fi
+    return
+  fi
+  st=$(git -C "$p" status --porcelain --untracked-files=no 2>/dev/null) || { printf 'git cannot read its status'; return; }
+  [ -z "$st" ] || printf 'it has uncommitted changes to tracked files'
 }
 
-# Why a nested repository (a .git folder, not a worktree) must stay, or nothing.
+# Why a nested repository (any checkout that is not one of ours) must stay, or nothing.
 nested_holds() {
-  local r="$1" b
-  [ -z "$(git -C "$r" status --porcelain --untracked-files=no 2>/dev/null)" ] || { printf 'nested repository %s has uncommitted changes' "${r#"$ROOT"/}"; return; }
-  [ -z "$(git -C "$r" stash list 2>/dev/null)" ] || { printf 'nested repository %s has a stash' "${r#"$ROOT"/}"; return; }
-  while read -r b; do
-    [ -n "$b" ] || continue
-    [ -n "$(git -C "$r" branch -r --contains "$b" 2>/dev/null)" ] || { printf 'nested repository %s: branch %s is on no remote' "${r#"$ROOT"/}" "$b"; return; }
-  done < <(git -C "$r" for-each-ref --format='%(refname:short)' refs/heads 2>/dev/null)
+  local r="$1" n st ahead; n=${1#"$(canon "$ROOT")"/}
+  st=$(git -C "$r" status --porcelain --untracked-files=no 2>/dev/null) || { printf 'nested repository %s: git cannot read it' "$n"; return; }
+  [ -z "$st" ] || { printf 'nested repository %s has uncommitted changes' "$n"; return; }
+  [ -z "$(git -C "$r" stash list 2>/dev/null)" ] || { printf 'nested repository %s has a stash' "$n"; return; }
+  [ -n "$(git -C "$r" remote 2>/dev/null)" ] || { printf 'nested repository %s has no remote' "$n"; return; }
+  ahead=$(git -C "$r" rev-list -n 1 HEAD --branches --tags --not --remotes 2>/dev/null) || { printf 'nested repository %s: git cannot list its commits' "$n"; return; }
+  [ -z "$ahead" ] || printf 'nested repository %s has commits no remote has (%s)' "$n" "${ahead:0:7}"
 }
 
-cmd_release() { # release <TASK> [--dry-run]
-  local task="${1:-}"; [ -n "$task" ] || die "usage: ckpt.sh release <TASK> [--dry-run]"; valid_task "$task"
-  local dry=0 a; for a in "${@:2}"; do case "$a" in --dry-run|-n) dry=1 ;; *) die "unknown option: $a" ;; esac; done
+# Every path a running process has as its directory or holds open, resolved,
+# one per line; "?" when this system cannot tell, which counts as in use.
+busy_list() {
+  if [ -d /proc/self/fd ]; then
+    # One readlink per link: a batch stops at the first process it may not read.
+    if [ -n "$(find /proc/self/cwd -maxdepth 0 -printf '%l' 2>/dev/null)" ]; then
+      find /proc/[0-9]*/cwd /proc/[0-9]*/fd/ -maxdepth 1 -type l -printf '%l\n' 2>/dev/null
+    else
+      local l; for l in /proc/[0-9]*/cwd /proc/[0-9]*/fd/*; do readlink "$l" 2>/dev/null; done
+    fi | sed 's/ (deleted)$//'
+  elif command -v lsof >/dev/null 2>&1; then lsof -Fn 2>/dev/null | sed -n 's/^n//p'
+  else echo "?"; fi
+}
+in_use() { # in_use <dir> <busy list>
+  [ "$2" != "?" ] || return 0
+  printf '%s\n' "$2" | awk -v d="$1" '$0==d || index($0, d "/")==1 { f=1; exit } END { exit !f }'
+}
+
+# open_cites <sdir> — each scratch folder an open task's file names, as
+# `<folder>\t<TASK>`. Those folders are inputs to work not yet done.
+open_cites() {
+  local pat f id; pat="$(printf '%s' "$1" | sed 's/[][\.*^$]/\\&/g')/[A-Za-z0-9._-]*"
+  for f in "$TD"/*.md "$DD"/backlog/*.md; do
+    [ -f "$f" ] || continue
+    id=$(basename "$f"); id=${id%%-*}
+    grep -o -- "$pat" "$f" 2>/dev/null | sed "s|^.*/||" | sort -u | sed "s|\$|	$id|"
+  done
+}
+held_by_open() { printf '%s\n' "$2" | awk -F'\t' -v n="$1" '$1==n{print $2}' | sort -u | tr '\n' ' ' | sed 's/ $//'; }
+
+# The scratch folder, normalised: inside the repository, no symlink on the way.
+scratch_dir() {
+  local s; s=$(cfg scratch scratch); s=${s#./}
+  while [ "${s%/}" != "$s" ]; do s=${s%/}; done
+  case "$s" in ""|.|/*|*..*|*//*) die "AA.yml scratch: must be a folder inside the repository, not '$s'" ;; esac
+  printf '%s' "$s"
+}
+
+# The extensions a task keeps (AA.yml keep_kinds), as find arguments.
+KEEP_KINDS_DEFAULT="md txt rst html pdf png svg jpg jpeg gif webp mp4 webm mkv mov json jsonl csv tsv log yaml yml"
+kind_args() {
+  local e first=1
+  for e in $(cfg keep_kinds "$KEEP_KINDS_DEFAULT"); do
+    case "$e" in *[!A-Za-z0-9]*|'') continue ;; esac
+    [ "$first" = 1 ] || printf '%s\n' -o
+    printf '%s\n' -iname "*.$e"; first=0
+  done
+}
+# Folders inside a task folder that are machinery, never evidence.
+SKIP_DIRS="venv .venv node_modules site-packages __pycache__ .cache .pytest_cache .mypy_cache CMakeFiles .git"
+
+# keepable <dir> <checkout tops…> — files of the kept kinds under <dir>, outside
+# machinery folders, and not tracked by a checkout in it (git has those).
+keepable() {
+  local d="$1"; shift
+  local prune=() k kinds=() t
+  for k in $SKIP_DIRS; do prune+=(-name "$k" -o); done
+  prune+=(-name 'build' -o -name 'build-*' -o -name 'build_*')
+  while IFS= read -r k; do kinds+=("$k"); done < <(kind_args)
+  [ ${#kinds[@]} -gt 0 ] || return 0
+  {
+    for t in "$@"; do git -C "$t" ls-files 2>/dev/null | sed "s|^|T	$t/|"; done
+    find "$d" \( -type d \( "${prune[@]}" \) -prune \) -o \( -type f \( "${kinds[@]}" \) -print \) 2>/dev/null | sed 's/^/F	/'
+  } | awk -F'\t' '$1=="T"{t[$2]=1; next} !($2 in t){print $2}'
+}
+
+# Refuses (dies) unless every run on the task is over and its trail reads clean.
+release_live_check() {
+  local task="$1" f; f=$(file "$task"); [ -f "$f" ] || return 0
+  local bad; bad=$(badlines "$f"); [ "$bad" -eq 0 ] || die "refusing: $task's trail has $bad unparseable line(s) (ckpt.sh check $task)"
+  local stale cutoff verdict; stale=$(stale_hours); cutoff=$(( $(date -u +%s) - stale * 3600 ))
+  verdict=$(records "$f" | jq -sr --argjson c "$cutoff" '
+    def ep: if type == "string" then (sub("\\.[0-9]+Z$"; "Z") | try fromdateiso8601 catch null) else null end;
+    if any(.[]; (.ts | ep) == null) then "unreadable"
+    else [ group_by(.run)[] | select(.[-1].kind != "end") | select((map(.ts | ep) | max) > $c) | .[0].run ] | join(" ") end') \
+    || die "refusing: $task's trail cannot be read (ckpt.sh check $task)"
+  [ "$verdict" != unreadable ] || die "refusing: an entry in $task's trail has no readable time (ckpt.sh check $task)"
+  [ -z "$verdict" ] || die "refusing: a run on $task has not ended and wrote within stale_hours ($verdict). End it first."
+  local running; running=$(runs "$f" | awk -F'\037' '$7=="running"{print $2}' | tr '\n' ' ')
+  [ -z "${running// }" ] || die "refusing: a run on $task is running ($running). End it first."
+}
+
+cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
+  local task="${1:-}"; [ -n "$task" ] || die "usage: ckpt.sh release <TASK> [--dry-run] [--list] [--archive DIR]"; valid_task "$task"
+  shift
+  local dry=0 list=0 archive; archive=$(cfg archive "")
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dry-run|-n) dry=1; shift ;;
+      --list) list=1; shift ;;
+      --archive) [ $# -ge 2 ] || die "--archive needs a folder"; archive=$2; shift 2 ;;
+      *) die "unknown option: $1" ;;
+    esac
+  done
   local tf; tf=$(ls "$TD/done/$task"-*.md 2>/dev/null | head -1)
   [ -n "$tf" ] || die "$task is not in ${TD#"$ROOT"/}/done/: only a finished task is released"
-  local main; main=$(trunk) || die "HEAD is detached: check out the main line before a release"
-  local sdir; sdir=$(cfg scratch scratch)
-  case "$sdir" in ""|/*|*..*) die "AA.yml scratch: must be a folder inside the repository, not '$sdir'" ;; esac
-  local sroot="$ROOT/$sdir" stale; stale=$(cfg stale_hours 24)
-  case "$stale" in ''|*[!0-9]*) stale=24 ;; esac
-
-  # A run on the task that is still alive keeps everything where it is.
-  local f; f=$(file "$task")
-  if [ -f "$f" ]; then
-    local cutoff; cutoff=$(( $(date -u +%s) - stale * 3600 ))
-    local alive; alive=$(records "$f" | jq -sr --argjson c "$cutoff" '
-      group_by(.run)[] | select((map(select(.kind=="end"))|length)==0)
-      | select((.[-1].ts | sub("\\.[0-9]+Z$";"Z") | fromdateiso8601) > $c) | .[0].run' 2>/dev/null | tr '\n' ' ')
-    [ -z "${alive// }" ] || die "refusing: a run on $task is live ($alive). End it first."
+  local rroot; rroot=$(canon "$ROOT")
+  [ "$(cd "$ROOT" && canon "$(git rev-parse --git-dir)")" = "$(cd "$ROOT" && canon "$(git rev-parse --git-common-dir)")" ] \
+    || die "run a release from the repository's main checkout, not a linked worktree"
+  TRUNK=$(trunk) || die "no main line: set trunk: in AA.yml"
+  [ "$(git -C "$ROOT" symbolic-ref -q --short HEAD)" = "$TRUNK" ] || die "check out $TRUNK first: the kept files are committed to the main line"
+  local sdir; sdir=$(scratch_dir)
+  local sroot="$rroot/$sdir"
+  if [ -e "$ROOT/$sdir" ] && [ "$(canon "$ROOT/$sdir")" != "$sroot" ]; then die "$sdir is a symlink or under one: refusing to delete through it"; fi
+  local max; max=$(cfg keep_max_kb 1024); case "$max" in ''|*[!0-9]*) max=1024 ;; esac; max=$((10#$max))
+  if [ -n "$archive" ]; then
+    case "$archive" in "~"|"~/"*) archive="$HOME${archive#\~}" ;; esac
+    case "$archive" in /*) ;; *) die "archive: must be an absolute folder outside the repository, not '$archive'" ;; esac
+    archive="$archive/$task"
+    case "$archive/" in "$rroot"/*|"$ROOT"/*) die "archive: $archive is inside the repository" ;; esac
   fi
+  release_live_check "$task"
+  local stale; stale=$(stale_hours)
 
-  local plan=() held=() rmdirs=() wts=() brs=() kept=() d p h b why
-  # Its folders under scratch/.
-  if [ -d "$sroot" ] && [ ! -L "$sroot" ]; then
+  local plan=() held=() rmdirs=() wts=() brs=() d p h b l why by m top
+  local cites; cites=$(open_cites "$sdir")
+  local busy; busy=$(busy_list)
+  local wtl; wtl=$(worktrees)
+  local tmp; tmp=$(mktemp -d) || die "no temporary folder"
+  # shellcheck disable=SC2064 # expanded now: $tmp is local and gone by exit
+  trap "rm -rf '$tmp'" EXIT
+  : > "$tmp/keep"
+  # 1. Its folders under scratch/.
+  if [ -d "$sroot" ]; then
     for d in "$sroot"/* "$sroot"/.[!.]*; do
       [ -e "$d" ] || [ -L "$d" ] || continue
       named_for "$(basename "$d")" "$task" || continue
-      if [ -L "$d" ]; then rmdirs+=("$d"); plan+=("remove the link ${d#"$ROOT"/} (not what it points to)"); continue; fi
+      by=$(held_by_open "$(basename "$d")" "$cites")
+      if [ -n "$by" ]; then held+=("${d#"$rroot"/} is kept whole: open task $by cites it"); continue; fi
+      if [ -L "$d" ]; then rmdirs+=("$d"); plan+=("remove the link ${d#"$rroot"/} (not what it points to)"); continue; fi
       [ -d "$d" ] || continue
-      why=""
-      while IFS=$'\t' read -r p h b; do
+      if in_use "$d" "$busy"; then held+=("${d#"$rroot"/} is kept whole: a running process is using it"); continue; fi
+      why="" ; local f_wts=() f_brs=() f_plan=() tops=()
+      while IFS=$'\037' read -r p h b l; do
+        [ -n "$p" ] || continue
         case "$p/" in "$d"/*) ;; *) continue ;; esac
-        why=$(worktree_holds "$p" "$h")
-        if [ -n "$why" ]; then held+=("worktree ${p#"$ROOT"/}: $why"); break; fi
-        wts+=("$p"); plan+=("remove worktree ${p#"$ROOT"/}${b:+ (branch $b)}")
-        [ -n "$b" ] && brs+=("$b")
-      done < <(worktrees)
+        why=$(worktree_holds "$p" "$h" "$l")
+        if [ -n "$why" ]; then why="worktree ${p#"$rroot"/}: $why"; break; fi
+        f_wts+=("$p"); tops+=("$p"); f_plan+=("remove worktree ${p#"$rroot"/}${b:+ (branch $b)}")
+        [ -z "$b" ] || f_brs+=("$b")
+      done <<< "$wtl"
       if [ -z "$why" ]; then
-        local r
-        while read -r r; do
-          [ -n "$r" ] || continue
-          r=${r%/.git}
-          why=$(nested_holds "$r")
-          if [ -n "$why" ]; then held+=("$why"); break; fi
-        done < <(find "$d" -name .git -type d -prune 2>/dev/null)
+        # Every checkout in the folder must be accounted for: one of ours, checked, or a nested repository with nothing unpushed.
+        while IFS= read -r m; do
+          [ -n "$m" ] || continue
+          top=$(canon "$(dirname "$m")"); [ -n "$top" ] || { why="cannot resolve ${m#"$rroot"/}"; break; }
+          case " ${tops[*]-} " in *" $top "*) continue ;; esac
+          why=$(nested_holds "$top"); [ -z "$why" ] || break
+          tops+=("$top")
+        done < <(find "$d" -name .git -prune -print 2>/dev/null)
       fi
-      if [ -n "$why" ]; then held+=("${d#"$ROOT"/} is kept whole"); continue; fi
-      rmdirs+=("$d"); plan+=("delete ${d#"$ROOT"/} ($(human_kb "$(du -sk "$d" 2>/dev/null | cut -f1)"))")
+      if [ -n "$why" ]; then held+=("$why" "${d#"$rroot"/} is kept whole"); continue; fi
+      keepable "$d" ${tops[@]+"${tops[@]}"} >> "$tmp/keep" || { held+=("${d#"$rroot"/}: cannot list what it keeps; kept whole"); continue; }
+      wts+=(${f_wts[@]+"${f_wts[@]}"}); brs+=(${f_brs[@]+"${f_brs[@]}"}); plan+=(${f_plan[@]+"${f_plan[@]}"})
+      rmdirs+=("$d"); plan+=("delete ${d#"$rroot"/} ($(human_kb "$(du -sk "$d" 2>/dev/null | cut -f1)"))")
     done
   fi
-  # Branches named for it, merged.
+  # 2. Branches named for it: landed by ancestry, and checked out nowhere that stays.
   while read -r b; do
-    [ -n "$b" ] && [ "$b" != "$main" ] || continue
+    [ -n "$b" ] && [ "$b" != "$TRUNK" ] || continue
     named_for "$b" "$task" || continue
     case " ${brs[*]-} " in *" $b "*) continue ;; esac
+    p=$(printf '%s\n' "$wtl" | awk -F'\037' -v b="$b" '$3==b{print $1; exit}')
+    if [ -n "$p" ]; then held+=("branch $b is checked out in ${p#"$rroot"/}, which stays"); continue; fi
     if landed "$b"; then brs+=("$b"); plan+=("delete merged branch $b")
-    else held+=("branch $b has commits not on $main"); fi
+    elif patch_landed "$b"; then held+=("branch $b is on $TRUNK by patch only, not by ancestry: check, then git branch -D $b")
+    else held+=("branch $b has commits not on $TRUNK"); fi
   done < <(git -C "$ROOT" for-each-ref --format='%(refname:short)' refs/heads)
-  # Subagent worktrees: landed, and untouched for stale_hours, whichever task spawned them.
-  while IFS=$'\t' read -r p h b; do
-    case "$p" in "$ROOT"/.claude/worktrees/*) ;; *) continue ;; esac
+  # 3. Subagent worktrees, whichever task spawned them: landed, no checkout of
+  #    their own inside, untouched for stale_hours, and no process using them.
+  while IFS=$'\037' read -r p h b l; do
+    [ -n "$p" ] || continue
+    case "$p" in "$rroot"/.claude/worktrees/*) ;; *) continue ;; esac
     case " ${wts[*]-} " in *" $p "*) continue ;; esac
-    [ -z "$(worktree_holds "$p" "$h")" ] || continue
+    [ -z "$(worktree_holds "$p" "$h" "$l")" ] || continue
+    [ -z "$(find "$p" -mindepth 2 -name .git -print -quit 2>/dev/null)" ] || continue
     [ -z "$(find "$p" -mmin "-$((stale * 60))" -print -quit 2>/dev/null)" ] || continue
-    wts+=("$p"); plan+=("remove landed subagent worktree ${p#"$ROOT"/} ($(human_kb "$(du -sk "$p" 2>/dev/null | cut -f1)"))${b:+, branch $b}")
-    [ -n "$b" ] && brs+=("$b")
-  done < <(worktrees)
+    in_use "$p" "$busy" && continue
+    wts+=("$p"); plan+=("remove landed subagent worktree ${p#"$rroot"/} ($(human_kb "$(du -sk "$p" 2>/dev/null | cut -f1)"))${b:+, branch $b}")
+    [ -z "$b" ] || brs+=("$b")
+  done <<< "$wtl"
 
-  # What it keeps: `keeps: [path, …]` in the task's frontmatter.
-  local keeps max; keeps=$(fm "$tf" keeps | tr -d '[]"' | tr ',' '\n' | sed 's/^ *//; s/ *$//' | grep -v '^$' || true)
-  max=$(cfg keep_max_kb 1024); case "$max" in ''|*[!0-9]*) max=1024 ;; esac
-  local k size rel
+  # 4. What it keeps: the kept kinds in the folders that go, and its keeps: line.
+  local keeps k; keeps=$(fm "$tf" keeps | tr -d '[]"' | tr ',' '\n' | sed 's/^ *//; s/ *$//' | grep -v '^$' || true)
   while read -r k; do
     [ -n "$k" ] || continue
     case "$k" in /*|*..*) die "keeps: $k must be a path inside the repository" ;; esac
-    # Kept by an earlier release already.
-    rel=${k#"$sdir"/}; rel=${rel#*/}
-    if [ ! -e "$ROOT/$k" ] && [ -f "$DD/evidence/$task/$rel" ]; then continue; fi
+    if [ ! -e "$ROOT/$k" ] && [ -f "$DD/evidence/$task/${k#"$sdir"/}" ]; then continue; fi
     [ -f "$ROOT/$k" ] && [ ! -L "$ROOT/$k" ] || die "keeps: $k is not a file here"
-    size=$(( ($(wc -c < "$ROOT/$k") + 1023) / 1024 ))
-    [ "$size" -le "$max" ] || die "keeps: $k is $(human_kb "$size"), over keep_max_kb ($max). Record its sha256 ($(sha256sum "$ROOT/$k" 2>/dev/null | cut -c1-16 || shasum -a 256 "$ROOT/$k" | cut -c1-16)…) and how to rebuild it in the Result, and drop it from keeps:."
-    kept+=("$k"); plan=("keep $k in ${DD#"$ROOT"/}/evidence/$task/" "${plan[@]}")
+    printf '%s\n' "$rroot/$k" >> "$tmp/keep"
   done <<< "$keeps"
+  local ev="$DD/evidence/$task" src rel bytes n_git=0 kb_git=0 n_arc=0 kb_arc=0
+  : > "$tmp/git"; : > "$tmp/arc"
+  sort -u "$tmp/keep" | while IFS= read -r src; do
+    rel=${src#"$rroot"/}; rel=${rel#"$sdir"/}
+    bytes=$(wc -c < "$src" | tr -d ' ')
+    if [ "$bytes" -le $((max * 1024)) ]; then printf '%s\t%s\t%s\n' "$src" "$rel" "$bytes" >> "$tmp/git"
+    else printf '%s\t%s\t%s\n' "$src" "$rel" "$bytes" >> "$tmp/arc"; fi
+  done
+  n_git=$(wc -l < "$tmp/git" | tr -d ' '); kb_git=$(awk -F'\t' '{s+=$3} END{printf "%d", (s+1023)/1024}' "$tmp/git")
+  n_arc=$(wc -l < "$tmp/arc" | tr -d ' '); kb_arc=$(awk -F'\t' '{s+=$3} END{printf "%d", (s+1023)/1024}' "$tmp/arc")
+  if [ "$n_arc" -gt 0 ] && [ -z "$archive" ]; then
+    local noarc="$n_arc kept file(s), $(human_kb "$kb_arc"), are over keep_max_kb ($max) and there is no archive: set archive: in AA.yml or pass --archive DIR (--list shows them)"
+    [ "$dry" = 1 ] || die "$noarc"
+    held+=("$noarc"); n_arc=0
+  fi
+  [ "$n_git" -eq 0 ] || plan=("keep $n_git file(s), $(human_kb "$kb_git"), in ${ev#"$ROOT"/}/" ${plan[@]+"${plan[@]}"})
+  [ "$n_arc" -eq 0 ] || plan=("archive $n_arc bigger file(s), $(human_kb "$kb_arc"), to $archive/ (size and sha256 in ${ev#"$ROOT"/}/RELEASED.tsv)" ${plan[@]+"${plan[@]}"})
 
   if [ ${#plan[@]} -eq 0 ] && [ ${#held[@]} -eq 0 ]; then echo "$task holds nothing on disk."; return 0; fi
-  [ ${#plan[@]} -gt 0 ] && printf '%s\n' "${plan[@]/#/- }"
-  [ ${#held[@]} -gt 0 ] && printf '%s\n' "${held[@]/#/- KEPT: }"
-  [ "$dry" = 1 ] && { echo "(dry run: nothing changed)"; return 0; }
+  [ ${#plan[@]} -eq 0 ] || printf -- '- %s\n' "${plan[@]}"
+  [ ${#held[@]} -eq 0 ] || printf -- '- KEPT: %s\n' "${held[@]}"
+  if [ "$list" = 1 ]; then
+    awk -F'\t' -v e="${ev#"$ROOT"/}" '{print "  git      " e "/" $2}' "$tmp/git"
+    awk -F'\t' -v a="$archive" '{print "  archive  " a "/" $2}' "$tmp/arc"
+  fi
+  [ "$dry" = 0 ] || { echo "(dry run: nothing changed)"; return 0; }
   [ ${#plan[@]} -gt 0 ] || { echo "nothing to release; the above stays."; return 0; }
 
-  # 1. Kept files into git, first: if this fails, nothing is deleted.
-  if [ ${#kept[@]} -gt 0 ]; then
-    local ev="$DD/evidence/$task"
-    for k in "${kept[@]}"; do
-      rel=${k#"$sdir"/}; rel=${rel#*/}
-      mkdir -p "$(dirname "$ev/$rel")" && cp -p "$ROOT/$k" "$ev/$rel" || die "could not copy $k; nothing deleted"
-    done
-    git -C "$ROOT" add -- "$ev" && git -C "$ROOT" commit -q --no-verify -m "evidence: $task's kept files, before its environment is released" -- "$ev" \
-      || die "could not commit ${ev#"$ROOT"/}; nothing deleted"
+  # 5. Kept files first, checked; if any step fails, nothing is deleted.
+  local dst sum got
+  while IFS=$'\t' read -r src rel bytes; do
+    dst="$ev/$rel"; mkdir -p "$(dirname "$dst")" && cp -p "$src" "$dst" || die "could not copy ${src#"$rroot"/}; nothing deleted"
+  done < "$tmp/git"
+  if [ "$n_arc" -gt 0 ]; then
+    mkdir -p "$ev" "$archive" || die "could not make $archive; nothing deleted"
+    [ -f "$ev/RELEASED.tsv" ] || printf 'path\tbytes\tsha256\tarchived to\n' > "$ev/RELEASED.tsv"
+    while IFS=$'\t' read -r src rel bytes; do
+      dst="$archive/$rel"; mkdir -p "$(dirname "$dst")" && cp -p "$src" "$dst" || die "could not archive ${src#"$rroot"/}; nothing deleted"
+      sum=$(sha256 "$src"); got=$(sha256 "$dst")
+      [ -n "$sum" ] && [ "$sum" = "$got" ] || die "the archived copy of ${src#"$rroot"/} does not match; nothing deleted"
+      grep -qF "${src#"$rroot"/}	$bytes	$sum	" "$ev/RELEASED.tsv" || printf '%s\t%s\t%s\t%s\n' "${src#"$rroot"/}" "$bytes" "$sum" "$dst" >> "$ev/RELEASED.tsv"
+    done < "$tmp/arc"
   fi
-  # 2. Worktrees, then their folders, then branches (-d: git refuses an unmerged one again).
-  for p in ${wts[@]+"${wts[@]}"}; do git -C "$ROOT" worktree remove --force "$p" 2>/dev/null || warn "could not remove worktree ${p#"$ROOT"/}"; done
+  if [ -d "$ev" ]; then
+    git -C "$ROOT" add -f -- "$ev" || die "could not stage ${ev#"$ROOT"/}; nothing deleted"
+    if ! git -C "$ROOT" diff --cached --quiet -- "$ev"; then
+      git -C "$ROOT" commit -q --no-verify -m "evidence: $task's kept files, before its environment is released" -- "$ev" \
+        || die "could not commit ${ev#"$ROOT"/}; nothing deleted"
+    fi
+    # Each kept file is in the commit, as it is on disk.
+    while IFS=$'\t' read -r src rel bytes; do
+      git -C "$ROOT" ls-files --error-unmatch -- "$ev/$rel" >/dev/null 2>&1 && git -C "$ROOT" diff --quiet HEAD -- "$ev/$rel" \
+        || die "${ev#"$ROOT"/}/$rel is not committed as it is; nothing deleted"
+    done < "$tmp/git"
+  fi
+  # 6. Worktrees, then folders (none with a worktree still registered in it), then branches.
+  for p in ${wts[@]+"${wts[@]}"}; do git -C "$ROOT" worktree remove --force "$p" 2>/dev/null || warn "could not remove worktree ${p#"$rroot"/}; its folder stays"; done
+  wtl=$(worktrees)
   for d in ${rmdirs[@]+"${rmdirs[@]}"}; do
     case "$d" in "$sroot"/?*) ;; *) die "refusing to delete $d: not under $sroot" ;; esac
-    if [ -L "$d" ]; then rm -f -- "$d"; else rm -rf -- "$d"; fi
+    if [ -L "$d" ]; then rm -f -- "$d"; continue; fi
+    if printf '%s\n' "$wtl" | awk -F'\037' -v d="$d" 'index($1"/", d"/")==1{f=1} END{exit !f}'; then warn "kept ${d#"$rroot"/}: a worktree in it is still registered"; continue; fi
+    rm -rf -- "$d"
   done
   git -C "$ROOT" worktree prune 2>/dev/null
-  # -D: landed() has checked it, by ancestry or by patch, which `branch -d` cannot see.
-  for b in ${brs[@]+"${brs[@]}"}; do landed "$b" && git -C "$ROOT" branch -q -D "$b" 2>/dev/null || warn "kept branch $b"; done
+  for b in ${brs[@]+"${brs[@]}"}; do
+    landed "$b" && git -C "$ROOT" branch -q -D "$b" 2>/dev/null || warn "kept branch $b"
+  done
   echo "released."
 }
 
@@ -570,33 +753,40 @@ cmd_release() { # release <TASK> [--dry-run]
 # one line per item, `<TASK>\t<path or branch>`, and `-\t<path>` for a landed,
 # idle subagent worktree, which no task owns by name.
 litter_scan() {
-  local sdir; sdir=$(cfg scratch scratch)
+  local sdir; sdir=$(scratch_dir 2>/dev/null) || return 0
+  TRUNK=$(trunk) || return 0
+  local rroot; rroot=$(canon "$ROOT")
   local done_ids; done_ids=$(ls "$TD/done" 2>/dev/null | sed -n 's/^\([A-Za-z0-9._]*\)-.*\.md$/\1/p' | sort -u)
   [ -n "$done_ids" ] || return 0
   local up; up=$(printf '%s\n' "$done_ids" | tr '[:lower:]' '[:upper:]')
-  local d n id
+  local d n id cites wtl busy; cites=$(open_cites "$sdir"); wtl=$(worktrees); busy=$(busy_list)
   if [ -d "$ROOT/$sdir" ] && [ ! -L "$ROOT/$sdir" ]; then
     for d in "$ROOT/$sdir"/*; do
       [ -e "$d" ] || [ -L "$d" ] || continue
       n=$(basename "$d" | tr '[:lower:]' '[:upper:]'); id=${n%%[-_/]*}
       printf '%s\n' "$up" | grep -qxF -- "$id" || continue
+      [ -z "$(held_by_open "$(basename "$d")" "$cites")" ] || continue
       printf '%s\t%s\n' "$(printf '%s\n' "$done_ids" | awk -v u="$id" 'toupper($0)==u{print; exit}')" "${d#"$ROOT"/}"
     done
   fi
-  local b main; main=$(trunk) || return 0
+  local b p h l
   while read -r b; do
-    [ -n "$b" ] && [ "$b" != "$main" ] || continue
+    [ -n "$b" ] && [ "$b" != "$TRUNK" ] || continue
     n=$(printf '%s' "$b" | tr '[:lower:]' '[:upper:]'); id=${n%%[-_/]*}
     printf '%s\n' "$up" | grep -qxF -- "$id" || continue
+    [ -z "$(printf '%s\n' "$wtl" | awk -F'\037' -v b="$b" '$3==b{print; exit}')" ] || continue
     landed "$b" && printf '%s\tbranch %s\n' "$(printf '%s\n' "$done_ids" | awk -v u="$id" 'toupper($0)==u{print; exit}')" "$b"
   done < <(git -C "$ROOT" for-each-ref --format='%(refname:short)' refs/heads)
-  local p h stale; stale=$(cfg stale_hours 24); case "$stale" in ''|*[!0-9]*) stale=24 ;; esac
-  while IFS=$'\t' read -r p h b; do
-    case "$p" in "$ROOT"/.claude/worktrees/*) ;; *) continue ;; esac
-    [ -z "$(worktree_holds "$p" "$h")" ] || continue
+  local stale; stale=$(stale_hours)
+  while IFS=$'\037' read -r p h b l; do
+    [ -n "$p" ] || continue
+    case "$p" in "$rroot"/.claude/worktrees/*) ;; *) continue ;; esac
+    [ -z "$(worktree_holds "$p" "$h" "$l")" ] || continue
+    [ -z "$(find "$p" -mindepth 2 -name .git -print -quit 2>/dev/null)" ] || continue
     [ -z "$(find "$p" -mmin "-$((stale * 60))" -print -quit 2>/dev/null)" ] || continue
-    printf -- '-\t%s\n' "${p#"$ROOT"/}"
-  done < <(worktrees)
+    in_use "$p" "$busy" && continue
+    printf -- '-\t%s\n' "${p#"$rroot"/}"
+  done <<< "$wtl"
 }
 
 # Sourced by board.sh for the helpers above; only dispatch when run directly.
@@ -622,8 +812,10 @@ ckpt.sh — AA checkpoints. One JSONL file per task, one line per event.
   ckpt.sh last  <TASK>              the resume point
   ckpt.sh check [TASK]              every line parses?
   ckpt.sh close <TASK> [--delete]   digest for the Result; --delete retires the trail, then releases
-  ckpt.sh release <TASK> [--dry-run] a done task's scratch folder, worktrees and branches go (rule 13);
-                                    its keeps: files are committed to AA/evidence/<TASK>/ first
+  ckpt.sh release <TASK> [--dry-run] [--list] [--archive DIR]
+                                    a done task's scratch folders, worktrees and branches go (rule 13);
+                                    its docs, visuals and metrics (keep_kinds) and keeps: files are
+                                    committed to AA/evidence/<TASK>/ first, bigger ones archived
   ckpt.sh board ...                 -> AA/board.sh
 
 doing BEFORE the act, did after it, end whenever you stop. Every entry carries --next.

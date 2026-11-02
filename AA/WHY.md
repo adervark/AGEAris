@@ -217,8 +217,12 @@ a path under that ignored folder, so deleting the bulk would have deleted the
 proof, and nobody dared. **Evidence and bulk in one folder means the bulk is
 kept forever.**
 
-So the task names what it keeps (`keeps:`, next to its decision rules, before
-the spend), and closing commits those files and deletes the rest. Landed work
+So closing keeps the kinds of file a Result stands on, documentation,
+visuals and metrics, plus anything the task's `keeps:` line names, and
+deletes the rest. Small ones are committed; big ones go to an archive outside
+git, with their sha256 committed, because a 230 MB JSON dump in git costs
+every clone forever. The operator's words: "keep only task documentation and
+visuals and metrics." Landed work
 is safe to delete because git still holds it. Work that has not landed is
 never deleted; it is named. The operator's words were: "I want the task
 environment files deleted once it is finished."

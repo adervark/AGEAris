@@ -53,10 +53,17 @@ map: {{README.md}}
 # Ids are permanent and never renumbered; the slug after them may change.
 id_prefix: T
 
-# A task's working files, worktrees and builds live in <scratch>/T###/, usually
-# git-ignored. `ckpt.sh release` deletes that folder when the task is done
-# (rule 13); the files its `keeps:` line names, each up to keep_max_kb, are
-# committed to AA/evidence/T###/ first. A bigger one is recorded by its sha256
-# and the command that rebuilds it.
+# Rule 13. A task's working files, worktrees and builds live in <scratch>/T###/,
+# usually git-ignored; `ckpt.sh release` deletes them when the task is done.
+# First it keeps the files whose extension is in keep_kinds (documentation,
+# visuals, metrics), outside virtualenvs, builds and checkouts git already has,
+# plus whatever the task's `keeps:` line names. Up to keep_max_kb each they
+# are committed to AA/evidence/T###/; bigger ones are copied to <archive>/T###/
+# (outside the repository; ~ allowed) and their size and sha256 committed in
+# AA/evidence/T###/RELEASED.tsv. With no archive, a release that has bigger
+# ones refuses. Landed means an ancestor of `trunk` (default: origin/HEAD's
+# branch, else main, else master).
 scratch: scratch
+keep_kinds: md txt rst html pdf png svg jpg jpeg gif webp mp4 webm mkv mov json jsonl csv tsv log yaml yml
 keep_max_kb: 1024
+archive: ~/Archive/{{repository name}}
