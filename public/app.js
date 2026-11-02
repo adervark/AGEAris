@@ -358,7 +358,9 @@ function focusSelector(element) {
   if (element.dataset.draft) return `[data-draft="${CSS.escape(element.dataset.draft)}"]${element.dataset.draftRun ? `[data-draft-run="${CSS.escape(element.dataset.draftRun)}"]` : ''}`;
   if (element.id) return `#${CSS.escape(element.id)}`;
   if (element.tagName === 'SUMMARY' && element.parentElement.dataset.key) return `details[data-key="${CSS.escape(element.parentElement.dataset.key)}"] > summary`;
-  if (element.dataset.action) return ['action', 'id', 'value', 'runAction'].filter((key) => element.dataset[key] !== undefined).map((key) => `[data-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}="${CSS.escape(element.dataset[key])}"]`).join('');
+  // A card's or row's own control, not a strip dot with the same data.
+  const owner = element.matches('.task-card, .task-row') ? `.${element.classList[0]}` : '';
+  if (element.dataset.action) return owner + ['action', 'id', 'value', 'runAction'].filter((key) => element.dataset[key] !== undefined).map((key) => `[data-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}="${CSS.escape(element.dataset[key])}"]`).join('');
   return '';
 }
 
@@ -876,7 +878,7 @@ function setupDialog(dialog) {
     const taskId = opener?.dataset?.action === 'open-task' ? opener.dataset.id : '';
     dialog.addEventListener('close', () => {
       if (document.querySelector('dialog[open]')) return;
-      const target = opener?.isConnected ? opener : taskId && $('#main').querySelector(`[data-action="open-task"][data-id="${CSS.escape(taskId)}"]`);
+      const target = opener?.isConnected ? opener : taskId && taskOpener(taskId);
       target?.focus({ preventScroll: true });
     }, { once: true });
     dialog.showModal();
@@ -884,6 +886,13 @@ function setupDialog(dialog) {
     // The content was swapped in place (a linked task): focus starts where a fresh open's would.
     dialog.querySelector('[autofocus], [data-close]')?.focus();
   }
+}
+
+// What opens a task on the page: its card or row, before any chart or strip
+// dot, which open it too and come first in the page.
+function taskOpener(taskId) {
+  const id = CSS.escape(taskId);
+  return $('#main').querySelector(`.task-card[data-id="${id}"], .task-row[data-id="${id}"]`) || $('#main').querySelector(`[data-action="open-task"][data-id="${id}"]`);
 }
 
 function anyDialogOpen() {
@@ -1261,7 +1270,7 @@ async function performAction(id, taskId, { input, confirm } = {}) {
   if (asks && input === undefined) {
     if (drawerTaskId() !== taskId) {
       // Focus goes back to this task's card when the drawer closes.
-      $('#main').querySelector(`[data-action="open-task"][data-id="${CSS.escape(taskId)}"]`)?.focus({ preventScroll: true });
+      taskOpener(taskId)?.focus({ preventScroll: true });
       openTask(taskId);
     }
     return showActionInput(id, task);

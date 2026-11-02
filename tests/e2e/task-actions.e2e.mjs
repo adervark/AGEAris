@@ -148,7 +148,7 @@ before(async () => {
   page.on('console', (message) => { if (['error', 'warning'].includes(message.type()) && !/status of 409/.test(message.text())) problems.push(`console ${message.type()}: ${message.text()}`); });
   page.on('pageerror', (error) => problems.push(`page error: ${error.message}`));
   await page.goto(`${base}/?token=${server.apiToken}#project/${projectId}`);
-  await page.waitForSelector(`[data-action="open-task"][data-id="${ids['Start me']}"]`);
+  await page.waitForSelector(card('Start me'));
 });
 
 after(async () => {
@@ -157,7 +157,10 @@ after(async () => {
   if (root) await rm(root, { recursive: true, force: true, maxRetries: 5 });
 });
 
-const card = (name) => `[data-action="open-task"][data-id="${ids[name]}"]`;
+// The board's own card. A flow strip's dot opens the same task, comes first in
+// the page, and dots of tasks the same age sit on top of each other (T100).
+const BOARD_ITEM = ':is(.task-card, .task-row)[data-action="open-task"]';
+const card = (name) => `${BOARD_ITEM}[data-id="${ids[name]}"]`;
 const bar = (act) => `#task-dialog .action-bar [data-act="${act}"]`;
 
 // A refresh can replace a card between finding it and clicking it.
@@ -429,7 +432,7 @@ test('unsaved Priority and Owner edits in the full form survive an action, and s
 
 // ---- Tracked AA boards (T023)
 
-const trackedCard = (board, id) => `[data-action="open-task"][data-id="${board.id}:${id}"]`;
+const trackedCard = (board, id) => `${BOARD_ITEM}[data-id="${board.id}:${id}"]`;
 const trackedFile = async (board, file) => readFile(path.join(board.dir, file), 'utf8');
 const toastSays = (pattern) => page.waitForFunction((source) => new RegExp(source).test(document.querySelector('#toast').textContent), {}, pattern);
 
@@ -460,7 +463,7 @@ async function switchOnByApi(board) {
 test('a tracked repository\'s task opens in the viewer, and while task actions are off the bar says so and changes nothing', async () => {
   await page.goto('about:blank');
   await page.goto(`${base}/#project/${trackedProjectId}`);
-  await clickCard(`[data-action="open-task"][data-id="${trackedProjectId}:T001"]`);
+  await clickCard(`${BOARD_ITEM}[data-id="${trackedProjectId}:T001"]`);
   await page.waitForSelector('#task-dialog[open] .task-view');
   assert.equal(await page.$('#task-dialog #task-form'), null, 'no full edit form');
   const claim = '#task-dialog .action-bar [data-act="start"]';
@@ -501,7 +504,7 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   const board = boards.withBacklog;
   await openTracked(board, 'T001');
   await page.click('#task-dialog .action-bar [data-act="start"]');
-  await toastSays('^Claimed T001 · [0-9a-f]{7} on main · not pushed');
+  await toastSays('^Claimed T001: [0-9a-f]{7} on main, not pushed\\.');
   const claimed = await trackedFile(board, 'AA/tasks/T001-read-the-archive.md');
   assert.match(claimed, /^status: claimed$/m);
   assert.match(claimed, /^owner: ade @agearis\/web \d{4}-\d{2}-\d{2} — /m);
@@ -517,7 +520,7 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   assert.equal(await git(board.dir, 'rev-list', '--count', 'HEAD'), '2', 'an empty reason commits nothing');
   await page.type('#action-slot [data-action-input]', 'Waiting on the archive key');
   await page.keyboard.press('Enter');
-  await toastSays('^Blocked T001 · ');
+  await toastSays('^Blocked T001: [0-9a-f]{7} on ');
   const blocked = await trackedFile(board, 'AA/tasks/T001-read-the-archive.md');
   assert.match(blocked, /^status: blocked$/m);
   assert.match(blocked, /^blockedReason: "Waiting on the archive key"$/m);
@@ -529,7 +532,7 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   await page.waitForSelector('#action-slot [data-action-input][required]');
   await page.type('#action-slot [data-action-input]', 'Read; nothing missing');
   await page.keyboard.press('Enter');
-  await toastSays('^Done T001 · ');
+  await toastSays('^Done T001: [0-9a-f]{7} on ');
   const done = await trackedFile(board, 'AA/tasks/done/T001-read-the-archive.md');
   assert.match(done, /^status: done$/m);
   assert.match(done, /## Result\n\nRead; nothing missing\n/);
@@ -545,7 +548,7 @@ test('on a board without backlog/ Claim changes the file in place', async () => 
   await switchOnByApi(board);
   await openTracked(board, 'T001');
   await page.click('#task-dialog .action-bar [data-act="start"]');
-  await toastSays('^Claimed T001 · ');
+  await toastSays('^Claimed T001: [0-9a-f]{7} on ');
   assert.match(await trackedFile(board, 'AA/tasks/T001-sort-the-logs.md'), /^status: claimed$/m);
   await assertCommittedByUi(board);
   await page.keyboard.press('Escape');
@@ -568,7 +571,7 @@ test('releasing a task an own agent session holds, with a run that never ended, 
   await page.click('#task-dialog .action-bar [data-act="release"]');
   await page.waitForSelector('#action-dialog[open] [type="submit"]');
   await page.click('#action-dialog [type="submit"]');
-  await toastSays('^Released T002 · ');
+  await toastSays('^Released T002: [0-9a-f]{7} on ');
   await page.waitForFunction(() => /ckpt\.sh log T002 end --run 7c1e2a90/.test(document.querySelector('#action-note').textContent));
   const released = await trackedFile(board, 'AA/tasks/T002-fold-two.md');
   assert.match(released, /^status: open$/m);
