@@ -990,3 +990,28 @@ its date, the number, and where the evidence is. Newest last.
 - `npm test` passed 596 of 596, and `npm run check` is clean.
 - With T021–T026 and T100, plan `docs/plans/task-control.md` is delivered.
 - Evidence: T024's and T025's Results.
+
+## 2026-11-03 — T110, T111 and T114: finished tasks release their environments
+
+- **T110** (inventory and plan, `docs/plans/environments.md`): AGEIS's
+  git-ignored `scratch/` held 194 GB, 44% of the disk; 110 GB of it
+  belonged to done tasks.
+- **T111** (rule 13, `ckpt.sh release`, `board.sh --litter`): a done task's
+  scratch folders, landed worktrees and merged branches are deleted. Its
+  documentation, visuals, metrics and cited files are kept first: in git up
+  to 1 MB each, bigger ones in an archive outside git with their sha256.
+  It took three review rounds, one by the operator's agy (Gemini) session.
+  The first review found nine ways the script deleted protected work; each
+  is now a test, 28 in all. `npm test` passed 624 of 624, and
+  `npm run check` is clean.
+- **T114** (the release):
+  - AGEIS freed **93 GB**: 441 GB used went to 347 GB.
+  - 4,583 files (201 MB) were committed to its `AA/evidence/`, and 118
+    files (5.0 GB) archived to `~/Archive/AGEIS/`.
+  - T123's unlanded commits are tagged `archive/T123-L`.
+  - Folders that open tasks cite were kept whole, as was one worktree with
+    uncommitted work.
+- **Spend:** `data-migration` in AGEIS and in this repository, on the
+  operator's word: "I want the task environment files deleted once it is
+  finished."
+- Evidence: T111's and T114's Results.

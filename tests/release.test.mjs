@@ -536,6 +536,9 @@ test('a subagent worktree with untracked work git does not ignore stays; one wit
   await write(junk, 'build-t1/CMakeCache.txt', 'cache');
   await age(work);
   await age(junk);
+  const listed = await exec('bash', ['AA/board.sh', '--litter'], { cwd: dir, env: process.env });
+  assert.doesNotMatch(listed.stdout, /agent-work/, '--litter agrees: held, so not listed');
+  assert.match(listed.stdout, /agent-junk/);
   const result = await release(dir, 'T002');
   assert.match(result.out, /KEPT: subagent worktree \.claude\/worktrees\/agent-work has untracked work \(report\.md\)/);
   assert.equal(await exists(path.join(work, 'report.md')), true);

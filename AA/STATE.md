@@ -6,7 +6,9 @@ control (`docs/plans/task-control.md`, T021–T026) is delivered as of
 2026-11-03: the drawer's bar, the card and row menu, the keys and drag all
 act through one registry, on AGE Aris projects and on tracked AA boards, and
 the project page says when STATE.md is behind (T025). `npm run e2e` is green
-again (T100). Everything is on `feature/pm-cockpit`, not on `main`.
+again (T100). Rule 13 holds (T111): a done task's scratch, worktrees and
+branches are released by `AA/ckpt.sh release`, and T114 freed 93 GB in
+AGEIS. Everything is on `feature/pm-cockpit`, not on `main`.
 
 **In progress:** nothing.
 
@@ -23,29 +25,27 @@ lives in PROGRESS.md and `done/`, not here.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-11-02T20:12Z · 112 tasks: 37 backlog, 2 WIP (2 in progress), 73 delivered`
+`board · 2026-11-02T20:59Z · 112 tasks: 37 backlog, 0 WIP (0 in progress), 75 delivered`
 
-FLOW · **WIP 2/2** · throughput 17.0/wk (73 in 30d) · cycle time 50th 8m / 85th 3h (n=73)
-FLOW · Little's Law: 2 ÷ 17.0/wk ≈ 19h expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 17.0/wk (73 in 30d) · cycle time 50th 8m / 85th 3h (n=73)
+FLOW · Little's Law: 0 ÷ 17.0/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 2/2 | T111 | Closing a task releases its environment: ckpt.sh release, rule 13, board.sh warns about what is left | adervark | now |  |
-|  | T114 | Release what finished tasks left: AGEIS's 110 GB and this repository's landed worktree | adervark | now |  |
 | **BACKLOG** 37 | | `T003` `T004` `T047` `T051` `T056` `T058` +31 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | now |  |
-|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 18m |  |
-|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 18m |  |
-|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 36m |  |
-|  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 32h |  |
+| **DONE** | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | 46m |  |
+|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 65m |  |
+|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 65m |  |
+|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 83m |  |
+|  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 33h |  |
 |  | T068 | Deprecate or archive a project, either kind, and restore it | adervark | 8d |  |
 |  | T053 | Measure how often agents get lost: a baseline | adervark | 8d |  |
 |  | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 8d |  |
 |  | T057 | `Cockpit.orient` and `GET /api/orient` | adervark | 9d |  |
 |  | T063 | Capabilities: what an agent may do, and how | adervark | 9d |  |
-|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 9d |  |
+|  | T094 | H2: research-runs v2.8 on RSNA T121, the held-out round | adervark | 10d |  |
 |  | T090 | Research-runs design v2.8: catch a correction of a word, a scope or a reason | adervark | 10d |  |
-|  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 10d |  |
+|  | T093 | Limits read each minute, the 5-hour window defined, /aa current | adervark | 11d |  |
 |  | T092 | Renew an expired token, so every account reads live | adervark | 11d |  |
 |  | T091 | Every account's limits in sight on every page, kept fresh | adervark | 11d |  |
 |  | T089 | The limits left on each Claude account | adervark | 11d |  |
@@ -66,7 +66,7 @@ FLOW · Little's Law: 2 ÷ 17.0/wk ≈ 19h expected · lead time 85th 35h
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 24d |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 24d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 24d |  |
-|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 24d |  |
+|  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 25d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 25d |  |
 |  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 25d |  |
 |  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 25d |  |
@@ -108,6 +108,10 @@ FLOW · Little's Law: 2 ÷ 17.0/wk ≈ 19h expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 26d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
+
+**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
+
+- **2** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T111 T114
 <!-- /AA:generated -->
 
 <!--

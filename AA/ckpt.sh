@@ -567,6 +567,14 @@ keepable() {
   } | awk -F'\t' '$1=="T"{t[$2]=1; next} !($2 in t){print $2}'
 }
 
+# untracked_work <worktree> — its first untracked file git does not ignore,
+# outside builds and caches, or nothing.
+untracked_work() {
+  git -C "$1" status --porcelain --untracked-files=all 2>/dev/null | sed -n 's/^?? //p' | awk -v skip="$SKIP_DIRS" '
+    BEGIN { n = split(skip, s, " "); for (i = 1; i <= n; i++) k[s[i]] = 1 }
+    { c = split($0, q, "/"); bad = 0; for (i = 1; i < c; i++) if ((q[i] in k) || q[i] ~ /^build/) bad = 1; if (!bad) { print; exit } }'
+}
+
 # Refuses (dies) unless every run on the task is over and its trail reads clean.
 release_live_check() {
   local task="$1" f; f=$(file "$task"); [ -f "$f" ] || return 0
@@ -706,9 +714,7 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
     [ -z "$(find "$p" -mmin "-$((stale * 60))" -print -quit 2>/dev/null)" ] || continue
     in_use "$p" "$busy" && continue
     # Untracked work git does not ignore, outside builds and caches, was never landed: it stays.
-    m=$(git -C "$p" status --porcelain --untracked-files=all 2>/dev/null | sed -n 's/^?? //p' | awk -v skip="$SKIP_DIRS" '
-      BEGIN { n = split(skip, s, " "); for (i = 1; i <= n; i++) k[s[i]] = 1 }
-      { c = split($0, q, "/"); bad = 0; for (i = 1; i < c; i++) if ((q[i] in k) || q[i] ~ /^build/) bad = 1; if (!bad) { print; exit } }')
+    m=$(untracked_work "$p")
     if [ -n "$m" ]; then held+=("subagent worktree ${p#"$rroot"/} has untracked work ($m): commit it or remove the worktree by hand"); continue; fi
     wts+=("$p"); plan+=("remove landed subagent worktree ${p#"$rroot"/} ($(human_kb "$(du -sk "$p" 2>/dev/null | cut -f1)"))${b:+, branch $b}")
     [ -z "$b" ] || brs+=("$b")
@@ -851,6 +857,7 @@ litter_scan() {
     [ -z "$(find "$p" -mindepth 2 -name .git -print -quit 2>/dev/null)" ] || continue
     [ -z "$(find "$p" -mmin "-$((stale * 60))" -print -quit 2>/dev/null)" ] || continue
     in_use "$p" "$busy" && continue
+    [ -z "$(untracked_work "$p")" ] || continue
     printf -- '-\t%s\n' "${p#"$rroot"/}"
   done <<< "$wtl"
 }
