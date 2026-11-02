@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { actionFor, actionRequest, availability, CAPABILITIES, holderKind, inputFor, projectKind, TASK_ACTIONS, WHY } from '../public/actions.js';
+import { actionFor, actionForKey, actionRequest, availability, CAPABILITIES, canMove, holderKind, inputFor, projectKind, TASK_ACTIONS, WHY } from '../public/actions.js';
 
 const OPERATOR = 'adervark';
 const STATUSES = ['backlog', 'in_progress', 'blocked', 'done'];
@@ -226,4 +226,39 @@ test('requests refuse an unknown action and a priority that is not one', () => {
   assert.throws(() => actionRequest('delete', task('backlog')), /Unknown action/);
   assert.throws(() => actionRequest('priority', task('backlog'), 'critical'), /Choose low, medium, high or urgent/);
   assert.throws(() => actionRequest('priority', task('backlog')), /Choose/);
+});
+
+test('a key does the action the registry gives it, refuses with the bar\'s reason, and does nothing outside its column', () => {
+  // A backlog task on a native project: c starts it, u (unblock) does not apply.
+  const backlog = availability(task('backlog'), NATIVE, { operator: OPERATOR });
+  assert.equal(actionForKey('c', backlog).id, 'start');
+  assert.equal(actionForKey('b', backlog).id, 'block');
+  assert.equal(actionForKey('u', backlog), null);
+  assert.equal(actionForKey('x', backlog), null);
+  assert.equal(actionForKey('.', backlog), null);
+  // Every key maps to its own action, wherever it applies.
+  for (const status of STATUSES) {
+    const entries = availability(task(status), NATIVE, { operator: OPERATOR });
+    for (const action of TASK_ACTIONS) {
+      const entry = actionForKey(action.key, entries);
+      assert.equal(entry?.id ?? null, entries.find((candidate) => candidate.id === action.id).relevant ? action.id : null, `${action.key} on ${status}`);
+    }
+  }
+  // Refused, the key's entry carries the reason the bar and the menu show.
+  const full = availability(task('backlog'), NATIVE, { operator: OPERATOR, wipCount: 3 });
+  assert.deepEqual(actionForKey('c', full), full.find((entry) => entry.id === 'start'));
+  assert.match(actionForKey('c', full).why, /WIP limit of 3 reached/);
+  const off = availability(task('backlog'), tracked(false, true), { operator: OPERATOR });
+  assert.equal(actionForKey('c', off).enabled, false);
+  assert.equal(actionForKey('c', off).why, OFF);
+  assert.equal(actionForKey('p', off).enabled, false, 'Priority is not an AA action');
+});
+
+test('a card can be dragged exactly when some action that moves it can be done now', () => {
+  assert.equal(canMove(availability(task('backlog'), NATIVE, { operator: OPERATOR })), true);
+  assert.equal(canMove(availability(task('backlog'), tracked(false, true), { operator: OPERATOR })), false, 'task actions off');
+  assert.equal(canMove(availability(task('in_progress', 'other'), NATIVE, { operator: OPERATOR })), false, 'another operator holds it');
+  assert.equal(canMove(availability(task('backlog'), tracked(true, true), { operator: OPERATOR })), true);
+  // Only Priority and Assign left would not make a card draggable.
+  assert.equal(canMove([{ id: 'priority', relevant: true, enabled: true }, { id: 'assign', relevant: true, enabled: true }]), false);
 });

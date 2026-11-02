@@ -114,6 +114,22 @@ export function inputFor(id, task, project) {
   return { needs: action.needs, field: action.field, required: aa && action.needs === 'reason' };
 }
 
+// The action a key does on a focused card or row, or in an open task drawer:
+// its entry from `availability`, or null when the key names no action that
+// applies to the task's column. A disabled entry is still returned, so a key
+// refuses with the same reason as the bar, the menu and a drag.
+export function actionForKey(key, entries) {
+  const action = TASK_ACTIONS.find((entry) => entry.key === key);
+  const entry = action && entries.find((candidate) => candidate.id === action.id);
+  return entry?.relevant ? entry : null;
+}
+
+// Whether a card can be dragged at all: some action that moves it to another
+// column can be done now.
+export function canMove(entries) {
+  return entries.some((entry) => entry.enabled && TASK_ACTIONS.find((action) => action.id === entry.id)?.to);
+}
+
 // The action that moves a task from one column to another, if there is one.
 export function actionFor(from, to, kind = 'native') {
   return TASK_ACTIONS.find((action) => action.to === to && columnsFor(action, kind)?.includes(from) && (kind !== 'aa' || !action.capability || CAPABILITIES.aa[action.capability])) || null;

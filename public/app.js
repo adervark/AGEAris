@@ -1,4 +1,4 @@
-import { actionFor, actionRequest, availability, inputFor, projectKind, TASK_ACTIONS, WHY } from './actions.js';
+import { actionFor, actionForKey, actionRequest, availability, canMove, inputFor, projectKind, TASK_ACTIONS, WHY } from './actions.js';
 import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, lifecycleBadge, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
@@ -359,17 +359,24 @@ function focusSelector(element) {
   if (element.id) return `#${CSS.escape(element.id)}`;
   if (element.tagName === 'SUMMARY' && element.parentElement.dataset.key) return `details[data-key="${CSS.escape(element.parentElement.dataset.key)}"] > summary`;
   // A card's or row's own control, not a strip dot with the same data.
-  const owner = element.matches('.task-card, .task-row') ? `.${element.classList[0]}` : '';
+  const owner = element.matches('.card-open, .card-menu, .task-row') ? `.${element.classList[0]}` : '';
   if (element.dataset.action) return owner + ['action', 'id', 'value', 'runAction'].filter((key) => element.dataset[key] !== undefined).map((key) => `[data-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}="${CSS.escape(element.dataset[key])}"]`).join('');
   return '';
 }
 
 function renderMain() {
   const focus = focusSelector(document.activeElement);
+  // An open card menu survives a re-render: it opens again on the new card,
+  // with focus on the item that had it.
+  const menuFor = openMenu;
+  const menuItem = document.activeElement?.closest?.('.task-menu') ? document.activeElement.dataset.act : '';
+  openMenu = '';
   renderPage();
   $('#main').querySelectorAll('details[data-key]').forEach((details) => {
     if (detailsOpen.has(details.dataset.key)) details.open = detailsOpen.get(details.dataset.key);
   });
+  const menuButtonNow = menuFor && $('#main').querySelector(`.card-menu[data-id="${CSS.escape(menuFor)}"]`);
+  if (menuButtonNow) openTaskMenu(menuButtonNow, menuItem);
   if (focus && !$('#main').contains(document.activeElement)) $('#main').querySelector(focus)?.focus({ preventScroll: true });
 }
 
@@ -617,17 +624,28 @@ function holder(task) {
 // One task, one look: the same signals, holder and note on a card, a row, and
 // in the drawer.
 function taskCard(task) {
-  const project = projectOf(task);
-  const editable = writable(project) || Boolean(project?.actions?.on);
   const signal = signals().get(task.id);
   const footer = `${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${icon('calendar')}${escape(formatDate(task.dueDate))}</span>` : '<span></span>'}${holder(task) || (task.status === 'done' ? '' : '<span class="muted">Unclaimed</span>')}`;
-  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${task.status !== 'done' && (signal || placeOf(task)?.waitingOn.length || placeOf(task)?.thread) ? `<span class="card-signals">${signal ? signalBadges(signal) : ''}${waitingChip(placeOf(task))}${threadTag(placeOf(task))}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></button>`;
+  // The card is not itself a control: a stretched open button and the menu
+  // button sit side by side in it, so nothing interactive is nested.
+  return `<article class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-id="${escape(task.id)}"><button type="button" class="card-open" data-action="open-task" data-id="${escape(task.id)}" draggable="${canMove(actionsFor(task))}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}" aria-keyshortcuts="${escape(taskKeys(task))}"></button><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span><span class="card-top-end">${priorityBadge(task)}${menuButton(task)}</span></span><span class="card-title">${escape(task.title)}</span>${task.status !== 'done' && (signal || placeOf(task)?.waitingOn.length || placeOf(task)?.thread) ? `<span class="card-signals">${signal ? signalBadges(signal) : ''}${waitingChip(placeOf(task))}${threadTag(placeOf(task))}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></article>`;
+}
+
+// The "⋯" button that opens a card's or row's action menu (openTaskMenu).
+function menuButton(task) {
+  return `<button type="button" class="card-menu" data-action="task-menu" data-id="${escape(task.id)}" aria-haspopup="menu" aria-expanded="false" aria-label="Actions for ${escape(taskNumber(task))}" title="Actions (.)">${icon('more')}</button>`;
+}
+
+// The keys that act on a task from its card, row or drawer, for aria-keyshortcuts.
+function taskKeys(task) {
+  const entries = actionsFor(task);
+  return [...TASK_ACTIONS.filter((action) => entries.find((entry) => entry.id === action.id)?.relevant).map((action) => action.key), '.'].join(' ');
 }
 
 function taskRow(task, showProject) {
   const signal = signals().get(task.id);
   const project = showProject ? projectOf(task) : null;
-  return `<li><button class="task-row" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="task-row-title" title="${escape(task.title)}">${escape(task.title)}${project ? `<small>${escape(project.name)}</small>` : ''}</span><span class="task-row-signals">${signal && task.status !== 'done' ? signalBadges(signal) : ''}${task.status !== 'done' ? waitingChip(placeOf(task)) : ''}${runLine(task)}</span><span class="task-row-owner">${holder(task) || '<span class="muted">—</span>'}</span><span class="task-row-when">${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${escape(formatDate(task.dueDate))}</span>` : escape(formatDate(task.createdAt))}</span></button></li>`;
+  return `<li class="task-row-item" data-id="${escape(task.id)}"><button class="task-row" data-action="open-task" data-id="${escape(task.id)}" aria-keyshortcuts="${escape(taskKeys(task))}"><span class="task-number">${escape(taskNumber(task))}</span><span class="task-row-title" title="${escape(task.title)}">${escape(task.title)}${project ? `<small>${escape(project.name)}</small>` : ''}</span><span class="task-row-signals">${signal && task.status !== 'done' ? signalBadges(signal) : ''}${task.status !== 'done' ? waitingChip(placeOf(task)) : ''}${runLine(task)}</span><span class="task-row-owner">${holder(task) || '<span class="muted">—</span>'}</span><span class="task-row-when">${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${escape(formatDate(task.dueDate))}</span>` : escape(formatDate(task.createdAt))}</span></button>${menuButton(task)}</li>`;
 }
 
 // Grouped by state; each group shows a page of rows and the rest on request.
@@ -892,7 +910,7 @@ function setupDialog(dialog) {
 // dot, which open it too and come first in the page.
 function taskOpener(taskId) {
   const id = CSS.escape(taskId);
-  return $('#main').querySelector(`.task-card[data-id="${id}"], .task-row[data-id="${id}"]`) || $('#main').querySelector(`[data-action="open-task"][data-id="${id}"]`);
+  return $('#main').querySelector(`.card-open[data-id="${id}"], .task-row[data-id="${id}"]`) || $('#main').querySelector(`[data-action="open-task"][data-id="${id}"]`);
 }
 
 function anyDialogOpen() {
@@ -2448,6 +2466,85 @@ async function openPipelineEditor(project) {
   });
 }
 
+// --- The card menu and the keyboard map ---------------------------------------
+// A card's or row's "⋯" opens the same actions as the drawer's bar, from the
+// same registry, with the same refusals. The keys c b u d r p a (TASK_ACTIONS'
+// `key`) do them on a focused card or row and in an open drawer; `.` or the
+// ContextMenu key opens the menu.
+
+let openMenu = '';
+
+function openTaskMenu(button, focusAct = '') {
+  closeTaskMenu(false);
+  const task = state.tasks.find((entry) => entry.id === button.dataset.id);
+  if (!task) return;
+  const items = actionsFor(task).filter((entry) => entry.relevant).map((entry) => {
+    const action = TASK_ACTIONS.find((candidate) => candidate.id === entry.id);
+    const why = `menu-why-${entry.id}`;
+    return `<button type="button" role="menuitem" tabindex="-1" class="menu-item" data-action="act" data-act="${entry.id}" data-id="${escape(task.id)}" aria-label="${escape(entry.label)}" aria-keyshortcuts="${action.key}" ${entry.enabled ? '' : `aria-disabled="true" aria-describedby="${why}"`}>${icon(action.icon)}<span class="menu-label">${escape(entry.label)}</span><kbd aria-hidden="true">${action.key}</kbd>${entry.enabled ? '' : `<small class="menu-why" id="${why}">${escape(entry.why)}</small>`}</button>`;
+  }).join('');
+  button.insertAdjacentHTML('afterend', `<div class="task-menu" role="menu" aria-label="Actions for ${escape(taskNumber(task))}">${items || '<p class="menu-empty">Nothing to do here</p>'}</div>`);
+  button.setAttribute('aria-expanded', 'true');
+  openMenu = task.id;
+  const menu = button.nextElementSibling;
+  (focusAct && menu.querySelector(`.menu-item[data-act="${focusAct}"]`) || menu.querySelector('.menu-item:not([aria-disabled])') || menu.querySelector('.menu-item'))?.focus();
+}
+
+// Closing returns focus to the menu button when asked to (Esc, a choice).
+function closeTaskMenu(returnFocus) {
+  const menu = $('#main').querySelector('.task-menu');
+  if (!menu) { openMenu = ''; return; }
+  // Cleared first: removing the menu blurs its item, and focusout must not close it twice.
+  openMenu = '';
+  const button = menu.previousElementSibling;
+  button?.setAttribute('aria-expanded', 'false');
+  if (returnFocus) button?.focus({ preventScroll: true });
+  menu.remove();
+}
+
+function moveInMenu(menu, key) {
+  const items = [...menu.querySelectorAll('.menu-item')];
+  if (!items.length) return;
+  const at = items.indexOf(document.activeElement);
+  const next = key === 'Home' ? 0 : key === 'End' ? items.length - 1 : (at + (key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+  items[next].focus();
+}
+
+// The task a key acts on: the drawer's, while it is the dialog on top and
+// focus is in it; otherwise the focused card's or row's.
+function keyedTask(event) {
+  if ($('#task-dialog').open) return $('#task-dialog').contains(event.target) && !document.querySelector('dialog[open]:not(#task-dialog)') ? drawerTaskId() : '';
+  if (anyDialogOpen()) return '';
+  return event.target.closest?.('.task-card, .task-row-item')?.dataset.id || '';
+}
+
+function onTaskKey(event) {
+  if (event.ctrlKey || event.metaKey || event.altKey || event.target.closest?.('input, textarea, select, [contenteditable]')) return;
+  const menu = event.target.closest?.('.task-menu');
+  if (menu && ['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) { event.preventDefault(); return moveInMenu(menu, event.key); }
+  if (menu && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return closeTaskMenu(true); }
+  const taskId = keyedTask(event);
+  const task = taskId && state.tasks.find((entry) => entry.id === taskId);
+  if (!task) return;
+  if (event.key === '.' || event.key === 'ContextMenu') {
+    event.preventDefault();
+    if ($('#task-dialog').open) return $('#task-dialog .action-bar .action-button')?.focus();
+    const button = event.target.closest('.task-card, .task-row-item').querySelector('.card-menu');
+    return openMenu === taskId ? closeTaskMenu(true) : openTaskMenu(button);
+  }
+  const entry = actionForKey(event.key, actionsFor(task));
+  if (!entry) return;
+  event.preventDefault();
+  if (menu) closeTaskMenu(true);
+  performAction(entry.id, taskId);
+}
+document.addEventListener('keydown', onTaskKey);
+// A menu closes when focus or a click goes elsewhere.
+document.addEventListener('click', (event) => { if (openMenu && !event.target.closest('.task-menu, .card-menu')) closeTaskMenu(false); });
+$('#main').addEventListener('focusout', (event) => {
+  if (openMenu && event.target.closest('.task-menu') && !event.relatedTarget?.closest?.('.task-menu, .card-menu')) closeTaskMenu(false);
+});
+
 // A column change is the action that makes it. Block asks (optionally) what
 // would unblock the task.
 function moveTask(id, status) {
@@ -2487,7 +2584,16 @@ function onAction(event) {
   const target = event.target.closest('[data-action]');
   if (!target) return;
   switch (target.dataset.action) {
-    case 'act': if (target.getAttribute('aria-disabled') === 'true') $('#action-note').textContent = target.nextElementSibling?.textContent || ''; else performAction(target.dataset.act, target.dataset.id); break;
+    case 'act': {
+      // From a card's menu the menu closes first, and a disabled item says why as a bar's button does.
+      const fromMenu = Boolean(target.closest('.task-menu'));
+      if (fromMenu) closeTaskMenu(true);
+      if (target.getAttribute('aria-disabled') !== 'true') performAction(target.dataset.act, target.dataset.id);
+      else if (fromMenu) toast(target.querySelector('.menu-why')?.textContent || '', true);
+      else $('#action-note').textContent = target.nextElementSibling?.textContent || '';
+      break;
+    }
+    case 'task-menu': if (openMenu === target.dataset.id) closeTaskMenu(true); else openTaskMenu(target); break;
     case 'act-confirm': performAction(target.dataset.act, target.dataset.id, { input: $('#action-slot [data-action-input]').value }); break;
     case 'act-cancel': closeActionInput(target.dataset.act); break;
     case 'new-project': openProjectEditor(); break;
@@ -2665,7 +2771,7 @@ function editingMain() {
 }
 
 function refreshPaused() {
-  return state.authLost || document.hidden || refreshing || state.acting || draggedId || anyDialogOpen() || editingMain();
+  return state.authLost || document.hidden || refreshing || state.acting || draggedId || openMenu || anyDialogOpen() || editingMain();
 }
 
 setInterval(() => {
