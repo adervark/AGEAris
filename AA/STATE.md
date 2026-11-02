@@ -66,8 +66,8 @@ FLOW · Little's Law: 2 ÷ 16.3/wk ≈ 20h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 2/2 | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 26d | ⚠ |
-|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | now |  |
+| **IN PROGRESS** 2/2 | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | now |  |
+|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | now |  |
 | **BACKLOG** 30 | | `T003` `T004` `T047` `T051` `T056` `T058` +24 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | now |  |
 |  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 32h |  |
@@ -141,7 +141,6 @@ FLOW · Little's Law: 2 ÷ 16.3/wk ≈ 20h expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 26d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ⚠ work item age past the 85th-percentile cycle time this repo has delivered — finish or split it; it is not a lock
 <!-- /AA:generated -->
 
 <!--
