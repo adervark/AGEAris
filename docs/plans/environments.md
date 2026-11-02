@@ -1,7 +1,9 @@
 # Environments a task leaves behind
 
-**Status: proposal, pending the operator's approval** (T110, 2026-11-03).
-Nothing in it has been built, and nothing anywhere has been deleted.
+**Status: approved 2026-11-03.** The operator: "I want the task environment
+files deleted once it is finished." Closing a task therefore releases its
+environment automatically (T111); S4's lists stay as the check that nothing
+was missed. T114 releases what the tasks already done left behind.
 
 A task makes things that are not task files: worktrees, branches, scratch
 folders, builds, copies of data, background processes. The AA convention

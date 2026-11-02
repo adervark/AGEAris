@@ -1,7 +1,7 @@
 ---
 id: T110
 title: "Environments a task leaves behind: measure them, and a structure that releases them"
-status: claimed
+status: done
 owner: adervark @b/cc5901e7 2026-11-03 — the inventory across ~/Code and the design, docs/plans/environments.md
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: design
@@ -30,7 +30,7 @@ releases each, approved by the operator before anything is built or deleted.
 
 - [x] Inventory every repository under ~/Code, read-only.
 - [x] `docs/plans/environments.md`: causes, the structure, phases as tasks.
-- [ ] The operator's decisions recorded in the plan.
+- [x] The operator's decisions recorded in the plan.
 
 ## Decision rules — fixed in advance
 
@@ -46,12 +46,27 @@ releases each, approved by the operator before anything is built or deleted.
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-11-03, adervark @b/cc5901e7
-- **In flight:** nothing; the plan waits on the operator (Q1–Q4)
+- **In flight:** nothing; closed
 - **On disk:** docs/plans/environments.md, committed
 - **Resume with:** the Steps above
-- **Next decision:** the operator's approval of the plan
+- **Next decision:** none
 
 ## Result
+
+- The inventory and the design are in `docs/plans/environments.md`
+  (`a849a8c`). Every number in it was measured on 2026-11-03, read-only.
+- AGEIS `scratch/` is 194 GB, 44% of the disk:
+  - 110.1 GB is held by tasks already done, and 31.6 GB by no task;
+  - about 50.6 GB looks like copies of the same file (same name and size,
+    not hashed);
+  - 47 of its 109 done Results cite ignored `scratch/` paths;
+  - 18 of its 19 worktrees and 17 of its 18 branches are landed.
+- The operator decided on 2026-11-03: "I want the task environment files
+  deleted once it is finished." The release is therefore automatic at close
+  (T111), and the tasks already done are released by T114. Nothing was
+  deleted under T110.
+
+**Spend:** none.
 
 ## Notes
 
