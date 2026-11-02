@@ -23,15 +23,17 @@ lives in PROGRESS.md and `done/`, not here.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-11-02T19:53Z · 102 tasks: 30 backlog, 0 WIP (0 in progress), 72 delivered`
+`board · 2026-11-02T20:03Z · 109 tasks: 37 backlog, 0 WIP (0 in progress), 72 delivered`
 
-FLOW · **WIP 0/2** · throughput 16.3/wk (70 in 30d) · cycle time 50th 7m / 85th 3h (n=70)
-FLOW · Little's Law: 0 ÷ 16.3/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 16.8/wk (72 in 30d) · cycle time 50th 8m / 85th 3h (n=72)
+FLOW · Little's Law: 0 ÷ 16.8/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 30 | | `T003` `T004` `T047` `T051` `T056` `T058` +24 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 17m |  |
+| **BACKLOG** 37 | | `T003` `T004` `T047` `T051` `T056` `T058` +31 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 10m |  |
+|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 10m |  |
+|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 27m |  |
 |  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 32h |  |
 |  | T068 | Deprecate or archive a project, either kind, and restore it | adervark | 8d |  |
 |  | T053 | Measure how often agents get lost: a baseline | adervark | 8d |  |
@@ -91,7 +93,7 @@ FLOW · Little's Law: 0 ÷ 16.3/wk ≈ now expected · lead time 85th 35h
 |  | T012 | A blocked task loses its Handoff reason when its file moves | adervark | 25d |  |
 |  | T028 | A README that explains the workflow, for a first-time tester | adervark | 25d |  |
 |  | T027 | /aa restarts an AGE Aris server that is older than its code | adervark | 25d |  |
-|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 25d |  |
+|  | T023 | Task actions on tracked AA boards, end to end; the read-only rule lifted | adervark | 26d |  |
 |  | T021 | A tracked-write engine that commits one task file under git's lock | adervark | 26d |  |
 |  | T022 | Task actions in the drawer, on AGE Aris projects first | adervark | 26d |  |
 |  | T019 | A Working page: everything in progress or blocked, on every board | adervark | 26d |  |
