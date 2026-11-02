@@ -978,3 +978,15 @@ its date, the number, and where the evidence is. Newest last.
   wording changed. The tests now target the card. On the page, focus that
   went back to a stacked dot now goes to the card.
 - Evidence: T100's Result.
+
+## 2026-11-03 — T024 and T025: task control finished
+
+- **T024** (the card menu, the keys, drag through the registry): every
+  Acceptance line of plan §5 T024 holds. `npm run e2e` passed 32 of 32
+  twice on `2c3ee30`, about 11 s a run. The independent review found 5
+  defects and no blocker, and all 5 are fixed.
+- **T025** (STATE.md behind AGE Aris's changes): every Acceptance line
+  holds, on real repositories of both kinds and on the page.
+- `npm test` passed 596 of 596, and `npm run check` is clean.
+- With T021–T026 and T100, plan `docs/plans/task-control.md` is delivered.
+- Evidence: T024's and T025's Results.
