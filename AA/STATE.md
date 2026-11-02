@@ -23,18 +23,20 @@ lives in PROGRESS.md and `done/`, not here.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-11-02T20:08Z · 110 tasks: 37 backlog, 1 WIP (1 in progress), 72 delivered`
+`board · 2026-11-02T20:12Z · 112 tasks: 37 backlog, 2 WIP (2 in progress), 73 delivered`
 
-FLOW · **WIP 1/2** · throughput 16.8/wk (72 in 30d) · cycle time 50th 8m / 85th 3h (n=72)
-FLOW · Little's Law: 1 ÷ 16.8/wk ≈ 10h expected · lead time 85th 35h
+FLOW · **WIP 2/2** · throughput 17.0/wk (73 in 30d) · cycle time 50th 8m / 85th 3h (n=73)
+FLOW · Little's Law: 2 ÷ 17.0/wk ≈ 19h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | now |  |
+| **IN PROGRESS** 2/2 | T111 | Closing a task releases its environment: ckpt.sh release, rule 13, board.sh warns about what is left | adervark | now |  |
+|  | T114 | Release what finished tasks left: AGEIS's 110 GB and this repository's landed worktree | adervark | now |  |
 | **BACKLOG** 37 | | `T003` `T004` `T047` `T051` `T056` `T058` +31 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 14m |  |
-|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 14m |  |
-|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 32m |  |
+| **DONE** | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | now |  |
+|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 18m |  |
+|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 18m |  |
+|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 36m |  |
 |  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 32h |  |
 |  | T068 | Deprecate or archive a project, either kind, and restore it | adervark | 8d |  |
 |  | T053 | Measure how often agents get lost: a baseline | adervark | 8d |  |
