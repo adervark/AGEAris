@@ -59,17 +59,18 @@ closes on that date.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-11-02T19:25Z · 102 tasks: 31 backlog, 2 WIP (2 in progress), 69 delivered`
+`board · 2026-11-02T19:36Z · 102 tasks: 30 backlog, 2 WIP (2 in progress), 70 delivered`
 
-FLOW · **WIP 2/2** · throughput 16.1/wk (69 in 30d) · cycle time 50th 7m / 85th 2h (n=69)
-FLOW · Little's Law: 2 ÷ 16.1/wk ≈ 20h expected · lead time 85th 35h
+FLOW · **WIP 2/2** · throughput 16.3/wk (70 in 30d) · cycle time 50th 7m / 85th 3h (n=70)
+FLOW · Little's Law: 2 ÷ 16.3/wk ≈ 20h expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 2/2 | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 26d | ⚠ |
-|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 8d | ⚠ |
-| **BACKLOG** 31 | | `T003` `T004` `T025` `T047` `T051` `T056` +25 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T054 | Scale baseline: a 300-repository perf fixture | adervark | 31h |  |
+| **IN PROGRESS** 2/2 | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 26d | ⚠ |
+|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | now |  |
+| **BACKLOG** 30 | | `T003` `T004` `T047` `T051` `T056` `T058` +24 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | now |  |
+|  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 32h |  |
 |  | T068 | Deprecate or archive a project, either kind, and restore it | adervark | 8d |  |
 |  | T053 | Measure how often agents get lost: a baseline | adervark | 8d |  |
 |  | T097 | Three tests race a cold ledger build when the whole suite runs at once | adervark | 8d |  |
@@ -100,8 +101,8 @@ FLOW · Little's Law: 2 ÷ 16.1/wk ≈ 20h expected · lead time 85th 35h
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 24d |  |
 |  | T044 | Restructure the interface around flow strips: it reads as a stock SaaS card kit | adervark | 24d |  |
 |  | T043 | The menu button does nothing on a desktop: it should fold the sidebar away | adervark | 24d |  |
-|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 24d |  |
-|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 24d |  |
+|  | T042 | Black glass with a silver edge: T039's gradient chrome looked like a basic app | adervark | 25d |  |
+|  | T041 | The Aris wordmark in Michroma: the plain sans looked too basic | adervark | 25d |  |
 |  | T040 | Aris under the logo, centred | adervark | 25d |  |
 |  | T039 | Silver that reads as metal: T036's chrome still looks like flat grey | adervark | 25d |  |
 |  | T038 | The Flow tab shows only what the data supports: empty charts, oversized text, numbers that disagree | adervark | 25d |  |
