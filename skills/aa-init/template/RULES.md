@@ -67,6 +67,14 @@ everywhere.
     reference repo violated by 40×.)*
 12. **New work gets the next id and a file in `backlog/`**, however small. If
     it is not a file, no agent will pick it up and the board cannot show it.
+13. **Closing releases what the task holds.** When a task reaches `done/`,
+    `AA/ckpt.sh release T###` deletes its scratch folder, its landed
+    worktrees and its merged branches. `close --delete` runs it too. What the
+    Result cites as evidence is named on the task's `keeps:` line, fixed with
+    the decision rules, and is committed to `AA/evidence/T###/` first. Work
+    that has not landed is never deleted, only named. `board.sh --check`
+    warns while a finished task still holds anything.
+    *(WHY § the scratch that outlived its tasks.)*
 
 ## Where things live
 
@@ -76,6 +84,8 @@ everywhere.
 | `tasks/` | past the commitment point. Counts against the WIP limit; its age is measured. |
 | `tasks/done/` | delivered or killed. A decision not to do something is a result and is kept. |
 | `checkpoints/T###.jsonl` | the live trail. Retired into the Result when the task closes; git keeps it. |
+| `evidence/T###/` | the files a done task kept (its `keeps:` line). Committed; nothing else of the task's outlives it. |
+| `scratch/T###/` (AA.yml `scratch:`) | a task's working files, worktrees and builds. Usually git-ignored. Deleted when the task is done (rule 13). |
 
 **The location is the state.** `status:` in the frontmatter adds detail within a
 column; when the two disagree, the directory is right.

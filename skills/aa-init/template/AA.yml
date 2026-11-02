@@ -52,3 +52,11 @@ map: {{README.md}}
 # Task id prefix. T001, CASE-001, CH-01 — whatever reads naturally here.
 # Ids are permanent and never renumbered; the slug after them may change.
 id_prefix: T
+
+# A task's working files, worktrees and builds live in <scratch>/T###/, usually
+# git-ignored. `ckpt.sh release` deletes that folder when the task is done
+# (rule 13); the files its `keeps:` line names, each up to keep_max_kb, are
+# committed to AA/evidence/T###/ first. A bigger one is recorded by its sha256
+# and the command that rebuilds it.
+scratch: scratch
+keep_max_kb: 1024

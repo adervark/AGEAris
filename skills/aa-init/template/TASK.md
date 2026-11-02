@@ -8,6 +8,8 @@ type: {{type, or delete the line for untyped}}
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
 blockedReason: ""
 depends: []
+# keeps: the files the Result cites, committed to AA/evidence/ at close; the rest of scratch/T###/ is deleted (rule 13)
+keeps: []
 created: {{DATE}}
 ---
 
@@ -30,6 +32,10 @@ created: {{DATE}}
 {{Pass, fail and stop criteria — required before claiming if this task will
 spend anything named in AA.yml (rule 5).}}
 
+{{What it keeps when done: list the files on the frontmatter's `keeps:` line,
+e.g. `keeps: [scratch/T###/bench.jsonl]`. Everything else under
+`scratch/T###/` is deleted at close (rule 13).}}
+
 *(While this is empty the board marks the task ⚑.)*
 
 ## Handoff — state at last stop
@@ -50,7 +56,8 @@ spend anything named in AA.yml (rule 5).}}
 
 *(on completion: the outcome against the decision rules above, a pointer to the
 entry in the log, and the digest from `AA/ckpt.sh close {{T###}}` — then
-retire the trail with `--delete`)*
+retire the trail with `--delete`, which also releases the task's scratch,
+worktrees and branches; with no trail, `AA/ckpt.sh release {{T###}}`)*
 
 ## Notes
 
