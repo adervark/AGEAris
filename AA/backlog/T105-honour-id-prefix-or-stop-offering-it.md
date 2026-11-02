@@ -20,7 +20,7 @@ A board that sets `id_prefix` to anything but `T` works in AGE Aris, or the temp
 ## Context
 
 - `AA/AA.yml` and the aa-init template offer `id_prefix` ("T001, CASE-001, CH-01").
-- `T\\d{3,}` is hard-coded in `lib/brief.mjs` (TASK_ID), `lib/history.mjs` (TASK_PATH, TRAIL_PATH), `lib/workspace.mjs` (TASK_FILE), `lib/tracked.mjs`, `lib/fabricate.mjs`, and `aa.sh`. A board with another prefix reads empty.
+- `T\d{3,}` is hard-coded in `lib/brief.mjs` (TASK_ID), `lib/history.mjs` (TASK_PATH, TRAIL_PATH), `lib/workspace.mjs` (TASK_FILE), `lib/tracked.mjs`, `lib/fabricate.mjs`, and `aa.sh`. A board with another prefix reads empty.
 - Found in an outside analysis, checked 2026-11-03.
 
 ## Steps
