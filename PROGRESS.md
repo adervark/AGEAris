@@ -968,3 +968,13 @@ its date, the number, and where the evidence is. Newest last.
   resident. It passed 4, with 6 todo, 1 skipped and none failed.
 - **Spend:** none. The fixture and the data folders are outside the
   repository and `.agearis-data`.
+
+## 2026-11-03 — T100: the task-actions e2e passes again
+
+- `npm run e2e` passed 27 of 27, twice in a row, on `3f2b298`, about 8 s a
+  run. Before, `task-actions.e2e.mjs` failed 9 of 24 in 255 s.
+- The cause was T044 (`0e9bfbb`): its flow-strip dots carry each card's
+  `data-action` and `data-id` and come first in the page, and its toast
+  wording changed. The tests now target the card. On the page, focus that
+  went back to a stacked dot now goes to the card.
+- Evidence: T100's Result.

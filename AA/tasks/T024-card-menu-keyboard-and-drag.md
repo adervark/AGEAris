@@ -1,8 +1,8 @@
 ---
 id: T024
 title: "The card menu, the keyboard map, and drag through the action registry"
-status: open
-owner: —
+status: claimed
+owner: adervark @b/cc5901e7 2026-11-03 — the card menu, the keyboard map, and drag through performAction
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
