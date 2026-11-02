@@ -642,6 +642,13 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
       by=$(held_by_open "$(basename "$d")" "$cites")
       if [ -n "$by" ]; then held+=("${d#"$rroot"/} is kept whole: open task $by cites it"); continue; fi
       if [ -L "$d" ]; then rmdirs+=("$d"); plan+=("remove the link ${d#"$rroot"/} (not what it points to)"); continue; fi
+      # A loose file named for the task (scratch/t062-gate.log) is a folder of one.
+      if [ -f "$d" ]; then
+        if in_use "$d" "$busy"; then held+=("${d#"$rroot"/} is kept: a running process is using it"); continue; fi
+        if [ -n "$(git -C "$ROOT" ls-files -- "$d" 2>/dev/null | head -1)" ]; then held+=("${d#"$rroot"/} is kept: the repository tracks it"); continue; fi
+        keepable "$d" >> "$tmp/keep" || { held+=("${d#"$rroot"/}: cannot tell whether it is kept; it stays"); continue; }
+        rmdirs+=("$d"); plan+=("delete ${d#"$rroot"/} ($(human_kb "$(du -sk "$d" 2>/dev/null | cut -f1)"))"); continue
+      fi
       [ -d "$d" ] || continue
       if in_use "$d" "$busy"; then held+=("${d#"$rroot"/} is kept whole: a running process is using it"); continue; fi
       if [ -n "$(git -C "$ROOT" ls-files -- "$d" 2>/dev/null | head -1)" ]; then held+=("${d#"$rroot"/} is kept whole: the repository tracks files in it"); continue; fi
@@ -797,7 +804,7 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
   wtl=$(worktrees)
   for d in ${rmdirs[@]+"${rmdirs[@]}"}; do
     case "$d" in "$sroot"/?*) ;; *) die "refusing to delete $d: not under $sroot" ;; esac
-    if [ -L "$d" ]; then rm -f -- "$d"; continue; fi
+    if [ -L "$d" ] || [ -f "$d" ]; then rm -f -- "$d"; continue; fi
     if printf '%s\n' "$wtl" | awk -F'\037' -v d="$d" 'index($1"/", d"/")==1{f=1} END{exit !f}'; then warn "kept ${d#"$rroot"/}: a worktree in it is still registered"; continue; fi
     rm -rf -- "$d"
   done

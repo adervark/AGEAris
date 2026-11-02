@@ -563,6 +563,21 @@ test('close --delete retires the trail even when the release then refuses, and s
   assert.equal(await exists(path.join(dir, 'scratch/T001/out.txt')), true);
 });
 
+test('a loose file named for the task is a folder of one: kept by kind, then removed; a loose binary just goes', async () => {
+  const dir = await repo();
+  await write(dir, 'scratch/t001-gate.log', 'gate ok\n');
+  await write(dir, 'scratch/t001-core.bin', 'core');
+  await write(dir, 'scratch/t0011-gate.log', 'another task');
+  const result = await release(dir, 'T001');
+  assert.equal(result.code, 0, result.out);
+  assert.equal(await readFile(path.join(dir, 'AA/evidence/T001/t001-gate.log'), 'utf8'), 'gate ok\n');
+  assert.equal(await exists(path.join(dir, 'scratch/t001-gate.log')), false);
+  assert.equal(await exists(path.join(dir, 'scratch/t001-core.bin')), false);
+  assert.equal(await exists(path.join(dir, 'scratch/t0011-gate.log')), true);
+  const { stdout } = await exec('bash', ['AA/board.sh', '--litter'], { cwd: dir, env: process.env });
+  assert.equal(stdout.trim(), 'Finished tasks hold nothing on disk.', '--litter and release agree');
+});
+
 test('close --delete releases the task after retiring its trail', async () => {
   const dir = await repo();
   await write(dir, 'scratch/T001/out.txt', 'x');
