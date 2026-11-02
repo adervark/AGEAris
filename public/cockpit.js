@@ -668,6 +668,21 @@ const statusChip = (status) => `<span class="status-pill status-${escape(status)
 const taskWord = (task) => `${task.id.split(':').at(-1)} ${task.title}`;
 
 // "Waiting on T076": an open task whose dependency is not finished.
+// A tracked board's STATE.md behind AGE Aris's changes (T025): the brief
+// line's `stateBehind`, as one note on the project page; '' when there is none.
+export function stateBehindNote(line) {
+  const behind = line?.stateBehind;
+  if (!behind?.tasks?.length) return '';
+  const shown = behind.tasks.slice(0, 6);
+  const more = behind.tasks.length - shown.length;
+  const names = `${shown.length > 1 ? `${shown.slice(0, -1).join(', ')} and ${shown.at(-1)}` : shown[0]}${more ? ` and ${more} more` : ''}`;
+  const said = behind.kind === 'generated'
+    ? `STATE.md is behind AGE Aris's changes to ${names}, as far as the commits show.`
+    : `STATE.md is kept by hand here; its ${behind.tasks.length === 1 ? 'line' : 'lines'} for ${names} ${behind.tasks.length === 1 ? 'predates its change' : 'predate their changes'} in AGE Aris, as far as the commits show.`;
+  const copy = behind.kind === 'generated' ? ` <button type="button" class="text-button" data-action="copy-path" data-value="${escape(behind.command)}" data-copied="Command" title="Copy the command that regenerates it">Copy <code>${escape(behind.command)}</code></button>` : '';
+  return `<p class="window-note state-behind-note">${icon('alert')}<span>${escape(said)}${copy}</span></p>`;
+}
+
 export function waitingChip(place) {
   if (!place?.waitingOn?.length) return '';
   const [first, ...rest] = place.waitingOn;

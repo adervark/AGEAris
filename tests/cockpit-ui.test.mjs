@@ -8,7 +8,7 @@ import { Cockpit } from '../lib/brief.mjs';
 import { METRIC_DEFINITIONS } from '../lib/metrics.mjs';
 import { Workspace } from '../lib/workspace.mjs';
 import { duration } from '../public/charts.js';
-import { escape, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, renderWorking, signalBadges, signalIndex } from '../public/cockpit.js';
+import { escape, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderTimeline, renderWorking, signalBadges, signalIndex, stateBehindNote } from '../public/cockpit.js';
 import { agentShort, healthWord } from '../public/words.js';
 import { briefQuery, CURSOR_KEY, cursorFromBrief, readCursor, readWindow, WINDOW_KEY, writeCursor, writeWindow } from '../public/cursor.js';
 
@@ -299,4 +299,20 @@ test('the Working page lists exactly the work in progress or blocked, by project
   const empty = renderWorking({ tasks: tasks.filter((entry) => !['in_progress', 'blocked'].includes(entry.status)), projects, brief, now: NOW });
   assert.match(empty, /Nothing is in progress/);
   assert.doesNotMatch(empty, /working-row/);
+});
+
+test('the STATE.md note: a generated board names the tasks and copies board.sh --write; a hand-kept one says its lines predate the change', () => {
+  assert.equal(stateBehindNote(null), '');
+  assert.equal(stateBehindNote({ projectId: PROJECT }), '', 'an AGE Aris project, or a board that caught up');
+  const generated = stateBehindNote({ stateBehind: { kind: 'generated', tasks: ['T012', 'T014'], command: 'AA/board.sh --write' } });
+  assert.match(generated, /STATE\.md is behind AGE Aris&#39;s changes to T012 and T014, as far as the commits show\./);
+  assert.match(generated, /data-action="copy-path" data-value="AA\/board\.sh --write" data-copied="Command"/);
+  const hand = stateBehindNote({ stateBehind: { kind: 'hand', tasks: ['T077', 'T036'], command: 'AA/board.sh --write' } });
+  assert.match(hand, /STATE\.md is kept by hand here; its lines for T077 and T036 predate their changes in AGE Aris, as far as the commits show\./);
+  assert.doesNotMatch(hand, /copy-path/, 'a hand-kept board has no command to run');
+  assert.match(stateBehindNote({ stateBehind: { kind: 'hand', tasks: ['T077'], command: 'AA/board.sh --write' } }), /its line for T077 predates its change in AGE Aris/);
+  const many = stateBehindNote({ stateBehind: { kind: 'generated', tasks: ['T001', 'T002', 'T003', 'T004', 'T005', 'T006', 'T007', 'T008'], command: 'AA/board.sh --write' } });
+  assert.match(many, /T001, T002, T003, T004, T005 and T006 and 2 more/);
+  // Task ids reach the page from a repository: escaped, never markup.
+  assert.doesNotMatch(stateBehindNote({ stateBehind: { kind: 'hand', tasks: ['<img src=x>'], command: 'x' } }), /<img/);
 });

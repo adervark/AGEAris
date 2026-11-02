@@ -482,6 +482,11 @@ test('the card menu opens with Enter, Space and the full stop; arrows, Home and 
   await page.waitForFunction(() => document.querySelector('#toast').textContent === 'Task started');
   assert.equal(await menuOpen(), null);
   await page.waitForFunction((id) => document.activeElement?.matches(`[data-drop-status="in_progress"] .card-menu[data-id="${id}"]`), {}, ids['Menu me']);
+  // The ContextMenu key, Shift+F10 and a right click arrive as a contextmenu event.
+  await page.$eval(card('Prioritise me'), (element) => element.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true })));
+  await page.waitForSelector(`.card-menu[data-id="${ids['Prioritise me']}"][aria-expanded="true"] + .task-menu`);
+  await page.keyboard.press('Escape');
+  assert.equal(await menuOpen(), null);
   // A click elsewhere closes an open menu.
   await clickInView(menuButtonOf('Menu me'));
   await page.waitForSelector('#main .task-menu');
@@ -698,6 +703,10 @@ test('keyboard only: Tab to a backlog card on a tracked board, press c, and it i
   assert.match(await trackedFile(board, 'AA/tasks/T004-claim-by-key.md'), /^status: claimed$/m);
   await assertCommittedByUi(board);
   await page.waitForFunction((selector) => document.activeElement?.matches(`[data-drop-status="in_progress"] ${selector}`), {}, opener);
+  // STATE.md is kept by hand on this board, and AGE Aris never writes it (T025).
+  await page.goto('about:blank');
+  await page.goto(`${base}/#project/${board.id}`);
+  await page.waitForFunction(() => /STATE\.md is kept by hand here; its lines for T001 and T004 predate their changes in AGE Aris, as far as the commits show\./.test(document.querySelector('.state-behind-note')?.textContent || ''));
 });
 
 test('on a board without backlog/ Claim changes the file in place', async () => {

@@ -1,5 +1,5 @@
 import { actionFor, actionForKey, actionRequest, availability, canMove, inputFor, projectKind, TASK_ACTIONS, WHY } from './actions.js';
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, lifecycleBadge, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, lifecycleBadge, sampleBadge, signalBadges, signalIndex, stateBehindNote, threadTag, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
@@ -547,6 +547,12 @@ function projectActions(project) {
 // Task files in a tracked repository that could not be read; the rest of the
 // board is shown without them.
 function problemsNote(project) {
+  const behind = stateBehindNote(briefLine(project.id));
+  if (behind) return `${behind}${problemsNoteOnly(project)}`;
+  return problemsNoteOnly(project);
+}
+
+function problemsNoteOnly(project) {
   if (project.unavailable) return `<p class="window-note problems-note">${icon('alert')}<span>This repository cannot be read right now: ${escape(project.unavailable)} Its tasks show again once it can be read; Stop tracking removes it from AGE Aris.</span></p>`;
   const problems = project.problems || [];
   if (!problems.length) return '';
@@ -1059,8 +1065,8 @@ async function setLifecycle(project, lifecycle) {
   }
 }
 
-async function copyPath(path) {
-  try { await navigator.clipboard.writeText(path); toast('Repository path copied'); } catch { toast(path); }
+async function copyPath(path, what = 'Repository path') {
+  try { await navigator.clipboard.writeText(path); toast(`${what} copied`); } catch { toast(path); }
 }
 
 // The grouping key of a task type, as the server computes it: lowercased,
@@ -2483,10 +2489,16 @@ function openTaskMenu(button, focusAct = '') {
     const why = `menu-why-${entry.id}`;
     return `<button type="button" role="menuitem" tabindex="-1" class="menu-item" data-action="act" data-act="${entry.id}" data-id="${escape(task.id)}" aria-label="${escape(entry.label)}" aria-keyshortcuts="${action.key}" ${entry.enabled ? '' : `aria-disabled="true" aria-describedby="${why}"`}>${icon(action.icon)}<span class="menu-label">${escape(entry.label)}</span><kbd aria-hidden="true">${action.key}</kbd>${entry.enabled ? '' : `<small class="menu-why" id="${why}">${escape(entry.why)}</small>`}</button>`;
   }).join('');
-  button.insertAdjacentHTML('afterend', `<div class="task-menu" role="menu" aria-label="Actions for ${escape(taskNumber(task))}">${items || '<p class="menu-empty">Nothing to do here</p>'}</div>`);
+  button.insertAdjacentHTML('afterend', `<div class="task-menu" role="menu" aria-label="Actions for ${escape(taskNumber(task))}">${items || '<button type="button" role="menuitem" tabindex="-1" class="menu-item" aria-disabled="true">Nothing to do here</button>'}</div>`);
   button.setAttribute('aria-expanded', 'true');
   openMenu = task.id;
   const menu = button.nextElementSibling;
+  // Opened upward when the board would clip it below and there is more room above.
+  const box = (button.closest('.board, .task-rows') || document.documentElement).getBoundingClientRect();
+  const bottom = Math.min(box.bottom, window.innerHeight);
+  const rect = menu.getBoundingClientRect();
+  const above = button.getBoundingClientRect().top - Math.max(box.top, 0);
+  if (rect.bottom > bottom && above > bottom - rect.top) menu.classList.add('opens-up');
   (focusAct && menu.querySelector(`.menu-item[data-act="${focusAct}"]`) || menu.querySelector('.menu-item:not([aria-disabled])') || menu.querySelector('.menu-item'))?.focus();
 }
 
@@ -2522,17 +2534,19 @@ function onTaskKey(event) {
   if (event.ctrlKey || event.metaKey || event.altKey || event.target.closest?.('input, textarea, select, [contenteditable]')) return;
   const menu = event.target.closest?.('.task-menu');
   if (menu && ['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) { event.preventDefault(); return moveInMenu(menu, event.key); }
-  if (menu && event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); return closeTaskMenu(true); }
+  // stopImmediate: the page's own Escape (closing the sidebar) is on document too.
+  if (menu && event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); return closeTaskMenu(true); }
   const taskId = keyedTask(event);
   const task = taskId && state.tasks.find((entry) => entry.id === taskId);
   if (!task) return;
-  if (event.key === '.' || event.key === 'ContextMenu') {
+  // The ContextMenu key and Shift+F10 arrive as a contextmenu event (below).
+  if (event.key === '.') {
     event.preventDefault();
     if ($('#task-dialog').open) return $('#task-dialog .action-bar .action-button')?.focus();
     const button = event.target.closest('.task-card, .task-row-item').querySelector('.card-menu');
     return openMenu === taskId ? closeTaskMenu(true) : openTaskMenu(button);
   }
-  const entry = actionForKey(event.key, actionsFor(task));
+  const entry = actionForKey(event.key.length === 1 ? event.key.toLowerCase() : event.key, actionsFor(task));
   if (!entry) return;
   event.preventDefault();
   if (menu) closeTaskMenu(true);
@@ -2541,8 +2555,23 @@ function onTaskKey(event) {
 document.addEventListener('keydown', onTaskKey);
 // A menu closes when focus or a click goes elsewhere.
 document.addEventListener('click', (event) => { if (openMenu && !event.target.closest('.task-menu, .card-menu')) closeTaskMenu(false); });
+// Leaving the window keeps it open.
 $('#main').addEventListener('focusout', (event) => {
-  if (openMenu && event.target.closest('.task-menu') && !event.relatedTarget?.closest?.('.task-menu, .card-menu')) closeTaskMenu(false);
+  if (openMenu && event.target.closest('.task-menu') && !event.relatedTarget?.closest?.('.task-menu, .card-menu')) {
+    setTimeout(() => { if (document.hasFocus() && !document.activeElement?.closest?.('.task-menu')) closeTaskMenu(false); });
+  }
+});
+// Safari and Firefox on macOS do not focus a clicked button: pressing an item
+// would blur the menu, and close it, before the click lands.
+$('#main').addEventListener('mousedown', (event) => {
+  if (openMenu && event.target.closest('.task-menu, .card-menu[aria-expanded="true"]')) event.preventDefault();
+});
+// A right click, the ContextMenu key or Shift+F10 on a card or row opens its menu.
+$('#main').addEventListener('contextmenu', (event) => {
+  const holder = event.target.closest('.task-card, .task-row-item');
+  if (!holder || event.target.closest('.task-menu')) return;
+  event.preventDefault();
+  if (openMenu !== holder.dataset.id) openTaskMenu(holder.querySelector('.card-menu'));
 });
 
 // A column change is the action that makes it. Block asks (optionally) what
@@ -2582,6 +2611,8 @@ function setLayout(layout) {
 // the same wherever it is and a linked task swaps the drawer's content in place.
 function onAction(event) {
   const target = event.target.closest('[data-action]');
+  // A card's chips sit above its open button, for their tooltips; a click on one opens the task.
+  if (!target && event.target.closest('.task-card .card-signals, .task-card .card-description')) return openTask(event.target.closest('.task-card').dataset.id);
   if (!target) return;
   switch (target.dataset.action) {
     case 'act': {
@@ -2604,7 +2635,7 @@ function onAction(event) {
     case 'mark-seen': markSeen(); break;
     case 'toggle-delta': toggleExpanded(target.dataset.value); break;
     case 'add-project': openAddProject(); break;
-    case 'copy-path': copyPath(target.dataset.value); break;
+    case 'copy-path': copyPath(target.dataset.value, target.dataset.copied); break;
     case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); break;
     case 'read-limits': loadLimits(true); break;
     case 'layout': setLayout(target.dataset.value); break;
@@ -2671,6 +2702,8 @@ $('#main').addEventListener('dragstart', (event) => {
   const card = event.target.closest('.task-card');
   if (!card) return;
   draggedId = card.dataset.id;
+  // The drag starts on the stretched, empty open button: show the card.
+  event.dataTransfer.setDragImage(card, event.offsetX, event.offsetY);
   event.dataTransfer.setData('text/plain', draggedId);
   event.dataTransfer.effectAllowed = 'move';
   card.classList.add('dragging');
