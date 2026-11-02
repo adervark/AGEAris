@@ -1,8 +1,8 @@
 ---
 id: T025
 title: "Say on the project page that STATE.md is behind, or kept by hand"
-status: open
-owner: —
+status: claimed
+owner: adervark @b/cc5901e7 2026-11-03 — stateBehind and the project-page note
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
