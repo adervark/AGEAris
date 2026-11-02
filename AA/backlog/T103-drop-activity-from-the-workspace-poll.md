@@ -52,3 +52,12 @@ created: 2026-11-03
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-11-03, the agy (Gemini) review that proposed this task corrected
+  itself: reads should not drop the lock entirely. `_updateTaskUnlocked`
+  (`lib/workspace.mjs:1772-1776`) writes the moved file and awaits before
+  removing the old one, in place, so a lock-free read can see both files or
+  a half-written one. Use a readers-writer lock, and write own-project task
+  files by temp file and rename. Four tests assert on `workspace.activity`:
+  `tests/workspace.test.mjs:1171`, `tests/server.test.mjs:113`,
+  `tests/perf/scale-fixture.mjs:232`, `tests/perf/scale.perf.mjs:170`.

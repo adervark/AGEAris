@@ -25,18 +25,20 @@ lives in PROGRESS.md and `done/`, not here.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-11-02T20:59Z · 112 tasks: 37 backlog, 0 WIP (0 in progress), 75 delivered`
+`board · 2026-11-02T21:00Z · 117 tasks: 42 backlog, 0 WIP (0 in progress), 75 delivered`
 
-FLOW · **WIP 0/2** · throughput 17.0/wk (73 in 30d) · cycle time 50th 8m / 85th 3h (n=73)
-FLOW · Little's Law: 0 ÷ 17.0/wk ≈ now expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 17.5/wk (75 in 30d) · cycle time 50th 8m / 85th 2h (n=75)
+FLOW · Little's Law: 0 ÷ 17.5/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **BACKLOG** 37 | | `T003` `T004` `T047` `T051` `T056` `T058` +31 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | 46m |  |
-|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 65m |  |
-|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 65m |  |
-|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 83m |  |
+| **BACKLOG** 42 | | `T003` `T004` `T047` `T051` `T056` `T058` +36 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T111 | Closing a task releases its environment: ckpt.sh release, rule 13, board.sh warns about what is left | adervark | now |  |
+|  | T114 | Release what finished tasks left: AGEIS's 110 GB and this repository's landed worktree | adervark | now |  |
+|  | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | 48m |  |
+|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 66m |  |
+|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 66m |  |
+|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 84m |  |
 |  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 33h |  |
 |  | T068 | Deprecate or archive a project, either kind, and restore it | adervark | 8d |  |
 |  | T053 | Measure how often agents get lost: a baseline | adervark | 8d |  |
@@ -108,10 +110,6 @@ FLOW · Little's Law: 0 ÷ 17.0/wk ≈ now expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 26d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-
-**POLICY AND DRIFT** — the board reports; the owner and `/reclaim` decide.
-
-- **2** delivered task(s) whose trail is still in the tree (`ckpt.sh close ID --delete`): T111 T114
 <!-- /AA:generated -->
 
 <!--
