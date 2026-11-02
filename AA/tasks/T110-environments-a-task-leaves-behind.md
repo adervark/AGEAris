@@ -28,8 +28,8 @@ releases each, approved by the operator before anything is built or deleted.
 
 ## Steps
 
-- [ ] Inventory every repository under ~/Code, read-only.
-- [ ] `docs/plans/environments.md`: causes, the structure, phases as tasks.
+- [x] Inventory every repository under ~/Code, read-only.
+- [x] `docs/plans/environments.md`: causes, the structure, phases as tasks.
 - [ ] The operator's decisions recorded in the plan.
 
 ## Decision rules — fixed in advance
@@ -46,8 +46,8 @@ releases each, approved by the operator before anything is built or deleted.
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-11-03, adervark @b/cc5901e7
-- **In flight:** writing the plan
-- **On disk:** nothing yet
+- **In flight:** nothing; the plan waits on the operator (Q1–Q4)
+- **On disk:** docs/plans/environments.md, committed
 - **Resume with:** the Steps above
 - **Next decision:** the operator's approval of the plan
 
