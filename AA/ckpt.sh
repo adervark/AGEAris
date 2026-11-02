@@ -392,7 +392,7 @@ cmd_close() { # close <TASK> [--delete] [--force]
     # Rule 13: a finished task's environment goes with its trail. Not after
     # --force: the runs it overrode may still be running.
     if ls "$TD/done/$task"-*.md >/dev/null 2>&1; then
-      if [ "$force" = 0 ]; then cmd_release "$task"
+      if [ "$force" = 0 ]; then ( cmd_release "$task" ) || warn "the trail is retired, but $task's environment is not released: fix the above, then ckpt.sh release $task"
       else echo "not released (--force): once nothing of $task runs, ckpt.sh release $task"; fi
     fi
   else
@@ -515,7 +515,7 @@ open_cites() {
     grep -o -- "$pat" "$f" 2>/dev/null | sed "s|^.*/||" | sort -u | sed "s|\$|	$id|"
   done
 }
-held_by_open() { printf '%s\n' "$2" | awk -F'\t' -v n="$1" '$1==n{print $2}' | sort -u | tr '\n' ' ' | sed 's/ $//'; }
+held_by_open() { printf '%s\n' "$2" | awk -F'\t' -v n="$1" 'tolower($1)==tolower(n){print $2}' | sort -u | tr '\n' ' ' | sed 's/ $//'; }
 
 # The scratch folder, normalised: inside the repository, no symlink on the way.
 scratch_dir() {
@@ -527,6 +527,20 @@ scratch_dir() {
 
 # The extensions a task keeps (AA.yml keep_kinds), as find arguments.
 KEEP_KINDS_DEFAULT="md txt rst html pdf png svg jpg jpeg gif webp mp4 webm mkv mov json jsonl csv tsv log yaml yml"
+kinds_valid() { # dies on a keep_kinds token that is not a plain extension
+  local e; for e in $(cfg keep_kinds "$KEEP_KINDS_DEFAULT"); do
+    case "$e" in *[!A-Za-z0-9]*) die "AA.yml keep_kinds: '$e' is not an extension; write them space-separated, e.g. keep_kinds: md png csv" ;; esac
+  done
+}
+# Secrets never go to git: a kept file that looks like it holds one goes to the archive.
+SECRET_PATTERNS='AKIA[0-9A-Z]{16}
+-----BEGIN [A-Z ]*PRIVATE KEY-----
+gh[pousr]_[A-Za-z0-9]{36}
+github_pat_[A-Za-z0-9_]{40}
+(^|[^A-Za-z0-9_-])sk-[A-Za-z0-9_-]{20}
+(^|[^A-Za-z0-9])xox[abprs]-[A-Za-z0-9-]{10}
+(^|[^A-Za-z0-9_])hf_[A-Za-z0-9]{30}
+AIza[0-9A-Za-z_-]{35}'
 kind_args() {
   local e first=1
   for e in $(cfg keep_kinds "$KEEP_KINDS_DEFAULT"); do
@@ -567,6 +581,9 @@ release_live_check() {
   [ -z "$verdict" ] || die "refusing: a run on $task has not ended and wrote within stale_hours ($verdict). End it first."
   local running; running=$(runs "$f" | awk -F'\037' '$7=="running"{print $2}' | tr '\n' ' ')
   [ -z "${running// }" ] || die "refusing: a run on $task is running ($running). End it first."
+  local mid; mid=$(records "$f" | jq -sr '[group_by(.run)[] | select(.[-1].kind == "doing") | .[0].run] | join(" ")') \
+    || die "refusing: $task's trail cannot be read (ckpt.sh check $task)"
+  [ -z "$mid" ] || die "refusing: a run on $task stopped mid-act ($mid). Check its tell (ckpt.sh live $task); once its act has stopped, reap it with ckpt.sh log $task end --run <RUN> …"
 }
 
 cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
@@ -596,10 +613,18 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
     case "$archive" in "~"|"~/"*) archive="$HOME${archive#\~}" ;; esac
     case "$archive" in /*) ;; *) die "archive: must be an absolute folder outside the repository, not '$archive'" ;; esac
     archive="$archive/$task"
-    case "$archive/" in "$rroot"/*|"$ROOT"/*) die "archive: $archive is inside the repository" ;; esac
+    # Resolve what exists of it, so neither .. nor a symlink can point it into the repository.
+    local up="$archive" rest="" real
+    while [ ! -d "$up" ]; do rest="/$(basename "$up")$rest"; up=$(dirname "$up"); done
+    real="$(canon "$up")$rest"
+    case "$real/" in *"/../"*|*"/./"*) die "archive: write it without . or .. ($archive)" ;; esac
+    case "$real/" in "$rroot"/*|"$ROOT"/*) die "archive: $archive is inside the repository" ;; esac
+    archive=$real
   fi
   release_live_check "$task"
+  kinds_valid
   local stale; stale=$(stale_hours)
+  local task_mb; task_mb=$(cfg keep_task_mb 100); case "$task_mb" in ''|*[!0-9]*) task_mb=100 ;; esac; task_mb=$((10#$task_mb))
 
   local plan=() held=() rmdirs=() wts=() brs=() d p h b l why by m top
   local cites; cites=$(open_cites "$sdir")
@@ -619,6 +644,7 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
       if [ -L "$d" ]; then rmdirs+=("$d"); plan+=("remove the link ${d#"$rroot"/} (not what it points to)"); continue; fi
       [ -d "$d" ] || continue
       if in_use "$d" "$busy"; then held+=("${d#"$rroot"/} is kept whole: a running process is using it"); continue; fi
+      if [ -n "$(git -C "$ROOT" ls-files -- "$d" 2>/dev/null | head -1)" ]; then held+=("${d#"$rroot"/} is kept whole: the repository tracks files in it"); continue; fi
       why="" ; local f_wts=() f_brs=() f_plan=() tops=()
       while IFS=$'\037' read -r p h b l; do
         [ -n "$p" ] || continue
@@ -637,6 +663,13 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
           why=$(nested_holds "$top"); [ -z "$why" ] || break
           tops+=("$top")
         done < <(find "$d" -name .git -prune -print 2>/dev/null)
+      fi
+      if [ -z "$why" ]; then
+        # A bare repository has no .git: its HEAD, objects/ and refs/ give it away.
+        while IFS= read -r m; do
+          top=$(dirname "$m")
+          if [ -d "$top/objects" ] && [ -d "$top/refs" ]; then why="bare repository ${top#"$rroot"/}: what was pushed to it may be nowhere else"; break; fi
+        done < <(find "$d" -name .git -prune -o -type f -name HEAD -print 2>/dev/null)
       fi
       if [ -n "$why" ]; then held+=("$why" "${d#"$rroot"/} is kept whole"); continue; fi
       keepable "$d" ${tops[@]+"${tops[@]}"} >> "$tmp/keep" || { held+=("${d#"$rroot"/}: cannot list what it keeps; kept whole"); continue; }
@@ -665,6 +698,11 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
     [ -z "$(find "$p" -mindepth 2 -name .git -print -quit 2>/dev/null)" ] || continue
     [ -z "$(find "$p" -mmin "-$((stale * 60))" -print -quit 2>/dev/null)" ] || continue
     in_use "$p" "$busy" && continue
+    # Untracked work git does not ignore, outside builds and caches, was never landed: it stays.
+    m=$(git -C "$p" status --porcelain --untracked-files=all 2>/dev/null | sed -n 's/^?? //p' | awk -v skip="$SKIP_DIRS" '
+      BEGIN { n = split(skip, s, " "); for (i = 1; i <= n; i++) k[s[i]] = 1 }
+      { c = split($0, q, "/"); bad = 0; for (i = 1; i < c; i++) if ((q[i] in k) || q[i] ~ /^build/) bad = 1; if (!bad) { print; exit } }')
+    if [ -n "$m" ]; then held+=("subagent worktree ${p#"$rroot"/} has untracked work ($m): commit it or remove the worktree by hand"); continue; fi
     wts+=("$p"); plan+=("remove landed subagent worktree ${p#"$rroot"/} ($(human_kb "$(du -sk "$p" 2>/dev/null | cut -f1)"))${b:+, branch $b}")
     [ -z "$b" ] || brs+=("$b")
   done <<< "$wtl"
@@ -678,6 +716,14 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
     [ -f "$ROOT/$k" ] && [ ! -L "$ROOT/$k" ] || die "keeps: $k is not a file here"
     printf '%s\n' "$rroot/$k" >> "$tmp/keep"
   done <<< "$keeps"
+  # And every file the task's own file cites inside the folders that go: a
+  # Result's script or table is evidence, whatever its kind.
+  local c pat; pat="$(printf '%s' "$sdir" | sed 's/[][\.*^$]/\\&/g')/[A-Za-z0-9._/-]*"
+  while IFS= read -r c; do
+    c=${c%[.,;:]}; case "$c" in *..*) continue ;; esac
+    [ -f "$rroot/$c" ] && [ ! -L "$rroot/$c" ] || continue
+    for d in ${rmdirs[@]+"${rmdirs[@]}"}; do case "$rroot/$c" in "$d"/*) printf '%s\n' "$rroot/$c" >> "$tmp/keep"; break ;; esac; done
+  done < <(grep -o -- "$pat" "$tf" 2>/dev/null | sort -u)
   local ev="$DD/evidence/$task" src rel bytes n_git=0 kb_git=0 n_arc=0 kb_arc=0
   : > "$tmp/git"; : > "$tmp/arc"
   sort -u "$tmp/keep" | while IFS= read -r src; do
@@ -686,8 +732,21 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
     if [ "$bytes" -le $((max * 1024)) ]; then printf '%s\t%s\t%s\n' "$src" "$rel" "$bytes" >> "$tmp/git"
     else printf '%s\t%s\t%s\n' "$src" "$rel" "$bytes" >> "$tmp/arc"; fi
   done
+  # A kept file that looks like it holds a secret goes to the archive, never to git.
+  if [ -s "$tmp/git" ]; then
+    cut -f1 "$tmp/git" | tr '\n' '\0' | xargs -0 grep -lIE -e "$(printf '%s' "$SECRET_PATTERNS" | paste -sd'|' -)" -- 2>/dev/null > "$tmp/secret" || true
+    if [ -s "$tmp/secret" ]; then
+      awk -F'\t' 'NR==FNR{x[$0]=1; next} ($1 in x){print > "/dev/stderr"; next} {print}' "$tmp/secret" "$tmp/git" 2>> "$tmp/arc" > "$tmp/git2" && mv "$tmp/git2" "$tmp/git"
+      plan+=("$(wc -l < "$tmp/secret" | tr -d ' ') kept file(s) look like they hold a secret: archived, not committed")
+    fi
+  fi
   n_git=$(wc -l < "$tmp/git" | tr -d ' '); kb_git=$(awk -F'\t' '{s+=$3} END{printf "%d", (s+1023)/1024}' "$tmp/git")
   n_arc=$(wc -l < "$tmp/arc" | tr -d ' '); kb_arc=$(awk -F'\t' '{s+=$3} END{printf "%d", (s+1023)/1024}' "$tmp/arc")
+  if [ "$kb_git" -gt $((task_mb * 1024)) ]; then
+    local over="the kept files come to $(human_kb "$kb_git"), over keep_task_mb ($task_mb) for one task: raise it in AA.yml, or narrow keep_kinds (--list shows them)"
+    [ "$dry" = 1 ] || die "$over"
+    held+=("$over")
+  fi
   if [ "$n_arc" -gt 0 ] && [ -z "$archive" ]; then
     local noarc="$n_arc kept file(s), $(human_kb "$kb_arc"), are over keep_max_kb ($max) and there is no archive: set archive: in AA.yml or pass --archive DIR (--list shows them)"
     [ "$dry" = 1 ] || die "$noarc"

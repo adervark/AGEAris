@@ -70,8 +70,8 @@ everywhere.
 13. **Closing releases what the task holds.** When a task reaches `done/`,
     `AA/ckpt.sh release T###` deletes its scratch folders, its landed
     worktrees and its merged branches; `close --delete` runs it too. It keeps
-    the task's documentation, visuals and metrics (`keep_kinds` in `AA.yml`)
-    and whatever its `keeps:` line names: committed to `AA/evidence/T###/`
+    the task's documentation, visuals and metrics (`keep_kinds` in `AA.yml`),
+    the files its task file cites, and whatever its `keeps:` line names: committed to `AA/evidence/T###/`
     first, or, over `keep_max_kb`, copied to the archive outside git with
     their sha256 committed. Work that has not landed, a folder an open task
     cites, and anything a process is using are never deleted, only named.

@@ -451,6 +451,118 @@ test('close --delete --force retires the trail but does not release: the runs it
   assert.equal(await exists(path.join(dir, 'scratch/T001/out.txt')), true);
 });
 
+// Third round: the second review and the agy review.
+test('a run that stopped mid-act blocks the release until it is reaped', async () => {
+  const dir = await repo();
+  await write(dir, 'scratch/T001/x.txt', 'x');
+  const old = new Date(Date.now() - 72 * 3_600_000).toISOString().replace(/\.\d{3}Z$/, 'Z');
+  await write(dir, 'AA/checkpoints/T001.jsonl', `${JSON.stringify({ ts: old, run: 'r1', kind: 'open', brief: 'b', next: 'n' })}\n${JSON.stringify({ ts: old, run: 'r1', kind: 'doing', act: 'train', next: 'n' })}\n`);
+  assert.match((await release(dir, 'T001')).out, /refusing: a run on T001 stopped mid-act \(r1\)/);
+  assert.equal(await exists(path.join(dir, 'scratch/T001/x.txt')), true);
+});
+
+test('an archive reached through a symlink or .. into the repository is refused', async () => {
+  const dir = await repo({ t001: { keeps: '[scratch/T001/big.bin]' }, yml: 'keep_max_kb: 1\n' });
+  await write(dir, 'scratch/T001/big.bin', 'x'.repeat(4096));
+  const outside = await tempDir('link');
+  await symlink(path.join(dir, 'scratch/T001'), path.join(outside, 'arc'));
+  assert.match((await release(dir, 'T001', '--archive', path.join(outside, 'arc'))).out, /archive: .* is inside the repository/);
+  assert.match((await release(dir, 'T001', '--archive', `${dir}/../${path.basename(dir)}/scratch`)).out, /archive: .* is inside the repository/);
+  assert.equal(await exists(path.join(dir, 'scratch/T001/big.bin')), true);
+});
+
+test('a folder the repository tracks files in, or one holding a bare repository, is kept whole', async () => {
+  const dir = await repo();
+  await write(dir, 'scratch/T001/run.py', 'print(1)\n');
+  await git(dir, 'add', '-f', 'scratch/T001/run.py');
+  await git(dir, 'commit', '--quiet', '-m', 'tracked under scratch');
+  assert.match((await release(dir, 'T001')).out, /KEPT: scratch\/T001 is kept whole: the repository tracks files in it/);
+  await git(dir, 'init', '--quiet', '--bare', path.join(dir, 'scratch/T002/origin.git'));
+  assert.match((await release(dir, 'T002')).out, /KEPT: bare repository scratch\/T002\/origin\.git/);
+  assert.equal(await exists(path.join(dir, 'scratch/T002/origin.git/HEAD')), true);
+});
+
+test('keep_kinds that are not plain extensions refuse; one task\'s kept files are capped by keep_task_mb', async () => {
+  const bad = await repo({ yml: 'keep_kinds: [md, png]\n' });
+  await write(bad, 'scratch/T001/a.md', 'a');
+  assert.match((await release(bad, 'T001')).out, /keep_kinds: '\[md,' is not an extension/);
+  assert.equal(await exists(path.join(bad, 'scratch/T001/a.md')), true);
+  const big = await repo({ yml: 'keep_task_mb: 0\n' });
+  await write(big, 'scratch/T001/a.md', 'a');
+  const result = await release(big, 'T001');
+  assert.match(result.out, /the kept files come to 1 KB, over keep_task_mb \(0\) for one task/);
+  assert.equal(await exists(path.join(big, 'scratch/T001/a.md')), true);
+});
+
+test('a kept file that looks like it holds a secret goes to the archive, never to git', async () => {
+  const dir = await repo();
+  const key = ['AKIA', 'ABCDEFGHIJKLMNOP'].join('');
+  await write(dir, 'scratch/T001/run.log', `aws ${key}\n`);
+  await write(dir, 'scratch/T001/risk.json', '{"risk-free-rate-adjusted-value": 1}');
+  assert.match((await release(dir, 'T001')).out, /no archive/, 'no archive: refuses');
+  const archive = await tempDir('archive');
+  const result = await release(dir, 'T001', '--archive', archive);
+  assert.equal(result.code, 0, result.out);
+  assert.match(result.out, /1 kept file\(s\) look like they hold a secret: archived, not committed/);
+  assert.equal(await readFile(path.join(archive, 'T001/T001/run.log'), 'utf8'), `aws ${key}\n`);
+  assert.equal(await git(dir, 'log', '--all', '-p', '--format=', '--', 'AA/evidence').then((log) => log.includes(key)), false, 'the key is in no commit');
+  assert.equal(await exists(path.join(dir, 'AA/evidence/T001/T001/risk.json')), true, 'risk- is not sk-');
+});
+
+test('a file the task\'s Result cites is kept whatever its kind', async () => {
+  const dir = await repo();
+  await write(dir, 'AA/tasks/done/T001-one.md', `${taskFile('T001')}\nThe probe is \`scratch/t001/smuggle.py\`, and scratch/t001/out.bin.\n`);
+  await git(dir, 'commit', '--quiet', '-am', 'cite');
+  await write(dir, 'scratch/t001/smuggle.py', 'probe()\n');
+  await write(dir, 'scratch/t001/out.bin', 'bin');
+  await write(dir, 'scratch/t001/other.py', 'not cited');
+  const result = await release(dir, 'T001');
+  assert.equal(result.code, 0, result.out);
+  assert.equal(await readFile(path.join(dir, 'AA/evidence/T001/t001/smuggle.py'), 'utf8'), 'probe()\n');
+  assert.equal(await exists(path.join(dir, 'AA/evidence/T001/t001/out.bin')), true);
+  assert.equal(await exists(path.join(dir, 'AA/evidence/T001/t001/other.py')), false);
+});
+
+test('a subagent worktree with untracked work git does not ignore stays; one with only ignored or build files goes', async () => {
+  const dir = await repo();
+  await write(dir, '.gitignore', 'scratch/\n.omc/\n');
+  await git(dir, 'commit', '--quiet', '-am', 'ignore .omc');
+  const work = path.join(dir, '.claude/worktrees/agent-work');
+  const junk = path.join(dir, '.claude/worktrees/agent-junk');
+  await git(dir, 'worktree', 'add', '--quiet', '-b', 'worktree-agent-work', work);
+  await git(dir, 'worktree', 'add', '--quiet', '-b', 'worktree-agent-junk', junk);
+  await write(work, 'report.md', '# found it\n');
+  await write(junk, '.omc/state/x.json', '{}');
+  await write(junk, 'build-t1/CMakeCache.txt', 'cache');
+  await age(work);
+  await age(junk);
+  const result = await release(dir, 'T002');
+  assert.match(result.out, /KEPT: subagent worktree \.claude\/worktrees\/agent-work has untracked work \(report\.md\)/);
+  assert.equal(await exists(path.join(work, 'report.md')), true);
+  assert.equal(await exists(junk), false);
+});
+
+test('an open task citing the folder in another case still holds it', async () => {
+  const dir = await repo();
+  await write(dir, 'scratch/t001/x.txt', 'x');
+  await write(dir, 'AA/tasks/T003-three.md', `${taskFile('T003', { status: 'claimed' })}\nReads scratch/T001/x.txt.\n`);
+  assert.match((await release(dir, 'T001')).out, /KEPT: scratch\/t001 is kept whole: open task T003 cites it/);
+});
+
+test('close --delete retires the trail even when the release then refuses, and says so', async () => {
+  const dir = await repo();
+  await write(dir, 'scratch/T001/out.txt', 'x');
+  const old = new Date(Date.now() - 48 * 3_600_000).toISOString().replace(/\.\d{3}Z$/, 'Z');
+  await write(dir, 'AA/checkpoints/T001.jsonl', `${JSON.stringify({ ts: old, run: 'r1', kind: 'open', brief: 'b', next: 'n' })}\n${JSON.stringify({ ts: old, run: 'r1', kind: 'end', next: 'none' })}\n`);
+  await git(dir, 'add', '-A');
+  await git(dir, 'commit', '--quiet', '-m', 'trail');
+  await git(dir, 'switch', '--quiet', '-c', 'elsewhere');
+  const { stdout, stderr } = await exec('bash', ['AA/ckpt.sh', 'close', 'T001', '--delete'], { cwd: dir, env: process.env });
+  assert.match(stdout, /deleted\. The trail is in git/);
+  assert.match(stderr, /the trail is retired, but T001's environment is not released/);
+  assert.equal(await exists(path.join(dir, 'scratch/T001/out.txt')), true);
+});
+
 test('close --delete releases the task after retiring its trail', async () => {
   const dir = await repo();
   await write(dir, 'scratch/T001/out.txt', 'x');

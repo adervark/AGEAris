@@ -104,10 +104,15 @@ A task's decision rules gain one line: **what it keeps.** For example,
 "keeps: `bench.jsonl` and the script; the builds and the copies of the data
 set are released."
 
-- At Done, the kept files are promoted to `docs/evidence/T###/` and
-  committed. AGE Aris already does this, in `docs/plans/evidence/t074/`.
-- A file too big to commit is kept outside git with its sha256, its size
-  and the command that rebuilds it.
+- At Done, the kept files are promoted to `AA/evidence/T###/<folder>/` and
+  committed. **As built (T111):** what is kept is the task's documentation,
+  visuals and metrics (`keep_kinds`), every file its own task file cites,
+  and its `keeps:` line. The operator chose this over an explicit list
+  alone: "keep only task documentation and visuals and metrics".
+- A file over `keep_max_kb`, or one that looks like it holds a secret, is
+  copied to the archive outside git (`archive:`), checked by sha256, and
+  its size and sha256 are committed in `AA/evidence/T###/RELEASED.tsv`.
+  `keep_task_mb` caps what one task commits.
 - Everything else of the task's is released: landed worktrees removed,
   merged branches deleted, scratch deleted.
 
@@ -115,14 +120,9 @@ A Result then cites only committed paths, or a hash with a rebuild command.
 
 ### S3. A rule in RULES.md: closing releases what the task holds
 
-> **13. Closing releases what the task holds.** Before a task moves to
-> `done/`, its worktrees are removed once landed and its merged branches
-> deleted. Its scratch is either deleted or promoted to `docs/evidence/`
-> under the "keeps" line it fixed in advance. A worktree or branch with
-> work not landed is never removed; it is named in the Result and kept.
-
-Deleting is irreversible, so S4 only lists what to delete. The deletion
-itself is done by the task's owner, in its own session.
+As built, rule 13 is in `AA/RULES.md`: the release runs when the task
+reaches `done/`, by its owner (`ckpt.sh release`, or `close --delete`).
+S4 only lists; it never deletes.
 
 ### S4. See it: board.sh and AGE Aris
 
