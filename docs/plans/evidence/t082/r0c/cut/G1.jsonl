@@ -1,0 +1,622 @@
+{"id":"R1#1","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":1,"kind":"head","text":"# RESEARCH-0902 — the road from public LB 0.926 to 0.960"}
+{"id":"R1#2","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":3,"kind":"para","text":"> Corrected 2026-09-02 by [RESEARCH-0902b](RESEARCH-0902b-round-2.md): the \"single models score 0.936–0.942\" premise in §2 is wrong — the verifiable public single model is 0.924;"}
+{"id":"R1#3","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":3,"kind":"para","text":"0.936 is a four-arm fusion."}
+{"id":"R1#4","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":3,"kind":"para","text":"Round 2 adds three cheaper levers and re-ranks the table;"}
+{"id":"R1#5","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":3,"kind":"para","text":"read it after this one."}
+{"id":"R1#6","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":5,"kind":"para","text":"Status: research complete 2026-09-02;"}
+{"id":"R1#7","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":5,"kind":"para","text":"nothing executed. Five Opus lanes plus an orchestrator lane, all read-only on the repo, CPU-only, 0 GPU-hours, 0 submissions."}
+{"id":"R1#8","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":7,"kind":"para","text":"Lane reports, with every command and source, live in [docs/research/0902/](research/0902/)."}
+{"id":"R1#9","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":8,"kind":"para","text":"This document ranks what they found, resolves where they disagree, and names the tasks that follow."}
+{"id":"R1#10","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":9,"kind":"para","text":"Registered as [T038](../pm/tasks/T038-road-to-0960-research.md)."}
+{"id":"R1#11","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":12,"kind":"para","text":"Evidence marks. READ = quoted from a primary page/thread/notebook;"}
+{"id":"R1#12","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":12,"kind":"para","text":"MEASURED = computed from files on disk with the command in the lane report;"}
+{"id":"R1#13","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":13,"kind":"para","text":"REPRODUCED = re-run by the orchestrator;"}
+{"id":"R1#14","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":14,"kind":"para","text":"INFERRED = an estimate, model stated."}
+{"id":"R1#15","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":14,"kind":"para","text":"Every lane's top claim that could be checked was checked before it is used here."}
+{"id":"R1#16","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":19,"kind":"head","text":"Where we actually stand (lane 0, READ)"}
+{"id":"R1#17","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":21,"kind":"para","text":"The board's account is a week stale, and the week mattered."}
+{"id":"R1#18","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":23,"kind":"row","text":"fact"}
+{"id":"R1#19","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":23,"kind":"row","text":"board said"}
+{"id":"R1#20","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":23,"kind":"row","text":"today"}
+{"id":"R1#21","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":25,"kind":"row","text":"top 20"}
+{"id":"R1#22","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":25,"kind":"row","text":"≥ 0.937"}
+{"id":"R1#23","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":25,"kind":"row","text":"≥ 0.946 (2,844 teams)"}
+{"id":"R1#24","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":26,"kind":"row","text":"0.952"}
+{"id":"R1#25","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":26,"kind":"row","text":"0.952"}
+{"id":"R1#26","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":27,"kind":"row","text":"our rank"}
+{"id":"R1#27","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":27,"kind":"row","text":"776, at 0.926"}
+{"id":"R1#28","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":28,"kind":"row","text":"a public-notebook plateau"}
+{"id":"R1#29","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":28,"kind":"row","text":"unknown"}
+{"id":"R1#30","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":28,"kind":"row","text":"0.936, ranks ~100–500 (664 teams ≥ 0.935)"}
+{"id":"R1#31","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":29,"kind":"row","text":"runtime cap"}
+{"id":"R1#32","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":29,"kind":"row","text":"\"~20 min\", refuted at 48"}
+{"id":"R1#33","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":29,"kind":"row","text":"9 h, CPU or GPU"}
+{"id":"R1#34","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":30,"kind":"row","text":"external data / pretrained"}
+{"id":"R1#35","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":30,"kind":"row","text":"\"blocked on a browser visit\""}
+{"id":"R1#36","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":30,"kind":"row","text":"allowed (\"freely & publicly available … including pre-trained models\");"}
+{"id":"R1#37","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":30,"kind":"row","text":"host ruled click-through non-commercial sets are fine, KneeCoT barred, MRNet/OAI unruled"}
+{"id":"R1#38","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":31,"kind":"row","text":"test set"}
+{"id":"R1#39","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":31,"kind":"row","text":"unknown"}
+{"id":"R1#40","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":31,"kind":"row","text":"~1,300 studies, expert-annotated, no reports"}
+{"id":"R1#41","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":32,"kind":"row","text":"efficiency prize"}
+{"id":"R1#42","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":32,"kind":"row","text":"rumoured"}
+{"id":"R1#43","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":32,"kind":"row","text":"real: $7k/$6k/$5k, formula AUC/(Benchmark−maxAUC) + Runtime/32400, own leaderboard of 2,703;"}
+{"id":"R1#44","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":32,"kind":"row","text":"we are rank 265, a 0.926 team is rank 22"}
+{"id":"R1#45","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":33,"kind":"row","text":"public/private split"}
+{"id":"R1#46","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":33,"kind":"row","text":"unknown"}
+{"id":"R1#47","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":33,"kind":"row","text":"still unstated on every page read"}
+{"id":"R1#48","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":35,"kind":"para","text":"Every fetch tool sees Kaggle as a JavaScript shell, but the r.jina.ai proxy reads the rules/overview tabs and the Kaggle CLI reads the forum (kaggle forums topics list --search \"RSNA Knee\" --category competitions, then forums topics show <id>), pulls notebook sources, and downloads both leaderboards."}
+{"id":"R1#49","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":39,"kind":"para","text":"Nothing about this competition is unreadable any more."}
+{"id":"R1#50","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":41,"kind":"para","text":"Gap arithmetic: to 0.960 is +0.034;"}
+{"id":"R1#51","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":41,"kind":"para","text":"to the current top 20, +0.020;"}
+{"id":"R1#52","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":41,"kind":"para","text":"to the plateau we sit under, +0.010."}
+{"id":"R1#53","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":44,"kind":"head","text":"The reframing every lane arrived at independently"}
+{"id":"R1#54","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":46,"kind":"para","text":"Our per-model quality is two to four points behind the field, and ensembling has been substituting for it. Forum thread 735304 (READ, verified by the orchestrator): single models at 224 px score 0.936 (single fold, small ResNet), 0.938 (single fold;"}
+{"id":"R1#55","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":49,"kind":"para","text":"also #1 on the efficiency board, \"as small a model as possible\"), 0.934 → 0.942 (5-fold, 224 px)."}
+{"id":"R1#56","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":50,"kind":"para","text":"We are at 0.926 with 22 members of one recipe."}
+{"id":"R1#57","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":53,"kind":"para","text":"The ensemble lane is closed by arithmetic, not by taste (lane 3, MEASURED): the gold return curve over random k-subsets of our 22 is flat past k ≈ 12, the marginal per extra member is +0.0001 to +0.0005, not one of the 22 has a resolved leave-one-out gain, and OOF's ranking of member value has no relationship to gold's (r = −0.08)."}
+{"id":"R1#58","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":57,"kind":"para","text":"Five members are near-duplicates of their argmax twins (rho 0.990–0.996)."}
+{"id":"R1#59","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":58,"kind":"para","text":"No 7th–9th fold and no recombination reaches 0.96, and the standing prohibition on both is confirmed with a number."}
+{"id":"R1#60","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":61,"kind":"para","text":"What the field does that we do not, from 23 dissected public notebooks and the forum (lanes 1, 5):"}
+{"id":"R1#61","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":64,"kind":"row","text":"the frontier"}
+{"id":"R1#62","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":64,"kind":"row","text":"gap class"}
+{"id":"R1#63","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":66,"kind":"row","text":"6 slots = 3 planes × {fat-sat, non-fat-sat}, 12–16 slices each, ~96 slices/study"}
+{"id":"R1#64","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":66,"kind":"row","text":"3 slots, fluid-sensitive only, 36 slices;"}
+{"id":"R1#65","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":66,"kind":"row","text":"90.6 % of studies never show the model a non-fat-sat image"}
+{"id":"R1#66","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":66,"kind":"row","text":"input — the largest"}
+{"id":"R1#67","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":67,"kind":"row","text":"physical-mm centre crop, 130–150 mm from PixelSpacing, unanimous across every 0.9+ notebook"}
+{"id":"R1#68","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":67,"kind":"row","text":"none;"}
+{"id":"R1#69","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":67,"kind":"row","text":"FOV 130–320 mm (median 160, spread 1.39×) resized to a fixed 320 px, so magnification varies 1.39× and augmentation adds ±15 % on top"}
+{"id":"R1#70","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":67,"kind":"row","text":"input — free"}
+{"id":"R1#71","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":68,"kind":"row","text":"per-label attention pooling"}
+{"id":"R1#72","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":68,"kind":"row","text":"we have it (--per-label-attn, +0.0188 unexplained) — the frontier's core head design, arrived at independently"}
+{"id":"R1#73","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":68,"kind":"row","text":"none"}
+{"id":"R1#74","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":69,"kind":"row","text":"discriminative encoder LR (~8e-6 backbone), warmup"}
+{"id":"R1#75","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":69,"kind":"row","text":"--layer-decay/--warmup-frac exist, wired correctly, never passed"}
+{"id":"R1#76","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":69,"kind":"row","text":"training"}
+{"id":"R1#77","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":70,"kind":"row","text":"confidence-weighted per-element BCE;"}
+{"id":"R1#78","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":70,"kind":"row","text":"pairwise rank loss as an AUC surrogate;"}
+{"id":"R1#79","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":70,"kind":"row","text":"prevalence pos_weight"}
+{"id":"R1#80","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":70,"kind":"row","text":"plain soft BCE"}
+{"id":"R1#81","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":70,"kind":"row","text":"training"}
+{"id":"R1#82","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":71,"kind":"row","text":"4 architecture families in the plateau notebook"}
+{"id":"R1#83","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":71,"kind":"row","text":"one recipe × 22"}
+{"id":"R1#84","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":71,"kind":"row","text":"diversity"}
+{"id":"R1#85","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":72,"kind":"row","text":"frozen encoder → cached features → tiny head, trained in minutes"}
+{"id":"R1#86","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":72,"kind":"row","text":"every experiment is a 2–5 h fold"}
+{"id":"R1#87","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":72,"kind":"row","text":"iteration speed"}
+{"id":"R1#88","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":73,"kind":"row","text":"224–392 px;"}
+{"id":"R1#89","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":73,"kind":"row","text":"encoder scaling and >336 px both measured null in-competition"}
+{"id":"R1#90","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":73,"kind":"row","text":"320 px"}
+{"id":"R1#91","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":73,"kind":"row","text":"not a gap"}
+{"id":"R1#92","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":75,"kind":"head","text":"Defects in what is deployed right now (lane 2, REPRODUCED by reading the code)"}
+{"id":"R1#93","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":77,"kind":"para","text":"src/tta.py:242 collapses the 2.5D packing. crop, bright and rot± rebuild the bag from channel 0 only and repeat it three times."}
+{"id":"R1#94","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":78,"kind":"para","text":"With --adjacent, channel 0 is the i−1 slice (dicom_io.py:539). 12 of the 22 deployed members are --adjacent and the kernel runs crop,bright, so 24 of 66 member-view forwards in the 0.926 submission run on a tensor no training sample ever had — three copies of the preceding slice."}
+{"id":"R1#95","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":82,"kind":"para","text":"smoke_test.py:2683 asserts the defect (\"the three channels stay identical\") because its fixture is non-adjacent."}
+{"id":"R1#96","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":85,"kind":"para","text":"src/tta.py:218 mirrors slice order without flipping the channel triplet, where training (dataset.py:406) does."}
+{"id":"R1#97","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":86,"kind":"para","text":"Inert today;"}
+{"id":"R1#98","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":86,"kind":"para","text":"live the moment T034's six-view screen runs on the family."}
+{"id":"R1#99","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":88,"kind":"para","text":"The crop/jitter augmentation is frozen across epochs (dataset.py:333, RNG keyed on (seed, index) only): eight epochs see one crop per study."}
+{"id":"R1#100","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":90,"kind":"para","text":"Arm C is undertrained: corpus rho still rising at the final epoch (0.6770 → 0.6799) with train loss falling;"}
+{"id":"R1#101","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":91,"kind":"para","text":"the riders moved the overfit point past an 8-epoch schedule set without them."}
+{"id":"R1#102","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":93,"kind":"para","text":"--seqs 2 would run 95 % unmanifested: 8,113 of the second family's 8,529 series are absent from data/manifest.csv."}
+{"id":"R1#103","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":94,"kind":"para","text":"build_manifest.py --all is a free CPU fix and a hard prerequisite for T007."}
+{"id":"R1#104","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":96,"kind":"para","text":"_resize downsamples without antialiasing at 1.6× (median) to ≥2× (27 % of series)."}
+{"id":"R1#105","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":99,"kind":"para","text":"Items 1–2 cost one submission and zero training to fix."}
+{"id":"R1#106","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":99,"kind":"para","text":"Items 3–5 are one-line or CPU-only and change what the next fold measures."}
+{"id":"R1#107","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":102,"kind":"head","text":"The target side (lane 4, REPRODUCED)"}
+{"id":"R1#108","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":104,"kind":"para","text":"The permitted α = 0.5 self-distillation target is resolvedly closer to expert truth than the teacher. On the 58 gold studies, 0.5·teacher + 0.5·deployed-22 scores 0.9217 against the teacher's 0.8976 and the model's 0.8987: +0.0233 [+0.0022, +0.0455] and +0.0241 [+0.0083, +0.0403], paired intervals excluding zero, stable across SWA-only, family-10 and rank pooling."}
+{"id":"R1#109","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":108,"kind":"para","text":"Reproduced exactly by the orchestrator from lane 4's appendix script."}
+{"id":"R1#110","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":109,"kind":"para","text":"Model and teacher correlate at only r = 0.455 across gold resamples — half-independent raters, which is the precondition for the blend to help."}
+{"id":"R1#111","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":113,"kind":"para","text":"Consequences: T035 is promoted back above the input-side levers (PLAN-0901 §5 C2 demoted it on an instrument argument that lane 3 also refutes, §5 below);"}
+{"id":"R1#112","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":114,"kind":"para","text":"the 0.9545 \"text-oracle ceiling\" bounds report-derived labels, not the LB, and is one hardcoded string in eval_llm.py:56 that should be sourced or retired;"}
+{"id":"R1#113","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":116,"kind":"para","text":"the deployed 22 has already closed 0.010–0.020 of all four \"gap columns\" and beats its teacher on Effusion resolvedly (0.948 vs 0.841)."}
+{"id":"R1#114","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":118,"kind":"para","text":"Closed with reasons: co-teaching/noise-robust losses (targets are already soft posteriors), label smoothing (no-op), per-cell confidence weights from label metadata (the metadata does not exist), gold fine-tuning (0.9210 in-sample / 0.7342 nested precedent, and two public negatives), test-time recalibration (AUC is rank-only per column)."}
+{"id":"R1#115","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":124,"kind":"head","text":"The measurement problem, restated with numbers (lane 3, MEASURED)"}
+{"id":"R1#116","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":126,"kind":"para","text":"- The \"transfer collapse\" is mostly arithmetic. Spearman-rho deltas run 2.24× the AUC deltas on the same predictions, and compare_ckpts.py can only average the members that held a study out, so OOF's \"22-member config\" is a 4.4-member average per study — the steep part of the return curve."}
+{"id":"R1#117","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":129,"kind":"para","text":"The two factors turn 6.97× into 1.37× on 10→22."}
+{"id":"R1#118","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":130,"kind":"para","text":"The \"teacher-agreement\" reading survives only as a ~13 % component: scored against Sonnet, an independent labeler on the same 3,749 studies that never trained anything, 87 % of the 16→22 OOF gain survives."}
+{"id":"R1#119","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":134,"kind":"para","text":"- A better free instrument exists: OOF AUC (not rho) against the Sonnet labels, paired half-width ±0.0019, power 0.999 at +0.005."}
+{"id":"R1#120","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":135,"kind":"para","text":"Gold's paired band is ±0.0100 with power 0.165 at +0.005, so T037's B1 rule passes a true zero 16 % of the time and fails a true +0.005 half the time."}
+{"id":"R1#121","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":137,"kind":"para","text":"Gold stays a veto, and greedy selection on gold loses −0.0053 out of sample — Rule 4 is now empirical."}
+{"id":"R1#122","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":140,"kind":"para","text":"- Public-subset noise: one-member swaps have sd 0.0001–0.0003 (a displayed +0.001 is real);"}
+{"id":"R1#123","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":141,"kind":"para","text":"a 10→22-sized nested step has paired band ~±0.006 (lane 4);"}
+{"id":"R1#124","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":141,"kind":"para","text":"structurally distinct configs have sd 0.003–0.007."}
+{"id":"R1#125","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":142,"kind":"para","text":"Picking the best public score among ~40 distinct submissions manufactures ~+0.010 of worthless public gain."}
+{"id":"R1#126","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":144,"kind":"para","text":"The final selection rule must be written before the scores exist."}
+{"id":"R1#127","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":145,"kind":"para","text":"- Every rank/logit/weighting scheme measured on OOF is resolved-positive and −0.0002 to −0.0010 on gold — the ROADMAP ban on rank averaging stands."}
+{"id":"R1#128","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":147,"kind":"para","text":"- Every instrument here except gold measures report-agreement. The hidden truth is expert, image-derived."}
+{"id":"R1#129","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":148,"kind":"para","text":"The only route to a truth-anchored instrument at n ≫ 58 is an external expert-labeled set (T037-B2), now rules-permitted."}
+{"id":"R1#130","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":151,"kind":"head","text":"The ranked levers"}
+{"id":"R1#131","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":153,"kind":"para","text":"Expected LB magnitude is INFERRED unless marked;"}
+{"id":"R1#132","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":153,"kind":"para","text":"cost is on our hardware (local fold 2 h 24 m measured, bag-72 4–6 h, Kaggle 4.9 h/fold, 9 h kernel cap)."}
+{"id":"R1#133","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"kind":"row","text":"lever"}
+{"id":"R1#134","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"kind":"row","text":"expected"}
+{"id":"R1#135","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"kind":"row","text":"evidence"}
+{"id":"R1#136","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"kind":"row","text":"cost"}
+{"id":"R1#137","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":156,"kind":"row","text":"prohibition touched"}
+{"id":"R1#138","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":158,"kind":"row","text":"Fix the two TTA bugs, re-score, resubmit (§3.1–2)"}
+{"id":"R1#139","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":158,"kind":"row","text":"+0.000 to +0.003;"}
+{"id":"R1#140","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":158,"kind":"row","text":"it is a correctness fix either way"}
+{"id":"R1#141","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":158,"kind":"row","text":"MEASURED in code"}
+{"id":"R1#142","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":158,"kind":"row","text":"1 submission, 0 training"}
+{"id":"R1#143","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":158,"kind":"row","text":"none"}
+{"id":"R1#144","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":159,"kind":"row","text":"Self-distillation family, α = 0.5 (T035)"}
+{"id":"R1#145","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":159,"kind":"row","text":"+0.005 to +0.010"}
+{"id":"R1#146","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":159,"kind":"row","text":"REPRODUCED gold +0.023 on the target;"}
+{"id":"R1#147","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":159,"kind":"row","text":"the plateau notebook's lineage does the same construction"}
+{"id":"R1#148","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":159,"kind":"row","text":"5 folds Kaggle (24.5 h) after a local fold-0 kill-only screen"}
+{"id":"R1#149","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":159,"kind":"row","text":"none — permitted by ruling;"}
+{"id":"R1#150","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":159,"kind":"row","text":"one pass, no α sweep"}
+{"id":"R1#151","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":160,"kind":"row","text":"Second sequence family, --slices 12 --seqs 2 (T007) after build_manifest.py --all"}
+{"id":"R1#152","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":160,"kind":"row","text":"+0.005 to +0.015"}
+{"id":"R1#153","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":160,"kind":"row","text":"unanimous frontier design;"}
+{"id":"R1#154","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":160,"kind":"row","text":"8,113 unopened series"}
+{"id":"R1#155","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":160,"kind":"row","text":"1 local fold 4–6 h, then a family"}
+{"id":"R1#156","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":160,"kind":"row","text":"none"}
+{"id":"R1#157","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"Physical-mm crop (130–140 mm) before resize"}
+{"id":"R1#158","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"+0.003 to +0.008, free memory/time"}
+{"id":"R1#159","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"unanimous across notebooks;"}
+{"id":"R1#160","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"FOV spread measured 1.39×"}
+{"id":"R1#161","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"1 fold to measure;"}
+{"id":"R1#162","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"~10 lines"}
+{"id":"R1#163","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"none;"}
+{"id":"R1#164","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":161,"kind":"row","text":"tripwire on Contusion/Fracture, which live near the frame edge"}
+{"id":"R1#165","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":162,"kind":"row","text":"Training recipe: --warmup-frac/--layer-decay passed, 14-epoch schedule, un-freeze augmentation RNG, confidence-weighted BCE, rank-loss auxiliary at 0.055"}
+{"id":"R1#166","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":162,"kind":"row","text":"+0.003 to +0.010 combined;"}
+{"id":"R1#167","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":162,"kind":"row","text":"measure two at a time at most"}
+{"id":"R1#168","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":162,"kind":"row","text":"frontier code + arm C's rising rho"}
+{"id":"R1#169","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":162,"kind":"row","text":"each is one fold;"}
+{"id":"R1#170","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":162,"kind":"row","text":"bundle warmup+layer-decay+schedule as one arm"}
+{"id":"R1#171","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":162,"kind":"row","text":"none"}
+{"id":"R1#172","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":163,"kind":"row","text":"Frozen encoder → cached features → tiny head"}
+{"id":"R1#173","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":163,"kind":"row","text":"no points directly;"}
+{"id":"R1#174","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":163,"kind":"row","text":"makes 5, 8 and every head-side idea cost minutes"}
+{"id":"R1#175","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":163,"kind":"row","text":"two notebooks do it"}
+{"id":"R1#176","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":163,"kind":"row","text":"~1 GPU pass over the corpus"}
+{"id":"R1#177","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":163,"kind":"row","text":"none"}
+{"id":"R1#178","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"kind":"row","text":"A second architecture family (DINOv3 ViT-S/ConvNeXt-T with LoRA-style adaptation), as diversity, not capacity"}
+{"id":"R1#179","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"kind":"row","text":"+0.002 to +0.006 as an ensemble arm"}
+{"id":"R1#180","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"kind":"row","text":"AnyMC3D: adaptation +0.11, backbone size ~0;"}
+{"id":"R1#181","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"kind":"row","text":"in-competition ViT-S→B +0.0011 null"}
+{"id":"R1#182","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"kind":"row","text":"T025, 3–4 h/fold"}
+{"id":"R1#183","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":164,"kind":"row","text":"none"}
+{"id":"R1#184","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":165,"kind":"row","text":"External expert-labeled data (MRNet, click-through) — first as a validation instrument, then pretraining"}
+{"id":"R1#185","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":165,"kind":"row","text":"instrument: fixes the binding constraint;"}
+{"id":"R1#186","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":165,"kind":"row","text":"pretraining: +0.000 to +0.010"}
+{"id":"R1#187","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":165,"kind":"row","text":"host ruling;"}
+{"id":"R1#188","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":165,"kind":"row","text":"T037-B2's same-day kill rule already written"}
+{"id":"R1#189","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":165,"kind":"row","text":"~1 day engineering, human licence step"}
+{"id":"R1#190","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":165,"kind":"row","text":"none — rules read"}
+{"id":"R1#191","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"kind":"row","text":"Efficiency-track submission: one model, identity view, runtime recorded"}
+{"id":"R1#192","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"kind":"row","text":"not LB points;"}
+{"id":"R1#193","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"kind":"row","text":"a top-30 in an $18k track is plausible this month"}
+{"id":"R1#194","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"kind":"row","text":"formula READ;"}
+{"id":"R1#195","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"kind":"row","text":"a 0.926 team is rank 22"}
+{"id":"R1#196","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"kind":"row","text":"1–2 submissions, 2 min of T4"}
+{"id":"R1#197","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":166,"kind":"row","text":"none"}
+{"id":"R1#198","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":167,"kind":"row","text":"Slice density 24"}
+{"id":"R1#199","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":167,"kind":"row","text":"small: --adjacent already puts 95 % of a series' slices in the tensor;"}
+{"id":"R1#200","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":167,"kind":"row","text":"+0.030 coverage for 2.6× wall clock"}
+{"id":"R1#201","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":167,"kind":"row","text":"lane 2 MEASURED"}
+{"id":"R1#202","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":167,"kind":"row","text":"screen it at inference first (~20 min)"}
+{"id":"R1#203","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":167,"kind":"row","text":"none"}
+{"id":"R1#204","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"bigger backbone as capacity;"}
+{"id":"R1#205","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"384/448 px before the mm crop;"}
+{"id":"R1#206","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"more same-recipe members;"}
+{"id":"R1#207","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"rank averaging;"}
+{"id":"R1#208","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"gold fine-tuning;"}
+{"id":"R1#209","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"new LLM labeling"}
+{"id":"R1#210","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"null or negative, measured"}
+{"id":"R1#211","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":168,"kind":"row","text":"lanes 1, 3, 4, 5"}
+{"id":"R1#212","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":170,"kind":"para","text":"Where the lanes disagreed, and the resolution."}
+{"id":"R1#213","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":172,"kind":"para","text":"- Density: lane 1 says the frontier runs ~96 slices;"}
+{"id":"R1#214","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":172,"kind":"para","text":"lane 2 says --adjacent closes 95 % of the coverage gap."}
+{"id":"R1#215","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":173,"kind":"para","text":"Both are right: the frontier's 96 comes from 6 slots × 16, i.e. from the second sequence family, not from density in one plane."}
+{"id":"R1#216","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":175,"kind":"para","text":"Slots first (lever 3), density last (lever 10)."}
+{"id":"R1#217","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":176,"kind":"para","text":"- Resolution: lane 2 measures us 1.6× coarser than acquisition;"}
+{"id":"R1#218","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":176,"kind":"para","text":"lane 1 finds 448 px does not beat 336 in a lesion probe."}
+{"id":"R1#219","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":177,"kind":"para","text":"The mm crop (lever 4) is the free half of the resolution lever and comes first;"}
+{"id":"R1#220","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":178,"kind":"para","text":"384 px only behind it."}
+{"id":"R1#221","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":179,"kind":"para","text":"- Backbone: lane 2 keeps T025 alive on the optimizer-flags argument;"}
+{"id":"R1#222","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":179,"kind":"para","text":"lanes 1 and 3 show capacity and diversity-by-correlation are both nulls."}
+{"id":"R1#223","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":180,"kind":"para","text":"Resolution: T025 runs as a diversity arm with the flags passed, ranked 7th, not as the capacity screen it was registered as."}
+{"id":"R1#224","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":183,"kind":"para","text":"- Cropping: lane 2 says tissue fills 99 % of rows so there is \"no free crop\";"}
+{"id":"R1#225","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":183,"kind":"para","text":"lanes 1/5 say a 130 mm crop clips 0.5 % of series."}
+{"id":"R1#226","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":184,"kind":"para","text":"A 130 mm crop at a 160 mm median FOV trims ~19 % per side of the field, which is femoral/tibial shaft, not joint."}
+{"id":"R1#227","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":186,"kind":"para","text":"That is the frontier's bet;"}
+{"id":"R1#228","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":186,"kind":"para","text":"the tripwire is the two labels that can sit there."}
+{"id":"R1#229","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":188,"kind":"para","text":"- Public noise: lane 3's 0.0001–0.0003 is for one-member swaps;"}
+{"id":"R1#230","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":188,"kind":"para","text":"lane 4's ±0.006 is for a 10→22-sized step."}
+{"id":"R1#231","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":189,"kind":"para","text":"Rules use lane 4's bands."}
+{"id":"R1#232","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":191,"kind":"head","text":"The plan (lane 4's calendar, amended by §6)"}
+{"id":"R1#233","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":193,"kind":"para","text":"Budget to the 2026-10-15 entry deadline: ~195 Kaggle hours and ~43 local fold slots, ~215 submissions against 11 ever spent."}
+{"id":"R1#234","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":194,"kind":"para","text":"Compute is not the constraint;"}
+{"id":"R1#235","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":194,"kind":"para","text":"knowing what to run is. Prerequisites before any fold: train.py --resume (half a day), the gpu_queue.sh occupancy fix (it parks forever behind the resident embedding service), build_manifest.py --all, smoke-test guards for the TTA fix, and record the scored rerun's wall clock on the next submission."}
+{"id":"R1#236","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":200,"kind":"row","text":"week"}
+{"id":"R1#237","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":200,"kind":"row","text":"Kaggle (30 h)"}
+{"id":"R1#238","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":200,"kind":"row","text":"local card (one fold, then cool)"}
+{"id":"R1#239","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":200,"kind":"row","text":"submissions"}
+{"id":"R1#240","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":202,"kind":"row","text":"W0 (to Fri 09-04)"}
+{"id":"R1#241","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":202,"kind":"row","text":"TTA fix + local re-score of the 22"}
+{"id":"R1#242","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":202,"kind":"row","text":"2: fixed-TTA resubmit;"}
+{"id":"R1#243","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":202,"kind":"row","text":"efficiency single-model"}
+{"id":"R1#244","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":203,"kind":"row","text":"T035 family after a local fold-0 kill-only screen"}
+{"id":"R1#245","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":203,"kind":"row","text":"manifest --all;"}
+{"id":"R1#246","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":203,"kind":"row","text":"inference density screen;"}
+{"id":"R1#247","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":203,"kind":"row","text":"T007 fold 0;"}
+{"id":"R1#248","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":203,"kind":"row","text":"augmentation-RNG fix"}
+{"id":"R1#249","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":204,"kind":"row","text":"whichever W1 screen opened (T007 / mm-crop / recipe arm)"}
+{"id":"R1#250","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":204,"kind":"row","text":"mm-crop fold;"}
+{"id":"R1#251","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":204,"kind":"row","text":"recipe arm (warmup + layer-decay + 14 ep);"}
+{"id":"R1#252","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":204,"kind":"row","text":"MRNet instrument build + same-day kill"}
+{"id":"R1#253","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":205,"kind":"row","text":"second winner"}
+{"id":"R1#254","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":205,"kind":"row","text":"local family of the other winner;"}
+{"id":"R1#255","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":205,"kind":"row","text":"first blended submission at the TTA-view intersection"}
+{"id":"R1#256","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":206,"kind":"row","text":"last new recipe enters"}
+{"id":"R1#257","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":206,"kind":"row","text":"fill member counts on adopted recipes only"}
+{"id":"R1#258","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":207,"kind":"row","text":"fill folds;"}
+{"id":"R1#259","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":207,"kind":"row","text":"freeze the accuracy recipe Fri 10-09;"}
+{"id":"R1#260","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":207,"kind":"row","text":"re-run efficiency arm"}
+{"id":"R1#261","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":208,"kind":"row","text":"no training;"}
+{"id":"R1#262","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":208,"kind":"row","text":"final assembly;"}
+{"id":"R1#263","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":208,"kind":"row","text":"selection by the pre-written rule, not best public"}
+{"id":"R1#264","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":208,"kind":"row","text":"4 + 2 reserved"}
+{"id":"R1#265","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":210,"kind":"para","text":"Adopt/kill bands for submissions: nested member-set step ≥ +0.006;"}
+{"id":"R1#266","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":210,"kind":"para","text":"recipe change ≥ +0.010;"}
+{"id":"R1#267","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":211,"kind":"para","text":"the gold veto (T036 A3) judged on the corrected OOF-AUC number, not raw rho;"}
+{"id":"R1#268","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":212,"kind":"para","text":"T034's ±0.002 bands are 5× too narrow and must be widened before it runs."}
+{"id":"R1#269","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":215,"kind":"head","text":"Honest expectation"}
+{"id":"R1#270","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":217,"kind":"para","text":"Summing the optimistic ends — self-distillation +0.010, second sequence family +0.010, mm crop +0.005, recipe +0.005, a diversity arm +0.005 — reaches 0.96 only if every lane pays at its optimistic end, and this log's record is that four of the last five mechanism-sound ideas came back null."}
+{"id":"R1#271","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":220,"kind":"para","text":"The realistic read is 0.940–0.948 on the public board, i.e. the current top 20 to top 50, plus a genuine shot at the efficiency prize."}
+{"id":"R1#272","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":222,"kind":"para","text":"What is different from every previous plan in this repo: the levers are the ones ~2,800 teams have already measured on this exact data, the instruments that misled the last three weeks are now priced, and the first two steps cost no training at all."}
+{"id":"R1#273","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":227,"kind":"head","text":"Follow-up tasks"}
+{"id":"R1#274","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":229,"kind":"para","text":"- T039 — fix src/tta.py (both bugs), guard in smoke_test.py, re-score the deployed 22 locally, submit once."}
+{"id":"R1#275","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":230,"kind":"para","text":"Registered with rules."}
+{"id":"R1#276","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":231,"kind":"para","text":"- T040 — efficiency-track submission: one checkpoint, identity view, runtime recorded."}
+{"id":"R1#277","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":232,"kind":"para","text":"Registered with rules."}
+{"id":"R1#278","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":233,"kind":"para","text":"- T035 — promoted to W1's Kaggle family;"}
+{"id":"R1#279","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":233,"kind":"para","text":"its task file's bands widen per §7."}
+{"id":"R1#280","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":234,"kind":"para","text":"- T007 — W1's local fold, gated on the manifest rebuild."}
+{"id":"R1#281","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":235,"kind":"para","text":"- T041 (to register before W2) — physical-mm crop, one fold, tripwire on Contusion/Fracture."}
+{"id":"R1#282","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":237,"kind":"para","text":"- T042 (to register before W2) — training-recipe arm: warmup + layer-decay + 14 epochs + augmentation RNG fix, one fold."}
+{"id":"R1#283","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":239,"kind":"para","text":"- T037-B2 — unblocked by the rules;"}
+{"id":"R1#284","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":239,"kind":"para","text":"MRNet licence is a human step."}
+{"id":"R1#285","doc":"R1","path":"docs/RESEARCH-0902-road-to-0960.md","commit":"d9c7c6e","line":240,"kind":"para","text":"- Board hygiene: pm/STATE.md's top-20 figure, the \"browser-blocked\" rows, and the oracle-ceiling sentence in PLAN-0955 are stale and say so now."}
+{"id":"R2#1","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":1,"kind":"head","text":"# RESEARCH-0902b — round 2: the single-model premise was wrong, and the levers got cheaper"}
+{"id":"R2#2","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":3,"kind":"para","text":"Status: research complete 2026-09-02;"}
+{"id":"R2#3","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":3,"kind":"para","text":"nothing executed. Three Opus lanes, read-only on the repo, CPU-only while a T007 fold held the card: 0 GPU-hours, 0 submissions, 0 imaging bytes downloaded. Lane reports with every command and source are in [docs/research/0902b/](research/0902b/)."}
+{"id":"R2#4","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":6,"kind":"para","text":"Registered as [T043](../pm/tasks/done/T043-road-to-0960-research-round-2.md)."}
+{"id":"R2#5","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":9,"kind":"para","text":"This amends [RESEARCH-0902](RESEARCH-0902-road-to-0960.md), it does not replace it: §1 corrects that document's central premise, §2 is a delta against its §6 ranked table, and nothing else in §6 moves."}
+{"id":"R2#6","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":11,"kind":"para","text":"Evidence marks as there: READ = quoted from a primary page/thread/notebook/CSV;"}
+{"id":"R2#7","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":12,"kind":"para","text":"MEASURED = computed from files on disk with the command in the lane report;"}
+{"id":"R2#8","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":13,"kind":"para","text":"REPRODUCED = re-run by the orchestrator;"}
+{"id":"R2#9","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":14,"kind":"para","text":"INFERRED = an estimate, model stated."}
+{"id":"R2#10","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":18,"kind":"head","text":"The premise correction"}
+{"id":"R2#11","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":20,"kind":"para","text":"RESEARCH-0902 §2 built its reframing on \"single models at 224 px score 0.936, 0.938, 0.934 → 0.942\"."}
+{"id":"R2#12","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":21,"kind":"para","text":"Those figures come from forum thread 735304 and are unverified author claims;"}
+{"id":"R2#13","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":22,"kind":"para","text":"lane 6 went looking for one with an artifact."}
+{"id":"R2#14","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":22,"kind":"para","text":"The verifiable public single model is 0.924, not 0.936. READ, the dreaddevelopment \"Raptor\" CoAtNet docstring: \"0.924 on the public leaderboard using one model, with no ensembling and no test-time augmentation.\" Weights, inference script and training script are all public and CC0."}
+{"id":"R2#15","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":26,"kind":"para","text":"The 0.936 that is ID-anchored (submission 55802512) is a 35-checkpoint four-arm fusion, which its own author calls \"now likely overfit to the public leaderboard\" after \"a user-driven fork-and-republish race [that] is not meaningful model development\" (READ, lane 7 §6)."}
+{"id":"R2#16","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":32,"kind":"para","text":"Our 22 at 0.926 is level with one public model — not two to four points behind a field of them."}
+{"id":"R2#17","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":34,"kind":"para","text":"The per-model-quality reframing stands, and the gap is ~0.024 — from one of our folds to their one model."}
+{"id":"R2#18","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":35,"kind":"para","text":"Arm C fold 0 scores gold 0.8793 (MEASURED, outputs/t028/armC_fold0.log) against the Raptor's 0.9054 on the same 58 (READ);"}
+{"id":"R2#19","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":37,"kind":"para","text":"their gold→LB offset over two READ pairs is +0.019/+0.022, putting our fold near 0.89–0.90 (INFERRED)."}
+{"id":"R2#20","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":38,"kind":"para","text":"The gold gap itself, 0.0261, is inside the ±0.036 tripwire and is not resolved — the direction rests on three independent LB pairs, never on a gold delta."}
+{"id":"R2#21","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":41,"kind":"para","text":"The last ~0.010 to the plateau is arm diversity, not member count. Their 0.936 is one 0.924 model plus ~35 checkpoints across four architecturally different arms;"}
+{"id":"R2#22","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":43,"kind":"para","text":"ours is 22 of one recipe, on a curve lane 3 measured flat past k ≈ 12."}
+{"id":"R2#23","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":46,"kind":"para","text":"Labels are not the difference. MEASURED: data/csv/train.csv has 4,407 rows, exactly 58 with any label."}
+{"id":"R2#24","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":47,"kind":"para","text":"READ, the public training notebook's own header: it refuses to run without an LLM-built soft-label parquet the user supplies, the same construction as data/llm_labels.csv."}
+{"id":"R2#25","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":49,"kind":"para","text":"Lane 5's finding that our teacher (gold 0.8976) beats the best published LLM reader (0.881) stands."}
+{"id":"R2#26","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":52,"kind":"head","text":"Delta against RESEARCH-0902 §6"}
+{"id":"R2#27","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":53,"kind":"para","text":"Only these rows change."}
+{"id":"R2#28","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":53,"kind":"para","text":"The TTA fix, T035, T007, the frozen-encoder cache, the efficiency submission, the density screen and the \"null or negative, measured\" line stand as written."}
+{"id":"R2#29","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"kind":"row","text":"lever"}
+{"id":"R2#30","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"kind":"row","text":"expected"}
+{"id":"R2#31","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"kind":"row","text":"evidence"}
+{"id":"R2#32","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"kind":"row","text":"cost"}
+{"id":"R2#33","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":57,"kind":"row","text":"prohibition"}
+{"id":"R2#34","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":59,"kind":"row","text":"NEW, rank 1"}
+{"id":"R2#35","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":59,"kind":"row","text":"Full-data training for deployment members — all 4,349 non-gold studies, nothing held out"}
+{"id":"R2#36","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":59,"kind":"row","text":"+0.008 to +0.010"}
+{"id":"R2#37","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":59,"kind":"row","text":"INFERRED from the one public controlled measurement on this axis: 3,155 → 4,349 studies (+37.8 %) bought +0.0131 gold, better in 92.7 % of 2,000 bootstraps (READ);"}
+{"id":"R2#38","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":59,"kind":"row","text":"scaled to our +25 %"}
+{"id":"R2#39","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":59,"kind":"row","text":"5 folds' training, no research"}
+{"id":"R2#40","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":59,"kind":"row","text":"none"}
+{"id":"R2#41","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"kind":"row","text":"NEW, screen S1"}
+{"id":"R2#42","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"kind":"row","text":"--layer-decay 0.6 --warmup-frac 0.15"}
+{"id":"R2#43","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"kind":"row","text":"+0.005 to +0.010"}
+{"id":"R2#44","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"kind":"row","text":"READ: their encoder runs at 3e-5 under a 1e-3 head with 15 % warmup."}
+{"id":"R2#45","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"kind":"row","text":"MEASURED: ours takes ~13,920 AdamW steps at a flat 3e-4, and both flags are wired here and were never once passed"}
+{"id":"R2#46","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"kind":"row","text":"zero code, one fold (~2.5 h)"}
+{"id":"R2#47","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":60,"kind":"row","text":"none"}
+{"id":"R2#48","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"NEW, screen S2"}
+{"id":"R2#49","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"Physical-mm centre crop, --crop-mm 140"}
+{"id":"R2#50","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"+0.003 to +0.008"}
+{"id":"R2#51","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"MEASURED over 200 series: effective scale 0.328–0.688 mm/px, a 2.1× spread the model must absorb;"}
+{"id":"R2#52","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"FOV 105–220 mm, only 9.5 % already under 140 mm;"}
+{"id":"R2#53","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"~24 % of pixels off-joint."}
+{"id":"R2#54","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"Unanimous across every 0.9+ public notebook"}
+{"id":"R2#55","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"~10 lines, one fold"}
+{"id":"R2#56","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"none;"}
+{"id":"R2#57","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":61,"kind":"row","text":"Contusion/Fracture tripwire"}
+{"id":"R2#58","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"RE-RANKED, above T025"}
+{"id":"R2#59","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"The CC0 Raptor checkpoint as the second-architecture arm"}
+{"id":"R2#60","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"+0.002 to +0.008 LB, most likely ~+0.004"}
+{"id":"R2#61","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"MEASURED: a cross-recipe branch is worth an order of magnitude more than another same-recipe member (+0.0053 vs +0.0001–0.0005);"}
+{"id":"R2#62","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"member quality 0.9128–0.9213 gold on three reproductions, a level we have never reached;"}
+{"id":"R2#63","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"ρ ≈ 0.68–0.75 with ours (INFERRED;"}
+{"id":"R2#64","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"the cross-recipe arms actually measured run 0.68–0.81, against our internal 0.87)"}
+{"id":"R2#65","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"training already paid;"}
+{"id":"R2#66","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"~1.5–2 days engineering + one local inference pass + one submission"}
+{"id":"R2#67","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":62,"kind":"row","text":"rank averaging — §3"}
+{"id":"R2#68","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"NEW, above MRNet"}
+{"id":"R2#69","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"fastMRI+ as the truth-anchored instrument"}
+{"id":"R2#70","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"not LB points;"}
+{"id":"R2#71","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"it fixes the binding constraint"}
+{"id":"R2#72","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"READ: one board-certified MSK radiologist drew boxes on the images, slice by slice, over all 1,172 studies — the hidden test's own measurement process."}
+{"id":"R2#73","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"MEASURED: 7 of our 12 columns, paired band ±0.0034 against gold's ±0.0100"}
+{"id":"R2#74","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"~1.5 days, ~10 h attended, ~1.5 h GPU, one human licence step"}
+{"id":"R2#75","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":63,"kind":"row","text":"none — validation only"}
+{"id":"R2#76","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":64,"kind":"row","text":"DEMOTED"}
+{"id":"R2#77","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":64,"kind":"row","text":"MRNet"}
+{"id":"R2#78","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":64,"kind":"row","text":"READ, its authors: labels \"obtained through manual extraction from clinical reports\" — a higher-fidelity version of what we already have too much of."}
+{"id":"R2#79","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":64,"kind":"row","text":"Grades 2 of 12 columns"}
+{"id":"R2#80","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":66,"kind":"para","text":"Ordering. Full-data training is rank 1 by evidence and is deliberately gated behind S1 and S2. It forfeits the OOF instrument for its members — removing the held-out fold removes the split every rule here is written against — so it can only ever be judged by one submission."}
+{"id":"R2#81","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":69,"kind":"para","text":"Run it after the screens, so the full-data folds carry the winning recipe rather than being trained twice."}
+{"id":"R2#82","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":70,"kind":"para","text":"S1 and S2 rules, as lane 6 §4 wrote them. Each is one local fold against outputs/t028/armC_fold0, byte-identical except the named flags, same fold, same --seed 0 --split-seed 0, same 869-study corpus split."}
+{"id":"R2#83","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":75,"kind":"para","text":"- Adopt (build a family) if OOF corpus rho beats arm C by ≥ +0.012 with the paired 95 % interval excluding zero."}
+{"id":"R2#84","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":76,"kind":"para","text":"Kill if the paired delta is ≤ 0.000."}
+{"id":"R2#85","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":77,"kind":"para","text":"Unresolved in between: no family, no submission, record it — a second fold is not authorised by this rule."}
+{"id":"R2#86","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":78,"kind":"para","text":"Gold veto, every branch: abandon if gold macro-AUC < 0.8433 (0.8793 − 0.036)."}
+{"id":"R2#87","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":80,"kind":"para","text":"- The band is ±0.0102, MEASURED on the arm-B-vs-arm-C fold-0 pair (compare_ckpts.py: paired A−B [−0.0046, +0.0158], r = 0.9089)."}
+{"id":"R2#88","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":81,"kind":"para","text":"The ±0.0020 argmax-vs-SWA band does not apply here."}
+{"id":"R2#89","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":82,"kind":"para","text":"S1 first — it is zero code."}
+{"id":"R2#90","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":82,"kind":"para","text":"Neither starts while T007 holds the card;"}
+{"id":"R2#91","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":83,"kind":"para","text":"one fold each, then cool down."}
+{"id":"R2#92","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":85,"kind":"head","text":"The Raptor arm, and what is refused"}
+{"id":"R2#93","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":87,"kind":"para","text":"Lane 7 §7's six rules, carried verbatim into [T044](../pm/tasks/T044-public-coatnet-member.md)."}
+{"id":"R2#94","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":89,"kind":"para","text":"CC0-1.0 only, and nothing whose training code is not also public."}
+{"id":"R2#95","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":90,"kind":"para","text":"Fidelity gate before anything is scored: the reload must reproduce gold-58 macro AUC within ±0.010 of 0.9167 on our decode."}
+{"id":"R2#96","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":91,"kind":"para","text":"Four irreconcilable public figures exist (0.9054 / 0.9128 / 0.9167 / 0.9213), so none may be quoted as the target — hence the band."}
+{"id":"R2#97","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":93,"kind":"para","text":"Failure means a preprocessing bug, not a member."}
+{"id":"R2#98","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":94,"kind":"para","text":"Measure locally before submitting: score it over our 4,349 corpus, write its OOF, recompute the blend table with real numbers."}
+{"id":"R2#99","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":95,"kind":"para","text":"Never on a projection."}
+{"id":"R2#100","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":96,"kind":"para","text":"w = 0.20, fixed, never swept."}
+{"id":"R2#101","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":96,"kind":"para","text":"No per-label weights. A sweep is rule-constant tuning, refused in advance;"}
+{"id":"R2#102","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":97,"kind":"para","text":"per-label weights are exactly what the plateau's own authors call \"most likely to be public-leaderboard fitting rather than signal.\""}
+{"id":"R2#103","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":100,"kind":"para","text":"One submission only. Adopt at ≥ +0.010, revert to the 22 at ≤ 0, hold in between."}
+{"id":"R2#104","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":101,"kind":"para","text":"Gold veto on top: a negative local gold delta at w = 0.20 and the submission is not made."}
+{"id":"R2#105","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":103,"kind":"para","text":"Kill for good if rule 2 fails twice, or rule 3 returns a negative gold delta with an interval excluding zero."}
+{"id":"R2#106","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":106,"kind":"para","text":"Mounting the 0.936 fusion notebook is refused, and not on taste."}
+{"id":"R2#107","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":106,"kind":"para","text":"It imports an author-admitted public-LB overfit — lane 5 measured that lineage going 0.936 → 0.935 twice on ID-anchored submissions when a better specialist was added — and its DINOv2/RadImageNet arms train in private Kaggle kernels, so §2.8's obligation to deliver training code cannot be satisfied from public material. The Raptor is the opposite case: weights, inference script, training script and preprocessing recipe are all public under CC0, and a winner's reproduction description would be honest and complete."}
+{"id":"R2#108","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":115,"kind":"para","text":"One prerequisite the six rules do not cover. Joining a foreign model's predictions to ours needs a per-column percentile-rank join — the two share no calibration, and a probability mean would let the more confident branch dominate a rank-only metric."}
+{"id":"R2#109","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":118,"kind":"para","text":"Lane 7 §3.2 flags that this touches the standing ban on rank averaging and says \"it is not for a lane report to declare the ban narrowed.\" T044 is blocked on an operator note narrowing that ban to the cross-calibration case. For the record, the ban's textual home is T026's STOP verdict and RESEARCH-0902 §5, not ROADMAP § \"Explicitly not worth doing\", where a grep finds nothing."}
+{"id":"R2#110","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":125,"kind":"head","text":"The instrument, and its one severe defect"}
+{"id":"R2#111","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":127,"kind":"para","text":"fastMRI+ beats MRNet because it is image-derived and covers 7 columns against 2."}
+{"id":"R2#112","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":127,"kind":"para","text":"Its defect: the annotated fastMRI knee set is coronal only (READ), so our three-plane model would score with two of three plane slots padded."}
+{"id":"R2#113","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":129,"kind":"para","text":"That threatens instrument validity, and it is falsifiable for free."}
+{"id":"R2#114","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":130,"kind":"para","text":"Gate 0 runs before the licence step. Score deployed-22 and T024-10 on ~1,000 of our own studies with the sagittal and axial slots masked, against the Sonnet labels (paired band ±0.0019 at corpus n)."}
+{"id":"R2#115","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":133,"kind":"para","text":"Pass if the coronal-only ordering still puts deployed-22 above T024-10;"}
+{"id":"R2#116","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":134,"kind":"para","text":"fail stops the lane."}
+{"id":"R2#117","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":134,"kind":"para","text":"Cost ~2 h coding, ~30 min GPU in a cooldown gap — no download, no licence, no human step. Gates 1–4 (licence;"}
+{"id":"R2#118","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":136,"kind":"para","text":"laterality probe;"}
+{"id":"R2#119","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":136,"kind":"para","text":"the same-day 10/16/22 kill rule;"}
+{"id":"R2#120","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":136,"kind":"para","text":"validation-only forever) are in [T045](../pm/tasks/T045-fastmri-plus-instrument.md) as lane 8 §7 wrote them."}
+{"id":"R2#121","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":138,"kind":"para","text":"This specialises T037-B2, which named MRNet;"}
+{"id":"R2#122","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":139,"kind":"para","text":"T037 is otherwise untouched."}
+{"id":"R2#123","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":141,"kind":"head","text":"Parked, not registered"}
+{"id":"R2#124","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":142,"kind":"para","text":"- fastMRI DICOM, 10,000 clinical studies — five sequences, three planes, our exact input format, zero adapter, 2.3× our corpus."}
+{"id":"R2#125","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":143,"kind":"para","text":"Blocked on a host ruling (the agreement's derived-data clause collides with the winners' obligation to publish weights;"}
+{"id":"R2#126","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":145,"kind":"para","text":"threads 735497 and 737950 ask and are unanswered) and on disk (~64 GiB free)."}
+{"id":"R2#127","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":147,"kind":"para","text":"- pos_weight (lane 6 rank 5, +0.002 to +0.005): MEASURED weights up-weight MCL 4.97, Fracture 3.93, Lateral Meniscus 3.13, three of the four gap columns. ~5 lines, one fold."}
+{"id":"R2#128","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":149,"kind":"para","text":"Queue behind S1/S2."}
+{"id":"R2#129","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":150,"kind":"para","text":"- 16-epoch schedule (rank 6): arm C's corpus rho was still rising at epoch 8;"}
+{"id":"R2#130","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":150,"kind":"para","text":"doubles fold cost to ~5 h."}
+{"id":"R2#131","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":151,"kind":"para","text":"Stochastic slice windows (rank 7): their 12 random window centres per epoch are a free augmentation we lack, and a dataset change;"}
+{"id":"R2#132","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":153,"kind":"para","text":"not yet."}
+{"id":"R2#133","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":153,"kind":"para","text":"OAI access: 2026 sources say NDA/Login.gov, not the institutional FWA this repo asserts — one browser check corrects the record and changes no plan."}
+{"id":"R2#134","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":157,"kind":"head","text":"Honest expectation, restated"}
+{"id":"R2#135","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"kind":"row","text":"lever"}
+{"id":"R2#136","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"kind":"row","text":"band"}
+{"id":"R2#137","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"kind":"row","text":"lever"}
+{"id":"R2#138","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":158,"kind":"row","text":"band"}
+{"id":"R2#139","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":160,"kind":"row","text":"full-data members"}
+{"id":"R2#140","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":160,"kind":"row","text":"+0.009"}
+{"id":"R2#141","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":160,"kind":"row","text":"T007 second sequence family"}
+{"id":"R2#142","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":160,"kind":"row","text":"+0.005 to +0.015"}
+{"id":"R2#143","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":161,"kind":"row","text":"recipe (S1)"}
+{"id":"R2#144","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":161,"kind":"row","text":"+0.005 to +0.010"}
+{"id":"R2#145","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":161,"kind":"row","text":"Raptor arm"}
+{"id":"R2#146","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":161,"kind":"row","text":"~+0.004"}
+{"id":"R2#147","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":162,"kind":"row","text":"mm crop (S2)"}
+{"id":"R2#148","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":162,"kind":"row","text":"+0.003 to +0.008"}
+{"id":"R2#149","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":162,"kind":"row","text":"T035 self-distillation"}
+{"id":"R2#150","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":162,"kind":"row","text":"+0.005 to +0.010"}
+{"id":"R2#151","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":163,"kind":"para","text":"The optimistic ends sum past 0.98, which is why they are not summed."}
+{"id":"R2#152","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":163,"kind":"para","text":"The realistic public read is 0.945–0.955, and 0.960 still needs most levers to pay — this log's record is that four of the last five mechanism-sound ideas came back null."}
+{"id":"R2#153","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":166,"kind":"para","text":"RESEARCH-0902 §8's 0.940–0.948 is raised only because full-data training is new, well-evidenced and independent of everything else."}
+{"id":"R2#154","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":167,"kind":"para","text":"What round 2 changed is the price: two levers are zero-code, one is zero-training, and one is a measurement fix rather than a bet."}
+{"id":"R2#155","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":171,"kind":"head","text":"The card queue, and the operator-only steps"}
+{"id":"R2#156","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":172,"kind":"para","text":"T007 holds the card until ~10:30–11:00Z. Then, in order, one fold each, ≥20 min cooldown between, launched only through scripts/gpu_queue.sh: T042 / S1 (zero code, so it goes first) → T041 / S2 (after the ~10-line --crop-mm change and its smoke-test pins) → fastMRI+ Gate 0 (~30 min, fits a cooldown gap) → T044 step 3 (one local inference pass with the Raptor checkpoint)."}
+{"id":"R2#157","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":177,"kind":"para","text":"T046 starts only after S1 and S2 return verdicts, and carries whichever recipe won."}
+{"id":"R2#158","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":180,"kind":"para","text":"Operator-only (lane 8 §8, plus §3's note);"}
+{"id":"R2#159","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":180,"kind":"para","text":"a session cannot take these."}
+{"id":"R2#160","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":181,"kind":"para","text":"Register for fastMRI at fastmri.med.nyu.edu, ~10 min, only after Gate 0 passes. Links are personal and must not be pasted anywhere shared."}
+{"id":"R2#161","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":183,"kind":"para","text":"Rule on the instrument-only reading of the derived-files clause: a validation-only instrument produces no file that enters a weight, a kernel or a submission."}
+{"id":"R2#162","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":185,"kind":"para","text":"Confirm or direct otherwise before Gate 1."}
+{"id":"R2#163","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":186,"kind":"para","text":"Post the pretraining question to the forum. Until a ruling lands, pretraining on external images does not start."}
+{"id":"R2#164","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":188,"kind":"para","text":"Narrow the rank-averaging ban to the cross-calibration join, or refuse it."}
+{"id":"R2#165","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":188,"kind":"para","text":"T044 cannot ship a submission without this."}
+{"id":"R2#166","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":189,"kind":"para","text":"(Optional, corrects the record: check OAI's access page in a browser.)"}
+{"id":"R2#167","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":192,"kind":"head","text":"Follow-up tasks"}
+{"id":"R2#168","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":193,"kind":"row","text":"what"}
+{"id":"R2#169","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":193,"kind":"row","text":"gate"}
+{"id":"R2#170","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":195,"kind":"row","text":"[T041](../pm/tasks/T041-physical-mm-crop.md)"}
+{"id":"R2#171","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":195,"kind":"row","text":"Screen S2, --crop-mm 140, ~10 lines + one fold"}
+{"id":"R2#172","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":195,"kind":"row","text":"after T007, after T042"}
+{"id":"R2#173","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":196,"kind":"row","text":"[T042](../pm/tasks/T042-recipe-arm-lr-warmup.md)"}
+{"id":"R2#174","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":196,"kind":"row","text":"Screen S1, --layer-decay 0.6 --warmup-frac 0.15, zero code"}
+{"id":"R2#175","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":196,"kind":"row","text":"after T007"}
+{"id":"R2#176","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":197,"kind":"row","text":"[T044](../pm/tasks/T044-public-coatnet-member.md)"}
+{"id":"R2#177","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":197,"kind":"row","text":"The CC0 Raptor as the second-architecture arm"}
+{"id":"R2#178","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":197,"kind":"row","text":"operator note on the rank join"}
+{"id":"R2#179","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":198,"kind":"row","text":"[T045](../pm/tasks/T045-fastmri-plus-instrument.md)"}
+{"id":"R2#180","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":198,"kind":"row","text":"fastMRI+ as the truth-anchored instrument;"}
+{"id":"R2#181","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":198,"kind":"row","text":"specialises T037-B2"}
+{"id":"R2#182","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":198,"kind":"row","text":"Gate 0, then the licence step"}
+{"id":"R2#183","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":199,"kind":"row","text":"[T046](../pm/tasks/T046-full-data-deployment-members.md)"}
+{"id":"R2#184","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":199,"kind":"row","text":"Full-data deployment members, no held-out fold"}
+{"id":"R2#185","doc":"R2","path":"docs/RESEARCH-0902b-round-2.md","commit":"d9c7c6e","line":199,"kind":"row","text":"T041 and T042 verdicts"}
+{"id":"lane13#1","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":1,"kind":"head","text":"# Lane 13 — the submission budget, and the final-two selection nobody has registered"}
+{"id":"lane13#2","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":3,"kind":"para","text":"T047, orchestrator's own lane, 2026-09-02. 0 GPU, 0 submissions, 0 downloads beyond the Kaggle submission list."}
+{"id":"lane13#3","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":4,"kind":"para","text":"Written while lanes 9–12 ran."}
+{"id":"lane13#4","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":6,"kind":"para","text":"Evidence marks. READ = quoted from a primary page or the rules text."}
+{"id":"lane13#5","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":6,"kind":"para","text":"MEASURED = computed here, command given."}
+{"id":"lane13#6","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":7,"kind":"para","text":"INFERRED = an estimate, model stated."}
+{"id":"lane13#7","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":11,"kind":"head","text":"Verdict in five lines"}
+{"id":"lane13#8","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":13,"kind":"para","text":"The submission budget is not our binding constraint and never has been. MEASURED: 16 submissions in 16 active days, 20 % of the allowance, with 250 still available before the close."}
+{"id":"lane13#9","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":16,"kind":"para","text":"privateScore is empty on all 16. Every number this project has ever steered by is a public-subset read."}
+{"id":"lane13#10","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":17,"kind":"para","text":"MEASURED."}
+{"id":"lane13#11","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":18,"kind":"para","text":"There is a live, unregistered decision worth free private score: two submissions are tied at public 0.926, one of them ran a verified TTA bug and the other is the code-verified fix, and Kaggle auto-selects on public score, which cannot tell them apart. READ + MEASURED."}
+{"id":"lane13#12","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":22,"kind":"para","text":"The field above us has the same 5/day allowance we have barely touched."}
+{"id":"lane13#13","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":22,"kind":"para","text":"The winner's-curse arithmetic lane 3 already measured says that matters, and lane 9 is the lane that can test it — this lane only sizes our side."}
+{"id":"lane13#14","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":25,"kind":"para","text":"Nothing here costs a GPU hour or a submission. The recommendation is to write a selection rule down while the choice is still cheap."}
+{"id":"lane13#15","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":30,"kind":"head","text":"The rules, READ verbatim"}
+{"id":"lane13#16","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":32,"kind":"para","text":"From outputs/t043/rules2.txt (fetched by lane 7 on 2026-09-02):"}
+{"id":"lane13#17","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":34,"kind":"para","text":"SUBMISSION LIMITS"}
+{"id":"lane13#18","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":35,"kind":"para","text":"\"You may submit a maximum of five (5) Submissions per day.\""}
+{"id":"lane13#19","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":36,"kind":"para","text":"\"You may select up to two (2) Final Submissions for judging.\""}
+{"id":"lane13#20","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":38,"kind":"para","text":"and the definition that makes §2.b consequential:"}
+{"id":"lane13#21","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":40,"kind":"para","text":"> \"A 'Final Submission' is the Submission selected by the user, or"}
+{"id":"lane13#22","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":41,"kind":"para","text":"> automatically selected by Kaggle in the event not selected by the user, that"}
+{"id":"lane13#23","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":42,"kind":"para","text":"> is/are used for final placement on the competition leaderboard.\""}
+{"id":"lane13#24","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":44,"kind":"para","text":"The criterion Kaggle uses when it auto-selects is NOT stated on any page I could read. The rules establish only that it auto-selects."}
+{"id":"lane13#25","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":45,"kind":"para","text":"Kaggle's long-standing convention across competitions is to take the best public-score submissions, but that is INFERRED from convention, not READ, and two attempts to source it failed:"}
+{"id":"lane13#26","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":54,"kind":"para","text":"both returned no matching text through the proxy."}
+{"id":"lane13#27","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":56,"kind":"para","text":"The recommendation is robust to that gap, which is why the gap is tolerable. If the criterion is public score, auto-selection performs exactly the procedure lane 3 §5B measured as manufacturing worthless public gain."}
+{"id":"lane13#28","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":58,"kind":"para","text":"If it is something else, we still do not control it and still cannot audit it."}
+{"id":"lane13#29","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":59,"kind":"para","text":"Either way the rule is the same: choose explicitly. Nothing below depends on knowing which."}
+{"id":"lane13#30","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":62,"kind":"head","text":"What we have actually spent — MEASURED"}
+{"id":"lane13#31","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":70,"kind":"row","text":"submissions made, 2026-08-18 → 2026-09-02"}
+{"id":"lane13#32","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":71,"kind":"row","text":"active days"}
+{"id":"lane13#33","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":72,"kind":"row","text":"allowance across that window, at 5/day"}
+{"id":"lane13#34","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":73,"kind":"row","text":"fraction of the allowance used"}
+{"id":"lane13#35","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":73,"kind":"row","text":"20.0 %"}
+{"id":"lane13#36","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":74,"kind":"row","text":"our rate"}
+{"id":"lane13#37","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":74,"kind":"row","text":"1.00/day"}
+{"id":"lane13#38","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":75,"kind":"row","text":"days remaining to the close, 2026-10-22"}
+{"id":"lane13#39","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":76,"kind":"row","text":"submissions still available"}
+{"id":"lane13#40","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":76,"kind":"row","text":"≈ 250"}
+{"id":"lane13#41","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":77,"kind":"row","text":"submissions carrying a privateScore"}
+{"id":"lane13#42","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":77,"kind":"row","text":"0 of 16"}
+{"id":"lane13#43","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":79,"kind":"para","text":"Reading. This project's constraints are the card (one fold, then cool down), the wall clock, and above all the instruments."}
+{"id":"lane13#44","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":80,"kind":"para","text":"Submissions are the one resource we are not short of, and PLAN-0831's diagnosis that \"the constraint moved from GPU-hours to measurement\" is confirmed from a third direction: we have 250 unbiased readouts available and no instrument good enough to tell us what to spend them on."}
+{"id":"lane13#45","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":86,"kind":"para","text":"This is not an argument to start sweeping. Lane 3 §5B measured the cost of that precisely, and §4 below keeps it in view."}
+{"id":"lane13#46","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":89,"kind":"head","text":"The public-score ladder, and what is nested in it"}
+{"id":"lane13#47","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":91,"kind":"para","text":"MEASURED, from the same listing:"}
+{"id":"lane13#48","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":93,"kind":"row","text":"date"}
+{"id":"lane13#49","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":93,"kind":"row","text":"public"}
+{"id":"lane13#50","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":93,"kind":"row","text":"what changed"}
+{"id":"lane13#51","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":95,"kind":"row","text":"08-18"}
+{"id":"lane13#52","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":95,"kind":"row","text":"0.793"}
+{"id":"lane13#53","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":95,"kind":"row","text":"B0 MIL, distilled weak labels"}
+{"id":"lane13#54","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":96,"kind":"row","text":"08-19"}
+{"id":"lane13#55","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":96,"kind":"row","text":"0.904"}
+{"id":"lane13#56","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":96,"kind":"row","text":"B2, 320 px, LLM-read labels"}
+{"id":"lane13#57","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":97,"kind":"row","text":"08-20"}
+{"id":"lane13#58","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":97,"kind":"row","text":"0.899 / 0.907 / 0.915 / 0.875"}
+{"id":"lane13#59","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":97,"kind":"row","text":"SWA vs argmax;"}
+{"id":"lane13#60","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":97,"kind":"row","text":"5-fold;"}
+{"id":"lane13#61","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":97,"kind":"row","text":"arm B probe"}
+{"id":"lane13#62","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":98,"kind":"row","text":"08-22"}
+{"id":"lane13#63","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":98,"kind":"row","text":"0.914 / 0.918"}
+{"id":"lane13#64","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":98,"kind":"row","text":"relabelled targets;"}
+{"id":"lane13#65","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":98,"kind":"row","text":"10 members"}
+{"id":"lane13#66","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":99,"kind":"row","text":"08-23"}
+{"id":"lane13#67","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":99,"kind":"row","text":"0.916"}
+{"id":"lane13#68","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":99,"kind":"row","text":"TTA on 5 members"}
+{"id":"lane13#69","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":100,"kind":"row","text":"08-25"}
+{"id":"lane13#70","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":100,"kind":"row","text":"0.921"}
+{"id":"lane13#71","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":100,"kind":"row","text":"10 members × 3 views"}
+{"id":"lane13#72","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":101,"kind":"row","text":"08-26"}
+{"id":"lane13#73","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":101,"kind":"row","text":"0.922 / 0.923"}
+{"id":"lane13#74","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":101,"kind":"row","text":"12 then 14 members"}
+{"id":"lane13#75","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":102,"kind":"row","text":"08-28"}
+{"id":"lane13#76","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":102,"kind":"row","text":"0.925"}
+{"id":"lane13#77","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":102,"kind":"row","text":"16 members"}
+{"id":"lane13#78","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":103,"kind":"row","text":"08-30"}
+{"id":"lane13#79","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":103,"kind":"row","text":"0.926"}
+{"id":"lane13#80","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":103,"kind":"row","text":"22 members — TTA bug live"}
+{"id":"lane13#81","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":104,"kind":"row","text":"09-02"}
+{"id":"lane13#82","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":104,"kind":"row","text":"0.926"}
+{"id":"lane13#83","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":104,"kind":"row","text":"22 members — TTA bug fixed"}
+{"id":"lane13#84","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":105,"kind":"row","text":"09-02"}
+{"id":"lane13#85","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":105,"kind":"row","text":"0.903"}
+{"id":"lane13#86","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":105,"kind":"row","text":"1 member, identity, efficiency probe"}
+{"id":"lane13#87","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":107,"kind":"para","text":"Fifteen distinct public scores over sixteen submissions, and the ladder is mostly nested — each step adds members to the step before it."}
+{"id":"lane13#88","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":108,"kind":"para","text":"Lane 3 §5A measured the selection inflation for nested candidates at about +0.0005, i.e. negligible."}
+{"id":"lane13#89","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":110,"kind":"para","text":"So our own 0.926 is close to an honest read, which is a different situation from a team that reached its number by keeping the best of many structurally distinct attempts."}
+{"id":"lane13#90","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":114,"kind":"head","text":"The exposure arithmetic, for the field rather than for us"}
+{"id":"lane13#91","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":116,"kind":"para","text":"Lane 3 §5B measured the public sampling sd between structurally distinct configs at 0.0028 to 0.0070, and the selection-only inflation from keeping the best of K truly-equal candidates as sd·√(2 ln K)."}
+{"id":"lane13#92","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":120,"kind":"row","text":"K distinct candidates"}
+{"id":"lane13#93","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":120,"kind":"row","text":"inflation at sd 0.0028"}
+{"id":"lane13#94","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":120,"kind":"row","text":"at sd 0.0070"}
+{"id":"lane13#95","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":122,"kind":"row","text":"+0.0066"}
+{"id":"lane13#96","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":122,"kind":"row","text":"+0.0165"}
+{"id":"lane13#97","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":123,"kind":"row","text":"+0.0078"}
+{"id":"lane13#98","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":123,"kind":"row","text":"+0.0196"}
+{"id":"lane13#99","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":124,"kind":"row","text":"100"}
+{"id":"lane13#100","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":124,"kind":"row","text":"+0.0085"}
+{"id":"lane13#101","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":124,"kind":"row","text":"+0.0212"}
+{"id":"lane13#102","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":125,"kind":"row","text":"250"}
+{"id":"lane13#103","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":125,"kind":"row","text":"+0.0093"}
+{"id":"lane13#104","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":125,"kind":"row","text":"+0.0233"}
+{"id":"lane13#105","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":127,"kind":"para","text":"INFERRED, and the caveat is load-bearing: this is the inflation for candidates that are truly equal and structurally distinct, selected on public score alone."}
+{"id":"lane13#106","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":129,"kind":"para","text":"Real teams' submissions are neither perfectly equal nor perfectly distinct, so the true figure sits below these numbers — treat the column as an upper bound on the mechanism, not as an estimate of anyone's score."}
+{"id":"lane13#107","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":131,"kind":"para","text":"The reason to record it at all is that the distance from the 0.936 plateau to rank 20 at 0.946 is +0.010, which lands inside this table's range at every K."}
+{"id":"lane13#108","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":135,"kind":"para","text":"Whether the field actually spent its budget that way is not established here and is lane 9's question. This lane establishes only that we did not."}
+{"id":"lane13#109","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":138,"kind":"head","text":"The decision that is live right now"}
+{"id":"lane13#110","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":140,"kind":"para","text":"Two submissions are tied at public 0.926:"}
+{"id":"lane13#111","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":142,"kind":"row","text":"ref"}
+{"id":"lane13#112","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":142,"kind":"row","text":"date"}
+{"id":"lane13#113","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":142,"kind":"row","text":"what it is"}
+{"id":"lane13#114","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":144,"kind":"row","text":"55896111"}
+{"id":"lane13#115","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":144,"kind":"row","text":"08-30"}
+{"id":"lane13#116","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":144,"kind":"row","text":"22 members, 3 views — ran with the src/tta.py:242 bug"}
+{"id":"lane13#117","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":145,"kind":"row","text":"55954418"}
+{"id":"lane13#118","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":145,"kind":"row","text":"09-02"}
+{"id":"lane13#119","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":145,"kind":"row","text":"the same 22 members and the same 3 views, bug fixed"}
+{"id":"lane13#120","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":147,"kind":"para","text":"T039 measured the difference on instruments the public LB does not have:"}
+{"id":"lane13#121","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":149,"kind":"para","text":"- fixed − buggy = +0.0124 corpus rho [+0.0106, +0.0143], resolved"}
+{"id":"lane13#122","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":150,"kind":"para","text":"- fixed − buggy = +0.0022 OOF-AUC-vs-Sonnet [+0.0011, +0.0033], resolved"}
+{"id":"lane13#123","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":151,"kind":"para","text":"- buggy − identity = −0.0109 rho, resolved — the deployed views were worse than running no TTA at all"}
+{"id":"lane13#124","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":154,"kind":"para","text":"The mechanism is code-verified: tta.py:242 rebuilt every non-mirror view from channel 0 repeated three times, so for the twelve --adjacent members the 2.5D packing was destroyed and the anatomy shifted by a slice."}
+{"id":"lane13#125","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":156,"kind":"para","text":"24 of 66 member-view forwards in the 0.926 submission ran on a tensor no training sample had ever seen."}
+{"id":"lane13#126","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":160,"kind":"para","text":"Both score 0.926 on the public subset, so the public subset cannot tell them apart. On every instrument that is not the public subset, one of them is resolvedly better."}
+{"id":"lane13#127","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":162,"kind":"para","text":"Whatever criterion Kaggle's auto-selection applies, it is not reading our corpus rho — so leaving this pick to it discards the only evidence that separates the two."}
+{"id":"lane13#128","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":166,"kind":"para","text":"This is the cleanest example this project has produced of the thing it keeps saying: the public score is not the quantity we care about. And unusually, it costs nothing to act on."}
+{"id":"lane13#129","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":170,"kind":"head","text":"Recommendation — a pre-registered final-selection rule"}
+{"id":"lane13#130","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":172,"kind":"para","text":"Not a submission, not a GPU hour, not a code change."}
+{"id":"lane13#131","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":172,"kind":"para","text":"A rule, written now, judged at the close."}
+{"id":"lane13#132","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":175,"kind":"para","text":"Never leave the final two to Kaggle's automatic selection. Not because its criterion is known to be bad — it is not documented on any page read — but because it is undocumented, unauditable, and certainly not reading the instruments that separate our candidates."}
+{"id":"lane13#133","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":179,"kind":"para","text":"Slot 1 — best by instrument, not by leaderboard. Among submissions whose public scores are within the nested-comparison noise of the best, take the one that leads on the corpus rho / OOF-AUC-vs-Sonnet pair, with gold as a veto."}
+{"id":"lane13#134","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":182,"kind":"para","text":"On today's evidence slot 1 is 55954418, the fixed-TTA 22, and it is chosen over 55896111 on a resolved +0.0124 rho despite an identical public score."}
+{"id":"lane13#135","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":185,"kind":"para","text":"Slot 2 — a structural hedge, not the runner-up. The second slot should be the most architecturally different config that is not disqualified, so the two selections do not fail together on the same private draw."}
+{"id":"lane13#136","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":187,"kind":"para","text":"It should not be a near-copy of slot 1, because two nested configs give one bet twice."}
+{"id":"lane13#137","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":189,"kind":"para","text":"The efficiency track is selected separately and does not consume these two — confirm this against the efficiency-prize eligibility text before the close;"}
+{"id":"lane13#138","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":190,"kind":"para","text":"lane 11 owns that question."}
+{"id":"lane13#139","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":192,"kind":"para","text":"Re-evaluate the rule, not the picks, whenever a new instrument lands. The rule is what is pre-registered;"}
+{"id":"lane13#140","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":193,"kind":"para","text":"which submission satisfies it is allowed to change as evidence arrives."}
+{"id":"lane13#141","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":196,"kind":"para","text":"Registered as a task rather than executed here, because the close is 2026-10-22 and the right time to make the pick is late — but the right time to fix the rule is now, while no candidate exists to bias it."}
+{"id":"lane13#142","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":202,"kind":"head","text":"## Appendix A — every command"}
+{"id":"lane13#143","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":211,"kind":"head","text":"## Appendix B — what this lane does not establish"}
+{"id":"lane13#144","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":213,"kind":"para","text":"- How many submissions any other team has made. Not exposed by any competitor-reachable interface. §4's table is the mechanism's size, not anyone's score."}
+{"id":"lane13#145","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":215,"kind":"para","text":"Lane 9 owns the empirical question."}
+{"id":"lane13#146","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":216,"kind":"para","text":"- That the fixed-TTA submission will score higher privately. It is resolvedly better on two internal instruments and identical on the public subset."}
+{"id":"lane13#147","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":218,"kind":"para","text":"That is the basis for preferring it;"}
+{"id":"lane13#148","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":218,"kind":"para","text":"it is not a measurement of the private score, and no such measurement exists before the close."}
+{"id":"lane13#149","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":220,"kind":"para","text":"- Whether the efficiency-track selection consumes a main-track final slot. Flagged for lane 11."}
+{"id":"lane13#150","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":222,"kind":"para","text":"- The criterion Kaggle applies when it auto-selects. Not stated in the rules text and not obtainable from the two documentation URLs tried (§1)."}
+{"id":"lane13#151","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":223,"kind":"para","text":"Treated as unknown throughout, and every recommendation is written to survive it being anything at all."}
+{"id":"lane13#152","doc":"lane13","path":"docs/research/0902c/lane13-submission-budget-and-selection.md","commit":"e4e356c","line":226,"kind":"para","text":"- Anything about the private/public split fraction, which lane 0 records as unstated on every page read, and which lane 3 simulated across rather than resolved."}

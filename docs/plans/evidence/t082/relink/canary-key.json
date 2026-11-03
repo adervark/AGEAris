@@ -1,0 +1,24 @@
+{
+ "canaries": [
+  {
+   "pair": 44,
+   "real": "F55",
+   "twin": "F235"
+  },
+  {
+   "pair": 209,
+   "real": "F8",
+   "twin": "F234"
+  },
+  {
+   "pair": 337,
+   "real": "F27",
+   "twin": "F233"
+  },
+  {
+   "pair": 352,
+   "real": "F59",
+   "twin": "F236"
+  }
+ ]
+}

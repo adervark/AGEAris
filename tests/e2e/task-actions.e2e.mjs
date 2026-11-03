@@ -90,7 +90,7 @@ before(async () => {
   await once(server, 'listening');
   base = `http://127.0.0.1:${server.address().port}`;
 
-  const project = await api('POST', '/projects', { name: 'Drawer actions', wipLimit: 6 });
+  const project = await api('POST', '/projects', { name: 'Drawer actions', wipLimit: 10 });
   projectId = project.id;
   const make = async (name, fields = {}) => { ids[name] = (await api('POST', '/tasks', { projectId, title: name, ...fields })).id; };
   await make('Start me');
@@ -108,6 +108,8 @@ before(async () => {
   await make('Double click me');
   await make('Double enter me');
   await make('Edits survive Done');
+  await make('Menu me');
+  await make('Keyed');
   // A task builds on another through `depends`, which the API does not set.
   const dir = path.join(server.workspace.projectsDir, projectId, 'AA');
   for (const folder of ['backlog', 'tasks']) {
@@ -129,6 +131,7 @@ before(async () => {
   const trail = (run, hours, act) => `${JSON.stringify({ ts: ago(hours + 1), run, kind: 'open', brief: act, next: 'start' })}\n${JSON.stringify({ ts: ago(hours), run, kind: 'doing', act, next: 'resume at epoch 5' })}\n`;
   boards.withBacklog = await trackedBoard('with-backlog', {
     'AA/backlog/T001-read-the-archive.md': aaTask('T001', 'Read the archive'),
+    'AA/backlog/T004-claim-by-key.md': aaTask('T004', 'Claim by key'),
     'AA/tasks/.gitkeep': '',
     'AA/AA.yml': 'wip:\n  in_progress: 3\n  blocked: 3\nstale_hours: 24\n',
   });
@@ -148,7 +151,7 @@ before(async () => {
   page.on('console', (message) => { if (['error', 'warning'].includes(message.type()) && !/status of 409/.test(message.text())) problems.push(`console ${message.type()}: ${message.text()}`); });
   page.on('pageerror', (error) => problems.push(`page error: ${error.message}`));
   await page.goto(`${base}/?token=${server.apiToken}#project/${projectId}`);
-  await page.waitForSelector(`[data-action="open-task"][data-id="${ids['Start me']}"]`);
+  await page.waitForSelector(card('Start me'));
 });
 
 after(async () => {
@@ -157,7 +160,10 @@ after(async () => {
   if (root) await rm(root, { recursive: true, force: true, maxRetries: 5 });
 });
 
-const card = (name) => `[data-action="open-task"][data-id="${ids[name]}"]`;
+// The board's own card. A flow strip's dot opens the same task, comes first in
+// the page, and dots of tasks the same age sit on top of each other (T100).
+const BOARD_ITEM = ':is(.card-open, .task-row)[data-action="open-task"]';
+const card = (name) => `${BOARD_ITEM}[data-id="${ids[name]}"]`;
 const bar = (act) => `#task-dialog .action-bar [data-act="${act}"]`;
 
 // A refresh can replace a card between finding it and clicking it.
@@ -224,7 +230,7 @@ test('a disabled action says why on hover and on focus, through aria-describedby
     await page.waitForSelector('#task-dialog:not([open])');
   } finally {
     const fresh = (await api('GET', '/workspace')).projects.find((entry) => entry.id === projectId);
-    await api('PATCH', `/projects/${projectId}`, { version: fresh.version, wipLimit: 6 });
+    await api('PATCH', `/projects/${projectId}`, { version: fresh.version, wipLimit: 10 });
     await page.reload();
   }
 });
@@ -337,13 +343,15 @@ test('a task named in the drawer swaps in place: the drawer never closes', async
   await page.waitForSelector('#task-dialog:not([open])');
 });
 
-async function drag(name, column) {
+async function drag(name, column) { return drag2(card(name), column); }
+
+async function drag2(selector, column) {
   await page.evaluate((selector, status) => {
     const source = document.querySelector(selector);
     const target = document.querySelector(`[data-drop-status="${status}"]`);
     const data = new DataTransfer();
     for (const [type, element] of [['dragstart', source], ['dragover', target], ['drop', target], ['dragend', source]]) element.dispatchEvent(new DragEvent(type, { bubbles: true, cancelable: true, dataTransfer: data }));
-  }, card(name), column);
+  }, selector, column);
 }
 
 test('dragging a card to another column goes through the same action', async () => {
@@ -427,9 +435,125 @@ test('unsaved Priority and Owner edits in the full form survive an action, and s
   assert.deepEqual([saved.assignee, saved.status], ['Grace Hopper', 'done']);
 });
 
+// ---- The card menu and the keyboard map (T024)
+
+const menuButtonOf = (name) => `.card-menu[data-id="${ids[name]}"]`;
+const focusedIs = (selector) => page.evaluate((wanted) => document.activeElement?.matches(wanted) || false, selector);
+const menuOpen = () => page.$('#main .task-menu[role="menu"]');
+// Scrolled to the middle first: at the top of the page the sticky limits
+// strip would take the click.
+async function clickInView(selector) {
+  await page.waitForSelector(selector);
+  await page.$eval(selector, (element) => element.scrollIntoView({ block: 'center' }));
+  await page.click(selector);
+}
+
+test('the card menu opens with Enter, Space and the full stop; arrows, Home and End move; Escape returns focus to its button', async () => {
+  await page.reload();
+  await page.waitForSelector(menuButtonOf('Menu me'));
+  for (const key of ['Enter', ' ']) {
+    await page.focus(menuButtonOf('Menu me'));
+    await page.keyboard.press(key);
+    await page.waitForSelector('#main .task-menu .menu-item');
+    assert.equal(await page.$eval(menuButtonOf('Menu me'), (element) => element.getAttribute('aria-expanded')), 'true');
+    const labels = await page.$$eval('#main .task-menu .menu-item', (items) => items.map((item) => item.getAttribute('aria-label')));
+    assert.deepEqual(labels, ['Start', 'Block', 'Done', 'Priority', 'Assign'], 'the registry\'s actions for a backlog task, in its order');
+    assert.equal(await focusedIs('.menu-item[data-act="start"]'), true, `${key === ' ' ? 'Space' : key} puts focus on the first item`);
+    await page.keyboard.press('ArrowDown');
+    assert.equal(await focusedIs('.menu-item[data-act="block"]'), true);
+    await page.keyboard.press('End');
+    assert.equal(await focusedIs('.menu-item[data-act="assign"]'), true);
+    await page.keyboard.press('ArrowDown');
+    assert.equal(await focusedIs('.menu-item[data-act="start"]'), true, 'the arrows wrap');
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('Home');
+    assert.equal(await focusedIs('.menu-item[data-act="start"]'), true);
+    await page.keyboard.press('Escape');
+    assert.equal(await menuOpen(), null, 'Escape closes the menu');
+    assert.equal(await focusedIs(menuButtonOf('Menu me')), true, 'and focus is back on its button');
+    assert.equal(await page.$eval(menuButtonOf('Menu me'), (element) => element.getAttribute('aria-expanded')), 'false');
+  }
+  // The full stop on the card itself, then a choice from the menu.
+  await page.focus(card('Menu me'));
+  await page.keyboard.press('.');
+  await page.waitForSelector('#main .task-menu .menu-item');
+  await page.keyboard.press('Enter');
+  await until(async () => (await task('Menu me')).status === 'in_progress', 'Start from the menu did not start the task');
+  await page.waitForFunction(() => document.querySelector('#toast').textContent === 'Task started');
+  assert.equal(await menuOpen(), null);
+  await page.waitForFunction((id) => document.activeElement?.matches(`[data-drop-status="in_progress"] .card-menu[data-id="${id}"]`), {}, ids['Menu me']);
+  // The ContextMenu key, Shift+F10 and a right click arrive as a contextmenu event.
+  await page.$eval(card('Prioritise me'), (element) => element.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true })));
+  await page.waitForSelector(`.card-menu[data-id="${ids['Prioritise me']}"][aria-expanded="true"] + .task-menu`);
+  await page.keyboard.press('Escape');
+  assert.equal(await menuOpen(), null);
+  // A click elsewhere closes an open menu.
+  await clickInView(menuButtonOf('Menu me'));
+  await page.waitForSelector('#main .task-menu');
+  await page.evaluate(() => document.body.click());
+  assert.equal(await menuOpen(), null, 'a click outside closes it');
+});
+
+test('keys act on a focused card and in the drawer: c starts, b asks for its line in the drawer, u unblocks there', async () => {
+  await page.focus(card('Keyed'));
+  await page.keyboard.press('c');
+  await until(async () => (await task('Keyed')).status === 'in_progress', 'c did not start the task');
+  await page.waitForFunction((id) => document.activeElement?.matches(`[data-drop-status="in_progress"] .card-open[data-id="${id}"]`), {}, ids.Keyed);
+  // A key whose action is not in this column does nothing.
+  await page.keyboard.press('u');
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  assert.equal((await task('Keyed')).status, 'in_progress');
+  await page.keyboard.press('b');
+  await page.waitForSelector(`#task-dialog[open] #task-form[data-task="${ids.Keyed}"] #action-slot [data-action-input]`);
+  await page.keyboard.type('Waiting on a key');
+  await page.keyboard.press('Enter');
+  await until(async () => (await task('Keyed')).status === 'blocked', 'the task was not blocked');
+  await pillIs('Blocked');
+  // In the drawer, with focus on the bar, u unblocks.
+  await page.focus(bar('unblock'));
+  await page.keyboard.press('u');
+  await until(async () => (await task('Keyed')).status === 'in_progress', 'u in the drawer did not unblock');
+  await pillIs('In progress');
+  // In a field of the full form a key is typing, not an action.
+  await page.focus('#task-form [name="title"]');
+  await page.keyboard.press('d');
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  assert.equal((await task('Keyed')).status, 'in_progress');
+  await closeDrawerAndExpectFocusOn('Keyed');
+});
+
+test('cards and rows nest no interactive element, and at 390 px the board and an open menu scroll nothing sideways', async () => {
+  const nested = () => page.evaluate(() => document.querySelectorAll('#main :is(button, a, [role="button"], [tabindex]) :is(button, a, input, select, textarea, [role="button"], [tabindex])').length);
+  assert.equal(await nested(), 0, 'board');
+  await clickInView('[data-action="layout"][data-value="list"]');
+  await page.waitForSelector('.task-row-item .card-menu');
+  assert.equal(await nested(), 0, 'list');
+  await clickInView('.task-row-item .card-menu');
+  await page.waitForSelector('#main .task-menu .menu-item');
+  assert.equal(await nested(), 0, 'list with a menu open');
+  await page.keyboard.press('Escape');
+  await clickInView('[data-action="layout"][data-value="board"]');
+  await page.setViewport({ width: 390, height: 844 });
+  try {
+    await page.reload();
+    await page.waitForSelector(menuButtonOf('Menu me'));
+    const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    assert.ok(await sideways() <= 0, 'the board at 390 px');
+    await clickInView(menuButtonOf('Menu me'));
+    await page.waitForSelector('#main .task-menu .menu-item');
+    assert.ok(await sideways() <= 0, 'with a menu open');
+    const box = await page.$eval('#main .task-menu', (element) => { const rect = element.getBoundingClientRect(); return { left: rect.left, right: rect.right }; });
+    assert.ok(box.left >= 0 && box.right <= 390, `the menu stays on screen (${box.left}–${box.right})`);
+    await page.keyboard.press('Escape');
+  } finally {
+    await page.setViewport({ width: 1280, height: 900 });
+    await page.reload();
+  }
+});
+
 // ---- Tracked AA boards (T023)
 
-const trackedCard = (board, id) => `[data-action="open-task"][data-id="${board.id}:${id}"]`;
+const trackedCard = (board, id) => `${BOARD_ITEM}[data-id="${board.id}:${id}"]`;
 const trackedFile = async (board, file) => readFile(path.join(board.dir, file), 'utf8');
 const toastSays = (pattern) => page.waitForFunction((source) => new RegExp(source).test(document.querySelector('#toast').textContent), {}, pattern);
 
@@ -460,7 +584,7 @@ async function switchOnByApi(board) {
 test('a tracked repository\'s task opens in the viewer, and while task actions are off the bar says so and changes nothing', async () => {
   await page.goto('about:blank');
   await page.goto(`${base}/#project/${trackedProjectId}`);
-  await clickCard(`[data-action="open-task"][data-id="${trackedProjectId}:T001"]`);
+  await clickCard(`${BOARD_ITEM}[data-id="${trackedProjectId}:T001"]`);
   await page.waitForSelector('#task-dialog[open] .task-view');
   assert.equal(await page.$('#task-dialog #task-form'), null, 'no full edit form');
   const claim = '#task-dialog .action-bar [data-act="start"]';
@@ -471,6 +595,30 @@ test('a tracked repository\'s task opens in the viewer, and while task actions a
   assert.equal(await page.$eval('[data-action="task-actions"]', (element) => element.getAttribute('aria-pressed')), 'false');
   await page.keyboard.press('Escape');
   await page.waitForSelector('#task-dialog:not([open])');
+});
+
+test('while task actions are off, the key, the menu and a drag refuse alike, with the same reason', async () => {
+  await page.goto('about:blank');
+  await page.goto(`${base}/#project/${trackedProjectId}`);
+  const opener = `.card-open[data-id="${trackedProjectId}:T001"]`;
+  await page.waitForSelector(opener);
+  const head = (await api('GET', '/workspace')).projects.find((entry) => entry.id === trackedProjectId).version;
+  assert.equal(await page.$eval(opener, (element) => element.getAttribute('draggable')), 'false', 'the card cannot be dragged');
+  await page.focus(opener);
+  await page.keyboard.press('c');
+  await toastSays('Task actions are off for Their repo');
+  const toastWhy = await page.$eval('#toast', (element) => element.textContent);
+  await clickInView(`.card-menu[data-id="${trackedProjectId}:T001"]`);
+  await page.waitForSelector('#main .task-menu .menu-item[data-act="start"][aria-disabled="true"]');
+  const menuWhy = await page.$eval('#main .task-menu .menu-item[data-act="start"] .menu-why', (element) => element.textContent);
+  assert.equal(menuWhy, toastWhy, 'the menu gives the key\'s reason');
+  await clickInView('#main .task-menu .menu-item[data-act="start"]');
+  await toastSays('Task actions are off for Their repo');
+  assert.equal(await page.$('#main .task-menu'), null, 'choosing closes the menu');
+  await drag2(opener, 'in_progress');
+  await toastSays('Task actions are off for Their repo');
+  assert.equal((await api('GET', '/workspace')).projects.find((entry) => entry.id === trackedProjectId).version, head);
+  assert.equal((await api('GET', '/workspace')).tasks.find((entry) => entry.id === `${trackedProjectId}:T001`).status, 'backlog', 'nothing moved');
 });
 
 test('switching task actions on shows what it means there, and needs a confirmation', async () => {
@@ -501,7 +649,7 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   const board = boards.withBacklog;
   await openTracked(board, 'T001');
   await page.click('#task-dialog .action-bar [data-act="start"]');
-  await toastSays('^Claimed T001 · [0-9a-f]{7} on main · not pushed');
+  await toastSays('^Claimed T001: [0-9a-f]{7} on main, not pushed\\.');
   const claimed = await trackedFile(board, 'AA/tasks/T001-read-the-archive.md');
   assert.match(claimed, /^status: claimed$/m);
   assert.match(claimed, /^owner: ade @agearis\/web \d{4}-\d{2}-\d{2} — /m);
@@ -517,7 +665,7 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   assert.equal(await git(board.dir, 'rev-list', '--count', 'HEAD'), '2', 'an empty reason commits nothing');
   await page.type('#action-slot [data-action-input]', 'Waiting on the archive key');
   await page.keyboard.press('Enter');
-  await toastSays('^Blocked T001 · ');
+  await toastSays('^Blocked T001: [0-9a-f]{7} on ');
   const blocked = await trackedFile(board, 'AA/tasks/T001-read-the-archive.md');
   assert.match(blocked, /^status: blocked$/m);
   assert.match(blocked, /^blockedReason: "Waiting on the archive key"$/m);
@@ -529,7 +677,7 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   await page.waitForSelector('#action-slot [data-action-input][required]');
   await page.type('#action-slot [data-action-input]', 'Read; nothing missing');
   await page.keyboard.press('Enter');
-  await toastSays('^Done T001 · ');
+  await toastSays('^Done T001: [0-9a-f]{7} on ');
   const done = await trackedFile(board, 'AA/tasks/done/T001-read-the-archive.md');
   assert.match(done, /^status: done$/m);
   assert.match(done, /## Result\n\nRead; nothing missing\n/);
@@ -540,12 +688,33 @@ test('Claim, Block and Done on a board with backlog/: each is one commit, the fi
   await page.waitForSelector('#task-dialog:not([open])');
 });
 
+test('keyboard only: Tab to a backlog card on a tracked board, press c, and it is claimed, in In progress, with focus on it', async () => {
+  const board = boards.withBacklog;
+  await page.goto('about:blank');
+  await page.goto(`${base}/#project/${board.id}`);
+  const opener = `.card-open[data-id="${board.id}:T004"]`;
+  await page.waitForSelector(opener);
+  for (let presses = 0; !(await focusedIs(opener)); presses += 1) {
+    assert.ok(presses < 300, 'Tab never reached the card');
+    await page.keyboard.press('Tab');
+  }
+  await page.keyboard.press('c');
+  await toastSays('^Claimed T004: [0-9a-f]{7} on main, not pushed');
+  assert.match(await trackedFile(board, 'AA/tasks/T004-claim-by-key.md'), /^status: claimed$/m);
+  await assertCommittedByUi(board);
+  await page.waitForFunction((selector) => document.activeElement?.matches(`[data-drop-status="in_progress"] ${selector}`), {}, opener);
+  // STATE.md is kept by hand on this board, and AGE Aris never writes it (T025).
+  await page.goto('about:blank');
+  await page.goto(`${base}/#project/${board.id}`);
+  await page.waitForFunction(() => /STATE\.md is kept by hand here; its lines for T001 and T004 predate their changes in AGE Aris, as far as the commits show\./.test(document.querySelector('.state-behind-note')?.textContent || ''));
+});
+
 test('on a board without backlog/ Claim changes the file in place', async () => {
   const board = boards.older;
   await switchOnByApi(board);
   await openTracked(board, 'T001');
   await page.click('#task-dialog .action-bar [data-act="start"]');
-  await toastSays('^Claimed T001 · ');
+  await toastSays('^Claimed T001: [0-9a-f]{7} on ');
   assert.match(await trackedFile(board, 'AA/tasks/T001-sort-the-logs.md'), /^status: claimed$/m);
   await assertCommittedByUi(board);
   await page.keyboard.press('Escape');
@@ -568,7 +737,7 @@ test('releasing a task an own agent session holds, with a run that never ended, 
   await page.click('#task-dialog .action-bar [data-act="release"]');
   await page.waitForSelector('#action-dialog[open] [type="submit"]');
   await page.click('#action-dialog [type="submit"]');
-  await toastSays('^Released T002 · ');
+  await toastSays('^Released T002: [0-9a-f]{7} on ');
   await page.waitForFunction(() => /ckpt\.sh log T002 end --run 7c1e2a90/.test(document.querySelector('#action-note').textContent));
   const released = await trackedFile(board, 'AA/tasks/T002-fold-two.md');
   assert.match(released, /^status: open$/m);

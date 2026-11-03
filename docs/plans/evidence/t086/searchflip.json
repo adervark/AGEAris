@@ -1,0 +1,457 @@
+{
+ "summary": {
+  "head": "fc0d19e",
+  "commands": 19,
+  "sources": 20,
+  "same": 8,
+  "flipped": 3,
+  "drifted": 8,
+  "notRerun": 1,
+  "error": 0
+ },
+ "flipped": [
+  {
+   "fact": "F354",
+   "orig": "G1-F354",
+   "cmd": "git grep -n -e 'decode-theirs' 59efe32 -- scripts/t112/paired_vs_member.py",
+   "status": "flipped",
+   "was": "59efe32",
+   "then": "e3b0c44298fc",
+   "now": "3eb13906cd21",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "fc0d19e:scripts/t112/paired_vs_member.py:48:    ap.add_argument(\"--decode-theirs\", dest=\"decode_theirs\", type=int, default=336,"
+   ]
+  },
+  {
+   "fact": "F756",
+   "orig": "G2-F205",
+   "cmd": "git grep -n -e dry_run -e EXPECTED_STAGES -e Thirteen 416447b -- tests scripts",
+   "status": "flipped",
+   "was": "416447b",
+   "then": "ab60373fa2ea",
+   "now": "724676842ba1",
+   "thenLines": 8,
+   "nowLines": 9,
+   "nowHead": [
+    "fc0d19e:scripts/t112/dry_run.py:4:Thirteen stages stand between a trained checkpoint and a scored leaderboard",
+    "fc0d19e:scripts/t112/dry_run.py:13:reason is the same defect as a check that does, one level up. So `EXPECTED_STAGES`",
+    "fc0d19e:scripts/t112/dry_run.py:26:    .venv/bin/python scripts/t112/dry_run.py"
+   ]
+  },
+  {
+   "fact": "F822",
+   "orig": "G2-F271",
+   "cmd": "git grep -n -e test_gpu_watchdog f896e38",
+   "status": "flipped",
+   "was": "f896e38",
+   "then": "c7965b2afbe2",
+   "now": "02f44f85ba60",
+   "thenLines": 1,
+   "nowLines": 21,
+   "nowHead": [
+    "fc0d19e:AGENTS.md:333:T084 found `test_gpu_watchdog` — nine checks over `gpu_watchdog.sh` — defined",
+    "fc0d19e:PROGRESS.md:3721:`systemd-inhibit`**. `test_gpu_watchdog` re-run against the edited script: 9 ok,",
+    "fc0d19e:deaddrop/STATE.md:439:| [T084](tasks/done/T084-split-the-smoke-suite-and-finish-the-structure.md) | **Split the 6,799-line smoke suite**, give `scripts/tNNN/` the retirement path it has never had, and fix two factual inconsistencies | **claimed 2026-09-12** by adervark @b/e721d92b. 0 GPU, 0 submissions. Option B of [the structure plan](../docs/plans/2026-09-12-repo-structure.md), after [T083](tasks/done/T083-make-the-source-importable.md) landed Option A. **Option C — decomposing `train.py`'s 622-line `run()` — is EXCLUDED, and that is recorded before work starts, not after**: it produces every number in PROGRESS.md, the competition closes 10-22, and `layout_guard.py` records three changes on that path that read as a null rather than an error. **done** — 6,799 → 100 lines; **reviewer REJECTED on first pass** (4 blocking + 8 non-blocking, all closed) after independently proving the split byte-identical two ways. **Found `test_gpu_watchdog` dead since `f896e38`** — nine checks over `gpu_watchdog.sh` never called; PROGRESS.md quoted a HAND run, which is why it looked covered. **975 → 984.** **The gate was never installed**: deleting five `check()` calls passed every gate the repo had. Now enforced — **984 checks, md5 `edefbf8da44a29…`**, asserted by `make smoke`. T083's `92eef54f…` is **RETRACTED** (captured with `2>&1`; a PyTorch warning bled into a check name). Staged kernels unchanged | T081, T083 |"
+   ]
+  }
+ ],
+ "drifted": [
+  {
+   "fact": "F764",
+   "orig": "G2-F213",
+   "cmd": "git grep -n -e leaderboard -e gold_auc -e kaggle 416447b -- scripts/t112/dry_run.py",
+   "status": "drifted",
+   "was": "416447b",
+   "then": "eb58b8e5315e",
+   "now": "3ced4af99090",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "fc0d19e:scripts/t112/dry_run.py:4:Thirteen stages stand between a trained checkpoint and a scored leaderboard",
+    "fc0d19e:scripts/t112/dry_run.py:23:What it cannot prove: that the arm is GOOD. Nothing here reads a leaderboard or",
+    "fc0d19e:scripts/t112/dry_run.py:80:    from coat_data import teacher_gold_auc"
+   ]
+  },
+  {
+   "fact": "F1201",
+   "orig": "G3-F41",
+   "cmd": "git grep -n -e coat_train.py 3ed78d4 -- scripts/t112/bringup_4090.sh",
+   "status": "drifted",
+   "was": "3ed78d4",
+   "then": "f8da959098dd",
+   "now": "cb5a759aa145",
+   "thenLines": 7,
+   "nowLines": 7,
+   "nowHead": [
+    "fc0d19e:scripts/t112/bringup_4090.sh:195:  for f in coat_data.py coat_model.py coat_train.py coat_export.py labels.py metric.py; do",
+    "fc0d19e:scripts/t112/bringup_4090.sh:240:if [ ! -f \"$ROOT/src/coat_train.py\" ] && [ -f \"$PWD/src/coat_train.py\" ]; then",
+    "fc0d19e:scripts/t112/bringup_4090.sh:692:# Exactly what src/coat_train.py:141-142 does, in the same order."
+   ]
+  },
+  {
+   "fact": "F1204",
+   "orig": "G3-F44",
+   "cmd": "git grep -n -e pgrep 3ed78d4 -- scripts/t112/bringup_4090.sh",
+   "status": "drifted",
+   "was": "3ed78d4",
+   "then": "5f0f3e6a411e",
+   "now": "76322cd3ae4b",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "fc0d19e:scripts/t112/bringup_4090.sh:41:# `pgrep -f`, which matches its own command line and has cost this project a",
+    "fc0d19e:scripts/t112/bringup_4090.sh:561:# Occupancy from the card, never from `pgrep -f`: a watcher that names the"
+   ]
+  },
+  {
+   "fact": "F1275",
+   "orig": "G3-F115",
+   "cmd": "git grep -n -e pgrep 3ed78d4 -- scripts/t112/bringup_4090.sh",
+   "status": "drifted",
+   "was": "3ed78d4",
+   "then": "5f0f3e6a411e",
+   "now": "76322cd3ae4b",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "fc0d19e:scripts/t112/bringup_4090.sh:41:# `pgrep -f`, which matches its own command line and has cost this project a",
+    "fc0d19e:scripts/t112/bringup_4090.sh:561:# Occupancy from the card, never from `pgrep -f`: a watcher that names the"
+   ]
+  },
+  {
+   "fact": "F1520",
+   "orig": "G3-F360",
+   "cmd": "git grep -n -e submit 1661b58 -- scripts/t112/push_arm.py",
+   "status": "drifted",
+   "was": "1661b58",
+   "then": "68cf5f71380b",
+   "now": "609fcf8d5ba3",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "fc0d19e:scripts/t112/push_arm.py:25:Nothing here submits. It pushes a kernel; a human reads its log for the VOID",
+    "fc0d19e:scripts/t112/push_arm.py:26:banner and submits by hand. That separation is deliberate -- T057 rule 6 and the",
+    "fc0d19e:scripts/t112/push_arm.py:193:            print(\"     !! BELOW THE BROKEN FLOOR (0.85). T111/T112 say: do not submit, debug.\")"
+   ]
+  },
+  {
+   "fact": "F1572",
+   "orig": "G3-F412",
+   "cmd": "git grep -n -i -e dicom 416447b -- src/coat_data.py",
+   "status": "drifted",
+   "was": "416447b",
+   "then": "11861602d74e",
+   "now": "4f2e3b328bd5",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "fc0d19e:src/coat_data.py:6:slices are real. Nothing here decodes a DICOM."
+   ]
+  },
+  {
+   "fact": "F1580",
+   "orig": "G3-F420",
+   "cmd": "git grep -n -i -e flip 416447b -- src/coat_data.py",
+   "status": "drifted",
+   "was": "416447b",
+   "then": "aed5e109c602",
+   "now": "a55e7944c65e",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "fc0d19e:src/coat_data.py:13:a mild intensity jitter nothing else is augmented. No flips: laterality is"
+   ]
+  },
+  {
+   "fact": "F1906",
+   "orig": "GC-F95",
+   "cmd": "git grep -n -e nvidia-smi 1661b58 -- tests/smoke/tooling.py",
+   "status": "drifted",
+   "was": "1661b58",
+   "then": "71c5cbe09e79",
+   "now": "6c0e0e8267ea",
+   "thenLines": 3,
+   "nowLines": 3,
+   "nowHead": [
+    "fc0d19e:tests/smoke/tooling.py:454:    `nvidia-smi` on PATH, so no check in this file touches the real card.",
+    "fc0d19e:tests/smoke/tooling.py:473:        (td / \"bin\" / \"nvidia-smi\").write_text(",
+    "fc0d19e:tests/smoke/tooling.py:478:        (td / \"bin\" / \"nvidia-smi\").chmod(0o755)"
+   ]
+  }
+ ],
+ "results": [
+  {
+   "fact": "F240",
+   "orig": "G1-F240",
+   "cmd": "git grep -n -e 'competitions submit' 59efe32 -- scripts/t112/push_arm.py",
+   "status": "same",
+   "was": "59efe32",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F354",
+   "orig": "G1-F354",
+   "cmd": "git grep -n -e 'decode-theirs' 59efe32 -- scripts/t112/paired_vs_member.py",
+   "status": "flipped",
+   "was": "59efe32",
+   "then": "e3b0c44298fc",
+   "now": "3eb13906cd21",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "fc0d19e:scripts/t112/paired_vs_member.py:48:    ap.add_argument(\"--decode-theirs\", dest=\"decode_theirs\", type=int, default=336,"
+   ]
+  },
+  {
+   "fact": "F419",
+   "orig": "G1-F419",
+   "cmd": "git grep -n -e 'competitions submit' 59efe32 -- scripts/t112/arm_t112.sh",
+   "status": "same",
+   "was": "59efe32",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F447",
+   "orig": "G1-F447",
+   "cmd": "git grep -n -e 'competitions submit' 7966326 -- scripts/t112/arm_t112.sh",
+   "status": "same",
+   "was": "7966326",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F645",
+   "orig": "G2-F94",
+   "cmd": "git grep -n -e \"src.replace(\" -e \"cells\\\"\\]\\[i\\]\" 1661b58 -- scripts/t112/build_t112_kernel.py",
+   "status": "not-rerun",
+   "why": "unclosed quote"
+  },
+  {
+   "fact": "F756",
+   "orig": "G2-F205",
+   "cmd": "git grep -n -e dry_run -e EXPECTED_STAGES -e Thirteen 416447b -- tests scripts",
+   "status": "flipped",
+   "was": "416447b",
+   "then": "ab60373fa2ea",
+   "now": "724676842ba1",
+   "thenLines": 8,
+   "nowLines": 9,
+   "nowHead": [
+    "fc0d19e:scripts/t112/dry_run.py:4:Thirteen stages stand between a trained checkpoint and a scored leaderboard",
+    "fc0d19e:scripts/t112/dry_run.py:13:reason is the same defect as a check that does, one level up. So `EXPECTED_STAGES`",
+    "fc0d19e:scripts/t112/dry_run.py:26:    .venv/bin/python scripts/t112/dry_run.py"
+   ]
+  },
+  {
+   "fact": "F764",
+   "orig": "G2-F213",
+   "cmd": "git grep -n -e leaderboard -e gold_auc -e kaggle 416447b -- scripts/t112/dry_run.py",
+   "status": "drifted",
+   "was": "416447b",
+   "then": "eb58b8e5315e",
+   "now": "3ced4af99090",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "fc0d19e:scripts/t112/dry_run.py:4:Thirteen stages stand between a trained checkpoint and a scored leaderboard",
+    "fc0d19e:scripts/t112/dry_run.py:23:What it cannot prove: that the arm is GOOD. Nothing here reads a leaderboard or",
+    "fc0d19e:scripts/t112/dry_run.py:80:    from coat_data import teacher_gold_auc"
+   ]
+  },
+  {
+   "fact": "F822",
+   "orig": "G2-F271",
+   "cmd": "git grep -n -e test_gpu_watchdog f896e38",
+   "status": "flipped",
+   "was": "f896e38",
+   "then": "c7965b2afbe2",
+   "now": "02f44f85ba60",
+   "thenLines": 1,
+   "nowLines": 21,
+   "nowHead": [
+    "fc0d19e:AGENTS.md:333:T084 found `test_gpu_watchdog` — nine checks over `gpu_watchdog.sh` — defined",
+    "fc0d19e:PROGRESS.md:3721:`systemd-inhibit`**. `test_gpu_watchdog` re-run against the edited script: 9 ok,",
+    "fc0d19e:deaddrop/STATE.md:439:| [T084](tasks/done/T084-split-the-smoke-suite-and-finish-the-structure.md) | **Split the 6,799-line smoke suite**, give `scripts/tNNN/` the retirement path it has never had, and fix two factual inconsistencies | **claimed 2026-09-12** by adervark @b/e721d92b. 0 GPU, 0 submissions. Option B of [the structure plan](../docs/plans/2026-09-12-repo-structure.md), after [T083](tasks/done/T083-make-the-source-importable.md) landed Option A. **Option C — decomposing `train.py`'s 622-line `run()` — is EXCLUDED, and that is recorded before work starts, not after**: it produces every number in PROGRESS.md, the competition closes 10-22, and `layout_guard.py` records three changes on that path that read as a null rather than an error. **done** — 6,799 → 100 lines; **reviewer REJECTED on first pass** (4 blocking + 8 non-blocking, all closed) after independently proving the split byte-identical two ways. **Found `test_gpu_watchdog` dead since `f896e38`** — nine checks over `gpu_watchdog.sh` never called; PROGRESS.md quoted a HAND run, which is why it looked covered. **975 → 984.** **The gate was never installed**: deleting five `check()` calls passed every gate the repo had. Now enforced — **984 checks, md5 `edefbf8da44a29…`**, asserted by `make smoke`. T083's `92eef54f…` is **RETRACTED** (captured with `2>&1`; a PyTorch warning bled into a check name). Staged kernels unchanged | T081, T083 |"
+   ]
+  },
+  {
+   "fact": "F1025",
+   "orig": "G2-F474",
+   "cmd": "git grep -n -e \"competitions submit\" 71dc5cf -- scripts/t112/arm_t112.sh",
+   "status": "same",
+   "was": "71dc5cf",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1201",
+   "orig": "G3-F41",
+   "cmd": "git grep -n -e kaggle 3ed78d4 -- scripts/t112/bringup_4090.sh",
+   "status": "same",
+   "was": "3ed78d4",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1201",
+   "orig": "G3-F41",
+   "cmd": "git grep -n -e coat_train.py 3ed78d4 -- scripts/t112/bringup_4090.sh",
+   "status": "drifted",
+   "was": "3ed78d4",
+   "then": "f8da959098dd",
+   "now": "cb5a759aa145",
+   "thenLines": 7,
+   "nowLines": 7,
+   "nowHead": [
+    "fc0d19e:scripts/t112/bringup_4090.sh:195:  for f in coat_data.py coat_model.py coat_train.py coat_export.py labels.py metric.py; do",
+    "fc0d19e:scripts/t112/bringup_4090.sh:240:if [ ! -f \"$ROOT/src/coat_train.py\" ] && [ -f \"$PWD/src/coat_train.py\" ]; then",
+    "fc0d19e:scripts/t112/bringup_4090.sh:692:# Exactly what src/coat_train.py:141-142 does, in the same order."
+   ]
+  },
+  {
+   "fact": "F1204",
+   "orig": "G3-F44",
+   "cmd": "git grep -n -e pgrep 3ed78d4 -- scripts/t112/bringup_4090.sh",
+   "status": "drifted",
+   "was": "3ed78d4",
+   "then": "5f0f3e6a411e",
+   "now": "76322cd3ae4b",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "fc0d19e:scripts/t112/bringup_4090.sh:41:# `pgrep -f`, which matches its own command line and has cost this project a",
+    "fc0d19e:scripts/t112/bringup_4090.sh:561:# Occupancy from the card, never from `pgrep -f`: a watcher that names the"
+   ]
+  },
+  {
+   "fact": "F1275",
+   "orig": "G3-F115",
+   "cmd": "git grep -n -e pgrep 3ed78d4 -- scripts/t112/bringup_4090.sh",
+   "status": "drifted",
+   "was": "3ed78d4",
+   "then": "5f0f3e6a411e",
+   "now": "76322cd3ae4b",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "fc0d19e:scripts/t112/bringup_4090.sh:41:# `pgrep -f`, which matches its own command line and has cost this project a",
+    "fc0d19e:scripts/t112/bringup_4090.sh:561:# Occupancy from the card, never from `pgrep -f`: a watcher that names the"
+   ]
+  },
+  {
+   "fact": "F1520",
+   "orig": "G3-F360",
+   "cmd": "git grep -n -e submit 1661b58 -- scripts/t112/push_arm.py",
+   "status": "drifted",
+   "was": "1661b58",
+   "then": "68cf5f71380b",
+   "now": "609fcf8d5ba3",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "fc0d19e:scripts/t112/push_arm.py:25:Nothing here submits. It pushes a kernel; a human reads its log for the VOID",
+    "fc0d19e:scripts/t112/push_arm.py:26:banner and submits by hand. That separation is deliberate -- T057 rule 6 and the",
+    "fc0d19e:scripts/t112/push_arm.py:193:            print(\"     !! BELOW THE BROKEN FLOOR (0.85). T111/T112 say: do not submit, debug.\")"
+   ]
+  },
+  {
+   "fact": "F1549",
+   "orig": "G3-F389",
+   "cmd": "git grep -n -e completed_epochs 1661b58 -- src/coat_train.py",
+   "status": "same",
+   "was": "1661b58",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1572",
+   "orig": "G3-F412",
+   "cmd": "git grep -n -i -e dicom 416447b -- src/coat_data.py",
+   "status": "drifted",
+   "was": "416447b",
+   "then": "11861602d74e",
+   "now": "4f2e3b328bd5",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "fc0d19e:src/coat_data.py:6:slices are real. Nothing here decodes a DICOM."
+   ]
+  },
+  {
+   "fact": "F1580",
+   "orig": "G3-F420",
+   "cmd": "git grep -n -i -e flip 416447b -- src/coat_data.py",
+   "status": "drifted",
+   "was": "416447b",
+   "then": "aed5e109c602",
+   "now": "a55e7944c65e",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "fc0d19e:src/coat_data.py:13:a mild intensity jitter nothing else is augmented. No flips: laterality is"
+   ]
+  },
+  {
+   "fact": "F1729",
+   "orig": "G3-F569",
+   "cmd": "git grep -n -e \"setx TEMP\" eefcc9c -- scripts/t112/setup_4090.cmd",
+   "status": "same",
+   "was": "eefcc9c",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1906",
+   "orig": "GC-F95",
+   "cmd": "git grep -n -e nvidia-smi 1661b58 -- tests/smoke/tooling.py",
+   "status": "drifted",
+   "was": "1661b58",
+   "then": "71c5cbe09e79",
+   "now": "6c0e0e8267ea",
+   "thenLines": 3,
+   "nowLines": 3,
+   "nowHead": [
+    "fc0d19e:tests/smoke/tooling.py:454:    `nvidia-smi` on PATH, so no check in this file touches the real card.",
+    "fc0d19e:tests/smoke/tooling.py:473:        (td / \"bin\" / \"nvidia-smi\").write_text(",
+    "fc0d19e:tests/smoke/tooling.py:478:        (td / \"bin\" / \"nvidia-smi\").chmod(0o755)"
+   ]
+  },
+  {
+   "fact": "F1915",
+   "orig": "GC-F104",
+   "cmd": "git grep -n -e pgrep 1661b58 -- scripts/gpu_watchdog.sh",
+   "status": "same",
+   "was": "1661b58",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  }
+ ]
+}

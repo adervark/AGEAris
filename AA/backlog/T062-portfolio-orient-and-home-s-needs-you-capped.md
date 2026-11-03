@@ -47,3 +47,11 @@ created: 2026-10-10
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-11-01, T054 (adervark @b/9ba3e0ed): the baseline is in PROGRESS.md.
+  On the 303-repository fixture, the brief is 1,219 KB: its `projects` lines
+  are 1,006 KB and `needsYou` only 212 KB, so a cap on Needs-you alone leaves
+  Home near 1 MB. A warm brief takes 1.9–2.2 s at p95. Memory: 646–669 MB
+  resident. `all=1` is not built; one orient per repository takes 24.5–27.9 s.
+  Drop the `todo`s on the Home, `all=1` and memory subtests in
+  `tests/perf/scale.perf.mjs`.

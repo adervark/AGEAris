@@ -38,6 +38,7 @@ export const WHY = {
   reopen: 'AA has no reopen: a task in done/ goes back by hand, in the repository',
   tracked: 'Task actions are off for this repository: switch them on in the project header',
   other: (holder) => `${holder} holds this task: ask them to release it`,
+  inactive: (project) => `${project.name} is ${project.lifecycle.state}: restore it in the project header to act on its tasks`,
 };
 
 export function projectKind(project) {
@@ -85,7 +86,7 @@ function entersWip(task, action) {
 export function availability(task, project, { operator = '', wipCount = 0 } = {}) {
   const kind = projectKind(project);
   const capabilities = CAPABILITIES[kind];
-  const off = kind === 'aa' && !project.actions?.on ? project.actions?.reason || WHY.tracked : '';
+  const off = project?.lifecycle ? WHY.inactive(project) : kind === 'aa' && !project.actions?.on ? project.actions?.reason || WHY.tracked : '';
   const held = holderKind(task, (kind === 'aa' && project.actions?.operator) || operator) === 'other';
   const wipLimit = Number.isInteger(project?.wipLimit) && project.wipLimit > 0 ? project.wipLimit : 0;
   return TASK_ACTIONS.map((action) => {
@@ -111,6 +112,22 @@ export function inputFor(id, task, project) {
   if (id === 'done') return aa && task.resultPending ? { needs: 'result', field: 'result', required: true } : null;
   if (!action?.needs) return null;
   return { needs: action.needs, field: action.field, required: aa && action.needs === 'reason' };
+}
+
+// The action a key does on a focused card or row, or in an open task drawer:
+// its entry from `availability`, or null when the key names no action that
+// applies to the task's column. A disabled entry is still returned, so a key
+// refuses with the same reason as the bar, the menu and a drag.
+export function actionForKey(key, entries) {
+  const action = TASK_ACTIONS.find((entry) => entry.key === key);
+  const entry = action && entries.find((candidate) => candidate.id === action.id);
+  return entry?.relevant ? entry : null;
+}
+
+// Whether a card can be dragged at all: some action that moves it to another
+// column can be done now.
+export function canMove(entries) {
+  return entries.some((entry) => entry.enabled && TASK_ACTIONS.find((action) => action.id === entry.id)?.to);
 }
 
 // The action that moves a task from one column to another, if there is one.

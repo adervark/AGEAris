@@ -1,5 +1,5 @@
-import { actionFor, actionRequest, availability, inputFor, projectKind, TASK_ACTIONS } from './actions.js';
-import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, sampleBadge, signalBadges, signalIndex, threadTag, waitingChip } from './cockpit.js';
+import { actionFor, actionForKey, actionRequest, availability, canMove, inputFor, projectKind, TASK_ACTIONS, WHY } from './actions.js';
+import { decisionsSummary, escape, formatAge, headline, healthDot, localId, metricButton, plural, boardStrip, renderActivity, renderEvidence, renderExplain, renderFlow, renderHome, renderMethod, renderThreads, renderTimeline, renderWorking, lifecycleBadge, sampleBadge, signalBadges, signalIndex, stateBehindNote, threadTag, waitingChip } from './cockpit.js';
 import { briefQuery, cursorFromBrief, readWindow, writeCursor, writeWindow } from './cursor.js';
 import { icon } from './icons.js';
 import { renderMarkdown } from './markdown.js';
@@ -20,7 +20,7 @@ const stageStatuses = { done: 'Done', active: 'Running', awaiting_approval: 'Nee
 const attemptStatuses = { queued: 'Queued', running: 'Running', awaiting_input: 'Waiting for a person', succeeded: 'Succeeded', failed: 'Failed', awaiting_approval: 'Awaiting approval', approved: 'Approved', rejected: 'Changes requested', cancelled: 'Cancelled' };
 // A project's tabs. It opens on its board.
 const LAYOUTS = { board: ['board', 'Board'], threads: ['route', 'Threads'], list: ['list', 'List'], flow: ['activity', 'Flow'], method: ['shield', 'Method'] };
-const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'home', layout: 'board', agentsTab: 'now', query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
+const state = { projects: [], tasks: [], runs: [], agents: [], operator: '', view: 'home', layout: 'board', agentsTab: 'now', limits: null, limitsError: '', limitsLoading: false, query: '', priority: '', status: '', owner: '', loading: true, runId: '', run: null, runError: null, decisionMode: '', decisionRun: '', drafts: {}, acting: false, authLost: false };
 const detailsOpen = new Map();
 // Decisions inbox: full runs fetched for rows opened inline, and which of them
 // show the request-changes form.
@@ -95,8 +95,24 @@ function projectOf(task) {
 
 // The full edit form, new tasks and the pipeline are for AGE Aris's own
 // projects; a tracked repository's tasks change only through task actions.
+// A deprecated or archived project is read-only.
 function writable(project) {
-  return Boolean(project) && !project.linked;
+  return Boolean(project) && !project.linked && !project.lifecycle;
+}
+
+// An archived project is shown only in the Projects page's Archived list and
+// on its own pages; everywhere else its tasks are left out too.
+function archived(project) {
+  return project?.lifecycle?.state === 'archived';
+}
+
+function listedProjects() {
+  return state.projects.filter((project) => !archived(project));
+}
+
+function listedTasks() {
+  const hidden = new Set(state.projects.filter(archived).map((project) => project.id));
+  return state.tasks.filter((task) => !hidden.has(task.projectId));
 }
 
 // What a tracked task's file adds to the task as listed (its Result still a
@@ -310,7 +326,7 @@ function render() {
 
 function renderNavigation() {
   const needs = cockpit.brief?.needsYou.length || 0;
-  const working = state.tasks.filter((task) => task.status === 'in_progress' || task.status === 'blocked').length;
+  const working = listedTasks().filter((task) => task.status === 'in_progress' || task.status === 'blocked').length;
   const counts = {
     home: needs ? `<span class="nav-count nav-count-alert" aria-label="${needs} need you">${needs}</span>` : '',
     working: working ? `<span class="nav-count" aria-label="${working} in progress or blocked">${working}</span>` : '',
@@ -320,9 +336,11 @@ function renderNavigation() {
     const on = active[view].includes(state.view);
     return `<a href="#${view}" class="nav-link ${on ? 'active' : ''}" ${state.view === view ? 'aria-current="page"' : ''}>${icon(symbol)}<span>${label}</span>${counts[view] || ''}</a>`;
   }).join('');
-  $('#project-navigation').innerHTML = state.projects.length ? state.projects.map((project) => {
+  const listed = listedProjects();
+  $('#project-navigation').innerHTML = listed.length ? listed.map((project) => {
     const health = briefLine(project.id)?.health;
-    return `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''} title="${escape(`${project.name}: ${health ? healthWord(health) : 'not computed yet'}`)}">${healthDot(health)}<span class="truncate">${escape(project.name)}</span></a>`;
+    const said = project.lifecycle ? 'deprecated' : health ? healthWord(health) : 'not computed yet';
+    return `<a href="#project/${escape(project.id)}" class="nav-link project-nav ${project.lifecycle ? 'is-deprecated' : ''} ${state.view === project.id ? 'active' : ''}" ${state.view === project.id ? 'aria-current="page"' : ''} title="${escape(`${project.name}: ${said}`)}">${healthDot(health)}<span class="truncate">${escape(project.name)}</span></a>`;
   }).join('') : '<p class="sidebar-empty">Your projects will appear here.</p>';
 }
 
@@ -330,7 +348,7 @@ function filteredTasks() {
   const project = selectedProject();
   const query = state.query.trim().toLowerCase();
   const ordered = { urgent: 0, high: 1, medium: 2, low: 3 };
-  return state.tasks.filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !ownerOf(task) : ownerOf(task) === state.owner)) && (!query || `${task.title} ${task.description} ${ownerOf(task)} ${task.claimNote || ''} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
+  return (project ? state.tasks : listedTasks()).filter((task) => (!project || task.projectId === project.id) && (!state.status || task.status === state.status) && (!state.priority || task.priority === state.priority) && (!state.owner || (state.owner === '__unassigned' ? !ownerOf(task) : ownerOf(task) === state.owner)) && (!query || `${task.title} ${task.description} ${ownerOf(task)} ${task.claimNote || ''} ${taskNumber(task)} ${state.projects.find((item) => item.id === task.projectId)?.name}`.toLowerCase().includes(query))).sort((a, b) => ordered[a.priority] - ordered[b.priority] || b.createdAt.localeCompare(a.createdAt));
 }
 
 // Re-rendering replaces #main, so keep what a person was doing: open <details>,
@@ -340,16 +358,25 @@ function focusSelector(element) {
   if (element.dataset.draft) return `[data-draft="${CSS.escape(element.dataset.draft)}"]${element.dataset.draftRun ? `[data-draft-run="${CSS.escape(element.dataset.draftRun)}"]` : ''}`;
   if (element.id) return `#${CSS.escape(element.id)}`;
   if (element.tagName === 'SUMMARY' && element.parentElement.dataset.key) return `details[data-key="${CSS.escape(element.parentElement.dataset.key)}"] > summary`;
-  if (element.dataset.action) return ['action', 'id', 'value', 'runAction'].filter((key) => element.dataset[key] !== undefined).map((key) => `[data-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}="${CSS.escape(element.dataset[key])}"]`).join('');
+  // A card's or row's own control, not a strip dot with the same data.
+  const owner = element.matches('.card-open, .card-menu, .task-row') ? `.${element.classList[0]}` : '';
+  if (element.dataset.action) return owner + ['action', 'id', 'value', 'runAction'].filter((key) => element.dataset[key] !== undefined).map((key) => `[data-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}="${CSS.escape(element.dataset[key])}"]`).join('');
   return '';
 }
 
 function renderMain() {
   const focus = focusSelector(document.activeElement);
+  // An open card menu survives a re-render: it opens again on the new card,
+  // with focus on the item that had it.
+  const menuFor = openMenu;
+  const menuItem = document.activeElement?.closest?.('.task-menu') ? document.activeElement.dataset.act : '';
+  openMenu = '';
   renderPage();
   $('#main').querySelectorAll('details[data-key]').forEach((details) => {
     if (detailsOpen.has(details.dataset.key)) details.open = detailsOpen.get(details.dataset.key);
   });
+  const menuButtonNow = menuFor && $('#main').querySelector(`.card-menu[data-id="${CSS.escape(menuFor)}"]`);
+  if (menuButtonNow) openTaskMenu(menuButtonNow, menuItem);
   if (focus && !$('#main').contains(document.activeElement)) $('#main').querySelector(focus)?.focus({ preventScroll: true });
 }
 
@@ -370,7 +397,7 @@ function renderPage() {
 
 // Everything in progress or blocked, on every board.
 function renderWorkingPage() {
-  $('#main').innerHTML = renderWorking({ tasks: state.tasks, projects: state.projects, brief: cockpit.brief });
+  $('#main').innerHTML = renderWorking({ tasks: listedTasks(), projects: listedProjects(), brief: cockpit.brief });
 }
 
 // All tasks across projects, or search results: one grouped list.
@@ -379,7 +406,7 @@ function renderTaskSearch() {
   const title = state.query ? 'Search results' : 'All tasks';
   const intro = state.query ? `Tasks matching “${state.query}”` : 'Every task in every project, grouped by state.';
   $('#main').innerHTML = `<section class="page-heading"><div><h1>${escape(title)}</h1><p>${escape(intro)}</p></div></section>
-    <div class="view-toolbar"><span class="board-meta">${escape(plural(tasks.length, 'task'))}${state.query ? ' found' : ''}</span><div class="filters">${filterControls(state.tasks)}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div></div>
+    <div class="view-toolbar"><span class="board-meta">${escape(plural(tasks.length, 'task'))}${state.query ? ' found' : ''}</span><div class="filters">${filterControls(listedTasks())}${state.status || state.priority || state.owner ? '<button class="text-button" data-action="clear-filters">Clear</button>' : ''}</div></div>
     ${taskList(tasks, { showProject: true })}`;
 }
 
@@ -388,12 +415,24 @@ function renderTaskSearch() {
 function renderProjectsPage() {
   const agents = agentsByProject();
   const width = mainWidth();
-  const boards = state.projects.map((project) => {
-    const line = briefLine(project.id) || { projectId: project.id, name: project.name, linked: project.linked, state: 'building', sentence: 'Reading this project’s history…' };
+  const boards = listedProjects().map((project) => {
+    const line = briefLine(project.id) || { projectId: project.id, name: project.name, linked: project.linked, lifecycle: project.lifecycle, state: 'building', sentence: 'Reading this project’s history…' };
     return boardStrip(line, { agents: agents.get(project.id) || 0, project, tasks: state.tasks.filter((task) => task.projectId === project.id), width });
   }).join('');
-  const open = state.tasks.filter((task) => task.status !== 'done').length;
-  $('#main').innerHTML = `<section class="page-heading"><div><h1>Projects</h1><p>Your own projects and the repositories you track, each with its flow and whether the work follows the method.</p></div><div class="heading-actions"><a class="button button-secondary" href="#work">${icon('tasks')}All tasks <span class="muted">${open} open</span></a><button class="button button-secondary" data-action="add-project">${icon('plus')}Add project</button></div></section><div class="home-boards">${boards}</div>`;
+  const open = listedTasks().filter((task) => task.status !== 'done').length;
+  $('#main').innerHTML = `<section class="page-heading"><div><h1>Projects</h1><p>Your own projects and the repositories you track, each with its flow and whether the work follows the method.</p></div><div class="heading-actions"><a class="button button-secondary" href="#work">${icon('tasks')}All tasks <span class="muted">${open} open</span></a><button class="button button-secondary" data-action="add-project">${icon('plus')}Add project</button></div></section><div class="home-boards">${boards}</div>${archivedList()}`;
+}
+
+// The archived projects, collapsed under the boards: each with when and why,
+// and a way back.
+function archivedList() {
+  const gone = state.projects.filter(archived);
+  if (!gone.length) return '';
+  const rows = gone.map((project) => {
+    const { since, reason } = project.lifecycle;
+    return `<li><a class="board-name" href="#project/${escape(project.id)}">${escape(project.name)}</a>${project.linked ? '<span class="readonly-badge">Tracked</span>' : ''}<span class="archived-why">${escape(`Archived${since ? ` ${formatDate(since)}` : ''}${reason ? `: ${reason}` : ''}`)}</span><button class="text-button project-settings" data-action="restore-project" data-id="${escape(project.id)}">Restore</button></li>`;
+  }).join('');
+  return `<details class="archived-projects"><summary>Archived <span class="muted">${gone.length}</span></summary><ul class="archived-list">${rows}</ul></details>`;
 }
 
 // --- A project: status, then the board; flow and method one tab away ----------
@@ -424,14 +463,28 @@ function mainWidth() {
 
 function projectHeader(project, line) {
   const where = project.linked
-    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}`
+    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed. On a board that names a <code>scratch:</code> folder, Done also releases the task's environment (rule 13), and AGE Aris does the same by itself at least an hour after an agent closes a task with git.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}${releaseNote(project)}`
     : project.description ? `<p class="project-where">${escape(project.description)}</p>` : '';
   const ready = line?.state === 'ready';
   const word = ready
     ? `<span class="project-health tone-${healthTone(line.health)}">${healthDot(line.health)}${metricButton({ projectId: project.id, metricId: 'health', display: healthWord(line.health), className: 'health-word', title: 'Which checks pass and fail' })}</span>`
     : `<span class="project-health">${healthDot(null)}<span class="health-word">${line?.state === 'unavailable' ? 'Unavailable' : 'Indexing'}</span></span>`;
+  if (archived(project)) return `<header class="project-header"><div class="project-title-row"><h1>${escape(project.name)}</h1>${lifecycleBadge(project.lifecycle)}${project.linked ? trackedBadge(project) : ''}<div class="project-actions">${projectActions(project)}</div></div>${lifecycleNote(project)}${where}</header>`;
   const status = !ready || line.health.level !== 'green' ? `<p class="project-status">${escape(headline(line) || 'Reading this project’s history…')}</p>` : '';
-  return `<header class="project-header"><div class="project-title-row"><h1>${escape(project.name)}</h1>${word}${project.linked ? trackedBadge(project) : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${where}${status}${figures(project, line)}${projectStrip(project, line)}</header>`;
+  return `<header class="project-header"><div class="project-title-row"><h1>${escape(project.name)}</h1>${word}${lifecycleBadge(project.lifecycle)}${project.linked ? trackedBadge(project) : ''}${sampleBadge(line?.sample)}<div class="project-actions">${projectActions(project)}</div></div>${lifecycleNote(project)}${where}${status}${figures(project, line)}${projectStrip(project, line)}</header>`;
+}
+
+// What a deprecated or archived project's header says: since when, why, what
+// replaces it, and that it is read-only until restored.
+function lifecycleNote(project) {
+  const lifecycle = project.lifecycle;
+  if (!lifecycle) return '';
+  const successor = lifecycle.successor && state.projects.find((entry) => entry.id === lifecycle.successor);
+  const word = lifecycle.state === 'archived' ? 'Archived' : 'Deprecated';
+  const why = `${word}${lifecycle.since ? ` ${escape(formatDate(lifecycle.since))}` : ''}${lifecycle.reason ? `: ${escape(lifecycle.reason)}` : ''}.`;
+  const instead = successor ? ` Work goes on in <a href="#project/${escape(successor.id)}">${escape(successor.name)}</a>.` : '';
+  const left = lifecycle.state === 'archived' ? ' It is left out of Home, the sidebar, All tasks, Working and Activity.' : ' It is left out of Needs you, Decisions and Activity across projects.';
+  return `<p class="window-note lifecycle-note" role="status">${icon('alert')}<span>${why}${instead}${left} Read-only until it is restored.</span></p>`;
 }
 
 // A project's flow strip, across the page.
@@ -475,19 +528,31 @@ function figures(project, line) {
 }
 
 function projectActions(project) {
+  if (project.lifecycle) {
+    const archive = project.lifecycle.state === 'deprecated' ? '<button class="text-button project-settings" data-action="archive-project">Archive</button>' : '';
+    const copy = project.linked ? `<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button>` : '';
+    return `${copy}<button class="text-button project-settings" data-action="restore-project" data-id="${escape(project.id)}">Restore</button>${archive}${project.linked ? '<button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>' : ''}`;
+  }
+  const retire = '<button class="text-button project-settings" data-action="deprecate-project">Deprecate</button><button class="text-button project-settings" data-action="archive-project">Archive</button>';
   if (project.linked) {
     const on = Boolean(project.actions?.on);
     const label = on ? `Task actions on, ${escape(project.actions.branch)}` : 'Task actions off';
     const title = on ? 'Switch task actions off: AGE Aris stops committing here' : (project.actions?.reason || 'Switch task actions on');
     const toggle = project.unavailable ? '' : `<button class="text-button project-settings" data-action="task-actions" aria-pressed="${on}" title="${escape(title)}">${icon('git')}${label}</button>`;
-    return `${toggle}<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button><button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
+    return `${toggle}<button class="text-button project-settings" data-action="copy-path" data-value="${escape(project.repository)}" title="Copy the repository path">${icon('git')}Copy path</button>${retire}<button class="text-button project-settings" data-action="unlink-project">Stop tracking</button>`;
   }
-  return `<button class="text-button project-settings" data-action="edit-project">${icon('edit')}Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>`;
+  return `<button class="text-button project-settings" data-action="edit-project">${icon('edit')}Edit project</button><button class="text-button project-settings" data-action="edit-pipeline">${icon('pipeline')}Pipeline</button>${retire}`;
 }
 
 // Task files in a tracked repository that could not be read; the rest of the
 // board is shown without them.
 function problemsNote(project) {
+  const behind = stateBehindNote(briefLine(project.id));
+  if (behind) return `${behind}${problemsNoteOnly(project)}`;
+  return problemsNoteOnly(project);
+}
+
+function problemsNoteOnly(project) {
   if (project.unavailable) return `<p class="window-note problems-note">${icon('alert')}<span>This repository cannot be read right now: ${escape(project.unavailable)} Its tasks show again once it can be read; Stop tracking removes it from AGE Aris.</span></p>`;
   const problems = project.problems || [];
   if (!problems.length) return '';
@@ -565,17 +630,28 @@ function holder(task) {
 // One task, one look: the same signals, holder and note on a card, a row, and
 // in the drawer.
 function taskCard(task) {
-  const project = projectOf(task);
-  const editable = writable(project) || Boolean(project?.actions?.on);
   const signal = signals().get(task.id);
   const footer = `${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${icon('calendar')}${escape(formatDate(task.dueDate))}</span>` : '<span></span>'}${holder(task) || (task.status === 'done' ? '' : '<span class="muted">Unclaimed</span>')}`;
-  return `<button class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-action="open-task" data-id="${escape(task.id)}" draggable="${editable}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}"><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span>${priorityBadge(task)}</span><span class="card-title">${escape(task.title)}</span>${task.status !== 'done' && (signal || placeOf(task)?.waitingOn.length || placeOf(task)?.thread) ? `<span class="card-signals">${signal ? signalBadges(signal) : ''}${waitingChip(placeOf(task))}${threadTag(placeOf(task))}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></button>`;
+  // The card is not itself a control: a stretched open button and the menu
+  // button sit side by side in it, so nothing interactive is nested.
+  return `<article class="task-card ${task.status === 'done' ? 'task-complete' : ''}" data-id="${escape(task.id)}"><button type="button" class="card-open" data-action="open-task" data-id="${escape(task.id)}" draggable="${canMove(actionsFor(task))}" aria-label="Open ${escape(taskNumber(task))}: ${escape(task.title)}" aria-keyshortcuts="${escape(taskKeys(task))}"></button><span class="card-top"><span class="task-number">${escape(taskNumber(task))}</span><span class="card-top-end">${priorityBadge(task)}${menuButton(task)}</span></span><span class="card-title">${escape(task.title)}</span>${task.status !== 'done' && (signal || placeOf(task)?.waitingOn.length || placeOf(task)?.thread) ? `<span class="card-signals">${signal ? signalBadges(signal) : ''}${waitingChip(placeOf(task))}${threadTag(placeOf(task))}</span>` : ''}${task.claimNote && task.status !== 'done' ? `<span class="card-description" title="The agent’s latest note">“${escape(task.claimNote)}”</span>` : ''}${runLine(task)}<span class="card-footer">${footer}</span></article>`;
+}
+
+// The "⋯" button that opens a card's or row's action menu (openTaskMenu).
+function menuButton(task) {
+  return `<button type="button" class="card-menu" data-action="task-menu" data-id="${escape(task.id)}" aria-haspopup="menu" aria-expanded="false" aria-label="Actions for ${escape(taskNumber(task))}" title="Actions (.)">${icon('more')}</button>`;
+}
+
+// The keys that act on a task from its card, row or drawer, for aria-keyshortcuts.
+function taskKeys(task) {
+  const entries = actionsFor(task);
+  return [...TASK_ACTIONS.filter((action) => entries.find((entry) => entry.id === action.id)?.relevant).map((action) => action.key), '.'].join(' ');
 }
 
 function taskRow(task, showProject) {
   const signal = signals().get(task.id);
   const project = showProject ? projectOf(task) : null;
-  return `<li><button class="task-row" data-action="open-task" data-id="${escape(task.id)}"><span class="task-number">${escape(taskNumber(task))}</span><span class="task-row-title" title="${escape(task.title)}">${escape(task.title)}${project ? `<small>${escape(project.name)}</small>` : ''}</span><span class="task-row-signals">${signal && task.status !== 'done' ? signalBadges(signal) : ''}${task.status !== 'done' ? waitingChip(placeOf(task)) : ''}${runLine(task)}</span><span class="task-row-owner">${holder(task) || '<span class="muted">—</span>'}</span><span class="task-row-when">${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${escape(formatDate(task.dueDate))}</span>` : escape(formatDate(task.createdAt))}</span></button></li>`;
+  return `<li class="task-row-item" data-id="${escape(task.id)}"><button class="task-row" data-action="open-task" data-id="${escape(task.id)}" aria-keyshortcuts="${escape(taskKeys(task))}"><span class="task-number">${escape(taskNumber(task))}</span><span class="task-row-title" title="${escape(task.title)}">${escape(task.title)}${project ? `<small>${escape(project.name)}</small>` : ''}</span><span class="task-row-signals">${signal && task.status !== 'done' ? signalBadges(signal) : ''}${task.status !== 'done' ? waitingChip(placeOf(task)) : ''}${runLine(task)}</span><span class="task-row-owner">${holder(task) || '<span class="muted">—</span>'}</span><span class="task-row-when">${task.dueDate ? `<span class="due-date ${overdue(task) ? 'is-overdue' : ''}">${escape(formatDate(task.dueDate))}</span>` : escape(formatDate(task.createdAt))}</span></button>${menuButton(task)}</li>`;
 }
 
 // Grouped by state; each group shows a page of rows and the rest on request.
@@ -713,11 +789,11 @@ function renderHomePage() {
   }
   if (!document.hidden && !homeShownAt) homeShownAt = Date.now();
   const tasks = new Map(state.tasks.map((task) => [task.id, task]));
-  $('#main').innerHTML = renderHome(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded, taskOf: (id) => tasks.get(id), agentsByProject: agentsByProject(), projects: state.projects, tasks: state.tasks, width: mainWidth() });
+  $('#main').innerHTML = renderHome(cockpit.brief, { mode: readWindow(storage()), expanded: cockpit.expanded, taskOf: (id) => tasks.get(id), agentsByProject: agentsByProject(), projects: listedProjects(), tasks: listedTasks(), width: mainWidth() });
 }
 
 function renderActivityPage() {
-  $('#main').innerHTML = renderActivity(cockpit.changes, { ...cockpit.changesFilter, projects: state.projects, timezone: cockpit.brief?.timezone });
+  $('#main').innerHTML = renderActivity(cockpit.changes, { ...cockpit.changesFilter, projects: listedProjects(), timezone: cockpit.brief?.timezone });
 }
 
 // Leaving Home after looking at it marks what it showed as seen.
@@ -826,7 +902,7 @@ function setupDialog(dialog) {
     const taskId = opener?.dataset?.action === 'open-task' ? opener.dataset.id : '';
     dialog.addEventListener('close', () => {
       if (document.querySelector('dialog[open]')) return;
-      const target = opener?.isConnected ? opener : taskId && $('#main').querySelector(`[data-action="open-task"][data-id="${CSS.escape(taskId)}"]`);
+      const target = opener?.isConnected ? opener : taskId && taskOpener(taskId);
       target?.focus({ preventScroll: true });
     }, { once: true });
     dialog.showModal();
@@ -834,6 +910,13 @@ function setupDialog(dialog) {
     // The content was swapped in place (a linked task): focus starts where a fresh open's would.
     dialog.querySelector('[autofocus], [data-close]')?.focus();
   }
+}
+
+// What opens a task on the page: its card or row, before any chart or strip
+// dot, which open it too and come first in the page.
+function taskOpener(taskId) {
+  const id = CSS.escape(taskId);
+  return $('#main').querySelector(`.card-open[data-id="${id}"], .task-row[data-id="${id}"]`) || $('#main').querySelector(`[data-action="open-task"][data-id="${id}"]`);
 }
 
 function anyDialogOpen() {
@@ -873,7 +956,7 @@ function openProjectEditor(project = null) {
 // Tracks an existing repository: AGE Aris reads its board and history.
 function openLinkEditor() {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. Nothing there changes unless you switch task actions on for it; then each claim, block or done is one commit of one task file, and the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
+  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. Nothing there changes unless you switch task actions on for it; then each claim, block or done is one commit of one task file, finished tasks' scratch folders and merged branches are released, and the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
   const form = $('#link-form');
   form.querySelector('[data-switch-new]').addEventListener('click', () => openProjectEditor());
   form.addEventListener('submit', async (event) => {
@@ -914,9 +997,20 @@ function openUnlinkDialog(project) {
   setupDialog(dialog);
 }
 
+// What AGE Aris's releases came to here since it started (rule 13), and what is
+// stuck and why: it deletes on its own here, so it says so.
+function releaseNote(project) {
+  const report = project.actions?.releases;
+  if (!report || (!report.released && !report.stuck.length)) return '';
+  const went = report.released ? `AGE Aris released the environments of ${report.released} finished ${report.released === 1 ? 'task' : 'tasks'} since it started; the record is <code>${escape(report.record)}</code>. ` : '';
+  const stuck = report.stuck.slice(0, 3).map((entry) => `${escape(entry.summary)}${entry.remedy ? ` <code>${escape(entry.remedy)}</code>` : ''}`).join(' ');
+  const more = report.stuck.length > 3 ? ` And ${report.stuck.length - 3} more.` : '';
+  return `<p class="window-note${report.stuck.length ? ' problems-note' : ''}" role="status">${icon(report.stuck.length ? 'alert' : 'activity')}<span>${went}${stuck}${more}</span></p>`;
+}
+
 // The switch for task actions on a tracked repository. Switching on shows
 // what it means there (the branch it pins, the identity, skipped hooks, other
-// worktrees, STATE.md), as the server lists it, and needs a confirmation;
+// worktrees, what Done releases, STATE.md), as the server lists it, and needs a confirmation;
 // switching off takes one click.
 async function switchTaskActions(project, button) {
   if (!project?.linked) return;
@@ -943,8 +1037,47 @@ async function switchTaskActions(project, button) {
   }
 }
 
-async function copyPath(path) {
-  try { await navigator.clipboard.writeText(path); toast('Repository path copied'); } catch { toast(path); }
+// Deprecating or archiving a project (T068): a reason, and for deprecating
+// the project that replaces it; then the server's confirmation of what it
+// means, as the task-actions switch asks for one.
+function openLifecycleDialog(project, target) {
+  if (!project) return;
+  const word = target === 'archived' ? 'Archive' : 'Deprecate';
+  const others = listedProjects().filter((entry) => entry.id !== project.id && !entry.lifecycle);
+  const successor = target === 'deprecated' && others.length
+    ? `<label class="field">Replaced by <span class="field-optional">optional</span><select name="successor"><option value="">None</option>${others.map((entry) => `<option value="${escape(entry.id)}">${escape(entry.name)}</option>`).join('')}</select></label>`
+    : '';
+  const dialog = $('#action-dialog');
+  dialog.innerHTML = `<form id="lifecycle-form">${dialogHeading(escape(project.name), `${word} ${escape(project.name)}?`, 'Close dialog')}<div class="dialog-fields"><label class="field">Why <span class="field-optional">optional</span><input name="reason" maxlength="200" placeholder="${target === 'archived' ? 'e.g. Finished in September' : 'e.g. Superseded by the new pipeline'}" autofocus></label>${successor}<p class="form-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Next</button></footer></form>`;
+  const form = $('#lifecycle-form');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    const lifecycle = { state: target, ...(data.reason?.trim() ? { reason: data.reason.trim() } : {}), ...(data.successor ? { successor: data.successor } : {}) };
+    closeDialog(dialog);
+    await setLifecycle(project, lifecycle);
+  });
+  setupDialog(dialog);
+}
+
+async function setLifecycle(project, lifecycle) {
+  const send = (confirm) => api(`/projects/${encodeURIComponent(project.id)}`, 'PATCH', { version: project.version, lifecycle, ...(confirm ? { confirm } : {}) });
+  try {
+    try { await send(); } catch (error) {
+      if (error.code !== 'CONFIRM') throw error;
+      const go = await confirmAction({ eyebrow: project.name, title: error.message, reasons: error.reasons || [], confirm: lifecycle.state === 'archived' ? 'Archive' : 'Deprecate' });
+      if (!go) return;
+      await send(error.confirmToken);
+    }
+    await refresh();
+    toast(lifecycle.state === 'active' ? `${project.name} is active again.` : `${project.name} is ${lifecycle.state}. Nothing was deleted; Restore brings it back.`);
+  } catch (error) {
+    toast(refusalText(error), true);
+  }
+}
+
+async function copyPath(path, what = 'Repository path') {
+  try { await navigator.clipboard.writeText(path); toast(`${what} copied`); } catch { toast(path); }
 }
 
 // The grouping key of a task type, as the server computes it: lowercased,
@@ -984,6 +1117,7 @@ function drawerTimeline(task, open) {
 function openTaskEditor(task = null, status = '') {
   if (task && !writable(projectOf(task))) return openTaskViewer(task);
   const here = selectedProject();
+  if (!task && here && here.lifecycle) return toast(`${WHY.inactive(here)}.`, true);
   if (!task && here && !writable(here)) return toast(`New tasks for ${here.name} are added in the repository; AGE Aris acts on the tasks already there.`, true);
   const choices = writableProjects();
   if (!task && !choices.length) return openAddProject();
@@ -1033,7 +1167,9 @@ function openTaskViewer(task) {
   const dialog = $('#task-dialog');
   const head = drawerHead(task, { editable: false });
   const actions = project?.actions;
-  const where = actions?.on
+  const where = project?.lifecycle
+    ? `${escape(WHY.inactive(project))}.`
+    : actions?.on
     ? `Commits to <code>${escape(actions.branch)}</code> in <code>${escape(project.repository)}</code> as ${escape(actions.operator || '')}; not pushed. Anything else about <code>${escape(task.file || taskNumber(task))}</code> changes in the repository, and AGE Aris picks it up.`
     : `${escape(actions?.reason || 'Task actions are off.')} Change <code>${escape(task.file || taskNumber(task))}</code> in <code>${escape(project?.repository || '')}</code> and AGE Aris picks the change up.`;
   dialog.innerHTML = `<div class="task-view" data-task="${escape(task.id)}">${head.heading}<div class="dialog-fields">${head.summary}${actionBar(task)}${drawerThread(task)}<section class="drawer-section"><h3>The task</h3><div id="task-body" data-task="${escape(task.id)}"><p class="muted">Reading the task file…</p></div></section><section class="drawer-section">${drawerTimeline(task, true)}</section><p class="readonly-note">${icon('git')}<span>${where}</span></p></div><footer class="dialog-footer"><button type="button" class="button button-secondary" data-close>Close</button></footer></div>`;
@@ -1125,7 +1261,27 @@ function refusalText(error) {
 // pushed, and any warning with its remedy.
 function committedText(action, task, result) {
   const done = `${action.aa?.done || action.done} ${taskNumber(task)}: ${result.commit.slice(0, 7)} on ${result.branch}, not pushed.`;
-  return [done, ...(result.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`)].join(' ');
+  return [done, ...(result.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`), releaseText(result.release)].filter(Boolean).join(' ');
+}
+
+// What a Done's release says (rule 13): nothing when the task held nothing.
+function releaseText(release) {
+  if (!release?.summary) return '';
+  return `${release.summary}${release.remedy ? ` ${release.remedy}` : ''}`;
+}
+
+// A release can outlast the Done's answer: asks how it went until it has ended,
+// then says so. Gives up quietly after the half hour a release may take.
+function followRelease(taskId, tries = 360) {
+  setTimeout(async () => {
+    let release = null;
+    try { release = (await api(`/tasks/${encodeURIComponent(taskId)}`)).release; } catch { /* asked again below */ }
+    if (release && release.state !== 'running') {
+      if (release.summary) toast(releaseText(release), release.state !== 'released', 12000);
+      return;
+    }
+    if (tries > 1) followRelease(taskId, tries - 1);
+  }, 5000);
 }
 
 // One confirmation for an action, listing every reason it needs one. Resolves
@@ -1169,7 +1325,7 @@ async function performAction(id, taskId, { input, confirm } = {}) {
   if (asks && input === undefined) {
     if (drawerTaskId() !== taskId) {
       // Focus goes back to this task's card when the drawer closes.
-      $('#main').querySelector(`[data-action="open-task"][data-id="${CSS.escape(taskId)}"]`)?.focus({ preventScroll: true });
+      taskOpener(taskId)?.focus({ preventScroll: true });
       openTask(taskId);
     }
     return showActionInput(id, task);
@@ -1207,7 +1363,8 @@ async function performAction(id, taskId, { input, confirm } = {}) {
   setBarBusy(false);
   const done = tracked && result ? committedText(action, task, result) : action.done;
   if (failure) toast(failure, true);
-  else toast(refreshed ? done : `${done}, but AGE Aris could not refresh. Use the refresh button.`, false, result?.warnings?.length ? 12000 : 0);
+  else toast(refreshed ? done : `${done}, but AGE Aris could not refresh. Use the refresh button.`, false, result?.warnings?.length || result?.release?.summary ? 12000 : 0);
+  if (result?.release?.state === 'running') followRelease(taskId);
   // Only a drawer still showing this task follows it; one closed meanwhile stays closed.
   if (drawerTaskId() !== taskId) return;
   const fresh = state.tasks.find((candidate) => candidate.id === taskId);
@@ -1228,7 +1385,8 @@ async function performAction(id, taskId, { input, confirm } = {}) {
     const bar = $('#task-dialog .action-bar');
     (bar.querySelector(`[data-act="${id}"]:not([aria-disabled])`) || bar.querySelector('.action-button:not([aria-disabled])') || $('#task-dialog-title')).focus();
     // Warnings stay in the drawer after the toast has gone.
-    if (result?.warnings?.length) $('#action-note').textContent = result.warnings.map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`).join(' ');
+    const notes = [...(result?.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`), releaseText(result?.release), ...(result?.release?.lines || [])].filter(Boolean);
+    if (notes.length) $('#action-note').textContent = notes.join(' ');
   }
   if (failure) $('#action-error').textContent = failure;
 }
@@ -1399,11 +1557,14 @@ function runRow(run) {
 }
 
 function renderDecisions() {
-  const waiting = state.runs.filter((run) => run.needsHuman);
-  const moving = state.runs.filter((run) => !run.needsHuman && isActiveRun(run));
-  const recent = state.runs.filter((run) => !run.needsHuman && !isActiveRun(run)).slice(0, 20);
+  // A deprecated or archived project's runs are on its own pages only.
+  const inactive = new Set(state.projects.filter((project) => project.lifecycle).map((project) => project.id));
+  const runs = state.runs.filter((run) => !inactive.has(run.projectId));
+  const waiting = runs.filter((run) => run.needsHuman);
+  const moving = runs.filter((run) => !run.needsHuman && isActiveRun(run));
+  const recent = runs.filter((run) => !run.needsHuman && !isActiveRun(run)).slice(0, 20);
   const section = (key, title, runs, empty, row = runRow) => `<section class="run-section run-section-${key}" aria-labelledby="runs-${key}"><div class="section-heading"><h2 id="runs-${key}" tabindex="-1">${title}</h2><span class="${key === 'waiting' && runs.length ? 'count-alert' : ''}">${runs.length}</span></div>${runs.length ? `<ol class="run-list">${runs.map(row).join('')}</ol>` : `<p class="run-empty">${empty}</p>`}</section>`;
-  const body = state.runs.length
+  const body = runs.length
     ? `${section('waiting', 'Waiting on you', waiting, `${icon('check')}Nothing is waiting on you.`, (run) => (inlineDecision(run) ? inboxItem(run) : runRow(run)))}${section('moving', 'In progress', moving, 'No runs are moving right now.')}${section('recent', 'Recent', recent, 'Finished runs will appear here.')}`
     : `<div class="empty-results">${icon('pipeline')}<h2>No agent runs yet</h2><p>Open a task and choose Run with agents. Runs that need you will wait here.</p><a class="button button-secondary" href="#work">Go to work</a></div>`;
   $('#main').innerHTML = `<section class="page-heading"><div><h1>Decisions</h1><p>Runs waiting on you come first. Expand an approval or a request for input to answer it here, or open the run for the full record.</p>${decisionsSummary(cockpit.brief)}</div></section>${body}`;
@@ -1959,9 +2120,135 @@ function actingApplies(agent, role) {
 
 // Agents: the sessions working on the boards now, and the pipeline's agents.
 function renderAgents() {
-  const tabs = [['now', 'Working now'], ['pipeline', 'Pipeline agents']].map(([value, label]) => `<button class="view-tab ${state.agentsTab === value ? 'selected' : ''}" data-action="agents-tab" data-value="${value}" aria-pressed="${state.agentsTab === value}">${label}</button>`).join('');
-  const heading = `<section class="page-heading"><div><h1>Agents</h1><p>Who is doing the work: the agent sessions holding tasks on each board, and the agents the pipeline routes stages to.</p></div>${state.agentsTab === 'pipeline' ? `<button class="button button-secondary" data-action="add-agent">${icon('plus')}Add agent</button>` : ''}</section><div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Agents view">${tabs}</div></div>`;
-  $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : workingNow());
+  const tabs = [['now', 'Working now'], ['pipeline', 'Pipeline agents'], ['limits', 'Account limits']].map(([value, label]) => `<button class="view-tab ${state.agentsTab === value ? 'selected' : ''}" data-action="agents-tab" data-value="${value}" aria-pressed="${state.agentsTab === value}">${label}</button>`).join('');
+  const heading = `<section class="page-heading"><div><h1>Agents</h1><p>Who is doing the work: the agent sessions holding tasks on each board, the agents the pipeline routes stages to, and how much each Claude account has left.</p></div>${state.agentsTab === 'pipeline' ? `<button class="button button-secondary" data-action="add-agent">${icon('plus')}Add agent</button>` : ''}${state.agentsTab === 'limits' ? `<button class="button button-secondary" data-action="read-limits" ${state.limitsLoading ? 'disabled' : ''}>${icon('activity')}${state.limitsLoading ? 'Reading…' : 'Read again'}</button>` : ''}</section><div class="view-toolbar has-tabs"><div class="view-tabs" role="group" aria-label="Agents view">${tabs}</div></div>`;
+  $('#main').innerHTML = heading + (state.agentsTab === 'pipeline' ? pipelineAgents() : state.agentsTab === 'limits' ? accountLimits() : workingNow());
+}
+
+// Every page reads /api/limits when it loads and every 30 seconds while it is
+// in sight; the strip under the top bar and the Account limits tab show the
+// same reading. The server holds each account's reading for 55 seconds, and
+// longer after Anthropic answers 429, so this never asks Anthropic more often
+// than that; Read again asks past the hold, at most every 30 seconds.
+const LIMITS_POLL_MS = 30000;
+let limitsRequest = null;
+
+function loadLimits(refresh = false) {
+  if (limitsRequest) return limitsRequest;
+  if (refresh) {
+    state.limitsLoading = true;
+    if (state.view === 'agents') renderMain();
+  }
+  limitsRequest = api(`/limits${refresh ? '?refresh=1' : ''}`).then((limits) => {
+    state.limits = limits;
+    state.limitsError = '';
+  }, (error) => {
+    state.limitsError = error.message;
+  }).finally(() => {
+    limitsRequest = null;
+    state.limitsLoading = false;
+    renderLimitsStrip();
+    if (state.view === 'agents' && state.agentsTab === 'limits' && (refresh || !refreshPaused())) renderMain();
+  });
+  return limitsRequest;
+}
+
+// A reset in a few characters, for the strip: 47m, 4h 17m, Thu 14:00.
+function shortReset(iso) {
+  if (!iso) return 'no window open';
+  const minutes = Math.round((new Date(iso).getTime() - Date.now()) / 60000);
+  if (!Number.isFinite(minutes)) return '';
+  if (minutes <= 0) return 'now';
+  if (minutes < 60) return `${minutes}m`;
+  if (minutes < 24 * 60) return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+  return new Date(iso).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+}
+
+// A time of day, with the weekday when it is not today: 22:19, Thu 13:59.
+function clockTime(iso) {
+  const date = new Date(iso);
+  const today = date.toDateString() === new Date().toDateString();
+  return date.toLocaleString(undefined, today ? { hour: 'numeric', minute: '2-digit' } : { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+}
+
+// When a window began and ends: the 5-hour one by time of day, a week by date.
+// A 5-hour window opens with the first message after the last one closed, so
+// with none open the next message starts one.
+function windowSpan(key, window) {
+  if (!window.resetsAt) return key === 'session' ? 'No 5-hour window open: the next message starts one' : 'No window open';
+  if (key === 'session') return `Window ${clockTime(window.beganAt)}–${clockTime(window.resetsAt)} · ${resetText(window.resetsAt)}`;
+  const day = (iso) => new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  return `Week ${day(window.beganAt)} – ${day(window.resetsAt)}`;
+}
+
+const nextRead = (account) => (account.nextReadAt ? `; next read ${clockTime(account.nextReadAt)}` : '');
+
+const STRIP_WINDOWS = [['session', '5h', 'Session (5 hours)'], ['weekly', 'Week', 'Weekly'], ['weeklyOpus', 'Opus', 'Weekly, Opus'], ['weeklySonnet', 'Sonnet', 'Weekly, Sonnet']];
+
+// Every account and every window it has, on every page. An account that
+// cannot be read says why, beside its last good reading.
+function renderLimitsStrip() {
+  const strip = $('#limits-strip');
+  const accounts = state.limits?.accounts || [];
+  if (!accounts.length) {
+    strip.hidden = !state.limitsError;
+    strip.innerHTML = state.limitsError ? `<span class="ls-error">Account limits: ${escape(state.limitsError)}</span>` : '';
+    return;
+  }
+  strip.hidden = false;
+  strip.innerHTML = accounts.map((account) => {
+    const windows = STRIP_WINDOWS.filter(([key]) => account.windows?.[key]).map(([key, short, long]) => {
+      const window = account.windows[key];
+      const used = Math.min(100, Math.max(0, window.percent));
+      const reset = key === 'session' ? (window.resetsAt ? `to ${clockTime(window.resetsAt)} · ${shortReset(window.resetsAt)}` : 'not started') : shortReset(window.resetsAt);
+      return `<span class="ls-window ${limitTone(window.percent)}" title="${escape(`${long}: ${window.percent}% used. ${windowSpan(key, window)}`)}"><span class="ls-label">${escape(short)}</span><svg class="ls-bar" viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="4" rx="2"></rect><rect class="limit-fill" width="${used}" height="4" rx="2"></rect></svg><strong>${escape(String(window.percent))}%</strong><small>${escape(reset)}</small></span>`;
+    }).join('');
+    const note = account.state === 'ok' ? '' : `<span class="ls-note ${account.state === 'expired' ? 'tone-wait' : account.state === 'error' ? 'tone-fail' : 'tone-idle'}" title="${escape(account.reason + nextRead(account))}">${escape({ expired: 'token expired', error: 'not read', 'no token': 'no token' }[account.state] || account.state)}${account.stale ? ', last reading' : ''}</span>`;
+    const best = account.profile === state.limits.mostLeft ? '<span class="ls-best">most left</span>' : '';
+    return `<span class="ls-account${account.state === 'ok' ? '' : ' is-stale'}"><span class="ls-who"><b>${escape(account.profile)}</b>${best}${note}</span><span class="ls-windows">${windows}</span></span>`;
+  }).join('');
+}
+
+function resetText(iso) {
+  if (!iso) return 'no window open';
+  const minutes = Math.round((new Date(iso).getTime() - Date.now()) / 60000);
+  if (!Number.isFinite(minutes)) return '';
+  if (minutes <= 0) return 'resets now';
+  if (minutes < 60) return `resets in ${minutes}m`;
+  if (minutes < 24 * 60) return `resets in ${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+  return `resets ${new Date(iso).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`;
+}
+
+const LIMIT_WINDOWS = [['session', 'Session (5 hours)'], ['weekly', 'Weekly'], ['weeklyOpus', 'Weekly, Opus'], ['weeklySonnet', 'Weekly, Sonnet']];
+
+function limitTone(percent) {
+  return percent >= 90 ? 'tone-fail' : percent >= 70 ? 'tone-wait' : 'tone-done';
+}
+
+// One bar per window. An SVG's width attribute, not a style: the page's CSP
+// allows no inline styles.
+function limitMeter(key, label, window) {
+  const used = Math.min(100, Math.max(0, window.percent));
+  return `<div class="limit-meter ${limitTone(window.percent)}"><div class="limit-label"><span>${escape(label)}</span><strong>${escape(String(window.percent))}% used</strong></div><svg class="limit-bar" viewBox="0 0 100 6" preserveAspectRatio="none" aria-hidden="true"><rect class="limit-track" width="100" height="6" rx="3"></rect><rect class="limit-fill" width="${used}" height="6" rx="3"></rect></svg><small>${escape(windowSpan(key, window))}</small></div>`;
+}
+
+function accountLimits() {
+  if (!state.limits) {
+    if (state.limitsError) return `<div class="empty-results">${icon('agent')}<h2>The limits could not be read</h2><p>${escape(state.limitsError)}</p></div>`;
+    return `<div class="empty-results">${icon('agent')}<h2>Reading each account’s limits…</h2></div>`;
+  }
+  const { accounts, mostLeft } = state.limits;
+  if (!accounts.length) return `<div class="empty-results">${icon('agent')}<h2>No Claude account found</h2><p>AGE Aris looks for Claude Code config folders in your home folder: ~/.claude and ~/.claude-&lt;profile&gt;.</p></div>`;
+  const rows = accounts.map((account) => {
+    const windows = LIMIT_WINDOWS.filter(([key]) => account.windows?.[key]).map(([key, label]) => limitMeter(key, label, account.windows[key])).join('');
+    const status = account.state === 'ok'
+      ? `<span class="chip ${limitTone(100 - account.left)}">${escape(String(account.left))}% left</span>${account.profile === mostLeft ? '<span class="chip tone-run">Most left</span>' : ''}`
+      : `<span class="chip ${account.state === 'expired' ? 'tone-wait' : account.state === 'error' ? 'tone-fail' : 'tone-idle'}">${escape({ expired: 'Token expired', error: 'Not read', 'no token': 'No token' }[account.state] || account.state)}</span>`;
+    const ago = account.readAt ? relativeTime(account.readAt) : '';
+    const when = ago ? `${account.stale ? 'Last good reading ' : 'Read '}${escape(ago === 'Just now' ? 'just now' : ago)}` : '';
+    return `<li class="session-row limit-row"><div class="session-who"><strong>${escape(account.profile)}</strong><small>${escape(account.folder)}${account.plan ? ` · ${escape(account.plan)}` : ''}</small></div><div class="session-work">${account.reason ? `<p class="session-note">${escape(account.reason + nextRead(account))}</p>` : ''}${windows ? `<div class="limit-meters">${windows}</div>` : ''}</div><div class="session-state">${status}<span>${when}</span></div></li>`;
+  }).join('');
+  return `<p class="flow-intro">How much of each Claude account’s session and weekly limits is used, read from Anthropic with each account’s own sign-in. An expired token is renewed the way Claude Code renews it, and the renewed sign-in is saved back in that profile. Agents read the same numbers from <code>/api/limits</code> and <code>/aa limits</code>.</p>${state.limitsError ? `<p class="form-error" role="alert">${escape(state.limitsError)}</p>` : ''}<ul class="session-list">${rows}</ul>`;
 }
 
 // One row per agent session holding work: what it holds, its latest note, and
@@ -2218,6 +2505,108 @@ async function openPipelineEditor(project) {
   });
 }
 
+// --- The card menu and the keyboard map ---------------------------------------
+// A card's or row's "⋯" opens the same actions as the drawer's bar, from the
+// same registry, with the same refusals. The keys c b u d r p a (TASK_ACTIONS'
+// `key`) do them on a focused card or row and in an open drawer; `.` or the
+// ContextMenu key opens the menu.
+
+let openMenu = '';
+
+function openTaskMenu(button, focusAct = '') {
+  closeTaskMenu(false);
+  const task = state.tasks.find((entry) => entry.id === button.dataset.id);
+  if (!task) return;
+  const items = actionsFor(task).filter((entry) => entry.relevant).map((entry) => {
+    const action = TASK_ACTIONS.find((candidate) => candidate.id === entry.id);
+    const why = `menu-why-${entry.id}`;
+    return `<button type="button" role="menuitem" tabindex="-1" class="menu-item" data-action="act" data-act="${entry.id}" data-id="${escape(task.id)}" aria-label="${escape(entry.label)}" aria-keyshortcuts="${action.key}" ${entry.enabled ? '' : `aria-disabled="true" aria-describedby="${why}"`}>${icon(action.icon)}<span class="menu-label">${escape(entry.label)}</span><kbd aria-hidden="true">${action.key}</kbd>${entry.enabled ? '' : `<small class="menu-why" id="${why}">${escape(entry.why)}</small>`}</button>`;
+  }).join('');
+  button.insertAdjacentHTML('afterend', `<div class="task-menu" role="menu" aria-label="Actions for ${escape(taskNumber(task))}">${items || '<button type="button" role="menuitem" tabindex="-1" class="menu-item" aria-disabled="true">Nothing to do here</button>'}</div>`);
+  button.setAttribute('aria-expanded', 'true');
+  openMenu = task.id;
+  const menu = button.nextElementSibling;
+  // Opened upward when the board would clip it below and there is more room above.
+  const box = (button.closest('.board, .task-rows') || document.documentElement).getBoundingClientRect();
+  const bottom = Math.min(box.bottom, window.innerHeight);
+  const rect = menu.getBoundingClientRect();
+  const above = button.getBoundingClientRect().top - Math.max(box.top, 0);
+  if (rect.bottom > bottom && above > bottom - rect.top) menu.classList.add('opens-up');
+  (focusAct && menu.querySelector(`.menu-item[data-act="${focusAct}"]`) || menu.querySelector('.menu-item:not([aria-disabled])') || menu.querySelector('.menu-item'))?.focus();
+}
+
+// Closing returns focus to the menu button when asked to (Esc, a choice).
+function closeTaskMenu(returnFocus) {
+  const menu = $('#main').querySelector('.task-menu');
+  if (!menu) { openMenu = ''; return; }
+  // Cleared first: removing the menu blurs its item, and focusout must not close it twice.
+  openMenu = '';
+  const button = menu.previousElementSibling;
+  button?.setAttribute('aria-expanded', 'false');
+  if (returnFocus) button?.focus({ preventScroll: true });
+  menu.remove();
+}
+
+function moveInMenu(menu, key) {
+  const items = [...menu.querySelectorAll('.menu-item')];
+  if (!items.length) return;
+  const at = items.indexOf(document.activeElement);
+  const next = key === 'Home' ? 0 : key === 'End' ? items.length - 1 : (at + (key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+  items[next].focus();
+}
+
+// The task a key acts on: the drawer's, while it is the dialog on top and
+// focus is in it; otherwise the focused card's or row's.
+function keyedTask(event) {
+  if ($('#task-dialog').open) return $('#task-dialog').contains(event.target) && !document.querySelector('dialog[open]:not(#task-dialog)') ? drawerTaskId() : '';
+  if (anyDialogOpen()) return '';
+  return event.target.closest?.('.task-card, .task-row-item')?.dataset.id || '';
+}
+
+function onTaskKey(event) {
+  if (event.ctrlKey || event.metaKey || event.altKey || event.target.closest?.('input, textarea, select, [contenteditable]')) return;
+  const menu = event.target.closest?.('.task-menu');
+  if (menu && ['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) { event.preventDefault(); return moveInMenu(menu, event.key); }
+  // stopImmediate: the page's own Escape (closing the sidebar) is on document too.
+  if (menu && event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); return closeTaskMenu(true); }
+  const taskId = keyedTask(event);
+  const task = taskId && state.tasks.find((entry) => entry.id === taskId);
+  if (!task) return;
+  // The ContextMenu key and Shift+F10 arrive as a contextmenu event (below).
+  if (event.key === '.') {
+    event.preventDefault();
+    if ($('#task-dialog').open) return $('#task-dialog .action-bar .action-button')?.focus();
+    const button = event.target.closest('.task-card, .task-row-item').querySelector('.card-menu');
+    return openMenu === taskId ? closeTaskMenu(true) : openTaskMenu(button);
+  }
+  const entry = actionForKey(event.key.length === 1 ? event.key.toLowerCase() : event.key, actionsFor(task));
+  if (!entry) return;
+  event.preventDefault();
+  if (menu) closeTaskMenu(true);
+  performAction(entry.id, taskId);
+}
+document.addEventListener('keydown', onTaskKey);
+// A menu closes when focus or a click goes elsewhere.
+document.addEventListener('click', (event) => { if (openMenu && !event.target.closest('.task-menu, .card-menu')) closeTaskMenu(false); });
+// Leaving the window keeps it open.
+$('#main').addEventListener('focusout', (event) => {
+  if (openMenu && event.target.closest('.task-menu') && !event.relatedTarget?.closest?.('.task-menu, .card-menu')) {
+    setTimeout(() => { if (document.hasFocus() && !document.activeElement?.closest?.('.task-menu')) closeTaskMenu(false); });
+  }
+});
+// Safari and Firefox on macOS do not focus a clicked button: pressing an item
+// would blur the menu, and close it, before the click lands.
+$('#main').addEventListener('mousedown', (event) => {
+  if (openMenu && event.target.closest('.task-menu, .card-menu[aria-expanded="true"]')) event.preventDefault();
+});
+// A right click, the ContextMenu key or Shift+F10 on a card or row opens its menu.
+$('#main').addEventListener('contextmenu', (event) => {
+  const holder = event.target.closest('.task-card, .task-row-item');
+  if (!holder || event.target.closest('.task-menu')) return;
+  event.preventDefault();
+  if (openMenu !== holder.dataset.id) openTaskMenu(holder.querySelector('.card-menu'));
+});
+
 // A column change is the action that makes it. Block asks (optionally) what
 // would unblock the task.
 function moveTask(id, status) {
@@ -2255,9 +2644,20 @@ function setLayout(layout) {
 // the same wherever it is and a linked task swaps the drawer's content in place.
 function onAction(event) {
   const target = event.target.closest('[data-action]');
+  // A card's chips sit above its open button, for their tooltips; a click on one opens the task.
+  if (!target && event.target.closest('.task-card .card-signals, .task-card .card-description')) return openTask(event.target.closest('.task-card').dataset.id);
   if (!target) return;
   switch (target.dataset.action) {
-    case 'act': if (target.getAttribute('aria-disabled') === 'true') $('#action-note').textContent = target.nextElementSibling?.textContent || ''; else performAction(target.dataset.act, target.dataset.id); break;
+    case 'act': {
+      // From a card's menu the menu closes first, and a disabled item says why as a bar's button does.
+      const fromMenu = Boolean(target.closest('.task-menu'));
+      if (fromMenu) closeTaskMenu(true);
+      if (target.getAttribute('aria-disabled') !== 'true') performAction(target.dataset.act, target.dataset.id);
+      else if (fromMenu) toast(target.querySelector('.menu-why')?.textContent || '', true);
+      else $('#action-note').textContent = target.nextElementSibling?.textContent || '';
+      break;
+    }
+    case 'task-menu': if (openMenu === target.dataset.id) closeTaskMenu(true); else openTaskMenu(target); break;
     case 'act-confirm': performAction(target.dataset.act, target.dataset.id, { input: $('#action-slot [data-action-input]').value }); break;
     case 'act-cancel': closeActionInput(target.dataset.act); break;
     case 'new-project': openProjectEditor(); break;
@@ -2268,15 +2668,18 @@ function onAction(event) {
     case 'mark-seen': markSeen(); break;
     case 'toggle-delta': toggleExpanded(target.dataset.value); break;
     case 'add-project': openAddProject(); break;
-    case 'copy-path': copyPath(target.dataset.value); break;
+    case 'copy-path': copyPath(target.dataset.value, target.dataset.copied); break;
     case 'agents-tab': state.agentsTab = target.dataset.value; renderMain(); break;
-    case 'open-project': navigate(target.dataset.id); break;
+    case 'read-limits': loadLimits(true); break;
     case 'layout': setLayout(target.dataset.value); break;
     case 'clear-filters': state.priority = ''; state.status = ''; state.owner = ''; state.query = ''; $('#search').value = ''; renderMain(); break;
     case 'sample-project': createSample(target); break;
     case 'link-project': openLinkEditor(); break;
     case 'unlink-project': openUnlinkDialog(selectedProject()); break;
     case 'task-actions': switchTaskActions(selectedProject(), target); break;
+    case 'deprecate-project': openLifecycleDialog(selectedProject(), 'deprecated'); break;
+    case 'archive-project': openLifecycleDialog(selectedProject(), 'archived'); break;
+    case 'restore-project': { const project = state.projects.find((entry) => entry.id === target.dataset.id); if (project) setLifecycle(project, { state: 'active' }); break; }
     case 'open-run': closeDialog($('#task-dialog')); openRun(target.dataset.id); break;
     case 'edit-pipeline': openPipelineEditor(selectedProject()); break;
     case 'add-agent': openAgentEditor(); break;
@@ -2332,6 +2735,8 @@ $('#main').addEventListener('dragstart', (event) => {
   const card = event.target.closest('.task-card');
   if (!card) return;
   draggedId = card.dataset.id;
+  // The drag starts on the stretched, empty open button: show the card.
+  event.dataTransfer.setDragImage(card, event.offsetX, event.offsetY);
   event.dataTransfer.setData('text/plain', draggedId);
   event.dataTransfer.effectAllowed = 'move';
   card.classList.add('dragging');
@@ -2432,7 +2837,7 @@ function editingMain() {
 }
 
 function refreshPaused() {
-  return state.authLost || document.hidden || refreshing || state.acting || draggedId || anyDialogOpen() || editingMain();
+  return state.authLost || document.hidden || refreshing || state.acting || draggedId || openMenu || anyDialogOpen() || editingMain();
 }
 
 setInterval(() => {
@@ -2464,6 +2869,16 @@ new ResizeObserver(() => {
   }, 150);
 }).observe($('#main'));
 document.addEventListener('visibilitychange', () => { if (!document.hidden && !refreshing && !state.authLost && !editingMain()) refresh().catch(monitorOffline); });
+setInterval(() => { if (!document.hidden && !state.authLost) loadLimits(); }, LIMITS_POLL_MS);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && !state.authLost) loadLimits(); });
+// The strip opens the Agents page on its Account limits tab.
+$('#limits-strip').addEventListener('click', (event) => {
+  event.preventDefault();
+  state.agentsTab = 'limits';
+  if (state.view === 'agents') renderMain();
+  else navigate('agents');
+});
+loadLimits();
 
 lastView = state.view;
 refresh().catch((error) => {

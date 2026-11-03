@@ -1,0 +1,39 @@
+{
+ "questions": 8,
+ "claims": 254,
+ "claimsPerLane": {
+  "9": 61,
+  "10": 87,
+  "11": 24,
+  "12": 52,
+  "13": 30
+ },
+ "claimsPerQuestion": {
+  "L9.Q1": 61,
+  "L9.Q2": 0,
+  "L10.Q1": 87,
+  "L11.Q1": 24,
+  "L11.Q2": 0,
+  "L12.Q1": 52,
+  "L13.Q1": 30,
+  "L13.Q2": 0
+ },
+ "unmarked": 67,
+ "withVerdict": 7,
+ "decisions": 34,
+ "sources": {
+  "verified": 18,
+  "lineOutOfRange": 0,
+  "ignoredOrUntracked": 3,
+  "ambiguous": 0,
+  "missing": 1
+ },
+ "warnings": {
+  "uncovered": 4,
+  "unbacked": 17,
+  "contradiction-about": 2,
+  "where-missing": 1,
+  "source-missing": 1,
+  "registered-late": 1
+ }
+}

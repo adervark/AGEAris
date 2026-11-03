@@ -1,0 +1,909 @@
+{"kind":"audit","clause":"R1#1","finding":"missed","why":"title asserts the starting point: public LB 0.926, target 0.960","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#5","finding":"ok","why":"pointer to the next document; asserts nothing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#9","finding":"ok","why":"describes what this document does; no claim about the world","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#11","finding":"ok","why":"legend: defines the READ evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#12","finding":"ok","why":"legend: defines the MEASURED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#13","finding":"ok","why":"legend: defines the REPRODUCED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#14","finding":"ok","why":"legend: defines the INFERRED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#16","finding":"missed","why":"heading asserts the section's evidence status: lane 0, READ from primary pages","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#18","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#19","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#20","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#21","finding":"missed","why":"row-subject cell holding a value (rank 20) that completes the row's claim top-20 >= 0.946","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#26","finding":"ok","why":"row label with no value; the value sits in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#28","finding":"ok","why":"row label with no value; the value sits in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#31","finding":"ok","why":"row label with no value; the value sits in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#34","finding":"ok","why":"row label with no value; the value sits in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#38","finding":"ok","why":"row label with no value; the value sits in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#41","finding":"ok","why":"row label with no value; the value sits in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#45","finding":"ok","why":"row label with no value; the value sits in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#51","finding":"missed","why":"gap arithmetic: +0.020 to the current top 20","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#55","finding":"missed","why":"thread 735304's 0.938 single model is #1 on the efficiency board; 0.934 -> 0.942 at 5-fold 224 px","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#61","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#62","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#92","finding":"missed","why":"heading asserts evidence status: the defects were REPRODUCED by reading the code (lane 2)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#107","finding":"missed","why":"heading asserts the target-side result was REPRODUCED (lane 4)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#115","finding":"missed","why":"heading asserts the measurement numbers are MEASURED (lane 3)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#130","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#131","finding":"missed","why":"asserts the evidence class of every expected magnitude in the table: INFERRED unless marked","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#133","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#134","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#135","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#136","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#137","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#142","finding":"missed","why":"cost cell of lever 1: 1 submission, 0 training","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#160","finding":"ok","why":"repeat: FOV spread 1.39x stated at line 67 (magnification varies 1.39x)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#179","finding":"missed","why":"expected gain of lever 7: +0.002 to +0.006 as an ensemble arm","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#182","finding":"missed","why":"cost of lever 7: T025, 3-4 h per fold","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#195","finding":"ok","why":"repeat: 'a 0.926 team is rank 22' stated verbatim at line 32","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#200","finding":"missed","why":"lever 10 numbers: +0.030 coverage for 2.6x wall clock","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#205","finding":"missed","why":"names 384/448 px before the mm crop as a lever measured null or negative","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#211","finding":"missed","why":"evidence cell: attributes the null/negative findings to lanes 1, 3, 4, 5","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#212","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#232","finding":"ok","why":"heading naming the section and its source; no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#236","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#237","finding":"missed","why":"header cell embeds a value: 30 Kaggle hours per week","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#239","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#269","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#273","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R1#274","finding":"missed","why":"plan claim: T039's scope is fix both tta.py bugs, a smoke-test guard, re-score the 22 locally, submit once","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#6","finding":"ok","why":"legend: defines the READ evidence mark, as in RESEARCH-0902","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#7","finding":"ok","why":"legend: defines the MEASURED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#8","finding":"ok","why":"legend: defines the REPRODUCED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#9","finding":"ok","why":"legend: defines the INFERRED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#10","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#26","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#29","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#30","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#31","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#32","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#33","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#44","finding":"missed","why":"READ: Raptor's encoder runs at LR 3e-5 under a 1e-3 head with 15 % warmup","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#51","finding":"missed","why":"MEASURED over 200 series: effective scale 0.328-0.688 mm/px, a 2.1x spread","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#90","finding":"missed","why":"rule: neither S1 nor S2 starts while T007 holds the card","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#92","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#111","finding":"missed","why":"comparison with cause: fastMRI+ beats MRNet because image-derived and covers 7 columns vs 2","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#129","finding":"missed","why":"16-epoch schedule is lane 6 rank 6; arm C's corpus rho still rising at epoch 8","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#131","finding":"missed","why":"stochastic slice windows, rank 7: 12 random window centres per epoch, a free augmentation we lack, a dataset change","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#134","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#135","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#136","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#137","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#138","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#139","finding":"ok","why":"row label with no value; the band sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#141","finding":"ok","why":"row label with no value; the band sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#143","finding":"ok","why":"row label with no value; the band sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#145","finding":"ok","why":"row label with no value; the band sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#147","finding":"ok","why":"row label with no value; the band sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#149","finding":"ok","why":"row label with no value; the band sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#155","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#157","finding":"missed","why":"rule: T046 starts only after S1 and S2 return verdicts and carries the winning recipe","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#167","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#168","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#169","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#170","finding":"missed","why":"row-subject cell: task T041 exists at that path and is the row's S2 screen with its gate","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#173","finding":"missed","why":"row-subject cell: task T042 exists at that path and is the row's S1 screen with its gate","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#176","finding":"missed","why":"row-subject cell: task T044 exists at that path and is the Raptor arm with its gate","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#179","finding":"missed","why":"row-subject cell: task T045 exists at that path and is the fastMRI+ instrument with its gate","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"R2#183","finding":"missed","why":"row-subject cell: task T046 exists at that path and is the full-data members task with its gate","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#4","finding":"ok","why":"legend: defines the READ evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#5","finding":"ok","why":"legend: defines the MEASURED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#6","finding":"ok","why":"legend: defines the INFERRED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#7","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#10","finding":"missed","why":"evidence mark asserting verdict 2 (privateScore empty on all 16) was MEASURED","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#15","finding":"missed","why":"heading asserts the quoted rules are READ verbatim from the rules text","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#17","finding":"ok","why":"quoted section title of the rules; asserts nothing itself","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#30","finding":"missed","why":"heading asserts the spending figures are MEASURED","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#32","finding":"ok","why":"row label with no value; 16 sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#34","finding":"ok","why":"row label with no value; the fraction sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#35","finding":"ok","why":"repeat: 20 % of the allowance stated at line 14","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#36","finding":"ok","why":"row label with no value; 1.00/day sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#39","finding":"ok","why":"row label with no value; 250 sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#41","finding":"ok","why":"row label with no value; 0 of 16 sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#42","finding":"ok","why":"repeat: privateScore empty on all 16, line 16","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#46","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#47","finding":"missed","why":"asserts the ladder table is MEASURED from the same submissions listing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#48","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#49","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#50","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#51","finding":"missed","why":"date cell 08-18 of the ladder row: 0.793 for B0 MIL on that date","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#90","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#92","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#93","finding":"missed","why":"header carries the condition of its column: inflation computed at sd 0.0028","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#94","finding":"missed","why":"header carries the condition of its column: inflation computed at sd 0.0070","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#99","finding":"missed","why":"K = 100 cell: the row's inflation values hold at K = 100","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#102","finding":"missed","why":"K = 250 cell: the row's inflation values hold at K = 250","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#109","finding":"ok","why":"repeat: the live decision is stated at line 18 (verdict 3)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#110","finding":"ok","why":"repeat: two submissions tied at public 0.926, lines 18-19","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#111","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#112","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#113","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#114","finding":"missed","why":"submission ref 55896111 is the 08-30 TTA-bug submission","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#117","finding":"missed","why":"submission ref 55954418 is the 09-02 bug-fixed submission","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#129","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#142","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane13#143","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#2","finding":"missed","why":"heading states the task's scope rule: round 3 aims only at what rounds 1 and 2 did not answer","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#3","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#7","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#8","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#9","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#37","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#39","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#42","finding":"ok","why":"research question for lane 9; asserts nothing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#47","finding":"ok","why":"research question for lane 11; asserts nothing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#50","finding":"missed","why":"heading asserts the decision rules were fixed in advance of the lanes","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#60","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#71","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#76","finding":"ok","why":"resumption pointer: which files to read next; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#78","finding":"ok","why":"repeat: rule 3 at line 65, 'Nothing is adopted by this task'","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#80","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#81","finding":"ok","why":"template placeholder; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"T047brief#82","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#1","finding":"ok","why":"title naming the lane's topic; no value or state asserted","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#9","finding":"ok","why":"the lane's question; asserts nothing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#14","finding":"ok","why":"pointer to §2","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#15","finding":"ok","why":"legend: defines the READ evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#16","finding":"ok","why":"legend: defines the MEASURED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#17","finding":"ok","why":"legend: defines the INFERRED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#19","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#27","finding":"ok","why":"pointer to appendix A","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#28","finding":"missed","why":"asserts our LB row was MEASURED by grep -i bhavish on the downloaded CSV","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#32","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#35","finding":"missed","why":"asserts the brief's first question (a new plateau?) has a clean answer","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#36","finding":"missed","why":"histogram is at 0.001 resolution, MEASURED with outputs/t047/lb_analysis.py","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#37","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#38","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#39","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#40","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#41","finding":"missed","why":"score cell 0.952 of a histogram row (1 team at 0.952)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#47","finding":"missed","why":"score cell 0.949 of a histogram row (1 team at 0.949)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#52","finding":"missed","why":"score cell 0.936 of the histogram's spike row (461 teams)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#72","finding":"missed","why":"snapshot timestamps compared: lane 0's 2026-09-01T18:44Z vs this lane's 2026-09-02T10:19Z, MEASURED against READ","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#73","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#74","finding":"missed","why":"header carries the snapshot time of its column: 09-01 18:44Z","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#75","finding":"missed","why":"header carries the snapshot time of its column: 09-02 10:19Z","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#79","finding":"missed","why":"threshold cell >=0.935 of the row 664 -> 694 (+30)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#83","finding":"ok","why":"row label with no value; counts sit in the next cells","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#90","finding":"ok","why":"connective pointer to §2","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#103","finding":"missed","why":"asserts the band table is MEASURED with outputs/t047/subs_analysis.py","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#104","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#105","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#106","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#107","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#108","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#109","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#110","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#119","finding":"missed","why":"band cell 0.940-0.942 of its row (31 teams, median 35 subs)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#140","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#141","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#142","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#143","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#144","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#164","finding":"ok","why":"connective pointer to §2.1","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#168","finding":"missed","why":"conclusion: submission count is not sufficient to reach the band; fitting story cannot explain the 88 teams above 0.94","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#175","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#176","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#177","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#178","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#179","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#200","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#212","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#213","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#214","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#229","finding":"ok","why":"pointer to §4.3","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#232","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#233","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#234","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#235","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#236","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#260","finding":"missed","why":"rank cell: pilkwang's own rank is 666","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#265","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#271","finding":"missed","why":"asserts for the posters below: identity verified and claimed score not inflated vs Kaggle's published score","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#274","finding":"missed","why":"topic 735304 by roy214 has 37 comments and 21 votes and is the forum's most valuable thread","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#281","finding":"ok","why":"pure quote of the forum post; asserts nothing of the lane's own","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#284","finding":"missed","why":"Scott Willis is rank 7 on the main LB at 0.948 and rank 1 on the efficiency LB","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#285","finding":"missed","why":"completes the line before: the efficiency rank is sourced from lane 0","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#287","finding":"missed","why":"READ evidence: Yann Majewski (2026-09-01) claims 0.936 LB with a single-fold small ResNet at 224x224","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#300","finding":"missed","why":"a 5-fold of one model at 224 px reaches 0.942, about rank 50","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#308","finding":"missed","why":"attribution: Tucker Arrants is rank 15; the quoted statement is dated 2026-08-31","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#310","finding":"missed","why":"completes the quoted claim: validates never against the provided labels","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#313","finding":"ok","why":"connective introducing a quote","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#317","finding":"ok","why":"connective introducing a quote","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#322","finding":"missed","why":"we are not behind on labels; the top team discussing it says labels are not the lever; corroborates the gold-58 posture","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#326","finding":"ok","why":"repeat: Pillar-0 absent from lanes 5, 6, 7 is stated with its grep at lines 259-260","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#337","finding":"ok","why":"pure quote of the poster's request; no assertion","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#338","finding":"ok","why":"tail of a quoted request; asserts nothing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#355","finding":"missed","why":"dates the author's score statement to 2026-08-26","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#358","finding":"missed","why":"dates the author's single-model answer to 2026-08-27","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#363","finding":"missed","why":"dates the runtime statement to 2026-08-29 and calls it the number that matters","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#367","finding":"missed","why":"quoted claim: the team scores 94 windows per study","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#369","finding":"missed","why":"completes the quoted claim that the CoAtNet costs as much as the 5-fold DINO half it is blended with","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#372","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#373","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#374","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#375","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#383","finding":"missed","why":"heading asserts the window-count result is the finding that matters for us","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#394","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#396","finding":"missed","why":"lane 0 READ the runtime cap as 'GPU Notebook <= 9 hours run-time'","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#400","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#404","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#405","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#406","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#407","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#410","finding":"ok","why":"repeat: 'Single model 0.934 @ 224px' quoted at line 303","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#411","finding":"ok","why":"repeat: 0.942 still at 224 px, 5-fold, quoted at lines 304-305","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#417","finding":"ok","why":"repeat: 'as small of a model as possible' quoted at line 312","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#426","finding":"ok","why":"repeat: rank 78 at line 419 and 'no fold ensembling in it' at line 432","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#438","finding":"ok","why":"connective introducing a quote","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#440","finding":"missed","why":"completes the quoted claim: none of the better labels translated to the LB","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#451","finding":"ok","why":"repeat: our teacher reads gold at 0.8976, line 363","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#471","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#475","finding":"missed","why":"attribution carries values: Scott Willis rank 7 at 0.948","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#477","finding":"ok","why":"quoted remark; asserts nothing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#480","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#481","finding":"missed","why":"claims every table entry names its instrument and band (entries 4-8 show none)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#483","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#484","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#485","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#486","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#487","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#490","finding":"ok","why":"repeat: 94-window point LB-corroborated, table at line 449","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#495","finding":"ok","why":"repeat: adopt only if OOF-AUC > +0.0019, lines 478-479","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#539","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#540","finding":"missed","why":"claim about the brief: it asked whether the >=0.94 band is worth chasing","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#545","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#552","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane9#559","finding":"missed","why":"widens line 290's 'none of these is ID-anchored' to every forum claim in the lane","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#43","finding":"missed","why":"row-subject cell: train.py defines flag --root, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#48","finding":"missed","why":"row-subject cell: train.py defines flag --labels, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#55","finding":"missed","why":"row-subject cell: train.py defines flag --series, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#60","finding":"missed","why":"row-subject cell: train.py defines flag --manifest, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#65","finding":"missed","why":"row-subject cell: train.py defines flag --backbone, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#72","finding":"missed","why":"row-subject cell: train.py defines flag --epochs, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#81","finding":"missed","why":"row-subject cell: train.py defines flag --slices, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#86","finding":"missed","why":"row-subject cell: train.py defines flag --seqs, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#91","finding":"missed","why":"row-subject cell: train.py defines flag --corpus-val, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#97","finding":"missed","why":"row-subject cell: train.py defines flag --folds, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#101","finding":"missed","why":"row-subject cell: train.py defines flag --fold, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#105","finding":"missed","why":"row-subject cell: train.py defines flag --size, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#115","finding":"missed","why":"row-subject cell: train.py defines flag --workers, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#119","finding":"missed","why":"row-subject cell: train.py defines flag --limit, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#123","finding":"missed","why":"row-subject cell: train.py defines flag --seed, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#127","finding":"missed","why":"row-subject cell: train.py defines flag --split-seed, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#132","finding":"missed","why":"row-subject cell: train.py defines flag --swa-epochs, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#136","finding":"missed","why":"row-subject cell: train.py defines flag --augment, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#141","finding":"missed","why":"row-subject cell: train.py defines flag --oof-targets, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#146","finding":"missed","why":"row-subject cell: train.py defines flag --mirror, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#150","finding":"missed","why":"row-subject cell: train.py defines flag --shared-head-drop, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#155","finding":"missed","why":"row-subject cell: train.py defines flag --per-label-attn, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#160","finding":"missed","why":"row-subject cell: train.py defines flag --seq-head, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#165","finding":"missed","why":"row-subject cell: train.py defines flag --adjacent, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#171","finding":"missed","why":"row-subject cell: train.py defines flag --rotate, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#175","finding":"missed","why":"row-subject cell: train.py defines flag --perspective, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#179","finding":"missed","why":"row-subject cell: train.py defines flag --warmup-frac, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#184","finding":"missed","why":"row-subject cell: train.py defines flag --layer-decay, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#189","finding":"missed","why":"row-subject cell: train.py defines flag --mask-at-base, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#194","finding":"missed","why":"row-subject cell: train.py defines flag --accum, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#198","finding":"missed","why":"row-subject cell: train.py defines flag --grad-checkpoint, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#204","finding":"missed","why":"row-subject cell: train.py defines flag --out, with the line, default, use and pass history in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#240","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_COMP, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#244","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_SRC, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#248","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_CKPT_DIR, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#252","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_CKPT, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#256","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_TEST_ROOT, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#259","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_OUT, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#262","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_CKPTS, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#266","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_TTA, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#270","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_TTA_UNMATCHED, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#273","finding":"missed","why":"row-subject cell: the live kernel reads env var RSNA_MAX_LAYOUTS, with the line and default in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#285","finding":"missed","why":"row-subject cell: flag --swa-epochs is live, consumed at the line in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#289","finding":"missed","why":"row-subject cell: flag --shared-head-drop is live, consumed at the line in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#293","finding":"missed","why":"row-subject cell: flag --seq-head is live, consumed at the line in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#297","finding":"missed","why":"row-subject cell: flag --perspective is live, consumed at the line in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#300","finding":"missed","why":"row-subject cell: flag --warmup-frac is live, consumed at the line in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#303","finding":"missed","why":"row-subject cell: flag --layer-decay is live, consumed at the line in its row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#1","finding":"missed","why":"title claims the code audit is exhaustive (appendix B limits it)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#5","finding":"ok","why":"legend: defines the READ evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#6","finding":"ok","why":"legend: defines the MEASURED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#7","finding":"ok","why":"legend: defines the INFERRED evidence mark","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#8","finding":"ok","why":"note on how the document was written; no claim about code, data or plan","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#9","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#13","finding":"ok","why":"connective introducing the list","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#14","finding":"missed","why":"--layer-decay and --warmup-frac were passed once at outputs/t025/run_arm.sh:13; the log proves they bound","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#27","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#29","finding":"missed","why":"method claim: the ever-passed column is not from memory but from three measured sources","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#33","finding":"missed","why":"the four Kaggle logs in outputs/t028/kaggle/ record the argv that actually ran on the T4","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#38","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#39","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#40","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#41","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#42","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#49","finding":"missed","why":"line cell: --labels is defined at train.py:712","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#149","finding":"missed","why":"--mirror passed as 0.5 from arm C on","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#209","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#210","finding":"missed","why":"adds qualifiers to line 19: never a non-default value, local or Kaggle, in any task; absence claim needs its search","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#213","finding":"missed","why":"asserts the never-passed claim is MEASURED with the command in appendix A","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#215","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#234","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#236","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#237","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#238","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#239","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#249","finding":"missed","why":"line cell: RSNA_CKPT_DIR is read at line 55 of the live kernel","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#263","finding":"missed","why":"line cell: RSNA_CKPTS is read at line 72 of the live kernel","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#275","finding":"ok","why":"pointer to another section","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#277","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#279","finding":"missed","why":"method claim: each never-passed flag was traced to the line that consumes it","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#280","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#281","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#282","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#306","finding":"ok","why":"repeat: --layer-decay/--warmup-frac passed once, line 27","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#322","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#323","finding":"ok","why":"repeat: BN double-update is NULL as a lever, line 37","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#329","finding":"missed","why":"asserts three measurements settle the BN double-update's cost","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#330","finding":"missed","why":"adds to line 37's 67 of 69: MEASURED by reading num_batches_tracked from the state dicts","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#342","finding":"missed","why":"adds to line 38: buffer difference measured across the 69 BN layers of each member","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#343","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#344","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#345","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#346","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#366","finding":"ok","why":"purpose note; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#367","finding":"ok","why":"heading naming a topic; the clean findings follow","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#368","finding":"missed","why":"rationale claim: a null that is written down is not re-checked","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#370","finding":"missed","why":"the mirror/rotate stream at dataset.py:342 is re-drawn each epoch","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#380","finding":"missed","why":"the kernel's member mean at rsna-knee-submit.py:281-288 is a flat mean over members, identical to blending first","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#385","finding":"ok","why":"repeat: ensemble at the MAX_LAYOUTS=2 cap blocks a T007 member, lines 35-36","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#386","finding":"missed","why":"asserts the layout evidence is MEASURED from outputs/t039/v16_log/rsna-knee-submit.log","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#390","finding":"ok","why":"repeat: 'Unregistered.' at line 36","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#395","finding":"ok","why":"repeat: registered at lines 364-366; mechanism measured at lines 357-360","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#403","finding":"ok","why":"repeat: no --encoder-lr/--weight-decay/--dropout flag, the one real find, lines 33-34","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#409","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#410","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#411","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#412","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#413","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#414","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#418","finding":"ok","why":"repeat: no --encoder-lr flag, line 33","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#419","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#424","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#425","finding":"ok","why":"repeat: weight decay literal 1e-4, line 386","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#426","finding":"ok","why":"repeat: written at train.py:268/276/284/289, lines 386-387","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#428","finding":"ok","why":"repeat: no --weight-decay flag, line 33","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#429","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#430","finding":"ok","why":"repeat: dropout default at model.py:169, not passed, line 385","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#431","finding":"ok","why":"repeat: no --dropout flag, line 33","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#434","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#435","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#436","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#437","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#438","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#439","finding":"missed","why":"header carries its column condition: groups under a 1e-6 absolute LR","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#443","finding":"missed","why":"layer-decay value cell 0.95 of its spectrum row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#448","finding":"missed","why":"layer-decay value cell 0.90 of its spectrum row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#453","finding":"missed","why":"layer-decay value cell 0.85 of its spectrum row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#458","finding":"missed","why":"layer-decay value cell 0.80 of its spectrum row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#460","finding":"missed","why":"at layer-decay 0.80 the median lr_scale is 0.0773","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#462","finding":"missed","why":"at layer-decay 0.80 the median LR is 2.3e-05","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#468","finding":"missed","why":"layer-decay value cell 0.70 of its spectrum row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#471","finding":"missed","why":"at layer-decay 0.70 the min LR is 8.2e-08","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#478","finding":"ok","why":"repeat: 24 of 48 groups below 1e-6 at 0.6, lines 31-32","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#479","finding":"missed","why":"layer-decay value cell 0.50 of its spectrum row","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#487","finding":"missed","why":"STATE.md's NOW block (2026-09-02 10:25Z) records 23 levels, 48 groups, mean encoder LR 1.35e-4, 2.2x below head","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#494","finding":"missed","why":"heading asserts none of the smaller things is a lever","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#496","finding":"missed","why":"T033 excluded decorrelation; +0.0188 still unexplained; its control unused; costs one fold","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#498","finding":"ok","why":"repeat: --seq-head never passed, line 92","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#503","finding":"ok","why":"repeat: seed 0 in all 22 + 8 checkpoints, line 112","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#514","finding":"ok","why":"purpose note; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#519","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#520","finding":"ok","why":"purpose note; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#522","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#523","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#524","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#525","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#528","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#531","finding":"missed","why":"row-subject cell names a config value: --seqs 2","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#534","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#537","finding":"missed","why":"row-subject cell holds a value: 16-epoch schedule","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#538","finding":"missed","why":"the 16-epoch schedule is registered as lane 6 §3 row 6","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#540","finding":"missed","why":"cell asserts a state: the crop+jitter is epoch-frozen","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#543","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#546","finding":"missed","why":"row-subject cell holds a value: alpha = 0.5 self-distillation","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#549","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#552","finding":"missed","why":"cell asserts a count and state: three TTA views are refused","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#553","finding":"ok","why":"repeat: registered in T028/T034/PLAN-0831, lines 364-366","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#554","finding":"ok","why":"repeat: same ten members are the layout blocker, lines 367-368","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#555","finding":"missed","why":"cell asserts a state: outputs/kernels/armc/rsna-knee-armc1/ is stale","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#556","finding":"ok","why":"repeat: pm/STATE.md flags the dir, line 474","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#557","finding":"ok","why":"repeat: confirmed from checkpoint and Kaggle log, lines 472-475","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#558","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#561","finding":"ok","why":"repeat: no wired-correct-unpassed flag on +0.005, lines 18-19","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#562","finding":"ok","why":"repeat: --layer-decay cannot express T042's hypothesis, line 30","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#563","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#564","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#565","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#566","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#567","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#568","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#569","finding":"ok","why":"repeat: no --encoder-lr, layer-decay cannot substitute, lines 30-33","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#570","finding":"ok","why":"repeat: 24 of 48 groups below 1e-6 at 0.6, line 31","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#571","finding":"ok","why":"repeat: no value gives the flat 10x cut, line 32","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#579","finding":"ok","why":"repeat: MAX_LAYOUTS=2 blocks a --seqs 2 member, lines 35-36","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#585","finding":"ok","why":"repeat: passed once at run_arm.sh:13, line 27","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#586","finding":"ok","why":"repeat: PROGRESS.md:5857 and lane 6 §2.5 say never, line 28","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#588","finding":"ok","why":"repeat: bind risk retired for ConvNeXt, lines 220-221","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#592","finding":"ok","why":"repeat: 67 of 69 and NULL, line 37","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#593","finding":"missed","why":"expected effect of the BN fix: 0.000","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#594","finding":"ok","why":"repeat: buffer difference below fold noise, line 38","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#595","finding":"ok","why":"repeat: Gate D -0.0115 at 1.03x band, harmless direction, lines 283-288","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#596","finding":"ok","why":"repeat: ~4 lines, line 292","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#597","finding":"ok","why":"repeat: controlled answer exists in Gate D, line 281","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#599","finding":"ok","why":"repeat: seed 0 in all 30 checkpoints, line 112","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#600","finding":"ok","why":"repeat: no member differs by initialisation, lines 113-114","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#602","finding":"ok","why":"repeat: unnamed candidate explanation for the flat curve, lines 456-457","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#608","finding":"ok","why":"repeat: seq-head is T014, nothing recommends perspective, lines 450-454","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#609","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#615","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#616","finding":"missed","why":"adds to lines 3-5 the working directory: commands ran from /home/ade/Code/RSNA","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#617","finding":"ok","why":"repeat: 0 GPU-hours, 0 submissions, 0 training runs, lines 3-4","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#621","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane10#627","finding":"ok","why":"repeat: comparison not controlled, fold and venue move with regime, line 277","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#1","finding":"missed","why":"title asserts the efficiency prize is a separate track and that runtime hours are unused","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#5","finding":"ok","why":"note on how the document was written; no claim about code, data or plan","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#6","finding":"missed","why":"asserts every claim in the lane carries a READ/MEASURED/INFERRED mark, commands in appendix A","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#8","finding":"ok","why":"placeholder note; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#9","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#10","finding":"missed","why":"heading embeds a count: exactly three real runtime datapoints exist","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#13","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#14","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#15","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#16","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#36","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#37","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#38","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#39","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#40","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#47","finding":"missed","why":"pass cell with values: t039 v16 layout B is 10 members x 3 views","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#61","finding":"missed","why":"the 0.0653 vs 0.0613 s/unit agreement is the real cross-check","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#63","finding":"missed","why":"deployed rerun runtime not known but now bounded far better than 90.5-264.7 min","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#64","finding":"missed","why":"subject of line 85's estimate: the fitted model's prediction is for the deployed config","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#72","finding":"ok","why":"connective introducing the table","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#73","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#74","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#80","finding":"missed","why":"not established how much of the 25 min intercept is queue and scoring vs notebook time","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#88","finding":"missed","why":"lane 7's conclusion that the Raptor arm fits inside 9 h survives","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#107","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#111","finding":"ok","why":"repeat: 1.329 min per forward unit, line 65","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#118","finding":"ok","why":"repeat: 1.329 min per unit, line 65; forward unit defined at line 29","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#119","finding":"ok","why":"repeat: 66 units => 113 min, line 85","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#120","finding":"ok","why":"repeat: ~185 units at 270 min, line 153","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#125","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#126","finding":"missed","why":"header carries its column's condition: gold-58 AUC over the 12 adjacent members","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#127","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#128","finding":"missed","why":"header carries its column's condition: OOF rho over 4,349 studies","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#129","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#132","finding":"missed","why":"view-set cell id,crop of its row: 0.8952 gold, +0.0032 rho resolved","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#137","finding":"ok","why":"repeat: deployed views are id, crop, bright, lines 37-39","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#142","finding":"missed","why":"asserts the view-curve table is MEASURED","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#143","finding":"missed","why":"the view curve has turned over; the second view resolves positive on the 4,349-study instrument","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#157","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#158","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#159","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#160","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#161","finding":"ok","why":"repeat: deployed --slices 12, line 199","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#164","finding":"missed","why":"at --slices 12, 0.1 % of series are fully consumed","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#171","finding":"missed","why":"at --slices 32, 28.31 mean slices are used","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#188","finding":"missed","why":"T028's --slices 36 OOM is not a constraint at inference: backward pass on 8 GiB card vs no gradients on 16 GiB T4","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#196","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#200","finding":"missed","why":"tf_efficientnet_b2's native train size is 260","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#204","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#210","finding":"ok","why":"repeat: the Raptor's 42 windows, line 280","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#215","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#230","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#231","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#232","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#233","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#234","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#235","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#236","finding":"missed","why":"label naming a change: slice density 12 -> 24 at inference, the row's lever","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#250","finding":"ok","why":"repeat: resolution adds no new information, line 258","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#256","finding":"ok","why":"repeat: more TTA views dead, line 183","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#258","finding":"ok","why":"n/a cell holds no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#259","finding":"ok","why":"n/a cell holds no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#260","finding":"ok","why":"n/a cell holds no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#261","finding":"ok","why":"repeat: third layout not an inference-only lever, line 270","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#262","finding":"ok","why":"repeat: a third layout needs training, line 269","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#264","finding":"ok","why":"n/a cell holds no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#265","finding":"ok","why":"n/a cell holds no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#266","finding":"ok","why":"n/a cell holds no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#267","finding":"ok","why":"repeat: per-label view weights are prohibited rule-constant tuning, lines 291-292","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#1","finding":"ok","why":"title naming the lane's topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#2","finding":"ok","why":"identifies the document; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#6","finding":"ok","why":"legend: defines the three evidence marks","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#7","finding":"missed","why":"rule: an unmarked number is a defect","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#8","finding":"ok","why":"placeholder note; no claim","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#9","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#11","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#12","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#29","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#50","finding":"missed","why":"completes the quoted claim: BN running stats are updated on both passes","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#55","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#58","finding":"missed","why":"regime cell 'off' of the row: 3 counters inside blocks and 3 outside","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#63","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#64","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#65","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#66","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#67","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#88","finding":"missed","why":"quoted claim: the checkpointed run produced a model better than the reference","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#108","finding":"missed","why":"starts the quoted claim: BN stats are already running means over the same distribution","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#116","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#117","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#118","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#119","finding":"missed","why":"key cell: the base0 argmax/SWA pair, +0.0075","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#123","finding":"missed","why":"key cell: the base1 argmax/SWA pair, +0.0014","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#127","finding":"missed","why":"key cell: the base2 argmax/SWA pair, -0.0013","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#131","finding":"missed","why":"key cell: the base3 argmax/SWA pair, +0.0048","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#135","finding":"missed","why":"key cell: the base4 argmax/SWA pair, +0.0004","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#139","finding":"missed","why":"key cell: the armB0 argmax/SWA pair, +0.0005","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#143","finding":"missed","why":"key cell: the armC0 argmax/SWA pair, +0.0012","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#144","finding":"missed","why":"armC0 argmax scores 0.8828","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#145","finding":"missed","why":"armC0 SWA scores 0.8840","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#147","finding":"missed","why":"key cell: the armC1 argmax/SWA pair, +0.0002","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#151","finding":"missed","why":"key cell: the armC2 argmax/SWA pair, +0.0005","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#155","finding":"missed","why":"key cell: the armC3 argmax/SWA pair, +0.0010","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#159","finding":"missed","why":"key cell: the armC4 argmax/SWA pair, -0.0002","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#167","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#169","finding":"ok","why":"repeat: 1a SURVIVES, verdict table line 27","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#192","finding":"ok","why":"repeat: 1b REJECTED, verdict table line 28","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#206","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#211","finding":"missed","why":"asserts the 135 slices/s throughput is MEASURED","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#216","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#217","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#218","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#219","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#220","finding":"missed","why":"header carries its column's condition: hours computed at 400 slices/s","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#224","finding":"missed","why":"SimCLR/MoCo bill: 164-328 M total slice-passes","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#236","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#243","finding":"missed","why":"the SSL run does not fit Kaggle; Kaggle kills the output of a quota-exhausting kernel","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#251","finding":"missed","why":"in-domain SSL would put an unevidenced 11 h run ahead of a registered, surveyed alternative","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#258","finding":"ok","why":"pointer to the script in appendix A","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#262","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#263","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#264","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#265","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#266","finding":"ok","why":"repeat: docstring's 14,010, quoted at line 340","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#268","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#269","finding":"ok","why":"repeat: docstring's 10,361, quoted at line 341","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#271","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#273","finding":"missed","why":"row label carries the condition: series opened at --seqs 1","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#274","finding":"ok","why":"repeat: docstring's 13,221, quoted at line 342","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#276","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#277","finding":"ok","why":"repeat: docstring's 9.4%, quoted at line 343","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#280","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#281","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#282","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#291","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#293","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#296","finding":"ok","why":"connective introducing the table","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#297","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#298","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#299","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#300","finding":"missed","why":"key cell: plane Sagittal of the row (non-fluid-sensitive, 931 left over)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#302","finding":"missed","why":"key cell: plane Sagittal of the row (fluid-sensitive, 517 left over)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#303","finding":"missed","why":"key cell: fluid-sensitive = yes for Sagittal, 517 left over","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#305","finding":"missed","why":"key cell: plane Coronal of the row (non-fluid-sensitive, 579 left over)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#307","finding":"missed","why":"key cell: plane Coronal of the row (fluid-sensitive, 376 left over)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#308","finding":"missed","why":"key cell: fluid-sensitive = yes for Coronal, 376 left over","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#310","finding":"missed","why":"key cell: plane Axial of the row (non-fluid-sensitive, 322 left over)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#312","finding":"missed","why":"key cell: plane Axial of the row (fluid-sensitive, 312 left over)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#313","finding":"missed","why":"key cell: fluid-sensitive = yes for Axial, 312 left over","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#315","finding":"missed","why":"heading asserts the finding: leftovers are within-cell duplicates, not missing views","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#318","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane12#319","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane11#117","finding":"ok","why":"heading naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"smoke_test.py§test_t003_tta_views#1","finding":"ok","why":"docstring title naming what the test covers; the properties follow","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"smoke_test.py§test_t003_tta_views#14","finding":"missed","why":"every TTA constant sits inside its flag's sampled range, stated from _augment/--rotate; T015 found two self-agreeing checks","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"smoke_test.py§test_t003_tta_views#15","finding":"ok","why":"section-divider comment naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"smoke_test.py§test_t003_tta_views#18","finding":"ok","why":"section-divider comment naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"smoke_test.py§test_t003_tta_views#20","finding":"ok","why":"section-divider comment naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"smoke_test.py§test_t003_tta_views#21","finding":"ok","why":"section-divider comment naming a topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"ROADMAP.md§383#1","finding":"ok","why":"section heading; the prohibited items and their reasons follow","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane0-rules-and-leaderboard.md§1#1","finding":"missed","why":"title dates the rules and leaderboard reading: as of 2026-09-02","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane1-winners-and-literature.md§1#1","finding":"missed","why":"title embeds the starting score 0.926 and target 0.96","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane2-architecture-headroom.md§1#1","finding":"ok","why":"title naming the lane's topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane3-measurement-and-ensemble.md§1#1","finding":"missed","why":"title dates the lane's report 2026-09-02","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane4-labels-and-plan.md§1#1","finding":"missed","why":"title states the plan horizon: to 2026-10-15","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§1#1","finding":"ok","why":"title naming the lane's topic and method","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane7-public-members.md§1#1","finding":"ok","why":"title naming the lane's topic","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane8-external-truth-sets.md§1#1","finding":"ok","why":"title naming the lane's question","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane7-public-members.md§20#3","finding":"missed","why":"evidence mark: claim 2 (the Raptor, CC0, 0.924 single model) is READ, §2","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane0-rules-and-leaderboard.md§72#1","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane0-rules-and-leaderboard.md§72#2","finding":"ok","why":"table header cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane5-public-notebooks.md§360#1","finding":"missed","why":"heading names the notebook and states its kernel type: a script","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§67#1","finding":"ok","why":"row label with no value; the docstring claim sits in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane5-public-notebooks.md§744#1","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane5-public-notebooks.md§744#5","finding":"missed","why":"the DINOv2 slot arm's input resolution is 336","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§255#1","finding":"missed","why":"compare_ckpts output: paired A-B [-0.0046, 0.0158], +/-0.0102, r = 0.9089, pairing tightens 2.3x","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane7-public-members.md§122#1","finding":"missed","why":"heading asserts winner's obligations are the real cost of using someone else's weights","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§185#1","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§185#6","finding":"missed","why":"evidence mark: both schedule cells are READ","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"push_family.py§main#13","finding":"missed","why":"in the loop known_flags costs one torch import per flag, ~8 s each, for an unchanging answer","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"add_ensemble_member.py§main#3","finding":"ok","why":"section-divider comment naming the step","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"gradcam.py§main#18","finding":"ok","why":"section comment naming the computation; the claims follow it","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"train.py§run#2","finding":"missed","why":"the 58 gold studies carry a +/-0.036 band, wider than most changes worth making; T001 could not be adjudicated","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"train.py§run#25","finding":"missed","why":"adds to the code's train-only flags a reason and condition: mirroring is not jitter; off whatever the flags say","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"train.py§run#26","finding":"ok","why":"repeat: base_mask applies only when train, as the code line below states","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"train.py§run#27","finding":"missed","why":"adds a consequence the code lacks: masking validation would re-base the corpus rho judge","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"train.py§run#28","finding":"missed","why":"adds the cause the code lacks: packing is a property of the input, so validation gets it too","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"model.py§__init__#6","finding":"ok","why":"tag naming the task the block belongs to; the claims follow","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"dataset.py§_warp#4","finding":"missed","why":"one 3x3 matrix does rotation and perspective, in warp_volume, shared by TTA and training","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"dicom_io.py§read_series#19","finding":"ok","why":"repeat: side(j) returns the cached slice or its centre, as the code below does","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"dicom_io.py§read_series#20","finding":"ok","why":"repeat: an undecodable or wrong-shape neighbour falls back to its centre, as the code below does","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"STATE.md§20#1","finding":"ok","why":"row label with no value; the trap is described in the next cell","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§182#1","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§182#5","finding":"missed","why":"evidence mark: both encoder-LR cells are READ","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§183#1","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§183#5","finding":"missed","why":"evidence mark: both head-LR cells are READ","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§184#1","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§184#5","finding":"missed","why":"evidence mark: both weight-decay cells are READ","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§174#1","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§174#3","finding":"missed","why":"arm C's head: PerLabelAttentionPool, gated Tanh x Sigmoid -> Linear(hidden,12), per-label softmax (model.py:34)","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§174#5","finding":"missed","why":"evidence mark: both head cells are READ","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"STATE.md§351#3","finding":"missed","why":"T033 registered and killed 2026-08-28 at 0 GPU; rule 0 negative: -0.2229 and -0.1028 mean column AUC","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"model.py§SliceSequenceHead#3","finding":"missed","why":"P0 added a zero-init linear map of scalar position, the weakest form of order-awareness","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"model.py§SliceSequenceHead#15","finding":"missed","why":"code behaviour: an all-padding chunk is run at length 1 and its output discarded","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§222#4","finding":"missed","why":"pos_weight cost: one fold, ~5 lines","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§223#1","finding":"missed","why":"8 epochs vs the recipe's 16, on a run still improving at epoch 8","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§162#1","finding":"ok","why":"row label with no value","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"lane6-single-model-gap.md§162#6","finding":"missed","why":"evidence mark: the epoch-variation row is READ","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"dataset.py§_slot_meta#12","finding":"missed","why":"axis_code adds an optional fifth column: mirror axis, or 0.0 for unreadable geometry","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"kaggle_inference.py§main#36","finding":"missed","why":"the rerun budget rests on one measured number (T009's ~6 min at five members); T003 spends it on views","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"ROADMAP.md§485#4","finding":"missed","why":"Baker's (0.984, an unaffected posterior label) is the mirror's tripwire","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"smoke_test.py§test_gradcam_instrument#12","finding":"ok","why":"section comment naming what the next checks exercise","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"PROGRESS.md§3383#1","finding":"missed","why":"bs=2 removed ~93% of the discrepancy and flipped its sign; local fold 0 rho 0.6451 vs Kaggle 0.6336","run":"1cd08a13.7ee3"}
+{"kind":"audit","clause":"ROADMAP.md§517#1","finding":"missed","why":"row 12's third gate is void: pretraining can run locally, only the checkpoint must reach Kaggle","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":1,"measurand":"raptor-single-model-public-lb","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":2,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":3,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":4,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":5,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":6,"measurand":"public-lb-top20-cutoff","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":7,"measurand":"public-lb-top20-cutoff","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":8,"measurand":"public-lb-team-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":9,"measurand":"public-lb-first-place-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":10,"measurand":"public-lb-first-place-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":11,"measurand":"our-public-lb-rank","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":12,"measurand":"our-public-lb-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":13,"measurand":"public-notebook-plateau-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":14,"measurand":"public-notebook-plateau-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":15,"measurand":"public-lb-teams-ge-0935","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":16,"measurand":"kernel-runtime-cap","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":17,"measurand":"test-set-size","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":18,"measurand":"efficiency-prize-purse","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":19,"measurand":"efficiency-lb-team-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":20,"measurand":"our-efficiency-lb-rank","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":21,"measurand":"efficiency-rank-of-0926-entry","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":22,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":23,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":24,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":25,"measurand":"forum-claimed-single-model-lb","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":26,"measurand":"forum-claimed-single-model-lb","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":27,"measurand":"forum-claimed-single-model-lb","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":28,"measurand":"our-public-lb-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":29,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":30,"measurand":"ensemble-return-plateau-k","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":31,"measurand":"same-recipe-member-marginal-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":32,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":33,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":34,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":35,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":36,"measurand":"frontier-slices-per-study","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":37,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":38,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":39,"measurand":"non-fat-sat-unseen-study-fraction","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":40,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":41,"measurand":"series-fov-range","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":42,"measurand":"series-fov-range","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":43,"measurand":"effective-scale-spread","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":44,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":45,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":46,"measurand":"per-label-attn-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":47,"measurand":"plateau-fusion-checkpoint-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":48,"measurand":"local-fold-wallclock","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":49,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":50,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":51,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":52,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":53,"measurand":"armc-corpus-rho-trajectory","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":54,"measurand":"unmanifested-seqs2-series","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":55,"measurand":"unmanifested-seqs2-series","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":56,"measurand":"resize-downsample-factor","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":57,"measurand":"resize-downsample-factor","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":58,"measurand":"gold-set-size","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":59,"measurand":"self-distill-target-gold-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":60,"measurand":"teacher-gold-macro-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":61,"measurand":"deployed22-gold-macro-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":62,"measurand":"self-distill-target-gold-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":63,"measurand":"self-distill-target-gold-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":64,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":65,"measurand":"effusion-gold-auc-deployed-vs-teacher","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":66,"measurand":"gold-finetune-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":67,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":68,"measurand":"rho-to-auc-delta-ratio","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":69,"measurand":"oof-effective-members-per-study","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":70,"measurand":"oof-gold-transfer-ratio","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":71,"measurand":"sonnet-scored-gain-survival","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":72,"measurand":"sonnet-labelled-study-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":73,"measurand":"sonnet-scored-gain-survival","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":74,"measurand":"oof-auc-sonnet-paired-halfwidth","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":75,"measurand":"gold-paired-band","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":76,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":77,"measurand":"greedy-gold-selection-oos-loss","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":78,"measurand":"public-noise-one-member-swap-sd","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":79,"measurand":"public-noise-nested-step-band","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":80,"measurand":"public-noise-distinct-config-sd","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":81,"measurand":"winners-curse-inflation","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":82,"measurand":"rank-scheme-gold-delta","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":83,"measurand":"local-fold-wallclock","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":84,"measurand":"seqs2-fold-wallclock","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":85,"measurand":"kaggle-fold-wallclock","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":86,"measurand":"kernel-runtime-cap","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":87,"measurand":"tta-fix-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":88,"measurand":"self-distillation-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":89,"measurand":"self-distill-target-gold-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":90,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":91,"measurand":"seqs2-family-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":92,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":93,"measurand":"seqs2-fold-wallclock","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":94,"measurand":"mm-crop-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":95,"measurand":"recipe-s1-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":96,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":97,"measurand":"second-architecture-family-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":98,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":99,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":100,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":101,"measurand":"external-pretraining-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":102,"measurand":"efficiency-prize-purse","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":103,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":104,"measurand":"efficiency-single-model-runtime","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":105,"measurand":"slice-density-coverage","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":106,"measurand":"slice-density-coverage","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":107,"measurand":"resize-downsample-factor","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":108,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":109,"measurand":"series-fov-below-crop-fraction","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":110,"measurand":"off-joint-pixel-fraction","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":111,"measurand":"entry-deadline","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":112,"measurand":"kaggle-gpu-hours-budget","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":113,"measurand":"local-fold-slot-budget","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":114,"measurand":"submissions-budget","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":115,"measurand":"submissions-budget","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":116,"measurand":"kaggle-gpu-hours-budget","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":117,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":118,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":119,"measurand":"realistic-public-lb-expectation","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":120,"measurand":"public-lb-team-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":121,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":122,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":123,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":124,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":125,"measurand":"raptor-single-model-public-lb","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":126,"measurand":"our-fold-inferred-lb","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":127,"measurand":"armc-fold0-gold-macro-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":128,"measurand":"raptor-gold58-macro-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":129,"measurand":"raptor-gold-to-lb-offset","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":130,"measurand":"our-fold-inferred-lb","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":131,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":132,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":133,"measurand":"train-csv-row-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":134,"measurand":"train-csv-row-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":135,"measurand":"teacher-gold-macro-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":136,"measurand":"best-published-llm-reader-gold-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":137,"measurand":"non-gold-corpus-size","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":138,"measurand":"full-data-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":139,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":140,"measurand":"public-full-data-controlled-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":141,"measurand":"public-full-data-controlled-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":142,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":143,"measurand":"recipe-s1-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":144,"measurand":"local-fold-wallclock","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":145,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":146,"measurand":"mm-crop-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":147,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":148,"measurand":"effective-scale-spread","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":149,"measurand":"effective-scale-spread","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":150,"measurand":"series-fov-range","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":151,"measurand":"series-fov-below-crop-fraction","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":152,"measurand":"off-joint-pixel-fraction","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":153,"measurand":"raptor-arm-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":154,"measurand":"raptor-arm-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":155,"measurand":"cross-recipe-branch-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":156,"measurand":"same-recipe-member-marginal-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":157,"measurand":"raptor-gold58-macro-auc","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":158,"measurand":"fastmri-plus-study-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":159,"measurand":"fastmri-plus-column-coverage","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":160,"measurand":"fastmri-plus-paired-band","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":161,"measurand":"gold-paired-band","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":162,"measurand":"mrnet-column-coverage","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":163,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":164,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":165,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":166,"measurand":"fold0-paired-rho-band","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":167,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":168,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":169,"measurand":"fastmri-plus-column-coverage","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":170,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":171,"measurand":"oof-auc-sonnet-paired-halfwidth","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":172,"measurand":"fastmri-dicom-study-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":173,"measurand":"fastmri-dicom-study-count","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":174,"measurand":"free-disk","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":175,"measurand":"pos-weight-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":176,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":177,"measurand":"full-data-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":178,"measurand":"seqs2-family-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":179,"measurand":"recipe-s1-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":180,"measurand":"raptor-arm-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":181,"measurand":"mm-crop-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":182,"measurand":"self-distillation-expected-lb-gain","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":183,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":184,"measurand":"realistic-public-lb-expectation","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":185,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":186,"measurand":"submissions-budget","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":187,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":188,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":189,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":190,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":191,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":192,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":193,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":194,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":195,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":196,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":197,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":198,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":199,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":200,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":201,"measurand":"our-public-lb-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":202,"measurand":"our-public-lb-score","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":203,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":204,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":205,"measurand":"public-noise-distinct-config-sd","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":206,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":207,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":208,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":209,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":210,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":211,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":212,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":213,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":214,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":215,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":216,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":217,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":218,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":219,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":220,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":221,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":222,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":223,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":224,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":225,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":226,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":227,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":228,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":229,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":230,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":231,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":232,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":233,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":234,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":235,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":236,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":237,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":238,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":239,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":240,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":241,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":242,"measurand":"public-noise-distinct-config-sd","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":243,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":244,"measurand":"none","run":"1cd08a13.7ee3"}
+{"kind":"assign","item":245,"measurand":"none","run":"1cd08a13.7ee3"}

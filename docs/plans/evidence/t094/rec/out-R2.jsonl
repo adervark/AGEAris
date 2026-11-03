@@ -1,0 +1,391 @@
+{"kind":"ok","group":2,"why":"157 facts on build_t112_kernel.py: coat.py's ~6 of 7 h at Stage 4 matches V1815 ~6 h; 576 positions, 384 eval res vs img 336 decode (res vs img), META_SRC T108's: all consistent","run":"1f16c0d5.b999"}
+{"kind":"same","group":5,"facts":["V1964","V2231"],"finding":"conflict","why":"V1964: test_t115_rendered_kernel_runs 'adds 8 more in ENV_ORDER'; V2231: the same function 'adds 4 more in ENV_ORDER' (_order.py at b3e35d5 and 0b783b8 both say 4): incompatible counts","run":"1f16c0d5.b999"}
+{"kind":"ok","group":8,"why":"47 facts on bag_child.py: T121's description (raw test DICOM, make_bag fixed specs, BagWindows eval pick, ImageNet norm) matches the file's; (76,3,H,W) rows, opencv 4.12.0: consistent","run":"1f16c0d5.b999"}
+{"kind":"same","group":12,"facts":["V1534","V2380"],"finding":"conflict","why":"V1534: Makefile at 0b783b8 calls make smoke 'the 1239-check suite'; V2380: _order.py at the same commit puts the gate at 1335 checks (1239 is an older entry, V2291): stale count","run":"1f16c0d5.b999"}
+{"kind":"same","group":12,"facts":["V2446","V2450"],"finding":"superseded","why":"V2446: gate 1302 checks at 2e7ffc6 (09-21 11:07); V2450: 1306 at ec7da60 (09-21 14:18), a later count of a moving quantity","run":"1f16c0d5.b999"}
+{"kind":"same","group":12,"facts":["V2450","V2454"],"finding":"superseded","why":"V2450: gate 1306 checks at ec7da60 (09-21); V2454: 1323 at 685d4b9 (09-22 02:56), a later count","run":"1f16c0d5.b999"}
+{"kind":"same","group":12,"facts":["V2454","V2460"],"finding":"superseded","why":"V2454: gate 1323 at 685d4b9 (09-22 02:56); V2460: 1331 at 9508307 (09-22 03:52), a later count","run":"1f16c0d5.b999"}
+{"kind":"same","group":12,"facts":["V2460","V2380"],"finding":"superseded","why":"V2460: gate 1331 at 9508307 (09-22 03:52); V2380: 1335 checks at 0b783b8 (09-22 04:04), a later count","run":"1f16c0d5.b999"}
+{"kind":"same","group":12,"facts":["V2665","V2666"],"finding":"conflict","why":"T084 D-1: AGENTS.md said the suite had 975 checks, the machine said 984 (V1984/V2091: 975 was T083/T084's gate, 984 the count then): the doc's figure was wrong, a correction","run":"1f16c0d5.b999"}
+{"kind":"same","group":15,"facts":["V71","V1503"],"finding":"conflict","why":"V71: corpus = 4,407 x 76 x 384 x 384 uint8 = 49.4 GB, 'verified'; V1503: 'the task registered it wrong', real figure 4,407 x 76 x 3 x 384^2 = 148.2 GB (rows are (76,3,H,W)): the 3 channels were dropped","run":"1f16c0d5.b999"}
+{"kind":"ok","group":18,"why":"34 facts on cam_viewer.py: 24 windows = (k_eval, 24); stages.3 12x12 at 384; train_gold read by b2 engine (V2964, V3203). T120 review (written 09-21 02:34) describes the code before the clean-flag fix: another version","run":"1f16c0d5.b999"}
+{"kind":"ok","group":21,"why":"30 facts naming coat_train.py: the seam is :44 (import) and :240/:243 (T121 line 35), so V20 and V252/V681 agree; watchdog, gradcam, cam_viewer facts are different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":23,"why":"28 facts on push_arm.py: coat.py, _order.py and the T120 review agree push_arm passed no clean flag, saved model/arch/res/norm only, and never records n_avg; second render FALSE in both","run":"1f16c0d5.b999"}
+{"kind":"same","group":27,"facts":["V975","V564"],"finding":"conflict","why":"V975: T121 measured the dense/fixed-76 window overlap at 84.2%; V564: the same measurement at 89.2% (bag_child.py line 16): one figure for one measurement, incompatible","run":"1f16c0d5.b999"}
+{"kind":"ok","group":30,"why":"23 facts: C' is 0.939 in T121 at four commits, the builder, PROGRESS and the trail; parity band 0.937-0.941 is 0.939 +/- 0.002; G 0.940 is at parity: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":32,"why":"23 facts on _centres: old rule range(lo+1, hi) and its interior blanks, the T119 one-group/no-blank rule, deterministic eval: coat_data.py, coat.py, coat_train.py and coat_gradcam.py agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":35,"why":"22 facts on materialise._one: (N,3,384,384) triplets, 148.2 GB, never truncate on overflow (bag_child V585 agrees), sidecars by the same row: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":38,"why":"21 facts on dicom_bag: V19 'imported by its own tests and nothing else' is T121's state before its adapter (the trail's 09-21 brief); geometry MEASURED 09-21 vs registered rows are two stated bases","run":"1f16c0d5.b999"}
+{"kind":"ok","group":41,"why":"21 facts: part 1 is 3,200 rows ((3200,44,336,336)) in T121, coat_data, coat.py, build_t112, _order; 19.0% boundary-crossing = 'one window in five'; 2.26x = 76/44 x (384/336)^2: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":45,"why":"19 facts on kaggle_train.main: two flag guards (push_family, kaggle_train) agree with the exact-token check; manifest is an optimisation with fallback: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":48,"why":"18 facts on dry_run.main: stages 1-7, img theirs / res ours, img=224 until 09-18, resnet18 backbone; Makefile's dryrun chain matches: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":51,"why":"16 facts: T118's gap is -0.010 in T121, coat_data, coat.py and _order; all three say the window defect is NOT its cause; G's 0.933-0.940 is a prediction: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":53,"why":"16 facts on StudyWindows: set_epoch writes the parent, persistent workers keep the forked epoch, identical tensor per study, only shuffle changes: coat_train.py and coat.py agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":55,"why":"15 facts on make_bag: (N,3,res,res) triplets in materialise, coat_data, coat.py, _order; 148.2 GB and 'wrong by 3x' agree; fallback to raw then median in bag_child: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":58,"why":"15 facts: CAPABILITIES.md says four never-passed flags in claims_guard, _order and tooling; ~11 is the false alarm with the logs unmounted, 'says four, finds 11': consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":61,"why":"15 facts on load_resume: train.py persists SWA at :887-888, :975 in coat_train.py and coat.py alike; absent-flag and scaler rules are different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":64,"why":"14 facts on arm_probs: pre-filled 0.5, kernel reaches COMPLETE, constant 0.5 column, measures the REMOVAL of a member: coat.py and build_t112_kernel.py agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":67,"why":"14 facts on the t115 check: notebook's own definitions plus grid_edit, unfixed control must raise, 224 px = 196 tokens (14^2), 384 the parent's res: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":70,"why":"14 facts on run_bag_384_fold0.sh: via gpu_queue, 16 epochs, k 12, k_eval 24, 384 on the 76-slot corpus, bs 2 x accum 4; T121 relaunched it unchanged: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":73,"why":"13 facts on StudyWindows: seam :44 plus :240/:243 constructions (V20, V21, V252) agree; (K,3,res,res) output; T120 review's omitted-flag list is the pre-fix state","run":"1f16c0d5.b999"}
+{"kind":"ok","group":76,"why":"13 facts on .last.pt: _order's two SWA halves (one epoch shipped under a recipe of 3; crash after 14 ends at 2 of 3 and refuses) are different defects; T121 resumes from the new .last.pt","run":"1f16c0d5.b999"}
+{"kind":"ok","group":79,"why":"13 facts on META_SRC: T108's metadata in coat.py, build_t112, _order; Stage 4 raise after ~6 h (coat.py ~6 of 7 h) agrees","run":"1f16c0d5.b999"}
+{"kind":"ok","group":82,"why":"12 facts: H - A = 0.000, UNRESOLVED, prediction HIT, in T121, PROGRESS and the trail alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":85,"why":"12 facts: the teacher's gold-58 AUC is 0.8976 in run script, coat_data, coat.py and kaggle_train alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":88,"why":"12 facts on set_epoch: parent-only write, workers fork after set_epoch(0), identical tensor per study: coat_train.py and coat.py agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":91,"why":"12 facts on compare_ckpts.compare: seed printed with the band (coat.py M5 agrees), interval not point estimate, hd==0 used to raise: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":92,"why":"11 facts on open_corpus: both parts required, part 2 = the other 1,207 studies (T121 quotes the message), no single-file fallback: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":95,"why":"11 facts on strict=True: their loader is strict in coat.py, push_arm, _order; unconverted runs die at the end of eight hours (push_arm and _order agree)","run":"1f16c0d5.b999"}
+{"kind":"ok","group":98,"why":"11 facts on save_resume: atomic temp+replace, superset of --out's keys, SWA persisted at :887-888, :975: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":101,"why":"11 facts on ENV_ORDER: 79 checks moved out of the gate (not deleted), imagenet check moved to test_t112_swap_kernel, +4 ENV for t115: consistent within _order and coat.py","run":"1f16c0d5.b999"}
+{"kind":"ok","group":104,"why":"11 facts: 384/bs2 VRAM fill 75.0% (5.74 of 7.65 GiB = 75.0%) in T121 and the run script; the 97% is refuted within T121 itself, which is not in another fact here","run":"1f16c0d5.b999"}
+{"kind":"ok","group":107,"why":"11 facts: llm_labels.csv carries gold values in its 58 is_gold rows and reads 1.0000 in coat_data and coat.py alike; the teacher-file ceiling is the guard in both","run":"1f16c0d5.b999"}
+{"kind":"ok","group":109,"why":"10 facts: G = 0.940 in T121 at 3c8fcaa and 0029f47 and in PROGRESS; >= 0.937 licenses H in each","run":"1f16c0d5.b999"}
+{"kind":"ok","group":112,"why":"10 facts: E - D = +0.010 in T121 at 3c8fcaa and f46796c; 'not a parity claim' and the moved premise are about its reading, not its value","run":"1f16c0d5.b999"}
+{"kind":"ok","group":115,"why":"10 facts: claims_guard's old walker was Path.rglob, which does not follow symlinks, in _order, claims_guard and tooling alike; disk cleanup became a false alarm in each","run":"1f16c0d5.b999"}
+{"kind":"same","group":118,"facts":["V1838","V843"],"finding":"conflict","why":"V1838: llm_labels_raw.csv (the teacher) reads gold-58 0.8848; V843/V859/V1345: the same file reads 0.8976. 0.8848 is the T112 student's gold-58 in PROGRESS, not the teacher's","run":"1f16c0d5.b999"}
+{"kind":"ok","group":122,"why":"9 facts on batched_cam: one forward per study, ONE batched autograd.grad, no per-label backward loop: cam_viewer.py and tooling.py agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":125,"why":"9 facts on StudyWindows.__init__: norm defaults to none, clean_windows defaults True (T119): different parameters; resume under the span rule refuses: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":128,"why":"9 facts citing AGENTS.md: re-record the count in _order, Makefile and AGENTS.md (coat.py, Makefile, tooling agree); 975 count is marked in group 12","run":"1f16c0d5.b999"}
+{"kind":"same","group":131,"facts":["V2772","V3273"],"finding":"superseded","why":"V2772 (claims_guard; also V1996, V3167): / hit 98% on 09-20; V3273 (AGENTS.md, later): 97% used, 29 GiB free of 767, after archiving (V3277: 98% before): a later reading of a moving quantity","run":"1f16c0d5.b999"}
+{"kind":"ok","group":134,"why":"8 facts: is_trainer/trainers_in matched the literal 'src/train.py', so the watchdog killed nothing for coat_train.py folds: coat.py, _order and gpu_watchdog.sh agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":137,"why":"8 facts on build_bag_kernels.py: renders two kernels G and H (T121 and the builder agree); a bag_child raise is not caught, failing visibly: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":140,"why":"8 facts: extra_vols (1207, 44, 336, 336) and T121's coexist/replace reasoning; materialise's 'assumed the latter' is not a second value here","run":"1f16c0d5.b999"}
+{"kind":"ok","group":143,"why":"8 facts: the gold-58 absolute band is +/-0.036 in paired_vs_member, resample_delta and train.py alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":146,"why":"8 facts on --out: argmax checkpoint written only on improvement, resume file separate and a superset of its keys; materialise's --out is another script's flag","run":"1f16c0d5.b999"}
+{"kind":"ok","group":149,"why":"8 facts: clean centres min 22 in coat_data and build_t112 (3,200 rows); mean 32.8 vs theoretical 34; k_eval 42 - 34 = ~8 repeats: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":154,"why":"7 facts: every fact quotes the T117 note '384/bs2 is 97% full' (T121 at two commits, profile_vram); the 75% measurement that refutes it is another measurand (group 104)","run":"1f16c0d5.b999"}
+{"kind":"ok","group":157,"why":"7 facts on the synthetic validity set np.arange(min(3, depth)): coat_data and coat.py agree it bypassed the clean contract in getitem","run":"1f16c0d5.b999"}
+{"kind":"ok","group":160,"why":"7 facts on --swa-epochs: default 3, refused at 0 under --train-gold, interrupted tail shipped one epoch under a recipe of 3: coat_train.py and _order agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":163,"why":"7 facts on view_w_edit: RUN CONFIG weights arms by name and the swap renames one; the edit renames the key and refuses blind: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":166,"why":"7 facts: T105's kernel run is 429-434 min in coat.py, build_t112 and _order; margin 'about 60 minutes' = 'about an hour': consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":169,"why":"7 facts: StudyWindows defaults clean_windows=True in cam_viewer and the T120 review alike; the legacy-input effect is the same finding 4","run":"1f16c0d5.b999"}
+{"kind":"ok","group":172,"why":"6 facts on assert_parent_res: every parent arm at 384, the default, so img_size threading is a no-op for them: coat.py and build_t112 agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":174,"why":"6 facts on claims_guard.py: it runs inside make check and fails it on a stale citation, --list exits 0; make check excludes kernel: consistent","run":"1f16c0d5.b999"}
+{"kind":"same","group":177,"facts":["V511","V1682"],"finding":"conflict","why":"V511: the old eval draw '7.9% touched a blank'; V1682, V901, V1428, V2325: the same old span-rule eval draw, 5.7% touched a blank slot: incompatible figures for one measurement","run":"1f16c0d5.b999"}
+{"kind":"ok","group":180,"why":"6 facts naming build_arm_kernel.py: :577 precedent, slug trap from T066 measured 09-08, make kernel stages kernels: different attributes, consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":183,"why":"6 facts: split vs CoatMIL.forward differs 5.5e-4 under TF32, 6e-7 fp32, 0 on CPU, in coat_gradcam and cam_viewer alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":186,"why":"6 facts: SWA over the last 3 epochs; recipe records swa_epochs, never n_avg (coat_train.py and coat.py agree)","run":"1f16c0d5.b999"}
+{"kind":"ok","group":189,"why":"6 facts: dense allocator mean 92.5 windows (_order, tooling) within its maximum of 94 (bag_child); mismatch is coverage not geometry in both","run":"1f16c0d5.b999"}
+{"kind":"same","group":192,"facts":["V836","V1009"],"finding":"conflict","why":"V836: gold-58's best use is as 'the only 58 rows of truth in the corpus'; V1009: 'the only 37 rows of truth': gold-58 is 58 studies throughout, an incompatible count","run":"1f16c0d5.b999"}
+{"kind":"ok","group":197,"why":"5 facts: EXT1 is 954 GB with 379 GB free in T121 at 2e7ffc6 and 3c8fcaa and AGENTS.md alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":200,"why":"5 facts: SLOT_BUDGETS (20,12,12,8,16,8) = 76 windows in materialise, bag_child and dicom_bag alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":203,"why":"5 facts on decode: bag_child's CPU decode vs resample_delta's 384 -> 224 resize (384/224 = 1.714x) are different code paths","run":"1f16c0d5.b999"}
+{"kind":"ok","group":206,"why":"5 facts naming CUDA_VISIBLE_DEVICES: smoke clears it (no GPU), bag_child one GPU per shard, kaggle_train hides a broken device: different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":209,"why":"5 facts on BagWindows: eval pick linspace(0, n_valid-1, k).round(), no clean_windows flag (coat_data and _order agree)","run":"1f16c0d5.b999"}
+{"kind":"ok","group":212,"why":"5 facts: corpus at /mnt/S/rsna-corpus-dicombag written by materialise.py --specs fixed; bag_child's place() mirrors its fixed branch: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":215,"why":"5 facts on trainers_in: the old hardcoded 'src/train.py' match (coat.py, _order) and gpu_stop.sh's new process-args read: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":218,"why":"5 facts on DENSE_TARGET: read from the notebook at run time and asserted; dense allocator up to 94 windows: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":221,"why":"5 facts on gpu_stop.sh --stop: it refuses when a fold trains, but could not see coat folds (coat.py, _order agree) and pkilled the session","run":"1f16c0d5.b999"}
+{"kind":"ok","group":224,"why":"5 facts on teacher_gold_auc: scores the label file, not the model, against gold-58; the one check against decoys: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":227,"why":"5 facts: absent clean_windows means False in coat_train.py and coat.py alike; legacy dirty resume succeeds, legacy clean refuses","run":"1f16c0d5.b999"}
+{"kind":"ok","group":229,"why":"4 facts on the BROKEN floor: coat_train refuses below it; resample_delta says the morning reading must not clear it: different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":230,"why":"4 facts naming repo_guard.py: make guards composition, link checks for four entry documents, layout test: different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":233,"why":"4 facts: old span-rule train draw touched a blank 5.0% in coat_data, coat.py and _order (16.7% is its boundary share): consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":236,"why":"4 facts on _SPECS: both packings, 44 and 64, in build_t112 and _order alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":239,"why":"4 facts: test_t115_notebook_builds_at_the_checkpoints_res, +22 checks, T115 2026-09-19, proves the grid transformation: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":242,"why":"4 facts: gold-58 recipe-pair r = 0.63-0.78 in T121, coat.py and _order alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":245,"why":"4 facts: persistent_workers is off on purpose (coat_train); _order's substring-grep weakness is about the guard: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":248,"why":"4 facts: clean_windows joined RECIPE on 09-20 (T119) and makes a mismatched resume refuse: coat_train.py and coat.py agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":251,"why":"4 facts on void_forbidden: the must-NOT half of the VOID gate, and it names the failure it closes: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":254,"why":"4 facts: make_bag returns (N,3,384,384) pre-formed triplets; check_images checks shape, slot ids and three image channels: consistent","run":"1f16c0d5.b999"}
+{"kind":"same","group":257,"facts":["V2138","V637"],"finding":"conflict","why":"V2138: _order's second test_t100_bn_recalibration entry (2026-09-15, T100) is +10 checks; V637 gives the same entry as +22 (_order at da31b2e still says +9 and +10): incompatible counts","run":"1f16c0d5.b999"}
+{"kind":"ok","group":260,"why":"4 facts on build_bag_kernels: a bag_child raise fails the submission visibly; the trail's next step pushes G: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":263,"why":"4 facts naming open_corpus: it refuses a half-staged corpus (T121 cites it), dry run checks it opens; 3.1x is T121's own old row: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":266,"why":"4 facts on _centres: old range(lo+1, hi) rule (_order); gradcam and cam_viewer use getitem's rule, read not restated: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":269,"why":"4 facts: the 0942 dense packing straddles a boundary on 8 of 94 windows in coat_data and coat.py alike","run":"1f16c0d5.b999"}
+{"kind":"same","group":272,"facts":["V982","V152"],"finding":"conflict","why":"V982: coat_train.py's measured envelope gives the RTX 4070 Laptop 7.62 GiB; V152 and V529 (T121, run script): the same card's total is 7.65 GiB: two values for one card's total memory","run":"1f16c0d5.b999"}
+{"kind":"ok","group":275,"why":"4 facts on --accum: bs 2 x accum 4 = the same 8 studies per step as bs 8; bs/accum set steps per epoch, so a resume must keep them: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":278,"why":"4 facts on img=384: img is theirs (decode size), res ours; img 384 from the replaced member; img=224 until 09-18 then refused: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":281,"why":"4 facts: cam_viewer gets every label's gradient from one batched autograd.grad and runs no per-label backward, in cam_viewer and tooling alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":287,"why":"3 facts: modules loaded by file path via spec_from_file_location; tooling's regex-literal fact is another attribute","run":"1f16c0d5.b999"}
+{"kind":"ok","group":290,"why":"3 facts: 'their class is the anchor' in paired_vs_member, push_arm and dry_run alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":293,"why":"3 facts: --swa-epochs default 3 on the 16-epoch / tail-3 recipe = epochs 13/14/15 of 16: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":296,"why":"3 facts: claims_guard's stale() returns unresolved citations; kaggle_train's 'Check first' is another subject","run":"1f16c0d5.b999"}
+{"kind":"ok","group":299,"why":"3 facts: RECIPE resume rule (agree on every field) is the same at 2e7ffc6 and 685d4b9","run":"1f16c0d5.b999"}
+{"kind":"ok","group":302,"why":"3 facts: test_t121_bag_corpus, +17 checks, synthetic fixture so gated: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":305,"why":"3 facts: 12 of ~42 legal centres for all 16 epochs in coat_train.py and coat.py alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":308,"why":"3 facts naming rank_slices: coat_gradcam imports the helpers, tooling describes the full ordering: different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":311,"why":"3 facts naming --push: build_bag_kernels --tag score --push (builder and trail agree), push_arm's own --push: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":314,"why":"3 facts: 436 checks is smoke_test at T004, a dated historical count; the flag-check pin is another attribute","run":"1f16c0d5.b999"}
+{"kind":"ok","group":317,"why":"3 facts: --parity 8 proves byte-for-byte; T121 measured 8/8 rows byte-identical: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":320,"why":"3 facts: make smoke asserts the ordered-name hash; 1335 / 6e773a57 is _order's current gate (Makefile's stale 1239 is marked in group 12)","run":"1f16c0d5.b999"}
+{"kind":"ok","group":323,"why":"3 facts: two flag guards, same extraction as known_flags, smoke_test pins them to identical verdicts: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":326,"why":"3 facts: capabilities_flag_count proves a history claim from logs under outputs/; following symlinks fixed how it reads: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":329,"why":"3 facts: old stored_recipe defaulted norm but not clean_windows, so a legacy resume refused --dirty-windows: coat.py and _order agree","run":"1f16c0d5.b999"}
+{"kind":"ok","group":332,"why":"3 facts: recipe records swa_epochs, never n_avg, in coat_train.py and coat.py alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":335,"why":"3 facts: gpu_watchdog sends USR1 for a stack before it kills, in gpu_watchdog.sh and train.py alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":338,"why":"2 facts: k 12 in profile_vram's invocation and T111's envelope: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":341,"why":"2 facts sharing 'silently wrong': T121 quotes open_corpus; materialise's 'assumed the latter' is another subject","run":"1f16c0d5.b999"}
+{"kind":"ok","group":344,"why":"2 facts naming compare_ckpts: old output omitted the seed; AGENTS.md's T004 load note is another attribute","run":"1f16c0d5.b999"}
+{"kind":"ok","group":347,"why":"2 facts: k_eval 42 against 34 centres repeats ~8 (42 - 34 = 8) in coat_data and coat.py alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":350,"why":"2 facts: --hold-out-gold is the opt-out; the 09-20 ruling holds nothing out by default: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":353,"why":"2 facts: src/dataset.py:285 'Keep persistent_workers off' quoted identically in coat_train.py and coat.py","run":"1f16c0d5.b999"}
+{"kind":"ok","group":356,"why":"2 facts: Kaggle's quota is 30 h/week in coat_train.py and AGENTS.md alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":359,"why":"2 facts: res 224 comes from our checkpoint, res is ours: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":362,"why":"2 facts: the gate changes only with _order and AGENTS.md; 1335 is _order's current count","run":"1f16c0d5.b999"}
+{"kind":"ok","group":365,"why":"2 facts on the resume block: SWA accumulator initialised before it; coat.py checks the persistence contract at its call sites: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":368,"why":"2 facts: materialise sends every study through dicom_bag.make_bag with the vendored specs: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":371,"why":"2 facts on ckpt.sh live: a past IN FLIGHT bug and its use before spending: different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":374,"why":"2 facts on --layer: stages.2 runs stage 3 on a graph; the hooked layer is a choice: consistent","run":"1f16c0d5.b999"}
+{"kind":"same","group":377,"facts":["V483","V1286"],"finding":"conflict","why":"V483: a fold that OOMs at epoch 13 of 16 'has burned ~7 h'; V1286: the same sentence with ~2 h (coat.py at b3e35d5 has no such clause): incompatible costs for one event","run":"1f16c0d5.b999"}
+{"kind":"ok","group":380,"why":"2 facts: only last.pt carries completed_epochs; load_resume returns where it left off: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":383,"why":"2 facts: frame_share (gradcam) and edge_mass (viewer) are two metrics on the outer ring: different attributes","run":"1f16c0d5.b999"}
+{"kind":"ok","group":386,"why":"2 facts: a history guard must refuse on unreachable evidence; a dangling link yields nothing: consistent","run":"1f16c0d5.b999"}
+{"kind":"ok","group":389,"why":"2 facts sharing BLE001: materialise categorises, the viewer shows on the page: different handlers","run":"1f16c0d5.b999"}
+{"kind":"ok","group":392,"why":"2 facts: ptrace_scope=1, no sudo, so no py-spy, in gpu_watchdog.sh and tooling alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":395,"why":"2 facts: absent clean_windows means False in resample_delta and cam_viewer alike","run":"1f16c0d5.b999"}
+{"kind":"ok","group":398,"why":"2 facts: frozen encoder with no graph in coat_gradcam and cam_viewer alike","run":"1f16c0d5.b999"}
+{"kind":"same","edit":15,"facts":["V332","V373"],"finding":"superseded","why":"V332 (09-23): 'H smoke: COMPLETE', 3/3 ok, 5 members; V373 (09-28): 'Both smokes COMPLETE and clean (G v3, H v2)': a later state of the smoke runs, same 3/3 and 5 members","run":"1f16c0d5.b999"}
+{"kind":"same","edit":16,"facts":["V392","V1"],"finding":"superseded","why":"V392: T121 status 'claimed' at 0029f47 (09-28 01:15); V1: status 'done' at 3c8fcaa (13:54): the task's state moved","run":"1f16c0d5.b999"}
+{"kind":"same","edit":17,"facts":["V2456","V2069"],"finding":"superseded","why":"V2456: test_t121_dense_specs '+8' at 9508307 (gate 1331); V2069: the same entry '+12' at 0b783b8 (gate 1335, +4): the function's check count grew and the entry was updated","run":"1f16c0d5.b999"}
+{"kind":"same","edit":18,"facts":["V347","V392"],"finding":"superseded","why":"V347: owner @k/e804d562 09-23, operator 'relaunch the 384 fold'; V392: owner @b/8900ef32 09-28, 'submit H': the claim's current holder and instruction moved, status still claimed","run":"1f16c0d5.b999"}
+{"kind":"same","edit":19,"facts":["V2446","V2380"],"finding":"superseded","why":"V2446: gate 1302 checks, md5 dae276cf, at 2e7ffc6 (09-21); V2380: 1335 checks, md5 6e773a57, at 0b783b8 (09-22): a later count","run":"1f16c0d5.b999"}
+{"kind":"same","edit":20,"facts":["V2454","V2380"],"finding":"superseded","why":"V2454: gate 1323 checks at 685d4b9 (09-22 02:56); V2380: 1335 at 0b783b8 (04:04): a later count","run":"1f16c0d5.b999"}
+{"kind":"same","edit":21,"facts":["V660","V632"],"finding":"conflict","why":"V660: both kernels insert at 'the one module-level anchor _coat_n = _coat_substitute()'; V632: at INSERT_AT, where G's anchor is now '_coat_public_path = _KePath(' (bd616cc: G inserts before the Raptor backup): corrected","run":"1f16c0d5.b999"}
+{"kind":"same","edit":22,"facts":["V299","V393"],"finding":"superseded","why":"V299: last touched 09-21, 'still nothing built'; V393: last touched 09-28, 'H submitted': the task's current state moved","run":"1f16c0d5.b999"}
+{"kind":"same","edit":23,"facts":["V393","V260"],"finding":"superseded","why":"V393: 'H submitted' (0029f47, 01:15); V260: 'G and H scored' (3c8fcaa, 13:54): a later state","run":"1f16c0d5.b999"}
+{"kind":"ok","edit":24,"why":"cost-table row 'dicom_bag geometry' became 'dicom_bag geometry, as registered': a label beside a new MEASURED row, the row's own claim unchanged","run":"1f16c0d5.b999"}
+{"kind":"same","edit":25,"facts":["V335","V385"],"finding":"conflict","why":"V335: G's save log need show OURS-BAG384 RAN and GATE G, zero VOID; V385: it MUST also contain '[coat-arm] blended OUR resgated': the gate was incomplete and corrected","run":"1f16c0d5.b999"}
+{"kind":"ok","edit":26,"why":"'Next decision: G against rule 3 (C' 0.939)' and 'rule 3 above, verbatim: C' 0.939': the same reference, reworded","run":"1f16c0d5.b999"}
+{"kind":"ok","edit":27,"why":"'No sweep on any outcome' gained 'not the member weight, not k_eval, not the family alpha': the same claim, spelled out","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":13,"why":"V122 'changes the decode key (76 slots at 384, not 44 at 336)' contrasts the bag fold with the old corpus; V316's same-key claim was about a fold on the 44-slot corpus, so it corrects nothing","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":14,"why":"V564's 89.2% 'not 100%' agrees with V2074 and V3218 (89.2%); no earlier fact here claimed 100%, so it corrects none of them","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":15,"why":"V1115 'the expensive mistakes on this path are all silent' is a summary; V1687 'announced, never silent' is the fallback's design: it corrects nothing","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":16,"why":"V1174 restates V1803: the first-draft stride check guarded img and refused a maxspan-v5 swap; it agrees with the earlier facts and corrects none","run":"1f16c0d5.b999"}
+{"kind":"same","cue":17,"facts":["V286","V1499"],"finding":"conflict","why":"V286: T121's cost table put the dicom_bag corpus at 49.4 GB; V1499: that figure 'assumed a 76-slice single-channel volume' (rows are triplets, V948: 148 GB): corrected","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":18,"why":"V1923 'reads as the registered REJECT rather than as a mistake' describes how a res mismatch would look, as V1710 and V1763 do for norm and clean: it corrects nothing","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":19,"why":"V2074 'the overlap is 89.2%, not 100%' denies an assumed full nesting; no earlier fact here claims 100% (the 8/94 straddles and slot overlaps are other quantities): corrects none","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":20,"why":"V2845 'the wall clock on this machine is wrong' is a standing note from AGENTS.md; none of the earlier facts states a time it would correct","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":21,"why":"V3173 'make check went red, but the answer was wrong' describes the symlink false alarm; it agrees with V2791/V3154 on wrong-reason failures and corrects none","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":22,"why":"V3255 says two facts in AGENTS.md's own drive paragraph were wrong and were corrected on 09-20; none of the listed earlier facts is one of those (they are other 09-20 events)","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":23,"why":"V3538 'Measured, not assumed' says how the log-buffering finding was established; it corrects nothing","run":"1f16c0d5.b999"}
+{"kind":"ok","cue":24,"why":"V2588 'the superseded b2 KneeMIL' names the old model gradcam.py serves; consistent with V2586/V2587 (CoAtNet adopted), corrects nothing","run":"1f16c0d5.b999"}
+{"kind":"same","check":3,"finding":"follows","why":"predicted H - A = 0.000 (range -0.001 to +0.001); measured 0.000, inside the range: HIT","run":"1f16c0d5.b999"}
+{"kind":"same","check":6,"finding":"unsupported","why":"the premise gives only the threshold 'above 0.941'; reading it as 'parity and better' needs the parity band (C' 0.939 +/- 0.002), which no premise states","run":"1f16c0d5.b999"}
+{"kind":"same","check":7,"finding":"follows","why":"53 GiB / 0.875 GiB/day = 60.6, ~61 days = 8.7 weeks; 0.875 is the ~0.9 GiB/day of V3293 within its rounding","run":"1f16c0d5.b999"}
+{"kind":"same","check":8,"finding":"unsupported","why":"the premise is only the 0942's live eval_windows call; nothing states the banner, the blend weights, or what the VOID gate greps for","run":"1f16c0d5.b999"}
+{"kind":"same","check":10,"finding":"follows","why":"E and F: res 224 on the 44-slot corpus; this fold: 384 on the 76-slot corpus: both differ","run":"1f16c0d5.b999"}
+{"kind":"same","check":12,"finding":"follows","why":"call site norm=arm.get('norm', NORM) with NORM = 'imagenet' for every arm: an arm with no norm key stays on imagenet","run":"1f16c0d5.b999"}
+{"kind":"same","check":13,"finding":"unsupported","why":"premise: the first draft pinned _SLOTS44 and (0.06, 0.94); no premise says which arguments the decode-group guard inspects, or that the replaced member's group differs","run":"1f16c0d5.b999"}
+{"kind":"same","check":17,"finding":"follows","why":"the fallback is the one path where a clean arm draws dirty windows (V1688), so a silent one scores a clean model on the distribution T119 removed","run":"1f16c0d5.b999"}
+{"kind":"same","check":18,"finding":"follows","why":"a preference order over label files means a missing file falls to the next, so a push that forgot one still trains something","run":"1f16c0d5.b999"}
+{"kind":"same","check":21,"finding":"follows","why":"the reading is the parent with one member swapped, all else byte-identical; a patch that silently no-ops leaves the parent, which scores as a null","run":"1f16c0d5.b999"}
+{"kind":"same","check":29,"finding":"follows","why":"the reference class is extracted from the notebook, never retyped, so a change to their class changes the extraction and fails the test","run":"1f16c0d5.b999"}
+{"kind":"same","check":30,"finding":"follows","why":"StudyWindows defaults clean_windows=True and every consumer omitted it, so a viewer on a span-rule checkpoint drew clean windows","run":"1f16c0d5.b999"}
+{"kind":"same","check":34,"finding":"follows","why":"fold at res 384 on the new corpus vs E and F at 224: corpus and resolution both move","run":"1f16c0d5.b999"}
+{"kind":"same","check":38,"finding":"unsupported","why":"the premise gives 8.8 h for 16 epochs at res 352; no premise states the durations of the project's past folds to compare against","run":"1f16c0d5.b999"}
+{"kind":"same","check":43,"finding":"follows","why":"a grep that passes rightly only while the literal occurs once, and can go green with the defect back, is a guard passing for the wrong reason","run":"1f16c0d5.b999"}
+{"kind":"same","check":44,"finding":"follows","why":"test_t117_no_holdout sat in the gate and aborted the suite once outputs/t107 was absent: green only while the disk had it","run":"1f16c0d5.b999"}
+{"kind":"same","check":50,"finding":"follows","why":"with unknown packing the one-group guarantee is vacuous, not violated, so one group says 'no boundaries here' honestly","run":"1f16c0d5.b999"}
+{"kind":"same","check":57,"finding":"follows","why":"the fallback fires only with no clean centre; the corpus floor is 22 clean centres, so the expected fallback count is zero","run":"1f16c0d5.b999"}
+{"kind":"same","check":61,"finding":"follows","why":"dense quotas vary per study, so no fixed per-slot region can pack them","run":"1f16c0d5.b999"}
+{"kind":"same","check":64,"finding":"unsupported","why":"the premise says only that _raw_bag runs after make_bag refused, and is counted; nothing compares a raw bag's accuracy with a column median's","run":"1f16c0d5.b999"}
+{"kind":"same","check":66,"finding":"follows","why":"an unknown depth returns ONE group, so the inside-one-group guarantee is vacuous and the no-blank guarantee still holds","run":"1f16c0d5.b999"}
+{"kind":"same","check":68,"finding":"follows","why":"the old rule range(lo+1, hi) crossed boundaries on 19.0% / 16.7% and touched blanks on 5.7% / 5.0%, so falling back to it serves those windows again","run":"1f16c0d5.b999"}
+{"kind":"same","check":70,"finding":"follows","why":"every distinct decode combination costs a full test pass, so a replacement that changes its member's key adds one","run":"1f16c0d5.b999"}
+{"kind":"same","check":77,"finding":"follows","why":"export test and dry run used resnet18 (no grid constraint) and the builder checked res % 32 arithmetic: proxies that could not fail","run":"1f16c0d5.b999"}
+{"kind":"same","check":78,"finding":"follows","why":"make_bag cannot run inside the dataloader, so Step 1 needs a pass that materialises the bags beforehand","run":"1f16c0d5.b999"}
+{"kind":"same","check":83,"finding":"follows","why":"49.4 GB registered - 21 GB on disk = 28.4 GB as stated (arithmetic on the premises; 49.4 itself is struck elsewhere)","run":"1f16c0d5.b999"}
+{"kind":"same","check":84,"finding":"follows","why":"set_epoch writes the parent and persistent workers are never re-forked, so their copy keeps the forked epoch","run":"1f16c0d5.b999"}
+{"kind":"same","check":86,"finding":"follows","why":"198 vs 196.2 MiB: 1.8 / 196.2 = 0.9%, under 1% as stated","run":"1f16c0d5.b999"}
+{"kind":"same","check":90,"finding":"follows","why":"coat_gradcam writes gradcam.py's cells.csv schema and run.json, so cam_sheet.py builds the sheet unchanged","run":"1f16c0d5.b999"}
+{"kind":"same","check":102,"finding":"follows","why":"the fifth view resolves the same arm by name, so after the rename the lookup finds none: StopIteration once raptor_extra_arm_w is set","run":"1f16c0d5.b999"}
+{"kind":"same","check":103,"finding":"follows","why":"the old check was the literal in src and nothing else, so it is right only while the literal occurs exactly once","run":"1f16c0d5.b999"}
+{"kind":"same","check":104,"finding":"follows","why":"the last log line of a hung run shows the previous loader's state, so 'hung at the start of epoch 6' could not be read off it","run":"1f16c0d5.b999"}
+{"kind":"same","check":105,"finding":"follows","why":"if dropping the first of three equally-spaced points lands on the same centre, the defective and correct weights can coincide, so only the count can gate","run":"1f16c0d5.b999"}
+{"kind":"same","check":108,"finding":"follows","why":"the loop saved before folding epoch N in, so the tail checkpoint carried the pre-N accumulator: the value persisted was the wrong one","run":"1f16c0d5.b999"}
+{"kind":"same","check":114,"finding":"follows","why":"epochs 13-15 = 3 left at ~41 min/epoch = ~123 min, ~2 h as stated","run":"1f16c0d5.b999"}
+{"kind":"same","check":116,"finding":"follows","why":"the comparison sees (None, False) for a legacy dirty fold because the field is absent; defaulting it to false makes it (False, False)","run":"1f16c0d5.b999"}
+{"kind":"same","check":119,"finding":"follows","why":"the local check passed what the kernel rejected; keeping the two in agreement is the remedy for that disagreement","run":"1f16c0d5.b999"}
+{"kind":"same","check":124,"finding":"unsupported","why":"the premise says every rendered kernel got clean=False; no premise describes T112's norm defect or T115/H1's grid defect to compare shapes with","run":"1f16c0d5.b999"}
+{"kind":"same","check":132,"finding":"follows","why":"push_arm reads recipe and res and neither records n_avg, so a short SWA cannot be seen downstream","run":"1f16c0d5.b999"}
+{"kind":"same","check":133,"finding":"follows","why":"_ok built after the synthetic span gives {0,1,2} to studies with 0-2 valid slots, so centre 1 passed and the fallback could not fire","run":"1f16c0d5.b999"}
+{"kind":"same","check":134,"finding":"follows","why":"the jitter/crop stream is keyed on (seed, index), part of every run's recipe, so changing its key changes what every measured run trained on","run":"1f16c0d5.b999"}
+{"kind":"same","check":136,"finding":"follows","why":"4,407 x 76 x 3 x 384^2 = 148,163,198,976 B = 148.2 GB as stated; non-overlapping windows (V1500) are why triplets are stored whole","run":"1f16c0d5.b999"}
+{"kind":"same","check":137,"finding":"follows","why":"kaggle datasets version replaces the directory, so adding one file means uploading all of it again","run":"1f16c0d5.b999"}
+{"kind":"same","check":140,"finding":"follows","why":"the band is a pair of order statistics that moves with the seed, so an endpoint inside that margin can flip on a re-run","run":"1f16c0d5.b999"}
+{"kind":"same","check":144,"finding":"follows","why":"valid = arange(3) gives slots 0,1,2, inside the first typed group (sagittal-FS, 12 slots), so centre 1 passed","run":"1f16c0d5.b999"}
+{"kind":"same","check":147,"finding":"follows","why":"range(lo+1, hi) reads only the span's ends, so an interior blank was a legal centre and neighbour","run":"1f16c0d5.b999"}
+{"kind":"same","check":153,"finding":"unsupported","why":"premises give 330 MB per family and 53 GiB free on 09-12; the 18 GiB set against it (a projection for the close date) is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":155,"finding":"follows","why":"/mnt/S has 250 GB free, internal and mounted; ~70 GB fits comfortably","run":"1f16c0d5.b999"}
+{"kind":"same","check":160,"finding":"unsupported","why":"premises: module level first, and train.py has two run functions; that ast.walk is breadth-first, which the 'luck' rests on, is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":167,"finding":"follows","why":"argmax excess +0.0134/+0.0044/+0.0083 (mean 0.0087) against a 0.0079 between-fold spread: the selector moved the number more","run":"1f16c0d5.b999"}
+{"kind":"same","check":169,"finding":"follows","why":"the reference class is extracted from the notebook, so their change breaks the test rather than passing against a stale copy","run":"1f16c0d5.b999"}
+{"kind":"same","check":170,"finding":"follows","why":"the decoys read 1.0000 because their 58 is_gold rows carry gold values, so a file over the ceiling is such a file, not a teacher","run":"1f16c0d5.b999"}
+{"kind":"same","check":173,"finding":"follows","why":"blanks match missing series 95% / 86%, and a filled block's type is present 94-100%, so some filled blocks come from another series","run":"1f16c0d5.b999"}
+{"kind":"same","check":177,"finding":"follows","why":"utilization dips to 0% between batches, so one 0% sample says nothing","run":"1f16c0d5.b999"}
+{"kind":"same","check":178,"finding":"follows","why":"arm_t112.sh already greps every forbidden line, so registering them in the builder ties the two lists together","run":"1f16c0d5.b999"}
+{"kind":"same","check":180,"finding":"follows","why":"the cache is used when the notebook is absent and refused when they disagree, so the fallback covers absence only","run":"1f16c0d5.b999"}
+{"kind":"same","check":183,"finding":"follows","why":"T108's metadata ships no checkpoint of ours, so the weight file is missing when find_weight_file runs, ~6 of 7 hours in","run":"1f16c0d5.b999"}
+{"kind":"same","check":199,"finding":"unsupported","why":"the premise reports only that a linear-trajectory check failed; that this is a property of a running mean needs the equal-spacing argument, which no premise gives","run":"1f16c0d5.b999"}
+{"kind":"same","check":202,"finding":"follows","why":"their inputs carry ~4.48x our standard deviation and a -0.24 mean shift: a model trained on [0, 1] sees another distribution","run":"1f16c0d5.b999"}
+{"kind":"same","check":204,"finding":"follows","why":"the accumulator below the resume block was reset on resume, so a tail resume shipped one epoch labelled as an SWA","run":"1f16c0d5.b999"}
+{"kind":"same","check":207,"finding":"follows","why":"their loader reads ck['res'] and uses the ARMS res only as a fallback, so the res written by --res decided the eval resolution","run":"1f16c0d5.b999"}
+{"kind":"same","check":208,"finding":"follows","why":"every window is rendered inside one typed slot from one series and stored whole, so a cross-series window cannot be stored at all","run":"1f16c0d5.b999"}
+{"kind":"same","check":218,"finding":"unsupported","why":"premises give the AND test and hangs killed after 62 min and 1 h 43 m; the twenty-minute hold the conclusion states is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":221,"finding":"follows","why":"after / hit 98% and eight trees were archived, the guard reported 11 never-passed flags against a page saying four, on unchanged evidence: a false alarm","run":"1f16c0d5.b999"}
+{"kind":"same","check":226,"finding":"follows","why":"_eval_centers resamples to k, so len(cs) is k under either rule; one of the two pinned mistakes of the twelve checks","run":"1f16c0d5.b999"}
+{"kind":"same","check":227,"finding":"follows","why":"a crash after epoch 14 ends at n_avg 2 of tail 3; the gate refuses 0 < n_avg < tail, so the fold does not ship","run":"1f16c0d5.b999"}
+{"kind":"same","check":229,"finding":"follows","why":"the flag is lost on export (second render false), so preserving it in the metadata and reading it back is the remedy","run":"1f16c0d5.b999"}
+{"kind":"same","check":233,"finding":"follows","why":"cs = range(lo+1, hi) from valid.min() and valid.max() only, so interior blanks were legal centres","run":"1f16c0d5.b999"}
+{"kind":"same","check":234,"finding":"follows","why":"G = 0.940 >= 0.937, the condition for submitting H","run":"1f16c0d5.b999"}
+{"kind":"same","check":241,"finding":"follows","why":"cell 47 keys groups on (img, slots, span, k_eval): those four are the decode recipe","run":"1f16c0d5.b999"}
+{"kind":"same","check":242,"finding":"follows","why":"the flag survives a first render and is false after export, so the mismatch reaches only the re-push path, with no error","run":"1f16c0d5.b999"}
+{"kind":"same","check":245,"finding":"unsupported","why":"the premises give only the parity band 0.937-0.941; naming the input path as the deficit needs it to be the only change, and the fold also moved res (224 to 384)","run":"1f16c0d5.b999"}
+{"kind":"same","check":247,"finding":"follows","why":"a window is (3, H, W); repeating C three times gives 9 channels against a conv1 that takes 3","run":"1f16c0d5.b999"}
+{"kind":"same","check":248,"finding":"follows","why":"with gold in training the gold argmax picks the epoch that overfits those 58 most, so the selector had to change with it","run":"1f16c0d5.b999"}
+{"kind":"same","check":249,"finding":"follows","why":"the tail checkpoint carried the pre-N accumulator, so a crash after epoch 14 resumes at n_avg 1, adds 15, ends at 2 of 3","run":"1f16c0d5.b999"}
+{"kind":"same","check":257,"finding":"unsupported","why":"premise: a normal epoch is 30 minutes; the stall threshold (20 min) and that train.py logs only once per epoch are in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":258,"finding":"follows","why":"the literal train_gold False was accurate until T117 made --train-gold default on, so the page called an in-sample number clean","run":"1f16c0d5.b999"}
+{"kind":"same","check":260,"finding":"follows","why":"cell 47 decodes each (img, slots, span, k_eval) group once, so a new img makes a new group: one more pass","run":"1f16c0d5.b999"}
+{"kind":"same","check":264,"finding":"follows","why":"decode is per group and each arm is resized to its res inside eval_windows, so res is what the model sees","run":"1f16c0d5.b999"}
+{"kind":"same","check":269,"finding":"follows","why":"4,407 unique rows, no NaN, range 0.03-0.98 in (0,1), gold-58 0.8976, equal to the parquet to 2.9e-8, under the 0.99 guard","run":"1f16c0d5.b999"}
+{"kind":"same","check":277,"finding":"follows","why":"an idle viewer's CUDA context makes gpu_queue.sh see the card busy and defer a fold, so use cuda only with none queued","run":"1f16c0d5.b999"}
+{"kind":"same","check":278,"finding":"follows","why":"StudyWindows now defaults to clean and the consumers omit the flag, so they no longer reproduce the dirty input","run":"1f16c0d5.b999"}
+{"kind":"same","check":279,"finding":"follows","why":"all four parent arms evaluate at 384, the default, so only an arm at another res could expose the grid defect","run":"1f16c0d5.b999"}
+{"kind":"same","check":281,"finding":"follows","why":"11 reported against a page saying four, with only the symlinks changed: the answer tracked the filesystem","run":"1f16c0d5.b999"}
+{"kind":"same","check":283,"finding":"follows","why":"the driver rewrites only BatchNorm buffers with its own estimator; unequal valid-slice counts make a batch average misweight them","run":"1f16c0d5.b999"}
+{"kind":"same","check":286,"finding":"follows","why":"arm_probs pre-filled 0.5, load succeeds, every forward raises (196 vs 576) into a try that continues: the column stays 0.5","run":"1f16c0d5.b999"}
+{"kind":"same","check":289,"finding":"follows","why":"every window comes from one slot of one series, so there is no cross-series window to filter","run":"1f16c0d5.b999"}
+{"kind":"same","check":291,"finding":"follows","why":"no img_size means the default 384 grid; 384/16 = 24, 24^2 = 576 positions","run":"1f16c0d5.b999"}
+{"kind":"same","check":292,"finding":"unsupported","why":"the premise says only that a live fold was killed five minutes in; that the check and the pkill were in one command, the stated cause, is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":294,"finding":"follows","why":"dicom_bag enforces same-series triplets in six typed slots, so each stored window is one slot of one series","run":"1f16c0d5.b999"}
+{"kind":"same","check":296,"finding":"follows","why":"kaggle kernels push exits 0 whether it pushed or refused, so only the sentinel line tells a refusal apart","run":"1f16c0d5.b999"}
+{"kind":"same","check":301,"finding":"follows","why":"the rule maps H - A = 0.000 to UNRESOLVED, A stays; measured H - A = 0.000","run":"1f16c0d5.b999"}
+{"kind":"same","check":306,"finding":"follows","why":".get('res') returned None on a re-import, so 'trained_res is not None' was False and the refusal was skipped","run":"1f16c0d5.b999"}
+{"kind":"same","check":310,"finding":"follows","why":"the stub scores ~0.3, below the 0.85 floor, so the floor refuses it","run":"1f16c0d5.b999"}
+{"kind":"same","check":311,"finding":"contradicted","why":"with weights N, dropping the first of 13,14,15 gives (14+15)/2 = 14.5, not the 14.0 both orderings gave; 14.0 = (13+15)/2, dropping the middle point","run":"1f16c0d5.b999"}
+{"kind":"same","check":313,"finding":"follows","why":"both helpers matched the literal src/train.py, so a coat_train.py fold was invisible to --stop's refusal","run":"1f16c0d5.b999"}
+{"kind":"same","check":320,"finding":"follows","why":"synthetic [0,1,2] replaces masks with under three valid slots before the clean check, and 12/12 windows then touch blanks with no diagnostic","run":"1f16c0d5.b999"}
+{"kind":"same","check":321,"finding":"follows","why":"the drive was mounted at /run/media/ade/EXT1 while /mnt/E stayed empty, so a check of /mnt/E saw no drive","run":"1f16c0d5.b999"}
+{"kind":"same","check":322,"finding":"follows","why":"the bag is rank 5 and channels_last is rank 4, so it goes on the flattened window batch","run":"1f16c0d5.b999"}
+{"kind":"same","check":327,"finding":"follows","why":"volumes, masks and ids share one row order (part 1 then part 2), so sorting one alone mis-pairs rows while shapes still fit","run":"1f16c0d5.b999"}
+{"kind":"same","check":328,"finding":"follows","why":"954 GB with 379 GB free at 1.7 GB/s direct: capacity cannot have been the problem","run":"1f16c0d5.b999"}
+{"kind":"same","check":334,"finding":"follows","why":"beside: 49.4 + 21 = ~70 GB; replacing returns 21 GB: the two answers set different targets","run":"1f16c0d5.b999"}
+{"kind":"same","check":336,"finding":"follows","why":"slice_span is part of the input and train.py gives it to validation too, so a differently sampled bag measures the mismatch","run":"1f16c0d5.b999"}
+{"kind":"same","check":340,"finding":"follows","why":"6 PM + ~10.7 h = ~04:42, 'around 04:45' as stated","run":"1f16c0d5.b999"}
+{"kind":"same","check":342,"finding":"follows","why":"gradcam.py rebuilds from stored args; a coat_train.py checkpoint stores recipe instead, so it cannot open one","run":"1f16c0d5.b999"}
+{"kind":"same","check":345,"finding":"follows","why":"past members cost 0 to -0.001; a predicted range of -0.001 to +0.001 around 0.000 covers that","run":"1f16c0d5.b999"}
+{"kind":"same","check":346,"finding":"follows","why":"kernel 384 -> 224 = 1.714x; trainer 336 -> 224 = 1.5x, as stated","run":"1f16c0d5.b999"}
+{"kind":"same","check":348,"finding":"follows","why":"run ids are session-derived and live grouped by run keeping the last record, so one task's end hid the other's doing","run":"1f16c0d5.b999"}
+{"kind":"same","check":349,"finding":"follows","why":"per-window slot ids keep group boundaries recoverable where an all-ones mask destroys them: strictly more informative","run":"1f16c0d5.b999"}
+{"kind":"same","check":356,"finding":"follows","why":"the map is a leaf that requires grad and nothing between it and the logit is skipped, so its gradient is the hooked one","run":"1f16c0d5.b999"}
+{"kind":"same","check":358,"finding":"unsupported","why":"the premise says T086's first pass got the never-passed set wrong; the cause (a smoke-check name echoed into a log) is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":360,"finding":"follows","why":"~40 min/epoch x 16 = 640 min = ~10.7 h","run":"1f16c0d5.b999"}
+{"kind":"same","check":363,"finding":"follows","why":"4,407 x 76 x 384 x 384 = 49,387,732,992 B = 49.4 GB = 46.0 GiB, right on these premises (they omit the 3 channels; see group 15)","run":"1f16c0d5.b999"}
+{"kind":"same","check":367,"finding":"follows","why":"config weights arms by name, swap_edit renames one, render edits only the arm cell: the key and the arm no longer match","run":"1f16c0d5.b999"}
+{"kind":"same","check":374,"finding":"follows","why":"the exported file is a valid input to the same reads, so what they need (clean_windows, res, norm) must survive export","run":"1f16c0d5.b999"}
+{"kind":"same","check":379,"finding":"follows","why":"the earlier guard tested saturation and passed a leaked file: a check that cannot fail on its subject gives false assurance","run":"1f16c0d5.b999"}
+{"kind":"same","check":382,"finding":"follows","why":"the old metric test pinned only the degenerate-column skip, none of the definition, which is the stated reason for H9","run":"1f16c0d5.b999"}
+{"kind":"same","check":384,"finding":"follows","why":"arm_probs pre-filled 0.5, load succeeds, forwards raise into a try that continues: the kernel completes","run":"1f16c0d5.b999"}
+{"kind":"same","check":386,"finding":"follows","why":"this fold at 384 on the new corpus, E and F at 224: corpus and resolution both differ","run":"1f16c0d5.b999"}
+{"kind":"same","check":390,"finding":"follows","why":"global average pooling after the hooked layer makes each channel's gradient the same at every position","run":"1f16c0d5.b999"}
+{"kind":"same","check":397,"finding":"unsupported","why":"the premise says only that git rev-parse HEAD ignores the CWD; that the other half did depend on it and failed is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":402,"finding":"unsupported","why":"premises give identical input (img 384, 44 slices, span 0.06-0.94, 42 windows); that B and C' share one architecture, needed to exclude it, is not stated","run":"1f16c0d5.b999"}
+{"kind":"same","check":405,"finding":"follows","why":"the tail epochs are statistically indistinguishable, so picking the argmax among them on the same 58 studies selects on noise","run":"1f16c0d5.b999"}
+{"kind":"same","check":411,"finding":"follows","why":"the 0.27 GiB SWA copy enters VRAM from epoch 13, so an OOM from it would come in the tail","run":"1f16c0d5.b999"}
+{"kind":"same","check":415,"finding":"follows","why":"open_bag_corpus refuses a half-written corpus because its zeros would read as pixels under a valid mask","run":"1f16c0d5.b999"}
+{"kind":"same","check":417,"finding":"follows","why":"export test and dry run on resnet18, push_arm proves a load, builder checks res % 32: none forwards through the kernel's backbone","run":"1f16c0d5.b999"}
+{"kind":"same","check":423,"finding":"follows","why":"absent clean_windows reads False: a legacy dirty fold matches it and resumes; a legacy clean one does not and refuses","run":"1f16c0d5.b999"}
+{"kind":"same","check":427,"finding":"follows","why":"the literal False stayed while T117 made --train-gold default on and the ruling held nothing out, so the page showed False for all","run":"1f16c0d5.b999"}
+{"kind":"same","check":428,"finding":"follows","why":"the published arms trained on boundary-crossing windows, so feeding them clean windows mismatches train and test the other way","run":"1f16c0d5.b999"}
+{"kind":"same","check":430,"finding":"follows","why":"_ok = {0,1,2} made centre 1 pass, so cs was non-empty and 'if clean and not cs' could not fire","run":"1f16c0d5.b999"}
+{"kind":"same","check":431,"finding":"follows","why":"the file opens on T118's -0.010 and E - D = +0.010 closed a gap that size with no input change: the premise moved","run":"1f16c0d5.b999"}
+{"kind":"same","check":432,"finding":"follows","why":"at identical input, a gap measured through a blend sharing one component on both sides is diluted, so the standalone gap is larger","run":"1f16c0d5.b999"}
+{"kind":"same","check":450,"finding":"follows","why":"export saves model, arch, res and norm only, and the clean flag comes from recipe defaulting false: the exported copy renders false","run":"1f16c0d5.b999"}
+{"kind":"same","check":452,"finding":"unsupported","why":"the premise says how a window is built (three consecutive slices as RGB); 'most of the benefit of a 3D model at the cost of a 2D one' is a gain and cost no premise measures","run":"1f16c0d5.b999"}
+{"kind":"same","check":453,"finding":"follows","why":"H - A = 0.000, UNRESOLVED: adding our member did not move the 0943","run":"1f16c0d5.b999"}
+{"kind":"same","check":454,"finding":"unsupported","why":"premises give fold F clean-trained and every kernel rendered clean=False; the 19% boundary-crossing share the conclusion states is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":462,"finding":"follows","why":"a separable fixture scores 1.0000 in every resample, so the band never varies; hence the fixture is a weak predictor","run":"1f16c0d5.b999"}
+{"kind":"same","check":463,"finding":"follows","why":"past members cost 0 to -0.001, this one may be at parity and weighs 1/5 of 0.40: a 0.000 prediction with +/-0.001","run":"1f16c0d5.b999"}
+{"kind":"same","check":466,"finding":"follows","why":"after the swap the key matched no arm, so a weight set there never ran while the run looked clean","run":"1f16c0d5.b999"}
+{"kind":"same","check":468,"finding":"follows","why":"make smoke asserts the ordered check-name hash, so a missing check changes the hash and fails","run":"1f16c0d5.b999"}
+{"kind":"same","check":470,"finding":"follows","why":"without ARM_DATASET in dataset_sources, find_weight_file('ours_coat_t112.pt') raises, at Stage 4","run":"1f16c0d5.b999"}
+{"kind":"same","check":472,"finding":"follows","why":"our arm was reachable by no key, so a config weight changed nothing while the run looked like an answer","run":"1f16c0d5.b999"}
+{"kind":"same","check":473,"finding":"follows","why":"the page exists to show what a model saw, so showing other windows defeats it worse than showing none","run":"1f16c0d5.b999"}
+{"kind":"same","check":474,"finding":"follows","why":"v5_full_swa decodes at img 336, the corpus's size, so its chain needs no resize step","run":"1f16c0d5.b999"}
+{"kind":"same","check":475,"finding":"follows","why":"a checkpoint of ours with no norm key predates norm in RECIPE, when our trainer fed [0, 1]: default 'none'","run":"1f16c0d5.b999"}
+{"kind":"same","check":479,"finding":"follows","why":"their four arms evaluate at 384, the default, so ours at another res was the first that could expose it","run":"1f16c0d5.b999"}
+{"kind":"same","check":480,"finding":"follows","why":"minimum 22 clean centres per study >= k = 12, so training never runs out of distinct centres","run":"1f16c0d5.b999"}
+{"kind":"same","check":485,"finding":"follows","why":"recipe records swa_epochs, never n_avg, so a short average is indistinguishable downstream from a full one","run":"1f16c0d5.b999"}
+{"kind":"same","check":487,"finding":"follows","why":"_SLOTS44 opens with Sagittal FS, 12 slots, so synthetic slots 0,1,2 lie in one typed group and centre 1 passes","run":"1f16c0d5.b999"}
+{"kind":"same","check":489,"finding":"follows","why":"495 - 434 = 61 and 495 - 429 = 66 min: about 60 minutes of margin","run":"1f16c0d5.b999"}
+{"kind":"same","check":493,"finding":"follows","why":"five modules' checks vanished while the run still printed 'all checks passed', so only the count gate could see it","run":"1f16c0d5.b999"}
+{"kind":"same","check":496,"finding":"follows","why":"make smoke takes ~95 s, so running lint first spares about 90 s; within the text's rounding","run":"1f16c0d5.b999"}
+{"kind":"same","check":498,"finding":"follows","why":"each collision is paired with an inflection that must still match, so a negation with its affirmed twin tells the two failures apart","run":"1f16c0d5.b999"}
+{"kind":"same","check":502,"finding":"follows","why":"the inhibitor lives as long as the watchdog, so a job launched through the watchdog directly is covered too","run":"1f16c0d5.b999"}
+{"kind":"same","check":503,"finding":"follows","why":"the input repairs are real but the coverage restriction is untouched, so a partial close of -0.010 is the stated expectation","run":"1f16c0d5.b999"}
+{"kind":"same","check":507,"finding":"follows","why":"push_family split on '=' while the kernel's substring test did not, so '--mirror=0.5' passed locally and failed in the kernel","run":"1f16c0d5.b999"}
+{"kind":"same","check":508,"finding":"follows","why":"a leaked label file scores gold 1.0000, so any teacher claim from it is gold measured against itself","run":"1f16c0d5.b999"}
+{"kind":"same","check":515,"finding":"follows","why":"53 -> 22 GiB over 8 days = 3.9 GiB/day, 4.4x the 0.875 the projection assumed: stale","run":"1f16c0d5.b999"}
+{"kind":"same","check":516,"finding":"follows","why":"the fold moves the corpus and res 224 -> 384 together against E and F, so one fold cannot separate the two","run":"1f16c0d5.b999"}
+{"kind":"same","check":520,"finding":"follows","why":"make_bag returns (N,3,384,384) triplets: 4,407 x 76 x 3 x 384^2 = 148.2 GB","run":"1f16c0d5.b999"}
+{"kind":"same","check":521,"finding":"follows","why":"the fallthrough opened masks.npy w+, zeroing the validity mask, so every study would show no valid windows","run":"1f16c0d5.b999"}
+{"kind":"same","check":526,"finding":"follows","why":"CAPABILITIES.md exists to watch a gap, went stale nine days, was off by one when written, yet was cited twice: the watcher was unwatched","run":"1f16c0d5.b999"}
+{"kind":"same","check":527,"finding":"follows","why":"four decoy files read 1.0000 on gold-58, which a model output cannot; their is_gold rows carry the gold values","run":"1f16c0d5.b999"}
+{"kind":"same","check":528,"finding":"follows","why":"scoring the label file itself separates decoys (1.0000) from a teacher, which a model-side check cannot","run":"1f16c0d5.b999"}
+{"kind":"same","check":529,"finding":"unsupported","why":"the premise gives about 24% slower; 'it is not' free follows, but the 87 C the slower run is said to spend is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":531,"finding":"follows","why":"a gated check with a gitignored dependency aborted the suite when the artifact was absent: a gate value set by the machine","run":"1f16c0d5.b999"}
+{"kind":"same","check":533,"finding":"follows","why":"--out is the argmax checkpoint (T004's at epoch 4 of 8), so resuming from it restarts 8 - 4 = 4 epochs early","run":"1f16c0d5.b999"}
+{"kind":"same","check":535,"finding":"follows","why":"the flag's purpose is the warning; certifying a contaminated number as clean is worse than giving none","run":"1f16c0d5.b999"}
+{"kind":"same","check":536,"finding":"follows","why":"the untouched arms' ck_res is 384, the architecture default, so passing it changes nothing for them","run":"1f16c0d5.b999"}
+{"kind":"same","check":539,"finding":"follows","why":"(0.002024 - 0.001913) / 0.00197 = 5.6%: 'about 5%' within the text's rounding","run":"1f16c0d5.b999"}
+{"kind":"same","check":540,"finding":"follows","why":"a loop skipped when gitignored artifacts are absent makes the gated count depend on which are present","run":"1f16c0d5.b999"}
+{"kind":"same","check":541,"finding":"follows","why":"part 2 holds 1,207 of 4,407 studies, so a run without it trains on 3,200 and nothing fails","run":"1f16c0d5.b999"}
+{"kind":"same","check":542,"finding":"follows","why":"update_bn needs another pass over the loader, and the loader is the bottleneck","run":"1f16c0d5.b999"}
+{"kind":"same","check":546,"finding":"follows","why":"5 folds x (argmax + SWA) = 10 checkpoints x ~33 MB = ~330 MB","run":"1f16c0d5.b999"}
+{"kind":"same","check":551,"finding":"follows","why":"a substring grep passes while the literal occurs once anywhere, so True on train plus False on eval passes with the freeze back","run":"1f16c0d5.b999"}
+{"kind":"same","check":552,"finding":"unsupported","why":"1,433 s at 6 workers = 23.9 min, ~24 min as stated; the ~50 GB of writes is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":554,"finding":"follows","why":"the line budget belonged to a split without subjects, so cutting a subject by lines brings back the drift the split removed","run":"1f16c0d5.b999"}
+{"kind":"same","check":558,"finding":"follows","why":"is_trainer read 'src/train.py' only, so a coat_train.py fold was not the trainer and the stall kill refused","run":"1f16c0d5.b999"}
+{"kind":"same","check":559,"finding":"follows","why":"/ has 26 GB free; beside needs ~70 GB, and replacing still needs 49.4 - 21 = 28.4 GB net: neither fits","run":"1f16c0d5.b999"}
+{"kind":"same","check":560,"finding":"follows","why":"gold-58 could not separate the three recipes and selecting on it added +0.004 to +0.013 of bias: two jobs, both done badly","run":"1f16c0d5.b999"}
+{"kind":"same","check":565,"finding":"follows","why":"the old read was recipe.get('clean_windows', False) and an exported checkpoint has no recipe, so a re-push read False","run":"1f16c0d5.b999"}
+{"kind":"same","check":568,"finding":"follows","why":"BagWindows keys its draw on (seed, epoch, index) like StudyWindows, so a worker with a frozen epoch freezes the draw","run":"1f16c0d5.b999"}
+{"kind":"same","check":575,"finding":"follows","why":"the fold changes the decode key (76 slots at 384, not 44 at 336), so no older score shares its key","run":"1f16c0d5.b999"}
+{"kind":"same","check":576,"finding":"follows","why":"the accumulator was not persisted and .last.pt lacked its keys, so a tail resume shipped one epoch, past the 0.85 floor","run":"1f16c0d5.b999"}
+{"kind":"same","check":579,"finding":"follows","why":"getitem built valid = arange(min(3, depth)) and handed it on, so _centres judged cleanliness on the synthetic set","run":"1f16c0d5.b999"}
+{"kind":"same","check":583,"finding":"unsupported","why":"the premise shows frozen epochs (x.sum 39484.996094, bit-identical); the ~42 legal centres per study is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":585,"finding":"unsupported","why":"premises: G v1 died on an IndentationError, v2 lost the resgated child; the stated cause (the vendored manifest sorting first) is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":586,"finding":"follows","why":"PROGRESS and T059 quoted '9 ok, 0 failed' from a hand run, so the test looked covered","run":"1f16c0d5.b999"}
+{"kind":"same","check":589,"finding":"follows","why":"arm_probs pre-filled, load succeeds, forwards raise into a try that continues: the kernel completes","run":"1f16c0d5.b999"}
+{"kind":"same","check":593,"finding":"follows","why":"the entry is renamed ours-<replaced>, the config still keys <replaced>, and weights apply by name: no match either way","run":"1f16c0d5.b999"}
+{"kind":"same","check":599,"finding":"follows","why":"gold_ids and gold_weight default to the no-op and the multiply is skipped at 1.0, so old runs are unchanged","run":"1f16c0d5.b999"}
+{"kind":"same","check":601,"finding":"unsupported","why":"premise: 5 micro-batches per epoch; the 10 per-micro-batch stepping would read needs the epoch count (2), which no premise states","run":"1f16c0d5.b999"}
+{"kind":"same","check":602,"finding":"follows","why":"the local diagnostics no longer reproduce each model's input, so paired tools must apply each model's own rule","run":"1f16c0d5.b999"}
+{"kind":"same","check":605,"finding":"unsupported","why":"the premise says every rendered kernel got clean=False; the 19% boundary-crossing share is in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":606,"finding":"follows","why":"the ceiling scores the label file (llm_labels.csv 1.0000 vs the teacher's 0.8976), which train_gold cannot excuse: the only guard","run":"1f16c0d5.b999"}
+{"kind":"same","check":607,"finding":"follows","why":"for a rare column the excluded draws are the extreme ones, so the surviving band is too narrow","run":"1f16c0d5.b999"}
+{"kind":"same","check":616,"finding":"follows","why":"the premises say the defect gives a checkpoint numerically identical to the correct one on a near-linear tail, so it is hard to see (V1401's own arithmetic is weighed at check 311)","run":"1f16c0d5.b999"}
+{"kind":"same","check":617,"finding":"follows","why":"nothing is held out, so the gold argmax selects on the training gold and picks the epoch that overfits it most","run":"1f16c0d5.b999"}
+{"kind":"same","check":619,"finding":"follows","why":"a raise would pin the column at 0.5 through cell 47's except, so falling back is right, and only an announced one is","run":"1f16c0d5.b999"}
+{"kind":"same","check":622,"finding":"unsupported","why":"premises: repairs real, coverage untouched, most of -0.010 to close; the endpoints 0.933-0.940 need B's score (0.929) and C' (0.939), which no premise states","run":"1f16c0d5.b999"}
+{"kind":"same","check":623,"finding":"follows","why":"the fallback is the old span rule range(lo+1, hi), so a silent one scores a clean model on the windows T119 removed","run":"1f16c0d5.b999"}
+{"kind":"same","check":624,"finding":"follows","why":"67 -> 53 GiB over the 16 days from 08-27 to 09-12 = 0.875 GiB/day, ~0.9 as stated","run":"1f16c0d5.b999"}
+{"kind":"same","check":626,"finding":"follows","why":"both checkpoints since T117 carry train_gold True and the page showed False for both: an inverted warning, worse than none","run":"1f16c0d5.b999"}
+{"kind":"same","check":627,"finding":"unsupported","why":"the premise says bag_corpus joins RECIPE as it decides what the model is shown; the comparison with T119's clean_windows mismatch rests on no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":628,"finding":"follows","why":"a flag added after the checkpoint is absent from its args, and at its default that equals the flag off","run":"1f16c0d5.b999"}
+{"kind":"same","check":629,"finding":"follows","why":"no skip guard, four gitignored artifacts, the USB disk dropped and the parquet dangled: it aborted, so green meant only the disk was there","run":"1f16c0d5.b999"}
+{"kind":"same","check":631,"finding":"follows","why":"dataset_sources was inherited without our dataset, so the weight file is absent under /kaggle/input and the lookup raises","run":"1f16c0d5.b999"}
+{"kind":"same","check":635,"finding":"follows","why":"sequential packing of 12, 10, 8, 6, 8 puts boundaries at 12, 22, 30, 36","run":"1f16c0d5.b999"}
+{"kind":"same","check":639,"finding":"follows","why":"the RUN CONFIG weights arms by name; with the arm renamed and the config untouched, no key reaches it","run":"1f16c0d5.b999"}
+{"kind":"same","check":640,"finding":"follows","why":"maxspan-v5 is _SLOTS64 at w 0.55, v8 is _SLOTS44 at w 0.20: swapping v5 moves layout and weight together","run":"1f16c0d5.b999"}
+{"kind":"same","check":642,"finding":"follows","why":"eight trees archived and symlinked after / hit 98%, Path.rglob does not follow symlinks, so the guard lost its logs","run":"1f16c0d5.b999"}
+{"kind":"same","check":644,"finding":"follows","why":"attention partitions on a 32-pixel grid and 336 = 32 x 10.5 is illegal, so the pipeline evaluates at 384 = 32 x 12","run":"1f16c0d5.b999"}
+{"kind":"same","check":645,"finding":"follows","why":"arm_t112.sh derives the banner's expected value from the ARMS literal and greps for it, so they cannot disagree","run":"1f16c0d5.b999"}
+{"kind":"same","check":646,"finding":"follows","why":"H - A = 0.000: H with our fold ties A","run":"1f16c0d5.b999"}
+{"kind":"same","check":648,"finding":"follows","why":"preferring the mechanism once cost 0.008 (run 3, T008), so an unresolved interval licenses no such fallback","run":"1f16c0d5.b999"}
+{"kind":"same","check":651,"finding":"follows","why":"sidecars are indexed by the corpus row, so a short pass shifts depth against pixels past its end","run":"1f16c0d5.b999"}
+{"kind":"same","check":652,"finding":"follows","why":"the page certified an in-sample number as clean; a flag that exists only to warn is worse inverted than silent","run":"1f16c0d5.b999"}
+{"kind":"same","check":661,"finding":"follows","why":"53 GiB on 09-12 to 22 GiB before the 09-20 archiving: 31 GiB / 8 days = 3.9 GiB/day","run":"1f16c0d5.b999"}
+{"kind":"same","check":662,"finding":"follows","why":"five consumers took the clean default, so span-trained checkpoints were scored under the clean rule (29 of 42 centres move)","run":"1f16c0d5.b999"}
+{"kind":"same","check":665,"finding":"follows","why":"a citation to a vanished checkpoint is a record of a run, not an error, so flagging it would be noise users learn to ignore","run":"1f16c0d5.b999"}
+{"kind":"same","check":666,"finding":"follows","why":"a declaration names its referent, so it cannot match the wrong thing and needs no exclusions","run":"1f16c0d5.b999"}
+{"kind":"same","check":670,"finding":"follows","why":"the 0941's try restores _raptor.csv on failure, so G inserted after the backup would score the parent on a failed child","run":"1f16c0d5.b999"}
+{"kind":"same","check":672,"finding":"follows","why":"T128 found 25% of studies served another study's windows, so the first fold's result is void","run":"1f16c0d5.b999"}
+{"kind":"same","check":676,"finding":"follows","why":"the bundle is worth +0.010 at 224, never ran at 384, and C' 0.939 had neither, so a low score has two explanations","run":"1f16c0d5.b999"}
+{"kind":"same","check":681,"finding":"follows","why":"redirected stdout is block-buffered and SIGTERM does not flush it, so a killed run loses the buffer","run":"1f16c0d5.b999"}
+{"kind":"same","check":682,"finding":"unsupported","why":"the premise gives the missing dataset; Stage 4 and '~6 of 7 hours spent' are in no premise","run":"1f16c0d5.b999"}
+{"kind":"same","check":683,"finding":"follows","why":"git status -- src/ scripts/ run with cwd=<repo>/src resolves to <repo>/src/src/ and <repo>/src/scripts/","run":"1f16c0d5.b999"}
+{"kind":"same","check":81,"finding":"follows","why":"getitem is what a fold calls and where the synthetic validity set was written, so checking only the unit leaves that line untested","run":"1f16c0d5.b999"}

@@ -1,0 +1,393 @@
+{
+ "note": "T086's key: every correction RSNA T112's own record states, within the round (3ed78d4..fc0d19e, T086's scope). Pinned by the parent before any subagent ran, from key-search.mjs hits over cut/clauses.jsonl, read by hand. earlier: clauses carrying the earlier claim; correction: clauses carrying the correction. why: what a line's why must state to count. reach: whether the pipeline can bring an earlier and a correcting clause together (different documents, or one file at two commits); reachWhy says why not. No subagent may read this file.",
+ "corrections": {
+  "K1": {
+   "claim": "336 is not a legal size -> the 32-px rule binds res only; 336 is a legal decode size (img)",
+   "earlier": [
+    "build_t112_kernel.py@3ed78d4#2"
+   ],
+   "correction": [
+    "T112#55",
+    "T112#57",
+    "build_t112_kernel.py#117",
+    "build_t112_kernel.py#118",
+    "build_t112_kernel.py#121",
+    "_order.py#49",
+    "coat.py#39",
+    "coat.py#40"
+   ],
+   "why": "336 is illegal only as res, the size the model sees; as img, the decode size, it is legal (the dominant member decodes at 336)",
+   "reach": true
+  },
+  "K2": {
+   "claim": "the published arm reads 0.9128-0.9213 -> 0.9054-0.9213",
+   "earlier": [
+    "T112@416447b#2",
+    "T112@416447b#6"
+   ],
+   "correction": [
+    "T112#142",
+    "T112#143",
+    "T112#177",
+    "T112#229",
+    "T112#276",
+    "PROGRESS#48",
+    "trail#11"
+   ],
+   "why": "the published arm's gold-58 range is 0.9054-0.9213; 0.9128-0.9213 dropped the lowest of four public figures",
+   "reach": true
+  },
+  "K3": {
+   "claim": "the BROKEN floor at an undefined 'full fidelity' -> defined as the kernel's resample chain and window count",
+   "earlier": [
+    "T112@416447b#1"
+   ],
+   "correction": [
+    "T112#140",
+    "T112#141",
+    "T112#289"
+   ],
+   "why": "full fidelity was undefined; the floor is read under the kernel's chain and window count (condition B), not the trainer's",
+   "reach": true
+  },
+  "K4": {
+   "claim": "a realistic good day is clearing 0.948 -> that is the best case, not realistic",
+   "earlier": [
+    "T112@416447b#5"
+   ],
+   "correction": [
+    "T112#197",
+    "T112#198"
+   ],
+   "why": "clearing 0.948 is the best case, not a realistic day: the recorded moves (0.000, 0.000, -0.001, -0.002) argue against it",
+   "reach": true
+  },
+  "K5": {
+   "claim": "make dryrun passes 9/9 (seven stages) -> it crashed after nine PASS lines; 13/13 once gated",
+   "earlier": [
+    "T112#215",
+    "PROGRESS#11",
+    "dry_run.py@3ed78d4#1",
+    "dry_run.py@3ed78d4#3"
+   ],
+   "correction": [
+    "T112#259",
+    "T112#260",
+    "T112#261",
+    "T112#262",
+    "T112#318",
+    "dry_run.py#5",
+    "dry_run.py#7",
+    "trail#15"
+   ],
+   "why": "the dry run did not pass 9/9: it printed nine PASS lines and crashed; with the stage count gated it passes 13/13",
+   "reach": true
+  },
+  "K6": {
+   "claim": "the day has at most two read-then-act cycles -> zero, with the quota exhausted",
+   "earlier": [
+    "T112#95",
+    "PROGRESS#16"
+   ],
+   "correction": [
+    "T112#221",
+    "T112#222",
+    "PROGRESS#43"
+   ],
+   "why": "with the weekly GPU quota exhausted the day had no submission cycle, not two",
+   "reach": true
+  },
+  "K7": {
+   "claim": "our arm's gold-58 gap to the member is not resolved -> paired, it is resolved behind",
+   "earlier": [
+    "T112#178"
+   ],
+   "correction": [
+    "T112#230",
+    "T112#240",
+    "T112#313",
+    "T112@7966326#9",
+    "PROGRESS#50",
+    "PROGRESS#60"
+   ],
+   "why": "the paired read resolves the gap: ours is behind v5 (delta -0.0277, CI [-0.0483, -0.0076]), where the absolute reads could not resolve it",
+   "reach": true
+  },
+  "K8": {
+   "claim": "the Kaggle weekly GPU quota is exhausted, the lane closed -> the quota had reset by 2026-09-19",
+   "earlier": [
+    "T112#1",
+    "T112#2",
+    "T112#218",
+    "T112#365",
+    "T112@7966326#5",
+    "PROGRESS#43",
+    "paired_vs_member.py#3"
+   ],
+   "correction": [
+    "trail#33"
+   ],
+   "why": "the quota had reset by 2026-09-19: the 09-18 block was gone (a later reading of a state that moves)",
+   "reach": true
+  },
+  "K9": {
+   "claim": "the VOID banner prints because our arm ran -> it prints at import, before any arm runs",
+   "earlier": [
+    "T112#78",
+    "build_t112_kernel.py#25",
+    "_order.py#56"
+   ],
+   "correction": [
+    "build_t112_kernel.py#90",
+    "coat.py#63"
+   ],
+   "why": "the banner prints at import, before the arms run, so it does not show that our arm ran",
+   "reach": true
+  },
+  "K10": {
+   "claim": "the chain is verified end to end -> the 224 arm could not run in the kernel and would score a constant 0.5",
+   "earlier": [
+    "T112#3",
+    "T112#215",
+    "T112#226",
+    "dry_run.py#1"
+   ],
+   "correction": [
+    "build_t112_kernel.py#85",
+    "build_t112_kernel.py#87",
+    "build_t112_kernel.py#89",
+    "build_t112_kernel.py#97",
+    "build_t112_kernel.py#136",
+    "coat.py#59",
+    "coat.py#62"
+   ],
+   "why": "the 224 arm could not run in the kernel: built without img_size the backbone is on the 384 grid, every 224 forward raises, and the arm scores a constant 0.5",
+   "reach": true
+  },
+  "K11": {
+   "claim": "submission 1 swaps in tonight's 224 arm -> withdrawn; do not submit the 224 arm",
+   "earlier": [
+    "T112#127",
+    "T112#148"
+   ],
+   "correction": [
+    "T112#243",
+    "T112#313",
+    "T112@7966326#9",
+    "PROGRESS#62"
+   ],
+   "why": "submission 1 is withdrawn: the 224 arm is resolved-behind the member it would replace",
+   "reach": true
+  },
+  "K12": {
+   "claim": "bringup_4090.sh runs the bring-up on the 4090 on arrival -> the 4090 is Windows without WSL; the bash bring-up cannot run",
+   "earlier": [
+    "T112#72",
+    "T112#122",
+    "T112#123"
+   ],
+   "correction": [
+    "T112#343",
+    "T112#344",
+    "T112#349",
+    "T112#350",
+    "selftest_4090.py#2",
+    "selftest_4090.py#3"
+   ],
+   "why": "the 4090 is a Windows machine without WSL, so the bash bring-up cannot run there; a Python self-test replaces it",
+   "reach": true
+  },
+  "K14": {
+   "claim": "the gated smoke suite's count: 1164 -> 1176 -> 1192 -> 1159",
+   "earlier": [
+    "Makefile@3ed78d4#1",
+    "Makefile@7edf46e#1",
+    "Makefile@416447b#1",
+    "_order.py@3ed78d4#1",
+    "_order.py@7edf46e#1",
+    "_order.py@416447b#1"
+   ],
+   "correction": [
+    "Makefile@7edf46e#1",
+    "Makefile@416447b#1",
+    "Makefile#3",
+    "_order.py@7edf46e#1",
+    "_order.py@416447b#1",
+    "_order.py#77"
+   ],
+   "why": "a later count of the gated suite replaces the earlier one (a moving quantity), the last once environment-gated checks were split out",
+   "reach": true
+  },
+  "K13": {
+   "claim": "our arm is 20% of the submission -> about 7.2%",
+   "earlier": [],
+   "correction": [
+    "T112#157",
+    "T112#171",
+    "PROGRESS#47"
+   ],
+   "why": "the arm's effective weight in the final blend is about 0.072 (0.20 x 0.60 x 0.60), not 20%",
+   "reach": false,
+   "reachWhy": "no committed sentence claims 20% of the final blend; 'w = 0.20' (T112#127) is the true weight within the stage"
+  },
+  "K15": {
+   "claim": "the swap kernel ships our checkpoint -> it never attached our dataset",
+   "earlier": [],
+   "correction": [
+    "T112#255",
+    "build_t112_kernel.py#30",
+    "PROGRESS#45",
+    "coat.py#52",
+    "_order.py#59"
+   ],
+   "why": "the kernel metadata was copied from T108, so our dataset was never attached and the weight lookup would raise at Stage 4",
+   "reach": false,
+   "reachWhy": "no committed sentence before the fix says the dataset was attached"
+  },
+  "K16": {
+   "claim": "--res is an input -> it must be asserted against the checkpoint",
+   "earlier": [],
+   "correction": [
+    "T112#263",
+    "T112#264",
+    "push_arm.py#32"
+   ],
+   "why": "a wrong --res rendered a consistent kernel that would score the wrong thing; it is now checked against the checkpoint's recipe",
+   "reach": false,
+   "reachWhy": "no committed sentence claimed --res was safe as an input"
+  },
+  "K17": {
+   "claim": "our inputs match theirs -> they normalise with ImageNet statistics and we divide by 255",
+   "earlier": [],
+   "correction": [
+    "T112#76",
+    "coat_export.py#34",
+    "coat_data.py#13"
+   ],
+   "why": "their eval_windows applies ImageNet normalisation to every arm, about 4.48x our standard deviation",
+   "reach": false,
+   "reachWhy": "the section first appears at 416447b, and no earlier committed sentence claimed the inputs matched"
+  },
+  "K18": {
+   "claim": "img defaults to --res -> img must be the replaced member's",
+   "earlier": [],
+   "correction": [
+    "T112#59",
+    "T112#60",
+    "build_t112_kernel.py#11",
+    "coat.py#40"
+   ],
+   "why": "img defaulting to our resolution opens a fourth decode group; img is the replaced member's",
+   "reach": false,
+   "reachWhy": "the earlier claim is argparse help text ('resize target; defaults to --res'), which the cut does not take from code"
+  },
+  "K19": {
+   "claim": "the VOID gate's hardcoded patterns -> derived from the render",
+   "earlier": [],
+   "correction": [
+    "arm_t112.sh#9",
+    "arm_t112.sh#10",
+    "arm_t112.sh#15"
+   ],
+   "why": "patterns hardcoded for the 224/none arm would have failed a correct 384/imagenet run",
+   "reach": false,
+   "reachWhy": "the earlier hardcoded text was in echo and grep strings, which the cut does not take from code"
+  },
+  "K20": {
+   "claim": "push_arm.py decides and acts with one kaggle binary -> it used two",
+   "earlier": [],
+   "correction": [
+    "T112#267"
+   ],
+   "why": "one kaggle binary decided whether the dataset existed and a different one acted",
+   "reach": false,
+   "reachWhy": "no committed sentence claimed one binary"
+  }
+ },
+ "considered": "Not corrections the record states: the R1 prediction that --norm imagenet beats 0.8848 (the trail gives 0.8825 for the 224/imagenet arm but never calls it a miss); the operator's override of the submit bar (a decision, not a corrected claim); setup_4090.cmd's move to offline wheels and paired_vs_member.py's second key format (changes of method); the trail's 'UNCOMMITTED working-tree copy' (59efe32 had committed it; the record never says so).",
+ "briefCheck": {
+  "note": "No brief may hold these terms (case-insensitive substrings), these figures as number tokens, any key clause id, or six words in a row from a key clause.",
+  "terms": [
+   "VOID",
+   "banner",
+   "full fidelity",
+   "realistic",
+   "read-then-act",
+   "dryrun",
+   "dry run",
+   "dry_run",
+   "9/9",
+   "13/13",
+   "quota",
+   "Windows",
+   "WSL",
+   "bringup",
+   "bring-up",
+   "selftest",
+   "decode size",
+   "img_size",
+   "not legal",
+   "illegal",
+   "resolved-behind",
+   "resolved behind",
+   "paired",
+   "withdrawn",
+   "submission 1",
+   "smoke",
+   "CoAtNet",
+   "coatnet",
+   "gold-58",
+   "native384",
+   "maxspan",
+   "Raptor",
+   "Kaggle",
+   "4090",
+   "T112",
+   "T107",
+   "T111",
+   "T118",
+   "dataset_sources",
+   "ImageNet",
+   "--res",
+   "--img",
+   "--norm",
+   "relative-position",
+   "at import"
+  ],
+  "figures": [
+   "336",
+   "224",
+   "384",
+   "0.9128",
+   "0.9054",
+   "0.9213",
+   "0.9131",
+   "0.948",
+   "0.950",
+   "0.941",
+   "0.85",
+   "0.8848",
+   "0.8854",
+   "0.8825",
+   "0.8896",
+   "0.0277",
+   "0.0483",
+   "0.0076",
+   "0.072",
+   "7.2",
+   "0.20",
+   "0.60",
+   "1164",
+   "1176",
+   "1192",
+   "1159",
+   "429",
+   "434",
+   "495",
+   "576",
+   "196",
+   "4.48",
+   "0.5"
+  ]
+ }
+}

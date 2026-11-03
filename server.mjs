@@ -5,6 +5,8 @@ import { extname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { AgentRegistry } from './lib/agents.mjs';
 import { Cockpit } from './lib/brief.mjs';
+import { capabilities } from './lib/capabilities.mjs';
+import { Limits } from './lib/limits.mjs';
 import { PipelineEngine } from './lib/pipeline.mjs';
 import { dataFolder, redactEmails, trackedWritesOff, Workspace, WorkspaceError } from './lib/workspace.mjs';
 
@@ -180,15 +182,17 @@ function logTrackedAction(error) {
 }
 
 // `clock` (milliseconds, like Date.now) is the time the engine and the cockpit
-// compute their read models at; tests inject it, and `ledgerOptions` (spawn,
-// stat) for the history ledgers.
-export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DATA_DIR || process.env.AGESIGHT_DATA_DIR || undefined), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {} } = {}) {
+// compute their read models at; tests inject it, `ledgerOptions` (spawn,
+// stat) for the history ledgers, and `limitsOptions` (home, fetch) for the
+// account limits.
+export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DATA_DIR || process.env.AGESIGHT_DATA_DIR || undefined), port, clock, engineOptions = {}, registryOptions = {}, ledgerOptions = {}, cockpitOptions = {}, limitsOptions = {} } = {}) {
   // AGEARIS_TRACKED_WRITES=0 turns task actions off on every tracked
   // repository, whatever each one's switch says.
   const workspace = await new Workspace({ dataDir, trackedWrites: !trackedWritesOff() }).init();
   const registry = await new AgentRegistry({ dataDir: workspace.dataDir, operator: workspace.operator, email: workspace.email, ...registryOptions }).init();
   const engine = await new PipelineEngine({ workspace, registry, ...engineOptions, ...(clock ? { clock } : {}) }).init();
   const cockpit = new Cockpit({ workspace, engine, clock: clock || (() => Date.now()), ledgerOptions, ...cockpitOptions });
+  const limits = new Limits({ ...(clock ? { clock } : {}), ...limitsOptions });
   const token = await apiToken(workspace.dataDir);
   const server = createHttpServer(async (request, response) => {
     securityHeaders(response);
@@ -212,6 +216,13 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
       const query = Object.fromEntries(url.searchParams);
       if (request.method === 'GET' && pathname === '/api/brief') return sendJson(response, 200, await cockpit.brief(query));
       if (request.method === 'GET' && pathname === '/api/changes') return sendJson(response, 200, await cockpit.changes(query));
+      if (request.method === 'GET' && pathname === '/api/orient') return sendJson(response, 200, await cockpit.orient(query));
+      // What an agent may do and how; ?for=agent leaves out what only the
+      // operator or the page does.
+      if (request.method === 'GET' && pathname === '/api/capabilities') {
+        if (![undefined, '', 'agent'].includes(query.for)) throw new WorkspaceError(400, 'for must be agent, or left out');
+        return sendJson(response, 200, capabilities({ for: query.for }));
+      }
       const metricsMatch = /^\/api\/projects\/([^/]+)\/metrics$/.exec(pathname);
       if (request.method === 'GET' && metricsMatch) return sendJson(response, 200, await cockpit.projectMetrics(metricsMatch[1], query));
       const explainMatch = /^\/api\/explain\/([a-z0-9_]+)$/.exec(pathname);
@@ -232,6 +243,9 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
         return sendJson(response, 200, { runId: run.id, path: run.path, audit: run.audit, events: run.events });
       }
       if (request.method === 'POST' && runMatch?.[2] === '/actions') return sendJson(response, 200, await engine.act(runMatch[1], await readJson(request)));
+      // Each Claude account's session and weekly use; ?refresh=1 reads past the
+      // cache, at most once a minute per account.
+      if (request.method === 'GET' && pathname === '/api/limits') return sendJson(response, 200, await limits.read({ refresh: query.refresh === '1' }));
       if (request.method === 'GET' && pathname === '/api/agents') return sendJson(response, 200, await engine.agentPerformance());
       if (request.method === 'POST' && pathname === '/api/agents') {
         const agent = await registry.create(await readJson(request));
@@ -324,12 +338,23 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
   server.registry = registry;
   server.engine = engine;
   server.cockpit = cockpit;
+  server.limits = limits;
   server.apiToken = token;
   engine.start();
   server.on('close', () => {
     engine.stop();
     cockpit.close();
   });
+  // The sweep (rule 13, for tasks agents close with git). Started only by a real
+  // server, since it deletes: a minute after starting, then every ten.
+  server.startSweeping = ({ first = 60_000, every = 600_000 } = {}) => {
+    const sweep = () => { workspace.sweepReleases().catch((error) => console.error(redactEmails(`Sweep failed: ${error?.message}`))); };
+    const firstTimer = setTimeout(sweep, first);
+    const timer = setInterval(sweep, every);
+    firstTimer.unref();
+    timer.unref();
+    server.on('close', () => { clearTimeout(firstTimer); clearInterval(timer); });
+  };
   server.start = (listenPort = port ?? 4310) => new Promise((resolve, reject) => {
     server.once('error', reject);
     server.listen(listenPort, '127.0.0.1', () => {
@@ -347,6 +372,7 @@ async function main() {
   }
   const server = await createServer({ port: Number(rawPort) });
   await server.start();
+  server.startSweeping();
   console.log(`AGE Aris is running. Open this link to sign in:\n\n  http://127.0.0.1:${rawPort}/?token=${server.apiToken}\n\nThe browser stays signed in for this data folder; the link is also stored in ${join(server.workspace.dataDir, '.api-token')} as the token.`);
 }
 

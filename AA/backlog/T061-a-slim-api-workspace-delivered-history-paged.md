@@ -47,3 +47,10 @@ created: 2026-10-10
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-11-01, T054 (adervark @b/9ba3e0ed): the baseline is in PROGRESS.md.
+  On the 303-repository fixture, `/api/workspace` is 20.7 MB and takes
+  7.7–8.9 s. Activity is 55% of it (45,716 rows: 200 per project, uncapped),
+  delivered tasks 37%, WIP 2.3%. Each call runs one `spawnSync` `git log` per
+  project (`lib/workspace.mjs:1022`), holding the event loop. Drop the
+  `todo` on the `/api/workspace` subtest in `tests/perf/scale.perf.mjs`.

@@ -5,7 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 
 import { buildEvent } from '../lib/audit.mjs';
-import { arrangeNeeds, Cockpit } from '../lib/brief.mjs';
+import { arrangeNeeds, Cockpit, stateBehind } from '../lib/brief.mjs';
 import { fabricate } from '../lib/fabricate.mjs';
 import { Workspace } from '../lib/workspace.mjs';
 
@@ -44,7 +44,8 @@ async function workspaceWith(projects, { runs = {} } = {}) {
     ids.push(id);
   }
   const engine = { eventsByProject: () => new Map(ids.map((id, index) => [id, runs[index] || []])) };
-  const cockpit = new Cockpit({ workspace, engine, clock: () => Date.parse(ASOF) });
+  // The brief waits for every ledger, so each line is ready however loaded the run (T097).
+  const cockpit = new Cockpit({ workspace, engine, clock: () => Date.parse(ASOF), buildWaitMs: 60_000 });
   return { cockpit, ids, fabrications, workspace };
 }
 
@@ -234,4 +235,41 @@ test('a blocked task keeps its Handoff reason after its file is renamed and noth
   const blocked = await cockpit.explain('blocked', { projectId: ids[0], asOf: ASOF });
   const item = blocked.items.find((entry) => entry.taskKey === 'T001');
   assert.deepEqual([item.reason, item.reasonSource], ['ask legal whether the dataset licence allows redistribution', 'handoff']);
+});
+
+// T025: STATE.md behind AGE Aris's changes. Commits on the first-parent line,
+// newest first: s3 (HEAD), u2, s2, u1, s1.
+test('stateBehind on a generated board: a regeneration covers what came before it, a NOW-only edit covers nothing', () => {
+  const order = new Map(['s3', 'u2', 's2', 'u1', 's1'].map((sha, at) => [sha, at]));
+  const at = '2026-11-03T10:00:00Z';
+  const changes = [{ id: 'T001', sha: 'u1', at }, { id: 'T002', sha: 'u2', at }];
+  const regen = (sha) => ({ sha, at, added: ['`board · 2026-11-03T10:00Z · 2 tasks`'] });
+  const nowOnly = (sha) => ({ sha, at, added: ['T001 and T002 are claimed.'] });
+  assert.deepEqual(stateBehind({ changes, stateCommits: [], generated: true, order }), ['T001', 'T002'], 'oldest change first');
+  assert.deepEqual(stateBehind({ changes, stateCommits: [nowOnly('s3')], generated: true, order }), ['T001', 'T002']);
+  assert.deepEqual(stateBehind({ changes, stateCommits: [regen('s2')], generated: true, order }), ['T002'], 'a regeneration between them covers the first only');
+  assert.deepEqual(stateBehind({ changes, stateCommits: [regen('s3')], generated: true, order }), []);
+  // The same second: order, not time, decides.
+  assert.deepEqual(stateBehind({ changes: [{ id: 'T001', sha: 'u2', at }], stateCommits: [regen('s2')], generated: true, order }), ['T001']);
+});
+
+test('stateBehind on a hand-kept board: only a later line naming the task, as a whole id, catches it up', () => {
+  const order = new Map(['s3', 'u2', 's2', 'u1', 's1'].map((sha, at) => [sha, at]));
+  const at = '2026-11-03T10:00:00Z';
+  const changes = [{ id: 'T077', sha: 'u1', at }, { id: 'T036', sha: 'u2', at }];
+  const lines = (sha, ...added) => ({ sha, at, added });
+  assert.deepEqual(stateBehind({ changes, stateCommits: [lines('s3', 'Unrelated edit', 'T0771 is another task', 'xT0770')], generated: false, order }), ['T077', 'T036']);
+  assert.deepEqual(stateBehind({ changes, stateCommits: [lines('s2', '- T077 claimed')], generated: false, order }), ['T036']);
+  assert.deepEqual(stateBehind({ changes, stateCommits: [lines('s1', '- T077 claimed')], generated: false, order }), ['T077', 'T036'], 'a line before the change does not count');
+  assert.deepEqual(stateBehind({ changes, stateCommits: [lines('s3', '| T077 | done |', 'T036.')], generated: false, order }), []);
+  // A header line does not stand in for the task's own line on a hand-kept board.
+  assert.deepEqual(stateBehind({ changes, stateCommits: [lines('s3', '`board · 2026-11-03T10:00Z`')], generated: false, order }), ['T077', 'T036']);
+});
+
+test('stateBehind outside the exact order: a commit beyond it is older than all within it; two beyond it go by time', () => {
+  const order = new Map([['s2', 0], ['u2', 1]]);
+  const changes = [{ id: 'T001', sha: 'u-old', at: '2026-10-01T00:00:00Z' }, { id: 'T002', sha: 'u2', at: '2026-11-01T00:00:00Z' }];
+  const regen = (sha, at) => ({ sha, at, added: ['`board · x`'] });
+  assert.deepEqual(stateBehind({ changes, stateCommits: [regen('s-old', '2026-10-02T00:00:00Z')], generated: true, order }), ['T002'], 'by time between two old ones; older than u2');
+  assert.deepEqual(stateBehind({ changes, stateCommits: [regen('s2', '2026-01-01T00:00:00Z')], generated: true, order }), [], 'inside the order, a skewed clock does not matter');
 });

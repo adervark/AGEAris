@@ -1,0 +1,278 @@
+{
+ "note": "R0d key, pinned by the parent before any reconciler ran (T085). Clauses come from key-search.mjs hits over R0c cut, read by hand. earlier: clauses carrying the earlier claim; correction: clauses carrying its correction. why: what a line why must state to count. No subagent may read this file.",
+ "twelve": {
+  "C1": {
+   "claim": "--layer-decay/--warmup-frac were never passed -> passed once",
+   "earlier": [
+    "R1#75",
+    "R2#45",
+    "T047brief#43",
+    "PROGRESS.md§5857#1",
+    "lane6-single-model-gap.md§185#1",
+    "lane6-single-model-gap.md§185#3",
+    "lane6-single-model-gap.md§185#4",
+    "lane6-single-model-gap.md§219#5"
+   ],
+   "correction": [
+    "lane10#14",
+    "lane10#182",
+    "lane10#309",
+    "lane10#585"
+   ],
+   "why": "the flags were passed once (outputs/t025/run_arm.sh:13), so never passed is false"
+  },
+  "C2": {
+   "claim": "screen S1 tests the encoder runs 10x too hot -> it cannot",
+   "earlier": [
+    "R2#41",
+    "R2#44",
+    "R2#174",
+    "lane6-single-model-gap.md§182#4",
+    "lane6-single-model-gap.md§219#1",
+    "lane6-single-model-gap.md§219#6",
+    "STATE.md§9#2",
+    "STATE.md§9#11"
+   ],
+   "correction": [
+    "lane10#16",
+    "lane10#17",
+    "lane10#439",
+    "lane10#478",
+    "lane10#562",
+    "lane10#570",
+    "lane10#571",
+    "lane10#614"
+   ],
+   "why": "S1s --layer-decay 0.6 cannot test a flat 10x encoder cut: it puts 24 of 48 groups below 1e-6, so S1 does not test the hypothesis"
+  },
+  "C3": {
+   "claim": "budget_minutes = 1 + M*V is an upper bound -> optimistic by 24%",
+   "earlier": [
+    "tta.py§budget_minutes#4",
+    "lane7-public-members.md§330#1",
+    "lane11#71"
+   ],
+   "correction": [
+    "lane11#76",
+    "lane11#77",
+    "lane11#83"
+   ],
+   "why": "budget_minutes is not an upper bound: the measured slope (1.329 min/unit) makes it about 24% optimistic, wrong in sign"
+  },
+  "C4": {
+   "claim": "the budget model under-predicts by 2x in practice -> the 2x is the layout multiplier",
+   "earlier": [
+    "lane7-public-members.md§330#2",
+    "lane11#85"
+   ],
+   "correction": [
+    "lane11#86"
+   ],
+   "why": "the ~134 min is the kernels own prediction (67 x 2 layouts), not a measurement: the 2x is the layout multiplier, not a modelling error"
+  },
+  "C5": {
+   "claim": "the deployed rerun takes 1.5-4.4 h -> ~113 min, fitted",
+   "earlier": [
+    "T047brief#46",
+    "lane9#384"
+   ],
+   "correction": [
+    "lane11#65",
+    "lane11#67",
+    "lane11#68",
+    "lane11#69",
+    "lane11#109",
+    "lane11#119"
+   ],
+   "why": "the fitted ~113 min replaces the 1.5-4.4 h bracket as the reruns runtime (inside it: superseded, or stated as a correction)"
+  },
+  "C6": {
+   "claim": "the deployed kernel runs 2 TTA views -> 3",
+   "earlier": [],
+   "correction": [
+    "lane11#30"
+   ],
+   "why": "out of reach: the earlier claim is in no committed sentence (a lane prompt)",
+   "reach": false
+  },
+  "C7": {
+   "claim": "336-384 px is part of our input gap -> killed",
+   "earlier": [
+    "lane5-public-notebooks.md§88#1",
+    "lane9#328"
+   ],
+   "correction": [
+    "lane9#401",
+    "lane9#419",
+    "lane9#420",
+    "lane9#421",
+    "lane9#423",
+    "lane9#514"
+   ],
+   "why": "the >=0.945 band spans 224-392 px, so 336-384 px is not part of our gap"
+  },
+  "C8": {
+   "claim": "the >=0.94 band may be public-LB overfit -> falsified",
+   "earlier": [],
+   "correction": [
+    "lane9#11",
+    "lane9#158",
+    "lane9#202"
+   ],
+   "why": "out of reach (D7): the earlier claim is R1s framing applied to the field, in no committed sentence",
+   "reach": false
+  },
+  "C9": {
+   "claim": "rank 776, 84 teams >=0.94, 2,844 teams -> 804 / 88 / 2,889",
+   "earlier": [
+    "R1#23",
+    "R1#27",
+    "T047brief#41",
+    "lane0-rules-and-leaderboard.md§70#1",
+    "lane0-rules-and-leaderboard.md§81#1",
+    "lane9#8",
+    "lane9#21",
+    "lane9#84"
+   ],
+   "correction": [
+    "lane9#20",
+    "lane9#29",
+    "lane9#85",
+    "lane9#93",
+    "lane9#168",
+    "lane9#221"
+   ],
+   "why": "the 09-02 board (2,889 teams) puts us at rank 804 with 88 teams >=0.94; 776/84/2,844 are the 09-01 snapshot, superseded"
+  },
+  "C10": {
+   "claim": "a fold is atomic because train.py has no --resume -> --resume exists",
+   "earlier": [
+    "lane12#238",
+    "AGENTS.md§45#4",
+    "R1#235"
+   ],
+   "correction": [],
+   "why": "--resume exists; only search-flipped (R0c, carried over) or a reconciler reading the code can show it"
+  },
+  "C11": {
+   "claim": "--slices 24 costs ~175 min -> 201 min on the lanes own model",
+   "earlier": [
+    "lane11#187"
+   ],
+   "correction": [
+    "lane11#55",
+    "lane11#65",
+    "lane11#110",
+    "lane11#111",
+    "lane11#113",
+    "lane11#118",
+    "lane11#238"
+   ],
+   "why": "~175 min drops the fits ~25 min intercept: on the lanes own fit, 132 units cost about 201 min"
+  },
+  "C12": {
+   "claim": "dropping the ten fold? members unlocks three TTA views -> twelve members block them",
+   "earlier": [
+    "lane10#392",
+    "lane10#398"
+   ],
+   "correction": [
+    "lane11#223",
+    "tta.py§unmatched#1"
+   ],
+   "why": "the views are blocked by the twelve --adjacent members, so dropping the ten fold? members does not unlock them"
+  }
+ },
+ "briefCheck": {
+  "note": "No brief may hold these terms (case-insensitive), these figures as number tokens, any key clause id, or six words in a row from a key clause.",
+  "terms": [
+   "never passed",
+   "passed once",
+   "run_arm",
+   "layer-decay",
+   "warmup-frac",
+   "too hot",
+   "10×",
+   "10x",
+   "24 of 48",
+   "1e-6",
+   "screen S1",
+   "budget_minutes",
+   "upper bound",
+   "optimistic",
+   "Σ",
+   "under-predict",
+   "layout multiplier",
+   "2×",
+   "1.5–4.4",
+   "4.4 h",
+   "id, crop, bright",
+   "TTA view",
+   "336",
+   "384",
+   "224",
+   "392",
+   "control group",
+   "control teams",
+   "overfit",
+   "winner",
+   "rank 776",
+   "rank 804",
+   "84 teams",
+   "88 teams",
+   "86 teams",
+   "--resume",
+   "atomic",
+   "--slices",
+   "slices 24",
+   "fold?",
+   "unlock",
+   "twelve",
+   "12 members",
+   "22 members",
+   "66 units",
+   "132 units",
+   "67 min",
+   "~175",
+   "200.6",
+   "25.2",
+   "1.329",
+   "mirror",
+   "adjacent"
+  ],
+  "figures": [
+   "1.329",
+   "25.2",
+   "200.6",
+   "175",
+   "201",
+   "132",
+   "113",
+   "90.5",
+   "264.7",
+   "540",
+   "427",
+   "134",
+   "776",
+   "804",
+   "2844",
+   "2889",
+   "0.926",
+   "0.936",
+   "0.937",
+   "0.94",
+   "0.945",
+   "0.946",
+   "336",
+   "384",
+   "224",
+   "392",
+   "1.75",
+   "3.5",
+   "1e-6",
+   "0.15",
+   "0.6",
+   "324"
+  ]
+ }
+}

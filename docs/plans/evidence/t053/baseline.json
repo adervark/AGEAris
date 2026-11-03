@@ -1,0 +1,2864 @@
+[
+  {
+    "dir": "/home/ade/Code/AGEAris",
+    "schema": "aa.lost/1",
+    "repo": {
+      "head": "1afc8e46644f95bd906372f1988bc7fd00852578",
+      "board": "AA"
+    },
+    "since": null,
+    "asOf": "2026-10-25T07:40:00Z",
+    "read": {
+      "commits": 270,
+      "merges": 0,
+      "trails": 24,
+      "lines": 456,
+      "malformed": 0,
+      "skipped": 0,
+      "runs": 85
+    },
+    "a": {
+      "repeats": 0,
+      "runs": 85,
+      "per100Runs": 0,
+      "noAct": 0,
+      "items": []
+    },
+    "b": {
+      "overlaps": 0,
+      "ownerLines": 0,
+      "runs": 0,
+      "items": []
+    },
+    "c": {
+      "claims": 66,
+      "limited": 66,
+      "noLimit": 0,
+      "items": [],
+      "wipAtClaim": {
+        "median": null,
+        "max": null
+      }
+    },
+    "d": {
+      "claims": 66,
+      "measured": 24,
+      "open": 1,
+      "noDid": 41,
+      "withTrail": 24,
+      "medianMinutes": 9,
+      "p85Minutes": 27,
+      "items": [
+        {
+          "task": "T001",
+          "commit": "b52bc2dbd58c3c55c2bc63cf1423febedd6faf8b",
+          "at": "2026-10-06T21:07:14Z",
+          "left": "2026-10-06T21:41:12Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-06T21:21:51Z",
+          "minutes": 15
+        },
+        {
+          "task": "T005",
+          "commit": "e37d3e9b42507ac1cbeb08b6f3303a0406ec4a0d",
+          "at": "2026-10-06T21:41:18Z",
+          "left": "2026-10-06T21:47:08Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T006",
+          "commit": "e37d3e9b42507ac1cbeb08b6f3303a0406ec4a0d",
+          "at": "2026-10-06T21:41:18Z",
+          "left": "2026-10-06T21:47:08Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T017",
+          "commit": "0a698d920bb9717284f80a1c84d7a48dab486466",
+          "at": "2026-10-06T21:54:30Z",
+          "left": "2026-10-06T21:56:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T018",
+          "commit": "bc4a63fa0ab7755e976044dd740bef6334a7bf55",
+          "at": "2026-10-06T21:59:10Z",
+          "left": "2026-10-06T22:05:14Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-06T22:03:53Z",
+          "minutes": 5
+        },
+        {
+          "task": "T019",
+          "commit": "e6fc2599c3f8031b0665c05e426e48be1448b19e",
+          "at": "2026-10-06T22:57:46Z",
+          "left": "2026-10-06T23:05:03Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T020",
+          "commit": "03a28e77a6bf19eb8d7f77f0cdd5b21a87417c99",
+          "at": "2026-10-06T23:03:02Z",
+          "left": "2026-10-06T23:05:03Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T021",
+          "commit": "957b574a95949cf959d9cc7bccc5d8ddd91ab0bd",
+          "at": "2026-10-07T17:13:26Z",
+          "left": "2026-10-07T19:13:17Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T17:23:02Z",
+          "minutes": 10
+        },
+        {
+          "task": "T022",
+          "commit": "b6746c15f3657abf50de9ee41a6aa81b705e7a6f",
+          "at": "2026-10-07T17:13:26Z",
+          "left": "2026-10-07T18:58:30Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T17:22:20Z",
+          "minutes": 9
+        },
+        {
+          "task": "T023",
+          "commit": "752c1b80d4c22b2edf8d7d6b26e1a2eb3824884a",
+          "at": "2026-10-07T19:13:35Z",
+          "left": "2026-10-07T20:00:28Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T19:35:56Z",
+          "minutes": 22
+        },
+        {
+          "task": "T027",
+          "commit": "a449e2d09f706a8ec62d50b2dc1e7014d93b7dd1",
+          "at": "2026-10-08T04:43:21Z",
+          "left": "2026-10-08T04:45:28Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T028",
+          "commit": "3f261ac5f97964294e7f9e68f0b040fd31404200",
+          "at": "2026-10-08T05:37:52Z",
+          "left": "2026-10-08T05:46:07Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-08T05:42:15Z",
+          "minutes": 4
+        },
+        {
+          "task": "T007",
+          "commit": "516ddd7b79852c9d7f0b865799f27ebd705077c8",
+          "at": "2026-10-08T09:00:04Z",
+          "left": "2026-10-08T09:04:45Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T012",
+          "commit": "516ddd7b79852c9d7f0b865799f27ebd705077c8",
+          "at": "2026-10-08T09:00:04Z",
+          "left": "2026-10-08T09:04:45Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T011",
+          "commit": "4f1dc5fda7a78a439dbc60658af4aaabbcd45d8a",
+          "at": "2026-10-08T09:04:52Z",
+          "left": "2026-10-08T09:08:10Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-08T09:07:53Z",
+          "minutes": 3
+        },
+        {
+          "task": "T013",
+          "commit": "4f1dc5fda7a78a439dbc60658af4aaabbcd45d8a",
+          "at": "2026-10-08T09:04:52Z",
+          "left": "2026-10-08T09:08:10Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T008",
+          "commit": "cc72b33533e900412e48045bf55d7791cc808e70",
+          "at": "2026-10-08T09:08:19Z",
+          "left": "2026-10-08T09:10:30Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T010",
+          "commit": "cc72b33533e900412e48045bf55d7791cc808e70",
+          "at": "2026-10-08T09:08:19Z",
+          "left": "2026-10-08T09:10:30Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T002",
+          "commit": "fd9d54097c58b102b4b1e477a2a965e4b081e9a7",
+          "at": "2026-10-08T09:11:10Z",
+          "left": "2026-10-08T09:15:05Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T009",
+          "commit": "fd9d54097c58b102b4b1e477a2a965e4b081e9a7",
+          "at": "2026-10-08T09:11:10Z",
+          "left": "2026-10-08T09:15:05Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T014",
+          "commit": "1bd1f7530ff5be65457c9dd69c2258872348de04",
+          "at": "2026-10-08T09:15:43Z",
+          "left": "2026-10-08T09:18:27Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T015",
+          "commit": "1bd1f7530ff5be65457c9dd69c2258872348de04",
+          "at": "2026-10-08T09:15:43Z",
+          "left": "2026-10-08T09:18:27Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T016",
+          "commit": "992c13619d1087a5e97c3dc59d465f2ed2ffcf1b",
+          "at": "2026-10-08T09:25:16Z",
+          "left": "2026-10-08T09:27:12Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-08T09:25:57Z",
+          "minutes": 1
+        },
+        {
+          "task": "T026",
+          "commit": "992c13619d1087a5e97c3dc59d465f2ed2ffcf1b",
+          "at": "2026-10-08T09:25:16Z",
+          "left": "2026-10-08T09:32:12Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T029",
+          "commit": "05b6e305c9cae97dedd82522e3cc1a49089a570b",
+          "at": "2026-10-08T09:46:51Z",
+          "left": "2026-10-08T09:49:15Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T030",
+          "commit": "6503ceb6ede493fe1fec0e5128f8596495c59cfd",
+          "at": "2026-10-08T10:03:03Z",
+          "left": "2026-10-08T10:09:04Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T031",
+          "commit": "6503ceb6ede493fe1fec0e5128f8596495c59cfd",
+          "at": "2026-10-08T10:03:03Z",
+          "left": "2026-10-08T10:09:04Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T032",
+          "commit": "507b0ac88607c932ad034cbb538237d2b81f3f1c",
+          "at": "2026-10-08T10:09:20Z",
+          "left": "2026-10-08T10:14:12Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T033",
+          "commit": "33e1d620f161657ff632425ea92d86acecc610a6",
+          "at": "2026-10-08T10:21:08Z",
+          "left": "2026-10-08T10:34:32Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T034",
+          "commit": "bd881c574d528c3684185d9e50b0ac621cd04599",
+          "at": "2026-10-08T10:40:13Z",
+          "left": "2026-10-08T10:44:52Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T035",
+          "commit": "236e4d88d7c8550bc42ea1ec33d688b51536922b",
+          "at": "2026-10-08T12:01:20Z",
+          "left": "2026-10-08T12:08:14Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T036",
+          "commit": "4f930f8455f5142ccf396fb9f3595dbefd7d6123",
+          "at": "2026-10-08T12:11:23Z",
+          "left": "2026-10-08T12:14:28Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T037",
+          "commit": "9fdfc214864b418141a83461feaf5558e13c0bc3",
+          "at": "2026-10-08T18:07:23Z",
+          "left": "2026-10-08T18:13:17Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T038",
+          "commit": "4891edbe09c4c273ad024f80dc438a88c03c5b2e",
+          "at": "2026-10-08T18:07:23Z",
+          "left": "2026-10-08T18:34:46Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T039",
+          "commit": "0d52fc19a201e5dea16c5c02b0798b0af73588f2",
+          "at": "2026-10-08T18:34:51Z",
+          "left": "2026-10-08T18:40:05Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T040",
+          "commit": "f4361a5dfac83c9157bed357b20fee49b3f6b219",
+          "at": "2026-10-08T19:20:55Z",
+          "left": "2026-10-08T19:24:11Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T041",
+          "commit": "d864251c297b12f9ead35b018c69284969c782cb",
+          "at": "2026-10-08T19:27:04Z",
+          "left": "2026-10-08T19:30:16Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T042",
+          "commit": "75e19847758c2013da416bae072a6070d889bbbb",
+          "at": "2026-10-08T19:31:55Z",
+          "left": "2026-10-08T19:35:34Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T043",
+          "commit": "9ac89ab3f71f43d1bbbf8d576d2669a8af243949",
+          "at": "2026-10-08T19:36:39Z",
+          "left": "2026-10-08T19:40:12Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T044",
+          "commit": "d097dc4db10a5ca0cf3c85a76d4dca670e6c6d22",
+          "at": "2026-10-08T19:49:26Z",
+          "left": "2026-10-08T20:15:03Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T045",
+          "commit": "78d4661df8762892c8bb5522b3a46472d379e812",
+          "at": "2026-10-09T05:56:15Z",
+          "left": "2026-10-09T05:58:06Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-09T05:56:58Z",
+          "minutes": 1
+        },
+        {
+          "task": "T046",
+          "commit": "48950199259fe1fd2a582396b0916a7efdb4c4a5",
+          "at": "2026-10-09T08:08:22Z",
+          "left": "2026-10-09T08:42:23Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-09T08:26:26Z",
+          "minutes": 18
+        },
+        {
+          "task": "T048",
+          "commit": "fe531200260b84ced7e3dbe9599c59f0ea0f5ce9",
+          "at": "2026-10-09T08:20:11Z",
+          "left": "2026-10-09T08:42:23Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-09T08:20:51Z",
+          "minutes": 1
+        },
+        {
+          "task": "T050",
+          "commit": "f3893b040244c8cd55d746f843410b1be954d3a3",
+          "at": "2026-10-09T08:43:29Z",
+          "left": "2026-10-09T14:01:48Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-09T08:58:46Z",
+          "minutes": 15
+        },
+        {
+          "task": "T049",
+          "commit": "c331700d804c197e5e107c255ef0ec0fc1e8a11a",
+          "at": "2026-10-09T08:48:03Z",
+          "left": "2026-10-09T14:25:43Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-09T14:15:03Z",
+          "minutes": 327
+        },
+        {
+          "task": "T052",
+          "commit": "00a3f26f61cf7c1e00fe192e571e7abf951bdfe5",
+          "at": "2026-10-10T09:49:47Z",
+          "left": "2026-10-10T10:34:53Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-10T09:57:12Z",
+          "minutes": 7
+        },
+        {
+          "task": "T069",
+          "commit": "de8baf8e9e80220e03904fa639efb19c133ba3cf",
+          "at": "2026-10-10T10:47:38Z",
+          "left": "2026-10-10T10:50:56Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-10T10:48:33Z",
+          "minutes": 1
+        },
+        {
+          "task": "T055",
+          "commit": "f46e8fd6571bd2e9a24e6fc3a7bd9f070c5f35d9",
+          "at": "2026-10-10T19:01:22Z",
+          "left": "2026-10-11T14:34:53Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-10T19:46:37Z",
+          "minutes": 45
+        },
+        {
+          "task": "T070",
+          "commit": "f46e8fd6571bd2e9a24e6fc3a7bd9f070c5f35d9",
+          "at": "2026-10-10T19:01:22Z",
+          "left": "2026-10-10T19:13:11Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-10T19:11:56Z",
+          "minutes": 11
+        },
+        {
+          "task": "T073",
+          "commit": "6856c59d4d363b57a3a8195c7f3a174d5d5c64f5",
+          "at": "2026-10-13T05:09:50Z",
+          "left": "2026-10-13T08:43:46Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-13T05:14:33Z",
+          "minutes": 5
+        },
+        {
+          "task": "T074",
+          "commit": "eb7f7eb1d5ffbac344190d9c114147036f7a3218",
+          "at": "2026-10-13T05:21:27Z",
+          "left": "2026-10-13T05:29:33Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T075",
+          "commit": "ab542c8418e69e9706262e08308a8dd16c7c6caf",
+          "at": "2026-10-13T08:57:44Z",
+          "left": "2026-10-13T09:24:54Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-13T09:13:42Z",
+          "minutes": 16
+        },
+        {
+          "task": "T082",
+          "commit": "c57dd82631b03cd1a0d7cc3ce63ef3eafbf07fbc",
+          "at": "2026-10-13T17:23:37Z",
+          "left": "2026-10-21T11:07:25Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-14T01:37:58Z",
+          "minutes": 494
+        },
+        {
+          "task": "T084",
+          "commit": "171ec622bf02ad5207ee6e38ff9e255b7a46fccb",
+          "at": "2026-10-21T11:07:42Z",
+          "left": "2026-10-21T12:29:22Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-21T11:12:13Z",
+          "minutes": 5
+        },
+        {
+          "task": "T085",
+          "commit": "1c4139bfb60eb467375f99daa34a162a79c0ca79",
+          "at": "2026-10-21T12:29:30Z",
+          "left": "2026-10-21T22:00:34Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-21T12:33:13Z",
+          "minutes": 4
+        },
+        {
+          "task": "T087",
+          "commit": "4d611060ae40e904e51fadcbe15839b9591f00a7",
+          "at": "2026-10-22T03:55:46Z",
+          "left": "2026-10-22T04:04:50Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T086",
+          "commit": "033ac4283ab68baaad017de2ec591785fe6c6046",
+          "at": "2026-10-22T04:12:32Z",
+          "left": "2026-10-22T18:03:33Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-22T04:39:29Z",
+          "minutes": 27
+        },
+        {
+          "task": "T089",
+          "commit": "35c90b19eb7bf075e8854ba6e868e928a806e4cb",
+          "at": "2026-10-22T10:35:49Z",
+          "left": "2026-10-22T18:03:52Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T091",
+          "commit": "d2972af56b8ad5b1091b8009d421a145ac3bdc40",
+          "at": "2026-10-22T18:10:33Z",
+          "left": "2026-10-22T18:19:15Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T092",
+          "commit": "2eb655975e7b24258581bf9f9d89286102f99554",
+          "at": "2026-10-22T19:35:55Z",
+          "left": "2026-10-22T19:41:43Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T093",
+          "commit": "20ccbfd4da24892911f4a5035493b6e892878eff",
+          "at": "2026-10-22T20:10:25Z",
+          "left": "2026-10-22T20:22:07Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T090",
+          "commit": "b50168a2bb4f113ddfd7a9fd91301ab5f70e21ce",
+          "at": "2026-10-22T20:25:45Z",
+          "left": "2026-10-23T00:25:51Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T094",
+          "commit": "49e1697d318f62ac8dea199d4ba8ec77394d5fc8",
+          "at": "2026-10-23T03:45:43Z",
+          "left": "2026-10-23T20:18:35Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-23T03:54:13Z",
+          "minutes": 9
+        },
+        {
+          "task": "T057",
+          "commit": "1f05fbe99b43dd1f13c6981e07c69273daf7f90b",
+          "at": "2026-10-24T08:05:50Z",
+          "left": "2026-10-24T08:42:00Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T063",
+          "commit": "1f05fbe99b43dd1f13c6981e07c69273daf7f90b",
+          "at": "2026-10-24T08:05:50Z",
+          "left": "2026-10-24T08:36:19Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T053",
+          "commit": "323b4674cc7f3b7f1103c273d4a740232bd01363",
+          "at": "2026-10-25T07:23:50Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        }
+      ]
+    }
+  },
+  {
+    "dir": "/home/ade/Code/AGEIS",
+    "schema": "aa.lost/1",
+    "repo": {
+      "head": "4f793d161c604977240b0187fa6d07275d4d121d",
+      "board": "AA"
+    },
+    "since": null,
+    "asOf": "2026-10-25T07:40:00Z",
+    "read": {
+      "commits": 608,
+      "merges": 17,
+      "trails": 60,
+      "lines": 1091,
+      "malformed": 0,
+      "skipped": 0,
+      "runs": 179
+    },
+    "a": {
+      "repeats": 0,
+      "runs": 179,
+      "per100Runs": 0,
+      "noAct": 22,
+      "items": []
+    },
+    "b": {
+      "overlaps": 0,
+      "ownerLines": 0,
+      "runs": 0,
+      "items": []
+    },
+    "c": {
+      "claims": 103,
+      "limited": 0,
+      "noLimit": 103,
+      "items": [],
+      "wipAtClaim": {
+        "median": 1,
+        "max": 8
+      }
+    },
+    "d": {
+      "claims": 103,
+      "measured": 56,
+      "open": 1,
+      "noDid": 46,
+      "withTrail": 63,
+      "medianMinutes": 6,
+      "p85Minutes": 73,
+      "items": [
+        {
+          "task": "T002",
+          "commit": "8a28d897e4900d92b411c46d30e49c4f1b3a5c4b",
+          "at": "2026-08-20T06:49:00Z",
+          "left": "2026-08-20T07:00:48Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T010",
+          "commit": "75f705eaa15afa1d08cf536ef1f7b11d2122ce98",
+          "at": "2026-08-27T18:58:02Z",
+          "left": "2026-08-27T19:07:45Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T011",
+          "commit": "04bac4e3c2555d050ce48bd0aed6a3230d6fe7bc",
+          "at": "2026-08-28T02:21:20Z",
+          "left": "2026-08-28T02:27:08Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T012",
+          "commit": "e2e2c85755270c33ef08299ff5375ce043b72a16",
+          "at": "2026-08-28T09:57:49Z",
+          "left": "2026-08-28T10:04:17Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T013",
+          "commit": "90344235f49f86c971168962b423ca77de248e72",
+          "at": "2026-08-28T15:49:24Z",
+          "left": "2026-08-28T16:00:25Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T014",
+          "commit": "e899bd4fb5624e8d287758a9f703c33386119aeb",
+          "at": "2026-08-28T18:33:51Z",
+          "left": "2026-08-28T18:43:14Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T015",
+          "commit": "351e7e15c294e9ef579de6a887a3673ac031c9cf",
+          "at": "2026-08-28T19:06:26Z",
+          "left": "2026-08-28T19:12:52Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T017",
+          "commit": "3dcd5e3996a1fc26bf908b31de59fb3954062d62",
+          "at": "2026-08-28T22:08:52Z",
+          "left": "2026-08-28T22:21:51Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T018",
+          "commit": "3dcd5e3996a1fc26bf908b31de59fb3954062d62",
+          "at": "2026-08-28T22:08:52Z",
+          "left": "2026-08-28T22:29:02Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T019",
+          "commit": "d5ad57d365503dcaebdef2b3965c6c9de1216a39",
+          "at": "2026-08-29T01:38:34Z",
+          "left": "2026-08-29T16:59:31Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T020",
+          "commit": "d5ad57d365503dcaebdef2b3965c6c9de1216a39",
+          "at": "2026-08-29T01:38:34Z",
+          "left": "2026-08-29T17:44:56Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T021",
+          "commit": "b8953b2df64dd4bca87daee776c8e026fa68d364",
+          "at": "2026-08-29T16:51:04Z",
+          "left": "2026-08-29T17:33:14Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T022",
+          "commit": "b8953b2df64dd4bca87daee776c8e026fa68d364",
+          "at": "2026-08-29T16:51:04Z",
+          "left": "2026-08-29T20:11:58Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T024",
+          "commit": "8d20d712ccc55ead07374307e8235f3680a4b575",
+          "at": "2026-08-29T20:32:49Z",
+          "left": "2026-08-29T21:56:07Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T025",
+          "commit": "8d20d712ccc55ead07374307e8235f3680a4b575",
+          "at": "2026-08-29T20:32:49Z",
+          "left": "2026-08-29T21:56:07Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T026",
+          "commit": "bee33b078d92e39a4681153390c80f5fd5bf1e43",
+          "at": "2026-08-29T21:56:44Z",
+          "left": "2026-08-29T21:56:44Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T027",
+          "commit": "f6bc04f9ad01effca2c9dc0b7a06d9579eef5ccd",
+          "at": "2026-08-29T22:18:34Z",
+          "left": "2026-08-29T22:36:10Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T029",
+          "commit": "2f779565715552cdc62d57aa5e7f24c1beb52ee5",
+          "at": "2026-08-30T06:27:52Z",
+          "left": "2026-08-30T06:46:13Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T030",
+          "commit": "8f66f19ac49aeddebdaf9f9c12e7e9d513d4f56c",
+          "at": "2026-08-30T10:16:03Z",
+          "left": "2026-08-30T10:29:58Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T032",
+          "commit": "b64fe372a8c6aa3ea6df0d21ec59cfde8fc06d49",
+          "at": "2026-08-30T17:05:58Z",
+          "left": "2026-08-30T18:53:08Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T033",
+          "commit": "c64b8eaa105f4d5d328fa6265f2dedcd3b23c279",
+          "at": "2026-08-30T21:59:00Z",
+          "left": "2026-08-30T22:17:21Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T023",
+          "commit": "2682261a127c279cbdffc73e0ec4f9a31493d22c",
+          "at": "2026-08-31T06:40:43Z",
+          "left": "2026-09-01T21:04:39Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T034",
+          "commit": "803e2c944875bb476d8129a8728dbc507d2bacca",
+          "at": "2026-08-31T06:52:51Z",
+          "left": "2026-08-31T07:07:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T035",
+          "commit": "4bcf2ce1ea8bb7252de4a506c58c4309c7fbf80d",
+          "at": "2026-09-01T10:11:47Z",
+          "left": "2026-09-01T20:44:46Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T037",
+          "commit": "4cc58dadedc90918c0cd283e1df603b587efab28",
+          "at": "2026-09-04T08:50:38Z",
+          "left": "2026-09-04T08:58:47Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T038",
+          "commit": "4cc58dadedc90918c0cd283e1df603b587efab28",
+          "at": "2026-09-04T08:50:38Z",
+          "left": "2026-10-07T20:18:38Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T039",
+          "commit": "ca602f6baa5fea8398ca93e6251b2742a6975119",
+          "at": "2026-09-11T05:08:32Z",
+          "left": "2026-09-11T05:12:09Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-11T05:10:14Z",
+          "minutes": 2
+        },
+        {
+          "task": "T040",
+          "commit": "ccf328e18821d86a96958bd8ba3897e55a609ed2",
+          "at": "2026-09-11T15:40:31Z",
+          "left": "2026-09-11T15:42:34Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-11T15:40:31Z",
+          "minutes": 0
+        },
+        {
+          "task": "T041",
+          "commit": "83fea363106a7a9dae1909395dc9aa1e4d905281",
+          "at": "2026-09-22T06:28:53Z",
+          "left": "2026-09-22T07:00:25Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-22T06:40:51Z",
+          "minutes": 12
+        },
+        {
+          "task": "T042",
+          "commit": "2fbb7d3c05324771c15b64424919837b911de5e2",
+          "at": "2026-09-22T09:14:16Z",
+          "left": "2026-09-22T17:25:50Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T043",
+          "commit": "bd76cd60191de7e27ee784dc4cd298e39c6589a5",
+          "at": "2026-09-23T03:54:02Z",
+          "left": "2026-09-23T04:22:44Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T044",
+          "commit": "87fcae1985a710f10ec8a4c2cb560f3d44e8a756",
+          "at": "2026-09-23T04:30:17Z",
+          "left": "2026-09-23T06:10:52Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-23T04:35:50Z",
+          "minutes": 6
+        },
+        {
+          "task": "T045",
+          "commit": "642175e9a40ad77454eab67d5b29c688f23368c7",
+          "at": "2026-09-24T19:08:37Z",
+          "left": "2026-09-24T19:12:25Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T046",
+          "commit": "05d168cffabd9984e71f88d34c312ae0409d450d",
+          "at": "2026-09-24T19:27:07Z",
+          "left": "2026-09-24T19:39:47Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T047",
+          "commit": "4e94ad4abc9afb5010885d305ff42e7b1a59920d",
+          "at": "2026-09-25T06:26:34Z",
+          "left": "2026-09-29T09:43:19Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-29T09:33:33Z",
+          "minutes": 5947
+        },
+        {
+          "task": "T048",
+          "commit": "45c98316ce870eea89bb090639f6e3c4da4e1b3b",
+          "at": "2026-09-28T17:23:04Z",
+          "left": "2026-09-28T18:52:17Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-28T17:39:43Z",
+          "minutes": 17
+        },
+        {
+          "task": "T036",
+          "commit": "6745b725461aa1b620985bdf2fbdf3503ae669b0",
+          "at": "2026-09-29T09:45:01Z",
+          "left": "2026-10-07T20:18:38Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T049",
+          "commit": "a0da010b43510bf545ab3d468db8d93b9307c81c",
+          "at": "2026-09-29T11:22:38Z",
+          "left": "2026-09-29T11:52:43Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-29T11:23:49Z",
+          "minutes": 1
+        },
+        {
+          "task": "T050",
+          "commit": "742350ab14ec1820f54bb640b3072c509fd35b04",
+          "at": "2026-09-29T11:27:04Z",
+          "left": "2026-09-29T11:30:51Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T051",
+          "commit": "c37e1accea47bdb9341e1bebd905983243059556",
+          "at": "2026-09-29T18:31:27Z",
+          "left": "2026-09-29T18:53:15Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-29T18:33:19Z",
+          "minutes": 2
+        },
+        {
+          "task": "T052",
+          "commit": "2ea64ba4fbc5fab151574c868218f54233f67ee8",
+          "at": "2026-09-30T05:40:38Z",
+          "left": "2026-09-30T15:39:20Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-30T05:41:58Z",
+          "minutes": 1
+        },
+        {
+          "task": "T053",
+          "commit": "fdd625e9c996a33b2cf7d9bdc4e9edf80cd6f8cf",
+          "at": "2026-09-30T17:43:46Z",
+          "left": "2026-09-30T18:04:13Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-30T17:49:43Z",
+          "minutes": 6
+        },
+        {
+          "task": "T054",
+          "commit": "c4eb4f6a9415bdf2c02c71e0e9e259f5fa1d5391",
+          "at": "2026-09-30T19:09:40Z",
+          "left": "2026-09-30T19:10:34Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T055",
+          "commit": "472241c65cc84665414453d67695a8a485f013d7",
+          "at": "2026-09-30T19:25:15Z",
+          "left": "2026-09-30T19:32:43Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-30T19:32:27Z",
+          "minutes": 7
+        },
+        {
+          "task": "T056",
+          "commit": "668cb7606091908d009437f90f89de28150c8299",
+          "at": "2026-09-30T19:43:50Z",
+          "left": "2026-09-30T19:53:12Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-30T19:50:11Z",
+          "minutes": 6
+        },
+        {
+          "task": "T058",
+          "commit": "e941e87ade40344f7920b77e460d8a05ca4c27eb",
+          "at": "2026-10-01T17:55:20Z",
+          "left": "2026-10-07T20:18:38Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T059",
+          "commit": "e941e87ade40344f7920b77e460d8a05ca4c27eb",
+          "at": "2026-10-01T17:55:20Z",
+          "left": "2026-10-01T18:30:27Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-01T18:01:21Z",
+          "minutes": 6
+        },
+        {
+          "task": "T060",
+          "commit": "4f3eaf563d6749d391433c07545bebdce7da6ec7",
+          "at": "2026-10-01T18:05:53Z",
+          "left": "2026-10-02T09:45:54Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-01T18:29:30Z",
+          "minutes": 24
+        },
+        {
+          "task": "T061",
+          "commit": "1e6874a10385a97d237a9d0b71682aa3f83053a1",
+          "at": "2026-10-02T13:11:51Z",
+          "left": "2026-10-02T15:20:42Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-02T13:29:27Z",
+          "minutes": 18
+        },
+        {
+          "task": "T065",
+          "commit": "cbdb6c0970fd7db252954cd70c2a1c01f000076a",
+          "at": "2026-10-02T13:38:03Z",
+          "left": "2026-10-02T16:55:01Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-02T15:23:10Z",
+          "minutes": 105
+        },
+        {
+          "task": "T067",
+          "commit": "ced447b9190983b3571ee796963f8ffb1f2ae187",
+          "at": "2026-10-02T20:43:33Z",
+          "left": "2026-10-02T21:53:23Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-02T20:48:32Z",
+          "minutes": 5
+        },
+        {
+          "task": "T068",
+          "commit": "96dcd373f18cd2de42e7e15d893a8c742fe14ee2",
+          "at": "2026-10-02T21:56:51Z",
+          "left": "2026-10-03T20:12:32Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-03T03:12:24Z",
+          "minutes": 316
+        },
+        {
+          "task": "T071",
+          "commit": "799a64a44828366d222fecbfaf47960158a4aa38",
+          "at": "2026-10-03T20:13:25Z",
+          "left": "2026-10-03T23:20:55Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-03T20:21:05Z",
+          "minutes": 8
+        },
+        {
+          "task": "T072",
+          "commit": "da04bdb44f840ba230578e260241219aa4689e4a",
+          "at": "2026-10-04T15:37:47Z",
+          "left": "2026-10-04T17:04:57Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-04T15:51:25Z",
+          "minutes": 14
+        },
+        {
+          "task": "T073",
+          "commit": "bb0dbd5ae497d75339a23f0aa2fff3857d831b03",
+          "at": "2026-10-04T17:32:30Z",
+          "left": "2026-10-04T19:38:00Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-04T18:03:49Z",
+          "minutes": 31
+        },
+        {
+          "task": "T074",
+          "commit": "95b16a65159ec4c8f0800736e156c12b10b6b221",
+          "at": "2026-10-04T19:39:07Z",
+          "left": "2026-10-05T06:17:56Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T05:09:50Z",
+          "minutes": 571
+        },
+        {
+          "task": "T075",
+          "commit": "4b983d3dc1daf1767456316548f9648ce9d4a3c3",
+          "at": "2026-10-05T08:38:43Z",
+          "left": "2026-10-05T10:28:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T10:10:37Z",
+          "minutes": 92
+        },
+        {
+          "task": "T077",
+          "commit": "4b983d3dc1daf1767456316548f9648ce9d4a3c3",
+          "at": "2026-10-05T08:38:43Z",
+          "left": "2026-10-07T20:18:38Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T08:40:58Z",
+          "minutes": 2
+        },
+        {
+          "task": "T057",
+          "commit": "5fd8192a3945546b3a172294155287603019f549",
+          "at": "2026-10-05T08:48:58Z",
+          "left": "2026-10-07T20:18:38Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T10:01:43Z",
+          "minutes": 73
+        },
+        {
+          "task": "T078",
+          "commit": "0147b394dac425c41210db3ade04c961177b4fd5",
+          "at": "2026-10-05T10:47:52Z",
+          "left": "2026-10-05T17:02:31Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T10:49:42Z",
+          "minutes": 2
+        },
+        {
+          "task": "T079",
+          "commit": "615d9fd16f1a0a843c9a62c10d96c668322f4280",
+          "at": "2026-10-05T15:24:10Z",
+          "left": "2026-10-05T16:50:27Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T16:05:07Z",
+          "minutes": 41
+        },
+        {
+          "task": "T080",
+          "commit": "648cf9f99495554f1abde6123039508acbb8c2dc",
+          "at": "2026-10-05T16:56:43Z",
+          "left": "2026-10-05T17:02:31Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T17:02:25Z",
+          "minutes": 6
+        },
+        {
+          "task": "T081",
+          "commit": "648cf9f99495554f1abde6123039508acbb8c2dc",
+          "at": "2026-10-05T16:56:43Z",
+          "left": "2026-10-05T17:02:31Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T17:02:25Z",
+          "minutes": 6
+        },
+        {
+          "task": "T082",
+          "commit": "187e0d81d9f08dc00452ac8bdb6554b3ef530e04",
+          "at": "2026-10-05T18:29:09Z",
+          "left": "2026-10-05T19:58:39Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T18:30:17Z",
+          "minutes": 1
+        },
+        {
+          "task": "T083",
+          "commit": "e45a904de86a8f6ebf5d80a10a5f5b0be6f7532c",
+          "at": "2026-10-05T18:39:19Z",
+          "left": "2026-10-05T19:58:39Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T18:45:10Z",
+          "minutes": 6
+        },
+        {
+          "task": "T084",
+          "commit": "f669321adcece1420b6bb8274028a90bb49de5fd",
+          "at": "2026-10-05T20:34:27Z",
+          "left": "2026-10-06T00:35:49Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-05T21:51:49Z",
+          "minutes": 77
+        },
+        {
+          "task": "T085",
+          "commit": "901f4b668c51ff7ba6f170eff75393af810a9025",
+          "at": "2026-10-06T03:29:05Z",
+          "left": "2026-10-06T03:37:54Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-06T03:37:10Z",
+          "minutes": 8
+        },
+        {
+          "task": "T086",
+          "commit": "d2364e3442bbf96a50d61f86371206829ac02aba",
+          "at": "2026-10-06T03:40:15Z",
+          "left": "2026-10-06T03:40:58Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T087",
+          "commit": "ea64c10c1d323d92b59672d0e2bc71289170dcb1",
+          "at": "2026-10-06T03:46:32Z",
+          "left": "2026-10-07T09:57:42Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-06T03:50:26Z",
+          "minutes": 4
+        },
+        {
+          "task": "T069",
+          "commit": "189083fda5d8e6f7cf1366c47a87ffbda28a9fd7",
+          "at": "2026-10-06T03:58:12Z",
+          "left": "2026-10-06T04:08:43Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T064",
+          "commit": "c1b86f42173e62379c0168c3283f6131e2482c92",
+          "at": "2026-10-06T03:58:58Z",
+          "left": "2026-10-06T04:08:43Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T066",
+          "commit": "153f1cb4b2c5614a789aa00e165d4711f798c639",
+          "at": "2026-10-06T04:00:13Z",
+          "left": "2026-10-06T08:19:33Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T062",
+          "commit": "8a68a6e443ccc22c6f953082566054a48c2863b1",
+          "at": "2026-10-06T04:09:57Z",
+          "left": "2026-10-06T04:21:19Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T063",
+          "commit": "eccf5c3a8995ab3d35bd45785503e7ec287b4261",
+          "at": "2026-10-06T07:21:36Z",
+          "left": "2026-10-06T07:38:46Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T070",
+          "commit": "736ca57243d6f14ac4211731f7583c6a28e12cf0",
+          "at": "2026-10-06T07:39:36Z",
+          "left": "2026-10-06T07:51:14Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T088",
+          "commit": "ed58df499e04ed0ac443894c8204c88bf518b1f5",
+          "at": "2026-10-06T21:30:15Z",
+          "left": "2026-10-06T21:30:16Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T089",
+          "commit": "c7d2d5a749045ad3a4eba2070d0054ed70c52c94",
+          "at": "2026-10-07T09:13:37Z",
+          "left": "2026-10-07T13:38:43Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T076",
+          "commit": "39931b66e0c8a08e4290cb8e1caf67915db84b46",
+          "at": "2026-10-07T13:52:20Z",
+          "left": "2026-10-07T14:15:50Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T14:15:50Z",
+          "minutes": 24
+        },
+        {
+          "task": "T090",
+          "commit": "4290b3063baf269a36c5c78a41fd166a06e562df",
+          "at": "2026-10-07T17:15:24Z",
+          "left": "2026-10-07T17:40:07Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T17:31:21Z",
+          "minutes": 16
+        },
+        {
+          "task": "T091",
+          "commit": "4677682f56e78f851d4a1015de0deff1e0f5891f",
+          "at": "2026-10-07T18:29:45Z",
+          "left": "2026-10-07T18:33:31Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T077",
+          "commit": "f16b09bac23598d2ade24e60711e7c08671f62ca",
+          "at": "2026-10-07T20:31:44Z",
+          "left": "2026-10-07T20:34:41Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T20:34:41Z",
+          "minutes": 3
+        },
+        {
+          "task": "T038",
+          "commit": "961f3adeaf7e059434db15570d3dc0194de5454b",
+          "at": "2026-10-07T20:36:20Z",
+          "left": "2026-10-07T20:44:12Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T20:44:12Z",
+          "minutes": 8
+        },
+        {
+          "task": "T093",
+          "commit": "1baaef4f23deaa47238d066c8c07a2a36f4fd996",
+          "at": "2026-10-07T21:06:53Z",
+          "left": "2026-10-07T21:41:15Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-07T21:23:48Z",
+          "minutes": 17
+        },
+        {
+          "task": "T092",
+          "commit": "7660806ab56f221da0f0c1ef5612c6e7ae48ecc1",
+          "at": "2026-10-08T10:32:12Z",
+          "left": "2026-10-08T10:33:24Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T092",
+          "commit": "5cbcadc7a61f73bea6fce39bcc003e86bd4918b2",
+          "at": "2026-10-08T12:01:40Z",
+          "left": "2026-10-08T15:02:50Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-08T12:10:46Z",
+          "minutes": 9
+        },
+        {
+          "task": "T094",
+          "commit": "4edf0989b3c28861bbab7b239def0b142788b4d7",
+          "at": "2026-10-09T13:48:01Z",
+          "left": "2026-10-11T05:22:27Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-09T13:52:47Z",
+          "minutes": 5
+        },
+        {
+          "task": "T096",
+          "commit": "e304345799f5a7503f75866acc86c27404548473",
+          "at": "2026-10-10T05:22:13Z",
+          "left": "2026-10-10T05:34:30Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-10T05:26:31Z",
+          "minutes": 4
+        },
+        {
+          "task": "T097",
+          "commit": "4c845e199c5087e5fe7efdcc54f42946fbbafe83",
+          "at": "2026-10-10T05:31:06Z",
+          "left": "2026-10-10T05:34:30Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-10T05:33:49Z",
+          "minutes": 3
+        },
+        {
+          "task": "T099",
+          "commit": "64072766186201c0613f31b3de6de1671ec755e5",
+          "at": "2026-10-11T14:43:03Z",
+          "left": "2026-10-12T02:17:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-11T14:44:46Z",
+          "minutes": 2
+        },
+        {
+          "task": "T100",
+          "commit": "99deb25117b8b55665ec2b0ffc0952332645a4ee",
+          "at": "2026-10-12T02:18:34Z",
+          "left": "2026-10-12T05:33:38Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-12T02:25:40Z",
+          "minutes": 7
+        },
+        {
+          "task": "T104",
+          "commit": "8e6547db81672a89d127944b4935d9e3c2a6e956",
+          "at": "2026-10-12T05:39:43Z",
+          "left": "2026-10-12T05:41:23Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-12T05:40:36Z",
+          "minutes": 1
+        },
+        {
+          "task": "T105",
+          "commit": "62fe125a3b5c08207c7c17b2618cda2c52db37fe",
+          "at": "2026-10-12T06:46:16Z",
+          "left": null,
+          "state": "open",
+          "trail": true
+        },
+        {
+          "task": "T106",
+          "commit": "16bf1f111dc6d7f69536d603e9405f3a4c9209d0",
+          "at": "2026-10-13T04:34:28Z",
+          "left": "2026-10-13T04:43:49Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-13T04:43:35Z",
+          "minutes": 9
+        },
+        {
+          "task": "T107",
+          "commit": "26d55d44dd7d15de424b56772dc4109e94f05d08",
+          "at": "2026-10-13T05:35:31Z",
+          "left": "2026-10-13T06:05:45Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-13T05:39:30Z",
+          "minutes": 4
+        },
+        {
+          "task": "T108",
+          "commit": "787a1a3b764fdb02bbee469543a4fea53db82701",
+          "at": "2026-10-13T08:45:15Z",
+          "left": "2026-10-13T10:33:10Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-13T08:49:25Z",
+          "minutes": 4
+        },
+        {
+          "task": "T109",
+          "commit": "dfa9252aba13f032ef8c931887cfe82840db0a9f",
+          "at": "2026-10-14T03:30:36Z",
+          "left": "2026-10-14T05:50:05Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-14T04:13:45Z",
+          "minutes": 43
+        },
+        {
+          "task": "T110",
+          "commit": "4d52c40ac6bcbef552e81b89ce06831e9516da78",
+          "at": "2026-10-14T06:46:11Z",
+          "left": "2026-10-14T07:06:33Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T111",
+          "commit": "0cf8e7d375e054871a9f3d6aad26e73c4d1328c2",
+          "at": "2026-10-15T10:02:09Z",
+          "left": "2026-10-16T08:25:12Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-16T03:45:20Z",
+          "minutes": 1063
+        },
+        {
+          "task": "T112",
+          "commit": "5ecd0ecb095ff9358ade33854540fe0477c17f40",
+          "at": "2026-10-16T08:43:35Z",
+          "left": "2026-10-16T20:06:33Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-16T17:06:34Z",
+          "minutes": 503
+        },
+        {
+          "task": "T113",
+          "commit": "09dc8f8a8d1031e18588fdbcfe779fa3db90db4e",
+          "at": "2026-10-16T20:06:41Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-16T20:09:46Z",
+          "minutes": 3
+        },
+        {
+          "task": "T114",
+          "commit": "2334adeb44fbcfdafd9eb756798635868c5ea112",
+          "at": "2026-10-16T21:10:39Z",
+          "left": "2026-10-17T01:46:45Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-16T21:15:09Z",
+          "minutes": 5
+        },
+        {
+          "task": "T121",
+          "commit": "6b504738bad1afefc5b98e58f6caf8374d423dd8",
+          "at": "2026-10-17T05:10:37Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-17T05:14:50Z",
+          "minutes": 4
+        },
+        {
+          "task": "T123",
+          "commit": "bbcf910df8d5799d99a06028bae19f4c64989e90",
+          "at": "2026-10-21T10:46:18Z",
+          "left": "2026-10-22T09:41:04Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-21T10:48:58Z",
+          "minutes": 3
+        }
+      ]
+    }
+  },
+  {
+    "dir": "/home/ade/Code/RSNA",
+    "schema": "aa.lost/1",
+    "repo": {
+      "head": "47755334fc1d2d83aa38d8a7a9bea082cfaeea68",
+      "board": "AA"
+    },
+    "since": null,
+    "asOf": "2026-10-25T07:40:00Z",
+    "read": {
+      "commits": 759,
+      "merges": 0,
+      "trails": 57,
+      "lines": 460,
+      "malformed": 0,
+      "skipped": 0,
+      "runs": 94
+    },
+    "a": {
+      "repeats": 1,
+      "runs": 94,
+      "per100Runs": 1.06,
+      "noAct": 0,
+      "items": [
+        {
+          "task": "T121",
+          "run": "7786e95f",
+          "at": "2026-09-24T11:21:17Z",
+          "act": "resume fold from .last.pt (13/16 done) after operator stop; inhibitor + expandable_segments + watchdog",
+          "earlier": {
+            "run": "e804d562",
+            "at": "2026-09-24T11:21:12Z"
+          },
+          "sameFamily": false
+        }
+      ]
+    },
+    "b": {
+      "overlaps": 1,
+      "ownerLines": 0,
+      "runs": 1,
+      "items": [
+        {
+          "task": "T081",
+          "source": "runs",
+          "a": {
+            "family": "x02f3",
+            "operator": "adervark"
+          },
+          "b": {
+            "family": "codex-cu",
+            "operator": "adervark"
+          },
+          "from": "2026-09-11T06:25:15Z",
+          "to": "2026-09-11T06:29:11Z"
+        }
+      ]
+    },
+    "c": {
+      "claims": 133,
+      "limited": 0,
+      "noLimit": 133,
+      "items": [],
+      "wipAtClaim": {
+        "median": 20,
+        "max": 39
+      }
+    },
+    "d": {
+      "claims": 133,
+      "measured": 50,
+      "open": 22,
+      "noDid": 61,
+      "withTrail": 56,
+      "medianMinutes": 36,
+      "p85Minutes": 547,
+      "items": [
+        {
+          "task": "T001",
+          "commit": "6c57930bcccd5de021c10f5fe6b825dcb1b9bd42",
+          "at": "2026-08-19T19:01:01Z",
+          "left": "2026-08-19T19:48:42Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T005",
+          "commit": "0ad6b16e99d210256e51d25059f1eae47d6e63cf",
+          "at": "2026-08-19T20:58:36Z",
+          "left": "2026-08-20T00:20:06Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T006",
+          "commit": "b33b724eda98fb20938439f422a63e304dbee0c8",
+          "at": "2026-08-20T00:17:58Z",
+          "left": "2026-08-25T20:59:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T009",
+          "commit": "a224f2aea4d2d8e939f6f96d4a828ca25339eee8",
+          "at": "2026-08-20T03:27:02Z",
+          "left": "2026-08-20T14:55:44Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T008",
+          "commit": "13237d75b4c5967e977aea5eefd4cbb5ffdfa6f4",
+          "at": "2026-08-20T23:58:05Z",
+          "left": "2026-08-21T00:27:04Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T010",
+          "commit": "bc38d88b96422aeccf0942d8a4cfc7396d6385fc",
+          "at": "2026-08-20T19:12:07Z",
+          "left": "2026-08-20T19:32:01Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T011",
+          "commit": "b58d65f7d9fc287a932d667d86cce7ab1018a5f9",
+          "at": "2026-08-20T19:16:28Z",
+          "left": "2026-08-21T11:38:01Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T012",
+          "commit": "e296fe218f244cbe2066a2c26542f18af726055a",
+          "at": "2026-08-21T10:24:25Z",
+          "left": "2026-08-21T10:37:14Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T013",
+          "commit": "928157434293b92eea76fcda5a6e2e1a122df82b",
+          "at": "2026-08-21T11:39:14Z",
+          "left": "2026-08-21T12:29:20Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T015",
+          "commit": "31fc767948f2895e8cc0ba3323ad4cda55380a2b",
+          "at": "2026-08-21T11:46:53Z",
+          "left": "2026-08-21T12:14:50Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T003",
+          "commit": "bba9d2ee5a6c75b72145df466549479281708a80",
+          "at": "2026-08-21T12:36:25Z",
+          "left": "2026-08-25T20:59:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T016",
+          "commit": "6f378f2cf1312f831fd24db7a432cf73366b2778",
+          "at": "2026-08-21T18:19:29Z",
+          "left": "2026-08-21T18:35:39Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T017",
+          "commit": "da5102da928517d04a550cc2f79f56be59b536a4",
+          "at": "2026-08-21T18:47:50Z",
+          "left": "2026-08-22T03:53:25Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T018",
+          "commit": "2cdaa49099723f4fdc4a13ae831c3d178088ae4d",
+          "at": "2026-08-22T04:08:04Z",
+          "left": "2026-08-22T15:33:58Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T019",
+          "commit": "592a4eb46861b07cc55d0950604c262e3629d233",
+          "at": "2026-08-22T16:05:34Z",
+          "left": "2026-08-22T21:55:43Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T014",
+          "commit": "e956d43d3b17533f0bd83a879d14d553ba7b1ff5",
+          "at": "2026-08-22T16:45:36Z",
+          "left": "2026-08-25T20:59:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T021",
+          "commit": "fd003e74afde7c138a30486ee20e10cdd15e1e38",
+          "at": "2026-08-23T13:28:37Z",
+          "left": "2026-08-25T20:59:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T022",
+          "commit": "8bff1b1061e86b357060b10ce8ee7458ac619744",
+          "at": "2026-08-23T18:54:25Z",
+          "left": "2026-08-25T20:59:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T020",
+          "commit": "de7c04eb856386c924298094e7b34245e9da086e",
+          "at": "2026-08-23T19:12:18Z",
+          "left": "2026-08-25T20:59:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T023",
+          "commit": "48d65483f16cceb497e57f2c2e8473b2244fd878",
+          "at": "2026-08-23T19:20:28Z",
+          "left": "2026-08-25T20:59:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T022",
+          "commit": "7aa760e9cfbffca9281b07364032b489ad1f72b2",
+          "at": "2026-08-25T21:17:53Z",
+          "left": "2026-08-25T23:51:00Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T024",
+          "commit": "3aeacc163c093fbaa377ae70408a74e3d6e49126",
+          "at": "2026-08-25T21:19:34Z",
+          "left": "2026-08-25T22:52:21Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T025",
+          "commit": "8bad7803a3eb2ef306c912342d18a1f423d3928c",
+          "at": "2026-08-25T21:28:30Z",
+          "left": "2026-08-25T23:51:00Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T026",
+          "commit": "3730fd60a53890215cc699cade25537ad0797b33",
+          "at": "2026-08-25T21:35:01Z",
+          "left": "2026-08-25T22:06:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T020",
+          "commit": "beaa4c140339876fbfc9288c47a8300ad2aa9cf7",
+          "at": "2026-08-25T23:46:13Z",
+          "left": "2026-08-26T01:54:39Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T028",
+          "commit": "2a8fca401e654352849ba8620a4265d808fd0152",
+          "at": "2026-08-26T14:31:56Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T029",
+          "commit": "7880ebc0855935cbc04939b8815901ea7c8ea40d",
+          "at": "2026-08-26T18:02:09Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T030",
+          "commit": "8151fa050c3e5efc2543d36782fc7a7475f64f88",
+          "at": "2026-08-27T06:04:55Z",
+          "left": "2026-08-28T08:56:47Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T031",
+          "commit": "75d9c9d11b30ac6e767d215d0f75bfb32bc4b6a9",
+          "at": "2026-08-27T18:49:41Z",
+          "left": "2026-08-28T08:52:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T032",
+          "commit": "830ba4f32680456a874a815cd19d6dd783468045",
+          "at": "2026-08-27T18:50:07Z",
+          "left": "2026-08-28T08:52:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T033",
+          "commit": "56eaadc0a7c03f5dc97efdf101eab72601648a16",
+          "at": "2026-08-28T09:11:12Z",
+          "left": "2026-08-28T09:15:04Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T025",
+          "commit": "011048360fe5b03cfdf3e6b6e7fdc570f11dbaa7",
+          "at": "2026-08-29T17:12:11Z",
+          "left": "2026-08-29T17:39:57Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T038",
+          "commit": "ad9218edbb6de2889e614f641cd5e1d6261194a5",
+          "at": "2026-09-01T18:57:26Z",
+          "left": "2026-09-01T19:16:53Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T039",
+          "commit": "11bc9405ed363c8e56da0821f2f1f5f698569314",
+          "at": "2026-09-01T20:16:22Z",
+          "left": "2026-09-02T09:39:51Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T040",
+          "commit": "fbc75b12f66424faf7d2bb9e6ddcb67403e6c961",
+          "at": "2026-09-01T23:50:34Z",
+          "left": "2026-09-02T09:35:26Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T007",
+          "commit": "ae247526a3ba5b8584bb8dd5851ae57b80a76e65",
+          "at": "2026-09-02T02:28:14Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T043",
+          "commit": "d513f43d8fbb3bca91d6b540e935c75012855d26",
+          "at": "2026-09-02T06:08:59Z",
+          "left": "2026-09-02T09:35:26Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T047",
+          "commit": "d9c7c6e1a16e5485620a3ad5f5fcf89c598ee549",
+          "at": "2026-09-02T10:17:38Z",
+          "left": "2026-09-02T14:43:55Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T042",
+          "commit": "eb91a71fc294f6385cbea6350795a971e8a65fed",
+          "at": "2026-09-02T10:22:52Z",
+          "left": "2026-09-02T17:23:36Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T041",
+          "commit": "268cbb87781de7f2cbb2a8fdfca7f9cbf62d2618",
+          "at": "2026-09-02T14:50:26Z",
+          "left": "2026-09-03T02:23:11Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T049",
+          "commit": "268cbb87781de7f2cbb2a8fdfca7f9cbf62d2618",
+          "at": "2026-09-02T14:50:26Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T050",
+          "commit": "268cbb87781de7f2cbb2a8fdfca7f9cbf62d2618",
+          "at": "2026-09-02T14:50:26Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-13T21:42:35Z",
+          "minutes": 16252
+        },
+        {
+          "task": "T034",
+          "commit": "f8c4db080a1fc270ffae8fac3c0e1ebc432b50b0",
+          "at": "2026-09-02T14:53:47Z",
+          "left": "2026-09-03T02:34:00Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T052",
+          "commit": "fe50aa73e66a9b251df54b661e8f7b34804c76c5",
+          "at": "2026-09-02T18:05:49Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T053",
+          "commit": "838774ecb1cfd55e6eb86318a3bda1d5d7b955b1",
+          "at": "2026-09-02T19:26:38Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T05:37:53Z",
+          "minutes": 17891
+        },
+        {
+          "task": "T054",
+          "commit": "8374eb5c499fba20a60100f8766c6026ed429ea6",
+          "at": "2026-09-03T07:06:05Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T058",
+          "commit": "86a7654615c803f93a633d43e3519db99c379992",
+          "at": "2026-09-04T06:49:13Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T060",
+          "commit": "d999d4a3d1b297a6f6cbda6ff0b30c56bb4106c2",
+          "at": "2026-09-04T07:07:42Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T059",
+          "commit": "8512503b65ea7306dcb89733b5a61444153d0d0a",
+          "at": "2026-09-04T07:49:51Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T061",
+          "commit": "abff88aff432775b4635bcdf32735b0ecf354d5b",
+          "at": "2026-09-04T08:28:33Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T062",
+          "commit": "abff88aff432775b4635bcdf32735b0ecf354d5b",
+          "at": "2026-09-04T08:28:33Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T064",
+          "commit": "edc238a48647a23f616240474a83404776afa06e",
+          "at": "2026-09-05T10:16:39Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T065",
+          "commit": "f729745ff36172ae3ef664c435fc1f74e75bb5ca",
+          "at": "2026-09-06T07:27:20Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T066",
+          "commit": "06f86e8692b9a44373b065ec1d400648c0c22ef4",
+          "at": "2026-09-07T10:13:46Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T067",
+          "commit": "1c7953ecf4c5e0ec224c6fcbc89aba53e7bca6af",
+          "at": "2026-09-08T18:31:35Z",
+          "left": "2026-09-17T21:25:01Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-14T15:00:28Z",
+          "minutes": 8429
+        },
+        {
+          "task": "T068",
+          "commit": "f55b2e041c9fb948180ba0f3583203a73d180c95",
+          "at": "2026-09-09T20:03:15Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T035",
+          "commit": "9e25f58c9db54f3d55b9fbf5ca30f22ee8ace7c1",
+          "at": "2026-09-09T20:22:38Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T071",
+          "commit": "01443d1c7641e9af581605a6aed88f9ba611a75c",
+          "at": "2026-09-10T09:21:19Z",
+          "left": "2026-09-10T09:27:20Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T074",
+          "commit": "21c327a05a81b86369b95f373f5af76141bffab7",
+          "at": "2026-09-10T15:18:03Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T076",
+          "commit": "2fbe0c5b0ab264397e90217b36ed6133adb5c063",
+          "at": "2026-09-10T15:50:13Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T069",
+          "commit": "caf8b0e89eefcf6a31b8ab456ac3a4b04c8966a1",
+          "at": "2026-09-10T15:56:12Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T070",
+          "commit": "caf8b0e89eefcf6a31b8ab456ac3a4b04c8966a1",
+          "at": "2026-09-10T15:56:12Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T073",
+          "commit": "caf8b0e89eefcf6a31b8ab456ac3a4b04c8966a1",
+          "at": "2026-09-10T15:56:12Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T075",
+          "commit": "caf8b0e89eefcf6a31b8ab456ac3a4b04c8966a1",
+          "at": "2026-09-10T15:56:12Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T077",
+          "commit": "18457cc7960852a270820502ec7a482c32de2640",
+          "at": "2026-09-10T17:11:57Z",
+          "left": "2026-09-10T17:13:39Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T078",
+          "commit": "0671162905ac57f9496b3352ea4d9b249a0528a2",
+          "at": "2026-09-10T17:18:49Z",
+          "left": "2026-09-10T17:22:12Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T079",
+          "commit": "43364fcb06bab5867fd4d73261d8f68e53a3cccb",
+          "at": "2026-09-11T04:08:07Z",
+          "left": "2026-09-11T10:41:02Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-11T09:21:31Z",
+          "minutes": 313
+        },
+        {
+          "task": "T080",
+          "commit": "4bb718010818d75dbe6e8d16f4130dfea025b298",
+          "at": "2026-09-11T05:19:25Z",
+          "left": "2026-09-11T05:22:41Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-11T05:21:04Z",
+          "minutes": 2
+        },
+        {
+          "task": "T081",
+          "commit": "ef87cac3ca5153853fd604e102585c36db8ee447",
+          "at": "2026-09-11T06:24:52Z",
+          "left": "2026-09-11T08:46:54Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-11T06:29:00Z",
+          "minutes": 4
+        },
+        {
+          "task": "T082",
+          "commit": "5dcd869b2eae94d2203d26206b270bec9a2d8f5e",
+          "at": "2026-09-11T21:47:48Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T083",
+          "commit": "ae5cf2cd8db93c9666f080397ea77166606622ac",
+          "at": "2026-09-12T10:51:17Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T084",
+          "commit": "544c1994c3f8ad5605cc411f63ac3c4f4995c616",
+          "at": "2026-09-12T11:18:30Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-12T12:03:40Z",
+          "minutes": 45
+        },
+        {
+          "task": "T085",
+          "commit": "446c106efe50c7529a11959d19f285d623da2fd1",
+          "at": "2026-09-12T12:52:04Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-12T13:28:30Z",
+          "minutes": 36
+        },
+        {
+          "task": "T086",
+          "commit": "39a82cc3fdb8d62dbcbf7a4ba902efd10de2e0fd",
+          "at": "2026-09-12T13:54:26Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T087",
+          "commit": "9396014b249b97b63ab7a5564558fc2e4605c152",
+          "at": "2026-09-12T14:40:23Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T088",
+          "commit": "60c43a39a7661577ea7f569d31a788547543a82c",
+          "at": "2026-09-12T16:46:01Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-12T16:46:01Z",
+          "minutes": 0
+        },
+        {
+          "task": "T089",
+          "commit": "0dd597b4abdbe965db36266c3b3078597d6e59c3",
+          "at": "2026-09-12T21:05:17Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-12T21:12:26Z",
+          "minutes": 7
+        },
+        {
+          "task": "T090",
+          "commit": "7516723cfb787651b97876f0e21df8a0aa4f39e6",
+          "at": "2026-09-13T08:16:12Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-13T08:24:05Z",
+          "minutes": 8
+        },
+        {
+          "task": "T091",
+          "commit": "1755f27295f63507f419e55d430633054981fe35",
+          "at": "2026-09-14T03:51:12Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-14T06:40:58Z",
+          "minutes": 170
+        },
+        {
+          "task": "T092",
+          "commit": "e91e6594454a9efa9f0fac0d29f5187cb838bfef",
+          "at": "2026-09-14T07:58:14Z",
+          "left": "2026-09-14T08:29:40Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T093",
+          "commit": "2ee9d1edad5c3ba9e622edfb3d34ee1a5b79ccca",
+          "at": "2026-09-14T08:13:49Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T094",
+          "commit": "7201a920dc4a2095e1fb93e0458fdfa851ad3e9d",
+          "at": "2026-09-14T10:56:19Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-14T18:08:43Z",
+          "minutes": 432
+        },
+        {
+          "task": "T095",
+          "commit": "8f3553e7b7844cdbbf6a7cd8c0d87135e6e3ceb0",
+          "at": "2026-09-14T18:36:34Z",
+          "left": "2026-09-15T03:43:13Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T03:43:13Z",
+          "minutes": 547
+        },
+        {
+          "task": "T096",
+          "commit": "f6b1547a5cde4de42070369e2b8eebd584324c90",
+          "at": "2026-09-14T19:42:26Z",
+          "left": "2026-09-14T20:11:24Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T097",
+          "commit": "682d567481e3caf9e37db1988d25f171ab5bb800",
+          "at": "2026-09-14T20:20:33Z",
+          "left": "2026-09-14T20:36:51Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T098",
+          "commit": "ad464953201ded24d6f364b569e7199f0fc03173",
+          "at": "2026-09-14T21:20:41Z",
+          "left": "2026-09-14T21:22:20Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T099",
+          "commit": "278335365676f24820c84c75e90ec10a5b54e23c",
+          "at": "2026-09-14T21:30:03Z",
+          "left": "2026-09-14T21:50:24Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-14T21:47:29Z",
+          "minutes": 17
+        },
+        {
+          "task": "T100",
+          "commit": "895f25794b52d773c1cd0134ea9a6a3cfc3ec407",
+          "at": "2026-09-14T22:17:59Z",
+          "left": "2026-09-14T23:41:09Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-14T23:21:23Z",
+          "minutes": 63
+        },
+        {
+          "task": "T101",
+          "commit": "7bdf0c72c72aca5e3dc8f89e9697e05106fd40a6",
+          "at": "2026-09-14T22:47:19Z",
+          "left": "2026-09-15T03:59:14Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T03:59:14Z",
+          "minutes": 312
+        },
+        {
+          "task": "T102",
+          "commit": "c6d002c4f87eb50034766f4420511ffb8f9711b7",
+          "at": "2026-09-14T23:10:47Z",
+          "left": "2026-09-15T09:12:29Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T09:12:22Z",
+          "minutes": 602
+        },
+        {
+          "task": "T103",
+          "commit": "c6d002c4f87eb50034766f4420511ffb8f9711b7",
+          "at": "2026-09-14T23:10:47Z",
+          "left": "2026-09-15T08:16:26Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T07:53:44Z",
+          "minutes": 523
+        },
+        {
+          "task": "T104",
+          "commit": "c6d002c4f87eb50034766f4420511ffb8f9711b7",
+          "at": "2026-09-14T23:10:47Z",
+          "left": "2026-09-15T05:27:10Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T02:51:16Z",
+          "minutes": 220
+        },
+        {
+          "task": "T105",
+          "commit": "c251c34cdee28752f0ec20107d0de0d24d5186b3",
+          "at": "2026-09-15T09:49:11Z",
+          "left": "2026-09-17T21:25:01Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T09:50:18Z",
+          "minutes": 1
+        },
+        {
+          "task": "T106",
+          "commit": "ba41c218d551430883c7d48849131b72a883c883",
+          "at": "2026-09-15T10:03:38Z",
+          "left": "2026-09-17T21:25:01Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T10:13:55Z",
+          "minutes": 10
+        },
+        {
+          "task": "T107",
+          "commit": "bb3d69361b69484ce2b3465173447f640e7691d3",
+          "at": "2026-09-15T18:56:53Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T18:58:14Z",
+          "minutes": 1
+        },
+        {
+          "task": "T108",
+          "commit": "bb3d69361b69484ce2b3465173447f640e7691d3",
+          "at": "2026-09-15T18:56:53Z",
+          "left": "2026-09-17T20:51:58Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-15T19:07:24Z",
+          "minutes": 11
+        },
+        {
+          "task": "T109",
+          "commit": "69bdd6acdc4a2ac94f351d3200fa54660a700efa",
+          "at": "2026-09-15T22:07:41Z",
+          "left": null,
+          "state": "open",
+          "trail": true
+        },
+        {
+          "task": "T110",
+          "commit": "b0be370508d0bfe0579bab519276a3e5e7c90836",
+          "at": "2026-09-16T00:33:57Z",
+          "left": "2026-09-17T21:25:01Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-17T08:38:10Z",
+          "minutes": 1924
+        },
+        {
+          "task": "T111",
+          "commit": "ddbe9a471abf15ed57fa1e17f380f4dc8d3acefe",
+          "at": "2026-09-17T09:09:33Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-17T14:08:02Z",
+          "minutes": 298
+        },
+        {
+          "task": "T112",
+          "commit": "3ed78d4b5dd8c80684c28fa8159a90525a81a51d",
+          "at": "2026-09-17T22:06:13Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-17T22:06:13Z",
+          "minutes": 0
+        },
+        {
+          "task": "T113",
+          "commit": "2ccd682588061d9409fc64eeaac5c131ad8e7306",
+          "at": "2026-09-18T18:29:19Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-18T18:47:13Z",
+          "minutes": 18
+        },
+        {
+          "task": "T114",
+          "commit": "dc228c2ce396c1512f0f4b5c3e1ab68e2fef04a1",
+          "at": "2026-09-18T20:12:50Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-18T20:16:02Z",
+          "minutes": 3
+        },
+        {
+          "task": "T115",
+          "commit": "8d75c6fac3b6d181b30111e42a12310c651ee184",
+          "at": "2026-09-19T03:41:10Z",
+          "left": "2026-09-19T05:25:35Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T116",
+          "commit": "8b05d310dc2c6ccad55f5bc0285704e2dc599edc",
+          "at": "2026-09-19T08:47:20Z",
+          "left": "2026-09-20T14:54:19Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-20T14:49:22Z",
+          "minutes": 1802
+        },
+        {
+          "task": "T117",
+          "commit": "8b83fab4b9304e2ee57d1ca5bd11627cd9ed44a4",
+          "at": "2026-09-19T20:25:21Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-20T14:14:27Z",
+          "minutes": 1069
+        },
+        {
+          "task": "T118",
+          "commit": "f17456c7ee15565b316a2ba81be3aa238a0eb141",
+          "at": "2026-09-19T22:08:41Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-19T22:19:15Z",
+          "minutes": 11
+        },
+        {
+          "task": "T119",
+          "commit": "85df376d6980b0458437f6c6b93375e8a7b0b478",
+          "at": "2026-09-20T17:11:14Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-20T21:04:13Z",
+          "minutes": 233
+        },
+        {
+          "task": "T120",
+          "commit": "88b8416fadaa37331d357b8912e5895f951f0571",
+          "at": "2026-09-20T18:40:44Z",
+          "left": "2026-09-20T21:04:53Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-20T21:03:24Z",
+          "minutes": 143
+        },
+        {
+          "task": "T124",
+          "commit": "19b91dacc53e04e87a80fc7e146af16751f6714a",
+          "at": "2026-09-20T21:17:46Z",
+          "left": "2026-09-20T21:19:16Z",
+          "state": "no-did",
+          "trail": true
+        },
+        {
+          "task": "T121",
+          "commit": "819f9b1406a914de9b31123834e2714f5234bf3e",
+          "at": "2026-09-21T04:02:50Z",
+          "left": "2026-09-28T08:24:55Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-21T05:37:05Z",
+          "minutes": 94
+        },
+        {
+          "task": "T122",
+          "commit": "819f9b1406a914de9b31123834e2714f5234bf3e",
+          "at": "2026-09-21T04:02:50Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T123",
+          "commit": "819f9b1406a914de9b31123834e2714f5234bf3e",
+          "at": "2026-09-21T04:02:50Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T125",
+          "commit": "a5c2568d6325f95a909bc59575355376ebe237aa",
+          "at": "2026-09-21T08:54:19Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-21T10:17:58Z",
+          "minutes": 84
+        },
+        {
+          "task": "T126",
+          "commit": "fc0d19eecc2a93d19e3861ec18b2b2e84a9521f6",
+          "at": "2026-09-21T10:56:04Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T127",
+          "commit": "73392ff672d92c7818f041fc5867654c4d2d5a27",
+          "at": "2026-09-21T18:56:41Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T129",
+          "commit": "b500c8e96767ee194d2bda3b4022669a656d2fa0",
+          "at": "2026-09-22T04:31:49Z",
+          "left": "2026-09-22T04:42:25Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T130",
+          "commit": "75513f179bb54873c92acca07d5d329f15eebdd5",
+          "at": "2026-09-22T06:31:42Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-22T06:48:06Z",
+          "minutes": 16
+        },
+        {
+          "task": "T131",
+          "commit": "76ac11f30db221d1898f13f645fdf0f2fd75ddd7",
+          "at": "2026-09-22T09:07:02Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-22T09:25:30Z",
+          "minutes": 18
+        },
+        {
+          "task": "T132",
+          "commit": "1143fe23a6a60766fbfbfb9da51c8c02a3dfd3af",
+          "at": "2026-09-22T09:51:58Z",
+          "left": "2026-09-23T20:09:34Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-22T10:07:12Z",
+          "minutes": 15
+        },
+        {
+          "task": "T133",
+          "commit": "000c32ed479429bad8261f175da4ea272ccb7c52",
+          "at": "2026-09-23T03:53:36Z",
+          "left": "2026-09-23T20:09:34Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-23T03:55:04Z",
+          "minutes": 1
+        },
+        {
+          "task": "T134",
+          "commit": "d1053d0c9f72823dcc00f858f733cac3bd8d500e",
+          "at": "2026-09-25T03:47:23Z",
+          "left": "2026-09-27T18:46:56Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-25T04:59:35Z",
+          "minutes": 72
+        },
+        {
+          "task": "T135",
+          "commit": "1c0487511361eb48999b7ee4ca012b7421ba2cd7",
+          "at": "2026-09-27T18:53:48Z",
+          "left": "2026-09-29T12:52:03Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-27T21:44:20Z",
+          "minutes": 171
+        },
+        {
+          "task": "T136",
+          "commit": "8b6f18ea7179123d59591bcf17d35e87905bfb24",
+          "at": "2026-09-28T17:42:32Z",
+          "left": "2026-09-28T18:48:39Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-28T18:46:40Z",
+          "minutes": 64
+        },
+        {
+          "task": "T138",
+          "commit": "5ea87109dee711e6eff6742116da9ea281afd274",
+          "at": "2026-09-29T10:22:23Z",
+          "left": "2026-09-29T18:28:32Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-29T10:44:51Z",
+          "minutes": 22
+        },
+        {
+          "task": "T139",
+          "commit": "543c87df81a624ed8b896b130f8999365aa39fa8",
+          "at": "2026-09-29T19:07:49Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-09-29T23:29:20Z",
+          "minutes": 262
+        },
+        {
+          "task": "T140",
+          "commit": "788d4c4c187eeaba64cc64d7b72db98b461ae4dd",
+          "at": "2026-10-06T21:30:22Z",
+          "left": "2026-10-06T21:30:24Z",
+          "state": "no-did",
+          "trail": false
+        },
+        {
+          "task": "T141",
+          "commit": "8733f0f83c40d802586474301997f77769a7b69d",
+          "at": "2026-10-10T06:16:32Z",
+          "left": "2026-10-10T10:01:47Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-10T06:16:46Z",
+          "minutes": 0
+        },
+        {
+          "task": "T143",
+          "commit": "cad25f22c7fc94d389fa8b6b03126d4c4c69199d",
+          "at": "2026-10-10T06:42:03Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T144",
+          "commit": "0f2e6dfa81242142c7051c4852297e3443dea233",
+          "at": "2026-10-16T05:01:57Z",
+          "left": "2026-10-19T08:11:15Z",
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-16T05:03:54Z",
+          "minutes": 2
+        },
+        {
+          "task": "T145",
+          "commit": "59bc526a130eb898da79225e97505d4d6150b8ec",
+          "at": "2026-10-16T05:52:12Z",
+          "left": null,
+          "state": "open",
+          "trail": false
+        },
+        {
+          "task": "T146",
+          "commit": "722a47a4bc015c4bb27db85268ae1b8d44ea4275",
+          "at": "2026-10-19T07:54:51Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-19T08:20:16Z",
+          "minutes": 25
+        },
+        {
+          "task": "T147",
+          "commit": "20364192bd88da51591eb9db26d68f5bb16554fe",
+          "at": "2026-10-19T08:35:21Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-19T08:46:54Z",
+          "minutes": 12
+        },
+        {
+          "task": "T148",
+          "commit": "ec6f72af7ad778769d9540fe8af6c9f3c7b1e901",
+          "at": "2026-10-19T20:58:13Z",
+          "left": null,
+          "state": "measured",
+          "trail": true,
+          "did": "2026-10-19T20:58:43Z",
+          "minutes": 1
+        }
+      ]
+    }
+  }
+]

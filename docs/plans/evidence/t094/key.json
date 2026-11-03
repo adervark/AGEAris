@@ -1,0 +1,283 @@
+{
+ "note": "T094's key: every correction RSNA T121's own record states, within the round (2e7ffc6..3c8fcaa, T094's scope). Pinned by the parent before any subagent ran: the task file at every version (its final text and the 71 clauses edits dropped), PROGRESS's T121 section, the trail and every code clause an edit dropped, all read in full; the code's other clauses searched for correction language and read where it hit. earlier: clauses carrying the earlier claim; correction: clauses carrying the correction. why: what a line's why must state to count. reach: whether the pipeline can bring an earlier and a correcting clause together (different documents, a file at two commits counting as two). Out of reach: the record states the correction but its earlier claim is in no in-scope sentence.",
+ "corrections": {
+  "K1": {
+   "claim": "the current corpus is 3,200 studies, 15.9 GB -> that was part 1 only; both parts are 4,407 studies, 21 GB",
+   "earlier": [
+    "T121@2e7ffc6#1"
+   ],
+   "correction": [
+    "T121#36",
+    "T121#37",
+    "T121#39",
+    "T121#50",
+    "T121#51"
+   ],
+   "why": "the 'current data/raptor_corpus' row counted part 1 only (3,200 studies, 15.9 GB); both parts hold 4,407 studies, 21 GB",
+   "reach": true
+  },
+  "K2": {
+   "claim": "the dicom_bag corpus is 49.4 GB -> measured 148.2 GB",
+   "earlier": [
+    "T121@da77768#1",
+    "T121@da77768#2",
+    "T121#52",
+    "T121#54",
+    "T121#62",
+    "T121#69"
+   ],
+   "correction": [
+    "T121#44",
+    "T121#45",
+    "T121#47",
+    "T121#49"
+   ],
+   "why": "measured, the dicom_bag corpus is 148.2 GB (76 slots x 3 channels), not the registered 49.4 GB, about 3x",
+   "reach": true
+  },
+  "K3": {
+   "claim": "/ has 29 GB free -> 26 GB",
+   "earlier": [
+    "T121@2e7ffc6#2"
+   ],
+   "correction": [
+    "T121#57"
+   ],
+   "why": "/ had 26 GB free when measured on 2026-09-21, not the 29 GB written on 09-20",
+   "reach": true
+  },
+  "K4": {
+   "claim": "the corpus goes on EXT1 -> EXT1 is a USB disk that drops off the bus; the target is under review, /mnt/S the alternative",
+   "earlier": [
+    "T121@2e7ffc6#4",
+    "trail#1",
+    "T121#162"
+   ],
+   "correction": [
+    "T121#59",
+    "T121#62",
+    "T121#63",
+    "T121#64",
+    "T121#66",
+    "T121#67"
+   ],
+   "why": "EXT1 is an external USB disk that dropped off the bus, so the registered target is under review; the internal /mnt/S is the alternative; availability, not capacity, is the problem",
+   "reach": true
+  },
+  "K5": {
+   "claim": "384/bs2 is 97% full with the SWA copy -> profiled at 75%",
+   "earlier": [
+    "T121@685d4b9#1"
+   ],
+   "correction": [
+    "T121#90",
+    "T121#94",
+    "T121#95",
+    "T121#96",
+    "T121#97",
+    "T121#106"
+   ],
+   "why": "profiled with the SWA copy held, res 384 bs 2 peaks at 5.74 GiB, 75% of the card, not 97%",
+   "reach": true
+  },
+  "K6": {
+   "claim": "the gap is a checkpoint difference to close before any architecture work -> the premise moved: E - D = +0.010 paid a deficit of that size with no input change",
+   "earlier": [
+    "T121#7",
+    "T121#8",
+    "T121#9"
+   ],
+   "correction": [
+    "T121@f46796c#4",
+    "T121@f46796c#5",
+    "T121@f46796c#6",
+    "T121#116",
+    "T121#117"
+   ],
+   "why": "E - D = +0.010 closed a deficit-sized gap with no input change, so the task's opening premise (a checkpoint difference, closed first) no longer holds unqualified",
+   "reach": true
+  },
+  "K7": {
+   "claim": "load_split holds the 58 gold studies out of training -> nothing is held out since --train-gold; the viewer certified a contaminated number as clean",
+   "earlier": [
+    "cam_viewer.py@2e7ffc6#1"
+   ],
+   "correction": [
+    "cam_viewer.py#122",
+    "cam_viewer.py#125"
+   ],
+   "why": "since --train-gold (default on, 2026-09-20) the gold studies are in training, so the viewer's 'held out' flag was false and certified a contaminated number as clean",
+   "reach": true
+  },
+  "K8": {
+   "claim": "the queue starts the fold by itself when the card is freed -> launched by hand beside the other service, OOM at step 1, relaunched, then the service stopped",
+   "earlier": [
+    "T121@84df4f1#1",
+    "T121@84df4f1#2",
+    "T121@84df4f1#3",
+    "T121@84df4f1#5",
+    "T121@84df4f1#6",
+    "trail#22"
+   ],
+   "correction": [
+    "T121@e35af30#2",
+    "T121@e35af30#3",
+    "trail#26",
+    "trail#27",
+    "trail#32",
+    "trail#33"
+   ],
+   "why": "the fold was not started by the queue: it was launched by hand while the other service held the card, OOM'd at step 1, was relaunched, and the service was then stopped",
+   "reach": true
+  },
+  "K9": {
+   "claim": "the smoke suite's check count 1302 -> 1306 -> 1323 -> 1331 -> 1335",
+   "earlier": [
+    "_order.py@2e7ffc6#2",
+    "_order.py@ec7da60#2",
+    "_order.py@685d4b9#2",
+    "_order.py@9508307#3",
+    "trail#6"
+   ],
+   "correction": [
+    "_order.py@ec7da60#2",
+    "_order.py@685d4b9#2",
+    "_order.py@9508307#3",
+    "_order.py#205"
+   ],
+   "why": "the gated count of smoke checks moved as checks were added; each later count replaces the earlier",
+   "reach": true
+  },
+  "K10": {
+   "claim": "both kernels insert at the anchor _coat_n = _coat_substitute() -> G must write before the 0941's Raptor backup",
+   "earlier": [
+    "build_bag_kernels.py@f46796c#1"
+   ],
+   "correction": [
+    "build_bag_kernels.py#10",
+    "build_bag_kernels.py#19"
+   ],
+   "why": "G cannot insert at the _coat_substitute anchor: it must write ours before the 0941 takes its Raptor backup, or a failed child restores the public output and G silently scores the parent",
+   "reach": true
+  },
+  "K11": {
+   "claim": "the drive believed unmounted and ext4 was mounted all along and is NTFS",
+   "earlier": [],
+   "correction": [
+    "T121#68"
+   ],
+   "why": "the earlier belief is in CLAUDE.md, outside the round",
+   "reach": false,
+   "reachWhy": "earlier claim in CLAUDE.md, not in scope"
+  },
+  "K12": {
+   "claim": "a guard accused docs/CAPABILITIES.md -> it was innocent; the guard failed for the wrong reason",
+   "earlier": [],
+   "correction": [
+    "_order.py@2e7ffc6#1",
+    "claims_guard.py#101",
+    "claims_guard.py#102",
+    "claims_guard.py#103"
+   ],
+   "why": "the earlier accusation was the guard's runtime output, never a committed sentence",
+   "reach": false,
+   "reachWhy": "earlier claim is program output, not in scope"
+  },
+  "K13": {
+   "claim": "the first fold -> VOID (25% of studies served another study's windows)",
+   "earlier": [],
+   "correction": [
+    "T121#123",
+    "T121#124",
+    "trail#10"
+   ],
+   "why": "the defect and its finding are T128's, outside the round; the launch line claims nothing T121#123 corrects",
+   "reach": false,
+   "reachWhy": "no in-scope sentence claims the first fold was sound"
+  },
+  "K14": {
+   "claim": "smoke G v2 ran -> it silently lost the parent's resgated child",
+   "earlier": [],
+   "correction": [
+    "T121@e35af30#13",
+    "T121@e35af30#14",
+    "trail#21"
+   ],
+   "why": "no in-scope sentence called G v2 clean before the defect was found",
+   "reach": false,
+   "reachWhy": "earlier claim never written"
+  },
+  "K15": {
+   "claim": "--resume refused a legacy fold even with --dirty-windows (T120 finding 3)",
+   "earlier": [],
+   "correction": [
+    "coat_train.py#25",
+    "coat_train.py#28"
+   ],
+   "why": "the earlier behaviour was code, not a sentence in scope",
+   "reach": false,
+   "reachWhy": "earlier claim is code behaviour"
+  }
+ },
+ "considered": [
+  "T121#90 vs T121#126 (7.2-10.6 h vs ~10.7 h): not stated as a correction",
+  "Makefile#3's 1239-check suite against _order.py's 1335: a disagreement the record never notices, not a correction it states",
+  "T121@f46796c#12 (T120's findings unfixed) against trail#4 (closed): the order of writing is not clear from the record",
+  "T121#162 (materialise to EXT1) is kept as an earlier side of K4: the step was never updated"
+ ],
+ "briefCheck": {
+  "note": "No brief given to a subagent may hold these, case-insensitively, or these figures as number tokens. 'premise' and 'part 1' were narrowed to 'premise moved' and 'part 1 only' before any brief was filled: the first is the ledger's own word for an inference's inputs, and the second matched a brief's generic phrase.",
+  "terms": [
+   "raptor_corpus",
+   "all_vols",
+   "extra_vols",
+   "part 1 only",
+   "dicom_bag",
+   "EXT1",
+   "USB",
+   "/mnt/S",
+   "nvme0n1p5",
+   "drops off",
+   "premise moved",
+   "checkpoint difference",
+   "contaminated",
+   "held out",
+   "train-gold",
+   "load_split",
+   "AGEIS",
+   "embedding service",
+   "OOM",
+   "expandable_segments",
+   "Raptor backup",
+   "_coat_substitute",
+   "INSERT_AT",
+   "CAPABILITIES",
+   "VOID",
+   "resgated",
+   "T121",
+   "T128",
+   "bag384"
+  ],
+  "figures": [
+   "148.2",
+   "49.4",
+   "15.9",
+   "3,200",
+   "4,407",
+   "97",
+   "75",
+   "5.74",
+   "7.65",
+   "1302",
+   "1306",
+   "1323",
+   "1331",
+   "1335",
+   "0.010",
+   "26",
+   "29",
+   "28.4",
+   "2.26"
+  ]
+ }
+}

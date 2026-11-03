@@ -1,0 +1,343 @@
+{
+ "facts": 1977,
+ "flagged": 33,
+ "byCue": {
+  "struck": 2,
+  "superseded": 2,
+  "turned out": 1,
+  "was wrong": 10,
+  "undefined": 3,
+  "assumed": 4,
+  "withdrawn": 2,
+  "not a figure": 10
+ },
+ "reached": [
+  "K1",
+  "K3",
+  "K4",
+  "K6",
+  "K11",
+  "K12"
+ ],
+ "notReached": [
+  "K2",
+  "K5",
+  "K7",
+  "K8",
+  "K9",
+  "K10",
+  "K14"
+ ],
+ "k": 12,
+ "metInCueUnit": [
+  "K3",
+  "K4",
+  "K6",
+  "K11"
+ ],
+ "detail": [
+  {
+   "key": "K1",
+   "step": "in a unit, not marked",
+   "cued": [
+    {
+     "id": "F1418",
+     "cues": [
+      "was wrong"
+     ],
+     "says": "Two mistakes followed from conflating them, and both are pinned below",
+     "unit": [
+      "F59",
+      "F54",
+      "F1217",
+      "F58",
+      "F66",
+      "F91",
+      "F68",
+      "F467",
+      "F1235",
+      "F208",
+      "F779",
+      "F1244"
+     ]
+    },
+    {
+     "id": "F1420",
+     "cues": [
+      "was wrong"
+     ],
+     "says": "the multiple-of-32 rule guarding img instead of res (which refused to render a maxspan-v5 swap at all, with a confidently wrong message",
+     "unit": [
+      "F67",
+      "F66",
+      "F57",
+      "F58",
+      "F201",
+      "F282",
+      "F68",
+      "F168",
+      "F1821",
+      "F779",
+      "F53",
+      "F740"
+     ]
+    }
+   ],
+   "met": []
+  },
+  {
+   "key": "K2",
+   "step": "candidate catch",
+   "cued": [],
+   "met": []
+  },
+  {
+   "key": "K3",
+   "step": "in a unit, not marked",
+   "cued": [
+    {
+     "id": "F156",
+     "cues": [
+      "undefined"
+     ],
+     "says": "\"Full fidelity\" was undefined when this was written",
+     "unit": [
+      "F1864",
+      "F75",
+      "F1952",
+      "F154",
+      "F422",
+      "F1677",
+      "F1170",
+      "F1188",
+      "F1160",
+      "F1328",
+      "F155",
+      "F110"
+     ]
+    }
+   ],
+   "met": [
+    "F156"
+   ]
+  },
+  {
+   "key": "K4",
+   "step": "in a unit, not marked",
+   "cued": [
+    {
+     "id": "F216",
+     "cues": [
+      "struck"
+     ],
+     "says": "(struck on review: \"realistic\" was the word the four rows directly above argue against)",
+     "unit": [
+      "F426",
+      "F1630",
+      "F193",
+      "F466",
+      "F117",
+      "F90",
+      "F116",
+      "F1120",
+      "F1125",
+      "F1320",
+      "F763",
+      "F1283"
+     ]
+    }
+   ],
+   "met": [
+    "F216"
+   ]
+  },
+  {
+   "key": "K5",
+   "step": "candidate catch",
+   "cued": [],
+   "met": []
+  },
+  {
+   "key": "K6",
+   "step": "in a unit, not marked",
+   "cued": [
+    {
+     "id": "F248",
+     "cues": [
+      "assumed"
+     ],
+     "says": "The two-cycle schedule above assumed a submission lane",
+     "unit": [
+      "F150",
+      "F151",
+      "F523",
+      "F149",
+      "F1863",
+      "F187",
+      "F1690",
+      "F243",
+      "F1689",
+      "F4",
+      "F112",
+      "F113"
+     ]
+    },
+    {
+     "id": "F249",
+     "cues": [
+      "not a figure"
+     ],
+     "says": "today it has zero cycles, not two.",
+     "unit": [
+      "F111",
+      "F487",
+      "F1594",
+      "F1676",
+      "F1308",
+      "F1961",
+      "F522",
+      "F2",
+      "F1134",
+      "F436",
+      "F750",
+      "F435"
+     ]
+    },
+    {
+     "id": "F526",
+     "cues": [
+      "not a figure"
+     ],
+     "says": "which is a budget of ~4 per week, not 5 per day.",
+     "unit": [
+      "F487",
+      "F496",
+      "F1956",
+      "F1652",
+      "F505",
+      "F483",
+      "F1958",
+      "F479",
+      "F426",
+      "F489",
+      "F511",
+      "F1825"
+     ]
+    }
+   ],
+   "met": [
+    "F249",
+    "F526"
+   ]
+  },
+  {
+   "key": "K7",
+   "step": "in a unit, not marked",
+   "cued": [],
+   "met": []
+  },
+  {
+   "key": "K8",
+   "step": "candidate catch",
+   "cued": [],
+   "met": []
+  },
+  {
+   "key": "K9",
+   "step": "in a unit, not marked",
+   "cued": [],
+   "met": []
+  },
+  {
+   "key": "K10",
+   "step": "in a unit, not marked",
+   "cued": [],
+   "met": []
+  },
+  {
+   "key": "K11",
+   "step": "transcribed, not in one unit",
+   "cued": [
+    {
+     "id": "F279",
+     "cues": [
+      "withdrawn"
+     ],
+     "says": "What this changes, before any score exists: the registered swap (submission 1) is withdrawn.",
+     "unit": [
+      "F548",
+      "F173",
+      "F91",
+      "F794",
+      "F536",
+      "F495",
+      "F153",
+      "F244",
+      "F166",
+      "F490",
+      "F150",
+      "F169"
+     ]
+    },
+    {
+     "id": "F548",
+     "cues": [
+      "withdrawn"
+     ],
+     "says": "The registered T112 swap is withdrawn before any leaderboard read.",
+     "unit": [
+      "F495",
+      "F794",
+      "F430",
+      "F513",
+      "F492",
+      "F1055",
+      "F1112",
+      "F1137",
+      "F1113",
+      "F1120",
+      "F485",
+      "F429"
+     ]
+    }
+   ],
+   "met": [
+    "F279"
+   ]
+  },
+  {
+   "key": "K12",
+   "step": "in a unit, not marked",
+   "cued": [
+    {
+     "id": "F1694",
+     "cues": [
+      "turned out"
+     ],
+     "says": "the 4090 turned out to be a Windows machine with no WSL",
+     "unit": [
+      "F1692",
+      "F392",
+      "F396",
+      "F537",
+      "F124",
+      "F407",
+      "F1749",
+      "F10",
+      "F401",
+      "F457",
+      "F1165",
+      "F346"
+     ]
+    }
+   ],
+   "met": []
+  },
+  {
+   "key": "K14",
+   "step": "candidate catch",
+   "cued": [],
+   "met": []
+  }
+ ]
+}

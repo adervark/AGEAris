@@ -6,6 +6,8 @@
 #                    code has changed since it started)
 #   aa.sh --open     the same, and open the link in the browser
 #   aa.sh --link     track this repository in AGE Aris first, if it is not
+#   aa.sh limits     instead of the board, how much of each Claude account's
+#                    session and weekly limits is used (GET /api/limits)
 #
 # Read-only on the repository: it runs `board.sh` without arguments, which
 # prints and writes nothing, and reads task files. It writes only what AGE Aris
@@ -23,12 +25,13 @@
 #                    is in, else ~/Code/AGEAris)
 set -uo pipefail
 
-OPEN=0 LINK=0
+OPEN=0 LINK=0 LIMITS=0
 for arg in "$@"; do
   case "$arg" in
     --open|open) OPEN=1 ;;
     --link|link) LINK=1 ;;
-    *) printf 'aa: unknown argument %s (use --open or --link)\n' "$arg" >&2; exit 2 ;;
+    --limits|limits) LIMITS=1 ;;
+    *) printf 'aa: unknown argument %s (use --open, --link or limits)\n' "$arg" >&2; exit 2 ;;
   esac
 done
 
@@ -103,7 +106,9 @@ field() {
 }
 clip() { local s="$1" n="$2"; [ "${#s}" -gt "$n" ] && s="${s:0:$((n - 1))}…"; printf '%s' "$s"; }
 
-if [ -z "$BOARD" ]; then
+# `limits` prints the accounts' limits instead of the board.
+if [ "$LIMITS" = 1 ]; then :
+elif [ -z "$BOARD" ]; then
   printf '%s has no AA board (no AA/tasks/, deaddrop/tasks/ or pm/tasks/). The aa-init skill makes one.\n' "$NAME"
 else
   B="$ROOT/$BOARD"
@@ -141,7 +146,7 @@ else
     [ "${#waiting[@]}" -gt 0 ] && printf '\nwaiting: %s\n' "${waiting[*]}"
   fi
 fi
-echo
+[ "$LIMITS" = 1 ] || echo
 
 # --- AGE Aris -----------------------------------------------------------------
 # The data folder. Its old default, ~/.agesight-data, is read until AGE Aris
@@ -167,7 +172,11 @@ native() { if [ "$WIN" = 1 ]; then cygpath -w "$1"; else printf '%s' "$1"; fi; }
 # jq 1.6 does not have; pipefail keeps jq's exit status.
 jqlf() { if [ "$WIN" = 1 ]; then jq "$@" | tr -d '\r'; else jq "$@"; fi; }
 
-token() { [ -f "$DATA/.api-token" ] && tr -d '\n' < "$DATA/.api-token"; }
+# While the server moves the old folder (start()), the token is at the old path
+# until the rename and at the new one from then on: reading the old path first
+# finds it at every moment, where the new one alone sends the first polls
+# without it.
+token() { local d; for d in ${MOVE:+"$HOME/.agesight-data"} "$DATA"; do tr -d '\n' 2>/dev/null < "$d/.api-token" && return; done; }
 # The token under the old header name too, for an AGE Aris started before the
 # rename, until it restarts.
 signed() { local t; t=$(token); curl -H "X-AGEAris-Token: $t" -H "X-AGESight-Token: $t" "$@"; }
@@ -256,6 +265,29 @@ if [ "$state" != 200 ]; then
     else echo "AGE Aris did not answer on port $PORT (HTTP $state); see $LOG."; fi
     exit 0
   fi
+fi
+
+# One row per Claude account, the numbers the Agents page shows. Times are UTC.
+if [ "$LIMITS" = 1 ]; then
+  reply=$(signed -s --max-time 60 "$URL/api/limits")
+  jqlf -er '
+    def at: .[0:10] + " " + .[11:16] + "Z";
+    def win: if . then "\(.percent)% · \(if .resetsAt then "resets \(.resetsAt | at)" else "no window open" end)" else "—" end;
+    def span: if . == null then "—" elif .resetsAt and .beganAt then "\(.percent)% · \(.beganAt | at) – \(.resetsAt[11:16])Z" elif .resetsAt then win else "\(.percent)% · no window open; the next message starts one" end;
+    "Claude account limits · read \(.readAt | at)\(if .mostLeft then " · most left: \(.mostLeft)" else "" end)",
+    "",
+    "| profile | plan | session (5 h) | weekly | left | |",
+    "|---|---|---|---|---|---|",
+    (.accounts[] as $a | "| \($a.profile) | \($a.plan // "—") | \($a.windows.session | span) | \($a.windows.weekly | win) | \(if $a.left == null then "—" else "\($a.left)%" end) | \([
+      (if $a.state == "ok" then empty else $a.reason end),
+      (if $a.nextReadAt then "next read \($a.nextReadAt | at)" else empty end),
+      (if $a.stale then "last good reading \($a.readAt | at)" else empty end),
+      (if $a.windows.weeklyOpus then "Opus weekly \($a.windows.weeklyOpus | win)" else empty end),
+      (if $a.windows.weeklySonnet then "Sonnet weekly \($a.windows.weeklySonnet | win)" else empty end),
+      (if $a.profile == .mostLeft then "most left" else empty end)
+    ] | join("; ")) |")' <<<"$reply" 2>/dev/null \
+    || echo "AGE Aris could not read the limits: $(jqlf -r '.error // .' <<<"$reply" 2>/dev/null)"
+  exit 0
 fi
 
 ID=$(project_id)

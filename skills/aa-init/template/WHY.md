@@ -198,6 +198,37 @@ The gate fell into two traps on its first test, and both shaped the code:
 
 ---
 
+## The scratch that outlived its tasks *(rule 13)*
+
+On 2026-11-03 one repository's git-ignored `scratch/` held **194 GB, 44% of
+the machine's disk**. 110 GB of it belonged to tasks already in `done/`,
+32 GB to folders no task id named, and about 50 GB was the same 5 GB data
+set copied once per run. 18 of its 19 worktrees were landed and kept anyway.
+Nine of them were subagent worktrees that the harness would have removed,
+except that a build inside each counted as a change.
+
+Nobody had decided to keep any of it. The convention tracked the task and was
+silent about what the task made: the trail records acts, not what they leave
+on disk, and Done checked the Result, not the disk. Because the folder was
+ignored, the board, `git status` and AGE Aris could not see it either.
+
+What kept it there was evidence. 47 of the repository's 109 done Results cited
+a path under that ignored folder, so deleting the bulk would have deleted the
+proof, and nobody dared. **Evidence and bulk in one folder means the bulk is
+kept forever.**
+
+So closing keeps the kinds of file a Result stands on, documentation,
+visuals and metrics, plus anything the task's `keeps:` line names, and
+deletes the rest. Small ones are committed; big ones go to an archive outside
+git, with their sha256 committed, because a 230 MB JSON dump in git costs
+every clone forever. The operator's words: "keep only task documentation and
+visuals and metrics." Landed work
+is safe to delete because git still holds it. Work that has not landed is
+never deleted; it is named. The operator's words were: "I want the task
+environment files deleted once it is finished."
+
+---
+
 ## The method this implements *(rules 5, 10)*
 
 A **Kanban system** in the ordinary sense: a pull system with explicit states, a

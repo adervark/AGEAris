@@ -1,0 +1,372 @@
+{
+ "canaries": {
+  "caught": 32,
+  "of": 33,
+  "byReconciler": [
+   "11/11",
+   "10/11",
+   "11/11"
+  ],
+  "missed": [
+   {
+    "reconciler": 2,
+    "type": "check",
+    "real": "F3073",
+    "realHolder": 1,
+    "twin": "F4044",
+    "unit": 498,
+    "realUnit": 219,
+    "realView": "V3106",
+    "twinView": "V3090",
+    "caught": false,
+    "line": "V3101–V3104 show throttling at bag 72 with a 1.85× cost vs armC; no premise says bag 72 is 3× armC's bag, so \"at 3×\" is not given"
+   }
+  ]
+ },
+ "findings": {
+  "ok": 274,
+  "conflict": 71,
+  "superseded": 43,
+  "follows": 988,
+  "contradicted": 25,
+  "unsupported": 207
+ },
+ "precision": {
+  "conflict": {
+   "unique": 43,
+   "marked": 43
+  },
+  "superseded": {
+   "unique": 31,
+   "marked": 31
+  },
+  "contradicted": {
+   "unique": 25,
+   "marked": 25
+  }
+ },
+ "twelve": {
+  "C1": {
+   "earlier": [
+    "F102",
+    "F103",
+    "F104",
+    "F476",
+    "F477",
+    "F478",
+    "F479",
+    "F948",
+    "F949",
+    "F950",
+    "F951",
+    "F952",
+    "F3307",
+    "F3308",
+    "F3313",
+    "F3314",
+    "F3315",
+    "F3316",
+    "F3599"
+   ],
+   "correction": [
+    "F1760",
+    "F1761",
+    "F1923",
+    "F1924",
+    "F2032"
+   ],
+   "why": "the flags were passed once (outputs/t025/run_arm.sh:13), so never passed is false",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 group 14 conflict F3599/F1760: Correction. V3636 (lane6 §219): --layer-decay/--warmup-frac 'were never once passed'; V1777 (lane10, READ): they were passed once, outputs/t025/run_arm.sh:13 (0.75 / 0.1), and the log shows they bound",
+    "R1 group 14 conflict F3308/F1760: Correction. V3344 (PROGRESS.md:5857): no run has ever passed --warmup-frac/--layer-decay; V1777 (lane10, READ): both were passed once, outputs/t025/run_arm.sh:13",
+    "R1 group 14 conflict F952/F1760: Correction. V968 (T047 brief): round 2's largest find was that the two flags 'were never passed'; V1777 (lane10, READ): they were passed once, in the T025 run script",
+    "R2 group 20 conflict F3599/F1760: Correction: V3636 (lane6) says the flags were never once passed; V1777 (lane10) reads them passed once at outputs/t025/run_arm.sh:13, and the T025 log shows they bound",
+    "R2 group 20 conflict F952/F1760: Correction: V968 (T047 brief) says round 2 found the flags were never passed; V1777 (lane10): they were passed once, in T025's run_arm.sh, before round 2",
+    "search-flipped on F104 (R0c)",
+    "search-flipped on F479 (R0c)",
+    "search-flipped on F949 (R0c)",
+    "search-flipped on F3308 (R0c)",
+    "search-flipped on F3315 (R0c)",
+    "search-flipped on F3316 (R0c)",
+    "search-flipped on F3599 (R0c)"
+   ]
+  },
+  "C2": {
+   "earlier": [
+    "F470",
+    "F473",
+    "F474",
+    "F475",
+    "F682",
+    "F3679",
+    "F3593",
+    "F3600",
+    "F3692",
+    "F3708",
+    "F3709",
+    "F3710",
+    "F3711",
+    "F3712",
+    "F3713",
+    "F3714"
+   ],
+   "correction": [
+    "F1765",
+    "F1766",
+    "F1767",
+    "F1768",
+    "F1769",
+    "F1770",
+    "F2361",
+    "F2362",
+    "F2363",
+    "F2364"
+   ],
+   "why": "S1s --layer-decay 0.6 cannot test a flat 10x encoder cut: it puts 24 of 48 groups below 1e-6, so S1 does not test the hypothesis",
+   "step": "in a unit, not marked: R1 group 14: conflict; R1 group 28: ok; R3 group 51: ok; R1 check 547: follows; R1 check 590: unsupported; R1 check 644: follows; R1 check 1018: follows; R3 check 306: follows",
+   "candidates": []
+  },
+  "C3": {
+   "earlier": [
+    "F3783",
+    "F3784",
+    "F3785",
+    "F3786",
+    "F2477",
+    "F2478",
+    "F2479"
+   ],
+   "correction": [
+    "F2481",
+    "F2482",
+    "F2483",
+    "F2489"
+   ],
+   "why": "budget_minutes is not an upper bound: the measured slope (1.329 min/unit) makes it about 24% optimistic, wrong in sign",
+   "step": "in a unit, not marked: R2 group 62: conflict; R2 group 128: conflict; R3 group 3: conflict; R3 group 3: superseded; R3 group 18: conflict; R3 check 822: follows; R1 check 56: follows; R1 check 159: follows",
+   "candidates": []
+  },
+  "C4": {
+   "earlier": [
+    "F3787",
+    "F3788",
+    "F2491"
+   ],
+   "correction": [
+    "F2492",
+    "F2493",
+    "F2494"
+   ],
+   "why": "the ~134 min is the kernels own prediction (67 x 2 layouts), not a measurement: the 2x is the layout multiplier, not a modelling error",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R3 group 126 conflict F3787/F2493: Correction: V3824 (lane7) calls ~134 min the measured 22-member rerun; V2515 (lane11): 134 is 67 x 2 layout passes, the kernel's own printed prediction, not a measurement",
+    "R3 group 126 conflict F3788/F2492: Correction: V3825 (lane7): the budget model under-predicts by 2x in practice; V2514 (lane11): not right as stated, the 2x is the layout multiplier the kernel already applies",
+    "R3 group 186 conflict F3787/F2493: Correction: V3824 (lane7) calls ~134 min the brief's measured rerun; V2515 (lane11): 134 is 67 x 2 layout passes, the kernel's printed prediction, not a measurement",
+    "R3 group 186 conflict F3788/F2493: Correction: V3825 (lane7): budget_minutes under-predicts by 2x against a measured 134 min; V2515 (lane11): the 134 is the kernel's own x2 prediction, so the 2x is not a modelling error"
+   ]
+  },
+  "C5": {
+   "earlier": [
+    "F955",
+    "F956",
+    "F1472",
+    "F1473",
+    "F1474"
+   ],
+   "correction": [
+    "F2469",
+    "F2471",
+    "F2472",
+    "F2473",
+    "F2474",
+    "F2475",
+    "F2522",
+    "F2523"
+   ],
+   "why": "the fitted ~113 min replaces the 1.5-4.4 h bracket as the reruns runtime (inside it: superseded, or stated as a correction)",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R2 group 7 superseded F956/F2469: V972 bracketed the deployed kernel at 1.5–4.4 h; V2491 fits it at 113 min (25.2 + 1.329×66), inside the bracket, and lane11 says that replaces the bracket as the honest statement",
+    "R2 group 7 superseded F1472/F2469: V1489 (lane9) repeats the 1.5–4.4 h bracket for the deployed kernel; V2491's fitted 113 min lands inside it and replaces it"
+   ]
+  },
+  "C6": {
+   "earlier": [],
+   "correction": [
+    "F2432",
+    "F2433"
+   ],
+   "why": "out of reach: the earlier claim is in no committed sentence (a lane prompt)",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "C7": {
+   "earlier": [
+    "F3240",
+    "F3241",
+    "F3242",
+    "F3243",
+    "F3244",
+    "F1399",
+    "F1400",
+    "F1401"
+   ],
+   "correction": [
+    "F1505",
+    "F1506",
+    "F1520",
+    "F1521",
+    "F1522",
+    "F1523",
+    "F1524",
+    "F1525",
+    "F1526",
+    "F1529",
+    "F1644"
+   ],
+   "why": "the >=0.945 band spans 224-392 px, so 336-384 px is not part of our gap",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R2 group 10 conflict F3244/F1522: Correction: V3280 (lane5) attributes the gap partly to 336–384 px input; V1539 (lane9): that does not survive, since 224 px and 392 px both reach ≥0.945 and our 320 px is inside that range"
+   ]
+  },
+  "C8": {
+   "earlier": [],
+   "correction": [
+    "F1019",
+    "F1020",
+    "F1021",
+    "F1022",
+    "F1177",
+    "F1230",
+    "F1231"
+   ],
+   "why": "out of reach (D7): the earlier claim is R1s framing applied to the field, in no committed sentence",
+   "step": "out of reach",
+   "candidates": []
+  },
+  "C9": {
+   "earlier": [
+    "F18",
+    "F19",
+    "F22",
+    "F23",
+    "F942",
+    "F943",
+    "F944",
+    "F945",
+    "F946",
+    "F947",
+    "F3187",
+    "F3206",
+    "F1014",
+    "F1015",
+    "F1016",
+    "F1029",
+    "F1030",
+    "F1031",
+    "F1099"
+   ],
+   "correction": [
+    "F1026",
+    "F1027",
+    "F1028",
+    "F1045",
+    "F1046",
+    "F1047",
+    "F1048",
+    "F1100",
+    "F1114",
+    "F1191",
+    "F1192",
+    "F1193",
+    "F1194",
+    "F1258",
+    "F1259"
+   ],
+   "why": "the 09-02 board (2,889 teams) puts us at rank 804 with 88 teams >=0.94; 776/84/2,844 are the 09-01 snapshot, superseded",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 group 108 superseded F943/F1194: V959 (T047 brief, from the 09-01 snapshot): 84 teams at ≥0.94; V1210 (lane9, 09-02): 88, a later count of the same moving quantity",
+    "R1 group 108 superseded F1014/F1194: V1030: 84 teams at ≥0.94 as of the 09-01 snapshot; V1210: 88 measured on 09-02, the later reading replaces it (lane9 records the +4)",
+    "R2 group 32 superseded F22/F1045: V22: our public rank 776 at 0.926 (09-01 reading); V1061: rank 804 on 09-02 at the same 0.926, a later reading of a moving rank (28 teams passed us)",
+    "R2 group 32 superseded F947/F1045: V963 (T047 brief): rank 776; V1061 (lane9, later commit): rank 804, score unchanged, a later reading of a moving rank",
+    "R2 group 32 superseded F3206/F1045: V3242 (lane0): 776 (us); V1061: rank 804 on 09-02, 776 + 28 teams that passed us, a later reading of a moving rank",
+    "R3 group 110 superseded F3187/F1100: V3223: 2,844 teams in the 09-01T18:44Z snapshot; V1116: 2,889 teams on 09-02 (+45), a later count of the field",
+    "R3 group 110 superseded F19/F1100: V19 (R1): 2,844 teams, the 09-01 snapshot; V1116: 2,889 on 09-02, a later count"
+   ]
+  },
+  "C10": {
+   "earlier": [
+    "F2986",
+    "F2987",
+    "F2988",
+    "F2989",
+    "F2990",
+    "F3937",
+    "F3938",
+    "F335",
+    "F336",
+    "F337",
+    "F338",
+    "F339",
+    "F340",
+    "F341"
+   ],
+   "correction": [],
+   "why": "--resume exists; only search-flipped (R0c, carried over) or a reconciler reading the code can show it",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 check 621 contradicted (F2989): atomic folds run 1.75-3.5 h: 11.4/3.5 = 3.3, so at least 4 sessions; seven (11.4/1.75 = 6.5) holds only at b2's length",
+    "search-flipped on F2988 (R0c)",
+    "search-flipped on F3938 (R0c)",
+    "search-flipped on F336 (R0c)"
+   ]
+  },
+  "C11": {
+   "earlier": [
+    "F2609",
+    "F2610"
+   ],
+   "correction": [
+    "F2456",
+    "F2457",
+    "F2469",
+    "F2524",
+    "F2526",
+    "F2527",
+    "F2679"
+   ],
+   "why": "~175 min drops the fits ~25 min intercept: on the lanes own fit, 132 units cost about 201 min",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R3 check 970 contradicted (F2610): T(u) = 25.2 + 1.329 u (V2479); at 132 units that is 25.2 + 175.4 = 200.6 min, not ~175 min (the intercept is dropped); still inside 540 min"
+   ]
+  },
+  "C12": {
+   "earlier": [
+    "F2156",
+    "F2157",
+    "F2158",
+    "F2165",
+    "F2166",
+    "F2167"
+   ],
+   "correction": [
+    "F2665",
+    "F2666",
+    "F3668"
+   ],
+   "why": "the views are blocked by the twelve --adjacent members, so dropping the ten fold? members does not unlock them",
+   "step": "candidate catch: judged by hand",
+   "candidates": [
+    "R1 group 80 conflict F2157/F2666: V2176 (lane10): dropping the ten fold? members unlocks the three refused TTA views; V2690 (lane11): 12 members lack mirror/rotate (armb0 ×2 as well as fold0-4 ×2), so with armb0 kept the any() still refuses them",
+    "R1 group 88 conflict F2157/F2666: V2176 (lane10): dropping the ten fold? members unlocks three refused TTA views; V2690 (lane11): 12 members lack mirror/rotate (armb0 ×2 plus fold0-4 ×2), so dropping ten leaves armb0 still vetoing them",
+    "R3 group 3 conflict F2157/F2666: V2176: dropping the ten fold? members unlocks mirror/rot+/rot-; V2690: 12 members (armb0 x2 + fold x10) carry mirror=rotate=0, so the views stay refused after dropping ten",
+    "R3 group 18 conflict F2157/F2666: V2176: dropping the ten fold? members unlocks mirror/rot+/rot-; V2690: 12 members (armb0 x2 + fold x10) carry mirror=rotate=0, so dropping ten leaves the views refused"
+   ]
+  }
+ }
+}

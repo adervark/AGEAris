@@ -1,0 +1,38 @@
+{
+ "groups": 344,
+ "groupLines": 5651,
+ "checks": 1220,
+ "checkLines": 4681,
+ "eligibleChecks": 70,
+ "sameDocPairsUnreviewed": 20883,
+ "canaries": 33,
+ "reconcilers": [
+  {
+   "file": "R1.jsonl",
+   "groups": 114,
+   "checks": 413,
+   "lines": 3481,
+   "canaries": 11,
+   "groupCanaries": 4,
+   "checkCanaries": 7
+  },
+  {
+   "file": "R2.jsonl",
+   "groups": 116,
+   "checks": 413,
+   "lines": 3480,
+   "canaries": 11,
+   "groupCanaries": 4,
+   "checkCanaries": 7
+  },
+  {
+   "file": "R3.jsonl",
+   "groups": 114,
+   "checks": 414,
+   "lines": 3469,
+   "canaries": 11,
+   "groupCanaries": 5,
+   "checkCanaries": 6
+  }
+ ]
+}

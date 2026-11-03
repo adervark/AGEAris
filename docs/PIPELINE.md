@@ -218,6 +218,8 @@ you, including agents, because they can read the file.
 | GET | `/api/explain/:metricId` | The full metric value behind a number (`projectId`, `asOf`, `taskKey` for `due_risk`) |
 | GET | `/api/tasks/:id/history` | Every transition of a task, across reuses of its id, with commits |
 | GET | `/api/changes` | The change feed (`projectId`, `kinds`, `since`, `limit` ≤ 500) |
+| GET | `/api/orient` | `aa.orient/1` for one project's repository: what an agent should do next and why (`project`, and `operator`, `run`, `task`, `asOf`, `budget`, `remote`), as [`ORIENT.md`](ORIENT.md) defines it. It reads the repository afresh and writes nothing |
+| GET | `/api/capabilities` | Every action, classed `agent-git`, `agent-read`, `agent-runner`, `operator-only` or `ui-only`, with how, inputs and refusals; `?for=agent` gives only what an agent may do, and what to ask the operator for. `AA/board.sh --capabilities` prints the board's part |
 | POST | `/api/projects/sample` | Create the sample project with simulated history |
 | GET / PUT | `/api/projects/:id/pipeline` | Read or replace stages (`{stages, version}`) |
 | GET / POST | `/api/runs` | List run summaries / start a run (`{taskId}`) |

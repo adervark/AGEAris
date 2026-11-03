@@ -1,0 +1,249 @@
+[
+ {
+  "conclusion": "F208",
+  "value": "~10.7 h",
+  "says": "~40 min/epoch x 16 = ~10.7 h",
+  "givenBy": "F207: 10.7",
+  "premises": [
+   {
+    "id": "F205",
+    "value": "not reachable (every tailnet peer offline)",
+    "says": "The 4090 is not reachable (every tailnet peer offline)"
+   },
+   {
+    "id": "F207",
+    "value": "~40 min/epoch",
+    "says": "~40 min/epoch x 16 = ~10.7 h"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F435",
+  "value": "148 GB",
+  "says": "would move 148 GB through a pipe",
+  "givenBy": "F434: 148",
+  "premises": [
+   {
+    "id": "F434",
+    "value": "11 MB",
+    "says": "Returning 11 MB of pixels per study through IPC would move 148 GB through a pipe to write 148 GB to disk."
+   }
+  ],
+  "refuted": false
+ },
+ {
+  "conclusion": "F832",
+  "value": "the only 58 rows of truth in the corpus",
+  "says": "its best use is as the only 58 rows of truth in the corpus",
+  "givenBy": "F829: 58",
+  "premises": [
+   {
+    "id": "F829",
+    "value": "could not separate any two of our three CoAtNet recipes",
+    "says": "gold-58 could not separate any two of our three CoAtNet recipes"
+   },
+   {
+    "id": "F830",
+    "value": "+0.004 to +0.013",
+    "says": "selecting on it added +0.004 to +0.013 of upward bias to the number then read"
+   }
+  ],
+  "refuted": false
+ },
+ {
+  "conclusion": "F985",
+  "value": "8.8 h is longer than any fold this project has run",
+  "says": "8.8 h is longer than any fold this project has run",
+  "givenBy": "F980: 8.8",
+  "premises": [
+   {
+    "id": "F980",
+    "value": "res 352 bs 2 6.06 GiB 38.1 ms/window 8.8 h for 16 epochs",
+    "says": "res 352 bs 2 6.06 GiB 38.1 ms/window 8.8 h for 16 epochs"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F2041",
+  "value": "3x",
+  "says": "T121'S COST TABLE WAS WRONG BY 3x",
+  "givenBy": "F2042: 3",
+  "premises": [
+   {
+    "id": "F2042",
+    "value": "(N, 3, res, res)",
+    "says": "make_bag returns (N, 3, res, res) -- pre-formed triplets"
+   },
+   {
+    "id": "F2043",
+    "value": "49.4 GB",
+    "says": "the table assumed a 76-slice single-channel volume, giving 49.4 GB."
+   },
+   {
+    "id": "F2046",
+    "value": "148.2 GB",
+    "says": "The real figure is 4,407 x 76 x 3 x 384^2 = 148.2 GB."
+   }
+  ],
+  "refuted": false
+ },
+ {
+  "conclusion": "F2541",
+  "value": "1.714x",
+  "says": "1.714x non-antialiased decimation against 1.5x",
+  "givenBy": "F2540: 384 / F2539: 224",
+  "premises": [
+   {
+    "id": "F2539",
+    "value": "one bilinear step",
+    "says": "the trainer reaches the model's 224 px from the 336 corpus in one bilinear step"
+   },
+   {
+    "id": "F2540",
+    "value": "decodes the DICOM to 384 and then resizes to 224",
+    "says": "the kernel decodes the DICOM to 384 and then resizes to 224"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F2876",
+  "value": "16 mm",
+  "says": "16 mm per CAM cell",
+  "givenBy": "F2874: 32 × F2875: 0.5",
+  "premises": [
+   {
+    "id": "F2874",
+    "value": "10x10",
+    "says": "which on a 320 px frame is a 10x10 map: 32 px"
+   },
+   {
+    "id": "F2873",
+    "value": "the LAST spatial module",
+    "says": "pick_layer(model) takes the LAST spatial module -- bn2.act for the efficientnets"
+   },
+   {
+    "id": "F2875",
+    "value": "0.5 mm",
+    "says": "at the census's 0.5 mm per delivered pixel"
+   },
+   {
+    "id": "F2876",
+    "value": "16 mm",
+    "says": "16 mm per CAM cell"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F3275",
+  "value": "8.7 weeks",
+  "says": "i.e. 8.7 weeks",
+  "givenBy": "F3274: 8.7",
+  "premises": [
+   {
+    "id": "F3274",
+    "value": "61 days to ZERO",
+    "says": "At 0.875 GiB/day that is 61 days to ZERO (53 ÷ 0.875 = 60.6), i.e. 8.7 weeks"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F3293",
+  "value": "≈ 330 MB",
+  "says": "So a five-fold family writes argmax + SWA = 10 checkpoints ≈ 330 MB, not ~200 MB.",
+  "givenBy": "F3292: 330",
+  "premises": [
+   {
+    "id": "F3282",
+    "value": "~33 MB",
+    "says": "Checkpoints are ~33 MB at the current config, not the ~19 MB this note used to claim"
+   },
+   {
+    "id": "F3292",
+    "value": "10 checkpoints",
+    "says": "So a five-fold family writes argmax + SWA = 10 checkpoints ≈ 330 MB, not ~200 MB."
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F3294",
+  "value": "Still small against 53 GiB",
+  "says": "Still small against 53 GiB — watch bulk artifacts, not checkpoints.",
+  "givenBy": "F3266: 53",
+  "premises": [
+   {
+    "id": "F3293",
+    "value": "≈ 330 MB",
+    "says": "So a five-fold family writes argmax + SWA = 10 checkpoints ≈ 330 MB, not ~200 MB."
+   },
+   {
+    "id": "F3266",
+    "value": "53 GiB free of 767 GiB",
+    "says": "/ had 53 GiB free of 767 GiB (93% used) — measured 2026-09-12 (T087)."
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F3341",
+  "value": "a spread of 0.0078",
+  "says": "a spread of 0.0078 against a +/-0.036 noise band on 58 studies.",
+  "givenBy": "F3340: 0.874 - F3340: 0.8662",
+  "premises": [
+   {
+    "id": "F3340",
+    "value": "0.8727 / 0.8662 / 0.8740 / 0.8711 / 0.8674",
+    "says": "Run 2's last five epochs scored 0.8727 / 0.8662 / 0.8740 / 0.8711 / 0.8674"
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F3479",
+  "value": "about 5%",
+  "says": "the half-width spans 0.001913-0.002024, about 5%.",
+  "givenBy": "F3478: 5",
+  "premises": [
+   {
+    "id": "F3478",
+    "value": "0.001913-0.002024",
+    "says": "measured over seeds 0-4 on the T019 comparison the half-width spans 0.001913-0.002024, about 5%."
+   }
+  ],
+  "refuted": true
+ },
+ {
+  "conclusion": "F3531",
+  "value": "about 24% slower",
+  "says": "about 24% slower.",
+  "givenBy": "F3529: 24",
+  "premises": [
+   {
+    "id": "F3526",
+    "value": "125 min wall for 8 epochs",
+    "says": "T020, run while the session was mostly idle, took 125 min wall for 8 epochs (11 min overhead);"
+   },
+   {
+    "id": "F3527",
+    "value": "11 min overhead",
+    "says": "took 125 min wall for 8 epochs (11 min overhead);"
+   },
+   {
+    "id": "F3529",
+    "value": "145 min for 7 epochs",
+    "says": "took 145 min for 7 epochs (46 min overhead) — about 24% slower."
+   },
+   {
+    "id": "F3530",
+    "value": "46 min overhead",
+    "says": "took 145 min for 7 epochs (46 min overhead)"
+   }
+  ],
+  "refuted": false
+ }
+]

@@ -52,3 +52,21 @@ map: {{README.md}}
 # Task id prefix. T001, CASE-001, CH-01 — whatever reads naturally here.
 # Ids are permanent and never renumbered; the slug after them may change.
 id_prefix: T
+
+# Rule 13. A task's working files, worktrees and builds live in <scratch>/T###/,
+# usually git-ignored; `ckpt.sh release` deletes them when the task is done.
+# First it keeps the files whose extension is in keep_kinds (documentation,
+# visuals, metrics), outside virtualenvs, builds and checkouts git already has,
+# plus every file the task's own file cites and whatever its `keeps:` line
+# names. A file that looks like it holds a secret is archived, never committed. Up to keep_max_kb each they
+# are committed to AA/evidence/T###/; bigger ones are copied to <archive>/T###/
+# (outside the repository; ~ allowed) and their size and sha256 committed in
+# AA/evidence/T###/RELEASED.tsv. With no archive, a release that has bigger
+# ones refuses. Landed means an ancestor of `trunk` (default: origin/HEAD's
+# branch, else main, else master).
+scratch: scratch
+keep_kinds: md txt rst html pdf png svg jpg jpeg gif webp mp4 webm mkv mov json jsonl csv tsv log yaml yml
+keep_max_kb: 1024
+# The most one task commits to AA/evidence/, in MB; over it the release refuses.
+keep_task_mb: 100
+archive: ~/Archive/{{repository name}}

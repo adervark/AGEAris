@@ -437,3 +437,624 @@ its date, the number, and where the evidence is. Newest last.
 - The operator waived reviewing the cases (2026-10-11).
 - `npm test` passed 542 of 542, and `npm run check` passed.
 - Evidence: the Result of T055.
+
+## 2026-10-13 — T074: RSNA's round 3 replayed as a ledger, 1 of 3 defects caught
+
+- RSNA's research round 3 (its T047: five lanes and a synthesis, at RSNA
+  `e4e356c`) was recast into a draft ledger by a script. The script applied
+  T074's procedure, which was fixed before any lane report was read: 8
+  questions, 254 claims, 34 decisions.
+- **Partial: v1's checks catch 1 of the 3 defects** that RSNA's synthesis
+  found by hand.
+  - **Caught: lane 11's efficiency half, never written** (`uncovered`). The
+    catch rests on two choices made before the reports were read. A
+    document's title is not a section, and a claim that matches no question
+    falls to the brief's first question. In a real ledger the lanes name their
+    questions themselves, which makes the catch robust.
+  - **Missed: lanes 10 and 11 disagreeing on a count, 10 against 12.** v1
+    compares claims only within one question, and the two lanes answered
+    different questions. A noun-phrase subject (`about`, under test) fired on
+    "members", but over six unrelated counts (5 to 22), so it would have fired
+    without the defect.
+  - **Missed: lane 12's two verdicts with no section behind them.** Rows 3 and
+    4 of its table point nowhere, and the report goes from §2 to §5.
+- **False positives:**
+  - 3 `uncovered`, from the replay's matching of headings to questions;
+  - 17 `unbacked`: 11 rest on evidence from rounds 1–2, 5 cite sections
+    written as prose, which the procedure does not extract, and 1 cites a
+    round 2 lane;
+  - 2 `contradiction-about`;
+  - 1 `where-missing`, from a reference to another lane's §3.4.
+- **Real, beyond the three:**
+  - lane 13 ran with no brief (`registered-late`);
+  - 1 cited file no longer exists anywhere (`outputs/t028/run_density.sh`);
+  - 3 more cited sources sit in untracked folders.
+- **The baseline:**
+  - (r1) questions asked again: 0, by exact text;
+  - (r2) and (r3): not applicable, because the round spent nothing;
+  - (r4) defects that reached the synthesis with no tool flag: 3 of 3. With
+    v1's checks, 2 of 3 would still have reached it;
+  - (r5): not measurable on one round finished in a day;
+  - (r6) cited evidence out of sight: 4 of 22 `path:line` sources (18%).
+  - Also: 67 of 254 claims carry no evidence mark in their row or section,
+    and 7 carry a verdict word.
+- **For T073's v2:**
+  - contradictions are keyed on registered subjects, not on questions;
+  - a verdict's `where` must name a section that exists and has a body;
+  - `q` and `verdict` are required on every claim;
+  - independence is not orient's run family, because all five lanes were one
+    family;
+  - sources get the same out-of-sight check as `where`.
+- **Evidence:** T074's Result. The script and its ledger are in `docs/plans/evidence/t074/`; the operator
+  chose to commit them, amending T074's rule. They quote RSNA's research:
+  not pushed before 2026-10-22.
+
+## 2026-10-13 — T074 re-graded: its one catch cannot be told from noise
+
+- T073's Critic (run `b8438f28.15f2`) graded R0 while it reviewed v1:
+  `docs/plans/reviews/research-runs-v1-critic.md`.
+- **The catch does not discriminate.** `uncovered` fired on 4 questions and
+  was right on 1. Under the fallback rule, every lane's second question (L9.Q2,
+  L11.Q2, L13.Q2) got 0 claims, and all three fired.
+- **The deciding choice was not blind.** "A document's H1 is its title" was
+  pinned after the headings were seen, by a session that knew the target.
+  T074's Result says so; the entry above shortened it to "before the reports
+  were read". The entry above also says a real ledger "makes the catch
+  robust". Nothing tested that, so it is withdrawn.
+- **Not tested:** whether lanes keep a ledger as they go, v1's riskiest
+  assumption. A script transcribed finished prose, and the round spent
+  nothing.
+- **Stands:**
+  - both misses;
+  - lane 13's `registered-late`;
+  - the script lane 10 cites in `outputs/`, never tracked and now gone;
+  - 23 of the 26 warnings false.
+- **What it changed:** T073's v2.1 takes the Critic's cheaper design as stage
+  1. One writer records a verdict per question at synthesis, and four checks
+  are each held to an incident and a counterfactual. The next replay is
+  RSNA's T112 and T118, the rounds that spent, after 2026-10-22.
+
+## 2026-10-13 — T073: research runs aggregated; v2.4 accepted, conflicts and repeats in stage 1
+
+- The operator accepted `docs/plans/research-runs.md` v2.4, with its open
+  objections listed in T073's Result. Nothing is built yet.
+- **The design:**
+  - load-bearing facts, each citing a pinned source, a scoped search, or its
+    premises;
+  - identity computed from shared referents, never from labels;
+  - a separate reconciler checked by canaries;
+  - eleven checks, seven of them for conflicting and repeated data;
+  - no decision on an open conflict.
+- **Reviews:** one Architect and four Critic runs (one died, one partial), in
+  `docs/plans/reviews/`. Each Critic round found a real hole, and each was
+  checked against RSNA at `e4e356c` before it was answered.
+- **Corrected along the way:**
+  - v2.2's 10-against-12 incident linked two true facts. The error was lane
+    10 §3.3's unsourced inference, lane 10:350–351.
+  - v2.3 claimed `git grep -n -- --layer-decay 2b3d2a6` finds only the
+    definition. It finds 29 lines, and 3 when scoped to `src`.
+- **Next, on evidence:**
+  - T075 (R0b) grades recall over every correction RSNA's round 3 synthesis
+    records;
+  - T076 (S0) simulates linking with planted conflicts, the uncatchable
+    shapes included;
+  - T077–T081 build and replay;
+  - T072 runs on a hand-written ledger.
+
+## 2026-10-13 — T075: R0b, round 3 replayed with facts: recall 2 of 12
+
+- A fresh transcriber wrote 232 facts from RSNA's round 3 lanes and the
+  record settled before it (13.4 min). `link.mjs` applied v2.4's referent rules
+  and found 234 pairs. A separate reconciler marked them (7.3 min).
+- **Recall: 2 of the 12 corrections** that the round 3 synthesis records.
+  - Caught: C1 (flags "never passed") and C2 ("encoder too hot").
+  - Missed:
+    - 6 never transcribed, 4 of them from documents the transcriber read
+      (C12, the 10-vs-12 inference, among them);
+    - 2 not linked, because runtime and leaderboard figures have no code
+      referent;
+    - 1 within one document;
+    - 1 from a later code commit.
+- **Precision: 17 of 17.** One of them is a real defect the synthesis never
+  recorded: lane 10's "~+30 min" for a third pass misreads the kernel's
+  "~67 min … x ~2".
+- The verdict, by T075's rule: below 10 of 12, so the design is revised
+  (T082) before T077.
+- Evidence: `docs/plans/evidence/t075/` (`grade.md` first). It quotes RSNA's
+  research: not pushed before 2026-10-22.
+
+## 2026-10-21 — T082: R0c, round 3 replayed under v2.5: recall 7 of 12
+
+- Under v2.5 every clause was disposed of: 4,033 facts and 391 skips from
+  3,231 clauses, by a registrar, five transcribers and an auditor (81 of 81
+  canaries on its rerun). Three reconcilers marked 286 groups and 1,220
+  premise checks, 13 subagent runs in all.
+- Reconcilers 1 and 2 are graded at pass 1 (10 of 11 canaries each). Their
+  reruns died at the usage limit. Finishing them cannot change the recall:
+  the units that hold the misses were re-marked the same way, or have no
+  pair to mark.
+- **Recall: 7 of 12**, by the rule fixed in `grade.mjs` and by hand. The
+  two readings agree on the count but differ on one member each:
+  - by the rule, C1, C2, C3, C4, C7, C10 and C12;
+  - by hand, C2 is out: its only credit is "a premise is missing". C11 is
+    in: all three reconcilers found "~175 min drops the 25.2 min intercept:
+    200.6", on facts the key did not name.
+- **Reach:** 11 by the design (C6 was never committed). By hand it is 10:
+  C8's earlier claim is, in the synthesis's words, R1's framing "applied to
+  the field", never written down.
+- **The misses within reach:**
+  - C5 and C9 were linked and judged consistent, as the brief says they
+    are. 113 min lies inside 1.5–4.4 h, and 776 and 804 are dated readings.
+    Supersession has no place in v2.5.
+  - C2's two sides name `--layer-decay` in their quotes but were given no
+    refs, so they never met.
+- **The measurement had two flaws:**
+  - a check canary replaces the real check it copies, so 27 real checks
+    were never shown. C11's own check was one of them;
+  - the key pinned one correcting clause per correction.
+- **Precision:**
+  - conflicts: 44 of 49 unique pairs real, 4 ambiguous, 1 false; that is
+    89.8% to 98.0% against the 90% floor;
+  - does-not-follow: 20 of a sample of 20 apply the rule, but only 5 name
+    a defect in the research. 14 name a premise the ledger lacks.
+- **A defect the synthesis carried:** its instrument table gives OOF-AUC
+  vs Sonnet 4,349 studies; lane 3 measured 3,749 (RESEARCH-0902c:381
+  against lane 3:453).
+- The verdict, by T082's rule: below 10 of 12, so the operator decides.
+  The operator sent v2.5 back for a v2.6 (T084), using the candidate
+  changes listed in the grade.
+- Evidence: `docs/plans/evidence/t082/r0c/` (`grade.md` first). It quotes
+  RSNA's research: not pushed before 2026-10-22.
+
+## 2026-10-21 — T084: v2.6 measured for free on R0c's material
+
+- **Refs from quotes are kept.** A linear scan of each fact's quote adds
+  544 refs to 423 of 4,033 facts: flags, paths and identifiers.
+  - R2's S1 and lane 10's "--layer-decay cannot express the hypothesis" now
+    share a group. That is C2, whose two sides never met in R0c.
+  - The review load grows 17.1% (4,848 to 5,676 fact lines), under the
+    quarter T084 allows.
+- **Supersession is a reconciler mark, not a list.** A mechanical rule
+  raises 2,933 candidates over R0c's 63 measurand groups, C5's and C9's
+  pairs among them. That is far over the 300 allowed.
+- **Fair canaries:** 70 of 1,220 checks have premises that bear on their
+  conclusion's number, enough for three reconcilers. 9 of R0c's 27 check
+  canaries were not eligible, including the one reconciler 2 missed.
+- **Code read at two commits:** `src/tta.py` was cut before and after
+  T039's fix. No fact carries its commit, though §5.2 says `at` does.
+- **A correction to R0c's grade:** C2's key sides did share a group (R1
+  group 23), on a figure lane 10 does not dispute. The count stays 7.
+- Evidence: `docs/plans/evidence/t084/measurements.md`.
+
+## 2026-10-21 — T084: v2.6 accepted, to be tested on R0d
+
+- The operator accepted v2.6 of the research-runs design with no Critic
+  round, to be tested on R0d (T085). R0d is R0c's ledger in v2.6's view,
+  with three fresh reconcilers.
+- The operator ruled C8 out of reach, so 10 of 12 are within reach and
+  R0d's bar is 9 of 12 (design §10, D7). R0d's go (D8) is still open.
+
+## 2026-10-21 — R0c re-read (T085): its own briefs primed three catches
+
+- R0c's briefs took their examples from round 3, the round being graded:
+  - the reconciler brief's example of a failed premise check is C11's
+    correction, verbatim (`25.2 + 1.329 × 132 = 200.6 min, not ~175`);
+  - the transcriber brief's worked fact is C12's earlier claim
+    (`lane10#392`). That brief was never committed; it was recovered from
+    session `b8438f28`'s transcript;
+  - that brief and the auditor's both name C10's "no --resume".
+- The catches no brief prompted are **4 of 12: C1, C3, C4 and C7**. The
+  mechanical count stays 7.
+- The design's §5.5 incidents are round 3's too. So a replay of round 3,
+  R0d included, is in-sample. v2.6 now requires that briefs carry no
+  answers, and that acceptance come from a round no incident or example
+  came from. What R0d is for is the operator's (§10, D9).
+- Evidence: the correction in `docs/plans/evidence/t082/r0c/grade.md`, and
+  `brief-transcriber-recovered.md` beside it.
+
+## 2026-10-21 — T085: R0d checks the mechanics; a held-out round decides
+
+- The operator ruled what R0d is for (research-runs design §10, D9). R0d
+  checks v2.6's mechanics on round 3: `superseded`, the three-way checks,
+  and canaries beside real units. It passes when every canary is caught and
+  `superseded`, `contradicted` and `conflict` lines are each at least 90%
+  real. Its recall on the twelve is reported as in-sample and decides
+  nothing.
+- v2.6 is accepted or not on a held-out round with its own key (H1, T086).
+  The round is the operator's to choose: T112 is a candidate, T118 is not.
+- R0d's go (D8): three Opus reconcilers, once the view, the key and the
+  brief are committed and the brief passes its check against the key.
+
+## 2026-10-21 — T085: R0d graded, not a pass: one canary of 33 missed
+
+- **The verdict, by T085's rules: not a pass.** One mechanic fails.
+  - Canaries: 32 of 33. R2 missed check canary 498 ("throttling at 3×" for
+    2×) and marked it `unsupported`. The real check's holder marked it
+    `follows`, so the exception does not apply. R2's one rerun went to its
+    death.
+  - `superseded`: 28 of 31 unique pairs real, 90.3%. It holds by one unit.
+  - `contradicted`: 23 of 25 real, 92.0%.
+  - `conflict`: 40 of 43 real, 93.0%.
+- **Recall on the twelve, in-sample, decides nothing:** 8 by the rule (R0c:
+  7), 7 by R0d's reconcilers. 6 rest on nothing any brief named (R0c: 4).
+  - C5 and C9 are gained through `superseded`.
+  - C11 is gained without the answer in the brief.
+  - C3 is lost: its pair sat in a unit and was not marked.
+- **The runs.** The first three reconcilers died with session `2bb43cf0`
+  mid-pass. Each was rerun once, resuming from its lines (`7359ccc`).
+  `check-reconcile.mjs` made each rerun relabel the dead run's lines with
+  its own run id. That is a checker defect; git keeps the originals.
+- **Next: the operator's.** Revise v2.6 before T086, or rule the canary
+  unfair. The canary's premises give the cost ratio, 1.85×, but not the
+  bag ratio. The checker's run-id rule is fixed either way.
+- Evidence: `docs/plans/evidence/t085/grade.md`, `precision.md`,
+  `grade.json`.
+
+## 2026-10-22 — T085 closed: the operator let R0d's failure stand
+
+- The missed canary (R2, check 498) stands, so R0d is not a pass. v2.6 is
+  revised before the held-out round. The revision is T087, free.
+  - a rule that only twins checks whose premises hold the refuting figure;
+  - `check-reconcile.mjs` keeps a dead run's ids;
+  - when a different condition counts as a replacement;
+  - C3's passed-over pair.
+- T086 now depends on T087.
+
+## 2026-10-22 — T087: research-runs v2.7 answers R0d, measured for free
+
+- **Check canaries:** a check is twinned only when its premises give the
+  figure the twin replaces, and the parent writes the refutation first. On
+  R0d's 20 check canaries the rule drops 9, the missed 498 among them. The
+  other 8 were caught, so the rule is conservative. It leaves 22 twinnable
+  checks, against v2.6's 31.
+- **Group canaries** go into each reconciler's largest groups. R0d's 13
+  sat in groups of 5 to 36 facts, none in the 29 groups of 40 or more. C3's
+  pair sat in a group of 118.
+- **`superseded`:** the brief says a later figure under another condition
+  replaces nothing. All three of R0d's ambiguous units turned on that.
+- **The checker** keeps a dead run's lines under their own ids. Its 6
+  cases pass, R0d's rebuilt outputs among them.
+- **§5.5** lists a pair a reconciler passes over as caught by no check.
+- **Evidence:** `docs/plans/evidence/t087/measurements.md`. The brief,
+  checker and test carry nothing from R0d's key (`brief-check.mjs`: 0
+  hits). Waiting on the operator's acceptance.
+
+## 2026-10-22 — T087 closed: v2.7 accepted, to be tested on the held-out round
+
+- The operator accepted research-runs v2.7, the stricter canary rule
+  included. T086 runs under it and waits only on the choice of round.
+
+## 2026-10-22 — T086: H1 graded, not a pass: recall 4 of 13
+
+- **The verdict, by T086's rules: not a pass.** Recall fails.
+  - Recall: 4 of the 13 corrections in reach, against a bar of 11. Caught:
+    K2 (the published range), K5 (the crashed dry run), K8 (the quota
+    reset) and K14 (the smoke counts).
+  - Canaries: the auditor's 40 of 40, the reconcilers' 14 of 15. All 5
+    check canaries were caught, and all 3 largest-decile group canaries.
+    The miss is unfair: a group twin put "200 KiB" where the real fact
+    says 197 KiB, beside a real "200 KB". R2 called it rounding, rightly.
+    No rerun: it would meet the same twin, and recall fails either way.
+  - Precision: `conflict` 9 of 9, `superseded` 9 of 9. No real check was
+    marked `contradicted`; the 5 such lines were all canaries.
+- **The shape of the miss.** Every catch corrects a figure or a count.
+  None of the 9 corrections of a word, a scope or a reason was caught.
+  - 6 sat in one group with both sides, and were marked `ok`. Two of the
+    lines name the edit: "one file edited, not a quantity".
+  - 3 never met in a unit: prose states with no referent in common.
+- **Outside the key:** 5 real findings. One is a correction the key
+  omits: `coat_curve.py` says the per-epoch resampling "never happened".
+  With it, recall would be 5 of 14.
+- **The runs.** 9 Opus first passes of 10; no rerun. The account's session
+  limit stopped the three reconcilers before their first line. The same
+  agents were continued after the reset.
+- **Next: the operator's.** Revise for a v2.8 (edited sentences judged as
+  claims; group twins outside the real value's rounding), or accept v2.7
+  with H1's blind spot written into §5.5.
+- Evidence: `docs/plans/evidence/t086/grade.md`, `precision.md`,
+  `grade.json`.
+
+## 2026-10-22 — T086 closed: v2.7 accepted as it stands; v2.8 registered
+
+- The operator accepted research-runs v2.7 as it stands after H1's 4 of
+  13 (§10, D11). §5.5 now names the blind spot: corrections of a word, a
+  scope or a reason, 0 of 9 on T112.
+- v2.8 is registered (T090): edited sentences judged as claims, and group
+  twins outside the real value's rounding. It changes no ledger format, so
+  S1a (T077) is unblocked.
+
+## 2026-10-22 — T089 done: the limits left on each Claude account
+
+- AGE Aris shows each Claude account's session and weekly use, and their
+  resets, on the Agents page, from `GET /api/limits` and from `/aa limits`
+  (`3c08f3a`). Read live at 18:03Z: `default` 12% / 2%, `b` 2% / 7%, `k`
+  4% / 66%, `v` expired. Its first outbound call; it never refreshes a
+  token and writes nothing under `~/.claude*`.
+
+## 2026-10-22 — T091 done: every account's limits on every page, kept fresh
+
+- A strip under the top bar shows every Claude account and every window it
+  has, on every page (`af3ec0b`). A page left open 5.5 minutes asked 6
+  times, and each reading moved on after 5 minutes, the server's hold.
+
+## 2026-10-22 — T092 done: a lapsed token renewed, so every account reads live
+
+- AGE Aris renews a lapsed access token as Claude Code does and writes the
+  renewed sign-in back into that profile (`c1f96a6`). Live at 19:41Z: `v`,
+  expired since 12:38Z, read 20% / 63%, and `claude auth status` in `v` still
+  says signed in. `npm test` 553 of 553.
+- **Spend:** `global-config`, on the operator's word: `v`'s
+  `.credentials.json`, its token fields only.
+
+## 2026-10-22 — T093 done: limits each minute, each window's span, /aa current
+
+- Each account is read fresh once a minute, backing off on a 429 by its
+  `retry-after`, doubled up to 30 minutes (`b5c61c0`). Live for 6 minutes at
+  20:14–20:22Z: all four accounts fresh each minute, no 429.
+- Each window says when it began and ends; with no 5-hour window open, the
+  next message starts one.
+- `~/.claude/skills/aa` is the repository's again; `/aa limits` runs.
+  `npm test` 554 of 554.
+- **Spend:** `global-config`, on the operator's word: `~/.claude/skills/aa`.
+
+## 2026-10-22 — T090 done: research-runs v2.8, accepted to be tested
+
+- v2.8 answers H1's misses with edit units, cue units, a brief that judges
+  claims, and fair twins, each measured for free on H1's material
+  (`docs/plans/evidence/t090/measurements.md`). At best 11 of 13 on H1,
+  exactly the bar, in-sample.
+- The operator accepted it to be tested, on RSNA's T121 (D12, D13); H2 is
+  T094. **Spend:** none.
+
+## 2026-10-24 — T094 done: H2, v2.8 on RSNA T121, not a pass; v2.8 accepted
+
+- Recall 5 of 10 against 8 on a held-out round (`docs/plans/evidence/t094/grade.md`);
+  v2.7's units alone would have caught 4. Canaries 73/73 and 23/24.
+  Precision 20/22, 25/26, 5/5. v2.8's edit unit: 18 real lines, none false.
+- Misses: a struck clause forms no edit; CORRECTED and REFUTED are not cues;
+  a cue fires on a negation; corrections of a premise or plan inside one
+  unit were marked `ok`.
+- The operator accepted v2.8 as it stands (D14); v2.9 is T095.
+- **Spend:** `agent-fan-out`, 10 Opus first passes, no rerun.
+
+## 2026-10-24 — T063 done: what an agent may do, and how
+
+- `GET /api/capabilities[?for=agent]` and `AA/board.sh --capabilities`: 39
+  actions classed `agent-git` 11, `agent-read` 15, `agent-runner` 1,
+  `operator-only` 9, `ui-only` 3, with how, inputs and refusals.
+- Held to the page (every `data-action`), to the server (every route, read
+  from `server.mjs` and called live) and to board.sh's copy; each check
+  fails when broken.
+- Review: changes requested (missing pull-runner routes, inputs and
+  refusals not as the code has them, protocol stops listed as refusals, a
+  bypassable scan); fixed and re-checked.
+- `npm test` 564 of 564. Evidence: `tests/capabilities.test.mjs`, T063's
+  Result.
+
+## 2026-10-24 — T057 done: GET /api/orient, 82 of 82 corpus cases
+
+- `lib/orient.mjs`, `Cockpit.orient` and `GET /api/orient` answer
+  `aa.orient/1` (docs/ORIENT.md); every corpus case, the server-only one
+  included, byte for byte.
+- On this repository: `continue T057` with `state-stale` and
+  `claim-unpushed`, all three true; about 215 ms a call, uncached.
+- Review (opus), three passes: a process cache that never forgot, git
+  failures read as empty history, forgeable history fields, `remote=1`
+  running the repository's configured programs, a pid batch one bad pid
+  could blind, and smaller ones. Fixed, each pinned by a test that failed on
+  the first cut; approved.
+- `npm test` 565 of 565. Evidence: `tests/orient-server.test.mjs`, T057's
+  Result.
+
+
+## 2026-10-25 — T053: how often agents get lost, the baseline
+
+- `node lib/lost.mjs --as-of 2026-10-25T07:40:00Z` on AGE Aris at `1afc8e4`,
+  AGEIS at `4f793d1` and RSNA at `4775533`, read as `docs/METRICS.md` § The
+  lost-agent measures pins it. Every instance is in
+  `docs/plans/evidence/t053/baseline.json`.
+
+  | | AGE Aris | AGEIS | RSNA |
+  |---|---|---|---|
+  | read | 270 commits, 85 runs | 608 commits (17 merges), 179 runs | 759 commits, 94 runs |
+  | (a) repeated acts | 0 | 0; 22 `doing`s name no act | 1, 1.06 per 100 runs |
+  | (b) overlapping claims | 0 | 0 | 1 (runs) |
+  | (c) over-limit claims | 0 of 66 (limit 2) | no limit; 103 claims, WIP at a claim median 1, max 8 | no limit; 133 claims, median 20, max 39 |
+  | (d) start latency, median / 85th | 9 min / 27 min (24 of 66) | 6 min / 1.2 h (56 of 103) | 36 min / 9.1 h (50 of 133) |
+
+- Pooled, (a) is 1 in 358 runs, 0.28 per 100.
+- (a), RSNA T121, 2026-09-24 11:21Z: session `e804d562` wrote "resume fold
+  from .last.pt (13/16 done)…", and 5 s later a new session on another
+  profile, `7786e95f`, wrote the same `doing`. A plan switch. The trail names
+  one trainer (pid 12860); it cannot say whether the first launch ran.
+- (b), RSNA T081, 2026-09-11: a Codex parent (run `x02f3`) and its subagents
+  (runs `codex-cu.*`). Their run ids share no root, so the rule counts two
+  workers where there was one.
+- (c) can be measured only on AGE Aris: AGEIS and RSNA set no WIP limit,
+  and RSNA claimed with up to 39 tasks in progress.
+- (d) has a value only where a `did` follows a claim: 130 of 302 claims.
+  Most claims have no trail at all. It times the trail, not the work: RSNA
+  T053's work was first committed 12 minutes after its claim, and its first
+  `did` came 12 days later.
+- Keying (a) on `tell` instead of the act's words finds no more repeats.
+- Found on the way: AGE Aris's ledger dates AGEIS's work by its merges. 78 of
+  106 finished cycles have no start, and 43 deliveries fall on 2026-10-13.
+  Registered as T096.
+- Reviewed by one Opus pass (run `a29cee11.3776`): 8 findings and 3 test
+  gaps, each with an input that fails.
+  - All 8 findings are fixed, each with a test. The three mutants the gaps
+    let through now fail.
+  - Re-measured at the same `--as-of`, with AGE Aris read from a clone at
+    `1afc8e4`: no number above changes.
+  - In `baseline.json`, RSNA T081's overlap now ends at 06:29Z, not 08:32Z,
+    because a span closes once each of the family's runs has ended.
+  - AGE Aris now shows no WIP at a claim: that figure counts only claims
+    made with no limit set, and every claim there had one.
+- Re-checked by a second Opus pass (run `6bab66ff.4df8`): all 8 fixes and 3
+  gaps hold. It found 5 more, each with an input that fails, all low:
+  - A merge read whether a hold had ended in the order git listed the
+    commits, not in time, and picked the owner's stint by its stay. Fix 7
+    gave a claim on a board without settings the limit of another board
+    whose settings the commit deleted.
+  - Two fixes had no test that a mutant reverting them would fail.
+  - All 5 are fixed, each with a test that the mutant reverting it fails.
+    No third pass reviewed them (decision rule: two passes).
+  - Re-measured the same way: `baseline.json` is unchanged on all three, and
+    no number above changes. No merge in the three repositories has two
+    different holds, and none deletes a settings file.
+- **Spend:** the reviews, two Opus passes (`agent-fan-out`): 19 min and
+  about 255k tokens on `default`, then about 25 min on `k`. The measuring
+  itself spent nothing.
+
+## 2026-11-01 — T054: the scale baseline, 300 repositories against §5.5
+
+- The fixture (`tests/perf/scale-fixture.mjs`): 300 tracked AA repositories
+  of about 200 commits and 3 of about 5,000, 76,396 commits in all. It holds
+  9,921 delivered tasks, 606 in progress or blocked and 1,416 in backlog. It
+  was built in 8.3 s, against a 5-minute budget, into
+  `~/.cache/agearis/perf/scale-<key>/`, outside the repository and the data
+  folder. The key hashes the generator and `lib/fabricate.mjs`, so the
+  fixture is reused until either changes, and a new build removes the old one.
+- Measured by `node --test tests/perf/scale.perf.mjs`. AGE Aris ran as its own
+  process on a fresh data folder tracking all 303 repositories, and was read
+  over HTTP. There were three runs, the third with `AGEARIS_PERF_STRICT=1`;
+  the numbers below are runs 1–3. The brief's timings during the build and
+  its parts were added after run 1, so they come from runs 2–4 (run 4 was
+  `npm run perf`). Memory when first fresh is run 1's. The machine had 16
+  threads (Ryzen 9
+  8945HS) and Node 22.22.1, with the operator's own AGE Aris idle beside it.
+
+  | §5.5 target | today | met | owner |
+  |---|---|---|---|
+  | `board.sh --orient`, 5,000 commits, p95 < 1 s | not built | — | T056 (P1b) |
+  | `GET /api/orient`, one repo, warm, p95 < 150 ms | 200 commits: 112, 82, 80 ms. 5,000 commits: 260, 234, 235 ms | 200: yes. 5,000: no | T102, new |
+  | `GET /api/orient?all=1`, 300 repos, p95 < 1 s | not built (400). One orient per repository in turn: 24.5–27.9 s | — | T062 (P3) |
+  | any answer ≤ its budget | the largest 1,424 B of 8,192 | yes | — |
+  | restart to fresh, cache warm, < 10 s | no cache exists. Cold: 10.3, 9.1, 8.5 s | not testable | T060 (P2a) |
+  | server memory < 300 MB (MB here is 2^20 bytes) | 646–669 MB resident at the end (404 MB when first fresh), 684–718 MB peak | no | T062 (P3) |
+  | `/api/workspace` < 100 KB | 20.7 MB, 7.7–8.9 s | no | T061 (P2b) |
+  | Home < 100 KB | brief 1,219 KB + changes 71 KB. Warm brief p95 1.9–2.2 s | no | T062 (P3) |
+
+- **The payload is history (N12): confirmed.**
+  - On the fixture, delivered tasks and activity are 92% of
+    `/api/workspace`: 45,716 activity rows are 11.7 MB (55%), 9,921
+    delivered tasks 7.8 MB (37%). The backlog is 5%, and WIP 2.3%.
+  - On the live data the same day (3 projects), `/api/workspace` was 462 KB,
+    up from the 316 KB of 2026-10-10. Delivered tasks were 233 KB (50%) and
+    activity 139 KB (30%), so history was 80%; the backlog was 52 KB (11%)
+    and WIP 31.5 KB (7%).
+- **The brief is per-project lines, not Needs-you.** Of its 1,219 KB, the
+  `projects` lines are 1,006 KB and `needsYou` 212 KB. T062's cap on
+  Needs-you alone would leave Home at about 1 MB.
+- **Found on the way:**
+  - A 5,000-commit repository's orient misses because `lib/orient.mjs`
+    `history()` walks every board commit on every call; nothing caches the
+    committed part that §5.1 calls cacheable. Registered as T102. On the live
+    data, one-repo orient already took 165–285 ms.
+  - During the cold build the server answers late. The first brief took
+    639–736 ms, though it waits only 250 ms for a cold ledger, and the second
+    took 7.7–8.4 s. Home shows nothing until the build is over.
+  - `/api/workspace` runs one `spawnSync` `git log` per project
+    (`lib/workspace.mjs:1022`), 303 in turn inside the workspace lock, so the
+    event loop is held for the whole 7.7–8.9 s. No request made during one
+    was timed.
+  - Activity keeps 200 rows per project and is not capped across projects:
+    45,716 rows.
+- `npm run perf` now runs its files one at a time (`--test-concurrency=1`),
+  so the two suites do not measure each other.
+- Run 5, `npm run perf` after the last edits, rebuilt the fixture (8.3 s,
+  the same 76,396 commits) and fell within or below runs 1–3. Orient on 5,000
+  commits took 203 ms, `/api/workspace` 6.9 s, and memory was 597 MB
+  resident. It passed 4, with 6 todo, 1 skipped and none failed.
+- **Spend:** none. The fixture and the data folders are outside the
+  repository and `.agearis-data`.
+
+## 2026-11-03 — T100: the task-actions e2e passes again
+
+- `npm run e2e` passed 27 of 27, twice in a row, on `3f2b298`, about 8 s a
+  run. Before, `task-actions.e2e.mjs` failed 9 of 24 in 255 s.
+- The cause was T044 (`0e9bfbb`): its flow-strip dots carry each card's
+  `data-action` and `data-id` and come first in the page, and its toast
+  wording changed. The tests now target the card. On the page, focus that
+  went back to a stacked dot now goes to the card.
+- Evidence: T100's Result.
+
+## 2026-11-03 — T024 and T025: task control finished
+
+- **T024** (the card menu, the keys, drag through the registry): every
+  Acceptance line of plan §5 T024 holds. `npm run e2e` passed 32 of 32
+  twice on `2c3ee30`, about 11 s a run. The independent review found 5
+  defects and no blocker, and all 5 are fixed.
+- **T025** (STATE.md behind AGE Aris's changes): every Acceptance line
+  holds, on real repositories of both kinds and on the page.
+- `npm test` passed 596 of 596, and `npm run check` is clean.
+- With T021–T026 and T100, plan `docs/plans/task-control.md` is delivered.
+- Evidence: T024's and T025's Results.
+
+## 2026-11-03 — T110, T111 and T114: finished tasks release their environments
+
+- **T110** (inventory and plan, `docs/plans/environments.md`): AGEIS's
+  git-ignored `scratch/` held 194 GB, 44% of the disk; 110 GB of it
+  belonged to done tasks.
+- **T111** (rule 13, `ckpt.sh release`, `board.sh --litter`): a done task's
+  scratch folders, landed worktrees and merged branches are deleted. Its
+  documentation, visuals, metrics and cited files are kept first: in git up
+  to 1 MB each, bigger ones in an archive outside git with their sha256.
+  It took three review rounds, one by the operator's agy (Gemini) session.
+  The first review found nine ways the script deleted protected work; each
+  is now a test, 28 in all. `npm test` passed 624 of 624, and
+  `npm run check` is clean.
+- **T114** (the release):
+  - AGEIS freed **93 GB**: 441 GB used went to 347 GB.
+  - 4,583 files (201 MB) were committed to its `AA/evidence/`, and 118
+    files (5.0 GB) archived to `~/Archive/AGEIS/`.
+  - T123's unlanded commits are tagged `archive/T123-L`.
+  - Folders that open tasks cite were kept whole, as was one worktree with
+    uncommitted work.
+- **Spend:** `data-migration` in AGEIS and in this repository, on the
+  operator's word: "I want the task environment files deleted once it is
+  finished."
+- Evidence: T111's and T114's Results.
+
+## 2026-11-03 — T119: AGEIS releases its own finished tasks
+
+- AGEIS `f8b0f90`: its `AA/ckpt.sh` is now the template's, with `release`,
+  and `close --delete` runs it. A new `AA/AA.yml` holds `trunk: main`, the
+  keep settings and `archive: ~/Archive/AGEIS`. `WORKFLOW.md` gains rule 10.
+  Before this, T114's cleanup ran from outside, and `scratch/` would have
+  filled again.
+- Same verdict on AGEIS's four trails (141 records, 0 unparseable). Dry runs
+  in AGEIS, and a full `close --delete` on a temporary copy of its board
+  layout, behave as rule 13 says.
+- T120 filed: the installed `aa-init` skill predates `release`.
+
+## 2026-11-03 — T121: Done in AGE Aris releases the task's environment
+
+- `0891a64`. On a board whose `AA.yml` names `scratch:`, a Done taken in AGE
+  Aris runs AGE Aris's own copy of `ckpt.sh release`. AGENTS.md's hard
+  constraint gains this one exception, on the operator's word: "AGEAris should
+  do that", "not AGEIS", then "Automatic on done".
+- `npm test` 644 of 644, `npm run e2e` 32 of 32, `npm run check` clean.
+- The review reproduced 11 findings, 3 of them critical, before any commit. All
+  were fixed, and removing each of 12 fixes on a temporary copy failed its test.
+  The fixes were not reviewed again, since the decision rules allowed one review.
+- Read-only dry runs on AGEIS (T092, T123). No real board was released.
+- T122 filed: tasks closed by git never pass through this, so AGEIS's own copy
+  (`f8b0f90`) stays until the operator chooses.
+
+## 2026-11-03 — T122: AGE Aris sweeps done tasks; the hardened release redesigned
+
+- A running server releases done tasks on boards with task actions on whose
+  `AA.yml` names `scratch:`, at least an hour after it first sees them. Not live:
+  the running server has the old code.
+- The one review allowed reproduced 3 critical, 4 high and 5 medium findings,
+  some in T121's fixes. Under AGE Aris the release now runs no git command that
+  can read a filter or hook, refuses a repository whose own config names a
+  filter, and leaves worktrees to a terminal.
+- `npm test` 670 of 670, `npm run e2e` 32 of 32, `npm run check` clean. Each of
+  23 protections, removed alone on a temporary copy, failed its test. The
+  redesign has had no independent review.
+- Read-only preview of the first sweep on AGEIS: 5 tasks considered (T084, T087,
+  T097, T108, T123), nothing deleted, all held by open tasks that cite them.
+- T123 and T124 filed from the review.
+

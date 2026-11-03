@@ -1,0 +1,104 @@
+## conflict: 9 unique, 9 to mark
+
+### C1 (R1 group 53)
+  F1865 [T111-one-model-on-the-card-we-have.md§77 T111-one-model-on-the-card-we-have.md§77#4] published CoAtNet arm/gold-58 AUC = 0.9128–0.9213 :: The published arm reads 0.9128–0.9213.
+  F158 [T112 T112#142] published CoAtNet member/gold-58 AUC (public) = 0.9054–0.9213 :: The published arm reads 0.9054–0.9213 on gold-58
+  why (R1): correction: T111 gives the published member's gold-58 as 0.9128–0.9213; T112 gives 0.9054–0.9213 and says the T107/T111 range silently dropped the lowest of T044's four figures (V1865)
+
+### C2 (R1 group 53, R1 group 122)
+  F423 [T112@416447b T112@416447b#2] published CoAtNet member/gold-58 range at 416447b = 0.9128–0.9213 :: The published arm reads 0.9128–0.9213;
+  F158 [T112 T112#142] published CoAtNet member/gold-58 AUC (public) = 0.9054–0.9213 :: The published arm reads 0.9054–0.9213 on gold-58
+  why (R1): correction: T112 at 416447b quoted the member at 0.9128–0.9213; at 59efe32 it is 0.9054–0.9213, the earlier range having dropped 0.9054, one of the four public figures
+  why (R1): correction: 0.9128–0.9213 (T112 at 416447b) vs 0.9054–0.9213 (59efe32) for the same member's gold-58; V161 says the earlier range silently dropped the lowest of four figures
+
+### C3 (R2 group 8)
+  F476 [PROGRESS PROGRESS#11] make dryrun/stages passed (PROGRESS) = 9/9 stages :: scripts/t112/dry_run.py (make dryrun — the whole chain on the real corpus and the real notebook, CPU-only, 9/9 stages);
+  F313 [T112 T112#262] make dryrun/stages passed (post-fix) = 13/13 :: 13/13 now.
+  why (R2): V480 (PROGRESS 07:54): make dryrun 9/9 stages; V317 (T112 09:08): it did not pass, 9/9 was read off a crashed run, 13/13 now. A correction of a wrong claim
+
+### C4 (R2 group 8)
+  F476 [PROGRESS PROGRESS#11] make dryrun/stages passed (PROGRESS) = 9/9 stages :: scripts/t112/dry_run.py (make dryrun — the whole chain on the real corpus and the real notebook, CPU-only, 9/9 stages);
+  F745 [dry_run.py dry_run.py#2] submit chain/stage count = Thirteen stages :: Thirteen stages stand between a trained checkpoint and a scored leaderboard submission.
+  why (R2): V753: dry_run.py at 416447b (07:00) runs thirteen stages; V480 at 07:54 reports 9/9 stages, a count the script then in force could not give
+
+### C5 (R2 group 76)
+  F990 [_order.py _order.py#111] raptor corpus and teacher/size = 533 GB / outputs/t107 :: needs the staged corpus and the teacher parquet (533 GB / outputs/t107)
+  F580 [Makefile Makefile#14] raptor corpus/size = 21.9 GB :: it reads the 21.9 GB corpus
+  why (R2): V999 (_order.py 1661b58): test_coat_arm needs the staged corpus, 533 GB; V586 (Makefile, same commit), V372, V1180: that corpus is 21.9 GB (20.4 GiB). 533 GB is the raw DICOM tree, not the staged corpus
+
+### C6 (R2 group 186, R2 group 237)
+  F1751 [setup_4090.cmd@3659952 setup_4090.cmd@3659952#2] torch@3659952/download time on line = about 40 minutes :: about 40 minutes there
+  F1734 [setup_4090.cmd setup_4090.cmd#9] torch/download time on line = ~30 minutes :: (~30 minutes)
+  why (R2): same 10 Mbps line, same torch download: 3659952 says torch ~3 GB, about 40 min; eefcc9c says torch 1.9 GB, ~30 min. A correction of the size and time, not a change in the line
+  why (R2): torch over the same 10 Mbps line: 3659952 'torch alone is ~3 GB, about 40 minutes'; eefcc9c 'torch is 1.9 GB (~30 minutes)'; the later version corrects the size and the time
+
+### C7 (R3 group 4)
+  F1576 [coat_data.py coat_data.py#5] training/window centres = k window centres at random every epoch :: Training draws k window centres at random every epoch
+  F1787 [coat_curve.py coat_curve.py#13] per-epoch resampling/happened = never happened :: so the per-epoch window resampling that coat_data.py calls "the augmentation" never happened
+  why (R3): V1587 (coat_data 09-18): training draws k window centres at random every epoch; V1802 (coat_curve 09-20): that per-epoch resampling never happened. A correction of the earlier claim
+
+### C8 (R3 group 101)
+  F241 [T112 T112#215] make dryrun/stages passed (as first reported) = 9/9 stages :: Run the whole chain end to end — make dryrun, 9/9 stages on the real corpus and the real notebook, CPU-only so it cannot claim a CUDA context
+  F313 [T112 T112#262] make dryrun/stages passed (post-fix) = 13/13 :: 13/13 now.
+  why (R3): make dryrun: V243 9/9 stages passed as first reported; V317 13/13 after the fix. The 9/9 was the PASS lines of a run that crashed (V758, V760): a correction
+
+### C9 (R3 group 101)
+  F476 [PROGRESS PROGRESS#11] make dryrun/stages passed (PROGRESS) = 9/9 stages :: scripts/t112/dry_run.py (make dryrun — the whole chain on the real corpus and the real notebook, CPU-only, 9/9 stages);
+  F750 [dry_run.py dry_run.py#5] dry_run.py earlier run/PASS lines before crash = nine PASS lines :: Review on 2026-09-18 caught this script printing nine PASS lines and then dying on a traceback
+  why (R3): V480 (PROGRESS 07:54) reports make dryrun 9/9 stages passing; V758 (dry_run.py 07:00) says those nine PASS lines preceded a traceback and the script runs thirteen stages
+
+## superseded: 9 unique, 9 to mark
+
+### S1 (R1 group 7, R1 group 135)
+  F585 [Makefile@3ed78d4 Makefile@3ed78d4#1] make smoke/gated check count = 1164 :: make smoke the 1164-check suite
+  F586 [Makefile@7edf46e Makefile@7edf46e#1] make smoke/gated check count = 1176 :: make smoke the 1176-check suite
+  why (R1): Makefile smoke suite: 1164 checks at 3ed78d4 (09-18 03:36), 1176 at 7edf46e (06:24); a later count of a moving quantity
+  why (R1): Makefile smoke suite: 1164 checks at 3ed78d4 (03:36), 1176 at 7edf46e (06:24); a later count of a moving quantity
+
+### S2 (R1 group 7, R1 group 135)
+  F586 [Makefile@7edf46e Makefile@7edf46e#1] make smoke/gated check count = 1176 :: make smoke the 1176-check suite
+  F587 [Makefile@416447b Makefile@416447b#1] make smoke/gated check count = 1192 :: make smoke the 1192-check suite
+  why (R1): Makefile smoke suite: 1176 checks at 7edf46e (06:24), 1192 at 416447b (07:00); a later count of a moving quantity
+  why (R1): Makefile smoke suite: 1176 checks at 7edf46e (06:24), 1192 at 416447b (07:00); a later count of a moving quantity
+
+### S3 (R1 group 7, R1 group 135, R3 group 27)
+  F587 [Makefile@416447b Makefile@416447b#1] make smoke/gated check count = 1192 :: make smoke the 1192-check suite
+  F563 [Makefile Makefile#3] make smoke/gated check count = 1159 :: make smoke the 1159-check suite
+  why (R1): Makefile smoke suite: 1192 checks at 416447b (09-18 07:00), 1159 at 1661b58 (09-19 09:59), the current count
+  why (R1): Makefile smoke suite: 1192 checks at 416447b (09-18), 1159 at 1661b58 (09-19), the current count
+  why (R3): make smoke check count: V594 1192 at 416447b (09-18 07:00); V569 1159 at 1661b58 (09-19), a later count of a moving quantity, matching _order's last entry V981 1159
+
+### S4 (R1 group 7)
+  F1013 [_order.py@3ed78d4 _order.py@3ed78d4#1] smoke gate/check count = 1164 checks :: 1164 checks
+  F1016 [_order.py@7edf46e _order.py@7edf46e#1] smoke gate/check count = 1176 checks :: 1176 checks
+  why (R1): _order.py smoke gate: 1164 checks at 3ed78d4, 1176 at 7edf46e; later count of a moving quantity (md5 re-recorded with it)
+
+### S5 (R1 group 7)
+  F1016 [_order.py@7edf46e _order.py@7edf46e#1] smoke gate/check count = 1176 checks :: 1176 checks
+  F1019 [_order.py@416447b _order.py@416447b#1] smoke gate/check count = 1192 checks :: 1192 checks
+  why (R1): _order.py smoke gate: 1176 checks at 7edf46e, 1192 at 416447b; later count of a moving quantity
+
+### S6 (R1 group 7, R3 group 27)
+  F1019 [_order.py@416447b _order.py@416447b#1] smoke gate/check count = 1192 checks :: 1192 checks
+  F972 [_order.py _order.py#77] smoke gate/check count = 1159 checks :: 1159 checks
+  why (R1): _order.py smoke gate: 1192 checks at 416447b (09-18), 1159 at 1661b58 (09-19), the current count; matches Makefile's 1159
+  why (R3): _order.py smoke gate: V1028 1192 checks at 416447b (09-18); V981 1159 at 1661b58 (09-19), the later count after 1214, 1216, 1137
+
+### S7 (R1 group 230, R2 group 8)
+  F783 [dry_run.py@3ed78d4 dry_run.py@3ed78d4#1] submit chain/stage count (old) = Seven stages :: Seven stages stand between a trained checkpoint and a scored leaderboard submission.
+  F745 [dry_run.py dry_run.py#2] submit chain/stage count = Thirteen stages :: Thirteen stages stand between a trained checkpoint and a scored leaderboard submission.
+  why (R1): dry_run.py's submit chain: 'Seven stages' at 3ed78d4 (03:36), 'Thirteen stages' at 416447b (07:00) as the chain grew; matches T112's 13 ran
+  why (R2): V792: Seven stages at 3ed78d4 (03:36); V753: Thirteen stages at 416447b (07:00), the script grew; a later count of a moving quantity
+
+### S8 (R2 group 146)
+  F2 [T112 T112#1] Kaggle weekly GPU quota/exhausted at = 2026-09-18 02:04Z :: Kaggle weekly GPU quota exhausted 2026-09-18 02:04Z
+  F1156 [trail trail#33] Kaggle weekly GPU quota/state 2026-09-19 = Quota HAD reset :: Quota HAD reset -- the 09-18 block is gone
+  why (R2): V2: weekly GPU quota exhausted 2026-09-18 02:04Z, no kernel can run; V1167 (trail 09-21): quota HAD reset, the 09-18 block is gone; a later reading of a moving state
+
+### S9 (R2 group 161)
+  F1748 [setup_4090.cmd@3659952 setup_4090.cmd@3659952#1] packages@3659952/source = OFFLINE, from the wheels carried on this drive :: OFFLINE, from the wheels carried on this drive.
+  F1731 [setup_4090.cmd setup_4090.cmd#8] torch/source = the copy THIS PC ALREADY DOWNLOADED :: torch comes from the copy THIS PC ALREADY DOWNLOADED, in uv's default cache on C:.
+  why (R2): setup_4090.cmd at 3659952 (10:17): packages OFFLINE from wheels carried on the drive; at eefcc9c (10:24): torch from the copy already in uv's cache on C:, --offline; the later version replaces the source
+
+## contradicted: 0 unique, 0 to mark
+

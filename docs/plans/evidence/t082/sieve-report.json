@@ -1,0 +1,133 @@
+{
+ "docs": {
+  "R1": {
+   "path": "docs/RESEARCH-0902-road-to-0960.md",
+   "commit": "d9c7c6e",
+   "clauses": 285,
+   "claims": 206,
+   "covered": 53
+  },
+  "R2": {
+   "path": "docs/RESEARCH-0902b-round-2.md",
+   "commit": "d9c7c6e",
+   "clauses": 185,
+   "claims": 152,
+   "covered": 47
+  },
+  "T047brief": {
+   "path": "pm/tasks/T047-research-round-3.md",
+   "commit": "d9c7c6e",
+   "clauses": 83,
+   "claims": 47,
+   "covered": 9
+  },
+  "lane9": {
+   "path": "docs/research/0902c/lane9-above-the-plateau.md",
+   "commit": "e4e356c",
+   "clauses": 573,
+   "claims": 470,
+   "covered": 36
+  },
+  "lane10": {
+   "path": "docs/research/0902c/lane10-capability-audit.md",
+   "commit": "e4e356c",
+   "clauses": 639,
+   "claims": 456,
+   "covered": 47
+  },
+  "lane11": {
+   "path": "docs/research/0902c/lane11-inference-and-efficiency.md",
+   "commit": "e4e356c",
+   "clauses": 267,
+   "claims": 216,
+   "covered": 40
+  },
+  "lane12": {
+   "path": "docs/research/0902c/lane12-semisupervised.md",
+   "commit": "e4e356c",
+   "clauses": 331,
+   "claims": 267,
+   "covered": 38
+  },
+  "lane13": {
+   "path": "docs/research/0902c/lane13-submission-budget-and-selection.md",
+   "commit": "e4e356c",
+   "clauses": 152,
+   "claims": 127,
+   "covered": 25
+  },
+  "lane0/R1": {
+   "path": "docs/research/0902/lane0-rules-and-leaderboard.md",
+   "commit": "d9c7c6e",
+   "clauses": 98,
+   "claims": 73,
+   "covered": 0
+  },
+  "lane1/R1": {
+   "path": "docs/research/0902/lane1-winners-and-literature.md",
+   "commit": "d9c7c6e",
+   "clauses": 686,
+   "claims": 468,
+   "covered": 0
+  },
+  "lane2/R1": {
+   "path": "docs/research/0902/lane2-architecture-headroom.md",
+   "commit": "d9c7c6e",
+   "clauses": 672,
+   "claims": 475,
+   "covered": 0
+  },
+  "lane3/R1": {
+   "path": "docs/research/0902/lane3-measurement-and-ensemble.md",
+   "commit": "d9c7c6e",
+   "clauses": 1537,
+   "claims": 1268,
+   "covered": 0
+  },
+  "lane4/R1": {
+   "path": "docs/research/0902/lane4-labels-and-plan.md",
+   "commit": "d9c7c6e",
+   "clauses": 979,
+   "claims": 736,
+   "covered": 0
+  },
+  "lane5/R1": {
+   "path": "docs/research/0902/lane5-public-notebooks.md",
+   "commit": "d9c7c6e",
+   "clauses": 738,
+   "claims": 571,
+   "covered": 0
+  },
+  "lane6/R2": {
+   "path": "docs/research/0902b/lane6-single-model-gap.md",
+   "commit": "d9c7c6e",
+   "clauses": 429,
+   "claims": 310,
+   "covered": 0
+  },
+  "lane7/R2": {
+   "path": "docs/research/0902b/lane7-public-members.md",
+   "commit": "d9c7c6e",
+   "clauses": 521,
+   "claims": 442,
+   "covered": 0
+  },
+  "lane8/R2": {
+   "path": "docs/research/0902b/lane8-external-truth-sets.md",
+   "commit": "d9c7c6e",
+   "clauses": 496,
+   "claims": 319,
+   "covered": 0
+  }
+ },
+ "unanchored": [
+  "F113",
+  "F115",
+  "F116",
+  "F121",
+  "F122",
+  "F161",
+  "F162",
+  "F167"
+ ]
+}

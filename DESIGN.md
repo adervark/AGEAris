@@ -146,6 +146,19 @@ or the holder's last note, and the usual signal badges. Agents keeps its own
 "Working now" tab, which groups the same work by agent session.
 
 The empty workspace offers project creation and an explicitly chosen example.
+A task's actions are one list from one registry (`public/actions.js`), and
+every way in reaches the same list with the same refusals. The ways in are
+the drawer's action bar, the "⋯" menu on each card and list row, the keys,
+and a drag between columns. The keys are `c` claim or start, `b` block, `u`
+unblock, `d` done, `r` release, `o` reopen, `p` priority and `a` assign. They
+work on a focused card or row and in an open drawer, never while typing in a
+field. `.`, the ContextMenu key, Shift+F10 or a right click opens the menu; arrows, Home and End move in it, and
+Escape closes it and puts focus back on its button. An action that cannot be
+done now is still listed, dimmed, with its reason under it, and pressing it or
+its key repeats the reason. A card can be dragged only when something can move
+it. The card is not itself a button: a stretched open control and the menu
+button sit side by side in it, so nothing interactive is nested.
+
 The task drawer keeps the board in context and renders the task file as
 Markdown does: a line break inside a paragraph is a space, and an indented
 block is code. Below 1280 px a project's tabs sit above its filters and a list

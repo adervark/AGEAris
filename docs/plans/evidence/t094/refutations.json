@@ -1,0 +1,11 @@
+{
+ "F208": "The premises give ~40 min/epoch x 16 epochs = 640 min = 10.7 h.",
+ "F985": "F980 states 8.8 h for 16 epochs at res 352 bs 2.",
+ "F2541": "The premises give 384 px resized to 224 px: 384 / 224 = 1.714x.",
+ "F2876": "The premises give 32 px per cell x 0.5 mm per pixel = 16 mm per cell.",
+ "F3275": "F3274 gives 61 days (60.6) to zero: 60.6 / 7 = 8.7 weeks.",
+ "F3293": "The premises give 10 checkpoints x ~33 MB = ~330 MB.",
+ "F3294": "F3266 states 53 GiB free.",
+ "F3341": "F3340's five scores run from 0.8662 to 0.8740: 0.8740 - 0.8662 = 0.0078.",
+ "F3479": "F3478 gives a half-width from 0.001913 to 0.002024: a difference of 0.000111, about 5% of either end."
+}

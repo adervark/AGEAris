@@ -254,9 +254,11 @@ test('the old ~/.agesight-data is read until AGE Aris starts, which moves it to 
   const app = path.join(bash.dir, 'app');
   await mkdir(app);
   // Stands in for AGE Aris: takes its data folder as the server does, records it, then counts as up.
+  // It starts late, as under a loaded run, so /aa polls before the folder has moved (T097).
   await writeFile(path.join(app, 'server.mjs'), [
     `import { dataFolder } from ${JSON.stringify(pathToFileURL(WORKSPACE).href)};`,
     "import { writeFileSync } from 'node:fs';",
+    'await new Promise((resolve) => setTimeout(resolve, 500));',
     "writeFileSync(`${process.env.STUB_CALLS}/server`, dataFolder(process.env.AGEARIS_DATA_DIR));",
     "writeFileSync(`${process.env.STUB_CALLS}/started`, '');",
   ].join('\n'));
@@ -306,4 +308,37 @@ test('a task file with CRLF line endings is read as it is with LF', async () => 
   });
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.ok(result.stdout.includes('| T001 | Saved on Windows | claimed | someone |\n'), result.stdout);
+});
+
+test('/aa limits prints one row per Claude account instead of the board', async () => {
+  const bash = await gitBash({ windows: false });
+  await writeFile(path.join(bash.calls, 'started'), '');
+  await writeFile(path.join(bash.dir, 'limits.json'), JSON.stringify({
+    readAt: '2026-10-22T17:40:12.000Z',
+    mostLeft: 'default',
+    accounts: [
+      { profile: 'default', folder: '~/.claude', plan: 'pro', state: 'ok', reason: '', readAt: '2026-10-22T17:40:12.000Z', stale: false, left: 96, windows: { session: { percent: 4, beganAt: '2026-10-22T17:19:59.700Z', resetsAt: '2026-10-22T22:19:59.700Z' }, weekly: { percent: 0, resetsAt: '2026-10-29T13:59:59.701Z' } }, extraUsage: false },
+      { profile: 'k', folder: '~/.claude-k', plan: 'max', state: 'error', reason: 'error: asked too often (HTTP 429); AGE Aris waits before asking again', nextReadAt: '2026-10-22T17:45:12.000Z', readAt: '2026-10-22T17:30:00.000Z', stale: true, left: 34, windows: { session: { percent: 0, beganAt: null, resetsAt: null }, weekly: { percent: 66, resetsAt: '2026-10-24T03:00:00.420Z' }, weeklyOpus: { percent: 12, resetsAt: '2026-10-24T03:00:00.420Z' } }, extraUsage: false },
+      { profile: 'v', folder: '~/.claude-v', plan: 'pro', state: 'expired', reason: 'expired: the sign-in could not be renewed (HTTP 400); sign in again in Claude Code there', readAt: null, stale: false, left: null, windows: null, extraUsage: null },
+    ],
+  }));
+  await script(path.join(bash.dir, 'bin'), 'curl', [
+    `i=0; while [ -e "${bash.calls}/curl.$i" ]; do i=$((i + 1)); done`,
+    `printf '%s\\n' "$@" > "${bash.calls}/curl.$i"`,
+    `case "$*" in *http_code*) printf 200 ;; *api/limits*) cat "${bash.dir}/limits.json" ;; *) printf '{}' ;; esac`,
+  ].join('\n'));
+  const result = bash.run(['limits']);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.equal(result.stdout, [
+    'Claude account limits · read 2026-10-22 17:40Z · most left: default',
+    '',
+    '| profile | plan | session (5 h) | weekly | left | |',
+    '|---|---|---|---|---|---|',
+    '| default | pro | 4% · 2026-10-22 17:19Z – 22:19Z | 0% · resets 2026-10-29 13:59Z | 96% | most left |',
+    '| k | max | 0% · no window open; the next message starts one | 66% · resets 2026-10-24 03:00Z | 34% | error: asked too often (HTTP 429); AGE Aris waits before asking again; next read 2026-10-22 17:45Z; last good reading 2026-10-22 17:30Z; Opus weekly 12% · resets 2026-10-24 03:00Z |',
+    '| v | pro | — | — | — | expired: the sign-in could not be renewed (HTTP 400); sign in again in Claude Code there |',
+    '',
+  ].join('\n'));
+  const asked = (await bash.requests()).find((args) => args.some((arg) => arg.endsWith('/api/limits')));
+  assert.ok(asked.includes(`X-AGEAris-Token: ${TOKEN}`));
 });

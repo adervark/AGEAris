@@ -1,0 +1,1058 @@
+{
+ "summary": {
+  "head": "e4e356c",
+  "commands": 46,
+  "sources": 58,
+  "same": 30,
+  "flipped": 15,
+  "drifted": 5,
+  "notRerun": 8,
+  "error": 0
+ },
+ "flipped": [
+  {
+   "fact": "F104",
+   "orig": "G1-F104",
+   "cmd": "git grep -n -e layer-decay -e warmup-frac 6d10943 -- notebooks scripts/*.sh",
+   "status": "flipped",
+   "was": "6d10943",
+   "then": "e3b0c44298fc",
+   "now": "4441187f15a4",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:17:#   * `--layer-decay 0.6` sends model.encoder through timm's own"
+   ]
+  },
+  {
+   "fact": "F336",
+   "orig": "G1-F336",
+   "cmd": "git grep -n -e --resume 6d10943 -- src/train.py",
+   "status": "flipped",
+   "was": "6d10943",
+   "then": "e3b0c44298fc",
+   "now": "009273b8b796",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:src/train.py:320:# Arguments a resumed run is allowed to change. `--out` and `--resume` name",
+    "e4e356c:src/train.py:454:        raise SystemExit(\"--resume with a changed recipe:\\n  \"",
+    "e4e356c:src/train.py:457:                           \"Only --out, --resume and --workers may differ.\")"
+   ]
+  },
+  {
+   "fact": "F479",
+   "orig": "G1-F479",
+   "cmd": "git grep -n -e layer-decay -e warmup-frac 2b3d2a6 -- notebooks scripts/*.sh",
+   "status": "flipped",
+   "was": "2b3d2a6",
+   "then": "e3b0c44298fc",
+   "now": "4441187f15a4",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:17:#   * `--layer-decay 0.6` sends model.encoder through timm's own"
+   ]
+  },
+  {
+   "fact": "F949",
+   "orig": "G2-F70",
+   "cmd": "git grep -n -e layer-decay -e warmup-frac d9c7c6e -- outputs scripts",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "86ca6609e8c5",
+   "thenLines": 1,
+   "nowLines": 7,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else."
+   ]
+  },
+  {
+   "fact": "F1755",
+   "orig": "G3-F15",
+   "cmd": "git grep -n -e --lr d9c7c6e -- '*.sh'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "0163b2bf3551",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:25:#     pretrained stack and stay at --lr 3e-4 (build_optimizer's `rest` group)."
+   ]
+  },
+  {
+   "fact": "F1860",
+   "orig": "G3-F120",
+   "cmd": "git grep -n -e --lr d9c7c6e -- '*.sh'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "0163b2bf3551",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:25:#     pretrained stack and stay at --lr 3e-4 (build_optimizer's `rest` group)."
+   ]
+  },
+  {
+   "fact": "F1951",
+   "orig": "G3-F211",
+   "cmd": "git grep -n -e add_argument d9c7c6e -- 'src/*.py' 'scripts/*.py'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "95dadc21b3ff",
+   "now": "6787eac95c75",
+   "thenLines": 146,
+   "nowLines": 147,
+   "nowHead": [
+    "e4e356c:scripts/add_ensemble_member.py:50:    ap.add_argument(\"--add\", action=\"append\", default=[], metavar=\"SRC:NAME\",",
+    "e4e356c:scripts/add_ensemble_member.py:52:    ap.add_argument(\"--spec\", required=True,",
+    "e4e356c:scripts/add_ensemble_member.py:56:    ap.add_argument(\"--max-layouts\", default=\"2\", dest=\"max_layouts\","
+   ]
+  },
+  {
+   "fact": "F2282",
+   "orig": "G3-F542",
+   "cmd": "git grep -n -e --labels d9c7c6e -- '*.sh'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "035e192e3add",
+   "now": "1863d33eb48f",
+   "thenLines": 4,
+   "nowLines": 5,
+   "nowHead": [
+    "e4e356c:outputs/t028/_arm_lib.sh:43:        --labels data/llm_labels.csv --per-label-band 2>&1 | tail -45",
+    "e4e356c:outputs/t028/_arm_lib.sh:48:        --labels data/llm_labels.csv 2>&1 | tail -10",
+    "e4e356c:scripts/run_local_folds.sh:72:        --labels data/llm_labels.csv \\"
+   ]
+  },
+  {
+   "fact": "F2988",
+   "orig": "G4-F591",
+   "cmd": "git grep -n -e --resume d9c7c6e -- src/train.py",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "009273b8b796",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:src/train.py:320:# Arguments a resumed run is allowed to change. `--out` and `--resume` name",
+    "e4e356c:src/train.py:454:        raise SystemExit(\"--resume with a changed recipe:\\n  \"",
+    "e4e356c:src/train.py:457:                           \"Only --out, --resume and --workers may differ.\")"
+   ]
+  },
+  {
+   "fact": "F3308",
+   "orig": "GC-F227",
+   "cmd": "git grep -n -e warmup-frac -e layer-decay d9c7c6e -- *.sh scripts/",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "86ca6609e8c5",
+   "thenLines": 1,
+   "nowLines": 7,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else."
+   ]
+  },
+  {
+   "fact": "F3315",
+   "orig": "GC-F234",
+   "cmd": "git grep -n -e warmup-frac d9c7c6e -- scripts/ *.sh",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "7e4e3eeb493d",
+   "thenLines": 1,
+   "nowLines": 5,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:26:#   * `--warmup-frac 0.15` makes lr_scale linear over the first 2,088 of 13,920"
+   ]
+  },
+  {
+   "fact": "F3316",
+   "orig": "GC-F235",
+   "cmd": "git grep -n -e warmup-frac d9c7c6e -- scripts/ *.sh",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "7e4e3eeb493d",
+   "thenLines": 1,
+   "nowLines": 5,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:26:#   * `--warmup-frac 0.15` makes lr_scale linear over the first 2,088 of 13,920"
+   ]
+  },
+  {
+   "fact": "F3599",
+   "orig": "GC-F518",
+   "cmd": "git grep -n -e warmup-frac -e layer-decay d9c7c6e -- scripts/ *.sh",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "86ca6609e8c5",
+   "thenLines": 1,
+   "nowLines": 7,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else."
+   ]
+  },
+  {
+   "fact": "F3629",
+   "orig": "GC-F548",
+   "cmd": "git grep -n -e adjacent d9c7c6e -- scripts/smoke_test.py",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "d1df8ccc2722",
+   "now": "b90d77f42169",
+   "thenLines": 42,
+   "nowLines": 45,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:1790:def test_t014_adjacent_channels():",
+    "e4e356c:scripts/smoke_test.py:1809:    pack, n3, _ = read_series(\"data/sample\", max_slices=4, adjacent=True)",
+    "e4e356c:scripts/smoke_test.py:1843:    b = _t015_sample_dataset(adjacent=True)"
+   ]
+  },
+  {
+   "fact": "F3938",
+   "orig": "GC-F857",
+   "cmd": "git grep -n -e resume d9c7c6e -- src/train.py",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "d97b304f0ab2",
+   "thenLines": 0,
+   "nowLines": 28,
+   "nowHead": [
+    "e4e356c:src/train.py:313:# Bumped when the resume payload's shape changes. A stale `.last.pt` must fail",
+    "e4e356c:src/train.py:314:# loudly rather than restore three quarters of a run: a resume that silently",
+    "e4e356c:src/train.py:320:# Arguments a resumed run is allowed to change. `--out` and `--resume` name"
+   ]
+  }
+ ],
+ "drifted": [
+  {
+   "fact": "F2304",
+   "orig": "G3-F564",
+   "cmd": "git grep -n -e PixelSpacing d9c7c6e -- src/dicom_io.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "05c01c26f2c4",
+   "now": "f7c3c61753aa",
+   "thenLines": 3,
+   "nowLines": 3,
+   "nowHead": [
+    "e4e356c:src/dicom_io.py:192:    spacing = (getattr(ds, \"PixelSpacing\", None)",
+    "e4e356c:src/dicom_io.py:193:               or getattr(ds, \"ImagerPixelSpacing\", None))",
+    "e4e356c:src/dicom_io.py:207:    # PixelSpacing is [between rows, between columns]: the first walks along"
+   ]
+  },
+  {
+   "fact": "F2853",
+   "orig": "G4-F456",
+   "cmd": "git grep -n -e update_bn d9c7c6e -- *.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "71037bb03b84",
+   "now": "6ea376f74f44",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:src/train.py:64:    close together, so this is the cheap approximation of `update_bn` -- which"
+   ]
+  },
+  {
+   "fact": "F3353",
+   "orig": "GC-F272",
+   "cmd": "git grep -n -e FOLDS d9c7c6e -- scripts/push_family.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "854feb00c6b2",
+   "now": "7f254ebef7a7",
+   "thenLines": 6,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/push_family.py:84:    # --folds counts KERNELS; the kernel's own FOLDS is the CV split and render()",
+    "e4e356c:scripts/push_family.py:144:        found = re.findall(r\"^FOLDS = (\\d+)$\", base_text, re.M)",
+    "e4e356c:scripts/push_family.py:146:            raise SystemExit(f\"{BASE} has {len(found)} 'FOLDS = <n>' lines \""
+   ]
+  },
+  {
+   "fact": "F3475",
+   "orig": "GC-F394",
+   "cmd": "git grep -n -e alpha d9c7c6e -- src/train.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "617bd487796a",
+   "now": "3df223a5c445",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:src/train.py:966:                        f\"them into the training targets at a fixed alpha=\""
+   ]
+  },
+  {
+   "fact": "F3733",
+   "orig": "GC-F652",
+   "cmd": "git grep -n -e SliceSequenceHead -e seq_head d9c7c6e -- scripts/smoke_test.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "19b918d7f53d",
+   "now": "ad4199690b88",
+   "thenLines": 6,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:1723:    from model import KneeMIL, SliceSequenceHead",
+    "e4e356c:scripts/smoke_test.py:1728:    gru = KneeMIL(\"tf_efficientnet_b0\", pretrained=False, seq_head=True,",
+    "e4e356c:scripts/smoke_test.py:1749:    h = SliceSequenceHead(16).eval()"
+   ]
+  }
+ ],
+ "results": [
+  {
+   "fact": "F104",
+   "orig": "G1-F104",
+   "cmd": "git grep -n -e layer-decay -e warmup-frac 6d10943 -- notebooks scripts/*.sh",
+   "status": "flipped",
+   "was": "6d10943",
+   "then": "e3b0c44298fc",
+   "now": "4441187f15a4",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:17:#   * `--layer-decay 0.6` sends model.encoder through timm's own"
+   ]
+  },
+  {
+   "fact": "F146",
+   "orig": "G1-F146",
+   "cmd": "git grep -n -e antialias 6d10943 -- src/dataset.py",
+   "status": "same",
+   "was": "6d10943",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F336",
+   "orig": "G1-F336",
+   "cmd": "git grep -n -e --resume 6d10943 -- src/train.py",
+   "status": "flipped",
+   "was": "6d10943",
+   "then": "e3b0c44298fc",
+   "now": "009273b8b796",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:src/train.py:320:# Arguments a resumed run is allowed to change. `--out` and `--resume` name",
+    "e4e356c:src/train.py:454:        raise SystemExit(\"--resume with a changed recipe:\\n  \"",
+    "e4e356c:src/train.py:457:                           \"Only --out, --resume and --workers may differ.\")"
+   ]
+  },
+  {
+   "fact": "F479",
+   "orig": "G1-F479",
+   "cmd": "git grep -n -e layer-decay -e warmup-frac 2b3d2a6 -- notebooks scripts/*.sh",
+   "status": "flipped",
+   "was": "2b3d2a6",
+   "then": "e3b0c44298fc",
+   "now": "4441187f15a4",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:17:#   * `--layer-decay 0.6` sends model.encoder through timm's own"
+   ]
+  },
+  {
+   "fact": "F589",
+   "orig": "G1-F589",
+   "cmd": "git grep -n -i -e \"rank averag\" -e rank-averag 2b3d2a6 -- docs/ROADMAP.md",
+   "status": "same",
+   "was": "2b3d2a6",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F662",
+   "orig": "G1-F662",
+   "cmd": "git grep -n -e crop-mm -e crop_mm 2b3d2a6 -- src scripts",
+   "status": "same",
+   "was": "2b3d2a6",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F949",
+   "orig": "G2-F70",
+   "cmd": "git grep -n -e layer-decay -e warmup-frac d9c7c6e -- outputs scripts",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "86ca6609e8c5",
+   "thenLines": 1,
+   "nowLines": 7,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else."
+   ]
+  },
+  {
+   "fact": "F1276",
+   "orig": "G2-F397",
+   "cmd": "git grep -n -i -e pillar d9c7c6e -- docs/research/0902/lane5-public-notebooks.md docs/research/0902b/lane6-single-model-gap.md docs/research/0902b/lane7-public-members.md",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1625",
+   "orig": "G2-F746",
+   "cmd": "git grep -n -i -e pillar d9c7c6e -- docs/research/0902/lane5-public-notebooks.md docs/research/0902b/lane6-single-model-gap.md docs/research/0902b/lane7-public-members.md docs/research/0902b/lane8-external-truth-sets.md",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1754",
+   "orig": "G3-F14",
+   "cmd": "git grep -n -e --swa-epochs d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1754",
+   "orig": "G3-F14",
+   "cmd": "git grep -n -e --shared-head-drop d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1754",
+   "orig": "G3-F14",
+   "cmd": "git grep -n -e --seq-head d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1754",
+   "orig": "G3-F14",
+   "cmd": "git grep -n -e --perspective d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1755",
+   "orig": "G3-F15",
+   "cmd": "git grep -n -e --lr d9c7c6e -- '*.sh'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "0163b2bf3551",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:25:#     pretrained stack and stay at --lr 3e-4 (build_optimizer's `rest` group)."
+   ]
+  },
+  {
+   "fact": "F1755",
+   "orig": "G3-F15",
+   "cmd": "git grep -n -e --swa-epochs d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1768",
+   "orig": "G3-F28",
+   "cmd": "git grep -n -e encoder-lr d9c7c6e -- src/train.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1769",
+   "orig": "G3-F29",
+   "cmd": "git grep -n -e weight-decay d9c7c6e -- src/train.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1770",
+   "orig": "G3-F30",
+   "cmd": "git grep -n -e --dropout d9c7c6e -- src/train.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1822",
+   "orig": "G3-F82",
+   "cmd": "git grep -n -e tf_efficientnet_b0 d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1843",
+   "orig": "G3-F103",
+   "cmd": "git grep -n -e corpus-val d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1855",
+   "orig": "G3-F115",
+   "cmd": "git grep -n -e '--size 256' d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1856",
+   "orig": "G3-F116",
+   "cmd": "git grep -n -e '--size 384' d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1860",
+   "orig": "G3-F120",
+   "cmd": "git grep -n -e --lr d9c7c6e -- '*.sh'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "0163b2bf3551",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:25:#     pretrained stack and stay at --lr 3e-4 (build_optimizer's `rest` group)."
+   ]
+  },
+  {
+   "fact": "F1879",
+   "orig": "G3-F139",
+   "cmd": "git grep -n -e --swa-epochs d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1895",
+   "orig": "G3-F155",
+   "cmd": "git grep -n -e --shared-head-drop d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1905",
+   "orig": "G3-F165",
+   "cmd": "git grep -n -e --seq-head d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1917",
+   "orig": "G3-F177",
+   "cmd": "git grep -n -e --perspective d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1920",
+   "orig": "G3-F180",
+   "cmd": "git grep -n -e --perspective d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1951",
+   "orig": "G3-F211",
+   "cmd": "git grep -n -e add_argument d9c7c6e -- 'src/*.py' 'scripts/*.py'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "95dadc21b3ff",
+   "now": "6787eac95c75",
+   "thenLines": 146,
+   "nowLines": 147,
+   "nowHead": [
+    "e4e356c:scripts/add_ensemble_member.py:50:    ap.add_argument(\"--add\", action=\"append\", default=[], metavar=\"SRC:NAME\",",
+    "e4e356c:scripts/add_ensemble_member.py:52:    ap.add_argument(\"--spec\", required=True,",
+    "e4e356c:scripts/add_ensemble_member.py:56:    ap.add_argument(\"--max-layouts\", default=\"2\", dest=\"max_layouts\","
+   ]
+  },
+  {
+   "fact": "F1977",
+   "orig": "G3-F237",
+   "cmd": "git grep -n -e add_argument d9c7c6e -- src/tta.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2122",
+   "orig": "G3-F382",
+   "cmd": "git grep -n -e persistent_workers d9c7c6e -- src/train.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2149",
+   "orig": "G3-F409",
+   "cmd": "git grep -n -i -e layout -e MAX_LAYOUTS -e deploy -e submit d9c7c6e -- pm/tasks/T007-sequence-diversity-clean.md",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2175",
+   "orig": "G3-F435",
+   "cmd": "git grep -n -i -e layout d9c7c6e -- pm/tasks/T034-family-alone-lb-ab.md",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2182",
+   "orig": "G3-F442",
+   "cmd": "git grep -n -e weight-decay -e weight_decay=args d9c7c6e -- src/train.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2183",
+   "orig": "G3-F443",
+   "cmd": "git grep -n -e encoder_lr -e encoder-lr d9c7c6e -- src/train.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2261",
+   "orig": "G3-F521",
+   "cmd": "git grep -n -e --shared-head-drop d9c7c6e -- '*.sh'",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2282",
+   "orig": "G3-F542",
+   "cmd": "git grep -n -e --labels d9c7c6e -- '*.sh'",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "035e192e3add",
+   "now": "1863d33eb48f",
+   "thenLines": 4,
+   "nowLines": 5,
+   "nowHead": [
+    "e4e356c:outputs/t028/_arm_lib.sh:43:        --labels data/llm_labels.csv --per-label-band 2>&1 | tail -45",
+    "e4e356c:outputs/t028/_arm_lib.sh:48:        --labels data/llm_labels.csv 2>&1 | tail -10",
+    "e4e356c:scripts/run_local_folds.sh:72:        --labels data/llm_labels.csv \\"
+   ]
+  },
+  {
+   "fact": "F2304",
+   "orig": "G3-F564",
+   "cmd": "git grep -n -e PixelSpacing d9c7c6e -- src/dicom_io.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "05c01c26f2c4",
+   "now": "f7c3c61753aa",
+   "thenLines": 3,
+   "nowLines": 3,
+   "nowHead": [
+    "e4e356c:src/dicom_io.py:192:    spacing = (getattr(ds, \"PixelSpacing\", None)",
+    "e4e356c:src/dicom_io.py:193:               or getattr(ds, \"ImagerPixelSpacing\", None))",
+    "e4e356c:src/dicom_io.py:207:    # PixelSpacing is [between rows, between columns]: the first walks along"
+   ]
+  },
+  {
+   "fact": "F2386",
+   "orig": "G3-F646",
+   "cmd": "git show d9c7c6e:scripts/smoke_test.py | wc -l",
+   "status": "not-rerun",
+   "why": "shell syntax |"
+  },
+  {
+   "fact": "F2507",
+   "orig": "G4-F110",
+   "cmd": "grep -n -i -e runtime -e duration -e elapsed .venv/lib/python3.12/site-packages/kagglesdk/competitions/types/competition_api_service.py",
+   "status": "not-rerun",
+   "why": "not a git search: grep"
+  },
+  {
+   "fact": "F2510",
+   "orig": "G4-F113",
+   "cmd": "grep -n -i -e duration .venv/lib/python3.12/site-packages/kagglesdk/kernels/types/kernels_api_service.py",
+   "status": "not-rerun",
+   "why": "not a git search: grep"
+  },
+  {
+   "fact": "F2511",
+   "orig": "G4-F114",
+   "cmd": "grep -n -i -e time -e duration .venv/lib/python3.12/site-packages/kagglesdk/kernels/types/kernels_api_service.py",
+   "status": "not-rerun",
+   "why": "not a git search: grep"
+  },
+  {
+   "fact": "F2853",
+   "orig": "G4-F456",
+   "cmd": "git grep -n -e update_bn d9c7c6e -- *.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "71037bb03b84",
+   "now": "6ea376f74f44",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:src/train.py:64:    close together, so this is the cheap approximation of `update_bn` -- which"
+   ]
+  },
+  {
+   "fact": "F2988",
+   "orig": "G4-F591",
+   "cmd": "git grep -n -e --resume d9c7c6e -- src/train.py",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "009273b8b796",
+   "thenLines": 0,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:src/train.py:320:# Arguments a resumed run is allowed to change. `--out` and `--resume` name",
+    "e4e356c:src/train.py:454:        raise SystemExit(\"--resume with a changed recipe:\\n  \"",
+    "e4e356c:src/train.py:457:                           \"Only --out, --resume and --workers may differ.\")"
+   ]
+  },
+  {
+   "fact": "F3068",
+   "orig": "G4-F671",
+   "cmd": "git log -1 --format=%B 5dbdd25",
+   "status": "not-rerun",
+   "why": "git log reads a commit, not a tree at a commit"
+  },
+  {
+   "fact": "F3069",
+   "orig": "G4-F672",
+   "cmd": "git log -1 --format=%B 5dbdd25",
+   "status": "not-rerun",
+   "why": "git log reads a commit, not a tree at a commit"
+  },
+  {
+   "fact": "F3070",
+   "orig": "G4-F673",
+   "cmd": "git log -1 --format=%B 5dbdd25",
+   "status": "not-rerun",
+   "why": "git log reads a commit, not a tree at a commit"
+  },
+  {
+   "fact": "F3071",
+   "orig": "G4-F674",
+   "cmd": "git log -1 --format=%B 5dbdd25",
+   "status": "not-rerun",
+   "why": "git log reads a commit, not a tree at a commit"
+  },
+  {
+   "fact": "F3308",
+   "orig": "GC-F227",
+   "cmd": "git grep -n -e warmup-frac -e layer-decay d9c7c6e -- *.sh scripts/",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "86ca6609e8c5",
+   "thenLines": 1,
+   "nowLines": 7,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else."
+   ]
+  },
+  {
+   "fact": "F3315",
+   "orig": "GC-F234",
+   "cmd": "git grep -n -e warmup-frac d9c7c6e -- scripts/ *.sh",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "7e4e3eeb493d",
+   "thenLines": 1,
+   "nowLines": 5,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:26:#   * `--warmup-frac 0.15` makes lr_scale linear over the first 2,088 of 13,920"
+   ]
+  },
+  {
+   "fact": "F3316",
+   "orig": "GC-F235",
+   "cmd": "git grep -n -e warmup-frac d9c7c6e -- scripts/ *.sh",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "7e4e3eeb493d",
+   "thenLines": 1,
+   "nowLines": 5,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else.",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:26:#   * `--warmup-frac 0.15` makes lr_scale linear over the first 2,088 of 13,920"
+   ]
+  },
+  {
+   "fact": "F3353",
+   "orig": "GC-F272",
+   "cmd": "git grep -n -e FOLDS d9c7c6e -- scripts/push_family.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "854feb00c6b2",
+   "now": "7f254ebef7a7",
+   "thenLines": 6,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/push_family.py:84:    # --folds counts KERNELS; the kernel's own FOLDS is the CV split and render()",
+    "e4e356c:scripts/push_family.py:144:        found = re.findall(r\"^FOLDS = (\\d+)$\", base_text, re.M)",
+    "e4e356c:scripts/push_family.py:146:            raise SystemExit(f\"{BASE} has {len(found)} 'FOLDS = <n>' lines \""
+   ]
+  },
+  {
+   "fact": "F3475",
+   "orig": "GC-F394",
+   "cmd": "git grep -n -e alpha d9c7c6e -- src/train.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "617bd487796a",
+   "now": "3df223a5c445",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "e4e356c:src/train.py:966:                        f\"them into the training targets at a fixed alpha=\""
+   ]
+  },
+  {
+   "fact": "F3599",
+   "orig": "GC-F518",
+   "cmd": "git grep -n -e warmup-frac -e layer-decay d9c7c6e -- scripts/ *.sh",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "b5b9f1901e62",
+   "now": "86ca6609e8c5",
+   "thenLines": 1,
+   "nowLines": 7,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:2485:                [\"--rotate\", \"-5\"], [\"--warmup-frac\", \"1.0\"]):",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:2:# T042 / screen S1: arm C's family config plus `--layer-decay 0.6",
+    "e4e356c:scripts/t042/run_recipe_fold0.sh:3:# --warmup-frac 0.15`, and nothing else."
+   ]
+  },
+  {
+   "fact": "F3629",
+   "orig": "GC-F548",
+   "cmd": "git grep -n -e adjacent d9c7c6e -- scripts/smoke_test.py",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "d1df8ccc2722",
+   "now": "b90d77f42169",
+   "thenLines": 42,
+   "nowLines": 45,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:1790:def test_t014_adjacent_channels():",
+    "e4e356c:scripts/smoke_test.py:1809:    pack, n3, _ = read_series(\"data/sample\", max_slices=4, adjacent=True)",
+    "e4e356c:scripts/smoke_test.py:1843:    b = _t015_sample_dataset(adjacent=True)"
+   ]
+  },
+  {
+   "fact": "F3733",
+   "orig": "GC-F652",
+   "cmd": "git grep -n -e SliceSequenceHead -e seq_head d9c7c6e -- scripts/smoke_test.py",
+   "status": "drifted",
+   "was": "d9c7c6e",
+   "then": "19b918d7f53d",
+   "now": "ad4199690b88",
+   "thenLines": 6,
+   "nowLines": 6,
+   "nowHead": [
+    "e4e356c:scripts/smoke_test.py:1723:    from model import KneeMIL, SliceSequenceHead",
+    "e4e356c:scripts/smoke_test.py:1728:    gru = KneeMIL(\"tf_efficientnet_b0\", pretrained=False, seq_head=True,",
+    "e4e356c:scripts/smoke_test.py:1749:    h = SliceSequenceHead(16).eval()"
+   ]
+  },
+  {
+   "fact": "F3759",
+   "orig": "GC-F678",
+   "cmd": "git grep -n -e pos_weight d9c7c6e -- src/train.py",
+   "status": "same",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F3938",
+   "orig": "GC-F857",
+   "cmd": "git grep -n -e resume d9c7c6e -- src/train.py",
+   "status": "flipped",
+   "was": "d9c7c6e",
+   "then": "e3b0c44298fc",
+   "now": "d97b304f0ab2",
+   "thenLines": 0,
+   "nowLines": 28,
+   "nowHead": [
+    "e4e356c:src/train.py:313:# Bumped when the resume payload's shape changes. A stale `.last.pt` must fail",
+    "e4e356c:src/train.py:314:# loudly rather than restore three quarters of a run: a resume that silently",
+    "e4e356c:src/train.py:320:# Arguments a resumed run is allowed to change. `--out` and `--resume` name"
+   ]
+  }
+ ]
+}

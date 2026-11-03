@@ -23,6 +23,7 @@
 #   board.sh                 print it
 #   board.sh --write         replace the generated region of STATE.md
 #   board.sh --check         exit 1 if that region is stale (for CI / pre-commit)
+#   board.sh --capabilities  what an agent may do here, and how
 #
 # It writes nothing but that region, commits nothing, and decides nothing.
 set -uo pipefail
@@ -448,6 +449,54 @@ check_state() { # exit 1 when the region is stale — for CI or a pre-commit hoo
   return 1
 }
 
+# What an agent may do on this board, and how: one line each, tab-separated
+# id, class, how, inputs, what the tools refuse, and what the protocol says to
+# stop on though git would not. AGE Aris serves the same table, with its own
+# endpoints, at GET /api/capabilities; its tests hold this copy to it.
+capabilities() {
+  cat <<'CAPABILITIES'
+board	agent-git	AA/board.sh [--all]			
+state	agent-git	AA/board.sh --write, then commit AA/STATE.md (rule 11)		--check exits 1 while the generated region is stale	
+register	agent-git	a new file AA/backlog/<next id>-<slug>.md, shaped as the other task files are (aa-init's TASK.md), its decision rules written before it can be claimed; commit (rules 5, 12)	title; goal; decision rules		
+claim	agent-git	git mv AA/backlog/T-*.md AA/tasks/; set status: claimed and owner: <operator> @<profile>/<session> <date> — <note>; commit "claim T" (rule 1)	task; note	the commit conflicts: someone else has it (rule 1)	the WIP limit is reached (rule 10); the task has no decision rules (rule 5); another operator holds the task (rule 2); a run on the task is live (AA/ckpt.sh live T): keep off unless it is yours (rule 6)
+checkpoint	agent-git	AA/ckpt.sh open T, then AA/ckpt.sh log T doing|did|blocked|end … before and after each spend (rule 6)	task; kind; what; next	a task id that is not one	a run on the task is live (AA/ckpt.sh live T): keep off unless it is yours (rule 6)
+live	agent-git	AA/ckpt.sh live [T]	task		
+block	agent-git	set status: blocked and blockedReason: <what unblocks it> in AA/tasks/T-*.md; commit	task; reason		another operator holds the task (rule 2)
+unblock	agent-git	set status: claimed and clear blockedReason in AA/tasks/T-*.md; commit	task		another operator holds the task (rule 2)
+release	agent-git	git mv AA/tasks/T-*.md AA/backlog/; set status: open and owner: —; commit "release T" (rule 4)	task	the commit conflicts: someone else has it (rule 1)	another operator holds the task (rule 2); a run on the task is live (AA/ckpt.sh live T): keep off unless it is yours (rule 6)
+done	agent-git	fill ## Result, with AA/ckpt.sh close T --delete's digest when T has a trail; git mv AA/tasks/T-*.md AA/tasks/done/, set status: done; commit; then AA/ckpt.sh release T (rule 13: its scratch, landed worktrees and merged branches go; keeps: files are committed first; on a board AGE Aris tracks with task actions on, it does this itself at least an hour after it sees the commit)	task; result	ckpt.sh close: T has no trail	another operator holds the task (rule 2); the Result is empty or a placeholder
+kill	agent-git	say why in ## Result, git mv the task file to AA/tasks/done/, set status: killed; commit	task; reason		another operator holds the task (rule 2)
+CAPABILITIES
+}
+
+# Rule 13 on --check: a warning on stderr, never a failure.
+litter_warning() {
+  local lines; lines=$(litter_scan 2>/dev/null) || return 0
+  [ -n "$lines" ] || return 0
+  local tasks agents
+  tasks=$(printf '%s\n' "$lines" | awk -F'\t' '$1!="-"{print $1}' | sort -u | wc -l | tr -d ' ')
+  agents=$(printf '%s\n' "$lines" | awk -F'\t' '$1=="-"' | wc -l | tr -d ' ')
+  printf 'board: rule 13 — %s finished task(s) still hold files or branches%s. AA/board.sh --litter lists them.\n' "$tasks" "$( [ "$agents" -gt 0 ] && printf ', and %s landed subagent worktree(s) are idle' "$agents")" >&2
+}
+
+# Rule 13, in full: each finished task that still holds something, with sizes,
+# and the one command that releases it. It deletes nothing.
+litter_report() {
+  local lines; lines=$(litter_scan)
+  if [ -z "$lines" ]; then echo "Finished tasks hold nothing on disk."; return 0; fi
+  local t p total=0 kb
+  while IFS=$'\t' read -r t p; do
+    case "$p" in "branch "*) printf '%-8s %10s  %s\n' "$t" "" "$p"; continue ;; esac
+    kb=$(du -sk "$ROOT/$p" 2>/dev/null | cut -f1); kb=${kb:-0}; total=$((total + kb))
+    printf '%-8s %10s  %s\n' "$t" "$(human_kb "$kb")" "$p"
+  done <<< "$lines"
+  echo
+  echo "In all: $(human_kb "$total"). Release each finished task with:"
+  printf '%s\n' "$lines" | awk -F'\t' '$1!="-"{print $1}' | sort -u | sed 's|^|  AA/ckpt.sh release |'
+  printf '%s\n' "$lines" | grep -q '^-' && echo "  (any release also removes the idle subagent worktrees marked -)"
+  return 0
+}
+
 main() {
   local all=0 win=30 wip=-1 mode=print
   while [ $# -gt 0 ]; do
@@ -455,17 +504,22 @@ main() {
       --all)    all=1; shift ;;
       --write)  mode=write; shift ;;
       --check)  mode=check; shift ;;
+      --litter) mode=litter; shift ;;
+      --capabilities) capabilities; return 0 ;;
       --window) [ $# -ge 2 ] || die "--window needs a value"; win="$2"; shift 2 ;;
       --wip)    [ $# -ge 2 ] || die "--wip needs a value"; wip="$2"; shift 2 ;;
       -h|--help) cat <<'USAGE'
-usage: board.sh [--write|--check] [--all] [--window DAYS] [--wip N]
+usage: board.sh [--write|--check|--litter|--capabilities] [--all] [--window DAYS] [--wip N]
 
   The Kanban board of the task files, as markdown. The location is the state:
   backlog/ is the queue, tasks/ is work in progress, tasks/done/ is delivered.
 
   (no flag)       print the board
   --write         replace the generated region of AA/STATE.md
-  --check         exit 1 if that region is stale — for CI or a pre-commit hook
+  --check         exit 1 if that region is stale — for CI or a pre-commit hook;
+                  it also warns (never fails) when finished tasks still hold files
+  --litter        what finished tasks still hold on disk, and the command that releases it (rule 13)
+  --capabilities  what an agent may do on this board, and how, one line each
   --all           show the whole backlog and every delivered task, not just the window
   --window DAYS   window for throughput and the DONE column (default 30)
   --wip N         override this run's WIP limit (normally from AA.yml)
@@ -480,7 +534,8 @@ USAGE
   [ -d "$TD" ] || die "no AA/tasks/ at $ROOT — is the board scaffolded here?"
   case "$mode" in
     write) write_state "$all" "$win" "$wip" ;;
-    check) check_state "$all" "$win" "$wip" ;;
+    check) local rc=0; check_state "$all" "$win" "$wip" || rc=$?; litter_warning; return "$rc" ;;
+    litter) litter_report ;;
     *)     render "$all" "$win" "$wip" ;;
   esac
 }

@@ -1,0 +1,883 @@
+{
+ "summary": {
+  "head": "3c8fcaa",
+  "commands": 37,
+  "sources": 38,
+  "same": 14,
+  "flipped": 2,
+  "drifted": 21,
+  "notRerun": 1,
+  "error": 0
+ },
+ "flipped": [
+  {
+   "fact": "F569",
+   "orig": "G1-F569",
+   "cmd": "git grep -n -e except f46796c -- scripts/t121/build_bag_kernels.py",
+   "status": "flipped",
+   "was": "f46796c",
+   "then": "e3b0c44298fc",
+   "now": "b959b98b0099",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/build_bag_kernels.py:50:#: level; the 0941 calls it inside a `try` whose `except` RESTORES `_raptor.csv`"
+   ]
+  },
+  {
+   "fact": "F1423",
+   "orig": "G2-F651",
+   "cmd": "git grep -n -e 19.0 -e 16.7 -e 5.7 b3e35d5 -- tests/smoke/coat.py",
+   "status": "flipped",
+   "was": "b3e35d5",
+   "then": "dfb827a52dec",
+   "now": "2b40361aa8d0",
+   "thenLines": 2,
+   "nowLines": 3,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/coat.py:1783:    **19.0% of the eval draw and 16.7% of the training draw spanned a boundary;",
+    "3c8fcaa:tests/smoke/coat.py:1784:    5.7% / 5.0% touched a blank slot.**",
+    "3c8fcaa:tests/smoke/coat.py:2473:    was six hours into a 10.6 h run on it, reading gold-58 0.8557, when it was"
+   ]
+  }
+ ],
+ "drifted": [
+  {
+   "fact": "F439",
+   "orig": "G1-F439",
+   "cmd": "git grep -n -e assert_dense_target 0b783b8 -- scripts/t121/materialise.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "1e8303566bbe",
+   "now": "f7fb93c91146",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/materialise.py:44:#: time rather than trusted here -- see `assert_dense_target`."
+   ]
+  },
+  {
+   "fact": "F633",
+   "orig": "G1-F633",
+   "cmd": "git grep -n -e \"--check\" da31b2e -- scripts/t121/build_bag_kernels.py",
+   "status": "drifted",
+   "was": "da31b2e",
+   "then": "3c78cb93be16",
+   "now": "567c51f30599",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/build_bag_kernels.py:17:parent, and `--check` proves that on the written artifact."
+   ]
+  },
+  {
+   "fact": "F638",
+   "orig": "G1-F638",
+   "cmd": "git grep -n -e \"try:\" da31b2e -- scripts/t121/build_bag_kernels.py",
+   "status": "drifted",
+   "was": "da31b2e",
+   "then": "19b46023bf80",
+   "now": "fee8848a2668",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/build_bag_kernels.py:126:    # NOT in a try: a dropped member of ours scores exactly the parent (T115/H1)."
+   ]
+  },
+  {
+   "fact": "F786",
+   "orig": "G2-F14",
+   "cmd": "git grep -n -i -e flip 685d4b9 -- src/coat_data.py",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "8bbda58a7668",
+   "now": "dcba5ee4c056",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:src/coat_data.py:13:a mild intensity jitter nothing else is augmented. No flips: laterality is"
+   ]
+  },
+  {
+   "fact": "F1119",
+   "orig": "G2-F347",
+   "cmd": "git grep -n -e _failures b3e35d5 -- tests/smoke/coat.py",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "196df6fe65e5",
+   "now": "1ff5ae34e879",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/coat.py:32:from _harness import check, _failures  # noqa: F401  explicit: both are used by name"
+   ]
+  },
+  {
+   "fact": "F1608",
+   "orig": "G3-F96",
+   "cmd": "git grep -n -e rerank -e transformer -e fusion 2e7ffc6 -- scripts/t112/build_t112_kernel.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "a0de8794e5ff",
+   "now": "7b8a311a4644",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "3c8fcaa:scripts/t112/build_t112_kernel.py:87:WHAT IT DOES NOT DO. It does not touch the transformer branch, the outer blend,",
+    "3c8fcaa:scripts/t112/build_t112_kernel.py:88:the rerank, or any fusion weight. T110 measured the whole transformer branch at"
+   ]
+  },
+  {
+   "fact": "F1872",
+   "orig": "G3-F360",
+   "cmd": "git grep -n -e \"must not share a slug\" b3e35d5 -- scripts/build_arm_kernel.py",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "ce6cb5671cdd",
+   "now": "67737c415881",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/build_arm_kernel.py:21:score. ⚠ The dataset and the kernel must not share a slug -- Kaggle returns a"
+   ]
+  },
+  {
+   "fact": "F1877",
+   "orig": "G3-F365",
+   "cmd": "git grep -n -e \"competitions submit\" -e \"submit\" b3e35d5 -- scripts/t112/push_arm.py",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "a24418295985",
+   "now": "4cfe17902a83",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "3c8fcaa:scripts/t112/push_arm.py:25:Nothing here submits. It pushes a kernel; a human reads its log for the VOID",
+    "3c8fcaa:scripts/t112/push_arm.py:26:banner and submits by hand. That separation is deliberate -- T057 rule 6 and the",
+    "3c8fcaa:scripts/t112/push_arm.py:198:            print(\"     !! BELOW THE BROKEN FLOOR (0.85). T111/T112 say: do not submit, debug.\")"
+   ]
+  },
+  {
+   "fact": "F2039",
+   "orig": "G3-F527",
+   "cmd": "git grep -n -e clean_windows 0b783b8 -- src/coat_data.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "78233ddc2c22",
+   "now": "ee042282ede4",
+   "thenLines": 7,
+   "nowLines": 7,
+   "nowHead": [
+    "3c8fcaa:src/coat_data.py:313:                 norm=\"none\", clean_windows=True):",
+    "3c8fcaa:src/coat_data.py:321:        self.clean_windows = bool(clean_windows)",
+    "3c8fcaa:src/coat_data.py:387:        if not (self.clean_windows if clean is None else clean):"
+   ]
+  },
+  {
+   "fact": "F2394",
+   "orig": "G3-F882",
+   "cmd": "git grep -n -e \"_order\" 0b783b8 -- scripts/smoke_test.py tests/test_smoke.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "2804fc85b4d4",
+   "now": "2a74b1578dd0",
+   "thenLines": 6,
+   "nowLines": 6,
+   "nowHead": [
+    "3c8fcaa:scripts/smoke_test.py:27:`tests/smoke/_order.py` holds the run order, lifted from the old `main()`'s own",
+    "3c8fcaa:scripts/smoke_test.py:62:from _order import ENV_ORDER, ORDER, functions  # noqa: E402",
+    "3c8fcaa:scripts/smoke_test.py:136:                  f\"in tests/smoke/_order.py in the same commit.\")"
+   ]
+  },
+  {
+   "fact": "F2455",
+   "orig": "G4-F12",
+   "cmd": "git grep -n -e pgrep 685d4b9 -- scripts/gpu_stop.sh",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "d3db061c716e",
+   "now": "f30d00522bea",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/gpu_stop.sh:16:# OCCUPANCY IS READ FROM /proc AND nvidia-smi, NEVER FROM `pgrep -f`. A watcher"
+   ]
+  },
+  {
+   "fact": "F2698",
+   "orig": "G4-F255",
+   "cmd": "git grep -n -e PROJECT-LOG 2e7ffc6 -- scripts/claims_guard.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "569da9a7081c",
+   "now": "bea1e2faab3c",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/claims_guard.py:93:                # prefix; it is append-only by nature and stays one. PROJECT-LOG.md"
+   ]
+  },
+  {
+   "fact": "F2734",
+   "orig": "G4-F291",
+   "cmd": "git grep -n -e \"def run(\" 2e7ffc6 -- src/train.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "c08dc86d99aa",
+   "now": "8cca35cbfa60",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "3c8fcaa:src/train.py:575:    def run(*a):",
+    "3c8fcaa:src/train.py:984:def run(args):"
+   ]
+  },
+  {
+   "fact": "F2737",
+   "orig": "G4-F294",
+   "cmd": "git grep -n -e \"def forward(\" 2e7ffc6 -- src/model.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "6109a088e19e",
+   "now": "95d5ba09f354",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "3c8fcaa:src/model.py:25:    def forward(self, x, mask=None):",
+    "3c8fcaa:src/model.py:71:    def forward(self, x, mask=None):",
+    "3c8fcaa:src/model.py:120:    def forward(self, feats, mask, k):"
+   ]
+  },
+  {
+   "fact": "F2738",
+   "orig": "G4-F295",
+   "cmd": "git grep -n -e \"def run(\" 2e7ffc6 -- src/train.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "c08dc86d99aa",
+   "now": "8cca35cbfa60",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "3c8fcaa:src/train.py:575:    def run(*a):",
+    "3c8fcaa:src/train.py:984:def run(args):"
+   ]
+  },
+  {
+   "fact": "F2794",
+   "orig": "G4-F351",
+   "cmd": "git grep -n -e cam_viewer ec7da60 -- tests/smoke",
+   "status": "drifted",
+   "was": "ec7da60",
+   "then": "8d9c5cdd57dd",
+   "now": "faea9c9bbc86",
+   "thenLines": 10,
+   "nowLines": 10,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/_order.py:95:                The inversion is the damage. cam_viewer's own docstring promises",
+    "3c8fcaa:tests/smoke/_order.py:187: +14         -- test_cam_viewer, 2026-09-15 (T096). The interactive viewer's",
+    "3c8fcaa:tests/smoke/_order.py:197: +5          -- test_cam_viewer, 2026-09-15 (T097). jacobgil/pytorch-grad-cam,"
+   ]
+  },
+  {
+   "fact": "F3034",
+   "orig": "G4-F591",
+   "cmd": "git grep -n -e \"def test_t004_per_label_attention\" 0b783b8 -- tests/smoke",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "66f3da24714d",
+   "now": "9c3aaed3d1a5",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/heads.py:112:def test_t004_per_label_attention():"
+   ]
+  },
+  {
+   "fact": "F3184",
+   "orig": "G4-F741",
+   "cmd": "git grep -n -e \"outputs/t119\" 0b783b8 -- tests/smoke/tooling.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "a17eaf1d7782",
+   "now": "bad556be7e43",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/tooling.py:1307:    # of this function looped over outputs/t119 and outputs/t117, asserting each"
+   ]
+  },
+  {
+   "fact": "F3350",
+   "orig": "GC-F145",
+   "cmd": "git grep -n -e update_bn 685d4b9 -- src/train.py",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "0b7632ca1ed6",
+   "now": "0e0fe0a2a0b4",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:src/train.py:65:    close together, so this is the cheap approximation of `update_bn` -- which"
+   ]
+  },
+  {
+   "fact": "F3389",
+   "orig": "GC-F184",
+   "cmd": "git grep -n -e emit_axis 685d4b9 -- src/ notebooks/ scripts/",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "74b326241014",
+   "now": "68004594e7f7",
+   "thenLines": 15,
+   "nowLines": 15,
+   "nowHead": [
+    "3c8fcaa:notebooks/kaggle_inference.py:392:                              emit_axis=(\"mirror\" in views))",
+    "3c8fcaa:notebooks/kaggle_tta_screen.py:220:                                  emit_axis=(\"mirror\" in views))",
+    "3c8fcaa:scripts/layout_guard.py:96:    \"emit_axis\":    \"the fifth meta column, and `KneeMIL` reads columns 0-3 and \""
+   ]
+  },
+  {
+   "fact": "F3472",
+   "orig": "GC-F267",
+   "cmd": "git grep -n -e git_provenance( b3e35d5 -- src/ scripts/ notebooks/",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "d21ee74db822",
+   "now": "5db6acf8ff70",
+   "thenLines": 3,
+   "nowLines": 3,
+   "nowHead": [
+    "3c8fcaa:src/train.py:548:def git_provenance(root=None):",
+    "3c8fcaa:src/train.py:588:PROVENANCE = None   # set in main(); see git_provenance()",
+    "3c8fcaa:src/train.py:1987:    PROVENANCE = git_provenance()"
+   ]
+  }
+ ],
+ "results": [
+  {
+   "fact": "F19",
+   "orig": "G1-F19",
+   "cmd": "git grep -n -e \"import dicom_bag\" 3c8fcaa -- *.py",
+   "status": "same",
+   "was": "3c8fcaa",
+   "then": "e9632f676d60",
+   "now": "e9632f676d60",
+   "thenLines": 7,
+   "nowLines": 7,
+   "nowHead": [
+    "3c8fcaa:scripts/t114/a2_all_studies.py:49:    import dicom_bag as B",
+    "3c8fcaa:scripts/t114/a4_known_good.py:32:import dicom_bag as B                            # noqa: E402",
+    "3c8fcaa:scripts/t121/bag_child.py:58:import dicom_bag as D  # noqa: E402  (after the path it lives on)"
+   ]
+  },
+  {
+   "fact": "F92",
+   "orig": "G1-F92",
+   "cmd": "git grep -n -e \"/mnt/S\" 3c8fcaa",
+   "status": "same",
+   "was": "3c8fcaa",
+   "then": "9754563bfc04",
+   "now": "9754563bfc04",
+   "thenLines": 22,
+   "nowLines": 22,
+   "nowHead": [
+    "3c8fcaa:deaddrop/checkpoints/T135.jsonl:2:{\"ts\":\"2026-09-27T18:53:48Z\",\"run\":\"8900ef32\",\"kind\":\"doing\",\"act\":\"upload /mnt/S/rsna-corpus-dicombag (148 GB) as private dataset bhavishnithinr/rsna-knee-dicombag-corpus\",\"tell\":\"outputs/t135/upload.log\",\"cost\":\"~2 h of upload\",\"next\":\"kaggle datasets status; then builder --set t135\"}",
+    "3c8fcaa:deaddrop/tasks/T135-v5-targets-at-384.md:61:- [x] Upload `/mnt/S/rsna-corpus-dicombag` as the private dataset `rsna-knee-dicombag-corpus`. Done in ~2 h at ~20 MB/s, `ready` after ~50 min of Kaggle processing (the status call returns 403 until then). `vols.npy` is 148,163,199,104 B on Kaggle, equal to the local file",
+    "3c8fcaa:deaddrop/tasks/done/T121-the-clean-baseline-package.md:86:**`/mnt/S` is the alternative and nothing in this repository mentions it:**"
+   ]
+  },
+  {
+   "fact": "F146",
+   "orig": "G1-F146",
+   "cmd": "git grep -n -i -e swa 3c8fcaa -- scripts/t111/calib_4070.py",
+   "status": "same",
+   "was": "3c8fcaa",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F288",
+   "orig": "G1-F288",
+   "cmd": "git grep -n -i -e swa 685d4b9 -- scripts/t111/calib_4070.py",
+   "status": "same",
+   "was": "685d4b9",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F439",
+   "orig": "G1-F439",
+   "cmd": "git grep -n -e assert_dense_target 0b783b8 -- scripts/t121/materialise.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "1e8303566bbe",
+   "now": "f7fb93c91146",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/materialise.py:44:#: time rather than trusted here -- see `assert_dense_target`."
+   ]
+  },
+  {
+   "fact": "F480",
+   "orig": "G1-F480",
+   "cmd": "git grep -n -i -e swa 6ce8324 -- scripts/t111/calib_4070.py",
+   "status": "same",
+   "was": "6ce8324",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F569",
+   "orig": "G1-F569",
+   "cmd": "git grep -n -e except f46796c -- scripts/t121/build_bag_kernels.py",
+   "status": "flipped",
+   "was": "f46796c",
+   "then": "e3b0c44298fc",
+   "now": "b959b98b0099",
+   "thenLines": 0,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/build_bag_kernels.py:50:#: level; the 0941 calls it inside a `try` whose `except` RESTORES `_raptor.csv`"
+   ]
+  },
+  {
+   "fact": "F633",
+   "orig": "G1-F633",
+   "cmd": "git grep -n -e \"--check\" da31b2e -- scripts/t121/build_bag_kernels.py",
+   "status": "drifted",
+   "was": "da31b2e",
+   "then": "3c78cb93be16",
+   "now": "567c51f30599",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/build_bag_kernels.py:17:parent, and `--check` proves that on the written artifact."
+   ]
+  },
+  {
+   "fact": "F638",
+   "orig": "G1-F638",
+   "cmd": "git grep -n -e \"try:\" da31b2e -- scripts/t121/build_bag_kernels.py",
+   "status": "drifted",
+   "was": "da31b2e",
+   "then": "19b46023bf80",
+   "now": "fee8848a2668",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/t121/build_bag_kernels.py:126:    # NOT in a try: a dropped member of ours scores exactly the parent (T115/H1)."
+   ]
+  },
+  {
+   "fact": "F778",
+   "orig": "G2-F6",
+   "cmd": "git grep -n -i -e pydicom -e dcmread 685d4b9 -- src/coat_data.py",
+   "status": "same",
+   "was": "685d4b9",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F786",
+   "orig": "G2-F14",
+   "cmd": "git grep -n -i -e flip 685d4b9 -- src/coat_data.py",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "8bbda58a7668",
+   "now": "dcba5ee4c056",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:src/coat_data.py:13:a mild intensity jitter nothing else is augmented. No flips: laterality is"
+   ]
+  },
+  {
+   "fact": "F1050",
+   "orig": "G2-F278",
+   "cmd": "git grep -n -e n_avg 685d4b9 -- scripts/t112/push_arm.py",
+   "status": "same",
+   "was": "685d4b9",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1119",
+   "orig": "G2-F347",
+   "cmd": "git grep -n -e _failures b3e35d5 -- tests/smoke/coat.py",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "196df6fe65e5",
+   "now": "1ff5ae34e879",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/coat.py:32:from _harness import check, _failures  # noqa: F401  explicit: both are used by name"
+   ]
+  },
+  {
+   "fact": "F1210",
+   "orig": "G2-F438",
+   "cmd": "git grep -n -e clean-windows -e dirty-windows b3e35d5 -- scripts/t112/push_arm.py",
+   "status": "same",
+   "was": "b3e35d5",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1360",
+   "orig": "G2-F588",
+   "cmd": "git grep -n -e n_avg b3e35d5 -- scripts/t112/push_arm.py",
+   "status": "same",
+   "was": "b3e35d5",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F1423",
+   "orig": "G2-F651",
+   "cmd": "git grep -n -e 19.0 -e 16.7 -e 5.7 b3e35d5 -- tests/smoke/coat.py",
+   "status": "flipped",
+   "was": "b3e35d5",
+   "then": "dfb827a52dec",
+   "now": "2b40361aa8d0",
+   "thenLines": 2,
+   "nowLines": 3,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/coat.py:1783:    **19.0% of the eval draw and 16.7% of the training draw spanned a boundary;",
+    "3c8fcaa:tests/smoke/coat.py:1784:    5.7% / 5.0% touched a blank slot.**",
+    "3c8fcaa:tests/smoke/coat.py:2473:    was six hours into a 10.6 h run on it, reading gold-58 0.8557, when it was"
+   ]
+  },
+  {
+   "fact": "F1608",
+   "orig": "G3-F96",
+   "cmd": "git grep -n -e rerank -e transformer -e fusion 2e7ffc6 -- scripts/t112/build_t112_kernel.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "a0de8794e5ff",
+   "now": "7b8a311a4644",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "3c8fcaa:scripts/t112/build_t112_kernel.py:87:WHAT IT DOES NOT DO. It does not touch the transformer branch, the outer blend,",
+    "3c8fcaa:scripts/t112/build_t112_kernel.py:88:the rerank, or any fusion weight. T110 measured the whole transformer branch at"
+   ]
+  },
+  {
+   "fact": "F1872",
+   "orig": "G3-F360",
+   "cmd": "git grep -n -e \"must not share a slug\" b3e35d5 -- scripts/build_arm_kernel.py",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "ce6cb5671cdd",
+   "now": "67737c415881",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/build_arm_kernel.py:21:score. ⚠ The dataset and the kernel must not share a slug -- Kaggle returns a"
+   ]
+  },
+  {
+   "fact": "F1877",
+   "orig": "G3-F365",
+   "cmd": "git grep -n -e \"competitions submit\" -e \"submit\" b3e35d5 -- scripts/t112/push_arm.py",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "a24418295985",
+   "now": "4cfe17902a83",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "3c8fcaa:scripts/t112/push_arm.py:25:Nothing here submits. It pushes a kernel; a human reads its log for the VOID",
+    "3c8fcaa:scripts/t112/push_arm.py:26:banner and submits by hand. That separation is deliberate -- T057 rule 6 and the",
+    "3c8fcaa:scripts/t112/push_arm.py:198:            print(\"     !! BELOW THE BROKEN FLOOR (0.85). T111/T112 say: do not submit, debug.\")"
+   ]
+  },
+  {
+   "fact": "F2039",
+   "orig": "G3-F527",
+   "cmd": "git grep -n -e clean_windows 0b783b8 -- src/coat_data.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "78233ddc2c22",
+   "now": "ee042282ede4",
+   "thenLines": 7,
+   "nowLines": 7,
+   "nowHead": [
+    "3c8fcaa:src/coat_data.py:313:                 norm=\"none\", clean_windows=True):",
+    "3c8fcaa:src/coat_data.py:321:        self.clean_windows = bool(clean_windows)",
+    "3c8fcaa:src/coat_data.py:387:        if not (self.clean_windows if clean is None else clean):"
+   ]
+  },
+  {
+   "fact": "F2288",
+   "orig": "G3-F776",
+   "cmd": "git grep -n -e n_avg 0b783b8 -- scripts/t112/push_arm.py",
+   "status": "same",
+   "was": "0b783b8",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2394",
+   "orig": "G3-F882",
+   "cmd": "git grep -n -e \"_order\" 0b783b8 -- scripts/smoke_test.py tests/test_smoke.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "2804fc85b4d4",
+   "now": "2a74b1578dd0",
+   "thenLines": 6,
+   "nowLines": 6,
+   "nowHead": [
+    "3c8fcaa:scripts/smoke_test.py:27:`tests/smoke/_order.py` holds the run order, lifted from the old `main()`'s own",
+    "3c8fcaa:scripts/smoke_test.py:62:from _order import ENV_ORDER, ORDER, functions  # noqa: E402",
+    "3c8fcaa:scripts/smoke_test.py:136:                  f\"in tests/smoke/_order.py in the same commit.\")"
+   ]
+  },
+  {
+   "fact": "F2455",
+   "orig": "G4-F12",
+   "cmd": "git grep -n -e pgrep 685d4b9 -- scripts/gpu_stop.sh",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "d3db061c716e",
+   "now": "f30d00522bea",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/gpu_stop.sh:16:# OCCUPANCY IS READ FROM /proc AND nvidia-smi, NEVER FROM `pgrep -f`. A watcher"
+   ]
+  },
+  {
+   "fact": "F2492",
+   "orig": "G4-F49",
+   "cmd": "git grep -n -e pgrep 685d4b9 -- scripts/gpu_watchdog.sh",
+   "status": "same",
+   "was": "685d4b9",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2669",
+   "orig": "G4-F226",
+   "cmd": "git ls-tree -r --name-only 2e7ffc6 -- docs/research/syntheses/RESULTS-0902-what-the-day-established.md",
+   "status": "not-rerun",
+   "why": "not a git search: git"
+  },
+  {
+   "fact": "F2682",
+   "orig": "G4-F239",
+   "cmd": "git grep -n -e \"def is_link_label\" 2e7ffc6 -- scripts/claims_guard.py",
+   "status": "same",
+   "was": "2e7ffc6",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F2698",
+   "orig": "G4-F255",
+   "cmd": "git grep -n -e PROJECT-LOG 2e7ffc6 -- scripts/claims_guard.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "569da9a7081c",
+   "now": "bea1e2faab3c",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:scripts/claims_guard.py:93:                # prefix; it is append-only by nature and stays one. PROJECT-LOG.md"
+   ]
+  },
+  {
+   "fact": "F2734",
+   "orig": "G4-F291",
+   "cmd": "git grep -n -e \"def run(\" 2e7ffc6 -- src/train.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "c08dc86d99aa",
+   "now": "8cca35cbfa60",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "3c8fcaa:src/train.py:575:    def run(*a):",
+    "3c8fcaa:src/train.py:984:def run(args):"
+   ]
+  },
+  {
+   "fact": "F2737",
+   "orig": "G4-F294",
+   "cmd": "git grep -n -e \"def forward(\" 2e7ffc6 -- src/model.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "6109a088e19e",
+   "now": "95d5ba09f354",
+   "thenLines": 5,
+   "nowLines": 5,
+   "nowHead": [
+    "3c8fcaa:src/model.py:25:    def forward(self, x, mask=None):",
+    "3c8fcaa:src/model.py:71:    def forward(self, x, mask=None):",
+    "3c8fcaa:src/model.py:120:    def forward(self, feats, mask, k):"
+   ]
+  },
+  {
+   "fact": "F2738",
+   "orig": "G4-F295",
+   "cmd": "git grep -n -e \"def run(\" 2e7ffc6 -- src/train.py",
+   "status": "drifted",
+   "was": "2e7ffc6",
+   "then": "c08dc86d99aa",
+   "now": "8cca35cbfa60",
+   "thenLines": 2,
+   "nowLines": 2,
+   "nowHead": [
+    "3c8fcaa:src/train.py:575:    def run(*a):",
+    "3c8fcaa:src/train.py:984:def run(args):"
+   ]
+  },
+  {
+   "fact": "F2794",
+   "orig": "G4-F351",
+   "cmd": "git grep -n -e cam_viewer ec7da60 -- tests/smoke",
+   "status": "drifted",
+   "was": "ec7da60",
+   "then": "8d9c5cdd57dd",
+   "now": "faea9c9bbc86",
+   "thenLines": 10,
+   "nowLines": 10,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/_order.py:95:                The inversion is the damage. cam_viewer's own docstring promises",
+    "3c8fcaa:tests/smoke/_order.py:187: +14         -- test_cam_viewer, 2026-09-15 (T096). The interactive viewer's",
+    "3c8fcaa:tests/smoke/_order.py:197: +5          -- test_cam_viewer, 2026-09-15 (T097). jacobgil/pytorch-grad-cam,"
+   ]
+  },
+  {
+   "fact": "F3034",
+   "orig": "G4-F591",
+   "cmd": "git grep -n -e \"def test_t004_per_label_attention\" 0b783b8 -- tests/smoke",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "66f3da24714d",
+   "now": "9c3aaed3d1a5",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/heads.py:112:def test_t004_per_label_attention():"
+   ]
+  },
+  {
+   "fact": "F3082",
+   "orig": "G4-F639",
+   "cmd": "git grep -n -e pgrep 0b783b8 -- scripts/gpu_watchdog.sh",
+   "status": "same",
+   "was": "0b783b8",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F3184",
+   "orig": "G4-F741",
+   "cmd": "git grep -n -e \"outputs/t119\" 0b783b8 -- tests/smoke/tooling.py",
+   "status": "drifted",
+   "was": "0b783b8",
+   "then": "a17eaf1d7782",
+   "now": "bad556be7e43",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:tests/smoke/tooling.py:1307:    # of this function looped over outputs/t119 and outputs/t117, asserting each"
+   ]
+  },
+  {
+   "fact": "F3350",
+   "orig": "GC-F145",
+   "cmd": "git grep -n -e update_bn 685d4b9 -- src/train.py",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "0b7632ca1ed6",
+   "now": "0e0fe0a2a0b4",
+   "thenLines": 1,
+   "nowLines": 1,
+   "nowHead": [
+    "3c8fcaa:src/train.py:65:    close together, so this is the cheap approximation of `update_bn` -- which"
+   ]
+  },
+  {
+   "fact": "F3389",
+   "orig": "GC-F184",
+   "cmd": "git grep -n -e emit_axis 685d4b9 -- src/ notebooks/ scripts/",
+   "status": "drifted",
+   "was": "685d4b9",
+   "then": "74b326241014",
+   "now": "68004594e7f7",
+   "thenLines": 15,
+   "nowLines": 15,
+   "nowHead": [
+    "3c8fcaa:notebooks/kaggle_inference.py:392:                              emit_axis=(\"mirror\" in views))",
+    "3c8fcaa:notebooks/kaggle_tta_screen.py:220:                                  emit_axis=(\"mirror\" in views))",
+    "3c8fcaa:scripts/layout_guard.py:96:    \"emit_axis\":    \"the fifth meta column, and `KneeMIL` reads columns 0-3 and \""
+   ]
+  },
+  {
+   "fact": "F3396",
+   "orig": "GC-F191",
+   "cmd": "git grep -n -e persistent_workers 685d4b9 -- src/train.py",
+   "status": "same",
+   "was": "685d4b9",
+   "then": "e3b0c44298fc",
+   "now": "e3b0c44298fc",
+   "thenLines": 0,
+   "nowLines": 0,
+   "nowHead": []
+  },
+  {
+   "fact": "F3472",
+   "orig": "GC-F267",
+   "cmd": "git grep -n -e git_provenance( b3e35d5 -- src/ scripts/ notebooks/",
+   "status": "drifted",
+   "was": "b3e35d5",
+   "then": "d21ee74db822",
+   "now": "5db6acf8ff70",
+   "thenLines": 3,
+   "nowLines": 3,
+   "nowHead": [
+    "3c8fcaa:src/train.py:548:def git_provenance(root=None):",
+    "3c8fcaa:src/train.py:588:PROVENANCE = None   # set in main(); see git_provenance()",
+    "3c8fcaa:src/train.py:1987:    PROVENANCE = git_provenance()"
+   ]
+  }
+ ]
+}

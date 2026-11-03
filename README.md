@@ -256,6 +256,15 @@ projects are edited there.
 **Agents** lists the agent sessions holding work now, with what they hold,
 their latest note, and whether their claim has gone stale. **Pipeline agents**
 holds the agents the pipeline routes stages to and their record per role.
+**Account limits** shows, for each Claude account signed in on this machine,
+how much of its session (5-hour) and weekly limits is used, when each window
+began and when it resets, so a fan-out goes to the account with room; agents
+get the same from `GET /api/limits` (each window's `beganAt` and `resetsAt`)
+and `/aa limits`. A 5-hour window opens with the first message after the last
+one closed, so an account with none open says the next message starts one. The
+same numbers stay in a strip under the top bar on every page, every account and
+every limit it has, and the page reads them again every 30 seconds while it is
+in sight.
 **Activity** shows one row per task per day (for example, Backlog → In
 progress → Done); expanding a row lists each raw change with its commit. It
 filters by kind and project. **All tasks** (from Projects) and search span the
@@ -350,7 +359,7 @@ in the repository. Starting AGE Aris with `AGEARIS_TRACKED_WRITES=0` turns
 task actions off for every tracked repository.
 
 Each action changes one task file, its folder included, and nothing else in
-the index or working tree. On a board with `backlog/`, claim moves the file
+the index or working tree; Done's release, below, comes after that commit. On a board with `backlog/`, claim moves the file
 from `backlog/` to `tasks/` and release moves it back; on an older board
 without one, both change the file in place. Done moves it to `tasks/done/` and,
 when its `## Result` is still a placeholder, asks for one line to put there.
@@ -384,8 +393,41 @@ Claim on a task one of your own agent sessions holds takes it back (AA rule
 
 **Done leaves the checkpoint trail in place.** AA's Done retires the trail
 with `AA/ckpt.sh close <ID> --delete`; AGE Aris does not write trails or run
-`ckpt.sh`, so a done on a task that has a trail reminds you to run that
-command. This is a deliberate deviation from the board's Done.
+the repository's `ckpt.sh`, so a done on a task that has a trail reminds you to
+run that command. This is a deliberate deviation from the board's Done.
+
+**Done releases what the task holds (rule 13).** On a board whose `AA.yml` names
+`scratch:`, Done goes on to run AGE Aris's own copy of `ckpt.sh release` from
+the repository, so the board needs no copy of its own:
+
+- The task's scratch folders and merged branches are deleted. What it keeps is
+  committed to `AA/evidence/<ID>/` first, as one more commit, made with git
+  plumbing: no git command that can read a filter or a hook runs, and it is never
+  pushed.
+- Work not on the main line, anything in use, and a folder an open task cites all
+  stay, and the result names them. So does a folder holding a linked worktree or
+  a nested repository, because reading one would use its own git config: run the
+  command the result gives from a terminal. The release also refuses while a run
+  on the task has not ended, during a merge or rebase, when the pinned branch is
+  not the main line, when `scratch:` is not ignored by git, when the repository's
+  own config names a filter (one in your global config, such as LFS, is yours and
+  does not count), or when a symlink lies on the way to `AA/evidence/` or a kept
+  file.
+- A refused or failed release never undoes the Done. The result says why and
+  gives the command to run from a terminal.
+- A long release goes on after the answer: `GET /api/tasks/:id` carries
+  `release: { state, summary, lines, remedy }`, and the page says when it ends.
+  Each release leaves a line in `releases.jsonl` in AGE Aris's data folder.
+
+**AGE Aris also releases tasks closed with git.** A running server looks a minute
+after it starts, then every ten minutes, on each board with task actions on
+whose `AA.yml` names `scratch:`. A done task in `HEAD` with a scratch entry or a
+branch named for it is released once AGE Aris has known of it for an hour, so the
+agent closing it can finish. A restart starts that hour again. Nobody takes any
+action for this, and the same rules decide what goes. What stays is not tried
+again for a day. The project page says how many went and what is stuck;
+`GET /api/projects/:id` carries it as `actions.releases`. Switching task actions
+off stops the sweep, between tasks too.
 
 **What agents in the repository see.** While AGE Aris commits (normally tens
 of milliseconds, at most 3 seconds) git's index lock is held, so an agent's
@@ -442,6 +484,25 @@ branch they pin. `.agearis-data/tracked-inflight/` holds a marker while a task
 action on a tracked repository is being written, so an interrupted one is
 settled, or named, when AGE Aris starts again.
 
+A project of either kind can be deprecated or archived from its header, and
+restored. The state is `lifecycle` in its `project.json`:
+`{state: "deprecated" | "archived", since, reason, successor}`, where
+`successor` is the id of the active project that replaces it. Without
+`lifecycle`, a project is active. Archiving a deprecated project keeps its
+reason and successor unless new ones are given. A project with a pipeline run
+still going is refused until the run is finished or cancelled.
+- **Deprecated:** the project stays listed, badged, and leaves Needs you,
+  Decisions and Activity across projects.
+- **Archived:** the project moves to an Archived list on the Projects page,
+  and leaves Home, the sidebar, All tasks and Working as well.
+
+Either way the project is read-only until it is restored: no task actions,
+task edits, new tasks, new runs or project edits. Its own pages still read.
+Nothing is deleted:
+- A tracked repository's state is written only in AGE Aris's data folder.
+  Its task-actions switch is kept, and comes back on restore.
+- An AGE Aris project's change is one commit to its `project.json`.
+
 Agents are registered in `.agearis-data/registry/agents.json`, a separate git
 repository. Agents start in `.agearis-data/workdirs/` unless configured
 otherwise. `.agearis-data/.api-token` holds the local API token.
@@ -465,6 +526,31 @@ Choose another data directory or port when starting:
 ```sh
 AGEARIS_DATA_DIR=/path/to/workspace PORT=4400 npm start
 ```
+
+AGE Aris makes two kinds of outbound call, and only when an open page, `GET
+/api/limits` or `/aa limits` asks. The first is `GET
+https://api.anthropic.com/api/oauth/usage`, once per Claude account, the request
+Claude Code's `/usage` makes. It finds the accounts as the Claude Code config
+folders in the home folder, `~/.claude` and `~/.claude-<profile>`, and reads
+each one's `.credentials.json` for its OAuth access token and plan. The second
+is made only for an account whose access token has lapsed: `POST
+https://platform.claude.com/v1/oauth/token`, the renewal Claude Code makes, with
+that profile's refresh token. Renewing rotates the refresh token, so AGE Aris
+writes the renewed sign-in back into that `.credentials.json` (the access token,
+refresh token and their expiry times and scopes; every other field stays, the
+file stays 0600, and the write is a temporary file renamed over it). If Claude
+Code renewed the file in the meantime, its sign-in is kept and nothing is
+written. A refused renewal changes nothing: the account shows as expired, with
+its last good reading, and says to sign in again; it is tried again after 5
+minutes. That file is the only one under `~/.claude*` AGE Aris writes. Tokens go
+in those requests and that file and nowhere else: not to the browser, a log,
+the data folder or git. Both requests name AGE Aris (`User-Agent: agearis`).
+Readings are held in memory for 55 seconds per account, and `?refresh=1` reads
+again at most every 30 seconds, so Anthropic is asked at most about once a
+minute per account. When it answers 429, that account is not asked again until
+the reply's `retry-after` has passed (5 minutes when it gives none), doubled
+for each 429 in a row up to 30 minutes; meanwhile it shows its last good
+reading and `nextReadAt`, when it will be read next.
 
 The server listens on `127.0.0.1`. This release uses one local operator, with the
 git identity configured on the machine. Named task owners are planning metadata;
@@ -504,7 +590,8 @@ skills/aa-init/               existing agent task-board integration
 The AGE Aris plugin, `agearis`, gives Claude Code two commands: `/aa-init`
 sets up an AA board in a repository, and `/aa` shows a repository's board and
 the link to its page in AGE Aris, starting AGE Aris when it is not running
-(`/aa open` opens the page). Install it from a terminal, in one line:
+(`/aa open` opens the page; `/aa limits` lists each Claude account's limits
+instead of the board). Install it from a terminal, in one line:
 
 ```sh
 claude plugin marketplace add adervark/AGEAris && claude plugin install agearis@agearis

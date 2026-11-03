@@ -1,0 +1,548 @@
+{"kind":"same","group":3,"facts":["V3825","V2517"],"finding":"conflict","why":"Correction: V3825 (lane7) says budget_minutes under-predicts by 2x (134 vs 67 min); V2517 (lane11) says 134 is 67 x 2 layout passes, the kernel's own prediction, and the real error is a 1.33x slope","run":"4279585a.711b"}
+{"kind":"same","group":3,"facts":["V2176","V2690"],"finding":"conflict","why":"V2176: dropping the ten fold? members unlocks mirror/rot+/rot-; V2690: 12 members (armb0 x2 + fold x10) carry mirror=rotate=0, so the views stay refused after dropping ten","run":"4279585a.711b"}
+{"kind":"same","group":3,"facts":["V224","V723"],"finding":"superseded","why":"V224 bracketed the TTA fix's LB gain at +0.000 to +0.003; V723: the bug and fixed submissions tie at public 0.926, a measured +0.000 inside the bracket","run":"4279585a.711b"}
+{"kind":"same","group":4,"facts":["V2173","V2515"],"finding":"conflict","why":"V2173: the kernel prints ~67 min for two passes at 22x3; V2515 (with V2510): it prints ~67 min x ~2 for the extra pass, i.e. 134 min for the two layout passes","run":"4279585a.711b"}
+{"kind":"same","group":6,"facts":["V2750","V3004"],"finding":"conflict","why":"V2750: in-domain SSL (proposal 2) costs 32-107 GPU-h; lane12's own bill at the optimistic 400/s gives 114-228 h (V3004, SimCLR/MoCo) and 228-455 h for MAE, so 32-107 matches no row","run":"4279585a.711b"}
+{"kind":"same","group":8,"facts":["V3246","V3249"],"finding":"conflict","why":"V3246: the +0.012 winner's-curse gain is larger than the whole gap to the top 20; V3249: rank 20 is 0.946 on the same snapshot, 0.020 above our 0.926 (V3243), so 0.012 < gap","run":"4279585a.711b"}
+{"kind":"same","group":8,"facts":["V3232","V1109"],"finding":"superseded","why":"V3232: 3 teams at >=0.95 in the 09-01 snapshot; V1109: 4 on 09-02, a later count of a moving quantity","run":"4279585a.711b"}
+{"kind":"same","group":8,"facts":["V3233","V1110"],"finding":"superseded","why":"V3233: 28 teams at >=0.945 on 09-01; V1110: 29 on 09-02, a later count","run":"4279585a.711b"}
+{"kind":"same","group":8,"facts":["V3234","V1111"],"finding":"superseded","why":"V3234: 84 teams at >=0.94 on 09-01; V1111: 88 on 09-02, a later count","run":"4279585a.711b"}
+{"kind":"same","group":8,"facts":["V3235","V1114"],"finding":"superseded","why":"V3235: 664 teams at >=0.935 on 09-01; V1114: +30 in the 16 h to 09-02 (694), a later reading","run":"4279585a.711b"}
+{"kind":"same","group":8,"facts":["V3223","V1117"],"finding":"superseded","why":"V3223: 2,844 teams in the 09-01 snapshot; V1117: +45 teams by 09-02, a later reading of the field size","run":"4279585a.711b"}
+{"kind":"same","group":11,"facts":["V2750","V3004"],"finding":"conflict","why":"V2750: in-domain SSL costs 32-107 GPU-h; the same lane's bill at the optimistic 400/s gives 114-228 h for SimCLR/MoCo (V3004) and 228-455 h for MAE (V3008); 32-107 fits no row","run":"4279585a.711b"}
+{"kind":"same","group":15,"facts":["V2376","V3749"],"finding":"conflict","why":"V2376: --layer-decay 0.6 leaves the late encoder, holding most of the parameters, at full LR; V3749: only the top 31 % of encoder parameters sit at the full 3e-4 (mean encoder LR 1.35e-4, V3748)","run":"4279585a.711b"}
+{"kind":"same","group":18,"facts":["V3825","V2517"],"finding":"conflict","why":"Correction: V3825 (lane7) says budget_minutes under-predicts by 2x (134 vs 67 min); V2517 (lane11): 134 is 67 x 2 layout passes, the kernel's own prediction; the real error is the 1.33x slope","run":"4279585a.711b"}
+{"kind":"same","group":18,"facts":["V2176","V2690"],"finding":"conflict","why":"V2176: dropping the ten fold? members unlocks mirror/rot+/rot-; V2690: 12 members (armb0 x2 + fold x10) carry mirror=rotate=0, so dropping ten leaves the views refused","run":"4279585a.711b"}
+{"kind":"same","group":21,"facts":["V339","V713"],"finding":"conflict","why":"V339 (R1, written 09-01): 11 submissions ever spent; V713: 16 measured 08-18 to 09-02, and lane13's dated ladder already holds 14 by 08-30, so 11 was stale when written","run":"4279585a.711b"}
+{"kind":"same","group":24,"facts":["V1214","V1236"],"finding":"conflict","why":"Same lane: V1214 puts the nested-config LB sd at ~0.0003; V1236 computes +0.0057 'at the nested-config sd of 0.0028', which is the low end of the structurally-distinct range 0.0028-0.0070","run":"4279585a.711b"}
+{"kind":"same","group":24,"facts":["V3237","V3250"],"finding":"conflict","why":"V3237: the 0.936 plateau spans ranks ~100-500; V3250: the same snapshot table puts 0.936 at ranks 200-500, and its rank 100 scores 0.938, so the plateau cannot start near 100","run":"4279585a.711b"}
+{"kind":"same","group":27,"facts":["V60","V437"],"finding":"conflict","why":"Correction: V60 (R1) says our per-model quality is two to four points behind the field; V437 (R2) says our 22 at 0.926 is level with one public model, not two to four points behind a field","run":"4279585a.711b"}
+{"kind":"ok","group":29,"why":"40 facts; lane13's inflation table recomputes from sd*sqrt(2 ln K) at 0.0028/0.0070; lane3's +0.012 at ~200 and R1's ~+0.010 at ~40 agree; no same-quantity disagreement","run":"4279585a.711b"}
+{"kind":"same","group":34,"facts":["V2750","V3004"],"finding":"conflict","why":"V2750: in-domain SSL costs 32-107 GPU-h; the lane's own bill at the optimistic 400/s gives 114-228 h for SimCLR/MoCo (V3004) and 228-455 h for MAE (V3008); 32-107 fits no row","run":"4279585a.711b"}
+{"kind":"ok","group":37,"why":"37 facts, mostly kernel docstrings at d9c7c6e plus lane11's MAX_LAYOUTS = 2; layout cap, member weighting and view refusal all agree","run":"4279585a.711b"}
+{"kind":"ok","group":40,"why":"33 facts; same-recipe member +0.0001-0.0005 (R1, R2, lane3 <=+0.0005) agree; Raptor +0.002-0.008, ~+0.004 consistent; lane9's null for more members is the field, not a figure","run":"4279585a.711b"}
+{"kind":"same","group":41,"facts":["V47","V613"],"finding":"conflict","why":"V47: the Sonnet-label instrument's paired band at corpus n is +/-0.0100; V613 (and V197, V3317, lane9, lane12): +/-0.0019. R1 gives +/-0.0100 as gold's paired band, not Sonnet's","run":"4279585a.711b"}
+{"kind":"same","group":41,"facts":["V47","V197"],"finding":"conflict","why":"Same document: V47 puts the Sonnet instrument's paired band at +/-0.0100; V197 gives OOF AUC vs Sonnet a paired half-width of +/-0.0019 (power 0.999 at +0.005)","run":"4279585a.711b"}
+{"kind":"same","group":44,"facts":["V2750","V3004"],"finding":"conflict","why":"V2750: in-domain SSL costs 32-107 GPU-h; the lane's own bill at the optimistic 400/s gives 114-228 h for SimCLR/MoCo (V3004) and 228-455 h for MAE (V3008); 32-107 fits no row","run":"4279585a.711b"}
+{"kind":"ok","group":47,"why":"29 facts; our public score 0.926 on 09-01 (lane0, lane9) and 09-02 (lane9) agree, 'we did not move'; the rest are lane9 lever rankings with no counterpart","run":"4279585a.711b"}
+{"kind":"ok","group":51,"why":"27 facts; public recipe encoder LR 3e-5 (lane10, lane6), the 10x gap to our 3e-4, and lane6's +0.005 to +0.010 estimate agree across documents","run":"4279585a.711b"}
+{"kind":"ok","group":54,"why":"26 facts; smoke-test docstrings at 6d10943 and R1's reproduction of the channel defect agree; T009's ~2 min/1 and ~6 min/5 members match the budget docstring","run":"4279585a.711b"}
+{"kind":"ok","group":58,"why":"24 facts; rule 2.4.b text, the unstated split fraction and 'nothing bars test-time adaptation' agree across lane0, lane9 and lane12","run":"4279585a.711b"}
+{"kind":"ok","group":59,"why":"24 facts; Raptor gold-58 figures 0.9054/0.9128/0.9167/0.9213 are different reproductions stated as such; gold gap 0.9054 - 0.8793 = 0.0261 and LB gap ~0.024 are distinct quantities","run":"4279585a.711b"}
+{"kind":"same","group":63,"facts":["V240","V381"],"finding":"conflict","why":"R1 ranks the second sequence family at +0.005 to +0.015 (V240), but its optimistic-ends sum takes that lever's optimistic end as +0.010 (V381), not +0.015","run":"4279585a.711b"}
+{"kind":"same","group":63,"facts":["V387","V664"],"finding":"superseded","why":"V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 because full-data training is new evidence, replacing the earlier expectation","run":"4279585a.711b"}
+{"kind":"same","group":66,"facts":["V3746","V2214"],"finding":"conflict","why":"V3746 (STATE CPU check): timm finds 23 layer levels in tf_efficientnet_b2 -> 48 groups; V2214 (lane10, MEASURED): 24 distinct layer levels; lane10 still says the two agree","run":"4279585a.711b"}
+{"kind":"ok","group":69,"why":"22 facts, gradcam.py docstrings at d9c7c6e with lane10's add_argument lines and the smoke test's rank/order; no quantity stated twice with different values","run":"4279585a.711b"}
+{"kind":"ok","group":72,"why":"22 facts; the hidden test set is ~1,300 studies in R1, the brief, lane4, lane11 and lane12 alike","run":"4279585a.711b"}
+{"kind":"same","group":76,"facts":["V91","V559"],"finding":"conflict","why":"Same FOV 130-320 mm, median 160: V91 gives the spread as 1.39x (p95/p05), V559 as 0.92x; a p95/p05 spread cannot be below 1","run":"4279585a.711b"}
+{"kind":"same","group":76,"facts":["V382","V661"],"finding":"conflict","why":"V382: R1 sums the mm crop at an optimistic end of +0.005; V661 (and R1's own lever 4) bands it +0.003 to +0.008, whose optimistic end is +0.008","run":"4279585a.711b"}
+{"kind":"same","group":76,"facts":["V387","V664"],"finding":"superseded","why":"V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 on the new full-data evidence, replacing the earlier expectation","run":"4279585a.711b"}
+{"kind":"ok","group":79,"why":"21 facts, all lane10's layout-cap reasoning plus dataset.py docstrings; layout key, the T007 third layout and SystemExit agree internally","run":"4279585a.711b"}
+{"kind":"ok","group":82,"why":"20 facts; Scott Willis rank 7 at 0.948 and efficiency rank 1 agree between lane9 and lane0","run":"4279585a.711b"}
+{"kind":"same","group":85,"facts":["V257","V383"],"finding":"conflict","why":"R1 bands the training recipe at +0.003 to +0.010 combined (V257) but sums it at an optimistic end of +0.005 (V383); the band's optimistic end is +0.010","run":"4279585a.711b"}
+{"kind":"same","group":85,"facts":["V387","V664"],"finding":"superseded","why":"V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 on the new full-data evidence, replacing the earlier expectation","run":"4279585a.711b"}
+{"kind":"ok","group":87,"why":"19 facts; the gold return curve flat past k ~ 12 (R1, R2, lane10) agrees; lane10's seed=0 explanation is marked a hypothesis, not a competing figure","run":"4279585a.711b"}
+{"kind":"ok","group":90,"why":"18 facts; R1's mirror bug (tta.py:218, d9c7c6e) and lane10's clean mirror_bag (:223, e4e356c) are two readings of code fixed in between (T039), not a disagreement","run":"4279585a.711b"}
+{"kind":"ok","group":92,"why":"18 facts; ROADMAP's label-swapping mirror permission, the n=58 rule-labeler ruling and what the section does not name (rank averaging, pretraining) agree across R2, lane11, lane12","run":"4279585a.711b"}
+{"kind":"ok","group":95,"why":"17 facts on src/model.py (dropout 0.3 default, masked-softmax pooling, pretrained encoder, GRU head); each stated once or consistently","run":"4279585a.711b"}
+{"kind":"ok","group":98,"why":"17 facts; SWA averages BatchNorm buffers instead of recomputing them and update_bn is never called, the same in lane12 and the train.py docstring","run":"4279585a.711b"}
+{"kind":"ok","group":101,"why":"17 facts; dataset.py docstrings (adjacent packing, emit_axis off by default, epoch set before the iterator, persistent_workers off) agree with lane10's clean epoch-propagation reading","run":"4279585a.711b"}
+{"kind":"ok","group":104,"why":"17 facts; ~13,920 AdamW steps at a flat 3e-4, S1 at one ~2.5 h fold and a 16-epoch schedule at ~5 h, S1 band +0.005 to +0.010 all consistent","run":"4279585a.711b"}
+{"kind":"ok","group":107,"why":"16 facts; efficiency LB rank 1 is Scott Willis at 0.948 in both lane0 and lane9","run":"4279585a.711b"}
+{"kind":"same","group":110,"facts":["V3223","V1116"],"finding":"superseded","why":"V3223: 2,844 teams in the 09-01T18:44Z snapshot; V1116: 2,889 teams on 09-02 (+45), a later count of the field","run":"4279585a.711b"}
+{"kind":"same","group":110,"facts":["V19","V1116"],"finding":"superseded","why":"V19 (R1): 2,844 teams, the 09-01 snapshot; V1116: 2,889 on 09-02, a later count","run":"4279585a.711b"}
+{"kind":"same","group":113,"facts":["V4050","V221"],"finding":"superseded","why":"V4050: ROADMAP's T4 ~2.7 h/fold from T022 (08-24); V221: Kaggle 4.9 h/fold, the later measured rate for the current recipe (lane2: 4.9 vs 2.05 local)","run":"4279585a.711b"}
+{"kind":"same","group":113,"facts":["V234","V3026"],"finding":"conflict","why":"V234: 5 Kaggle folds cost 24.5 h at 4.9 h/fold (V221); V3026: five follow-up folds are ~20 h at T4 rates, i.e. ~4 h/fold","run":"4279585a.711b"}
+{"kind":"ok","group":115,"why":"14 facts; channel 0 is the i-1 slice under --adjacent, so the collapsed tensor is three copies of the preceding slice; 24 of 66 forwards agree in R1 and lane13","run":"4279585a.711b"}
+{"kind":"ok","group":118,"why":"14 facts; T004's per-label-attention gain is +0.0188 and unexplained in R1, the model.py docstring and lane10 alike","run":"4279585a.711b"}
+{"kind":"ok","group":121,"why":"14 facts, all R2 and the brief on S1: zero code, one ~2.5 h fold, +0.005 to +0.010; no figure stated twice with different values","run":"4279585a.711b"}
+{"kind":"same","group":126,"facts":["V3824","V2515"],"finding":"conflict","why":"Correction: V3824 (lane7) calls ~134 min the measured 22-member rerun; V2515 (lane11): 134 is 67 x 2 layout passes, the kernel's own printed prediction, not a measurement","run":"4279585a.711b"}
+{"kind":"same","group":126,"facts":["V3825","V2514"],"finding":"conflict","why":"Correction: V3825 (lane7): the budget model under-predicts by 2x in practice; V2514 (lane11): not right as stated, the 2x is the layout multiplier the kernel already applies","run":"4279585a.711b"}
+{"kind":"same","group":129,"facts":["V3314","V1508"],"finding":"conflict","why":"V3314 (lane3): the OOF-AUC-vs-Sonnet instrument has n = 3,749, the studies the Sonnet labeler read; V1508 (lane9): 4,349 studies, which is the OOF rho corpus vs Opus, not Sonnet's","run":"4279585a.711b"}
+{"kind":"ok","group":132,"why":"13 facts; --rotate is on for arm C, absent from the stale armc1 staging list, and gates rot views; lane10 and the docstrings agree","run":"4279585a.711b"}
+{"kind":"ok","group":135,"why":"13 facts, lane2's option (a) costs and memory figures with lane9's corroboration of the encoder-scaling null; nothing stated twice with different values","run":"4279585a.711b"}
+{"kind":"ok","group":138,"why":"12 facts; the card rule (one fold, then cool down, via gpu_queue.sh) and lane9's window-count lever do not overlap in any quantity","run":"4279585a.711b"}
+{"kind":"ok","group":141,"why":"12 facts; 8,113 of 8,529 second-family series missing from manifest.csv and the manifest's 13,221 series are compatible; T007 gated on the rebuild throughout","run":"4279585a.711b"}
+{"kind":"ok","group":144,"why":"12 facts; --layer-decay defaults to 1.0, the --encoder-lr fix is ~8 lines in both mentions, and T025's 40 groups are a different encoder","run":"4279585a.711b"}
+{"kind":"ok","group":149,"why":"11 facts; Raptor arm +0.002 to +0.008, most likely ~+0.004 in both R2 tables; lane9 changes its priority, not its size","run":"4279585a.711b"}
+{"kind":"ok","group":152,"why":"11 facts; no checkpoint has seq_head=True (lane10) and all 22 deployed carry it False or absent (lane11); kernel reads it from the checkpoint","run":"4279585a.711b"}
+{"kind":"ok","group":155,"why":"11 facts; 4,407 training studies, 58 expert-labelled, 4,349 report-only, the same in README and lane12","run":"4279585a.711b"}
+{"kind":"same","group":158,"facts":["V240","V381"],"finding":"conflict","why":"R1 ranks the second sequence family at +0.005 to +0.015 (V240, and R2's V658), but its optimistic-ends sum takes that lever at +0.010 (V381), not +0.015","run":"4279585a.711b"}
+{"kind":"same","group":158,"facts":["V387","V664"],"finding":"superseded","why":"V387: R1's realistic public read 0.940-0.948; V664: R2 raises it to 0.945-0.955 on the new full-data evidence, replacing the earlier expectation","run":"4279585a.711b"}
+{"kind":"ok","group":161,"why":"11 facts; the fold-0 paired corpus-rho band is +/-0.0102 in lane6, lane9 and lane10 alike","run":"4279585a.711b"}
+{"kind":"ok","group":165,"why":"10 facts; channel 0 = slice i-1 under --adjacent, so the collapsed tensor is three copies of the preceding slice; 24 of 66 forwards in R1 and lane13","run":"4279585a.711b"}
+{"kind":"ok","group":167,"why":"10 facts; the gold set is 58 studies in R1, README, gradcam.py and the forum post lane9 quotes","run":"4279585a.711b"}
+{"kind":"ok","group":170,"why":"10 facts; T024's 27 minutes of local inference and zero GPU hours agree between PROGRESS.md and lane12; lane12's per-pass split is an inference, judged with the checks","run":"4279585a.711b"}
+{"kind":"ok","group":176,"why":"9 facts; lr_scale is linear warmup then cosine, warmup defaults to 0, flags wired correctly (R1, lane6, docstring)","run":"4279585a.711b"}
+{"kind":"ok","group":179,"why":"9 facts; Dread Development rank 78, 0.940, 54 submissions, CC0-1.0 weights, stated alike in lane9 and lane7","run":"4279585a.711b"}
+{"kind":"ok","group":183,"why":"8 facts from T028's decision rules plus lane10's 'already registered'; arm C bundle, view lock and 3 of 6 views agree","run":"4279585a.711b"}
+{"kind":"same","group":186,"facts":["V3824","V2515"],"finding":"conflict","why":"Correction: V3824 (lane7) calls ~134 min the brief's measured rerun; V2515 (lane11): 134 is 67 x 2 layout passes, the kernel's printed prediction, not a measurement","run":"4279585a.711b"}
+{"kind":"same","group":186,"facts":["V3825","V2515"],"finding":"conflict","why":"Correction: V3825 (lane7): budget_minutes under-predicts by 2x against a measured 134 min; V2515 (lane11): the 134 is the kernel's own x2 prediction, so the 2x is not a modelling error","run":"4279585a.711b"}
+{"kind":"ok","group":189,"why":"8 facts, lane7 §3.4 and the budget_minutes docstring; 1 + members x views gives 67 at 22x3 throughout; lane11's correction is not in this group","run":"4279585a.711b"}
+{"kind":"same","group":192,"facts":["V83","V424"],"finding":"conflict","why":"Same description of our input, 3 fluid-sensitive slots: V83 says 36 slices, V424 says 32; 3 slots x --slices 12 = 36 (bag width 36 elsewhere)","run":"4279585a.711b"}
+{"kind":"ok","group":195,"why":"8 facts; 4,407 training studies in README and lane12 alike","run":"4279585a.711b"}
+{"kind":"ok","group":198,"why":"8 facts; every store_true flag lane10 lists defaults off, as the build_parser docstring says of the riders","run":"4279585a.711b"}
+{"kind":"ok","group":201,"why":"7 facts; weight decay is the literal 1e-4, written four times, in lane10 and lane6 alike","run":"4279585a.711b"}
+{"kind":"same","group":204,"facts":["V2108","V4058"],"finding":"conflict","why":"Same fold-cost estimate in the PROGRESS entry titled '22% off the estimate': V4058 says the estimate was 22% low, V2108 says 63% low","run":"4279585a.711b"}
+{"kind":"ok","group":207,"why":"7 facts; six views defined, RSNA_TTA's default lists crop,bright (2 of 6) and the identity view always runs, so 3 of 6 run; consistent","run":"4279585a.711b"}
+{"kind":"ok","group":210,"why":"7 facts, the brief's pointers to lane6 and rounds 1-2 plus lane9's note; no quantity in common","run":"4279585a.711b"}
+{"kind":"same","group":213,"facts":["V327","V2973"],"finding":"conflict","why":"Both cite lanes 1/5 on how many series a 130 mm crop clips: V327 says 0.5 %, V2973 says 1.8 %","run":"4279585a.711b"}
+{"kind":"ok","group":216,"why":"6 facts; T003's rule that per-view dumps open only if the bundle fails reads the same in PROGRESS.md and lane11","run":"4279585a.711b"}
+{"kind":"ok","group":218,"why":"6 facts, lane6's windowing row and lane10's pointer to it; the +0.001 to +0.004 share is stated once","run":"4279585a.711b"}
+{"kind":"ok","group":221,"why":"6 facts; data/llm_labels.csv is the hosted-model teacher, always passed as --labels; its 3,609 positive studies stated once","run":"4279585a.711b"}
+{"kind":"ok","group":224,"why":"6 facts; best published LLM reader 0.881 in lane5 and R2, our teacher 0.8976 ahead of it in both","run":"4279585a.711b"}
+{"kind":"same","group":227,"facts":["V3232","V1109"],"finding":"superseded","why":"V3232: 3 teams at >=0.95 in the 09-01 snapshot; V1109: 4 on 09-02, a later count of a moving quantity","run":"4279585a.711b"}
+{"kind":"same","group":227,"facts":["V961","V1109"],"finding":"superseded","why":"V961 (brief): 3 teams at >=0.95 as of 09-01; V1109: 4 on 09-02, a later count","run":"4279585a.711b"}
+{"kind":"ok","group":230,"why":"6 facts; dump_views.py shares one dataloader pass and reads slices/img_size from checkpoint args, per lane11 and its docstring","run":"4279585a.711b"}
+{"kind":"ok","group":233,"why":"6 facts; T025's dinov3 checkpoint carries layer_decay=0.75 and build_optimizer's decay branch ran (40 groups); no figure disagrees","run":"4279585a.711b"}
+{"kind":"ok","group":234,"why":"5 facts; slices_per_plane cuts the bag into ordered chunks and dump_views reads it from the checkpoint; consistent","run":"4279585a.711b"}
+{"kind":"ok","group":236,"why":"5 facts; averaged BN stats are the cheap approximation of update_bn, which the repo never calls, in lane12 and train.py alike","run":"4279585a.711b"}
+{"kind":"ok","group":239,"why":"5 facts; the OOF-AUC-vs-Sonnet half-width is +/-0.0019 in lane3 and lane9 alike","run":"4279585a.711b"}
+{"kind":"ok","group":242,"why":"5 facts; lane9's 4,349-study size has no differing size in this group (lane3's n is not here); standing as tightest instrument agrees","run":"4279585a.711b"}
+{"kind":"ok","group":245,"why":"5 facts; the Raptor head's Dropout(0.2) and gated pooling read the same in lane6 and lane10","run":"4279585a.711b"}
+{"kind":"ok","group":248,"why":"5 facts; lane0 did not read the forum and lane9 says round 1 never read it; the proxy failures are stated once","run":"4279585a.711b"}
+{"kind":"ok","group":253,"why":"4 facts; T028's 3 of 6 views and lane10's 'already registered' agree","run":"4279585a.711b"}
+{"kind":"ok","group":256,"why":"4 facts, all lane7 §3.4 at one commit; the correcting lane11 facts are not in this group","run":"4279585a.711b"}
+{"kind":"ok","group":259,"why":"4 facts; train.csv has 4,407 rows, exactly 58 labelled, matching README","run":"4279585a.711b"}
+{"kind":"ok","group":262,"why":"4 facts of task front matter (T047 depends on nothing, T034 on T024 and T028); no shared quantity","run":"4279585a.711b"}
+{"kind":"ok","group":265,"why":"4 facts; the archived Kaggle fold 0 corpus rho is 0.6336 in PROGRESS.md and lane12","run":"4279585a.711b"}
+{"kind":"ok","group":268,"why":"4 facts; ROADMAP:480's rule-labeler ruling quoted identically by lane12","run":"4279585a.711b"}
+{"kind":"ok","group":271,"why":"4 facts; lane5 dissected 23 notebooks and the 0.936 plateau, per the brief and lane9","run":"4279585a.711b"}
+{"kind":"ok","group":274,"why":"4 facts; --split-seed pins the partition, S1/S2 use seed 0 split-seed 0; consistent","run":"4279585a.711b"}
+{"kind":"ok","group":277,"why":"4 facts on --fold (definition line, push_family's '=' guard, the dry-run folds); no shared quantity","run":"4279585a.711b"}
+{"kind":"ok","group":280,"why":"4 facts; local fold 0 corpus rho 0.6451 in PROGRESS.md and lane12; 0.6451 - 0.6336 = +0.0115 lies outside +/-0.0102 as stated","run":"4279585a.711b"}
+{"kind":"ok","group":282,"why":"3 facts; R2 amends R1 and the brief names both syntheses; no disagreement","run":"4279585a.711b"}
+{"kind":"ok","group":284,"why":"3 facts; the sequence head and side projections are zero-init in lane10 and the model.py docstring","run":"4279585a.711b"}
+{"kind":"ok","group":287,"why":"3 facts; load_model rebuilds from the checkpoint's own args, so auc may be absent; consistent","run":"4279585a.711b"}
+{"kind":"ok","group":290,"why":"3 facts; 8 vs 16 epochs and the ~5 h doubled fold cost stated alike in lane6 and lane10","run":"4279585a.711b"}
+{"kind":"ok","group":293,"why":"3 facts; public sd between structurally distinct configs is 0.0028-0.0070 in lane3 and lane9","run":"4279585a.711b"}
+{"kind":"ok","group":296,"why":"3 facts on attn_divergence.py's statistic and argument site; no shared quantity","run":"4279585a.711b"}
+{"kind":"ok","group":299,"why":"3 facts; lane6's +0.005 to +0.010 quoted unchanged by lane10","run":"4279585a.711b"}
+{"kind":"ok","group":302,"why":"3 facts; the 09-01 snapshot (2,844 teams) survives only in lane0's table; nothing disagrees","run":"4279585a.711b"}
+{"kind":"ok","group":305,"why":"3 facts; T034 is open and unclaimed in its front matter and in lane10","run":"4279585a.711b"}
+{"kind":"ok","group":308,"why":"3 facts; --bs 1 --accum 2 in run_local_folds.sh and AGENTS.md's 16 h warning do not overlap","run":"4279585a.711b"}
+{"kind":"same","group":311,"facts":["V3352","V2051"],"finding":"conflict","why":"Correction: V3352 (lane6) says --warmup-frac is wired and never used; V2051 (lane10, MEASURED) finds outputs/t025/dinov3_fold0.pt recorded warmup_frac=0.1, so it was passed once","run":"4279585a.711b"}
+{"kind":"ok","group":316,"why":"2 facts; side_known is 0.0 when the side is unresolved, and the mirror needs it resolved; consistent","run":"4279585a.711b"}
+{"kind":"ok","group":319,"why":"2 facts; pos_weight +0.002 to +0.005 in lane6 and R2","run":"4279585a.711b"}
+{"kind":"ok","group":322,"why":"2 facts; lane7's pre-registered rule and lane9's reuse of it; no quantity","run":"4279585a.711b"}
+{"kind":"ok","group":325,"why":"2 facts, two unrelated warning docstrings; no shared quantity","run":"4279585a.711b"}
+{"kind":"ok","group":328,"why":"2 facts; Raptor 336 stored / 384 model in lane5 and lane7","run":"4279585a.711b"}
+{"kind":"ok","group":331,"why":"2 facts, two scripts that each build one dataset or share one pass; no shared quantity","run":"4279585a.711b"}
+{"kind":"ok","group":334,"why":"2 facts; meta is 2 or 4 columns and KneeMIL reads columns 0-3; consistent","run":"4279585a.711b"}
+{"kind":"ok","group":337,"why":"2 facts; the Raptor notebook's 0.924 single-model claim quoted alike by lane6 and lane9","run":"4279585a.711b"}
+{"kind":"ok","group":340,"why":"2 facts; ROADMAP permits the label-swapping mirror, as lane11 reports","run":"4279585a.711b"}
+{"kind":"ok","group":343,"why":"2 facts; on sagittal the slice index is medial-lateral, so the mirror reverses slice order; consistent","run":"4279585a.711b"}
+{"kind":"same","check":1,"finding":"follows","why":"V606: the annotated fastMRI set is coronal only; V608: so two of our three plane slots would be padded; that is the defect the conclusion names","run":"4279585a.711b"}
+{"kind":"same","check":2,"finding":"unsupported","why":"Circular: the only premise is V3473 itself; nothing independent shows what within-block ranking removes","run":"4279585a.711b"}
+{"kind":"same","check":6,"finding":"follows","why":"V2510: the kernel already prints x ~N for the extra layout passes, so lane7's 2x (V2513) is that multiplier, not a model error: 'not right as stated'","run":"4279585a.711b"}
+{"kind":"same","check":8,"finding":"follows","why":"V1382-V1384: the band is not out-ensembling the plateau and does not need breadth, so the breadth half of lane5 §1.3 fails","run":"4279585a.711b"}
+{"kind":"same","check":11,"finding":"contradicted","why":"V490: one S1 fold is ~2.5 h; doubling it gives ~5 h, not ~1 h","run":"4279585a.711b"}
+{"kind":"same","check":20,"finding":"follows","why":"V1211: a population at exactly one score has zero variance in its submissions, i.e. the same inference graph re-run","run":"4279585a.711b"}
+{"kind":"same","check":23,"finding":"unsupported","why":"V2287 gives only the head's location (model.py:83-143); no premise reads its body, so 'complete' is not shown","run":"4279585a.711b"}
+{"kind":"same","check":30,"finding":"follows","why":"V3050: T007 takes essentially all of the usable unopened series, so the proposal is only partially open: 'PARTIAL'","run":"4279585a.711b"}
+{"kind":"same","check":32,"finding":"follows","why":"V1482 - V1480 = 0.940 - 0.930 = +0.010 from 42 to 94 windows","run":"4279585a.711b"}
+{"kind":"same","check":34,"finding":"unsupported","why":"V632 is cited as its own premise; V631 says only that fastMRI waits on a host ruling, not that the clause collides with publishing weights","run":"4279585a.711b"}
+{"kind":"same","check":42,"finding":"follows","why":"V3826/V3827: the 22 + Raptor kernel runs ~4.2 h; that cannot be the one-checkpoint, one-view efficiency entry, so the two must stay apart","run":"4279585a.711b"}
+{"kind":"same","check":44,"finding":"follows","why":"V3289: ~72 distinct values per label vs ~19 for the rules; fewer ties under AUC is part of the 0.8976 vs 0.7990/0.8182 gain","run":"4279585a.711b"}
+{"kind":"same","check":46,"finding":"contradicted","why":"V471 sizes full-data training at +0.008 to +0.010 LB (R2 §6 lists +0.009); the conclusion's band of +0.023 is more than twice that","run":"4279585a.711b"}
+{"kind":"same","check":49,"finding":"follows","why":"V540: MRNet's labels were manually extracted from clinical reports, i.e. report-derived like our teacher's, only cleaner","run":"4279585a.711b"}
+{"kind":"same","check":54,"finding":"unsupported","why":"~1 h for 10 armC members x 3 new views has no rate here: V2646's 7.7 min/member is the --slices 24 probe, which would put 30 member-views well past 1 h","run":"4279585a.711b"}
+{"kind":"same","check":55,"finding":"unsupported","why":"A gain with no derivation: 'unanimous frontier design' (V241) and 8,113 unopened series (V242) do not size it at +0.005 to +0.015","run":"4279585a.711b"}
+{"kind":"same","check":58,"finding":"follows","why":"V1489/V1490: 9 h minus a 1.5-4.4 h kernel leaves 4.6-7.5 h unused; ~5 h is the conservative end","run":"4279585a.711b"}
+{"kind":"same","check":60,"finding":"follows","why":"V1098-V1101: bins 0.937-0.952 have spike ratios 0.00-3.00 against 0.936's 6.78, one mode, so no shared artifact drives the band","run":"4279585a.711b"}
+{"kind":"same","check":64,"finding":"follows","why":"V558/V560: the fold-0 paired half-width is +/-0.0102 ([-0.0046, +0.0158]); a +0.012 delta clears it, so the interval excludes zero","run":"4279585a.711b"}
+{"kind":"same","check":67,"finding":"follows","why":"V1482 - V1063 = 0.940 - 0.926 = +0.014","run":"4279585a.711b"}
+{"kind":"same","check":69,"finding":"follows","why":"V861/V862: slot 2 is the most architecturally different config, a hedge, so the two picks are unlikely to fail on the same private draw","run":"4279585a.711b"}
+{"kind":"same","check":70,"finding":"follows","why":"V2092: the stem/head BatchNorms sit outside the checkpointed blocks and update once, so they are the un-doubled pair","run":"4279585a.711b"}
+{"kind":"same","check":75,"finding":"follows","why":"V3207: a 1.0 in the base mask sets the cell's weight to 0, so the cell no longer supervises the image","run":"4279585a.711b"}
+{"kind":"same","check":82,"finding":"unsupported","why":"V3575 says only what the +/-0.036 band describes; no premise shows within-run checkpoint errors are correlated or cancel","run":"4279585a.711b"}
+{"kind":"same","check":83,"finding":"follows","why":"V146: 8,113 of 8,529 = 95 % unmanifested (V145); V147/V148: a free CPU fix and a hard prerequisite for T007","run":"4279585a.711b"}
+{"kind":"same","check":84,"finding":"follows","why":"V179: targets are already soft posteriors and V185: AUC is rank-only, so smoothing (a rank-preserving shrink) changes nothing","run":"4279585a.711b"}
+{"kind":"same","check":89,"finding":"follows","why":"V2413: that seed=0 explains the flat curve is untested and would cost a fold, so it is a hypothesis, not a finding","run":"4279585a.711b"}
+{"kind":"same","check":92,"finding":"unsupported","why":"Queued 10:23:36Z (V3730); ~10:43Z needs the queue's ~20 min idle window, which no premise states","run":"4279585a.711b"}
+{"kind":"same","check":94,"finding":"follows","why":"V125-V127: the views rebuild the bag from channel 0 repeated, collapsing the packing; removing a reproduced defect is a correctness fix whatever the LB does","run":"4279585a.711b"}
+{"kind":"same","check":95,"finding":"follows","why":"V142/V143: corpus rho still rising at the last epoch (0.6770 -> 0.6799) with train loss falling: undertrained","run":"4279585a.711b"}
+{"kind":"same","check":100,"finding":"follows","why":"V3682: arm C is a bundle judged as one, so a loss cannot be pinned on either flag","run":"4279585a.711b"}
+{"kind":"same","check":105,"finding":"unsupported","why":"V4040-V4042 show T024 reused T018 checkpoints and T003 dumps with 27 min of inference; no premise shows a self-citing budget that kept two levers apart","run":"4279585a.711b"}
+{"kind":"same","check":107,"finding":"unsupported","why":"V516 gives measured cross-recipe rho 0.68-0.81; nothing places the Raptor in the narrower 0.68-0.75","run":"4279585a.711b"}
+{"kind":"same","check":108,"finding":"follows","why":"V2976: no board instrument exercises a test-time adaptation, so adopting it ships an unmeasured change","run":"4279585a.711b"}
+{"kind":"same","check":109,"finding":"follows","why":"V2681: data-fitted per-label view weights are prohibited, so the lever is blocked rather than unpromising","run":"4279585a.711b"}
+{"kind":"same","check":111,"finding":"follows","why":"V1771-V1776: of five never-passed flags, two are registered, two only explain a past result and --lr is under test, so none is an unpassed lever","run":"4279585a.711b"}
+{"kind":"same","check":112,"finding":"unsupported","why":"V2291 shows one registered flag (--seq-head as T014); the second registration the conclusion counts is not in the premises","run":"4279585a.711b"}
+{"kind":"same","check":113,"finding":"follows","why":"V843-V845: both score 0.926 public, yet one is resolvedly better elsewhere, so the public score is not what decides","run":"4279585a.711b"}
+{"kind":"same","check":114,"finding":"unsupported","why":"Self-cited (V3337); V3338/V3339 say adaptation, not scale, drives AnyMC3D, but give no size for a stronger backbone's +0.00 to +0.01","run":"4279585a.711b"}
+{"kind":"same","check":122,"finding":"unsupported","why":"+88 min is 66 extra units x 1.329 (V2479), but the deployed 66 units per study that doubling adds is not in the premises","run":"4279585a.711b"}
+{"kind":"same","check":126,"finding":"follows","why":"V3884 refuses views no member was trained through; the conclusion gives the reason, a model is invariant only to what it saw, so such a view averages in a guess","run":"4279585a.711b"}
+{"kind":"same","check":129,"finding":"follows","why":"V2571: adding bright moves OOF rho by -0.0005 [-0.0009, -0.0001], an interval below zero, so the third step is measurably negative","run":"4279585a.711b"}
+{"kind":"same","check":130,"finding":"follows","why":"V1187/V1188: rho = 0.161 with permutation p = 0.077 > 0.05 over 20,000 permutations: not significant, and small","run":"4279585a.711b"}
+{"kind":"same","check":131,"finding":"follows","why":"V627/V469: 10,000 / 4,349 = 2.30x our corpus","run":"4279585a.711b"}
+{"kind":"same","check":132,"finding":"follows","why":"V481: R2 puts S1 (layer-decay + warmup) at +0.005 to +0.010, as the brief does; V230 is another lever with the same band","run":"4279585a.711b"}
+{"kind":"same","check":133,"finding":"follows","why":"V2305: sched.step() runs before the first optimizer.step() under AMP, which the GradScaler can skip, and V2306: PyTorch warns of it","run":"4279585a.711b"}
+{"kind":"same","check":137,"finding":"follows","why":"V2443: only a 90.5-264.7 min bracket from a killed poller; V2542: no API exposes the runtime, so it is still unmeasured","run":"4279585a.711b"}
+{"kind":"same","check":140,"finding":"follows","why":"V1199-V1202: 86 teams with >=30 submissions (median 41, max 119) reached only {0.936, 0.937}","run":"4279585a.711b"}
+{"kind":"same","check":147,"finding":"follows","why":"V2298: testing seed diversity costs a fold, i.e. 1 fold","run":"4279585a.711b"}
+{"kind":"same","check":148,"finding":"follows","why":"V3533: Gate D compares the new OOF with the archived fold, so landing inside the band means the bookkeeping did not matter","run":"4279585a.711b"}
+{"kind":"same","check":150,"finding":"follows","why":"V1361 vs V1366-V1368: a 0.915 single-model claim from a team verified at rank 27, 0.945: identity checked and the claim not above the score","run":"4279585a.711b"}
+{"kind":"same","check":152,"finding":"follows","why":"V2255-V2259: no ramp gives a flat 0.1x encoder LR; at ~0.82 the scales still span 0.006-1.0 (170x) against the recipe's 1x","run":"4279585a.711b"}
+{"kind":"same","check":156,"finding":"follows","why":"V3480: at init every scorer row is identical and every distance exactly 0, so any distance above 0 came from training","run":"4279585a.711b"}
+{"kind":"same","check":157,"finding":"unsupported","why":"V1275: two of the 88 teams at >=0.940 publish code, but the other team's rank is not in the premises, so rank 78 being the highest is not shown","run":"4279585a.711b"}
+{"kind":"same","check":158,"finding":"follows","why":"V1102: no shared notebook at 0.94x has appeared since round 1, and V1275: only two of 88 band teams publish code, so there is no 0.945 notebook to fork","run":"4279585a.711b"}
+{"kind":"same","check":161,"finding":"follows","why":"V3103: 1.85x armC at bag 72; scaling by 108/72 gives 1.85 x 1.5 = 2.78, ~2.8x","run":"4279585a.711b"}
+{"kind":"same","check":162,"finding":"follows","why":"V2841-V2844: 0.6336 - 0.6451 = -0.0115, beyond the pair's +/-0.0112, with the checkpointed local fold the higher one","run":"4279585a.711b"}
+{"kind":"same","check":172,"finding":"follows","why":"V817: the true inflation sits below the table, so the table is an upper bound on the mechanism","run":"4279585a.711b"}
+{"kind":"same","check":178,"finding":"follows","why":"V2664: all 22 members share (12, 320, 1) and differ only in adjacent, so no third layout exists to use: the pool binds, not the cap","run":"4279585a.711b"}
+{"kind":"same","check":180,"finding":"follows","why":"V3047: the revived screen's instrument has a +/-0.0102 band on a fold-0 pair, so the screen must clear it before four more folds","run":"4279585a.711b"}
+{"kind":"same","check":186,"finding":"follows","why":"V576: the blend weight is fixed at 0.20 and never swept, consistent with refusing a sweep as rule-constant tuning","run":"4279585a.711b"}
+{"kind":"same","check":188,"finding":"follows","why":"V3196: canonicalizing after the resize works on size x size instead of up to 960^2; (960/320)^2 = 9, the ~9x","run":"4279585a.711b"}
+{"kind":"same","check":189,"finding":"follows","why":"V2947: ROADMAP:480 settles that no rule constant is falsifiable at n=58, so proposal 1a passes only by choosing no momentum value","run":"4279585a.711b"}
+{"kind":"same","check":199,"finding":"follows","why":"V1564/V1565: a 0.03 swing in teacher quality moved the LB by zero, so the target-side lever is null at 0.94","run":"4279585a.711b"}
+{"kind":"same","check":202,"finding":"follows","why":"V2544 - V2491 = 540 - 113 = 427 min","run":"4279585a.711b"}
+{"kind":"same","check":206,"finding":"unsupported","why":"V2710 gives only resolution's +29 units; a rank of #3 needs the other levers' figures, absent here (and lane11 §2.6 ranks resolution second)","run":"4279585a.711b"}
+{"kind":"same","check":208,"finding":"follows","why":"V814: the table assumes candidates truly equal and fully distinct, an idealisation; real submissions sit between, so the caveat bears weight (V815)","run":"4279585a.711b"}
+{"kind":"same","check":218,"finding":"follows","why":"Taking V2173's ~67 min as two passes, one pass is ~33 min, the ~+30 of V2174: a scaling of the kernel's estimate as stated","run":"4279585a.711b"}
+{"kind":"same","check":222,"finding":"follows","why":"V2059/V2060: the wrong 'never passed' claim heads the screen queued to run now, so the error is live, not archival","run":"4279585a.711b"}
+{"kind":"same","check":223,"finding":"contradicted","why":"V2673: 42 windows over 64 slices in 5 slots per study; our --slices 12 (V2597) is per plane, 36 per study, so ~1.2x (64/36 ~1.8x); 3.5 = 42/12 mixes the two","run":"4279585a.711b"}
+{"kind":"same","check":225,"finding":"unsupported","why":"Circular: V3585 is its own only premise; nothing here gives the paired or absolute bands it compares","run":"4279585a.711b"}
+{"kind":"same","check":228,"finding":"follows","why":"V2273-V2275: one add_argument plus one branch reusing the existing enc/rest split, ~8 lines","run":"4279585a.711b"}
+{"kind":"same","check":235,"finding":"follows","why":"V1473: the 24-window run 'scored 0.02', impossible as an AUC beside 42 windows' 0.930 (V1474), so that point is unusable as written","run":"4279585a.711b"}
+{"kind":"same","check":238,"finding":"follows","why":"V2459 times passes from in-kernel stdout timestamps; V2434 is an external 60 s submission poller: two separate instruments","run":"4279585a.711b"}
+{"kind":"same","check":239,"finding":"follows","why":"V325: tissue fills 99 % of rows, so lane 2 sees no free crop","run":"4279585a.711b"}
+{"kind":"same","check":240,"finding":"follows","why":"V18 - V23 = 0.946 - 0.926 = +0.020","run":"4279585a.711b"}
+{"kind":"same","check":244,"finding":"follows","why":"V739/V740: the rules say only that Kaggle auto-selects, not how, so under any other criterion we neither control nor audit it","run":"4279585a.711b"}
+{"kind":"same","check":249,"finding":"follows","why":"V1644/V1645: a 4th architecture family added to 22 members of one recipe is there to decorrelate members","run":"4279585a.711b"}
+{"kind":"same","check":250,"finding":"follows","why":"V3485/V3486: the gold-58 band is +/-0.036, wider than most changes worth making, so a per-label move rarely clears it","run":"4279585a.711b"}
+{"kind":"same","check":252,"finding":"follows","why":"V473/V472/V476: +0.0131 for +37.8 % data, scaled to our +25 %: 0.0131 x 25/37.8 = 0.0087, inside +0.008 to +0.010","run":"4279585a.711b"}
+{"kind":"same","check":253,"finding":"contradicted","why":"V91/V92: a 1.39x FOV spread resized to a fixed 320 px makes magnification vary 1.39x (V93), not 1.03x","run":"4279585a.711b"}
+{"kind":"same","check":254,"finding":"follows","why":"V2300/V2303: the default is the superseded rule labeler and _arm_lib.sh overrides it by hand in three places, so one omission grades on wrong targets","run":"4279585a.711b"}
+{"kind":"same","check":259,"finding":"follows","why":"V3085-V3087: every study has all three planes and both sequence families, so --seqs 2 (one series per plane and family) reaches every cell that exists","run":"4279585a.711b"}
+{"kind":"same","check":262,"finding":"follows","why":"V569-V572: the weights are fixed and the gate is a band around the public figures, so a reload outside it points at our decode, not the member","run":"4279585a.711b"}
+{"kind":"same","check":266,"finding":"follows","why":"V1562/V1563/V1572: CV 0.87-0.90 across label sets but the same ~0.94 LB, and fixing extraction failures moved nothing: labels saturated","run":"4279585a.711b"}
+{"kind":"same","check":272,"finding":"follows","why":"V1241/V1242: the score fits the model only if all seven submissions were structurally distinct systems, which is method work","run":"4279585a.711b"}
+{"kind":"same","check":273,"finding":"follows","why":"V2140-V2144: epoch is set before the iterator, no loader sets persistent_workers, so forked workers see each new epoch: clean","run":"4279585a.711b"}
+{"kind":"same","check":275,"finding":"follows","why":"V2689/V2690: unmatched refuses a view unless every member had it, so serving armC-only views needs per-member unmatched and per-group blending","run":"4279585a.711b"}
+{"kind":"same","check":276,"finding":"unsupported","why":"V472-V475 describe full-data training's one controlled measurement (+0.0131 gold); 'rank 1 by evidence' needs the other levers' evidence, absent here","run":"4279585a.711b"}
+{"kind":"same","check":279,"finding":"follows","why":"V1505: an offline 869-study held-out rho (+/-0.0102) can show whether predictions move with no submission spent","run":"4279585a.711b"}
+{"kind":"same","check":280,"finding":"unsupported","why":"V3343/V3344 say the flags exist and were never passed; that a repeat fold would learn nothing needs T011's ConvNeXt null being uninterpretable, not in the premises","run":"4279585a.711b"}
+{"kind":"same","check":288,"finding":"follows","why":"From the premises as given: 134 / 67 = 2.0 (V3824/V3823); lane11 later shows the 134 was not a measurement","run":"4279585a.711b"}
+{"kind":"same","check":289,"finding":"follows","why":"V3181: the stream is keyed on the epoch too; a per-study-only key would freeze each study's mirror state, which is the conclusion's point","run":"4279585a.711b"}
+{"kind":"same","check":291,"finding":"unsupported","why":"Epoch 5 of 8 at ~30.5 min/epoch leaves ~1.5-2 h, but the time of claiming is not in the premises, so 17:15Z cannot be reached from them","run":"4279585a.711b"}
+{"kind":"same","check":303,"finding":"follows","why":"V2206/V2209: the recipe runs a flat 3e-5 encoder under a 1e-3 head, so --encoder-lr 3e-5 under the head LR gives its shape","run":"4279585a.711b"}
+{"kind":"same","check":306,"finding":"follows","why":"V3713/V3712: 3e-4 / 3e-5 = 10x on a pretrained encoder","run":"4279585a.711b"}
+{"kind":"same","check":309,"finding":"follows","why":"V2853: the rule-1 ranking is confounded with fold 0 and with arm B/C, so it cannot show that doubling helps","run":"4279585a.711b"}
+{"kind":"same","check":311,"finding":"follows","why":"V2925/V2961: the survivor 1a recalibrates BN offline on our corpus, while the brief's opener 1b adapts on the hidden test","run":"4279585a.711b"}
+{"kind":"same","check":312,"finding":"follows","why":"V1729/V1730: SubmissionCount's handling of failed runs is unclear, but both populations in the contrast are read through the same field","run":"4279585a.711b"}
+{"kind":"same","check":314,"finding":"follows","why":"V3587/V3588: compare_ckpts defaults to weak_labels.csv, the run-1 rule labeler nothing trains on, so a bare call scores against unseen targets","run":"4279585a.711b"}
+{"kind":"same","check":315,"finding":"follows","why":"V2520/V2521: at 0.0653 s/unit, 5 units is ~7 min vs T009's ~6 and 1 unit 1.4 min vs ~2, both fitting within T009's rounding","run":"4279585a.711b"}
+{"kind":"same","check":316,"finding":"follows","why":"V158/V159: 0.9217 vs the teacher's 0.8976 (+0.0241), and V163: the paired intervals exclude zero, so the target is resolvedly closer","run":"4279585a.711b"}
+{"kind":"same","check":319,"finding":"follows","why":"V3624: rotation +/-25 degrees plus perspective transforms is a stronger geometric augmentation than a small crop","run":"4279585a.711b"}
+{"kind":"same","check":320,"finding":"follows","why":"V2929: 0 to +0.003 OOF AUC per member is too small to expect a visible LB move","run":"4279585a.711b"}
+{"kind":"same","check":322,"finding":"follows","why":"(66 + 320) / 66 = 5.85, the 5.8x","run":"4279585a.711b"}
+{"kind":"same","check":336,"finding":"unsupported","why":"V3334 measures convnext_tiny at 3.4 GiB; no premise gives vit_small's 2.3 GiB","run":"4279585a.711b"}
+{"kind":"same","check":337,"finding":"unsupported","why":"V2614-V2616 compare crop/bright with denser slice sampling; no premise describes the mirror view, so 'far more diverse than a 0.90 crop' is not shown","run":"4279585a.711b"}
+{"kind":"same","check":339,"finding":"follows","why":"V2645/V2646: inference only, zero training hours, ~7.7 min per member: cheap","run":"4279585a.711b"}
+{"kind":"same","check":340,"finding":"follows","why":"V1964: --seed is 0 in all 22 deployed and 8 experimental members, so diversity can come only from fold, arm and argmax-vs-SWA","run":"4279585a.711b"}
+{"kind":"same","check":343,"finding":"contradicted","why":"V2604: --slices 12 shows 34.5 % of all slices, which is what the 10 non-adjacent members see, not 84.5 %","run":"4279585a.711b"}
+{"kind":"same","check":345,"finding":"unsupported","why":"V2614 says two thirds of each series is discarded at inference only; \"never been shown\" also needs training never to sample those slices, which no premise states","run":"4279585a.711b"}
+{"kind":"same","check":346,"finding":"contradicted","why":"V1235 with N=7: √(2·ln 7)=1.973; 0.0070×1.973=+0.0138 (not +0.0143) and 0.0028×1.973=+0.0055 (not V1236's +0.0057); the stated figures match N≈8","run":"4279585a.711b"}
+{"kind":"same","check":348,"finding":"unsupported","why":"V1518 says a 9 h rerun can fail, which gives \"never 9 h\"; the ≤ 7 h budget needs a runtime limit and margin that no premise states","run":"4279585a.711b"}
+{"kind":"same","check":349,"finding":"follows","why":"V1168 34 / V1169 10 = 3.4× as stated","run":"4279585a.711b"}
+{"kind":"same","check":355,"finding":"follows","why":"V3980: ~44 °C by 6 min and ~40 °C by 15 min idle; 20 min exceeds the 15 min at which it reaches ~40 °C","run":"4279585a.711b"}
+{"kind":"same","check":356,"finding":"follows","why":"V1344/V1349: band entries are a 5-fold ensemble and a single model single fold at 0.938; V1378/V1381: plateau is 35 checkpoints at 0.936, so the band is not winning by ensembling","run":"4279585a.711b"}
+{"kind":"same","check":358,"finding":"unsupported","why":"V2315/V2316 give armc1's flags (per_label_attn, mirror 0.5, rotate 25) but no premise states arm A's flags, so \"not an arm-A member\" lacks the comparison","run":"4279585a.711b"}
+{"kind":"same","check":359,"finding":"follows","why":"V2499: budget_minutes = 1.0 + members × views has no layouts term","run":"4279585a.711b"}
+{"kind":"same","check":364,"finding":"follows","why":"V199-V202: gold band ±0.0100, power 0.165 at +0.005, B1 false-pass 16 %, misses +0.005 half the time; V204 greedy on gold loses −0.0053: gold can veto but not select","run":"4279585a.711b"}
+{"kind":"same","check":368,"finding":"follows","why":"V1564: a 0.03 teacher-quality swing gave zero LB movement, which is the stated basis for the target side not binding at 0.94","run":"4279585a.711b"}
+{"kind":"same","check":373,"finding":"follows","why":"V240 +0.005 to +0.015 AUC for the second sequence family; V658 repeats the same band","run":"4279585a.711b"}
+{"kind":"same","check":374,"finding":"follows","why":"V2565 [−0.0046, +0.0055] and V2569 [−0.0024, +0.0031] both span zero, so gold resolves neither step","run":"4279585a.711b"}
+{"kind":"same","check":378,"finding":"follows","why":"V256 lists warmup, layer-decay, 14-epoch schedule and augmentation RNG un-freeze; V261 bundles warmup+layer-decay+schedule as one arm; T042 draws exactly these","run":"4279585a.711b"}
+{"kind":"same","check":385,"finding":"follows","why":"V1447/V1448: the 0.053 random-vs-grouped metadata gap is site memorisation that does not transfer, i.e. no transferable signal","run":"4279585a.711b"}
+{"kind":"same","check":388,"finding":"follows","why":"V1537: 224 px and 392 px both reach ≥0.945, so resolution does not separate the band","run":"4279585a.711b"}
+{"kind":"same","check":392,"finding":"unsupported","why":"V257 gives only lever 5's own band (+0.003 to +0.010); a rank of 5 needs the other levers' bands, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":393,"finding":"unsupported","why":"V3149 says an absent flag reads off; that an unseen presentation makes the average worse is not in any premise","run":"4279585a.711b"}
+{"kind":"same","check":394,"finding":"follows","why":"V2162 layout key includes adjacent, V2163 MAX_LAYOUTS 2, V1928 the ten fold? members lack --adjacent: they form their own layout, so dropping them frees one","run":"4279585a.711b"}
+{"kind":"same","check":396,"finding":"unsupported","why":"V2272-V2277 describe the size and shape of the three flags; none states their defaults equal today's values","run":"4279585a.711b"}
+{"kind":"same","check":400,"finding":"unsupported","why":"V2458/V2459 describe the Kaggle log format; that no earlier lane used the timestamps is not in any premise","run":"4279585a.711b"}
+{"kind":"same","check":406,"finding":"follows","why":"V25 plateau 0.936 − V23 our 0.926 = +0.010 as stated","run":"4279585a.711b"}
+{"kind":"same","check":410,"finding":"follows","why":"V2829 train(weak)=3480 at --bs 2 → 1,740 steps/epoch; × 4 epochs = 6,960, matching V2827's stem BN counter","run":"4279585a.711b"}
+{"kind":"same","check":412,"finding":"follows","why":"V3296: our teacher is ahead of the one public number, so the labels it supplies are not what holds us below 0.936","run":"4279585a.711b"}
+{"kind":"same","check":415,"finding":"follows","why":"V430/V431: the verifiable public single model is 0.924; our 0.926 is level with it, and V428 marks the higher figures as unverified claims","run":"4279585a.711b"}
+{"kind":"same","check":417,"finding":"follows","why":"V2374-V2377: encoder-lr is a flat low encoder LR, layer-decay 0.6 freezes the stem and leaves the late encoder at full LR, \"close to opposites\"","run":"4279585a.711b"}
+{"kind":"same","check":418,"finding":"unsupported","why":"V1112/V1113 show teams ≥0.935 rising 664→694; placing that growth at the plateau rather than the top needs a count above 0.94 or a breakdown, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":423,"finding":"follows","why":"V2062-V2069: the only run with the flags was a different encoder, flags off, stopped at epoch 1; V2077-V2080 say what that does and does not retire for a screen","run":"4279585a.711b"}
+{"kind":"same","check":430,"finding":"unsupported","why":"V1412-V1415 say only that a rank-88 team at 0.940 uses Pillar-0; nothing gives an expected gain to rank it as lever 2, and the licence is unread","run":"4279585a.711b"}
+{"kind":"same","check":432,"finding":"follows","why":"V2483-V2485: two independent instruments agree on the marginal cost of one member-view (0.0653 inside 0.0547–0.0679), so forward units are the working currency","run":"4279585a.711b"}
+{"kind":"same","check":434,"finding":"follows","why":"lane9 §7 lever 6 (better teacher labels) is V1677 Null with V1678 two teams reporting it exhausted; teacher quality as a null at the top follows","run":"4279585a.711b"}
+{"kind":"same","check":435,"finding":"follows","why":"V441 0.9054 − V440 0.8793 = 0.0261 as stated","run":"4279585a.711b"}
+{"kind":"same","check":442,"finding":"unsupported","why":"V380-V384 sum to +0.035 and V386 says 4 of 5 ideas were null, but no premise gives the starting score (0.926) or the discount that turns this into 0.940–0.948","run":"4279585a.711b"}
+{"kind":"same","check":443,"finding":"unsupported","why":"V2860 describes the BN buffers as an EMA of recent batches; that nobody has priced this property is not in any premise","run":"4279585a.711b"}
+{"kind":"same","check":447,"finding":"follows","why":"V1205/V1206: the control group's median 41 is above both band medians and 86 teams outspent the band yet stayed on the plateau: same or more budget, opposite outcome","run":"4279585a.711b"}
+{"kind":"same","check":448,"finding":"unsupported","why":"V1276-V1280 describe dreaddevelopment at rank 78, 0.940; no premise says dreaddevelopment is the Raptor author, nor gives the 0.936–0.938 single-model claim","run":"4279585a.711b"}
+{"kind":"same","check":452,"finding":"follows","why":"lane9 §7 lever 4 is resolution; V1544/V1545: resolution is a null lever, our 320 px inside the band's range, so Null","run":"4279585a.711b"}
+{"kind":"same","check":454,"finding":"follows","why":"V3734 15–25 min/epoch × 8 = 120–200 min = 2.0–3.3 h; the stated 3.5 h upper end rounds up by ~10 min","run":"4279585a.711b"}
+{"kind":"same","check":459,"finding":"follows","why":"V1742-V1746: Pillar-0 found, not evaluated, model card, licence, architecture and recipe all unread, so §7 entry 2 is a pointer only","run":"4279585a.711b"}
+{"kind":"same","check":461,"finding":"unsupported","why":"V3851 says side_known is kept because it costs nothing; that it is an input feature whose removal changes the input width is not in the premise","run":"4279585a.711b"}
+{"kind":"same","check":463,"finding":"contradicted","why":"V1518: a rerun at 9 h can fail; V1519: budget well inside the cap. A ≤ 9 h budget permits exactly the 9 h the premises rule out","run":"4279585a.711b"}
+{"kind":"same","check":464,"finding":"follows","why":"V1211 zero variance in the control group's submissions; V1215 an order statistic of a zero-variance population is that same point, so it cannot produce a ≥0.94 tail","run":"4279585a.711b"}
+{"kind":"same","check":465,"finding":"unsupported","why":"V1199-V1201 give the control group (86 teams ≥30 subs, median 41, max 119); no premise lists the notebook authors' submissions or ranks to show they are those teams","run":"4279585a.711b"}
+{"kind":"same","check":467,"finding":"unsupported","why":"V734 says up to two Final Submissions; that the efficiency track is selected separately and does not use them needs an efficiency-track rule no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":468,"finding":"follows","why":"self-contained: a value hardcoded for one checkpoint cannot change with the cells.csv argument, so the generator is not general; cam_sheet.py:343-346 states it as the reason the AUC comes from run.json","run":"4279585a.711b"}
+{"kind":"same","check":475,"finding":"contradicted","why":"V2438: B's submit→terminal wall clock is 68–78 min, midpoint 73 min (lane11:63 says \"B's 73 min midpoint\"), not 20 min","run":"4279585a.711b"}
+{"kind":"same","check":482,"finding":"follows","why":"V113 4 architecture families in the plateau notebook vs V114 our one recipe × 22: a diversity gap","run":"4279585a.711b"}
+{"kind":"same","check":490,"finding":"follows","why":"V253 tripwire on Contusion/Fracture; V254 these live near the frame edge, so they are the labels a crop can cut","run":"4279585a.711b"}
+{"kind":"same","check":492,"finding":"follows","why":"V2140 train_ds.epoch set before the iterator is built and V2141 no persistent_workers: workers are re-forked each epoch and carry the new value","run":"4279585a.711b"}
+{"kind":"same","check":493,"finding":"follows","why":"V1537 224 and 392 px both reach ≥0.945; V1538/V1539 lane 5 attributed our gap partly to 336–384 px, which does not survive: a correction to lane 5","run":"4279585a.711b"}
+{"kind":"same","check":495,"finding":"follows","why":"V2162 key (slices,size,seqs,adjacent), V2163 MAX_LAYOUTS 2, V2164 both slots used, V2165 (12,320,2,True) a third layout, V2167 SystemExit: it cannot join","run":"4279585a.711b"}
+{"kind":"same","check":500,"finding":"follows","why":"V1256/V1257: chasing the band is not worthless because the band is not an artefact of submission spending, which is the conclusion restated","run":"4279585a.711b"}
+{"kind":"same","check":501,"finding":"follows","why":"V2687 armC members mirror 0.5/rotate 25, V2688 the other 12 at 0.0, V2689 tta.unmatched refuses a view unless every member was trained for it","run":"4279585a.711b"}
+{"kind":"same","check":502,"finding":"unsupported","why":"V2590 says slice density has headroom; the design's --slices 24 and the 869-study OOF block size are inputs no premise states","run":"4279585a.711b"}
+{"kind":"same","check":504,"finding":"follows","why":"V2273/V2274: one add_argument plus one branch, reusing the existing enc/rest split: small","run":"4279585a.711b"}
+{"kind":"same","check":505,"finding":"follows","why":"V1138 lane 3: ~200 distinct submissions manufacture +0.012 public-only gain, larger than V1139's +0.010 plateau-to-rank-20 distance, so part of that distance can be selection","run":"4279585a.711b"}
+{"kind":"same","check":510,"finding":"follows","why":"V1342/V1343 224 px at 0.934→0.942, V1349/V1350 single small model at 0.938, V1356 small resnet at 224: smaller and lower-resolution","run":"4279585a.711b"}
+{"kind":"same","check":511,"finding":"follows","why":"V3771 proj zero-initialised: the residual adds exactly 0, so outputs equal the run 2 path until training moves proj","run":"4279585a.711b"}
+{"kind":"same","check":517,"finding":"follows","why":"V2485 agreement within ~6 %: 0.0653 vs the 0.0613 midpoint of 0.0547–0.0679 differs by 0.0040 (6.1 % of 0.0653); naming it the real check follows","run":"4279585a.711b"}
+{"kind":"same","check":519,"finding":"follows","why":"V166 r = 0.455 across gold resamples, V167 half-independent raters: partial independence is what a blend needs to help","run":"4279585a.711b"}
+{"kind":"same","check":522,"finding":"follows","why":"V2479 slope 1.329 min per forward unit; V2504 repeats 1.329 min/unit","run":"4279585a.711b"}
+{"kind":"same","check":523,"finding":"follows","why":"V1620 \"a race to overfit the public leaderboard\" and V1621 doubt the score holds privately: both argue the fitting story that §2 rejects","run":"4279585a.711b"}
+{"kind":"same","check":530,"finding":"follows","why":"V528-V534: image-level boxes by an MSK radiologist on 1,172 studies, paired band ±0.0034 vs gold's ±0.0100; covers 7 of 12 columns, so it fixes gold's resolution limit on those","run":"4279585a.711b"}
+{"kind":"same","check":535,"finding":"follows","why":"V3993: SWA averages BN running stats with the weights instead of recomputing over data, which is what update_bn would do: a cheap approximation of it","run":"4279585a.711b"}
+{"kind":"same","check":539,"finding":"follows","why":"V96/V97/V100: the frontier's core head is per-label attention pooling and we have it (V98 +0.0188), so no head-design gap","run":"4279585a.711b"}
+{"kind":"same","check":540,"finding":"follows","why":"V2121: the checkpointed member sits inside the spread of the two non-checkpointed ones on both statistics: no outlier","run":"4279585a.711b"}
+{"kind":"same","check":548,"finding":"follows","why":"V3697 tta.unmatched refuses a view unless every member carries the flag; V3698 a family blended with the incumbent cannot use mirror/rot±","run":"4279585a.711b"}
+{"kind":"same","check":549,"finding":"follows","why":"sd·√(2 ln K): K=16 gives 0.0066–0.0165, K=250 gives 0.0093–0.0233 (V806, V813); the +0.010 gap (V819) lies inside at both ends and every K between","run":"4279585a.711b"}
+{"kind":"same","check":552,"finding":"follows","why":"V4056 a concurrent second kernel would hit quota exhaustion mid-run; V4057 Kaggle discards a killed kernel's output: sequencing saved that fold","run":"4279585a.711b"}
+{"kind":"same","check":553,"finding":"unsupported","why":"V2102 gives m' = 1 − (1−0.1)² = 0.19 for the double update, but the fix's momentum (1 − √0.9 = 0.0513 in lane10) is not among the premises","run":"4279585a.711b"}
+{"kind":"same","check":555,"finding":"follows","why":"V3663 centre channel bit-identical to the 2D path and V3664 window from the centre alone: the only difference left is the neighbours","run":"4279585a.711b"}
+{"kind":"same","check":556,"finding":"follows","why":"V3644 interval [−0.0232, −0.0008]: the upper bound sits 0.0008 below zero as stated","run":"4279585a.711b"}
+{"kind":"same","check":558,"finding":"unsupported","why":"V1530/V1531 give 392 px at 0.945; V1528 gives Tucker Arrants 0.947 but no premise states the resolution behind that 0.947, so the 224 px half is missing","run":"4279585a.711b"}
+{"kind":"same","check":559,"finding":"follows","why":"V2443 264.7 − 90.5 = 174.2 min, a 174-minute bracket","run":"4279585a.711b"}
+{"kind":"same","check":561,"finding":"follows","why":"V2986-V2988 read train(weak)=3480 and 15.4 min at bag width 36 from our own armB log","run":"4279585a.711b"}
+{"kind":"same","check":567,"finding":"unsupported","why":"V2478 measures an intercept of 25.2 min, which shows ~1 min was wrong; that T009 read notebook time rather than submit→terminal time is not in any premise","run":"4279585a.711b"}
+{"kind":"same","check":568,"finding":"follows","why":"V2758 mirror-consistency is T015's mirror rider plus a loss term and V2759 the rider has never been run: not separate work","run":"4279585a.711b"}
+{"kind":"same","check":571,"finding":"contradicted","why":"V2233's min lr_scale 5.90e-03 is at --layer-decay 0.80 (1/0.0059 ≈ 170×); at ≈0.82 over the same 23 steps the min is 0.82²³ ≈ 0.0104, a ~96× range, not 170×","run":"4279585a.711b"}
+{"kind":"same","check":572,"finding":"follows","why":"V2121, V2125-V2131: Δrho −0.0115 vs band ±0.0112 (1.03×), favouring trusted members, buffer difference below fold noise: null as a lever","run":"4279585a.711b"}
+{"kind":"same","check":573,"finding":"follows","why":"V3097 bag widens from T007's 72 to 108 slots; a wider bag on the same data costs strictly more","run":"4279585a.711b"}
+{"kind":"same","check":574,"finding":"follows","why":"V880-V882: better on two internal instruments, identical on the public subset, higher private score not established: internal instruments are not the private score","run":"4279585a.711b"}
+{"kind":"same","check":577,"finding":"unsupported","why":"V217/V218 support using the external expert-labelled set as a truth-anchored validation instrument; nothing in the premises speaks to pretraining or why it comes second","run":"4279585a.711b"}
+{"kind":"same","check":579,"finding":"follows","why":"V2664: all 22 members share (12, 320, 1) and differ only in adjacent (two layouts); a member at --slices 24 has a new key, a third layout","run":"4279585a.711b"}
+{"kind":"same","check":592,"finding":"contradicted","why":"V247 gives mm crop +0.003 to +0.008; its optimistic end is +0.008, not the +0.005 that V382 sums as the \"optimistic end\"","run":"4279585a.711b"}
+{"kind":"same","check":595,"finding":"unsupported","why":"V286/V287 give the design (one model, identity view, runtime recorded); the count of 1–2 submissions has no derivation in the premises","run":"4279585a.711b"}
+{"kind":"same","check":599,"finding":"unsupported","why":"V1516 says the 9 h run sits at the rule limit; ineligibility for the efficiency track needs that track's runtime limit, which no premise states","run":"4279585a.711b"}
+{"kind":"same","check":602,"finding":"follows","why":"V172-V175: the 0.9545 \"text-oracle ceiling\" is one hardcoded string that bounds report-derived labels, not the LB, and should be sourced or retired: a plan sentence leaning on it is stale","run":"4279585a.711b"}
+{"kind":"same","check":606,"finding":"follows","why":"V3539: the epoch keys the mirror draw; without it the draw depends on seed and index only and repeats every epoch","run":"4279585a.711b"}
+{"kind":"same","check":607,"finding":"unsupported","why":"V1782/V1783 concern --layer-decay; no premise states --lr's default or that T042 tests it","run":"4279585a.711b"}
+{"kind":"same","check":611,"finding":"follows","why":"V2554 185 / V2449 66 = 2.80×, as stated","run":"4279585a.711b"}
+{"kind":"same","check":613,"finding":"follows","why":"V2478/V2479: (270 − 25.2) / 1.329 = 184.2 ≈ 185 units/study","run":"4279585a.711b"}
+{"kind":"same","check":615,"finding":"follows","why":"V120 frontier 224–392 px, V123 ours 320 px inside it, V122 >336 px measured null: not a gap","run":"4279585a.711b"}
+{"kind":"same","check":616,"finding":"unsupported","why":"V2926/V2927 describe the mechanism; no premise estimates ~40 lines of engineering","run":"4279585a.711b"}
+{"kind":"same","check":617,"finding":"follows","why":"V2847: the four split-regime (doubled-BN) members take the top four of 22 places, which argues doubling is not a defect","run":"4279585a.711b"}
+{"kind":"same","check":622,"finding":"follows","why":"V2864 ~720 images (10 batches × 72) vs V2866 ~5.3 batches ≈ 380 images: about half the averaging window, so the same mean with roughly double the variance","run":"4279585a.711b"}
+{"kind":"same","check":626,"finding":"follows","why":"V317 we are 1.6× coarser than acquisition and V318 448 px does not beat 336: resolution via mm crop rather than pixel count is the cheap half","run":"4279585a.711b"}
+{"kind":"same","check":628,"finding":"unsupported","why":"V2919 gives SWA-vs-argmax mean +0.0015; no premise ties the proposal's gain to that spread as an upper bound","run":"4279585a.711b"}
+{"kind":"same","check":629,"finding":"follows","why":"V3377: the jitter/crop stream keyed on (seed, index) is fixed across epochs, so every epoch sees the same augmentation","run":"4279585a.711b"}
+{"kind":"same","check":630,"finding":"unsupported","why":"V135/V136 reproduce the mirror bug; that T034's screen uses the mirror view on the family, and that nothing uses it today, is not in the premises","run":"4279585a.711b"}
+{"kind":"same","check":632,"finding":"follows","why":"V2158: select_ckpts fails loudly on a pattern that matches nothing","run":"4279585a.711b"}
+{"kind":"same","check":634,"finding":"follows","why":"V3011 11.4 h / V3024 30 h/week = 38 % as stated","run":"4279585a.711b"}
+{"kind":"same","check":639,"finding":"unsupported","why":"the only other premise is V3335, vit_small 2.3 GiB; nothing measures or derives convnext_tiny's 3.4 GiB","run":"4279585a.711b"}
+{"kind":"same","check":640,"finding":"follows","why":"V1742-V1747: Pillar-0 found, not evaluated, nothing about it read: its size is unknown","run":"4279585a.711b"}
+{"kind":"same","check":646,"finding":"follows","why":"V3646: a local checkpoint is slightly better than its Kaggle twin, so mixing can only dilute a gain, not import a defect","run":"4279585a.711b"}
+{"kind":"same","check":650,"finding":"follows","why":"V2164-V2167: a T007 --seqs 2 member makes a third layout and would SystemExit; V2168 T007's file never mentions the cap: record it there before judging","run":"4279585a.711b"}
+{"kind":"same","check":652,"finding":"follows","why":"log-linear fit to V2230 (0.85 → 0.1548) and V2234 (0.80 → 0.0773) gives median ∝ d^11.5; 0.1^(1/11.5) ≈ 0.818 ≈ 0.82","run":"4279585a.711b"}
+{"kind":"same","check":654,"finding":"follows","why":"V2427 exactly three reruns with a wall clock and V2428 one pair of timestamped logs: the premises state the set is complete","run":"4279585a.711b"}
+{"kind":"same","check":659,"finding":"follows","why":"V2659: inference resolution interpolates the same decoded pixels and adds no information, leaving only where the stride falls","run":"4279585a.711b"}
+{"kind":"same","check":668,"finding":"follows","why":"V1468: the runtime goes to window count rather than models; window count is an inference-time setting, so no added training GPU","run":"4279585a.711b"}
+{"kind":"same","check":669,"finding":"unsupported","why":"V989 says a null lane is a valid result; that four levers from four lanes would show motivated reasoning needs an expected null rate no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":676,"finding":"follows","why":"V3253 sampling sd 0.0001–0.0003 is below the ±0.0005 rounding of a 0.001 display step, so granularity binds (note 0.001/0.0003 is 3.3 sd, not V3254's 5)","run":"4279585a.711b"}
+{"kind":"same","check":679,"finding":"follows","why":"V3401: the bound is read from the kernel; a literal would not follow a change to that line","run":"4279585a.711b"}
+{"kind":"same","check":681,"finding":"follows","why":"V2825 4 of 22 carry the split regime (real, measured) and V2847 they hold the top four places (benign)","run":"4279585a.711b"}
+{"kind":"same","check":683,"finding":"follows","why":"V2464 1 unit vs V2467 36 units per study: 36 − 1 = 35 extra units","run":"4279585a.711b"}
+{"kind":"same","check":684,"finding":"follows","why":"V2860: the buffers are an EMA of the last batches; a cumulative average (momentum=None) of forward passes over the fold is the corpus statistic that replaces it","run":"4279585a.711b"}
+{"kind":"same","check":688,"finding":"follows","why":"V2173 ~67 min for two passes ≈ 33 min a pass; V2172 option 1 pays a third pass: ~+30 min","run":"4279585a.711b"}
+{"kind":"same","check":691,"finding":"follows","why":"V611 Gate 0 runs before the licence step on V612 our own ~1,000 studies scored against Sonnet labels: no download, licence or human step","run":"4279585a.711b"}
+{"kind":"same","check":693,"finding":"follows","why":"lane9 lever 5 is more ensemble members; V1558/V1559 nothing above the plateau is bought with member count and the hardest ensemblers are stuck","run":"4279585a.711b"}
+{"kind":"same","check":695,"finding":"follows","why":"V805 sd·√(2 ln 250) = 0.0028 × 3.323 = 0.0093 as stated","run":"4279585a.711b"}
+{"kind":"same","check":697,"finding":"follows","why":"V1063: our score is 0.926, in the 0.92x tier","run":"4279585a.711b"}
+{"kind":"same","check":701,"finding":"follows","why":"V2137/V2138: the fix's effect is bounded by Gate D's 0.0115 rho, almost all from fold and venue, V2131 below fold noise: an expected 0.000","run":"4279585a.711b"}
+{"kind":"same","check":704,"finding":"follows","why":"V2769: unlabelled-corpus pseudo-labelling is self-distillation, already T035, so it is rejected as a new item","run":"4279585a.711b"}
+{"kind":"same","check":711,"finding":"follows","why":"V3793: the armc1 staging on disk is the stale pre-fix one from the 18:47Z attempt, so a diff against it shows differences that are not the family's","run":"4279585a.711b"}
+{"kind":"same","check":712,"finding":"follows","why":"V1784-V1787: no --layer-decay value gives the flat 10× encoder cut and no --encoder-lr flag exists, so S1's shape needs its axis moved to encoder LR","run":"4279585a.711b"}
+{"kind":"same","check":713,"finding":"follows","why":"V1322-V1325: the plateau's own authors spent 52 and 96 submissions without moving off 0.936, so submissions do not buy +0.010","run":"4279585a.711b"}
+{"kind":"same","check":715,"finding":"follows","why":"V3034: the encoder is built with timm pretrained=True, an ImageNet initialisation, which an in-domain SSL encoder must beat to be worth it","run":"4279585a.711b"}
+{"kind":"same","check":716,"finding":"follows","why":"V1240 +0.014 vs V1237's +0.0143 at sd 0.0070, the generous end: at the edge (√(2 ln 7) gives +0.0138, which would put him just past it)","run":"4279585a.711b"}
+{"kind":"same","check":717,"finding":"unsupported","why":"V2669 says the third bag layout is not an inference-only lever; ranking it #5 needs the other levers' sizes, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":719,"finding":"unsupported","why":"9 − 4.9 = 4.1 is right, but neither the 9 h quota nor the 4.9 h fold is in the premises; V4054 says only that sequencing saved a fold","run":"4279585a.711b"}
+{"kind":"same","check":723,"finding":"unsupported","why":"V279 says external data as an instrument fixes the binding constraint; ranking it 8th needs the other levers' sizes, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":725,"finding":"follows","why":"V129 12 --adjacent members × V130 2 collapsing views (crop, bright) = 24; 22 members × 3 views (identity + 2) = 66","run":"4279585a.711b"}
+{"kind":"same","check":728,"finding":"follows","why":"V1751/V1752: only 12 of 94 topics were read in full, so a title-only thread like 735639 is left for a future lane","run":"4279585a.711b"}
+{"kind":"same","check":730,"finding":"unsupported","why":"V2026-V2037 show five flags live; lane10's never-passed set also holds --warmup-frac and --layer-decay, absent here, so \"nothing\" exceeds the premises","run":"4279585a.711b"}
+{"kind":"same","check":734,"finding":"unsupported","why":"V335 gives the 10-15 deadline (~43 days, V337); ~215 submissions needs a daily submission cap (5/day), which no premise states","run":"4279585a.711b"}
+{"kind":"same","check":735,"finding":"unsupported","why":"V1342/V1349 quote single-model scores from the thread; ranking it the most valuable on the forum needs a comparison with other threads that no premise makes","run":"4279585a.711b"}
+{"kind":"same","check":736,"finding":"follows","why":"V3978 power-capped, not thermally throttled, and V3979 no thermal slowdown even at 87 °C: the card is not in danger","run":"4279585a.711b"}
+{"kind":"same","check":741,"finding":"follows","why":"V2945 not a labelling pass, flip, rule constant or self-distillation, and V2946 momentum=None is no tuned constant: no prohibition touched","run":"4279585a.711b"}
+{"kind":"same","check":744,"finding":"follows","why":"V2121-V2123: the checkpointed member sits inside the non-checkpointed spread in an uncontrolled comparison where fold and venue move with the regime","run":"4279585a.711b"}
+{"kind":"same","check":746,"finding":"follows","why":"V2572: the view curve has already turned over, which argues against adding more views however diverse","run":"4279585a.711b"}
+{"kind":"same","check":748,"finding":"unsupported","why":"V2062-V2069 show the run used another encoder and stopped at epoch 1; that the layer_decay branch ran and made 40 groups (V2078) is not among these premises","run":"4279585a.711b"}
+{"kind":"same","check":750,"finding":"follows","why":"V50-V55: the jina proxy and Kaggle CLI read the rules, forum, notebooks and both leaderboards, so \"browser-blocked\" rows no longer hold","run":"4279585a.711b"}
+{"kind":"same","check":751,"finding":"follows","why":"V589: the 0.936 fusion's DINOv2/RadImageNet arms train in private Kaggle kernels, so their training code is not public","run":"4279585a.711b"}
+{"kind":"same","check":753,"finding":"follows","why":"V3497: averaged predictions stop being out-of-fold without a shared partition; a study one member trained on is then scored by it, inflating OOF","run":"4279585a.711b"}
+{"kind":"same","check":754,"finding":"follows","why":"V3504/V3505: rows sorted by a hash-like UID uncorrelated with site, language or pathology, so a prefix is unbiased only because of that property, not by design","run":"4279585a.711b"}
+{"kind":"same","check":757,"finding":"follows","why":"V3449: downstream consumers read the checkpoint from this one place; the alternative is a per-consumer literal that does not update","run":"4279585a.711b"}
+{"kind":"same","check":762,"finding":"unsupported","why":"V3384/V3385 show argparse dying on --flags \"--adjacent\"; that the failure lands at the start of a quota window needs the launch timing, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":776,"finding":"follows","why":"V1426 topic dated 2026-08-12; the lane is at 2026-09-02, 21 days later","run":"4279585a.711b"}
+{"kind":"same","check":779,"finding":"unsupported","why":"16 % needs B1's pass threshold: with band ±0.0100 (sd ≈ 0.0051) a +0.005 cut passes a true zero P(Z>0.98) ≈ 16 %, but no premise states the threshold","run":"4279585a.711b"}
+{"kind":"same","check":780,"finding":"follows","why":"V1544/V1545: resolution is a null lever, our 320 px inside the 0.945 range: do not spend","run":"4279585a.711b"}
+{"kind":"same","check":782,"finding":"follows","why":"V1192 quadrupling budget in the band moves the median by zero, V1205/V1206 86 heavier spenders stayed on the plateau, V1218 five teams reach ≥0.940 on ≤12 subs","run":"4279585a.711b"}
+{"kind":"same","check":790,"finding":"follows","why":"V1508/V1509 ±0.0019 on 4,349 studies vs V1505's ±0.0102 for the 869-study ρ: the tighter of the instruments named","run":"4279585a.711b"}
+{"kind":"same","check":791,"finding":"follows","why":"V2982: the rerun costs a slot and answers a question worth less than it, so it is ranked last and kept on record","run":"4279585a.711b"}
+{"kind":"same","check":793,"finding":"follows","why":"V1442 0.6515 − V1443 0.598 = 0.0535 ≈ 0.053","run":"4279585a.711b"}
+{"kind":"same","check":794,"finding":"unsupported","why":"V3360 says the ranges are checked before a kernel starts; the six GPU hours a typo would otherwise cost is not in any premise","run":"4279585a.711b"}
+{"kind":"same","check":796,"finding":"unsupported","why":"V348 gives 30 h/week but not the span; the 10-15 deadline (43 days, ~6.1 weeks) would give ~184 h, and no premise gives the ~6.5 weeks behind ~195 h","run":"4279585a.711b"}
+{"kind":"same","check":799,"finding":"follows","why":"V719-V723: the tied pair cannot be split by public score which Kaggle auto-selects on; V831-V834 the fix is resolvedly better on rho (+0.0124) and OOF-AUC (+0.0022)","run":"4279585a.711b"}
+{"kind":"same","check":801,"finding":"follows","why":"V3076 gives 3,037 series left after T007, the subject the conclusion names","run":"4279585a.711b"}
+{"kind":"same","check":803,"finding":"unsupported","why":"V1482/V1483 show the 94-window point is LB-corroborated; \"only\" needs the other points' evidence class, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":804,"finding":"follows","why":"V139/V140 frozen RNG (one-line key fix), V141-V143 arm C undertrained (a schedule length), V147 build_manifest --all a free CPU fix: one-line or CPU-only","run":"4279585a.711b"}
+{"kind":"same","check":807,"finding":"follows","why":"V3096: --seqs 3 is rejected; recording that before someone re-proposes it is useful","run":"4279585a.711b"}
+{"kind":"same","check":808,"finding":"follows","why":"V1621: the team's own \"not too confident my score is going to hold on the private LB\" is a caveat against the band's scores","run":"4279585a.711b"}
+{"kind":"same","check":813,"finding":"unsupported","why":"V63-V67: field single models 0.934–0.942 vs our 0.926 ensemble is 1.0–1.6 points; a per-model gap of two to four points needs our single-model LB, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":816,"finding":"follows","why":"V2614-V2616: two thirds of each series is discarded at inference and density adds unseen pixels, while crop and bright only re-present the same pixels","run":"4279585a.711b"}
+{"kind":"same","check":822,"finding":"follows","why":"V2499 slope 1 min/unit vs V2479 1.329: (1.329 − 1)/1.329 = 24.8 %, the stated 24 % optimistic (truncated)","run":"4279585a.711b"}
+{"kind":"same","check":823,"finding":"contradicted","why":"V3253 sd 0.0001–0.0003: 0.001/0.0003 = 3.3 sd and 0.001/0.0001 = 10 sd, so the step is 3.3–10 sd, not 5–10","run":"4279585a.711b"}
+{"kind":"same","check":825,"finding":"follows","why":"V846/V847: auto-selection does not read our corpus rho, so leaving the pick to it discards the only evidence separating the two","run":"4279585a.711b"}
+{"kind":"same","check":826,"finding":"follows","why":"V2927: forward passes only, no backward, optimizer or labels: no training GPU","run":"4279585a.711b"}
+{"kind":"same","check":827,"finding":"follows","why":"V1495: window count is the only axis that costs no local GPU and no training; V1494 we spend nothing on it","run":"4279585a.711b"}
+{"kind":"same","check":831,"finding":"follows","why":"V2782 nothing in the rules bars adapting on the test set in the kernel; V2784 the pages do not mention transduction","run":"4279585a.711b"}
+{"kind":"same","check":832,"finding":"follows","why":"V2659/V2660: resolution adds no new information and acts only through stride placement, against density's new pixels: weaker","run":"4279585a.711b"}
+{"kind":"same","check":838,"finding":"follows","why":"V3435: ~4,350 of ~4,407 rows carry only a Report, so the head of the file is almost surely a study without ground truth","run":"4279585a.711b"}
+{"kind":"same","check":839,"finding":"follows","why":"V3006 names MAE with its published 400–800 ImageNet epochs as the objective being costed","run":"4279585a.711b"}
+{"kind":"same","check":844,"finding":"follows","why":"V745/V746: under a public-score criterion auto-selection manufactures worthless gain; under any other we cannot control or audit it: choose explicitly","run":"4279585a.711b"}
+{"kind":"same","check":852,"finding":"follows","why":"V2638/V2639: the density instrument is a cheap one-member re-dump; the resolution test swaps --slices 24 for img_size=384 at the same cost","run":"4279585a.711b"}
+{"kind":"same","check":853,"finding":"follows","why":"V2199-V2201: weight decay is the literal 1e-4 written four times, reachable by no flag: one flag replaces four literals","run":"4279585a.711b"}
+{"kind":"same","check":857,"finding":"follows","why":"V3817: ~6 min at 5 members and ~2 min at 1 give slope (6 − 2)/4 = 1 min/member and intercept 1 min","run":"4279585a.711b"}
+{"kind":"same","check":865,"finding":"follows","why":"V454/V455 the public notebook uses the same LLM soft-label construction, and V456-V458 our teacher (0.8976) beats the best published reader (0.881)","run":"4279585a.711b"}
+{"kind":"same","check":866,"finding":"unsupported","why":"V3513 gives the blend 0.5·BASE + 0.5·prediction; what the mask selects and how the second rider interacts with it are not in the premises","run":"4279585a.711b"}
+{"kind":"same","check":874,"finding":"follows","why":"V1335/V1336: posters matched to TeamNames with claims at or below verified scores shows who and no inflation, not the configuration","run":"4279585a.711b"}
+{"kind":"same","check":876,"finding":"follows","why":"V3419/V3420: the kernel reads os.environ first, so a stale RSNA_CKPTS would override the pushed spec, the failure the script guards against","run":"4279585a.711b"}
+{"kind":"same","check":881,"finding":"follows","why":"V3547: a trailing partial window holds real gradients; it has at most accum − 1 studies, the most a drop could lose per epoch","run":"4279585a.711b"}
+{"kind":"same","check":882,"finding":"unsupported","why":"V117 says a tiny head on cached features trains in minutes; that levers 5 and 8 are head-side is not stated, and lever 5's warmup/layer-decay act on the encoder a frozen cache cannot train","run":"4279585a.711b"}
+{"kind":"same","check":885,"finding":"follows","why":"V3954/V3955: 14,010 fluid-sensitive fat-suppressed series, 10,361 neither, nothing between: a clean binary","run":"4279585a.711b"}
+{"kind":"same","check":887,"finding":"follows","why":"V456 0.8976 > V457 0.881","run":"4279585a.711b"}
+{"kind":"same","check":891,"finding":"follows","why":"V3994/V3995: SWA averages BN stats instead of an update_bn pass, so it is the known approximation to suspect if SWA underperforms","run":"4279585a.711b"}
+{"kind":"same","check":893,"finding":"unsupported","why":"V3867/V3868 say averaging packed and unpacked feeds a member an untrained tensor; that both have identical shapes is not in the premises","run":"4279585a.711b"}
+{"kind":"same","check":896,"finding":"unsupported","why":"V637-V642 give pos_weight's rank, band and measured weights; no premise sizes the change at ~5 lines","run":"4279585a.711b"}
+{"kind":"same","check":897,"finding":"unsupported","why":"V3802 gives 8 vs 16 epochs; \"~5 h\" needs the current ~2.5 h fold cost, which no premise states","run":"4279585a.711b"}
+{"kind":"same","check":900,"finding":"unsupported","why":"V1386 refutes only the breadth half of V1385; nothing in the premises tests the input-representation half, so \"survives\" is not shown","run":"4279585a.711b"}
+{"kind":"same","check":901,"finding":"follows","why":"V4032: the grad-checkpoint (double-update) model scored better than the reference, so the double update did not break it","run":"4279585a.711b"}
+{"kind":"same","check":902,"finding":"follows","why":"V1091 plateau at 0.936 − V1063 our 0.926 = 0.010 below","run":"4279585a.711b"}
+{"kind":"same","check":904,"finding":"follows","why":"V2572: the view curve has already turned over, a poor prior for adding views","run":"4279585a.711b"}
+{"kind":"same","check":905,"finding":"follows","why":"V2491 25.2 + 1.329 × 66 = 112.9 ≈ 113 min, a point estimate inside V2443's 90.5–264.7 bracket","run":"4279585a.711b"}
+{"kind":"same","check":907,"finding":"follows","why":"V3808/V3809: rotate and mirror vary per epoch while jitter and crop do not, a partial loss of input variation","run":"4279585a.711b"}
+{"kind":"same","check":909,"finding":"follows","why":"V805: 0.0070 × √(2 ln 50) = 0.0070 × 2.797 = 0.0196 as stated","run":"4279585a.711b"}
+{"kind":"same","check":912,"finding":"follows","why":"V210: picking the best public score among ~40 distinct submissions manufactures ~+0.010 worthless gain; auto-selection on public score is that procedure","run":"4279585a.711b"}
+{"kind":"same","check":916,"finding":"follows","why":"V2935 zero training GPU, V2944/V2945 no prohibition, V2950/V2951 measurable on OOF-AUC-vs-Sonnet ±0.0019: survives","run":"4279585a.711b"}
+{"kind":"same","check":917,"finding":"follows","why":"V1098: every bin from 0.937 to 0.952 has a spike ratio of 0.00–3.00, so none stands out from its neighbours","run":"4279585a.711b"}
+{"kind":"same","check":918,"finding":"follows","why":"V3027/V3028 SSL does not fit Kaggle's quota and output is lost at exhaustion; V3043 it duplicates a registered alternative: arithmetic and duplication","run":"4279585a.711b"}
+{"kind":"same","check":924,"finding":"follows","why":"V1240-V1243: +0.014 on 7 submissions sits at the edge of the sd 0.0070 bound (+0.0143) and needs seven structurally distinct systems, i.e. method work","run":"4279585a.711b"}
+{"kind":"same","check":928,"finding":"follows","why":"V3706: unmatched returns every offender in one message, so none is found only after a re-queue","run":"4279585a.711b"}
+{"kind":"same","check":929,"finding":"follows","why":"V2474 0.0653 lies within V2482's 0.0547–0.0679 s/study/unit","run":"4279585a.711b"}
+{"kind":"same","check":930,"finding":"follows","why":"V2968/V2969 train and test are one collection under the organisers' split; V2970/V2971 no shift shown and no test image seen outside a scored rerun","run":"4279585a.711b"}
+{"kind":"same","check":936,"finding":"follows","why":"V2847-V2852: the four split-regime (doubled) members score 0.8828–0.8841, the top four of 22 against a 0.8531 floor","run":"4279585a.711b"}
+{"kind":"same","check":938,"finding":"follows","why":"V718-V723: two submissions tie at public 0.926, one buggy and one fixed, and auto-selection on public score cannot split them: register the rule now","run":"4279585a.711b"}
+{"kind":"same","check":939,"finding":"follows","why":"V3035-V3042: SSL must beat ImageNet init on a small redundant corpus, and a cheaper surveyed external route is already registered: the structural objection carries","run":"4279585a.711b"}
+{"kind":"same","check":940,"finding":"follows","why":"V3014: the corpus is 819,078 slices, the ~819k the proposal names","run":"4279585a.711b"}
+{"kind":"same","check":942,"finding":"follows","why":"V3324 reports are absent at test and V3325/V3326 truth is an expert re-reading the images, so an image model is not bound by what the report contains","run":"4279585a.711b"}
+{"kind":"same","check":943,"finding":"follows","why":"V3900: ~63 % of a series read is network wait, so reading once and running N forwards avoids paying that wait N times","run":"4279585a.711b"}
+{"kind":"same","check":947,"finding":"unsupported","why":"V240 gives only lever 3's own band (+0.005 to +0.015); ranking it third needs the other levers' bands, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":950,"finding":"contradicted","why":"V240 gives the second sequence family +0.005 to +0.015; its optimistic end is +0.015, not the +0.010 that V381 sums as the optimistic end","run":"4279585a.711b"}
+{"kind":"same","check":956,"finding":"follows","why":"V1945/V1946 --layer-decay was passed once at 0.75, so V2055's \"no run has ever passed them\" in PROGRESS.md needs the same correction","run":"4279585a.711b"}
+{"kind":"same","check":958,"finding":"follows","why":"V2110 armc0 local fold 0, V2113 armc1 T4 fold 1, V2117 armc3 T4 fold 3: fold and venue change with the regime","run":"4279585a.711b"}
+{"kind":"same","check":960,"finding":"unsupported","why":"V716 shows no private score on any of 16 submissions; that every steering number is a public-subset read ignores internal instruments (OOF, gold, rho) the premises do not address","run":"4279585a.711b"}
+{"kind":"same","check":963,"finding":"follows","why":"V2219-V2251: every decay below 1.0 spreads lr_scale over orders of magnitude (e.g. 0.80 down to 5.90e-03) and 1.0 is flat at 1×, so no value is flat at 0.1×","run":"4279585a.711b"}
+{"kind":"same","check":966,"finding":"follows","why":"V2479 1.329 min = 79.7 s per unit over ~1,300 studies = 0.0613 s per study per unit","run":"4279585a.711b"}
+{"kind":"same","check":968,"finding":"follows","why":"V3747-V3750: lr_scale spans 1e-5 to 1.0, the top 31 % of encoder params at full LR and the stem frozen: graded, not a uniform cut","run":"4279585a.711b"}
+{"kind":"same","check":970,"finding":"contradicted","why":"T(u) = 25.2 + 1.329 u (V2479); at 132 units that is 25.2 + 175.4 = 200.6 min, not ~175 min (the intercept is dropped); still inside 540 min","run":"4279585a.711b"}
+{"kind":"same","check":971,"finding":"follows","why":"V2868: the section rests on standard BN EMA algebra, INFERRED, so nothing in it is measured","run":"4279585a.711b"}
+{"kind":"same","check":972,"finding":"follows","why":"V2651 trained at 320 vs V2657 tf_efficientnet_b2 native 260: already above native size","run":"4279585a.711b"}
+{"kind":"same","check":973,"finding":"unsupported","why":"V2714 gives +22 units per view; ranking the lever 4th needs the other levers' sizes, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":975,"finding":"follows","why":"V2730 819,078 × V3001 2 views × V3002 100–200 epochs = 163.8–327.6 M ≈ 164–328 M","run":"4279585a.711b"}
+{"kind":"same","check":978,"finding":"follows","why":"V547: full-data training runs after the screens so the folds carry the winning recipe","run":"4279585a.711b"}
+{"kind":"same","check":979,"finding":"follows","why":"V30/V31: a 9 h cap binds the scored rerun, so its wall clock is the quantity to record on the next submission","run":"4279585a.711b"}
+{"kind":"same","check":982,"finding":"follows","why":"V3685-V3687: mirror/rot± views are legal only on flag-trained checkpoints, the deployed kernel runs 3 of 6 views, a flag-carrying family can run all 6","run":"4279585a.711b"}
+{"kind":"same","check":984,"finding":"follows","why":"V1199-V1204: 86 teams with ≥30 subs, median 41 vs the ≥0.9375 median of 34, all scoring only {0.936, 0.937}","run":"4279585a.711b"}
+{"kind":"same","check":985,"finding":"follows","why":"135 slices/s × ~3 ≈ 400, the band's high end (V2993); the conclusion names the assumption, which V2995/V2996's ~1.4× from checkpointing does not support","run":"4279585a.711b"}
+{"kind":"same","check":986,"finding":"follows","why":"V1245-V1247: the band is method, needs something structurally different, and budget alone does not reach it: real, reachable skill","run":"4279585a.711b"}
+{"kind":"same","check":988,"finding":"follows","why":"V2939/V2940: ~50 min, under 2 h with reloads, a short job and not the sustained load the rule addresses","run":"4279585a.711b"}
+{"kind":"same","check":993,"finding":"follows","why":"V230 +0.005 to +0.010 for self-distillation; V662 carries the same band","run":"4279585a.711b"}
+{"kind":"same","check":999,"finding":"unsupported","why":"V510-V515 give a +0.0053 cross-recipe gain on our own instrument and Raptor's gold quality; no premise maps these to an LB band of +0.002 to +0.008 or a ~+0.004 centre","run":"4279585a.711b"}
+{"kind":"same","check":1005,"finding":"follows","why":"V1252/V1253: lane 3's winner's curse still applies to each team's public-vs-private delta, so the band result says nothing about individual margins","run":"4279585a.711b"}
+{"kind":"same","check":1013,"finding":"follows","why":"V2975: every board instrument scores our own corpus; a test-time adaptation acts only on the test set, so none exercises it","run":"4279585a.711b"}
+{"kind":"same","check":1015,"finding":"follows","why":"V79 6 slots × V80 16 slices = 96 = V81 ~96 slices/study","run":"4279585a.711b"}
+{"kind":"same","check":1017,"finding":"unsupported","why":"V335-V339 give the deadline and budgets; nothing in the premises mentions train.py --resume or prices it at half a day","run":"4279585a.711b"}
+{"kind":"same","check":1019,"finding":"contradicted","why":"V2265 param-weighted mean encoder LR 1.35e-4 = 0.45 × 3e-4, so at most 45 % of encoder params can sit at full LR; \"most of the parameters at full LR\" cannot hold (STATE says 31 %)","run":"4279585a.711b"}
+{"kind":"same","check":1026,"finding":"follows","why":"V1138: ~200 structurally distinct submissions manufacture +0.012 public-only gain, so band scores are not shown privately safe","run":"4279585a.711b"}
+{"kind":"same","check":1027,"finding":"follows","why":"V18 0.946 − V25 0.936 = +0.010","run":"4279585a.711b"}
+{"kind":"same","check":1030,"finding":"follows","why":"V3030: published SSL gains come from 100–800-epoch schedules; 20 epochs is a different regime, not a cheap copy","run":"4279585a.711b"}
+{"kind":"same","check":1032,"finding":"follows","why":"V3407-V3409: a refused push returns 0, so a returncode check reports unlaunched folds as launched; V3412 the counting itself is sound","run":"4279585a.711b"}
+{"kind":"same","check":1036,"finding":"unsupported","why":"V489 S1 is zero code but V502 S2 is ~10 lines; no premise names a second zero-code lever","run":"4279585a.711b"}
+{"kind":"same","check":1037,"finding":"follows","why":"V187 rho deltas 2.24× AUC deltas and V189 a 4.4-member OOF average together turn V191's 6.97× into 1.37× on 10→22: mostly arithmetic","run":"4279585a.711b"}
+{"kind":"same","check":1039,"finding":"follows","why":"V843-V846: both 0.926 on the public subset, one resolvedly better elsewhere, and auto-selection does not read corpus rho","run":"4279585a.711b"}
+{"kind":"same","check":1042,"finding":"follows","why":"V2102 m' = 0.19 vs 0.1: V2104 1/m = 10 batches → V2105 1/m' = 5.3 batches; same EMA target, shorter window","run":"4279585a.711b"}
+{"kind":"same","check":1046,"finding":"contradicted","why":"V572: none of the four figures may be quoted as the target, yet the gate centres on 0.9167, one of them, and 0.9167 ± 0.010 = 0.9067–0.9267 excludes V570's 0.9054","run":"4279585a.711b"}
+{"kind":"same","check":1054,"finding":"follows","why":"V70 gold return curve flat past k ≈ 12; V189 OOF's \"22-member\" config is a 4.4-member average, well below 12: the steep part","run":"4279585a.711b"}
+{"kind":"same","check":1056,"finding":"follows","why":"V2841-V2845: 0.6451 vs 0.6336, Δ −0.0115 just outside ±0.0112 with the checkpointed model better: harmless","run":"4279585a.711b"}
+{"kind":"same","check":1061,"finding":"follows","why":"V593-V599: joining Raptor needs a percentile-rank join (no shared calibration), which touches the rank-averaging ban T044 is blocked on","run":"4279585a.711b"}
+{"kind":"same","check":1065,"finding":"follows","why":"V298: --adjacent already puts 95 % of a series' slices in the tensor, so added density has little left to add","run":"4279585a.711b"}
+{"kind":"same","check":1068,"finding":"follows","why":"V2812-V2815: armb0, armb0.swa, armc0, armc0.swa carry grad-checkpoint and a 2.00 counter ratio: 4 of 22 = 18.2 %","run":"4279585a.711b"}
+{"kind":"same","check":1076,"finding":"follows","why":"V2571 −0.0005 [−0.0009, −0.0001]: negative, the interval excludes zero","run":"4279585a.711b"}
+{"kind":"same","check":1078,"finding":"contradicted","why":"V258 says measure two at a time at most; bundling warmup, layer-decay and schedule into one arm changes three at once","run":"4279585a.711b"}
+{"kind":"same","check":1079,"finding":"unsupported","why":"V2125 shows the local (checkpointed) run better by Δrho −0.0115; no premise says which regime's members are the ones \"already trusted\"","run":"4279585a.711b"}
+{"kind":"same","check":1083,"finding":"follows","why":"V1322-V1325: the plateau notebook's authors spent 52 and 96 submissions without leaving 0.936: stuck","run":"4279585a.711b"}
+{"kind":"same","check":1084,"finding":"follows","why":"V3010 16.4 M slice-passes / V2998 400 slices/s = 41,000 s = 11.4 h","run":"4279585a.711b"}
+{"kind":"same","check":1087,"finding":"follows","why":"V1964: seed 0 in all 22 deployed and 8 experimental members limits diversity, hedged as a candidate explanation for the flat curve","run":"4279585a.711b"}
+{"kind":"same","check":1090,"finding":"follows","why":"V3611/V3612 a separate dropout mask per label vs one shared mask; V3614 pooled vectors identical at init, so per-label noise is the first difference","run":"4279585a.711b"}
+{"kind":"same","check":1091,"finding":"follows","why":"V2938 ~2.7 min per 4,349-study pass: 22 passes over ~3,500 studies ≈ 22 × 2.2 = 48 min, under 2 h with reloads","run":"4279585a.711b"}
+{"kind":"same","check":1097,"finding":"follows","why":"V206 swap sd 0.0001–0.0003: +0.001 is 3.3–10 sd, so a displayed +0.001 is real","run":"4279585a.711b"}
+{"kind":"same","check":1099,"finding":"follows","why":"V2959: a hygiene fix with a small expected size and no measured delta ranks below measured ones","run":"4279585a.711b"}
+{"kind":"same","check":1103,"finding":"follows","why":"V3093: after T007 --seqs 2 covers every (plane, family) cell for every study, leaving nothing structurally new for --seqs 3","run":"4279585a.711b"}
+{"kind":"same","check":1110,"finding":"unsupported","why":"V3013 gives 4.1 M slice-passes (819,078 × 5); \"nobody would publish\" needs the published 100–800-epoch schedules, which are not among the premises","run":"4279585a.711b"}
+{"kind":"same","check":1111,"finding":"follows","why":"V2944/V2945: no prohibition touched, and it is none of the prohibited kinds","run":"4279585a.711b"}
+{"kind":"same","check":1122,"finding":"unsupported","why":"V2162/V2163 give the key's fields and the cap; the values 12 slices, 320 px and adjacent=True for a T007 member are not in the premises","run":"4279585a.711b"}
+{"kind":"same","check":1123,"finding":"follows","why":"V1392: another team says the gold sample is too small to resolve, which matches our posture that gold-58 is wide","run":"4279585a.711b"}
+{"kind":"same","check":1125,"finding":"follows","why":"V1578: two independent teams above us report the label lever exhausted, which is lane 12's target-side question","run":"4279585a.711b"}
+{"kind":"same","check":1126,"finding":"follows","why":"V2702/V2716: +66 units buys +32 pp of unseen volume, named the best mechanism among the levers","run":"4279585a.711b"}
+{"kind":"same","check":1127,"finding":"follows","why":"V2997/V2998: the high end could not be measured, so the bill at 400 slices/s is INFERRED and optimistic","run":"4279585a.711b"}
+{"kind":"same","check":1129,"finding":"follows","why":"V2514: lane 7 §3.4's claim is not right as stated, so its reasoning should not be reused","run":"4279585a.711b"}
+{"kind":"same","check":1135,"finding":"follows","why":"V1035-V1038: 86 teams spent the same or more as the median ≥0.94 team and stayed at 0.936, falsifying the overfit hypothesis","run":"4279585a.711b"}
+{"kind":"same","check":1136,"finding":"contradicted","why":"V3076 3,037 over V3073 21,334 opened is a 14.2 % increase; 12.5 % is 3,037 / 24,371, the share of all series, not the increase","run":"4279585a.711b"}
+{"kind":"same","check":1142,"finding":"follows","why":"V761: lane 3 §5B measured the cost of sweeping, so spare submissions are no reason to sweep","run":"4279585a.711b"}
+{"kind":"same","check":1143,"finding":"follows","why":"V2624: a masked softmax over the slice axis normalises over however many slices are present: length-agnostic","run":"4279585a.711b"}
+{"kind":"same","check":1148,"finding":"follows","why":"V2754: the confound check ran and is null, which rules the confound out","run":"4279585a.711b"}
+{"kind":"same","check":1156,"finding":"follows","why":"V713-V715: 16 submissions in 16 days is 20 % of the allowance with 250 left: the budget does not bind","run":"4279585a.711b"}
+{"kind":"same","check":1157,"finding":"follows","why":"V3171: mirror_bag reverses real slices only; reversing the padded chunk would put padding at the front while the mask marks the back","run":"4279585a.711b"}
+{"kind":"same","check":1158,"finding":"follows","why":"V1192, V1207-V1210, V1218: budget moves nothing inside the band, heavy spenders stayed put, five teams reached ≥0.940 on ≤12 subs: No","run":"4279585a.711b"}
+{"kind":"same","check":1159,"finding":"follows","why":"V3893: a flat mean over all members weights each group by its size, 10 to 2","run":"4279585a.711b"}
+{"kind":"same","check":1161,"finding":"unsupported","why":"V4066 lists MRNet's properties; \"second-best\" needs the best source and the comparison, which no premise gives","run":"4279585a.711b"}
+{"kind":"same","check":1162,"finding":"follows","why":"V526: fastMRI+ is an instrument that fixes the binding constraint, a measurement fix rather than a bet","run":"4279585a.711b"}
+{"kind":"same","check":1163,"finding":"follows","why":"V649-V652: rank 7, a free augmentation that needs a dataset change: deferred","run":"4279585a.711b"}
+{"kind":"same","check":1164,"finding":"follows","why":"V2491: 113 min is the whole submit→terminal time, so the notebook portion within it is at most 113 min","run":"4279585a.711b"}
+{"kind":"same","check":1168,"finding":"follows","why":"V1597: stevenleehans' null corroborates lane 2's encoder-scaling finding from an independent team","run":"4279585a.711b"}
+{"kind":"same","check":1169,"finding":"follows","why":"V3828: the Raptor arm would break T040's one-checkpoint, one-view thesis, so the accuracy and efficiency submissions must stay separate","run":"4279585a.711b"}
+{"kind":"same","check":1171,"finding":"follows","why":"V3572-V3574: argmax 0.907 vs SWA 0.899 from the same weights, and \"prefer SWA\" picked the worse one: compare instead","run":"4279585a.711b"}
+{"kind":"same","check":1173,"finding":"follows","why":"V1419 two LB-corroborated band members at 224 px vs V1420 our 320 px: the band points down, not up","run":"4279585a.711b"}
+{"kind":"same","check":1174,"finding":"follows","why":"V2809: 67 of 69 BN layers at double momentum applications and 2 at single: one checkpoint with two regimes inside it","run":"4279585a.711b"}
+{"kind":"same","check":1182,"finding":"follows","why":"V1356-V1360: a single fold of a small ResNet at 224 px is claimed at 0.936 and verified at 0.936 (rank 251)","run":"4279585a.711b"}
+{"kind":"same","check":1193,"finding":"follows","why":"V3162/V3163: ~2 min for one member and ~6 for five give ~1 min fixed + ~1 min per member, from which the budget points and cap follow","run":"4279585a.711b"}
+{"kind":"same","check":1195,"finding":"follows","why":"V440 0.8793 + V442 offsets +0.019/+0.022 = 0.898–0.901, i.e. near 0.89–0.90","run":"4279585a.711b"}
+{"kind":"same","check":1197,"finding":"follows","why":"V3061-V3065 recompute 14,010, 10,361, 13,221 and 416 (416/4,407 = 9.4 %), matching the docstring's claims","run":"4279585a.711b"}
+{"kind":"same","check":1202,"finding":"unsupported","why":"V224 gives lever 1 only +0.000 to +0.003, the smallest band; ranking it first needs a cost or ordering criterion that no premise states","run":"4279585a.711b"}
+{"kind":"same","check":1205,"finding":"follows","why":"V2085-V2087: local folds checkpoint, Kaggle ones do not, and armc1-4 and fold0-4 record False, leaving armb0, armc0 and their SWAs: 4","run":"4279585a.711b"}
+{"kind":"same","check":1208,"finding":"follows","why":"the 11 deltas V2887-V2918 sum to +0.0160; /11 = +0.0015, with 9 positive and 2 negative (base2, armC4)","run":"4279585a.711b"}
+{"kind":"same","check":1209,"finding":"follows","why":"V145-V148: --seqs 2 would run 95 % unmanifested (8,113 of 8,529) and build_manifest.py --all is the free prerequisite","run":"4279585a.711b"}
+{"kind":"same","check":1214,"finding":"follows","why":"V805: 0.0028 × √(2 ln 16) = 0.0028 × 2.355 = 0.0066 as stated","run":"4279585a.711b"}
+{"kind":"same","check":1215,"finding":"follows","why":"V2587: 0.0005 rho × 0.74 ≈ +0.0004 LB, below what the LB can show: not worth a submission","run":"4279585a.711b"}
+{"kind":"same","check":1216,"finding":"follows","why":"V227 lever 1 costs 1 submission and 0 training; V293/V294 lever 9 is 1–2 submissions and 2 min of T4 inference: neither trains","run":"4279585a.711b"}
+{"kind":"same","check":1218,"finding":"unsupported","why":"V3912 says only that the kernel prints the real runtime; that the visible-to-hidden run ratio holds as views are added is not in any premise","run":"4279585a.711b"}
+{"kind":"same","check":1220,"finding":"unsupported","why":"V493 names the lever (--crop-mm 140); no premise sizes the change at ~10 lines","run":"4279585a.711b"}
+{"kind":"same","check":1221,"finding":"follows","why":"V1420 320 px lies between V1537's 224 px and 392 px","run":"4279585a.711b"}
+{"kind":"same","check":1222,"finding":"follows","why":"V2022: stripping every RSNA_ variable before staging stops a stale shell value from being baked","run":"4279585a.711b"}
+{"kind":"same","check":1228,"finding":"follows","why":"V2101 m = 0.1 applied twice (V2100): 1 − (1 − 0.1)² = 1 − 0.81 = 0.19","run":"4279585a.711b"}
+{"kind":"same","check":1235,"finding":"follows","why":"V2294-V2296: seed 0 everywhere is no defect and only a candidate explanation, so a fold to test it is not obviously worth it","run":"4279585a.711b"}
+{"kind":"same","check":1238,"finding":"follows","why":"V3527: num_batches_tracked reads 6 after 3 steps, so BN updates twice per optimizer step","run":"4279585a.711b"}

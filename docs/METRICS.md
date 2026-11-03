@@ -387,3 +387,118 @@ files. It is a precedent, not an oracle: AGE Aris differs on purpose here.
 | Windows | 30-day throughput by default | 7 days against the previous 4 weeks; percentiles over 90 days, minimum 5 | A daily view against a steadier baseline. |
 | Reopened items | Delivered at the latest `done` or `killed` line, still counted after a reopen (139) | Counted once, at the final finish as of `asOf`; an item reopened and still open has no finish (its earlier finish is listed as withdrawn) | Work reopened is not delivered; counting it would also inflate forecasts. |
 | Display | Whole units (`3d`, `14h`) | One decimal: hours below a day, days above | Comparing percentiles needs the extra resolution. |
+
+## The lost-agent measures
+
+How often agents get lost on a board (`docs/plans/agent-brain.md` §8). They
+are the baseline orient is judged against, not values the app shows: §8 sets
+their targets, measured again 28 days after orient joins AGENTS.md (P6).
+`lib/lost.mjs` counts them, and `node lib/lost.mjs [--json] [--since <time>]
+[--as-of <time>] <repository>…` prints them; `--json` gives each instance with
+the commit or trail entry it rests on. This section pins how each one reads
+the records.
+
+**The records.**
+
+- **History:** every commit reachable from HEAD that touches the board's task
+  folders, settings file or trails, under `AA/`, `deaddrop/` and `pm/`, on
+  every branch merged into HEAD, parents before children and otherwise in
+  time order, a commit dated no earlier than its latest parent. Each commit's
+  board is its first parent's with its own changes. A first-parent walk would date
+  every claim made on a merged branch from the merge.
+- **Times:** a commit's committer date, as written (not clamped); a trail
+  entry's `ts`.
+- **Trails:** every line of every committed version of each task's trail,
+  and of the working tree's, once each, in `ts` order; lines with the same
+  `ts` keep their order in the file. A line is an entry when orient reads it
+  as one (ORIENT.md §3.2); any other line is counted as malformed and
+  skipped. A run is one run id in one task's trail. Its family is the run id
+  before the first `.`: a session and its subagents.
+- **Columns** are orient's: the folder, refined by the status word. On an
+  older board (no `backlog/` file and no settings file), unclaimed work in
+  `tasks/` is backlog. An id with two files is in no column. WIP is the tasks
+  in progress or blocked (§5.2).
+- **A claim** is a commit in which a task becomes *held*: in progress or
+  blocked under an owner line, when no parent held it. A claim belongs to the
+  owner line's operator. A new session of the same operator continues it
+  (rule 3), and so does another operator's takeover. A task moved into
+  `tasks/` without an owner line is in WIP but not yet claimed. A task is held
+  from its claim until the first commit, on any line, where it is not; that
+  is its *stay*. An operator's *stint* holding it ends the same way: at the
+  first commit, on any line, where it is not held under their owner line. A
+  line that goes on holding it after that is one nobody worked on, until a
+  merge brings it up to date. A merge that brings the task in held from two
+  lines goes on with the hold that no line has ended by then, and with the
+  stint of its owner line's operator that none has.
+
+**(a) Repeated acts.** A `doing` repeats an act when an earlier `doing` on the
+same task, in another run, says the same act, and that run wrote no `did` or
+`end` between the two.
+
+- The act is the line's `act`, or its `what` when it has no act, with each
+  run of whitespace one space. Many `doing`s carry only `what`, though
+  `ckpt.sh live` shows only `act`. A `doing` with neither is never
+  compared; it is counted as naming no act.
+- Each repeat counts once, however many earlier lines it matches.
+- A reaping `end` answers the dead run's act, so a resume that checked the
+  `tell` first is not a repeat.
+- A repeat within one family (a subagent repeating its parent) counts, and is
+  marked.
+- The rate is repeats per 100 runs, each run counted where its first entry
+  falls.
+- What it cannot see: the same act worded differently. On the three tracked
+  repositories, keying on `tell` instead finds no more (2026-10-25).
+
+**(b) Overlapping claims.** Two workers on one task at once, from either
+record:
+
+- **Owner lines:** two operators' stints holding the task that share time.
+  On one line of history an owner line ends where the next begins, so these
+  come only from branches that diverged.
+- **Runs:** two families writing on the task at once. Their spans share time,
+  or one family's single entry falls strictly inside the other's span. A span
+  leaves out `end` entries, because the session that reaps a dead run writes
+  its `end`. It closes once each of the family's runs has ended, so a family
+  that writes again after that starts a new span. It also splits where the
+  family names a new process, a resumed session. The old process's runs died
+  with it, so they need no `end` for the span to close.
+- §8's "the same operator and two runs writing in the same interval" is read
+  as the runs record. A same-operator take-back (rule 3) leaves one owner
+  line, so only the trail shows the second worker.
+- Two families that are an owner-line pair's operators or sessions count
+  once.
+- What it cannot see:
+  - One worker whose runs do not share a root counts as two.
+  - A worker who goes on with the task on a branch after another operator
+    took it over on another line is not counted. Their stint ends at the
+    takeover.
+
+**(c) Over-limit claims.** A claim made while WIP is at the board's
+`wip.in_progress`, as the settings file stood in the claim's parent. When
+the claim's commit renames the board, settings file and all, that is the
+settings file under the old name. A board that has no settings file after the
+commit renamed nothing.
+
+- WIP counts the tasks in progress or blocked that the commit leaves there,
+  claimed or not. It also counts the commit's earlier claims, in id order by
+  number (T999 before T1000). A commit that finishes one task and claims
+  another breaches nothing.
+- Without a limit a claim cannot be over one. Such claims are counted apart,
+  with the WIP each joined.
+
+**(d) Start latency.** From a claim's commit time to the first `did` on the
+task, by any run, while the stay lasts.
+
+- A claim whose stay ended without a `did` has none. One still held without
+  a `did` is open.
+- The median and the 85th percentile are nearest ranks, over the claims that
+  have a latency.
+- What it cannot see: work done before the first `did`. It times the trail,
+  so a task worked in commits before its trail starts reads as slow to start.
+
+**Windows.** `--since` and `--as-of` count what starts between them: a repeat
+by its `doing`, a run by its first entry, an overlap by when it starts, a
+claim by its commit. Nothing after `--as-of` counts, trail lines included,
+and a stay or stint still running then ends there. Without `--since`, all of
+history counts. The `read` counts say what was read at HEAD, whatever the
+window; the exception is `runs`, which counts the window's.

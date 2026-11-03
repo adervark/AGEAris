@@ -1,0 +1,281 @@
+## conflict: 22 unique, 22 to mark
+
+### C1 (R1 group 14)
+  F657 [build_bag_kernels.py@f46796c build_bag_kernels.py@f46796c#1] kernels/insertion anchor (f46796c) = _coat_n = _coat_substitute() :: Both insert ONE block at the one module-level anchor _coat_n = _coat_substitute()
+  F642 [build_bag_kernels.py build_bag_kernels.py#19] 0941/substitution call = inside a try whose except RESTORES _raptor.csv :: the 0941 calls it inside a try whose except RESTORES _raptor.csv from bytes read just before
+  why (R1): V660 (f46796c): both kernels insert at 'the one module-level anchor _coat_n = _coat_substitute()'; V645: the 0941 calls it inside a try (first G smoke died there, V648); later text says INSERT_AT: corrected
+
+### C2 (R1 group 33)
+  F3274 [AGENTS.md§100 AGENTS.md§100#15] / days to zero at 0.875 GiB/day = 61 days to ZERO :: At 0.875 GiB/day that is 61 days to ZERO (53 ÷ 0.875 = 60.6), i.e. 8.7 weeks
+  F3258 [AGENTS.md§100 AGENTS.md§100#9] 61 days to zero line/error = wrong by about 5x in the dangerous direction :: so the "61 days to zero" line was wrong by about 5x in the dangerous direction.
+  why (R1): V3297: at 0.875 GiB/day, 61 days to zero; V3281/V3280: 53 to 22 GiB over 09-12..09-20 is ~3.9 GiB/day, so the '61 days to zero' line was wrong by ~5x: corrected
+
+### C3 (R1 group 65)
+  F67 [T121 T121#52] corpus step/sizes = 21 -> 49.4 GB :: So the step is 21 -> 49.4 GB, +28.4 GB
+  F416 [materialise.py materialise.py#4] T121 cost table/assumption = assumed the latter :: T121's cost table assumed the latter.
+  why (R1): V67: the new corpus is 21 -> 49.4 GB (76/44 slots x area, single channel); V417 materialise.py: T121's cost table assumed a 76-slice single-channel volume, but make_bag stores 3-channel triplets (148.2 GB, V423)
+
+### C4 (R1 group 139)
+  F75 [T121 T121#54] coexistence/disk need = ~70 GB :: Beside it needs ~70 GB
+  F416 [materialise.py materialise.py#4] T121 cost table/assumption = assumed the latter :: T121's cost table assumed the latter.
+  why (R1): V75: the new corpus beside the old needs ~70 GB (21 + 49.4); V417: T121's cost table assumed a single-channel volume, while make_bag stores 3-channel triplets, 148.2 GB: corrected
+
+### C5 (R1 cue 2)
+  F1489 [coat.py coat.py#310] T121 cost table/dicom_bag size = 49.4 GB :: T121's cost table assumed a 76-slice single-channel volume, giving 49.4 GB.
+  F416 [materialise.py materialise.py#4] T121 cost table/assumption = assumed the latter :: T121's cost table assumed the latter.
+  why (R1): V1499: T121's cost table gave the dicom_bag corpus 49.4 GB; V417: that table 'assumed the latter', a single-channel volume, while make_bag stores 3-channel triplets (148.2 GB): corrected
+
+### C6 (R1 cue 7)
+  F1489 [coat.py coat.py#310] T121 cost table/dicom_bag size = 49.4 GB :: T121's cost table assumed a 76-slice single-channel volume, giving 49.4 GB.
+  F2041 [_order.py _order.py#56] T121 cost table/error factor = 3x :: T121'S COST TABLE WAS WRONG BY 3x
+  why (R1): V1499: T121's cost table gave the dicom_bag corpus 49.4 GB; V2059: 'T121's cost table was wrong by 3x', 148.2/49.4 = 3.0: corrected
+
+### C7 (R1 cue 8)
+  F780 [coat_data.py coat_data.py#4] window/construction = three physically consecutive slices stacked as the three channels :: Each window is three physically consecutive slices stacked as the three channels of one RGB image
+  F2300 [_order.py _order.py#168] 2.5D triplet/not 2.5D share = ONE WINDOW IN FIVE :: THE 2.5D TRIPLET WAS NOT 2.5D FOR ONE WINDOW IN FIVE.
+  why (R1): V783: each window is three physically consecutive slices of one image; V2318: the 2.5D triplet was not 2.5D for one window in five (19.0% crossed a plane boundary under the span rule): corrected
+
+### C8 (R2 group 12, R3 group 19)
+  F1523 [Makefile Makefile#3] make smoke/check count = 1239 :: make smoke the 1239-check suite
+  F2362 [_order.py _order.py#205] 1335-check gate/md5 = 1335 :: 1335 checks -- md5 of the ordered names: 6e773a5730fb7fdea491cc53e67229ab
+  why (R2): V1534: Makefile at 0b783b8 calls make smoke 'the 1239-check suite'; V2380: _order.py at the same commit puts the gate at 1335 checks (1239 is an older entry, V2291): stale count
+  why (R3): V1534 (Makefile 0b783b8): make smoke is 'the 1239-check suite'; V2380 (_order.py, same commit): the gate is '1335 checks' with its md5; one suite, one commit, two counts
+
+### C9 (R2 group 12)
+  F2648 [claims_guard.py claims_guard.py#4] T084 D-1/AGENTS.md check count = 975 checks :: AGENTS.md said 975 checks
+  F2649 [claims_guard.py claims_guard.py#4] T084 D-1/machine check count = 984 :: the machine said 984
+  why (R2): T084 D-1: AGENTS.md said the suite had 975 checks, the machine said 984 (V1984/V2091: 975 was T083/T084's gate, 984 the count then): the doc's figure was wrong, a correction
+
+### C10 (R2 group 15)
+  F71 [T121 T121#52] dicom_bag corpus registered size/arithmetic = 49,387,732,992 B :: 4,407 x 76 x 384 x 384 uint8 = 49,387,732,992 B = 49.4 GB decimal = 46.0 GiB
+  F1493 [coat.py coat.py#313] dicom_bag corpus/size = 4,407 x 76 x 3 x 384^2 = 148.2 GB :: The real figure is 4,407 x 76 x 3 x 384^2 = 148.2 GB.
+  why (R2): V71: corpus = 4,407 x 76 x 384 x 384 uint8 = 49.4 GB, 'verified'; V1503: 'the task registered it wrong', real figure 4,407 x 76 x 3 x 384^2 = 148.2 GB (rows are (76,3,H,W)): the 3 channels were dropped
+
+### C11 (R2 group 272)
+  F977 [coat_train.py coat_train.py#5] RTX 4070 Laptop/total memory = 7.62 GiB :: Measured envelope, RTX 4070 Laptop (7.62 GiB)
+  F152 [T121 T121#93] RTX 4070 Laptop/total VRAM = 7.65 GiB :: of 7.65 GiB
+  why (R2): V982: coat_train.py's measured envelope gives the RTX 4070 Laptop 7.62 GiB; V152 and V529 (T121, run script): the same card's total is 7.65 GiB: two values for one card's total memory
+
+### C12 (R2 edit 21)
+  F657 [build_bag_kernels.py@f46796c build_bag_kernels.py@f46796c#1] kernels/insertion anchor (f46796c) = _coat_n = _coat_substitute() :: Both insert ONE block at the one module-level anchor _coat_n = _coat_substitute()
+  F630 [build_bag_kernels.py build_bag_kernels.py#10] kernels/insertion = ONE block at a module-level anchor (INSERT_AT) :: Both insert ONE block at a module-level anchor (INSERT_AT)
+  why (R2): V660: both kernels insert at 'the one module-level anchor _coat_n = _coat_substitute()'; V632: at INSERT_AT, where G's anchor is now '_coat_public_path = _KePath(' (bd616cc: G inserts before the Raptor backup): corrected
+
+### C13 (R2 edit 25)
+  F334 [T121@bd616cc T121@bd616cc#2] G save log/required lines (bd616cc) = [t121] OURS-BAG384 RAN and GATE G, zero VOID :: read G's save log for [t121] OURS-BAG384 RAN and GATE G, zero VOID, then submit G.
+  F384 [T121@e35af30 T121@e35af30#16] G save log/must contain = [t121] OURS-BAG384 RAN, [t121] GATE G and [coat-arm] blended OUR resgated :: read G's save log: MUST contain [t121] OURS-BAG384 RAN, [t121] GATE G and [coat-arm] blended OUR resgated;
+  why (R2): V335: G's save log need show OURS-BAG384 RAN and GATE G, zero VOID; V385: it MUST also contain '[coat-arm] blended OUR resgated': the gate was incomplete and corrected
+
+### C14 (R2 cue 17)
+  F285 [T121@da77768 T121@da77768#2] dicom_bag corpus/size (da77768) = 49.4 GB :: 49.4 GB
+  F1489 [coat.py coat.py#310] T121 cost table/dicom_bag size = 49.4 GB :: T121's cost table assumed a 76-slice single-channel volume, giving 49.4 GB.
+  why (R2): V286: T121's cost table put the dicom_bag corpus at 49.4 GB; V1499: that figure 'assumed a 76-slice single-channel volume' (rows are triplets, V948: 148 GB): corrected
+
+### C15 (R3 group 3)
+  F2992 [cam_viewer.py@2e7ffc6 cam_viewer.py@2e7ffc6#1] load_split/gold hold-out = holds the 58 gold studies out of training :: load_split holds the 58 gold studies out of training by construction
+  F2937 [cam_viewer.py cam_viewer.py#123] post-T117 checkpoints/train_gold in recipe = train_gold: True :: Every checkpoint trained since has train_gold: True in its own recipe
+  why (R3): V3013 (cam_viewer@2e7ffc6): load_split holds the 58 gold studies out of training by construction; V2958: every checkpoint since T117 has train_gold: True. The earlier page certified contaminated as clean: a correction
+
+### C16 (R3 group 4)
+  F2992 [cam_viewer.py@2e7ffc6 cam_viewer.py@2e7ffc6#1] load_split/gold hold-out = holds the 58 gold studies out of training :: load_split holds the 58 gold studies out of training by construction
+  F2935 [cam_viewer.py cam_viewer.py#122] --train-gold/default = DEFAULT ON :: when T117 added --train-gold (DEFAULT ON)
+  why (R3): V3013 (cam_viewer@2e7ffc6): load_split holds the 58 gold studies out of training by construction; V2956: T117 added --train-gold DEFAULT ON, and V2962 says the old page certified contaminated as clean: a correction
+
+### C17 (R3 group 31)
+  F285 [T121@da77768 T121@da77768#2] dicom_bag corpus/size (da77768) = 49.4 GB :: 49.4 GB
+  F2041 [_order.py _order.py#56] T121 cost table/error factor = 3x :: T121'S COST TABLE WAS WRONG BY 3x
+  why (R3): V286 (T121@da77768): the dicom_bag corpus is 49.4 GB; V2059: 'T121'S COST TABLE WAS WRONG BY 3x' (triplets, 148 GB per materialise.py); V1497 'the task registered it wrong': a correction
+
+### C18 (R3 group 31)
+  F2041 [_order.py _order.py#56] T121 cost table/error factor = 3x :: T121'S COST TABLE WAS WRONG BY 3x
+  F3259 [AGENTS.md§100 AGENTS.md§100#10] T121 corpus rebuild/disk need = ~49 GB :: The corpus rebuild T121 registers needs ~49 GB
+  why (R3): V2059 (09-22) corrects the corpus to 3x the 49.4 GB estimate; V3282 (AGENTS.md 3c8fcaa, 09-28) still says the T121 rebuild 'needs ~49 GB': the later doc keeps the struck figure
+
+### C19 (R3 group 336)
+  F889 [coat_data.py coat_data.py#80] slot_groups/undescribed depth = refuses :: slot_groups() refuses a depth SLOT_SPEC does not describe.
+  F3330 [T120-t119-regression-review.md§24 T120-t119-regression-review.md§24#27] slot_groups/unknown depths = accepting unknown depths as one group :: An additional watch item is slot_groups accepting unknown depths as one group while serving knows only 44/64-slot layouts.
+  why (R3): V893 (coat_data.py 685d4b9 comment): slot_groups() refuses a depth SLOT_SPEC does not describe; V3354 (T120 review): slot_groups accepts unknown depths as one group, as its own docstring says ('ONE group when the packing is unknown')
+
+### C20 (R3 edit 28)
+  F289 [T121@685d4b9 T121@685d4b9#1] 384/bs2 VRAM fill (685d4b9) = 97% full :: 384/bs2 is 97% full with it.
+  F149 [T121 T121#90] 384/bs2 VRAM fill/measured = 75% :: it is 75%
+  why (R3): V290 (T121@685d4b9): 384/bs2 is 97% full with the SWA copy; V148/V149 (3c8fcaa) strike it: 'MEASURED 2026-09-21 (US-003) and the 97% is REFUTED: it is 75%': a correction
+
+### C21 (R3 edit 31)
+  F2992 [cam_viewer.py@2e7ffc6 cam_viewer.py@2e7ffc6#1] load_split/gold hold-out = holds the 58 gold studies out of training :: load_split holds the 58 gold studies out of training by construction
+  F2934 [cam_viewer.py cam_viewer.py#122] load_split gold hold-out comment/truth = false since 2026-09-20 :: TRUE WHEN WRITTEN and false since 2026-09-20
+  why (R3): V3013 (2e7ffc6, 09-21): load_split holds the 58 gold out of training by construction; V2955: that comment was 'false since 2026-09-20' when T117 made --train-gold DEFAULT ON, so it was already wrong at 2e7ffc6: corrected
+
+### C22 (R3 cue 31)
+  F285 [T121@da77768 T121@da77768#2] dicom_bag corpus/size (da77768) = 49.4 GB :: 49.4 GB
+  F2043 [_order.py _order.py#57] T121 cost table/corpus estimate = 49.4 GB :: the table assumed a 76-slice single-channel volume, giving 49.4 GB.
+  why (R3): V286 (T121@da77768): the dicom_bag corpus is 49.4 GB; V2061: that figure came from assuming a 76-slice single-channel volume, and the real size is 4,407 x 76 x 3 x 384^2 = 148.2 GB (V1503, V948): corrected
+
+## superseded: 26 unique, 26 to mark
+
+### S1 (R1 group 1, R1 group 11)
+  F1622 [build_t112_kernel.py build_t112_kernel.py#48] src/coat_data.py/normalisation = does no mean/std normalisation :: src/coat_data.py divides by 255 and does no mean/std normalisation
+  F935 [coat_data.py coat_data.py#115] imagenet normalisation/order = AFTER the jitter and its clamp :: AFTER the jitter and its clamp, which are defined on [0, 1].
+  why (R1): V1635 (09-21): coat_data.py divides by 255 and does no mean/std normalisation; at 685d4b9 (09-22) coat_data.py has a norm option with imagenet normalisation after the jitter (V939, V886): the code moved
+  why (R1): V1635 (09-21): coat_data.py does no mean/std normalisation; at 685d4b9 (09-22) getitem applies imagenet normalisation after the jitter (V939), V799 'divided by 255 and stopped' in the past: the code moved
+
+### S2 (R1 group 1, R1 group 11)
+  F3305 [T120-t119-regression-review.md§24 T120-t119-regression-review.md§24#8] coat_data.py and build_t112_kernel.py/degenerate mask handling = replace fewer than three real valid indices with synthetic [0,1,2] before checking clean eligibility :: src/coat_data.py:378–380 and scripts/t112/build_t112_kernel.py:225–227 replace fewer than three real valid indices with synthetic [0,1,2] before checking clean eligibility.
+  F923 [coat_data.py coat_data.py#105] getitem/validity set = the REAL one :: The validity set is now the REAL one.
+  why (R1): V3329 (T120 review, written 09-21 02:34): coat_data.py replaces <3 valid indices with synthetic [0,1,2]; V927 at 685d4b9: 'The validity set is now the REAL one', fixed after T120 finding 2
+  why (R1): V3329 (T120 review, written 09-21 02:34): getitem replaces <3 valid indices with synthetic [0,1,2]; V927 at 685d4b9: 'The validity set is now the REAL one', fixed after T120 finding 2
+
+### S3 (R1 group 20)
+  F3324 [T120-t119-regression-review.md§24 T120-t119-regression-review.md§24#22] checkpoint consumers/clean flag passed = omit the flag :: checkpoint consumers omit the flag: scripts/cam_viewer.py:469, scripts/t113/coat_gradcam.py:333, scripts/t113/g2_precision.py:40, scripts/t112/resample_delta.py:87, and scripts/t112/paired_vs_member.p
+  F2638 [coat_gradcam.py coat_gradcam.py#65] coat_gradcam.py/window rule = absent meaning False :: the checkpoint's own window rule, absent meaning False.
+  why (R1): V3348 (T120 review, written 09-21 02:34): coat_gradcam.py:333 omits the clean flag; V2655 at 2e7ffc6, the commit closing T120's findings: it reads the checkpoint's own window rule, absent meaning False
+
+### S4 (R1 group 33)
+  F3266 [AGENTS.md§100 AGENTS.md§100#12] / free space 2026-09-12 = 53 GiB free of 767 GiB :: / had 53 GiB free of 767 GiB (93% used) — measured 2026-09-12 (T087).
+  F3250 [AGENTS.md§100 AGENTS.md§100#7] / free space 2026-09-20 = 29 GiB free of 767 GiB :: / has 29 GiB free of 767 GiB (97% used) — measured 2026-09-20 (T121)
+  why (R1): V3289: / had 53 GiB free on 09-12; V3272: 29 GiB free on 09-20, a later reading of a moving quantity
+
+### S5 (R1 group 33, R1 edit 7)
+  F277 [T121@2e7ffc6 T121@2e7ffc6#2] / free space (2e7ffc6) = 29 GB free :: / has 29 GB free.
+  F80 [T121 T121#57] / free space 2026-09-21 = 26 GB free :: / has 26 GB free (measured 2026-09-21
+  why (R1): V278 (T121@2e7ffc6): / has 29 GB free; V80 (T121 at 3c8fcaa): 26 GB measured 09-21, 'not the 29 GB written on 09-20': a later reading of free space
+  why (R1): V278: / has 29 GB free (written 09-20); V80: 26 GB free measured 09-21, a later reading of a moving quantity
+
+### S6 (R1 group 54)
+  F3299 [T120-t119-regression-review.md§24 T120-t119-regression-review.md§24#3] push_arm.py/clean flag derivation = derives the clean flag only from recipe and defaults it to false :: line 116 derives the clean flag only from recipe and defaults it to false.
+  F1230 [coat.py coat.py#97] push_arm clean literal/T120 finding 1 change = fall back to the TOP-LEVEL key as well :: when T120 finding 1 widened it to fall back to the TOP-LEVEL key as well
+  why (R1): V3323 (T120 review, written 09-21 02:34): push_arm.py derives clean only from recipe, defaulting false; V1239 at b3e35d5: T120 finding 1 widened it to fall back to the top-level key: the code moved
+
+### S7 (R1 group 136)
+  F1622 [build_t112_kernel.py build_t112_kernel.py#48] src/coat_data.py/normalisation = does no mean/std normalisation :: src/coat_data.py divides by 255 and does no mean/std normalisation
+  F557 [bag_child.py bag_child.py#4] BagWindows eval/normalisation = divides by 255 and applies the ImageNet mean/std :: divides by 255 and applies the ImageNet mean/std.
+  why (R1): V1635 (09-21): src/coat_data.py divides by 255 and does no mean/std normalisation; V559 (09-23): coat_data's BagWindows eval divides by 255 and applies the ImageNet mean/std: the code moved
+
+### S8 (R1 edit 2)
+  F294 [T121@6ce8324 T121@6ce8324#1] T121/owner (6ce8324) = adervark @b/0c5898c3 2026-09-21 :: owner: adervark @b/0c5898c3 2026-09-21 — continued from @b/e59f85a4;
+  F346 [T121@1f772fd T121@1f772fd#1] T121/owner (1f772fd) = adervark @k/e804d562 2026-09-23 :: owner: adervark @k/e804d562 2026-09-23
+  why (R1): T121's owner moved: V295 adervark @b/0c5898c3 2026-09-21; V347 adervark @k/e804d562 2026-09-23 after the relaunch order, a later state of the claim
+
+### S9 (R1 edit 5)
+  F2418 [_order.py@ec7da60 _order.py@ec7da60#2] smoke gate/count and md5 at ec7da60 = 1306 :: 1306 checks -- md5 of the ordered names: 4a39eb03e56dcd8f0124861ed32f9de8
+  F2362 [_order.py _order.py#205] 1335-check gate/md5 = 1335 :: 1335 checks -- md5 of the ordered names: 6e773a5730fb7fdea491cc53e67229ab
+  why (R1): The smoke gate count moved: V2450 1306 checks at ec7da60; V2380 1335 checks at 0b783b8, a later count with a new md5
+
+### S10 (R1 edit 6, R2 group 12)
+  F2428 [_order.py@9508307 _order.py@9508307#3] smoke gate/count and md5 at 9508307 = 1331 :: 1331 checks -- md5 of the ordered names: 97e80ac95f83c6b48f3394ed1b2f0913
+  F2362 [_order.py _order.py#205] 1335-check gate/md5 = 1335 :: 1335 checks -- md5 of the ordered names: 6e773a5730fb7fdea491cc53e67229ab
+  why (R1): The smoke gate count moved: V2460 1331 checks at 9508307 (03:52); V2380 1335 checks at 0b783b8 (04:04), a later count
+  why (R2): V2460: gate 1331 at 9508307 (09-22 03:52); V2380: 1335 checks at 0b783b8 (09-22 04:04), a later count
+
+### S11 (R2 group 12)
+  F2414 [_order.py@2e7ffc6 _order.py@2e7ffc6#2] smoke gate/count and md5 at 2e7ffc6 = 1302 :: 1302 checks -- md5 of the ordered names: dae276cfac5f92b41adc202407f23bbb
+  F2418 [_order.py@ec7da60 _order.py@ec7da60#2] smoke gate/count and md5 at ec7da60 = 1306 :: 1306 checks -- md5 of the ordered names: 4a39eb03e56dcd8f0124861ed32f9de8
+  why (R2): V2446: gate 1302 checks at 2e7ffc6 (09-21 11:07); V2450: 1306 at ec7da60 (09-21 14:18), a later count of a moving quantity
+
+### S12 (R2 group 12)
+  F2418 [_order.py@ec7da60 _order.py@ec7da60#2] smoke gate/count and md5 at ec7da60 = 1306 :: 1306 checks -- md5 of the ordered names: 4a39eb03e56dcd8f0124861ed32f9de8
+  F2422 [_order.py@685d4b9 _order.py@685d4b9#2] smoke gate/count and md5 at 685d4b9 = 1323 :: 1323 checks -- md5 of the ordered names: 6d9829c784a22646f78ad3a6fec930c8
+  why (R2): V2450: gate 1306 checks at ec7da60 (09-21); V2454: 1323 at 685d4b9 (09-22 02:56), a later count
+
+### S13 (R2 group 12)
+  F2422 [_order.py@685d4b9 _order.py@685d4b9#2] smoke gate/count and md5 at 685d4b9 = 1323 :: 1323 checks -- md5 of the ordered names: 6d9829c784a22646f78ad3a6fec930c8
+  F2428 [_order.py@9508307 _order.py@9508307#3] smoke gate/count and md5 at 9508307 = 1331 :: 1331 checks -- md5 of the ordered names: 97e80ac95f83c6b48f3394ed1b2f0913
+  why (R2): V2454: gate 1323 at 685d4b9 (09-22 02:56); V2460: 1331 at 9508307 (09-22 03:52), a later count
+
+### S14 (R2 group 131)
+  F2753 [claims_guard.py claims_guard.py#92] / filesystem/fill on 2026-09-20 = 98% :: / hit 98%
+  F3251 [AGENTS.md§100 AGENTS.md§100#7] / usage 2026-09-20 = 97% used :: / has 29 GiB free of 767 GiB (97% used) — measured 2026-09-20 (T121)
+  why (R2): V2772 (claims_guard; also V1996, V3167): / hit 98% on 09-20; V3273 (AGENTS.md, later): 97% used, 29 GiB free of 767, after archiving (V3277: 98% before): a later reading of a moving quantity
+
+### S15 (R2 edit 15)
+  F331 [T121@bd616cc T121@bd616cc#1] H smoke/status = COMPLETE :: H smoke: COMPLETE, [t121] OURS-BAG384 RAN, 3/3 ok, 5 CoAt members.
+  F372 [T121@e35af30 T121@e35af30#12] both smokes/status = COMPLETE and clean (G v3, H v2) :: Both smokes COMPLETE and clean (G v3, H v2)
+  why (R2): V332 (09-23): 'H smoke: COMPLETE', 3/3 ok, 5 members; V373 (09-28): 'Both smokes COMPLETE and clean (G v3, H v2)': a later state of the smoke runs, same 3/3 and 5 members
+
+### S16 (R2 edit 16)
+  F391 [T121@0029f47 T121@0029f47#1] T121/status (0029f47) = claimed :: status: claimed owner: adervark @b/8900ef32 2026-09-28
+  F1 [T121 T121#1] T121/status = done :: status: done
+  why (R2): V392: T121 status 'claimed' at 0029f47 (09-28 01:15); V1: status 'done' at 3c8fcaa (13:54): the task's state moved
+
+### S17 (R2 edit 17, R3 group 348)
+  F2424 [_order.py@9508307 _order.py@9508307#1] test_t121_dense_specs/added checks at 9508307 = +8 :: +8 -- test_t121_dense_specs, 2026-09-21 (T121 US-006).
+  F2051 [_order.py _order.py#61] test_t121_dense_specs/added checks = +12 :: +12 -- test_t121_dense_specs, 2026-09-21 (T121 US-006).
+  why (R2): V2456: test_t121_dense_specs '+8' at 9508307 (gate 1331); V2069: the same entry '+12' at 0b783b8 (gate 1335, +4): the function's check count grew and the entry was updated
+  why (R3): V2456 (_order.py@9508307): '+8 -- test_t121_dense_specs'; V2069 (_order.py 0b783b8, US-007): '+12' on the same row: a later count of a test that grew
+
+### S18 (R2 edit 18)
+  F346 [T121@1f772fd T121@1f772fd#1] T121/owner (1f772fd) = adervark @k/e804d562 2026-09-23 :: owner: adervark @k/e804d562 2026-09-23
+  F391 [T121@0029f47 T121@0029f47#1] T121/status (0029f47) = claimed :: status: claimed owner: adervark @b/8900ef32 2026-09-28
+  why (R2): V347: owner @k/e804d562 09-23, operator 'relaunch the 384 fold'; V392: owner @b/8900ef32 09-28, 'submit H': the claim's current holder and instruction moved, status still claimed
+
+### S19 (R2 edit 19)
+  F2414 [_order.py@2e7ffc6 _order.py@2e7ffc6#2] smoke gate/count and md5 at 2e7ffc6 = 1302 :: 1302 checks -- md5 of the ordered names: dae276cfac5f92b41adc202407f23bbb
+  F2362 [_order.py _order.py#205] 1335-check gate/md5 = 1335 :: 1335 checks -- md5 of the ordered names: 6e773a5730fb7fdea491cc53e67229ab
+  why (R2): V2446: gate 1302 checks, md5 dae276cf, at 2e7ffc6 (09-21); V2380: 1335 checks, md5 6e773a57, at 0b783b8 (09-22): a later count
+
+### S20 (R2 edit 20)
+  F2422 [_order.py@685d4b9 _order.py@685d4b9#2] smoke gate/count and md5 at 685d4b9 = 1323 :: 1323 checks -- md5 of the ordered names: 6d9829c784a22646f78ad3a6fec930c8
+  F2362 [_order.py _order.py#205] 1335-check gate/md5 = 1335 :: 1335 checks -- md5 of the ordered names: 6e773a5730fb7fdea491cc53e67229ab
+  why (R2): V2454: gate 1323 checks at 685d4b9 (09-22 02:56); V2380: 1335 at 0b783b8 (04:04): a later count
+
+### S21 (R2 edit 22)
+  F298 [T121@f46796c T121@f46796c#1] T121/build state (f46796c) = still nothing built :: still nothing built.
+  F392 [T121@0029f47 T121@0029f47#2] T121/last touched (0029f47) = H submitted :: Last touched: 2026-09-28, adervark @b/8900ef32 — H submitted.
+  why (R2): V299: last touched 09-21, 'still nothing built'; V393: last touched 09-28, 'H submitted': the task's current state moved
+
+### S22 (R2 edit 23)
+  F392 [T121@0029f47 T121@0029f47#2] T121/last touched (0029f47) = H submitted :: Last touched: 2026-09-28, adervark @b/8900ef32 — H submitted.
+  F259 [T121 T121#167] G and H/state = scored :: G and H scored;
+  why (R2): V393: 'H submitted' (0029f47, 01:15); V260: 'G and H scored' (3c8fcaa, 13:54): a later state
+
+### S23 (R3 group 100, R3 group 222)
+  F335 [T121@84df4f1 T121@84df4f1#1] fold queue/state (84df4f1) = WAITING, not training :: scripts/gpu_queue.sh scripts/t121/run_bag_384_fold0.sh (setsid, logs to outputs/t121/queue.log) is WAITING, not training
+  F203 [T121 T121#125] fold/relaunched = relaunched unchanged :: The fold is relaunched unchanged through scripts/gpu_queue.sh scripts/t121/run_bag_384_fold0.sh
+  why (R3): V336 (T121@84df4f1, 09-23): the gpu_queue.sh fold is WAITING, not training; V204 (T121 3c8fcaa, 09-28): the fold is relaunched unchanged through gpu_queue.sh after a first launch (V356): a later state of a moving queue
+  why (R3): V336 (T121@84df4f1, 09-23): run_bag_384_fold0.sh is WAITING in the queue, not training; V204 (3c8fcaa, 09-28): relaunched unchanged after the first launch's OOM (V356): later state of the fold
+
+### S24 (R3 group 120)
+  F286 [T121@685d4b9 T121@685d4b9#1] res 384 bs 2 fold/wall time (685d4b9) = ~7.2–10.6 h :: res 384 / bs 2 is ~7.2–10.6 h on this card
+  F343 [T121@84df4f1 T121@84df4f1#6] fold/wall time (84df4f1) = ~10.7 h :: ~10.7 h, so the SWA lands around 04:45 the next morning.
+  why (R3): V287 (T121@685d4b9, 09-22): a res 384 / bs 2 fold is ~7.2-10.6 h; V344 (T121@84df4f1, 09-23): ~10.7 h (~40 min/epoch x 16, V209), a sharper estimate at the bracket's top replacing it
+
+### S25 (R3 edit 32)
+  F348 [T121@1f772fd T121@1f772fd#2] T121/displaced (1f772fd) = displaced @b/0c5898c3, same operator :: displaced @b/0c5898c3, same operator
+  F6 [T121 T121#2] T121/continued from = @k/e804d562 and @b/7786e95f :: continued from @k/e804d562 and @b/7786e95f, same operator
+  why (R3): V349 (1f772fd, 09-23): T121 'displaced @b/0c5898c3'; V6 (3c8fcaa, 09-28): 'continued from @k/e804d562 and @b/7786e95f': a later claim header of a task whose holder moves
+
+### S26 (R3 edit 39)
+  F396 [T121@0029f47 T121@0029f47#5] H/state (0029f47) = PENDING :: In flight: H 56617956, PENDING.
+  F261 [T121 T121#169] T121/in flight = nothing :: In flight: nothing.
+  why (R3): V397 (0029f47, 09-28 01:15): in flight H 56617956, PENDING; V262 (3c8fcaa, 13:54): in flight nothing, H since scored 0.943: the later state of what is in flight
+
+## contradicted: 5 unique, 5 to mark
+
+### C1 (R1 check 255)
+conclusion: F435 [materialise.py materialise.py#12] IPC alternative/bytes through pipe = 148 GB :: would move 148 GB through a pipe
+  premise: F434 [materialise.py materialise.py#12] per-study pixels = 11 MB :: Returning 11 MB of pixels per study through IPC would move 148 GB through a pipe to write 148 GB to disk.
+  why (R1): 11 MB per study (V435) x 4,407 studies = 48.5 GB, not 148 GB; 148 GB needs ~33.6 MB per study (76 x 3 x 384^2)
+
+### C2 (R1 check 330)
+conclusion: F2736 [claims_guard.py claims_guard.py#81] declaration names referent/non-unique name = FALSE for a non-unique name :: "a declaration names its referent" is FALSE for a non-unique name.
+  premise: F2723 [claims_guard.py claims_guard.py#69] declaration/false positives = no false positives by construction :: A declaration names its referent, so it has no false positives by construction and needs no exclusion list at all.
+  why (R1): V2742 says a declaration names its referent, so no false positives by construction; the conclusion says that is FALSE for a non-unique name, which no premise gives
+
+### C3 (R2 check 311)
+conclusion: F2359 [_order.py _order.py#203] running mean/property = a property of a running mean, not of the fixture :: That is a property of a running mean, not of the fixture: dropping the first of three equally spaced points and averaging the other two lands on the same centre.
+  premise: F2358 [_order.py _order.py#202] linear trajectory fixture/failed = bit-identical weights at 14.0 :: the first version used a LINEAR weight trajectory and FAILED -- both orderings gave bit-identical weights at 14.0.
+  why (R2): with weights N, dropping the first of 13,14,15 gives (14+15)/2 = 14.5, not the 14.0 both orderings gave; 14.0 = (13+15)/2, dropping the middle point
+
+### C4 (R3 check 251)
+conclusion: F1391 [coat.py coat.py#225] dropped first of three equally-spaced points/mean = lands on the same centre :: Dropping the first of three equally-spaced points and averaging the other two lands on the same centre
+  premise: F1388 [coat.py coat.py#223] first t120 check/trajectory = a LINEAR trajectory :: The first version of the check above used a LINEAR trajectory -- epoch N's weights are N -- and FAILED
+  why (R3): On the linear trajectory (epoch N's weights are N, V1398) the mean of 13, 14, 15 is 14 but dropping the first gives (14+15)/2 = 14.5, not the same centre
+
+### C5 (R3 check 252)
+conclusion: F3531 [AGENTS.md§186 AGENTS.md§186#4] T004 vs T020/slowdown = about 24% slower :: about 24% slower.
+  premise: F3526 [AGENTS.md§186 AGENTS.md§186#3] T020/wall time = 125 min wall for 8 epochs :: T020, run while the session was mostly idle, took 125 min wall for 8 epochs (11 min overhead);
+  premise: F3527 [AGENTS.md§186 AGENTS.md§186#3] T020/overhead = 11 min overhead :: took 125 min wall for 8 epochs (11 min overhead);
+  premise: F3529 [AGENTS.md§186 AGENTS.md§186#4] T004/wall time = 145 min for 7 epochs :: took 145 min for 7 epochs (46 min overhead) — about 24% slower.
+  premise: F3530 [AGENTS.md§186 AGENTS.md§186#4] T004/overhead = 46 min overhead :: took 145 min for 7 epochs (46 min overhead)
+  why (R3): T004 145/7 = 20.7 min/epoch vs T020 125/8 = 15.6 (V3550, V3553): 33% slower (16% in total time), not ~24%
+

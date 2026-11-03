@@ -10,6 +10,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 import test from 'node:test';
 
+import { Cockpit } from '../lib/brief.mjs';
 import { Workspace } from '../lib/workspace.mjs';
 
 process.env.GIT_CONFIG_GLOBAL = os.devNull;
@@ -711,4 +712,62 @@ test('an interrupted write is shown on the project until the operator clears it,
   await refused(repo, () => act(repo, 'T012', 'claim'), 409, 'INTERRUPTED_PENDING');
   await rm(markerPath);
   assert.equal((await act(repo, 'T012', 'claim')).task.status, 'in_progress');
+});
+
+// ---- STATE.md behind AGE Aris's changes (T025), on real repositories
+
+async function behindNow(repo) {
+  const cockpit = new Cockpit({ workspace: repo.workspace, buildWaitMs: 60_000 });
+  try {
+    const brief = await cockpit.brief();
+    return brief.projects.find((line) => line.projectId === repo.project.id).stateBehind || null;
+  } finally { cockpit.close(); }
+}
+
+async function commitState(repo, text, message) {
+  await writeFile(path.join(repo.dir, 'AA/STATE.md'), text);
+  await g(repo.dir, 'add', 'AA/STATE.md');
+  await g(repo.dir, 'commit', '--quiet', '-m', message);
+}
+
+test('T025, a board.sh board: two claims are named; a NOW-only edit keeps them; a regeneration clears them', async () => {
+  const repo = await board({ files: { 'AA/board.sh': '#!/bin/sh\n' } });
+  assert.equal(await behindNow(repo), null, 'no AGE Aris change yet');
+  await act(repo, 'T004', 'claim');
+  await act(repo, 'T012', 'claim');
+  assert.deepEqual(await behindNow(repo), { kind: 'generated', tasks: ['T004', 'T012'], command: 'AA/board.sh --write' });
+  await commitState(repo, '# State\n\n<!-- AA:now -->\nT004 and T012 are claimed.\n<!-- /AA:now -->\n', 'STATE.md: the NOW block');
+  assert.deepEqual((await behindNow(repo)).tasks, ['T004', 'T012'], 'an edit to the NOW block regenerates nothing');
+  await commitState(repo, '# State\n\n<!-- AA:generated -->\n`board · 2026-11-03T10:00Z · 3 tasks: 0 backlog, 2 WIP`\n<!-- /AA:generated -->\n', 'STATE.md: regenerated');
+  assert.equal(await behindNow(repo), null, 'board.sh --write and a commit clear it');
+  // A change after the regeneration is behind again.
+  await act(repo, 'T004', 'block', { reason: 'Waiting on the key' });
+  assert.deepEqual((await behindNow(repo)).tasks, ['T004']);
+});
+
+test('T025, a hand-kept board: an unrelated STATE.md commit keeps the task listed; a line naming it clears it', async () => {
+  const repo = await board();
+  await act(repo, 'T004', 'claim');
+  assert.deepEqual(await behindNow(repo), { kind: 'hand', tasks: ['T004'], command: 'AA/board.sh --write' });
+  await commitState(repo, '# State\n\nThe archive is read; T0040 is a different task.\n', 'STATE.md: unrelated');
+  assert.deepEqual((await behindNow(repo)).tasks, ['T004'], 'neither an unrelated line nor T0040 names T004');
+  await commitState(repo, '# State\n\nThe archive is read; T0040 is a different task.\n- T004: claimed\n', 'STATE.md: T004');
+  assert.equal(await behindNow(repo), null);
+});
+
+test('T025: a change made outside AGE Aris is not AGE Aris\'s to report, and an AGE Aris project never shows the note', async () => {
+  const repo = await board();
+  const file = path.join(repo.dir, 'AA/backlog', T004);
+  await writeFile(file, `${await readFile(file, 'utf8')}\nA note added by hand.\n`);
+  await g(repo.dir, 'commit', '--quiet', '-am', 'by hand');
+  assert.equal(await behindNow(repo), null);
+  const own = await repo.workspace.createProject({ name: 'Own' });
+  const made = await repo.workspace.createTask({ projectId: own.id, title: 'Start me' });
+  await repo.workspace.updateTask(made.id, { version: made.version, status: 'in_progress' });
+  const cockpit = new Cockpit({ workspace: repo.workspace, buildWaitMs: 60_000 });
+  try {
+    const line = (await cockpit.brief()).projects.find((entry) => entry.projectId === own.id);
+    assert.equal(line.state, 'ready');
+    assert.equal('stateBehind' in line, false);
+  } finally { cockpit.close(); }
 });
