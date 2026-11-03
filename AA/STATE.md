@@ -8,11 +8,14 @@ act through one registry, on AGE Aris projects and on tracked AA boards, and
 the project page says when STATE.md is behind (T025). `npm run e2e` is green
 again (T100). Rule 13 holds (T111): a done task's scratch, worktrees and
 branches are released by `AA/ckpt.sh release`, and T114 freed 93 GB in
-AGEIS. Everything is on `feature/pm-cockpit`, not on `main`.
+AGEIS. A Done taken in AGE Aris now releases that task from AGE Aris's own
+copy of the script (T121). Everything is on `feature/pm-cockpit`, not on `main`.
 
 **In progress:** nothing.
 
-**Next action:** the agent brain (T052, `docs/plans/agent-brain.md`). T060
+**Next action:** T122 needs the operator's choice: tasks agents close with git
+never pass through AGE Aris's Done, so AGEIS's own release script stays until
+then. Otherwise, the agent brain (T052, `docs/plans/agent-brain.md`). T060
 (disk cache), T061 (slim `/api/workspace`) and T102 (warm orient) can start
 on T054's fixture; T056 waits on T004. T003 needs the operator's choice in
 its file first.

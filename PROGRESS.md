@@ -1027,3 +1027,17 @@ its date, the number, and where the evidence is. Newest last.
   in AGEIS, and a full `close --delete` on a temporary copy of its board
   layout, behave as rule 13 says.
 - T120 filed: the installed `aa-init` skill predates `release`.
+
+## 2026-11-03 — T121: Done in AGE Aris releases the task's environment
+
+- `0891a64`. On a board whose `AA.yml` names `scratch:`, a Done taken in AGE
+  Aris runs AGE Aris's own copy of `ckpt.sh release`. AGENTS.md's hard
+  constraint gains this one exception, on the operator's word: "AGEAris should
+  do that", "not AGEIS", then "Automatic on done".
+- `npm test` 644 of 644, `npm run e2e` 32 of 32, `npm run check` clean.
+- The review reproduced 11 findings, 3 of them critical, before any commit. All
+  were fixed, and removing each of 12 fixes on a temporary copy failed its test.
+  The fixes were not reviewed again, since the decision rules allowed one review.
+- Read-only dry runs on AGEIS (T092, T123). No real board was released.
+- T122 filed: tasks closed by git never pass through this, so AGEIS's own copy
+  (`f8b0f90`) stays until the operator chooses.

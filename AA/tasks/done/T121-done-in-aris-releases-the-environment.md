@@ -1,8 +1,8 @@
 ---
 id: T121
 title: "Done in AGE Aris releases the task's environment, from AGE Aris's own copy"
-status: claimed
-owner: adervark @k/5a99efba 2026-11-03 — Done in AGE Aris runs rule 13's release
+status: done
+owner: adervark @k/5a99efba 2026-11-03 — done
 # type: one word; tasks of one type are timed together; `bug` counts as defect work
 type: feature
 # blockedReason: while blocked, one line saying what unblocks it; cleared on unblock
@@ -31,13 +31,13 @@ copy of `ckpt.sh`, so a board needs no script of its own.
 
 ## Steps
 
-- [ ] Failing tests on temporary repositories.
-- [ ] `lib/release.mjs` runs `skills/aa-init/template/ckpt.sh release` from
+- [x] Failing tests on temporary repositories.
+- [x] `lib/release.mjs` runs `skills/aa-init/template/ckpt.sh release` from
       the repository, hardened; `actOnTask` starts it after the commit,
       outside the write queue.
-- [ ] The result, the task and the drawer say what happened; a long release
+- [x] The result, the task and the drawer say what happened; a long release
       reports later.
-- [ ] AGENTS.md's constraint, the README, the switch's wording, capabilities.
+- [x] AGENTS.md's constraint, the README, the switch's wording, capabilities.
 
 ## Decision rules — fixed in advance
 
@@ -57,22 +57,43 @@ copy of `ckpt.sh`, so a board needs no script of its own.
   a filter and the repository's own `ckpt.sh` are shown not to run; `npm test`
   and `npm run check` pass.
 
-## Handoff — state at last stop
+## Handoff
 
-*Kept true while claimed, not written on the way out (rule 8).*
-
-- **Last touched:** 2026-11-03, adervark @k/5a99efba
-- **In flight:** nothing yet
-- **On disk:** nothing yet
-- **Resume with:** the Steps above
-- **Next decision:** whether AGEIS's own copy can go; tasks its agents close
-  by git never pass through AGE Aris's Done
+Done. Nothing in flight. What is left is T122's choice.
 
 ## Verify
 
 `node --test tests/task-actions.test.mjs`, and `npm test`, `npm run check`.
 
 ## Result
+
+Commit `0891a64`. A Done taken in AGE Aris on a tracked board whose `AA.yml`
+names `scratch:` now runs AGE Aris's own copy of `ckpt.sh release` from the
+repository. No board needs a script of its own for this. The Done stands
+whatever the release does; `release: { state, summary, lines, remedy }` comes
+back on the action and on `GET /api/tasks/:id`, and `releases.jsonl` in the data
+folder keeps a line for each.
+
+- **Checks:** `npm test` 644 of 644 (20 new, `tests/done-release.test.mjs`),
+  `npm run e2e` 32 of 32, `npm run check` clean.
+- **Review:** the one review the decision rules allow reproduced 3 critical,
+  2 high, 3 medium and 3 low findings, all before any commit. All were fixed.
+  The fixes were not reviewed again. Instead each of 12 was removed in turn on
+  a temporary copy, and its test failed each time. External diffs have no such
+  test: the reviewer found the test passes without `--no-ext-diff`, so those
+  flags are a precaution that nothing here proves.
+- **Found while fixing:** an invalid `scratch:` did not stop `ckpt.sh` (its
+  `die` ran in a subshell), and `redactEmails` was quadratic on long text.
+- **Real board:** read-only `release --dry-run` on AGEIS with AGE Aris's copy,
+  T092 and T123: nothing deleted, and everything open tasks and unlanded work
+  hold was named as kept. No real board was released.
+- **Limits:** only a Done taken in AGE Aris releases; agents closing by git do
+  not pass through it (T122), so AGEIS's own copy stays. A filter added in the
+  moment between AGE Aris listing filters and the script's git call is not
+  blanked. The running server has the old code until it restarts.
+
+Run digest:
+- **5a99efba** (session @k/5a99efba): Done in AGE Aris releases the task; review findings fixed · cost one read-only review (agent-fan-out) · left: —
 
 ## Notes
 
