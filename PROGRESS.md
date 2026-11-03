@@ -1015,3 +1015,15 @@ its date, the number, and where the evidence is. Newest last.
   operator's word: "I want the task environment files deleted once it is
   finished."
 - Evidence: T111's and T114's Results.
+
+## 2026-11-03 — T119: AGEIS releases its own finished tasks
+
+- AGEIS `f8b0f90`: its `AA/ckpt.sh` is now the template's, with `release`,
+  and `close --delete` runs it. A new `AA/AA.yml` holds `trunk: main`, the
+  keep settings and `archive: ~/Archive/AGEIS`. `WORKFLOW.md` gains rule 10.
+  Before this, T114's cleanup ran from outside, and `scratch/` would have
+  filled again.
+- Same verdict on AGEIS's four trails (141 records, 0 unparseable). Dry runs
+  in AGEIS, and a full `close --delete` on a temporary copy of its board
+  layout, behave as rule 13 says.
+- T120 filed: the installed `aa-init` skill predates `release`.

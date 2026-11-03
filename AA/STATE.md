@@ -25,15 +25,14 @@ lives in PROGRESS.md and `done/`, not here.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-11-03T11:26Z · 118 tasks: 42 backlog, 1 WIP (1 in progress), 75 delivered`
+`board · 2026-11-03T11:29Z · 119 tasks: 43 backlog, 0 WIP (0 in progress), 76 delivered`
 
-FLOW · **WIP 1/2** · throughput 17.5/wk (75 in 30d) · cycle time 50th 8m / 85th 2h (n=75)
-FLOW · Little's Law: 1 ÷ 17.5/wk ≈ 9h expected · lead time 85th 35h
+FLOW · **WIP 0/2** · throughput 17.5/wk (75 in 30d) · cycle time 50th 8m / 85th 2h (n=75)
+FLOW · Little's Law: 0 ÷ 17.5/wk ≈ now expected · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T119 | AGEIS releases its own finished tasks: rule 13 in its board | adervark | ? | ↩ |
-| **BACKLOG** 42 | | `T003` `T004` `T047` `T051` `T056` `T058` +36 more (`--all`) | | | ⚑ 0 not ready |
+| **BACKLOG** 43 | | `T003` `T004` `T047` `T051` `T056` `T058` +37 more (`--all`) | | | ⚑ 0 not ready |
 | **DONE** | T111 | Closing a task releases its environment: ckpt.sh release, rule 13, board.sh warns about what is left | adervark | 14h |  |
 |  | T114 | Release what finished tasks left: AGEIS's 110 GB and this repository's landed worktree | adervark | 14h |  |
 |  | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | 15h |  |
@@ -111,7 +110,6 @@ FLOW · Little's Law: 1 ÷ 17.5/wk ≈ 9h expected · lead time 85th 35h
 |  | T001 | Review 479b6e7 and e64f823 independently | adervark | 27d |  |
 
 age: in the queue (BACKLOG) · since the claim (IN PROGRESS) · since blocking (BLOCKED) · since delivery (DONE)
-- ↩ your own idle claim — take it straight back, no staleness wait (rule 3)
 <!-- /AA:generated -->
 
 <!--
