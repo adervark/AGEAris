@@ -49,6 +49,8 @@ a board can drop its own copy of the release, as the operator wants for AGEIS.
 - `push`: none. `global-config`: none.
 - `agent-fan-out`: one read-only review of this diff and of T121's fixes, which
   were not reviewed again. Nothing else.
+  Amended on the operator's word, 2026-11-03, asked whether to go live: "Review
+  first", so a second read-only review, of the redesign (`8415b80`).
 - It sweeps only a board with task actions on, whose `AA.yml` names `scratch:`,
   and only a task whose move to `done/` is committed and over an hour old, so a
   closing agent is left to finish. Switching actions off stops it.
