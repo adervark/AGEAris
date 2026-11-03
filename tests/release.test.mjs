@@ -594,3 +594,41 @@ test('close --delete releases the task after retiring its trail', async () => {
   assert.match(stdout, /released\./);
   assert.equal(await exists(path.join(dir, 'scratch/T001')), false);
 });
+
+test('a worktree in the task\'s folder with untracked work stays, as a subagent\'s does', async () => {
+  const dir = await repo();
+  await git(dir, 'worktree', 'add', '--quiet', '-b', 't001-wt', path.join(dir, 'scratch/T001/wt'));
+  await write(dir, 'scratch/T001/wt/new_module.py', 'print(1)\n');
+  const { out } = await release(dir, 'T001');
+  assert.match(out, /KEPT: worktree scratch\/T001\/wt has untracked work \(new_module\.py\)/);
+  assert.equal(await exists(path.join(dir, 'scratch/T001/wt/new_module.py')), true);
+});
+
+test('an invalid scratch: stops the release, and it never names git\'s folder or the board', async () => {
+  for (const value of ['.git/refs/heads', 'AA', '../x']) {
+    const dir = await repo({ yml: `scratch: ${value}\n` });
+    const { code, out } = await release(dir, 'T001');
+    assert.notEqual(code, 0, `${value} was accepted`);
+    assert.match(out, /scratch:/);
+  }
+});
+
+test('a release refuses during a merge, before anything is staged', async () => {
+  const dir = await repo();
+  await write(dir, 'c.txt', 'base\n');
+  await git(dir, 'add', 'c.txt');
+  await git(dir, 'commit', '--quiet', '-m', 'base');
+  await git(dir, 'checkout', '--quiet', '-b', 'other');
+  await write(dir, 'c.txt', 'theirs\n');
+  await git(dir, 'commit', '--quiet', '-am', 'theirs');
+  await git(dir, 'checkout', '--quiet', 'main');
+  await write(dir, 'c.txt', 'ours\n');
+  await git(dir, 'commit', '--quiet', '-am', 'ours');
+  await git(dir, 'merge', '--quiet', 'other').catch(() => {});
+  await write(dir, 'scratch/T001/notes.md', 'x\n');
+  const { code, out } = await release(dir, 'T001');
+  assert.notEqual(code, 0, 'a release ran during a merge');
+  assert.match(out, /in progress \(MERGE_HEAD\)/);
+  assert.equal(await exists(path.join(dir, 'scratch/T001')), true);
+});
+

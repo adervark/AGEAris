@@ -463,7 +463,7 @@ function mainWidth() {
 
 function projectHeader(project, line) {
   const where = project.linked
-    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed. Done also releases the task's environment (rule 13) on a board that names a <code>scratch:</code> folder.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}`
+    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed. On a board that names a <code>scratch:</code> folder, Done also releases the task's environment (rule 13), and AGE Aris does the same by itself at least an hour after an agent closes a task with git.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}${releaseNote(project)}`
     : project.description ? `<p class="project-where">${escape(project.description)}</p>` : '';
   const ready = line?.state === 'ready';
   const word = ready
@@ -956,7 +956,7 @@ function openProjectEditor(project = null) {
 // Tracks an existing repository: AGE Aris reads its board and history.
 function openLinkEditor() {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. Nothing there changes unless you switch task actions on for it; then each claim, block or done is one commit of one task file, done also releases that task's scratch folders, landed worktrees and merged branches, and the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
+  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. Nothing there changes unless you switch task actions on for it; then each claim, block or done is one commit of one task file, finished tasks' scratch folders and merged branches are released, and the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
   const form = $('#link-form');
   form.querySelector('[data-switch-new]').addEventListener('click', () => openProjectEditor());
   form.addEventListener('submit', async (event) => {
@@ -995,6 +995,17 @@ function openUnlinkDialog(project) {
     } catch (error) { form.querySelector('.form-error').textContent = error.message; button.disabled = false; }
   });
   setupDialog(dialog);
+}
+
+// What AGE Aris's releases came to here since it started (rule 13), and what is
+// stuck and why: it deletes on its own here, so it says so.
+function releaseNote(project) {
+  const report = project.actions?.releases;
+  if (!report || (!report.released && !report.stuck.length)) return '';
+  const went = report.released ? `AGE Aris released the environments of ${report.released} finished ${report.released === 1 ? 'task' : 'tasks'} since it started; the record is <code>${escape(report.record)}</code>. ` : '';
+  const stuck = report.stuck.slice(0, 3).map((entry) => `${escape(entry.summary)}${entry.remedy ? ` <code>${escape(entry.remedy)}</code>` : ''}`).join(' ');
+  const more = report.stuck.length > 3 ? ` And ${report.stuck.length - 3} more.` : '';
+  return `<p class="window-note${report.stuck.length ? ' problems-note' : ''}" role="status">${icon(report.stuck.length ? 'alert' : 'activity')}<span>${went}${stuck}${more}</span></p>`;
 }
 
 // The switch for task actions on a tracked repository. Switching on shows

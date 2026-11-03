@@ -345,6 +345,16 @@ export async function createServer({ dataDir = dataFolder(process.env.AGEARIS_DA
     engine.stop();
     cockpit.close();
   });
+  // The sweep (rule 13, for tasks agents close with git). Started only by a real
+  // server, since it deletes: a minute after starting, then every ten.
+  server.startSweeping = ({ first = 60_000, every = 600_000 } = {}) => {
+    const sweep = () => { workspace.sweepReleases().catch((error) => console.error(redactEmails(`Sweep failed: ${error?.message}`))); };
+    const firstTimer = setTimeout(sweep, first);
+    const timer = setInterval(sweep, every);
+    firstTimer.unref();
+    timer.unref();
+    server.on('close', () => { clearTimeout(firstTimer); clearInterval(timer); });
+  };
   server.start = (listenPort = port ?? 4310) => new Promise((resolve, reject) => {
     server.once('error', reject);
     server.listen(listenPort, '127.0.0.1', () => {
@@ -362,6 +372,7 @@ async function main() {
   }
   const server = await createServer({ port: Number(rawPort) });
   await server.start();
+  server.startSweeping();
   console.log(`AGE Aris is running. Open this link to sign in:\n\n  http://127.0.0.1:${rawPort}/?token=${server.apiToken}\n\nThe browser stays signed in for this data folder; the link is also stored in ${join(server.workspace.dataDir, '.api-token')} as the token.`);
 }
 

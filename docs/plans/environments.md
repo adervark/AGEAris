@@ -137,9 +137,10 @@ S4 only lists; it never deletes.
 - The board's FLOW lines gain one more line, for example:
   `DISK · scratch 194G: 110G held by 27 done tasks, 32G unowned · 18 landed worktrees`.
 - AGE Aris shows the same as a Method check ("environments released") and a
-  number on the project page. It reads sizes only. **Since T121** a Done taken
-  in AGE Aris also releases that task, from AGE Aris's own copy of `ckpt.sh`;
-  the check and the number still only read.
+  number on the project page. It reads sizes only. **Since T121 and T122**
+  AGE Aris also releases a done task, from its own copy of `ckpt.sh`, on a Done
+  taken in it and by a sweep for tasks closed with git. Linked worktrees stay
+  for a terminal. The check and the number still only read.
 
 ### S5. An optional disk budget
 

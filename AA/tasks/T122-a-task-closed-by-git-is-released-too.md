@@ -34,10 +34,12 @@ a board can drop its own copy of the release, as the operator wants for AGEIS.
 
 ## Steps
 
-- [ ] The sweep, with failing tests first, on temporary repositories.
-- [ ] The project page and the API say what it did and what is stuck.
-- [ ] AGENTS.md's exception, the README, the switch's wording.
-- [ ] Show the operator what the first real sweep would delete, read-only.
+- [x] The sweep, with failing tests first, on temporary repositories.
+- [x] The project page and the API say what it did and what is stuck.
+- [x] AGENTS.md's exception, the README, the switch's wording.
+- [x] Show the operator what the first real sweep would delete, read-only.
+
+- [ ] On the operator's word: restart the server, and take AGEIS's own copy out.
 
 ## Decision rules — fixed in advance
 
@@ -61,10 +63,11 @@ a board can drop its own copy of the release, as the operator wants for AGEIS.
 *Kept true while claimed, not written on the way out (rule 8).*
 
 - **Last touched:** 2026-11-03, adervark @k/5a99efba
-- **In flight:** nothing yet
-- **On disk:** nothing yet
-- **Resume with:** the Steps above
-- **Next decision:** the operator's word on the first real sweep's list
+- **In flight:** nothing; the code is committed, and the running server has the old code
+- **On disk:** nothing
+- **Resume with:** the operator's word, then a restart (`/aa` does it, and that
+  starts the sweep) and AGEIS's commit
+- **Next decision:** go live, or a further review first; the redesign has had none
 
 ## Verify
 
@@ -74,3 +77,14 @@ a board can drop its own copy of the release, as the operator wants for AGEIS.
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-11-03: the one review allowed reproduced 3 critical, 4 high and 5 medium
+  findings, some of them in T121's fixes. Blanking repository config did not
+  converge, so the hardened release was redesigned: no git command that can read
+  a filter or hook, a repository whose own config names a filter refused, and
+  worktrees left to a terminal. The decision rule said an hour from the commit;
+  that date is the agent's to write, so the hour now runs from when AGE Aris
+  first sees the task, which is stricter.
+- Each of 23 protections, removed alone on a temporary copy, failed its test
+  (two tests were strengthened to get there). The redesign itself has had no
+  independent review.

@@ -9,13 +9,15 @@ the project page says when STATE.md is behind (T025). `npm run e2e` is green
 again (T100). Rule 13 holds (T111): a done task's scratch, worktrees and
 branches are released by `AA/ckpt.sh release`, and T114 freed 93 GB in
 AGEIS. A Done taken in AGE Aris now releases that task from AGE Aris's own
-copy of the script (T121). Everything is on `feature/pm-cockpit`, not on `main`.
+copy of the script (T121), and a sweep does the same for tasks closed with git
+(T122), once the server restarts. Everything is on `feature/pm-cockpit`, not on
+`main`.
 
-**In progress:** nothing.
+**In progress:** T122, waiting on the operator's word to go live.
 
-**Next action:** T122 needs the operator's choice: tasks agents close with git
-never pass through AGE Aris's Done, so AGEIS's own release script stays until
-then. Otherwise, the agent brain (T052, `docs/plans/agent-brain.md`). T060
+**Next action:** T122 needs the operator's word. A server restart, which `/aa`
+does, starts the sweep; AGEIS's own script comes out after that. Otherwise, the
+agent brain (T052, `docs/plans/agent-brain.md`). T060
 (disk cache), T061 (slim `/api/workspace`) and T102 (warm orient) can start
 on T054's fixture; T056 waits on T004. T003 needs the operator's choice in
 its file first.
@@ -28,23 +30,23 @@ lives in PROGRESS.md and `done/`, not here.
 <!-- /AA:now -->
 
 <!-- AA:generated -->
-`board · 2026-11-03T13:56Z · 121 tasks: 43 backlog, 1 WIP (1 in progress), 77 delivered`
+`board · 2026-11-03T15:06Z · 123 tasks: 45 backlog, 1 WIP (1 in progress), 77 delivered`
 
 FLOW · **WIP 1/2** · throughput 18.0/wk (77 in 30d) · cycle time 50th 8m / 85th 2h (n=77)
-FLOW · Little's Law: 1 ÷ 18.0/wk ≈ 9h expected · lead time 85th 35h
+FLOW · Little's Law: 1 ÷ 18.0/wk ≈ 9h expected · flow efficiency 100% (touch 69m of 69m, n=1 trails) · lead time 85th 35h
 
 | | id | task | owner | age | |
 |---|---|---|---|---|---|
-| **IN PROGRESS** 1/2 | T122 | A task an agent closes with git is released by AGE Aris too | adervark | 4m |  |
-| **BACKLOG** 43 | | `T003` `T004` `T047` `T051` `T056` `T058` +37 more (`--all`) | | | ⚑ 0 not ready |
-| **DONE** | T121 | Done in AGE Aris releases the task's environment, from AGE Aris's own copy | adervark | 4m |  |
-|  | T119 | AGEIS releases its own finished tasks: rule 13 in its board | adervark | 2h |  |
-|  | T111 | Closing a task releases its environment: ckpt.sh release, rule 13, board.sh warns about what is left | adervark | 16h |  |
-|  | T114 | Release what finished tasks left: AGEIS's 110 GB and this repository's landed worktree | adervark | 16h |  |
-|  | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | 17h |  |
-|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 18h |  |
-|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 18h |  |
-|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 18h |  |
+| **IN PROGRESS** 1/2 | T122 | A task an agent closes with git is released by AGE Aris too | adervark | 69m |  |
+| **BACKLOG** 45 | | `T003` `T004` `T047` `T051` `T056` `T058` +39 more (`--all`) | | | ⚑ 0 not ready |
+| **DONE** | T121 | Done in AGE Aris releases the task's environment, from AGE Aris's own copy | adervark | 74m |  |
+|  | T119 | AGEIS releases its own finished tasks: rule 13 in its board | adervark | 3h |  |
+|  | T111 | Closing a task releases its environment: ckpt.sh release, rule 13, board.sh warns about what is left | adervark | 18h |  |
+|  | T114 | Release what finished tasks left: AGEIS's 110 GB and this repository's landed worktree | adervark | 18h |  |
+|  | T110 | Environments a task leaves behind: measure them, and a structure that releases them | adervark | 18h |  |
+|  | T024 | The card menu, the keyboard map, and drag through the action registry | adervark | 19h |  |
+|  | T025 | Say on the project page that STATE.md is behind, or kept by hand | adervark | 19h |  |
+|  | T100 | The task-actions e2e fails 9 of 24, before T068 as after | adervark | 19h |  |
 |  | T054 | Scale baseline: a 300-repository perf fixture | adervark | 2d |  |
 |  | T068 | Deprecate or archive a project, either kind, and restore it | adervark | 9d |  |
 |  | T053 | Measure how often agents get lost: a baseline | adervark | 9d |  |
@@ -65,12 +67,12 @@ FLOW · Little's Law: 1 ÷ 18.0/wk ≈ 9h expected · lead time 85th 35h
 |  | T075 | R0b: replay RSNA's round 3 with facts, graded on every correction its synthesis records | adervark | 21d |  |
 |  | T073 | Research runs, aggregated: one line of thought, in the operator's sight | adervark | 21d |  |
 |  | T074 | Replay RSNA's research round 3 as a ledger: do the checks catch what its synthesis caught by hand? | adervark | 21d |  |
-|  | T055 | The orient contract and its scenario corpus | adervark | 22d |  |
+|  | T055 | The orient contract and its scenario corpus | adervark | 23d |  |
 |  | T070 | A run names its process, so a session reads as running or closed | adervark | 23d |  |
 |  | T069 | A long act says when it expects to finish, so orient never restarts it | adervark | 24d |  |
 |  | T052 | The agent's brain: a design that orients any agent, on any repo, at team scale | adervark | 24d |  |
-|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 24d |  |
-|  | T050 | /aa on Windows without WSL | adervark | 24d |  |
+|  | T049 | Every AGESight name becomes AGE Aris's, and the old ones are still read | adervark | 25d |  |
+|  | T050 | /aa on Windows without WSL | adervark | 25d |  |
 |  | T046 | Install in one line: /aa names everything the machine is missing, at once | adervark | 25d |  |
 |  | T048 | The plugin is agearis: the install and the plugin list still said agesight | adervark | 25d |  |
 |  | T045 | /aa prints the signed-in link: the plain link gave a sign-in error | adervark | 25d |  |

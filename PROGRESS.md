@@ -1041,3 +1041,20 @@ its date, the number, and where the evidence is. Newest last.
 - Read-only dry runs on AGEIS (T092, T123). No real board was released.
 - T122 filed: tasks closed by git never pass through this, so AGEIS's own copy
   (`f8b0f90`) stays until the operator chooses.
+
+## 2026-11-03 — T122: AGE Aris sweeps done tasks; the hardened release redesigned
+
+- A running server releases done tasks on boards with task actions on whose
+  `AA.yml` names `scratch:`, at least an hour after it first sees them. Not live:
+  the running server has the old code.
+- The one review allowed reproduced 3 critical, 4 high and 5 medium findings,
+  some in T121's fixes. Under AGE Aris the release now runs no git command that
+  can read a filter or hook, refuses a repository whose own config names a
+  filter, and leaves worktrees to a terminal.
+- `npm test` 670 of 670, `npm run e2e` 32 of 32, `npm run check` clean. Each of
+  23 protections, removed alone on a temporary copy, failed its test. The
+  redesign has had no independent review.
+- Read-only preview of the first sweep on AGEIS: 5 tasks considered (T084, T087,
+  T097, T108, T123), nothing deleted, all held by open tasks that cite them.
+- T123 and T124 filed from the review.
+

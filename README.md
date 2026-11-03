@@ -400,24 +400,34 @@ run that command. This is a deliberate deviation from the board's Done.
 `scratch:`, Done goes on to run AGE Aris's own copy of `ckpt.sh release` from
 the repository, so the board needs no copy of its own:
 
-- The task's scratch folders, landed worktrees and merged branches are deleted.
-  What it keeps is committed to `AA/evidence/<ID>/` first, as one more commit,
-  under the same rules as a task action: no hooks, filters, signing or automatic
-  maintenance, and never pushed.
-- Work not on the main line, anything in use, a folder an open task cites and a
-  nested repository all stay, and the result names them. A nested repository is
-  left for you because reading it would use its own git config. The release
-  also refuses while a run on the task has not ended, when the pinned branch is
-  not the main line, when `scratch:` is not ignored by git, or when a symlink
-  lies on the way to `AA/evidence/` or a kept file.
+- The task's scratch folders and merged branches are deleted. What it keeps is
+  committed to `AA/evidence/<ID>/` first, as one more commit, made with git
+  plumbing: no git command that can read a filter or a hook runs, and it is never
+  pushed.
+- Work not on the main line, anything in use, and a folder an open task cites all
+  stay, and the result names them. So does a folder holding a linked worktree or
+  a nested repository, because reading one would use its own git config: run the
+  command the result gives from a terminal. The release also refuses while a run
+  on the task has not ended, during a merge or rebase, when the pinned branch is
+  not the main line, when `scratch:` is not ignored by git, when the repository's
+  own config names a filter (one in your global config, such as LFS, is yours and
+  does not count), or when a symlink lies on the way to `AA/evidence/` or a kept
+  file.
 - A refused or failed release never undoes the Done. The result says why and
   gives the command to run from a terminal.
 - A long release goes on after the answer: `GET /api/tasks/:id` carries
   `release: { state, summary, lines, remedy }`, and the page says when it ends.
   Each release leaves a line in `releases.jsonl` in AGE Aris's data folder.
 
-Only a Done taken in AGE Aris does this. A task an agent moves to `done/` with
-git is released by the board's own `ckpt.sh close --delete`, if it has one.
+**AGE Aris also releases tasks closed with git.** A running server looks a minute
+after it starts, then every ten minutes, on each board with task actions on
+whose `AA.yml` names `scratch:`. A done task in `HEAD` with a scratch entry or a
+branch named for it is released once AGE Aris has known of it for an hour, so the
+agent closing it can finish. A restart starts that hour again. Nobody takes any
+action for this, and the same rules decide what goes. What stays is not tried
+again for a day. The project page says how many went and what is stuck;
+`GET /api/projects/:id` carries it as `actions.releases`. Switching task actions
+off stops the sweep, between tasks too.
 
 **What agents in the repository see.** While AGE Aris commits (normally tens
 of milliseconds, at most 3 seconds) git's index lock is held, so an agent's

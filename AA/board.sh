@@ -464,7 +464,7 @@ live	agent-git	AA/ckpt.sh live [T]	task
 block	agent-git	set status: blocked and blockedReason: <what unblocks it> in AA/tasks/T-*.md; commit	task; reason		another operator holds the task (rule 2)
 unblock	agent-git	set status: claimed and clear blockedReason in AA/tasks/T-*.md; commit	task		another operator holds the task (rule 2)
 release	agent-git	git mv AA/tasks/T-*.md AA/backlog/; set status: open and owner: —; commit "release T" (rule 4)	task	the commit conflicts: someone else has it (rule 1)	another operator holds the task (rule 2); a run on the task is live (AA/ckpt.sh live T): keep off unless it is yours (rule 6)
-done	agent-git	fill ## Result, with AA/ckpt.sh close T --delete's digest when T has a trail; git mv AA/tasks/T-*.md AA/tasks/done/, set status: done; commit; then AA/ckpt.sh release T (rule 13: its scratch, landed worktrees and merged branches go; keeps: files are committed first)	task; result	ckpt.sh close: T has no trail	another operator holds the task (rule 2); the Result is empty or a placeholder
+done	agent-git	fill ## Result, with AA/ckpt.sh close T --delete's digest when T has a trail; git mv AA/tasks/T-*.md AA/tasks/done/, set status: done; commit; then AA/ckpt.sh release T (rule 13: its scratch, landed worktrees and merged branches go; keeps: files are committed first; on a board AGE Aris tracks with task actions on, it does this itself at least an hour after it sees the commit)	task; result	ckpt.sh close: T has no trail	another operator holds the task (rule 2); the Result is empty or a placeholder
 kill	agent-git	say why in ## Result, git mv the task file to AA/tasks/done/, set status: killed; commit	task; reason		another operator holds the task (rule 2)
 CAPABILITIES
 }

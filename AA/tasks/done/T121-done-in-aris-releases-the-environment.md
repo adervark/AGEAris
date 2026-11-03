@@ -99,3 +99,8 @@ Run digest:
 
 *(anyone may append here — the one part of a claimed file that is not the
 owner's alone, rule 2)*
+
+- 2026-11-03, from T122: a second review broke some of this task's fixes, and the
+  hardened release was redesigned there. Under AGE Aris a landed worktree now
+  stays for a terminal, and a repository whose own config names a filter is
+  refused. The Result above describes `0891a64`, not what runs now.

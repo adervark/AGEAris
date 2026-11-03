@@ -2,13 +2,16 @@
 // copy of ckpt.sh. Real temporary repositories, no global or system git config,
 // and nothing outside os.tmpdir() is touched.
 import assert from 'node:assert/strict';
-import { execFile } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { chmod, lstat, mkdir, mkdtemp, readFile, realpath, rm, symlink, utimes, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import test from 'node:test';
 
+import { namedFor, releaseTask, scratchFolder } from '../lib/release.mjs';
+import { createServer } from '../server.mjs';
+import { filterOff, trackedGit } from '../lib/tracked.mjs';
 import { redactEmails, Workspace } from '../lib/workspace.mjs';
 
 process.env.GIT_CONFIG_GLOBAL = os.devNull;
@@ -84,32 +87,20 @@ test('Done releases the task\'s scratch and commits what it keeps; another task\
   assert.ok(record.lines.some((line) => line.startsWith('delete scratch/t050')), JSON.stringify(record.lines));
 });
 
-test('the repository\'s own ckpt.sh, its hooks, filters and signing do not run', async () => {
+test('the repository\'s own ckpt.sh, its hooks and signing do not run, and the kept files still go in', async () => {
   const canaries = await tempDir('canaries');
   const canary = (name) => `#!/bin/sh\ntouch ${path.join(canaries, name)}\ncat\n`;
-  const repo = await repository({
-    files: {
-      'AA/ckpt.sh': canary('own-ckpt'),
-      '.gitattributes': '*.md filter=sneak diff=sneak\n',
-    },
-  });
-  for (const [name, config, value] of [
-    ['hook', 'core.hooksPath', path.join(canaries, 'hooks')],
-    ['clean', 'filter.sneak.clean', path.join(canaries, 'run-clean')],
-    ['sign', 'gpg.program', path.join(canaries, 'run-sign')],
-    ['external', 'diff.external', path.join(canaries, 'run-external')],
-    ['driver', 'diff.sneak.command', path.join(canaries, 'run-driver')],
-    ['textconv', 'diff.sneak.textconv', path.join(canaries, 'run-textconv')],
-  ]) {
+  const repo = await repository({ files: { 'AA/ckpt.sh': canary('own-ckpt') } });
+  for (const [config, value, name] of [['gpg.program', path.join(canaries, 'run-sign'), 'sign'], ['diff.external', path.join(canaries, 'run-external'), 'external']]) {
     await git(repo.dir, 'config', config, value);
-    if (name !== 'hook') {
-      await writeFile(value, canary(name));
-      await chmod(value, 0o755);
-    }
+    await writeFile(value, canary(name));
+    await chmod(value, 0o755);
   }
   await git(repo.dir, 'config', 'commit.gpgSign', 'true');
+  await git(repo.dir, 'config', 'core.hooksPath', path.join(canaries, 'hooks'));
   await mkdir(path.join(canaries, 'hooks'));
-  for (const hook of ['pre-commit', 'prepare-commit-msg', 'commit-msg', 'post-commit']) {
+  const hooks = ['pre-commit', 'prepare-commit-msg', 'commit-msg', 'post-commit', 'reference-transaction', 'post-index-change'];
+  for (const hook of hooks) {
     const file = path.join(canaries, 'hooks', hook);
     await writeFile(file, canary(`hook-${hook}`));
     await chmod(file, 0o755);
@@ -117,9 +108,83 @@ test('the repository\'s own ckpt.sh, its hooks, filters and signing do not run',
   const result = await done(repo);
   assert.equal(result.release.state, 'released', JSON.stringify(result.release));
   assert.equal(await exists(path.join(repo.dir, 'scratch/t050')), false);
-  for (const name of ['own-ckpt', 'clean', 'sign', 'external', 'driver', 'textconv', 'hook-pre-commit', 'hook-prepare-commit-msg', 'hook-commit-msg', 'hook-post-commit']) {
+  assert.equal(await git(repo.dir, 'show', 'HEAD:AA/evidence/T050/t050/notes.md'), 'what we found');
+  for (const name of ['own-ckpt', 'sign', 'external', ...hooks.map((hook) => `hook-${hook}`)]) {
     assert.equal(await exists(path.join(canaries, name)), false, `${name} ran`);
   }
+});
+
+test('the evidence commit leaves the index and the working tree clean, and others\' staged work alone', async () => {
+  const repo = await repository({ files: { 'theirs.txt': 'one\n' } });
+  await writeFile(path.join(repo.dir, 'theirs.txt'), 'two\n');
+  await git(repo.dir, 'add', 'theirs.txt');
+  await writeFile(path.join(repo.dir, 'dirty.txt'), 'untracked\n');
+  const result = await done(repo);
+  assert.equal(result.release.state, 'released', JSON.stringify(result.release));
+  assert.equal(await git(repo.dir, 'status', '--porcelain'), 'M  theirs.txt\n?? dirty.txt');
+  assert.equal(await git(repo.dir, 'show', 'HEAD:theirs.txt'), 'one');
+  assert.match(await git(repo.dir, 'log', '-1', '--format=%an %s'), /^ade evidence: T050/);
+});
+
+test('a repository whose own config names a filter is refused, and no filter runs', async () => {
+  const repo = await repository({ files: { '.gitattributes': '*.md filter=sneak\n' } });
+  const filter = await canary('sneak');
+  await git(repo.dir, 'config', 'filter.sneak.clean', filter.file);
+  const result = await done(repo);
+  assert.equal(result.release.state, 'refused', JSON.stringify(result.release));
+  assert.match(result.release.summary, /own git config names a filter/);
+  assert.equal(await filter.ran(), false);
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050/notes.md')), true);
+  assert.equal(await exists(path.join(repo.dir, 'AA/tasks/done/T050-a-task.md')), true);
+});
+
+test('a filter in the user\'s own config is theirs, and does not stop the release', async () => {
+  const file = path.join(await tempDir('global'), 'gitconfig');
+  await writeFile(file, '[filter "lfs"]\n\tclean = cat\n');
+  const before = process.env.GIT_CONFIG_GLOBAL;
+  process.env.GIT_CONFIG_GLOBAL = file;
+  try {
+    const repo = await repository();
+    assert.equal((await done(repo)).release.state, 'released');
+  } finally {
+    process.env.GIT_CONFIG_GLOBAL = before;
+  }
+});
+
+test('filterOff switches off a filter with an empty name or an = in it; without it, git runs them', async () => {
+  for (const [section, attributes] of [['[filter ""]', '*.txt filter=\n'], ['[filter "a=b"]', '*.txt filter=a=b\n']]) {
+    const dir = await tempDir('off');
+    await git(dir, 'init', '--quiet', '--initial-branch=main');
+    await writeFile(path.join(dir, '.gitattributes'), attributes);
+    const filter = await canary('ran');
+    const config = path.join(dir, '.git/config');
+    await writeFile(config, `${await readFile(config, 'utf8')}${section}\n\tclean = ${filter.file}\n`);
+    await writeFile(path.join(dir, 'a.txt'), 'one\n');
+    const off = await filterOff((args, options) => trackedGit(dir, args, options));
+    assert.equal((await trackedGit(dir, [...off, 'add', 'a.txt'])).code, 0);
+    assert.equal(await filter.ran(), false, `${section} ran with filterOff`);
+    await writeFile(path.join(dir, 'a.txt'), 'two\n');
+    await trackedGit(dir, ['add', 'a.txt']);
+    assert.equal(await filter.ran(), true, `${section} does not run at all, so this proves nothing`);
+  }
+});
+
+test('filters a task action could not otherwise switch off: an empty name and one with = do not run; a name that is not UTF-8 is refused', async () => {
+  for (const [section, attributes, name] of [['[filter ""]', '*.md filter=\n', 'empty'], ['[filter "a=b"]', '*.md filter=a=b\n', 'equals']]) {
+    const repo = await repository({ yml: '', files: { '.gitattributes': attributes } });
+    const filter = await canary(name);
+    const config = path.join(repo.dir, '.git/config');
+    await writeFile(config, `${await readFile(config, 'utf8')}${section}\n\tclean = ${filter.file}\n`);
+    const result = await done(repo);
+    assert.match(result.commit, /^[0-9a-f]{40}$/);
+    assert.equal(await filter.ran(), false, `the ${name} filter ran`);
+  }
+  const repo = await repository({ yml: '' });
+  const config = path.join(repo.dir, '.git/config');
+  await writeFile(config, Buffer.concat([await readFile(config), Buffer.from('[filter "'), Buffer.from([0xff]), Buffer.from('"]\n\tclean = /nonexistent\n')]));
+  const refused = await done(repo).catch((error) => error);
+  assert.equal(refused.code, 'BAD_CONFIG', refused.message);
+  assert.equal(await exists(path.join(repo.dir, 'AA/tasks/T050-a-task.md')), true);
 });
 
 test('a board whose AA.yml names no scratch: is left alone, and the result says so', async () => {
@@ -246,24 +311,118 @@ test('the commit\'s automatic maintenance does not run gc\'s hook', async () => 
   assert.equal(await hook.ran(), false, 'gc\'s hook ran');
 });
 
-test('a linked worktree\'s own filter does not run, and a filter whose name has = runs neither in the release nor in the Done', async () => {
-  const repo = await repository({ files: { '.gitattributes': '*.txt filter=own\n*.md filter=a=b\n', 'tracked.txt': 'one\n' } });
+test('a folder holding a linked worktree stays whole: AGE Aris does not read it, so its own filter and a submodule\'s cannot run', async () => {
+  const repo = await repository({ files: { '.gitattributes': '*.txt filter=own\n', 'tracked.txt': 'one\n' } });
   const own = await canary('own');
-  const equals = await canary('equals');
   const worktree = path.join(repo.dir, 'scratch/t050/wt');
   await git(repo.dir, 'worktree', 'add', '--quiet', '-b', 't050-wt', worktree);
   await git(repo.dir, 'config', 'extensions.worktreeConfig', 'true');
   await git(worktree, 'config', '--worktree', 'filter.own.clean', own.file);
-  await git(repo.dir, 'config', 'filter.a=b.clean', equals.file);
-  // Rewritten with the same bytes and an old-looking entry, so status asks the filter.
   const stamp = new Date(Date.now() + 5000);
   await writeFile(path.join(worktree, 'tracked.txt'), 'one\n');
   await utimes(path.join(worktree, 'tracked.txt'), stamp, stamp);
   const result = await done(repo);
   assert.equal(await own.ran(), false, 'the worktree\'s filter ran');
-  assert.equal(await equals.ran(), false, 'the = filter ran');
-  assert.equal(result.release.state, 'released', JSON.stringify(result.release));
-  assert.equal(await exists(worktree), false);
+  assert.notEqual(result.release.state, 'released', JSON.stringify(result.release));
+  assert.match(result.release.lines.join(' '), /AGE Aris leaves worktrees to you|names a filter/);
+  assert.equal(await exists(worktree), true);
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050/notes.md')), true);
+});
+
+test('a landed worktree in the folder is left to a terminal, and the folder is named', async () => {
+  const repo = await repository();
+  const worktree = path.join(repo.dir, 'scratch/t050/wt');
+  await git(repo.dir, 'worktree', 'add', '--quiet', '-b', 't050-wt', worktree);
+  const result = await done(repo);
+  assert.equal(result.release.state, 'kept', JSON.stringify(result.release));
+  assert.match(result.release.summary, /AGE Aris leaves worktrees to you/);
+  assert.match(result.release.remedy, /release T050$/);
+  assert.equal(await exists(path.join(worktree, '.git')), true);
+});
+
+test('a replace ref cannot make unlanded work look landed', async () => {
+  const repo = await repository();
+  await git(repo.dir, 'checkout', '--quiet', '-b', 't050-wip');
+  await write(repo.dir, 'wip.txt', 'not landed\n');
+  await git(repo.dir, 'add', 'wip.txt');
+  await git(repo.dir, 'commit', '--quiet', '-m', 'wip');
+  await git(repo.dir, 'checkout', '--quiet', 'main');
+  // Main's tip, replaced by one with the branch for its parent: to anything that
+  // honours replace refs, the branch is now on main.
+  await git(repo.dir, 'replace', '--graft', 'main', 't050-wip');
+  await exec('git', ['merge-base', '--is-ancestor', 't050-wip', 'main'], { cwd: repo.dir, env: process.env });
+  const result = await done(repo);
+  assert.match(result.release.lines.join(' '), /branch t050-wip has commits not on main/);
+  assert.match(await git(repo.dir, 'branch', '--list', 't050-wip'), /t050-wip/);
+});
+
+test('a running process named by path holds its folder, though it holds nothing open there', async () => {
+  const repo = await repository();
+  const child = spawn('sh', ['-c', 'sleep 30', 'scratch/t050/job.py'], { cwd: repo.dir, stdio: 'ignore' });
+  try {
+    const result = await done(repo);
+    assert.equal(await exists(path.join(repo.dir, 'scratch/t050/notes.md')), true);
+    assert.match(result.release.lines.join(' '), /a running process is using it/);
+  } finally {
+    child.kill();
+  }
+});
+
+test('during a merge the release refuses, and leaves the merge\'s index alone', async () => {
+  const repo = await repository({ files: { 'c.txt': 'base\n' } });
+  await git(repo.dir, 'checkout', '--quiet', '-b', 'other');
+  await write(repo.dir, 'c.txt', 'theirs\n');
+  await git(repo.dir, 'commit', '--quiet', '-am', 'theirs');
+  await git(repo.dir, 'checkout', '--quiet', 'main');
+  await write(repo.dir, 'c.txt', 'ours\n');
+  await git(repo.dir, 'commit', '--quiet', '-am', 'ours');
+  await git(repo.dir, 'merge', '--quiet', 'other').catch(() => {});
+  await mkdir(path.join(repo.dir, 'AA/tasks/done'), { recursive: true });
+  // The Done is refused by the merge; the release of a task closed earlier is what is at stake.
+  await write(repo.dir, 'AA/tasks/done/T060-closed.md', taskFile('T060').replace('status: claimed', 'status: done'));
+  await write(repo.dir, 'scratch/t060/notes.md', 'x\n');
+  const before = await git(repo.dir, 'diff', '--cached', '--name-only');
+  const outcome = await releaseTask(repo.dir, 'T060');
+  assert.equal(outcome.state, 'refused', JSON.stringify(outcome));
+  assert.match(outcome.summary, /in progress \(MERGE_HEAD\)/);
+  assert.equal(await git(repo.dir, 'diff', '--cached', '--name-only'), before);
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t060/notes.md')), true);
+});
+
+test('scratch/ swapped for a link while the release runs: nothing outside it is deleted', async () => {
+  const outside = await tempDir('outside');
+  await write(outside, 't050/precious.txt', 'mine\n');
+  const repo = await repository();
+  // Nothing to keep, so the release reaches the delete with no copy to stop it first.
+  await rm(path.join(repo.dir, 'scratch/t050/notes.md'));
+  // `du` runs after the checks; this one does the swap as a racing agent might.
+  const bin = await tempDir('bin');
+  await writeFile(path.join(bin, 'du'), `#!/bin/sh\ncd ${repo.dir} && [ -d scratch ] && [ ! -L scratch ] && mv scratch scratch-real && ln -s ${outside} scratch\necho 4\n`);
+  await chmod(path.join(bin, 'du'), 0o755);
+  const before = process.env.PATH;
+  process.env.PATH = `${bin}:${before}`;
+  try {
+    const result = await done(repo);
+    assert.notEqual(result.release.state, 'released', JSON.stringify(result.release));
+  } finally {
+    process.env.PATH = before;
+  }
+  assert.equal(await readFile(path.join(outside, 't050/precious.txt'), 'utf8'), 'mine\n');
+});
+
+test('a task file that is a FIFO is refused rather than hanging, and a stuck release is stopped', async () => {
+  const repo = await repository();
+  await mkdir(path.join(repo.dir, 'AA/tasks/done'), { recursive: true });
+  await exec('mkfifo', [path.join(repo.dir, 'AA/tasks/done/T060-pipe.md')]);
+  const refused = await releaseTask(repo.dir, 'T060');
+  assert.equal(refused.state, 'refused', JSON.stringify(refused));
+  assert.match(refused.summary, /not a regular file/);
+  const script = path.join(await tempDir('stuck'), 'stuck.sh');
+  await writeFile(script, "#!/bin/bash\ntrap '' TERM\nsleep 60 &\nsleep 60\n");
+  const started = Date.now();
+  const stopped = await releaseTask(repo.dir, 'T050', { script, limit: 100 });
+  assert.equal(stopped.state, 'failed', JSON.stringify(stopped));
+  assert.ok(Date.now() - started < 8000, `took ${Date.now() - started} ms`);
 });
 
 test('a symlink under the evidence folder stops the release before any copy goes through it', async () => {
@@ -373,4 +532,184 @@ test('nothing after the commit can turn a Done into an error', async () => {
   assert.equal(result.release.state, 'failed');
   assert.match(result.release.summary, /release\.mjs is gone/);
   assert.equal(await exists(path.join(repo.dir, 'AA/tasks/done/T050-a-task.md')), true);
+});
+
+// ---- The sweep: tasks closed with git (T122).
+
+// T050 moved to done/ with git, as an agent closes one, its scratch left behind.
+async function closedByGit(repo, id = 'T050', slug = 'a-task') {
+  await mkdir(path.join(repo.dir, 'AA/tasks/done'), { recursive: true });
+  await git(repo.dir, 'mv', `AA/tasks/${id}-${slug}.md`, 'AA/tasks/done/');
+  await git(repo.dir, 'commit', '--quiet', '-m', `${id} done`);
+}
+const HOUR = 3_600_000;
+const later = (hours = 2) => Date.now() + hours * HOUR;
+// The first sweep sees the task; a sweep past the grace period acts on it.
+async function sweptPastGrace(repo) {
+  await repo.workspace.sweepReleases({ now: later(0) });
+  await repo.workspace.sweepReleases({ now: later(2) });
+}
+
+test('a task an agent closed with git is released once AGE Aris has known of it for an hour; another task is not', async () => {
+  const repo = await repository();
+  await closedByGit(repo);
+  await sweptPastGrace(repo);
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050')), false);
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t051/notes.md')), true);
+  assert.equal(await git(repo.dir, 'show', 'HEAD:AA/evidence/T050/t050/notes.md'), 'what we found');
+  const record = JSON.parse(await readFile(path.join(repo.workspace.dataDir, 'releases.jsonl'), 'utf8'));
+  assert.equal(record.trigger, 'sweep');
+  assert.equal(record.state, 'released');
+  const project = (await repo.workspace._project(repo.project.id)).project;
+  assert.equal(project.actions.releases.released, 1);
+  assert.deepEqual(project.actions.releases.stuck, []);
+});
+
+test('the sweep leaves a fresh close and an uncommitted move alone, and a commit\'s date does not hurry it', async () => {
+  const repo = await repository();
+  await mkdir(path.join(repo.dir, 'AA/tasks/done'), { recursive: true });
+  await git(repo.dir, 'mv', 'AA/tasks/T050-a-task.md', 'AA/tasks/done/');
+  await exec('git', ['commit', '--quiet', '-m', 'T050 done, dated long ago'], { cwd: repo.dir, env: { ...process.env, GIT_COMMITTER_DATE: '2020-01-01T00:00:00Z', GIT_AUTHOR_DATE: '2020-01-01T00:00:00Z' } });
+  await repo.workspace.sweepReleases({ now: later(0) });
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050/notes.md')), true, 'first sight, whatever the date says');
+  await git(repo.dir, 'mv', 'AA/tasks/T051-another.md', 'AA/tasks/done/');
+  await repo.workspace.sweepReleases({ now: later(2) });
+  await repo.workspace.sweepReleases({ now: later(4) });
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t051/notes.md')), true, 'a move not committed');
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050')), false, 'past the hour');
+});
+
+test('the sweep leaves a board with actions off, or with no scratch:, alone', async () => {
+  const off = await repository();
+  await closedByGit(off);
+  const stored = (await off.workspace._project(off.project.id)).project;
+  await off.workspace.updateProject(off.project.id, { version: stored.version, taskActions: { on: false } });
+  await sweptPastGrace(off);
+  assert.equal(await exists(path.join(off.dir, 'scratch/t050/notes.md')), true, 'actions off');
+
+  const bare = await repository({ yml: '' });
+  await closedByGit(bare);
+  await sweptPastGrace(bare);
+  assert.equal(await exists(path.join(bare.dir, 'scratch/t050/notes.md')), true, 'no scratch:');
+});
+
+test('switching actions off during a pass stops it before the next task', async () => {
+  const repo = await repository();
+  await closedByGit(repo);
+  await closedByGit(repo, 'T051', 'another');
+  await repo.workspace.sweepReleases({ now: later(0) });
+  const queue = repo.workspace._queueRelease.bind(repo.workspace);
+  repo.workspace._queueRelease = async (...args) => {
+    const outcome = await queue(...args);
+    const stored = (await repo.workspace._project(repo.project.id)).project;
+    await repo.workspace.updateProject(repo.project.id, { version: stored.version, taskActions: { on: false } });
+    return outcome;
+  };
+  await repo.workspace.sweepReleases({ now: later(2) });
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050')), false, 'the first went');
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t051/notes.md')), true, 'the second stayed');
+});
+
+test('one sweep at a time', async () => {
+  const repo = await repository();
+  await closedByGit(repo);
+  await repo.workspace.sweepReleases({ now: later(0) });
+  await Promise.all([repo.workspace.sweepReleases({ now: later(2) }), repo.workspace.sweepReleases({ now: later(2) })]);
+  const lines = (await readFile(path.join(repo.workspace.dataDir, 'releases.jsonl'), 'utf8')).trim().split('\n');
+  assert.equal(lines.length, 1);
+  repo.workspace._sweeping = true;
+  await closedByGit(repo, 'T051', 'another');
+  await repo.workspace.sweepReleases({ now: later(0) });
+  await repo.workspace.sweepReleases({ now: later(2) });
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t051/notes.md')), true, 'a sweep going keeps a second off');
+});
+
+async function stuckRepository() {
+  const repo = await repository();
+  const line = JSON.stringify({ ts: '2026-01-01T00:00:00Z', run: 'old', kind: 'doing', act: 'train', next: 'x' });
+  await write(repo.dir, 'AA/checkpoints/T050.jsonl', `${line}\n`);
+  await git(repo.dir, 'add', '-A');
+  await git(repo.dir, 'commit', '--quiet', '-m', 'a trail');
+  await closedByGit(repo);
+  return repo;
+}
+const records = async (repo) => (await readFile(path.join(repo.workspace.dataDir, 'releases.jsonl'), 'utf8')).trim().split('\n').length;
+
+test('what the sweep cannot release shows on the project, and is not tried again for a day', async () => {
+  const repo = await stuckRepository();
+  await sweptPastGrace(repo);
+  const stuck = (await repo.workspace._project(repo.project.id)).project.actions.releases.stuck;
+  assert.equal(stuck.length, 1);
+  assert.equal(stuck[0].task, 'T050');
+  assert.match(stuck[0].summary, /stopped mid-act/);
+  assert.match(stuck[0].remedy, /release T050$/);
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050/notes.md')), true);
+  await repo.workspace.sweepReleases({ now: later(3) });
+  assert.equal(await records(repo), 1, 'tried again within the day');
+  await repo.workspace.sweepReleases({ now: later(30) });
+  assert.equal(await records(repo), 2, 'not tried again after the day');
+});
+
+test('once the operator clears what was stuck, the project stops saying it is', async () => {
+  const repo = await stuckRepository();
+  await sweptPastGrace(repo);
+  assert.equal((await repo.workspace._project(repo.project.id)).project.actions.releases.stuck.length, 1);
+  await rm(path.join(repo.dir, 'scratch/t050'), { recursive: true });
+  await repo.workspace.sweepReleases({ now: later(3) });
+  assert.deepEqual((await repo.workspace._project(repo.project.id)).project.actions.releases.stuck, []);
+});
+
+test('a release that left something behind is not tried again within the day', async () => {
+  const repo = await repository();
+  await git(repo.dir, 'checkout', '--quiet', '-b', 't050-wip');
+  await write(repo.dir, 'wip.txt', 'not landed\n');
+  await git(repo.dir, 'add', 'wip.txt');
+  await git(repo.dir, 'commit', '--quiet', '-m', 'wip');
+  await git(repo.dir, 'checkout', '--quiet', 'main');
+  await closedByGit(repo);
+  await sweptPastGrace(repo);
+  assert.equal(await exists(path.join(repo.dir, 'scratch/t050')), false);
+  assert.match(await git(repo.dir, 'branch', '--list', 't050-wip'), /t050-wip/);
+  assert.equal((await repo.workspace._project(repo.project.id)).project.actions.releases.stuck[0].task, 'T050');
+  await repo.workspace.sweepReleases({ now: later(3) });
+  assert.equal(await records(repo), 1);
+});
+
+test('a sweep finds branches named for a done task; a task holding nothing is never run', async () => {
+  const repo = await repository();
+  await rm(path.join(repo.dir, 'scratch/t050'), { recursive: true });
+  await closedByGit(repo);
+  await sweptPastGrace(repo);
+  await assert.rejects(readFile(path.join(repo.workspace.dataDir, 'releases.jsonl')), 'nothing named for it, no run');
+  await git(repo.dir, 'branch', 't050-side');
+  await sweptPastGrace(repo);
+  assert.equal(await git(repo.dir, 'branch', '--list', 't050-side'), '');
+});
+
+test('namedFor reads names as ckpt.sh does', () => {
+  assert.deepEqual(namedFor(['T123', 'T12', 'T999'], ['t123', 'T123-x']), ['T123']);
+  assert.deepEqual(namedFor(['T123'], ['t123_x']), ['T123']);
+  assert.deepEqual(namedFor(['T123'], ['t123/x']), ['T123']);
+  assert.deepEqual(namedFor(['T123'], ['t1234', 'xt123', 't123x']), []);
+});
+
+test('scratchFolder reads the value, not a comment', () => {
+  assert.equal(scratchFolder('a: 1\nscratch: work  # here\nb: 2\n'), 'work');
+  assert.equal(scratchFolder('# scratch: no\n'), '');
+  assert.equal(scratchFolder('scratch:\n'), '');
+});
+
+test('a real server sweeps by itself once told to start', async () => {
+  const repo = await repository({ workspace: { sweepGrace: 0 } });
+  await closedByGit(repo);
+  const server = await createServer({ dataDir: repo.workspace.dataDir });
+  server.workspace.sweepGrace = 0;
+  server.startSweeping({ first: 5, every: 50 });
+  try {
+    for (let tries = 0; tries < 200 && await exists(path.join(repo.dir, 'scratch/t050')); tries += 1) await new Promise((resolve) => { setTimeout(resolve, 50); });
+    assert.equal(await exists(path.join(repo.dir, 'scratch/t050')), false);
+  } finally {
+    await new Promise((resolve) => { server.close(resolve); server.emit('close'); });
+    await server.workspace.releasesSettled();
+  }
 });

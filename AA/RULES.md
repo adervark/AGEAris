@@ -69,8 +69,11 @@ everywhere.
     it is not a file, no agent will pick it up and the board cannot show it.
 13. **Closing releases what the task holds.** When a task reaches `done/`,
     `AA/ckpt.sh release T###` deletes its scratch folders, its landed
-    worktrees and its merged branches; `close --delete` runs it too, and so
-    does Done in AGE Aris, from its own copy, when `AA.yml` names `scratch:`. It keeps
+    worktrees and its merged branches; `close --delete` runs it too. When
+    `AA.yml` names `scratch:` and AGE Aris tracks the board with task actions
+    on, AGE Aris also runs it, on a Done taken in it and at least an hour after
+    any other move to `done/`, so finish with your scratch before you close. It
+    leaves worktrees to you. It keeps
     the task's documentation, visuals and metrics (`keep_kinds` in `AA.yml`),
     the files its task file cites, and whatever its `keeps:` line names: committed to `AA/evidence/T###/`
     first, or, over `keep_max_kb`, copied to the archive outside git with
