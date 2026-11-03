@@ -463,7 +463,7 @@ function mainWidth() {
 
 function projectHeader(project, line) {
   const where = project.linked
-    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}`
+    ? `<p class="project-where">Tracked from <code>${escape(project.repository)}</code>. AGE Aris reads its <code>${escape(project.board)}/</code> board and git history. ${project.actions?.on ? `Task actions commit to <code>${escape(project.actions.branch)}</code> as ${escape(project.actions.operator || '')}, one task file at a time, and are not pushed. Done also releases the task's environment (rule 13) on a board that names a <code>scratch:</code> folder.` : 'Its tasks change in the repository, where its agents work, until task actions are switched on here.'}</p>${interruptedNote(project)}`
     : project.description ? `<p class="project-where">${escape(project.description)}</p>` : '';
   const ready = line?.state === 'ready';
   const word = ready
@@ -956,7 +956,7 @@ function openProjectEditor(project = null) {
 // Tracks an existing repository: AGE Aris reads its board and history.
 function openLinkEditor() {
   const dialog = $('#project-dialog');
-  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. Nothing there changes unless you switch task actions on for it; then each claim, block or done is one commit of one task file, and the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
+  dialog.innerHTML = `<form id="link-form"><header class="dialog-heading"><div><span class="dialog-eyebrow">Track an existing repository</span><h2 id="project-dialog-title">Track a repository</h2></div><button type="button" class="icon-button" data-close aria-label="Close">${icon('close')}</button></header><div class="dialog-fields"><p class="dialog-copy">AGE Aris reads the repository’s AA/ task board (or deaddrop/ or pm/, its older names) and its git history, and checks the work against the board’s method. Nothing there changes unless you switch task actions on for it; then each claim, block or done is one commit of one task file, done also releases that task's scratch folders, landed worktrees and merged branches, and the agents working in it carry on as before.</p><label class="field">Repository folder<input name="path" required maxlength="4096" placeholder="/home/you/code/project" spellcheck="false" autocomplete="off" autofocus><small>The full path of the folder that holds .git and the board.</small></label><label class="field">Name <span class="field-optional">optional</span><input name="name" maxlength="100" placeholder="The folder’s name"></label>${colorField('blue')}<p class="form-error" id="link-error" role="alert"></p></div><footer class="dialog-footer"><button type="button" class="text-button dialog-switch" data-switch-new>Start a new project instead</button><button type="button" class="button button-secondary" data-close>Cancel</button><button type="submit" class="button button-primary">Track repository</button></footer></form>`;
   const form = $('#link-form');
   form.querySelector('[data-switch-new]').addEventListener('click', () => openProjectEditor());
   form.addEventListener('submit', async (event) => {
@@ -999,7 +999,7 @@ function openUnlinkDialog(project) {
 
 // The switch for task actions on a tracked repository. Switching on shows
 // what it means there (the branch it pins, the identity, skipped hooks, other
-// worktrees, STATE.md), as the server lists it, and needs a confirmation;
+// worktrees, what Done releases, STATE.md), as the server lists it, and needs a confirmation;
 // switching off takes one click.
 async function switchTaskActions(project, button) {
   if (!project?.linked) return;
@@ -1250,7 +1250,27 @@ function refusalText(error) {
 // pushed, and any warning with its remedy.
 function committedText(action, task, result) {
   const done = `${action.aa?.done || action.done} ${taskNumber(task)}: ${result.commit.slice(0, 7)} on ${result.branch}, not pushed.`;
-  return [done, ...(result.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`)].join(' ');
+  return [done, ...(result.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`), releaseText(result.release)].filter(Boolean).join(' ');
+}
+
+// What a Done's release says (rule 13): nothing when the task held nothing.
+function releaseText(release) {
+  if (!release?.summary) return '';
+  return `${release.summary}${release.remedy ? ` ${release.remedy}` : ''}`;
+}
+
+// A release can outlast the Done's answer: asks how it went until it has ended,
+// then says so. Gives up quietly after the half hour a release may take.
+function followRelease(taskId, tries = 360) {
+  setTimeout(async () => {
+    let release = null;
+    try { release = (await api(`/tasks/${encodeURIComponent(taskId)}`)).release; } catch { /* asked again below */ }
+    if (release && release.state !== 'running') {
+      if (release.summary) toast(releaseText(release), release.state !== 'released', 12000);
+      return;
+    }
+    if (tries > 1) followRelease(taskId, tries - 1);
+  }, 5000);
 }
 
 // One confirmation for an action, listing every reason it needs one. Resolves
@@ -1332,7 +1352,8 @@ async function performAction(id, taskId, { input, confirm } = {}) {
   setBarBusy(false);
   const done = tracked && result ? committedText(action, task, result) : action.done;
   if (failure) toast(failure, true);
-  else toast(refreshed ? done : `${done}, but AGE Aris could not refresh. Use the refresh button.`, false, result?.warnings?.length ? 12000 : 0);
+  else toast(refreshed ? done : `${done}, but AGE Aris could not refresh. Use the refresh button.`, false, result?.warnings?.length || result?.release?.summary ? 12000 : 0);
+  if (result?.release?.state === 'running') followRelease(taskId);
   // Only a drawer still showing this task follows it; one closed meanwhile stays closed.
   if (drawerTaskId() !== taskId) return;
   const fresh = state.tasks.find((candidate) => candidate.id === taskId);
@@ -1353,7 +1374,8 @@ async function performAction(id, taskId, { input, confirm } = {}) {
     const bar = $('#task-dialog .action-bar');
     (bar.querySelector(`[data-act="${id}"]:not([aria-disabled])`) || bar.querySelector('.action-button:not([aria-disabled])') || $('#task-dialog-title')).focus();
     // Warnings stay in the drawer after the toast has gone.
-    if (result?.warnings?.length) $('#action-note').textContent = result.warnings.map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`).join(' ');
+    const notes = [...(result?.warnings || []).map((warning) => `${warning.message}${warning.remedy ? ` ${warning.remedy}` : ''}`), releaseText(result?.release), ...(result?.release?.lines || [])].filter(Boolean);
+    if (notes.length) $('#action-note').textContent = notes.join(' ');
   }
   if (failure) $('#action-error').textContent = failure;
 }

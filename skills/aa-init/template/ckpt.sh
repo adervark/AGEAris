@@ -479,6 +479,8 @@ worktree_holds() {
 # Why a nested repository (any checkout that is not one of ours) must stay, or nothing.
 nested_holds() {
   local r="$1" n st ahead; n=${1#"$(canon "$ROOT")"/}
+  # AGE Aris runs this copy and never reads another repository's own config, where a filter could run.
+  [ -z "${CKPT_HARDENED:-}" ] || { printf 'nested repository %s: AGE Aris leaves it to you, since reading it would use its own git config' "$n"; return; }
   st=$(git -C "$r" status --porcelain --untracked-files=no 2>/dev/null) || { printf 'nested repository %s: git cannot read it' "$n"; return; }
   [ -z "$st" ] || { printf 'nested repository %s has uncommitted changes' "$n"; return; }
   [ -z "$(git -C "$r" stash list 2>/dev/null)" ] || { printf 'nested repository %s has a stash' "$n"; return; }
@@ -517,11 +519,18 @@ open_cites() {
 }
 held_by_open() { printf '%s\n' "$2" | awk -F'\t' -v n="$1" 'tolower($1)==tolower(n){print $2}' | sort -u | tr '\n' ' ' | sed 's/ $//'; }
 
+# Does this repository-relative path reach its folder with no symlink on the way?
+plain_path() {
+  local d; d=$(dirname "$1"); [ "$d" != . ] || return 0
+  [ "$(canon "$rroot/$d")" = "$rroot/$d" ]
+}
+
 # The scratch folder, normalised: inside the repository, no symlink on the way.
 scratch_dir() {
   local s; s=$(cfg scratch scratch); s=${s#./}
   while [ "${s%/}" != "$s" ]; do s=${s%/}; done
   case "$s" in ""|.|/*|*..*|*//*) die "AA.yml scratch: must be a folder inside the repository, not '$s'" ;; esac
+  case "$(lower "$s")" in .git|.git/*|*/.git|*/.git/*|aa|aa/*) die "AA.yml scratch: cannot be git's folder or the board, not '$s'" ;; esac
   printf '%s' "$s"
 }
 
@@ -606,6 +615,8 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
       *) die "unknown option: $1" ;;
     esac
   done
+  # AGE Aris starts this in the repository it tracks; core.worktree must not send it elsewhere.
+  [ -z "${CKPT_HARDENED:-}" ] || [ "$(canon "$ROOT")" = "$(pwd -P)" ] || die "git says this repository's top is $(canon "$ROOT"), not $(pwd -P): check core.worktree"
   local tf; tf=$(ls "$TD/done/$task"-*.md 2>/dev/null | head -1)
   [ -n "$tf" ] || die "$task is not in ${TD#"$ROOT"/}/done/: only a finished task is released"
   local rroot; rroot=$(canon "$ROOT")
@@ -613,9 +624,10 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
     || die "run a release from the repository's main checkout, not a linked worktree"
   TRUNK=$(trunk) || die "no main line: set trunk: in AA.yml"
   [ "$(git -C "$ROOT" symbolic-ref -q --short HEAD)" = "$TRUNK" ] || die "check out $TRUNK first: the kept files are committed to the main line"
-  local sdir; sdir=$(scratch_dir)
+  local sdir; sdir=$(scratch_dir) || exit 1
   local sroot="$rroot/$sdir"
   if [ -e "$ROOT/$sdir" ] && [ "$(canon "$ROOT/$sdir")" != "$sroot" ]; then die "$sdir is a symlink or under one: refusing to delete through it"; fi
+  if [ -n "${CKPT_HARDENED:-}" ] && [ -d "$ROOT/$sdir" ] && ! git -C "$ROOT" check-ignore -q -- "$sdir/"; then die "$sdir is not ignored by git, so it may hold work: run the release yourself if it is meant to go"; fi
   local max; max=$(cfg keep_max_kb 1024); case "$max" in ''|*[!0-9]*) max=1024 ;; esac; max=$((10#$max))
   if [ -n "$archive" ]; then
     case "$archive" in "~"|"~/"*) archive="$HOME${archive#\~}" ;; esac
@@ -727,6 +739,7 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
     case "$k" in /*|*..*) die "keeps: $k must be a path inside the repository" ;; esac
     if [ ! -e "$ROOT/$k" ] && [ -f "$DD/evidence/$task/${k#"$sdir"/}" ]; then continue; fi
     [ -f "$ROOT/$k" ] && [ ! -L "$ROOT/$k" ] || die "keeps: $k is not a file here"
+    plain_path "$k" || die "keeps: $k goes through a symlink"
     printf '%s\n' "$rroot/$k" >> "$tmp/keep"
   done <<< "$keeps"
   # And every file the task's own file cites inside the folders that go: a
@@ -734,7 +747,7 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
   local c pat; pat="$(printf '%s' "$sdir" | sed 's/[][\.*^$]/\\&/g')/[A-Za-z0-9._/-]*"
   while IFS= read -r c; do
     c=${c%[.,;:]}; case "$c" in *..*) continue ;; esac
-    [ -f "$rroot/$c" ] && [ ! -L "$rroot/$c" ] || continue
+    [ -f "$rroot/$c" ] && [ ! -L "$rroot/$c" ] && plain_path "$c" || continue
     for d in ${rmdirs[@]+"${rmdirs[@]}"}; do case "$rroot/$c" in "$d"/*) printf '%s\n' "$rroot/$c" >> "$tmp/keep"; break ;; esac; done
   done < <(grep -o -- "$pat" "$tf" 2>/dev/null | sort -u)
   local ev="$DD/evidence/$task" src rel bytes n_git=0 kb_git=0 n_arc=0 kb_arc=0
@@ -780,6 +793,14 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
 
   # 5. Kept files first, checked; if any step fails, nothing is deleted.
   local dst sum got
+  # A committed symlink under the evidence folder would send a copy out of the repository.
+  [ "$(canon "$DD")" = "$rroot/AA" ] || die "AA is a symlink: nothing deleted"
+  if [ -e "$DD/evidence" ] || [ -L "$DD/evidence" ]; then
+    [ "$(canon "$DD/evidence")" = "$rroot/AA/evidence" ] || die "AA/evidence is a symlink: nothing deleted"
+  fi
+  if [ -e "$ev" ] || [ -L "$ev" ]; then
+    [ -z "$(find "$ev" -type l -print -quit 2>/dev/null)" ] || die "${ev#"$ROOT"/} holds a symlink: nothing deleted"
+  fi
   while IFS=$'\t' read -r src rel bytes; do
     dst="$ev/$rel"; mkdir -p "$(dirname "$dst")" && cp -p "$src" "$dst" || die "could not copy ${src#"$rroot"/}; nothing deleted"
   done < "$tmp/git"
@@ -795,30 +816,31 @@ cmd_release() { # release <TASK> [--dry-run] [--list] [--archive DIR]
   fi
   if [ -d "$ev" ]; then
     git -C "$ROOT" add -f -- "$ev" || die "could not stage ${ev#"$ROOT"/}; nothing deleted"
-    if ! git -C "$ROOT" diff --cached --quiet -- "$ev"; then
+    if ! git -C "$ROOT" diff --no-ext-diff --no-textconv --cached --quiet -- "$ev"; then
       git -C "$ROOT" commit -q --no-verify -m "evidence: $task's kept files, before its environment is released" -- "$ev" \
         || die "could not commit ${ev#"$ROOT"/}; nothing deleted"
     fi
     # Each kept file is in the commit, as it is on disk.
     while IFS=$'\t' read -r src rel bytes; do
-      git -C "$ROOT" ls-files --error-unmatch -- "$ev/$rel" >/dev/null 2>&1 && git -C "$ROOT" diff --quiet HEAD -- "$ev/$rel" \
+      git -C "$ROOT" ls-files --error-unmatch -- "$ev/$rel" >/dev/null 2>&1 && git -C "$ROOT" diff --no-ext-diff --no-textconv --quiet HEAD -- "$ev/$rel" \
         || die "${ev#"$ROOT"/}/$rel is not committed as it is; nothing deleted"
     done < "$tmp/git"
   fi
   # 6. Worktrees, then folders (none with a worktree still registered in it), then branches.
-  for p in ${wts[@]+"${wts[@]}"}; do git -C "$ROOT" worktree remove --force "$p" 2>/dev/null || warn "could not remove worktree ${p#"$rroot"/}; its folder stays"; done
+  local partial=0
+  for p in ${wts[@]+"${wts[@]}"}; do git -C "$ROOT" worktree remove --force "$p" 2>/dev/null || { partial=1; warn "could not remove worktree ${p#"$rroot"/}; its folder stays"; }; done
   wtl=$(worktrees)
   for d in ${rmdirs[@]+"${rmdirs[@]}"}; do
     case "$d" in "$sroot"/?*) ;; *) die "refusing to delete $d: not under $sroot" ;; esac
-    if [ -L "$d" ] || [ -f "$d" ]; then rm -f -- "$d"; continue; fi
-    if printf '%s\n' "$wtl" | awk -F'\037' -v d="$d" 'index($1"/", d"/")==1{f=1} END{exit !f}'; then warn "kept ${d#"$rroot"/}: a worktree in it is still registered"; continue; fi
-    rm -rf -- "$d"
+    if [ -L "$d" ] || [ -f "$d" ]; then rm -f -- "$d" || { partial=1; warn "could not delete ${d#"$rroot"/}"; }; continue; fi
+    if printf '%s\n' "$wtl" | awk -F'\037' -v d="$d" 'index($1"/", d"/")==1{f=1} END{exit !f}'; then partial=1; warn "kept ${d#"$rroot"/}: a worktree in it is still registered"; continue; fi
+    rm -rf -- "$d" 2>/dev/null || { partial=1; warn "could not delete all of ${d#"$rroot"/}"; }
   done
   git -C "$ROOT" worktree prune 2>/dev/null
   for b in ${brs[@]+"${brs[@]}"}; do
-    landed "$b" && git -C "$ROOT" branch -q -D "$b" 2>/dev/null || warn "kept branch $b"
+    landed "$b" && git -C "$ROOT" branch -q -D "$b" 2>/dev/null || { partial=1; warn "kept branch $b"; }
   done
-  echo "released."
+  if [ "$partial" = 0 ]; then echo "released."; else echo "released in part."; fi
 }
 
 # What finished tasks still hold, without sizes (cheap enough for --check):

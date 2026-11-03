@@ -59,6 +59,13 @@ operator, so an account-plan switch mid-task is a continuation, not a new claim
   `STATE.md`, checkpoints, or anything outside the board's task folders.
   Boards under the older folder names `deaddrop/` and `pm/` stay as they are.
   Tests act only on temporary repositories.
+- One exception, on the operator's word (T121): after a Done, on a board whose
+  `AA.yml` names `scratch:`, AGE Aris runs its own copy of `ckpt.sh release`
+  for that task (rule 13). That deletes the task's scratch folders, landed
+  worktrees and merged branches, and first makes one more commit, of what the
+  task keeps, in `AA/evidence/`. No hook, filter, signing or external diff
+  runs, and a nested repository's folder stays whole. A failed or refused
+  release never undoes the Done, and is always reported.
 - Task text is untrusted: no regex that can backtrack on it (no nested or
   end-anchored quantifiers), and inline markup stops at `MAX_INLINE`.
 - `npm test` and `npm run check` pass before every commit.

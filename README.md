@@ -359,7 +359,7 @@ in the repository. Starting AGE Aris with `AGEARIS_TRACKED_WRITES=0` turns
 task actions off for every tracked repository.
 
 Each action changes one task file, its folder included, and nothing else in
-the index or working tree. On a board with `backlog/`, claim moves the file
+the index or working tree; Done's release, below, comes after that commit. On a board with `backlog/`, claim moves the file
 from `backlog/` to `tasks/` and release moves it back; on an older board
 without one, both change the file in place. Done moves it to `tasks/done/` and,
 when its `## Result` is still a placeholder, asks for one line to put there.
@@ -393,8 +393,31 @@ Claim on a task one of your own agent sessions holds takes it back (AA rule
 
 **Done leaves the checkpoint trail in place.** AA's Done retires the trail
 with `AA/ckpt.sh close <ID> --delete`; AGE Aris does not write trails or run
-`ckpt.sh`, so a done on a task that has a trail reminds you to run that
-command. This is a deliberate deviation from the board's Done.
+the repository's `ckpt.sh`, so a done on a task that has a trail reminds you to
+run that command. This is a deliberate deviation from the board's Done.
+
+**Done releases what the task holds (rule 13).** On a board whose `AA.yml` names
+`scratch:`, Done goes on to run AGE Aris's own copy of `ckpt.sh release` from
+the repository, so the board needs no copy of its own:
+
+- The task's scratch folders, landed worktrees and merged branches are deleted.
+  What it keeps is committed to `AA/evidence/<ID>/` first, as one more commit,
+  under the same rules as a task action: no hooks, filters, signing or automatic
+  maintenance, and never pushed.
+- Work not on the main line, anything in use, a folder an open task cites and a
+  nested repository all stay, and the result names them. A nested repository is
+  left for you because reading it would use its own git config. The release
+  also refuses while a run on the task has not ended, when the pinned branch is
+  not the main line, when `scratch:` is not ignored by git, or when a symlink
+  lies on the way to `AA/evidence/` or a kept file.
+- A refused or failed release never undoes the Done. The result says why and
+  gives the command to run from a terminal.
+- A long release goes on after the answer: `GET /api/tasks/:id` carries
+  `release: { state, summary, lines, remedy }`, and the page says when it ends.
+  Each release leaves a line in `releases.jsonl` in AGE Aris's data folder.
+
+Only a Done taken in AGE Aris does this. A task an agent moves to `done/` with
+git is released by the board's own `ckpt.sh close --delete`, if it has one.
 
 **What agents in the repository see.** While AGE Aris commits (normally tens
 of milliseconds, at most 3 seconds) git's index lock is held, so an agent's
