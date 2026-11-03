@@ -1,1 +1,2 @@
 {"ts":"2026-11-03T11:26:49Z","run":"cc5901e7","kind":"open","operator":"adervark","profile":"b","session":"cc5901e7-62e5-4791-a4ff-1eb9b8d65381","boot":"3b6bb7fe-2c12-4f27-abc2-7ee5c262c7b7","pid":105687,"pstart":"Mon Nov 2 19:25:00 2026","brief":"rule 13 in AGEIS's own board: ckpt.sh, AA.yml, WORKFLOW.md"}
+{"ts":"2026-11-03T11:27:59Z","run":"cc5901e7","kind":"doing","act":"commit AA/ckpt.sh, AA/AA.yml, AA/WORKFLOW.md in AGEIS main","tell":"git -C ~/Code/AGEIS log -1 -- AA/AA.yml","next":"if absent: verify the three files, then commit them"}
